@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-17 00:41+0000\n"
+"POT-Creation-Date: 2025-10-06 00:42+0000\n"
 "PO-Revision-Date: 2009-03-03 11:45+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -3707,8 +3707,9 @@ msgid ""
 msgstr ""
 
 #: functions/financial.xml:172
-#, kde-format
-msgid "CONTINOUS(principal;interest;years)"
+#, fuzzy, kde-format
+#| msgid "CONTINOUS(principal;interest;years)"
+msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINOUS(मूल;ब्याज;साल)"
 
 #: functions/financial.xml:173

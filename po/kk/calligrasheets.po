@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-17 00:41+0000\n"
+"POT-Creation-Date: 2025-10-06 00:42+0000\n"
 "PO-Revision-Date: 2013-10-17 04:56+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -3812,8 +3812,9 @@ msgstr ""
 "өседі."
 
 #: functions/financial.xml:172
-#, kde-format
-msgid "CONTINOUS(principal;interest;years)"
+#, fuzzy, kde-format
+#| msgid "CONTINOUS(principal;interest;years)"
+msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINOUS(бастапқы_капитал;өсім_мөлшер;мерзім)"
 
 #: functions/financial.xml:173

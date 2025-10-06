@@ -1,14 +1,14 @@
 # POT_PART_NORMAL only
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:42+0400\n"
+"PO-Revision-Date: 2025-10-05 12:54+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -28,7 +28,7 @@ msgstr "المتراسل"
 #: KoRdfFoaF.cpp:167
 #, kde-format
 msgid "Select an address book for saving:"
-msgstr ""
+msgstr "اختر دفتر عناوين للحفظ:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: KoRdfFoaFEditWidget.ui:26
@@ -40,7 +40,7 @@ msgstr "الا&سم:"
 #: KoRdfFoaFEditWidget.ui:36
 #, kde-format
 msgid "&Nick:"
-msgstr ""
+msgstr "الل&قب:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: KoRdfFoaFEditWidget.ui:46
@@ -52,12 +52,12 @@ msgstr "&رقم الهاتف:"
 #: KoRdfFoaFEditWidget.ui:59
 #, kde-format
 msgid "&Home Page:"
-msgstr ""
+msgstr "&صفحة البداية:"
 
 #: KoRdfFoaFTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Contact Information"
-msgstr ""
+msgstr "معلومات المتراسل"
 
 #: KoRdfFoaFTreeWidgetItem.cpp:47
 #, kde-format
@@ -67,9 +67,9 @@ msgstr "حرّر..."
 #: KoRdfFoaFTreeWidgetItem.cpp:50
 #, kde-format
 msgid "Import contact"
-msgstr ""
+msgstr "استورد المتراسل"
 
 #: KoRdfFoaFTreeWidgetItem.cpp:53
 #, kde-format
 msgid "Export as vcard..."
-msgstr ""
+msgstr "صدّر كـ vcard..."

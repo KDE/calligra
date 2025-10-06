@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-17 00:41+0000\n"
+"POT-Creation-Date: 2025-10-06 00:42+0000\n"
 "PO-Revision-Date: 2024-08-23 12:06+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -3915,8 +3915,9 @@ msgstr ""
 "CONTINUOUS(1000;1;1) oftewel $1105.17 op."
 
 #: functions/financial.xml:172
-#, kde-format
-msgid "CONTINOUS(principal;interest;years)"
+#, fuzzy, kde-format
+#| msgid "CONTINOUS(principal;interest;years)"
+msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINUOUS(startkapitaal;rente;jaren)"
 
 #: functions/financial.xml:173

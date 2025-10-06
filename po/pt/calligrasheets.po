@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-17 00:41+0000\n"
+"POT-Creation-Date: 2025-10-06 00:42+0000\n"
 "PO-Revision-Date: 2023-04-25 21:15+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -3983,8 +3983,9 @@ msgstr ""
 "render 10% em 1 ano, tornar-se-ão CONTINUOUS(1000;0,1;1), ou seja, 1105,17 €."
 
 #: functions/financial.xml:172
-#, kde-format
-msgid "CONTINOUS(principal;interest;years)"
+#, fuzzy, kde-format
+#| msgid "CONTINOUS(principal;interest;years)"
+msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINUOUS(principal;taxa;anos)"
 
 #: functions/financial.xml:173

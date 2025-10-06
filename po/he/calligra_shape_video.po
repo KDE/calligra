@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
 #
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2024-06-29 16:22+0300\n"
+"PO-Revision-Date: 2025-10-05 11:34+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: ChangeVideoCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -27,7 +27,7 @@ msgstr "החלפת סרטון"
 #: forms/VideoToolWidget.ui:33
 #, kde-format
 msgid "Replace video..."
-msgstr "החלפת סרטןו…"
+msgstr "החלפת סרטון…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnPlay)
 #: forms/VideoToolWidget.ui:40

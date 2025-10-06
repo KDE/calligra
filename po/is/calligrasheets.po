@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-17 00:41+0000\n"
+"POT-Creation-Date: 2025-10-06 00:42+0000\n"
 "PO-Revision-Date: 2011-07-07 08:22+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -3664,7 +3664,7 @@ msgstr ""
 
 #: functions/financial.xml:172
 #, fuzzy, kde-format
-msgid "CONTINOUS(principal;interest;years)"
+msgid "CONTINUOUS(principal;interest;years)"
 msgstr "continuous(höfuðstóll;vextir;árafjöldi)"
 
 #: functions/financial.xml:173

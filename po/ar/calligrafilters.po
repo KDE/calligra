@@ -1,14 +1,14 @@
 # translation of kofficefilters.po to
 # Language AR translations for PACKAGE package.
 # Automatically generated, 2007.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2024-09-07 19:41+0400\n"
+"PO-Revision-Date: 2025-10-05 12:19+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -20,9 +20,9 @@ msgstr ""
 "X-Generator: Lokalize 23.08.5\n"
 
 #: karbon/image/ImageExport.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 Export Options"
-msgstr "PNG صدِّر خيارات"
+msgstr "خيارات تصدير %1"
 
 #: karbon/image/ImageExportOptionsWidget.cpp:48
 #, kde-format
@@ -31,15 +31,15 @@ msgstr "الصفحة %1"
 
 #. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
 #: karbon/image/ImageExportOptionsWidget.ui:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page:"
-msgstr "الصفحة:"
+msgstr "الصفحة "
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: karbon/image/ImageExportOptionsWidget.ui:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Size in Pixels"
-msgstr "مخصص حجم بوصة بكسلات:"
+msgstr "الحجم بالبكسل"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
@@ -61,7 +61,7 @@ msgstr "ارتفاع الصورة:"
 #: karbon/image/ImageExportOptionsWidget.ui:69
 #, kde-format
 msgid "Size in Units"
-msgstr ""
+msgstr "الحجم بالوحدات"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: karbon/image/ImageExportOptionsWidget.ui:98
@@ -114,17 +114,17 @@ msgstr "العتمة"
 #: words/docx/import/DocxXmlSettingsReader.cpp:75
 #, kde-format
 msgid "Namespace \"%1\" not found"
-msgstr ""
+msgstr "لم يجد حيز الاسم «%1»"
 
 #: libmsooxml/MsooXmlImport.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not open the requested file %1"
-msgstr "يمكن أن ليس قراءة من ملفّ."
+msgstr "لم يستطع فتح الملف المطلوب %1"
 
 #: libmsooxml/MsooXmlImport.cpp:117
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
-msgstr ""
+msgstr "لم يستطع قراءة دليل ZIP للملف المطلوب %1"
 
 #: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
@@ -134,73 +134,73 @@ msgstr "أدخل كلمة السر"
 #: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
-msgstr ""
+msgstr "هذا المستند مُعمَّى، رجاء أدخل كلمة السر لفك تعميته:"
 
 #: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
-msgstr ""
+msgstr "كلمة سر غير صحيحة، رجاء أدخل كلمة السر لفك تعمية هذا المستند:"
 
 #: libmsooxml/MsooXmlImport.cpp:624
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not find path for type %1"
-msgstr "يمكن أن ليس قراءة من ملفّ."
+msgstr "لم يستطع إيجاد مسار للنوع %1"
 
 #: libmsooxml/MsooXmlReader.cpp:130
 #, kde-format
 msgid "%1 (line %2, column %3)"
-msgstr ""
+msgstr "%1 (السطر %2، العمود %3)"
 
 #: libmsooxml/MsooXmlReader.cpp:131
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
-msgstr ""
+msgstr "%1 (%2، السطر %3، العمود %4)"
 
 #: libmsooxml/MsooXmlReader.cpp:153
 #, kde-format
 msgid "Element \"%1\" not found"
-msgstr ""
+msgstr "لم يجد العنصر «%1»"
 
 #: libmsooxml/MsooXmlReader.cpp:158
-#, fuzzy, kde-format
+#, kde-format
 msgid "Attribute \"%1\" not found"
-msgstr "حاشية سفلية 1"
+msgstr "لم يجد السمة «%1»"
 
 #: libmsooxml/MsooXmlReader.cpp:168
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
-msgstr ""
+msgstr "قيمة غير متوقَّعة «%1» للسمة «%2»"
 
 #: libmsooxml/MsooXmlReader.cpp:173
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
-msgstr ""
+msgstr "وقوع ثان غير متوقَّع للعنصر «%1»"
 
 #: libmsooxml/MsooXmlReader.cpp:190 libmsooxml/MsooXmlReader.cpp:241
 #, kde-format
 msgid "Expected closing of element \"%1\""
-msgstr ""
+msgstr "توقَّع إغلاق العنصر «%1»"
 
 #: libmsooxml/MsooXmlReader.cpp:232
 #, kde-format
 msgid "None of expected elements found: %1"
-msgstr ""
+msgstr "لم يجد أيًّا من العناصر المتوقَّعة: %1"
 
 #: libmsooxml/MsooXmlRelationships.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
-msgstr "يمكن أن ليس قراءة من ملفّ."
+msgstr "لم يستطع إيجاد الهدف لـ «%1» في الملف «%2»"
 
 #: libmsooxml/MsooXmlRelationships.cpp:89
 #: libmsooxml/MsooXmlRelationships.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not find relationships file \"%1\""
-msgstr "يمكن أن ليس قراءة من ملفّ."
+msgstr "لم يستطع إيجاد ملف العلاقات «%1»"
 
 #: libmsooxml/MsooXmlRelationships.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
-msgstr "يمكن أن ليس قراءة من ملفّ."
+msgstr "لم يستطع إيجاد الهدف للعلاقة «%1» في الملف «%2»"
 
 #: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
@@ -214,35 +214,35 @@ msgstr ""
 #: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
-msgstr ""
+msgstr "لم يجد المدخل «%1»."
 
 #: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
-msgstr ""
+msgstr "المدخل «%1» ليس ملفًا."
 
 #: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
 #: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
-msgstr ""
+msgstr "لم يستطع فتح المدخل «%1» للكتابة."
 
 #: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
 #: libmsooxml/MsooXmlUtils.cpp:390
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not write block"
-msgstr "يمكن أن ليس قراءة من ملفّ."
+msgstr "لم يستطع كتابة الكتلة"
 
 #: sheets/csv/csvexport.cc:253
 #, kde-format
 msgid "<SHEETNAME>"
-msgstr ""
+msgstr "<اسم_الورقة>"
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "صدِّر إلى صورة"
+msgstr "صدِّر إلى CSV"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
@@ -252,9 +252,9 @@ msgid "Export"
 msgstr "صدّر"
 
 #: sheets/csv/csvimport.cc:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "CSV filter cannot open input file - please report."
-msgstr "CVS المرشّح فتح دَخْل ملفّ تقرير."
+msgstr "مرشِّح CSV لا يستطيع فتح ملف الإدخال — رجاءً بلِّغ."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
 #: sheets/csv/exportdialogui.ui:48
@@ -264,27 +264,27 @@ msgstr "نهاية السطر"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "End of Line:"
-msgstr "نهاية السطر"
+msgstr "نهاية السطر:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "&UNIX style (recommended; line feed only)"
-msgstr "يونيكس أسلوب مفضّل سطر تلقيم"
+msgstr "طراز &يونكس (موصى به؛ تلقيم سطر فقط)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
 #: sheets/csv/exportdialogui.ui:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Windows style (carriage return and line feed)"
-msgstr "النوافذ أسلوب عودة و سطر تلقيم"
+msgstr "طراز &ويندوز (إرجاع وحمولة سطر)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
 #: sheets/csv/exportdialogui.ui:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "&MacOS style (carriage return only)"
-msgstr "أسلوب عودة"
+msgstr "طراز &ماك أو إس (إرجاع فقط)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: sheets/csv/exportdialogui.ui:96
@@ -294,33 +294,33 @@ msgstr "الأوراق"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
 #: sheets/csv/exportdialogui.ui:109
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select sheets to export:"
-msgstr "انتقِ إلى تصدير:"
+msgstr "اختر الأوراق للتصدير:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
 #: sheets/csv/exportdialogui.ui:125
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delimiter Line"
-msgstr "حد خط"
+msgstr "سطر الفاصلة"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
 #: sheets/csv/exportdialogui.ui:131
 #, kde-format
 msgid "********<SHEETNAME>********"
-msgstr ""
+msgstr "********<اسم_الورقة>********"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: sheets/csv/exportdialogui.ui:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "<SHEETNAME> gets replaced by the name of the next sheet."
-msgstr "<SHEETNAME> أداء الاسم من التالي الورقة."
+msgstr "يُستبدل <اسم_الورقة> باسم الورقة التالية."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
 #: sheets/csv/exportdialogui.ui:163
-#, fuzzy, kde-format
+#, kde-format
 msgid "Print delimiter line above every sheet"
-msgstr "اطبع مُحِد سطر أعلى كل الورقة"
+msgstr "اطبع سطر الفاصلة فوق كل ورقة"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: sheets/csv/exportdialogui.ui:174
@@ -372,49 +372,49 @@ msgstr "علامات الاقتباس:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: sheets/csv/exportdialogui.ui:270
-#, fuzzy, kde-format
+#, kde-format
 msgid "\""
-msgstr "\""
+msgstr "«"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: sheets/csv/exportdialogui.ui:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "'"
 msgstr "'"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
 #: sheets/csv/exportdialogui.ui:301
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export selection only"
-msgstr "صدِّر منتقى"
+msgstr "صدِّر الاختيار فقط"
 
 #: sheets/dbase/dbaseimport.cc:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "File format is not supported."
-msgstr "ملف تنسيق هو ليس مدعوم."
+msgstr "صيغة الملف غير مدعومة."
 
 #: sheets/dbase/dbaseimport.cc:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not read from file."
-msgstr "يمكن أن ليس قراءة من ملفّ."
+msgstr "لم يستطع القراءة من الملف."
 
 #: sheets/html/exportdialog.cc:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export Sheet to HTML"
 msgstr "صدِّر ورقة إلى HTML"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #: sheets/html/exportwidget.ui:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sheet Selection"
-msgstr "ورقة التحديد"
+msgstr "اختيار الورقة"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
 #: sheets/html/exportwidget.ui:32 sheets/html/exportwidget.ui:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Click here to select all sheets in the list."
-msgstr "نقر إلى تحديد الكل بوصة قائمة."
+msgstr "انقر هنا لاختيار جميع الأوراق في القائمة."
 
 #. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
 #: sheets/html/exportwidget.ui:35
@@ -430,19 +430,19 @@ msgstr "ألغ ت&حديد الكل"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
 #: sheets/html/exportwidget.ui:70
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "This option will make the HTML export filter generate a new page for each "
 "sheet. If you disable this option, all sheets are written on one page."
 msgstr ""
-"هذا خيار make HTML تصدير المرشّح توليد a جديد صفحة لـ الورقة إذا تعطيل خيار "
-"الكل يعمل صفحة."
+"هذا الخيار يجعل مرشح التصدير لـ HTML يولِّد صفحة جديدة لكل ورقة. إن عطّلت هذا "
+"الخيار، فاكتب جميع الأوراق في صفحة واحدة."
 
 #. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
 #: sheets/html/exportwidget.ui:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use &separate files for each table"
-msgstr "إستعمل ملفات لـ جدول"
+msgstr "استخدم ملفات &منفصلة لكل جدول"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
 #: sheets/html/exportwidget.ui:83
@@ -452,41 +452,42 @@ msgstr "الطراز"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
 #: sheets/html/exportwidget.ui:89
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Select this option to use the default fonts and colors for the HTML page."
-msgstr "انتقِ خيار إلى استخدام افتراضي و ألوان لـ HTML صفحة."
+msgstr "اختر هذا الخيار لاستخدام الخطوط والألوان المبدئية لصفحة HTML."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
 #: sheets/html/exportwidget.ui:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use &default style"
-msgstr "إستعمل افتراضي أسلوب"
+msgstr "استخدم الطراز ال&مبدئي"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:102
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Select this option to specify a separate stylesheet for the HTML page. You "
 "can select or type on in the field below."
 msgstr ""
-"انتقِ خيار إلى تحديد a لـ HTML صفحة أنت تحديد أو نوع يعمل بوصة حقل أسفل."
+"اختر هذا الخيار لتحديد ورقة طراز منفصلة لصفحة HTML. يمكنك الاختيار أو "
+"الكتابة في الحقل بالأسفل."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use &external stylesheet:"
-msgstr "إستعمل خارجي:"
+msgstr "استخدم ورقة طراز &خارجية:"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
 #: sheets/html/exportwidget.ui:115
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "In this field you can enter an URL for your stylesheet. It is possible to "
 "point to a stylesheet on disk, or to somewhere on the Internet."
 msgstr ""
-"داخل حقل أدخل URL لـ itإيطالياهو هو إلى نقطة إلى a يعمل قرص أو إلى يعمل "
-"إنترنت."
+"في هذا الحقل يمكنك إدخال عنوان URL لورقة طرازك. من الممكن الإشارة إلى ورقة "
+"طراز على القرص، أو إلى مكان ما على الإنترنت."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: sheets/html/exportwidget.ui:125
@@ -496,31 +497,32 @@ msgstr "التخطيط"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
 #: sheets/html/exportwidget.ui:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use this option to enable or disable borders around the cells."
-msgstr "إستعمل خيار إلى تمكين أو تعطيل."
+msgstr "استخدم هذا الخيار لتمكين أو تعطيل الحدود حول الخلايا."
 
 #. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
 #: sheets/html/exportwidget.ui:134
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use &borders"
-msgstr "إستعمل"
+msgstr "استخدم &الحدود"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
 #: sheets/html/exportwidget.ui:146 sheets/html/exportwidget.ui:168
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Use this option to define how many pixels there should be between the cells. "
 "This effect is better visible if you check <b>Use borders</b> too."
 msgstr ""
-"إستعمل خيار إلى تعريف بكسلات بين هذا تأثير هو مرئي IF تفقّد<b> إستعمل</b>."
+"استخدم هذا الخيار لتحديد عدد البكسلات الذي يجب أن يكون بين الخلايا. هذا "
+"التأثير مرئي أفضل إن حدّدت <b>استخدم الحدود</b> أيضًا."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: sheets/html/exportwidget.ui:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pi&xels between cells:"
-msgstr "بكسلات بين:"
+msgstr "&بكسلات بين الخلايا:"
 
 #: sheets/html/htmlexport.cc:191 sheets/html/htmlexport.cc:366
 #, kde-format
@@ -528,9 +530,9 @@ msgid "Top"
 msgstr "أعلى"
 
 #: sheets/latex/export/latexexportdialog.cc:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Latex Export Filter Configuration"
-msgstr "LaTeXكبيرمطّاط صدِّر تصفية إعدادات"
+msgstr "إعدادات مرشح تصدير لاتخ"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget2)
 #: sheets/latex/export/latexexportwidget.ui:36
@@ -540,21 +542,21 @@ msgstr "المستند"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document style:"
-msgstr "مستند الأسلوب"
+msgstr "طراز المستند:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Latex style"
-msgstr "LaTeXكبيرمطّاط أسلوب"
+msgstr "طراز لاتخ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Words style"
-msgstr "KWord أسلوب"
+msgstr "طراز Words"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
@@ -564,53 +566,55 @@ msgstr "نوع المستند:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "The document will be able to be compiled alone"
-msgstr "الـ مستند إلى"
+msgstr "المستند يستطيع أن يُصرَّف وحيدًا"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The document will be generated as a full latex document since all the "
 "include will be generated before the \\begin{document} and \\end{document} "
 "commands."
-msgstr "الـ مستند a مستند منذ الكل تضمين قبل بداية، بدء مستند و end مستند."
+msgstr ""
+"المستند يُولَّد كمستند لاتخ كامل لأن جميع تضمينات تُولَّد قبل أمرين "
+"\\begin{document} و \\end{document}."
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Independent document"
-msgstr "مستقل مستند"
+msgstr "مستند مستقل"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Do not generate either the latex header or the document environment"
-msgstr "تنفيذ ليس توليد عنوان رأسي أو مستند بيئة"
+msgstr "لا تولّد ترويسة لاتخ ولا بيئة المستند"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:94
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The document will be generated as a latex document which will have to be "
 "included in a main latex document. It will allow you to generate several "
 "little files for each chapter of your document."
 msgstr ""
-"الـ مستند a مستند إلى مُدْرج بوصة a رئيسي مستند itإيطالياهو اسمح إلى توليد "
-"ملفات لـ من مستند."
+"المستند يُولَّد كمستند لاتخ الذي يجب تضمينه في مستند لاتخ رئيسي. هذا يسمح لك "
+"بتوليد عدة ملفات صغيرة لكل فصل من مستندك."
 
 #. i18n: ectx: property (text), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document to include"
-msgstr "مستند إلى تضمين"
+msgstr "مستند للتضمين"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
 #: sheets/latex/export/latexexportwidget.ui:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document class:"
-msgstr "مستند الفئة:"
+msgstr "صنف المستند:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: sheets/latex/export/latexexportwidget.ui:124
@@ -644,15 +648,15 @@ msgstr "الصور"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: sheets/latex/export/latexexportwidget.ui:192
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert the pictures:"
-msgstr "حوّل صور"
+msgstr "حوّل الصور:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
 #: sheets/latex/export/latexexportwidget.ui:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pictures directory:"
-msgstr "صور دليل:"
+msgstr "دليل الصور:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
@@ -688,15 +692,15 @@ msgstr "المحتويات"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: sheets/latex/export/latexexportwidget.ui:329
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export information about author:"
-msgstr "صدِّر حوْل المؤلف"
+msgstr "صدِّر معلومات عن المؤلف:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: sheets/latex/export/latexexportwidget.ui:349
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a table of content:"
-msgstr "إضافة a جدول من المحتوى"
+msgstr "أضف جدول محتويات:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: sheets/latex/export/latexexportwidget.ui:368
@@ -706,21 +710,21 @@ msgstr "ملاحظات"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
 #: sheets/latex/export/latexexportwidget.ui:374
-#, fuzzy, kde-format
+#, kde-format
 msgid "Don't export"
-msgstr "دون t تصدير"
+msgstr "لا تصدِّر"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
 #: sheets/latex/export/latexexportwidget.ui:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export notes in margin notes"
-msgstr "صدِّر بوصة هامش"
+msgstr "صدِّر الملاحظات في ملاحظات الهامش"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
 #: sheets/latex/export/latexexportwidget.ui:388
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export notes in comments"
-msgstr "صدِّر بوصة تعليقات"
+msgstr "صدِّر الملاحظات في التعليقات"
 
 #: sheets/opencalc/opencalcexport.cc:889
 #, kde-format
@@ -728,86 +732,89 @@ msgid "Page "
 msgstr "الصفحة "
 
 #: sheets/opencalc/opencalcimport.cc:1198
-#, fuzzy, kde-format
+#, kde-format
 msgid "The file seems to be corrupt. Skipping a table."
-msgstr "الـ ملفّ إلى فاسد الطفر a جدول."
+msgstr "الملف يبدو تالفًا. تجاهل جدولًا."
 
 #: sheets/opencalc/opencalcimport.cc:1210
-#, fuzzy, kde-format
+#, kde-format
 msgid "Skipping a table."
-msgstr "الطفر a جدول."
+msgstr "تجاهل جدولًا."
 
 #: sheets/opencalc/opencalcimport.cc:1909
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "This document was created with OpenOffice.org version '%1'. This filter was "
 "written for version 1.0. Reading this file could cause strange behavior, "
 "crashes or incorrect display of the data. Do you want to continue converting "
 "the document?"
 msgstr ""
-"هذا مستند مع أوبن أوفيس النسخة هذا المرشّح لـ النسخة جاري القراءة ملفّ سلوك أو "
-"عرض من البيانات تنفيذ إلى متابعة مستند?"
+"هذا المستند أُنشئ بإصدار OpenOffice.org ‏«%1». هذا المرشح كُتب للإصدار 1.0. "
+"قراءة هذا الملف قد تُسبّب سلوكًا غريبًا، أو انهيارات، أو عرضًا غير صحيح للبيانات. "
+"هل تريد مواصلة تحويل المستند؟"
 
 #: sheets/opencalc/opencalcimport.cc:1910
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unsupported document version"
-msgstr "غير مدعوم مستند النسخة"
+msgstr "إصدار مستند غير مدعوم"
 
 #: sheets/qpro/qproimport.cc:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "QPRO filter cannot open input file - please report."
-msgstr "المرشّح فتح دَخْل ملفّ تقرير."
+msgstr "مرشح QPRO لا يستطيع فتح ملف الإدخال — رجاء بلِّغ."
 
 #: sheets/qpro/qproimport.cc:219
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Unable to open password protected files.\n"
 "The password algorithm has not been published"
-msgstr "عاجز إلى فتح كلمة مرور محمي ملفات كلمة مرور الخوارزميات ليس نُشِر"
+msgstr ""
+"لا يمكن فتح الملفات المحمية بكلمة سر.\n"
+"لم تُنشر خوارزمية كلمة السر"
 
 #: sheets/xlsx/XlsxImport.cpp:577 stage/pptx/PptxImport.cpp:1314
 #: words/docx/import/DocxImport.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to find part for type %1"
-msgstr "يمكن أن ليس قراءة من ملفّ."
+msgstr "لا يمكن إيجاد جزء للنوع %1"
 
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:171
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
-msgstr ""
+msgstr "العدد المُعلن للسلاسل المشتركة صغير جدًا (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:564
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
-msgstr ""
+msgstr "العدد المُعلن لطرازات الخطوط صغير جدًا (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:920
 #, kde-format
 msgid "Declared number of cell formats too small (%1)"
-msgstr ""
+msgstr "العدد المُعلن لصيغ الخلايا صغير جدًا (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:1047
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:1368
 #, kde-format
 msgid "Declared number of fill styles too small (%1)"
-msgstr ""
+msgstr "العدد المُعلن لطرازات التعبئة صغير جدًا (%1)"
 
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:341
 #, kde-format
 msgid ""
 "The data could not be loaded completely because the maximum size of sheet "
 "was exceeded."
-msgstr ""
+msgstr "البيانات لم يستطع تحميلها بالكامل لأن الحد الأقصى لحجم الورقة تجاوز."
 
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1403
 #, kde-format
 msgid "Expected integer or floating point number"
-msgstr ""
+msgstr "توقَّع عددًا صحيحًا أو عائمًا"
 
 #: stage/pptx/PptxXmlDocumentReader.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide layout \"%1\" not found"
-msgstr "تعليق ختامي 1"
+msgstr "لم يجد تخطيط الشريحة «%1»"
 
 #: stage/pptx/PptxXmlSlideReader.cpp:569
 #, kde-format
@@ -815,44 +822,44 @@ msgid "Slide %1"
 msgstr "شريحة %1"
 
 #: words/ascii/ImportDialog.cc:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Words's Plain Text Import Filter"
-msgstr "KWord s عادي نص استيراد تصفية"
+msgstr "مرشح استيراد النص المجرد لـ Words"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
 #: words/ascii/ImportDialogUI.ui:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plain Text Import Dialog"
-msgstr "عادي نص استيراد حوار"
+msgstr "حوار استيراد النص المجرد"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
 #: words/ascii/ImportDialogUI.ui:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "End of Paragraph"
-msgstr "نهاية من فقرة"
+msgstr "نهاية الفقرة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
 #: words/ascii/ImportDialogUI.ui:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "&As is: At the end of line"
-msgstr "ك هو عند end من سطر"
+msgstr "&كما هو: في نهاية السطر"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
 #: words/ascii/ImportDialogUI.ui:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Sentence: If the end of line is the end of a sentence"
-msgstr "الجملة إذا end من سطر هو end من a جملة"
+msgstr "&جملة: إن كانت نهاية السطر هي نهاية جملة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
 #: words/ascii/ImportDialogUI.ui:45
 #, kde-format
 msgid "&Empty Line: If the line is empty"
-msgstr ""
+msgstr "&سطر فارغ: إن كان السطر فارغًا"
 
 #: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "End notes"
-msgstr "نهاية السطر"
+msgstr "حواشي نهاية"
 
 #: words/msword-odf/conversion.cpp:783
 #, kde-format
@@ -875,12 +882,12 @@ msgid "Odd Pages Footer"
 msgstr "تذييل الصفحات الفردية"
 
 #: words/msword-odf/conversion.cpp:791
-#, fuzzy, kde-format
+#, kde-format
 msgid "First Page Header"
 msgstr "ترويسة الصفحة الأولى"
 
 #: words/msword-odf/conversion.cpp:793
-#, fuzzy, kde-format
+#, kde-format
 msgid "First Page Footer"
 msgstr "تذييل الصفحة الأولى"
 
@@ -890,20 +897,20 @@ msgid "Table %1"
 msgstr "الجدول %1"
 
 #: words/rtf/import/rtfimport.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
-msgstr "الـ ملفّ تمَ التحميل الإيطالية ليس إلى RTF مستند."
+msgstr "لا يمكن تحميل الملف، حيث إنه لا يبدو مستند RTF."
 
 #: words/rtf/import/rtfimport.cpp:55 words/rtf/import/rtfimport.cpp:68
 #: words/rtf/import/rtfimport.cpp:76
-#, fuzzy, kde-format
+#, kde-format
 msgid "Words's RTF Import Filter"
-msgstr "KWord s RTF استيراد تصفية"
+msgstr "مرشح استيراد RTF لـ Words"
 
 #: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
-#, fuzzy, kde-format
+#, kde-format
 msgid "The file cannot be loaded."
-msgstr "الـ ملفّ تمَ التحميل الإيطالية."
+msgstr "لا يمكن تحميل الملف."
 
 #, fuzzy
 #~ msgid "Encoding"

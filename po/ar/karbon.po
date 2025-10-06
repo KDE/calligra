@@ -3,13 +3,13 @@
 # Usama Ahmed Ali <usama01@maktoob.com>, 2002.
 # Nuriddin Aminagha <nuriddin@haydarlinux.org>, 2003.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-23 00:39+0000\n"
-"PO-Revision-Date: 2024-09-07 21:33+0400\n"
+"PO-Revision-Date: 2025-10-05 12:21+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
-msgstr ""
+msgstr "عملية منطقية"
 
 #. i18n: ectx: Menu (object_order)
 #: data/karbon.rc:16 data/karbon.rc:77
@@ -128,20 +128,20 @@ msgid "View"
 msgstr "عرض"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Flatten Path..."
-msgstr "سطّح المسار."
+msgstr "ا&سطح المسار..."
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flatten Path"
-msgstr "سطّح المسار"
+msgstr "تسليح المسار"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:98
 #: plugins/refinepath/RefinePathPlugin.cpp:93
 #: plugins/roundcorners/RoundCornersPlugin.cpp:107
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Properties"
 msgstr "خصائص"
 
@@ -151,26 +151,24 @@ msgid "Flatness:"
 msgstr "السطحية:"
 
 #: plugins/flattenpath/KarbonPathFlattenCommand.cpp:152
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten path"
-msgstr "سطّح المسار"
+msgstr "سَطِّح المسار"
 
 #: plugins/refinepath/KarbonPathRefineCommand.cpp:33
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Refine path"
-msgstr "حَسِّن المسار"
+msgstr "نقِّح المسار"
 
 #: plugins/refinepath/RefinePathPlugin.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Refine Path..."
-msgstr "حَسِّن المسار."
+msgstr "&نقِّح المسار..."
 
 #: plugins/refinepath/RefinePathPlugin.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Refine Path"
-msgstr "حَسِّن المسار"
+msgstr "تنقيح المسار"
 
 #: plugins/refinepath/RefinePathPlugin.cpp:97
 #, kde-format
@@ -200,15 +198,14 @@ msgid "Radius:"
 msgstr "نصف القطر:"
 
 #: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:98
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Whirl & pinch"
-msgstr "دوامة"
+msgstr "دوِّر و&اقرص"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Whirl/Pinch..."
-msgstr "الدوران القرصة."
+msgstr "&دوران/قرص..."
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:94
 #, kde-format
@@ -221,11 +218,11 @@ msgid "Info"
 msgstr "معلومات"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The result of the Whirlpinch effect can be improved by refining the path "
 "shape beforehand."
-msgstr "الـ نتيجو من تأثير أداء المسار شكل."
+msgstr "يمكن تحسين نتيجة تأثير الدوران/القرص بتنقيح شكل المسار قبل ذلك."
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:118
 #, kde-format
@@ -303,17 +300,17 @@ msgstr "كربون"
 #: ui/KarbonAboutData.h:22
 #, kde-format
 msgid "A Vector Graphics Drawing Application."
-msgstr ""
+msgstr "تطبيق رسم رسوميات متجهية."
 
 #: ui/KarbonAboutData.h:24
 #, kde-format
 msgid "(c) 2001-%1, The Karbon Developers"
-msgstr ""
+msgstr "(ج) 2001-%1، مطورو Karbon"
 
 #: ui/KarbonAboutData.h:29
 #, kde-format
 msgid "Anthony Fieroni"
-msgstr ""
+msgstr "Anthony Fieroni"
 
 #: ui/KarbonAboutData.h:29
 #, kde-format
@@ -333,48 +330,48 @@ msgstr "النّقل إلى كيوت 6"
 #: ui/KarbonAboutData.h:35
 #, kde-format
 msgid "Rob Buis"
-msgstr ""
+msgstr "Rob Buis"
 
 #: ui/KarbonAboutData.h:36
 #, kde-format
 msgid "Tomislav Lukman"
-msgstr ""
+msgstr "Tomislav Lukman"
 
 #: ui/KarbonAboutData.h:37
 #, kde-format
 msgid "Benoît Vautrin"
-msgstr ""
+msgstr "Benoît Vautrin"
 
 #: ui/KarbonAboutData.h:38 ui/KarbonAboutData.h:39 ui/KarbonAboutData.h:40
 #: ui/KarbonAboutData.h:41 ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Bug fixes and improvements"
-msgstr ""
+msgstr "إصلاح الأخطاء والتحسينات"
 
 #: ui/KarbonAboutData.h:38
 #, kde-format
 msgid "Jan Hambrecht"
-msgstr ""
+msgstr "Jan Hambrecht"
 
 #: ui/KarbonAboutData.h:39
 #, kde-format
 msgid "Peter Simonsson"
-msgstr ""
+msgstr "بيتر سيمونسون"
 
 #: ui/KarbonAboutData.h:40
 #, kde-format
 msgid "Tim Beaulen"
-msgstr ""
+msgstr "Tim Beaulen"
 
 #: ui/KarbonAboutData.h:41
 #, kde-format
 msgid "Boudewijn Rempt"
-msgstr ""
+msgstr "بودوين رمبت"
 
 #: ui/KarbonAboutData.h:42
 #, kde-format
 msgid "Pierre Stirnweiss"
-msgstr ""
+msgstr "بيير شتيرنوايس"
 
 #: ui/KarbonAboutData.h:43
 #, kde-format
@@ -389,12 +386,12 @@ msgstr "ينغ والين"
 #: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Alan Horkan"
-msgstr ""
+msgstr "Alan Horkan"
 
 #: ui/KarbonAboutData.h:44
 #, kde-format
 msgid "Helpful patches and advice"
-msgstr ""
+msgstr "رقع ونصائح مفيدة"
 
 #. i18n translator strings
 #: ui/KarbonAboutData.h:47
@@ -415,14 +412,14 @@ msgid "Insert graphics"
 msgstr "إدراج رسومات"
 
 #: ui/KarbonView.cpp:369
-#, fuzzy, kde-format
+#, kde-format
 msgid "Choose Graphic to Add"
-msgstr "تدرج"
+msgstr "اختر رسماً لإضافته"
 
 #: ui/KarbonView.cpp:405
 #, kde-format
 msgid "Could not load image."
-msgstr ""
+msgstr "تعذر تحميل الصورة."
 
 #: ui/KarbonView.cpp:405 ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
@@ -432,7 +429,7 @@ msgstr "استورد رسمًا"
 #: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Could not create image shape."
-msgstr ""
+msgstr "تعذر إنشاء شكل الصورة."
 
 #: ui/KarbonView.cpp:636
 msgctxt "(qtundo-format)"
@@ -440,32 +437,29 @@ msgid "Mirror Horizontally"
 msgstr "اعكس أفقيًّا"
 
 #: ui/KarbonView.cpp:638
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
-msgstr "أفقي:"
+msgstr "اعكس عمودياً"
 
 #: ui/KarbonView.cpp:640
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
-msgstr "أفقي:"
+msgstr "اعكس أفقياً وعمودياً"
 
 #: ui/KarbonView.cpp:695
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
-msgstr "منفصل المسار"
+msgstr "افصل المسارات"
 
 #: ui/KarbonView.cpp:876
 #, kde-format
 msgid "Outline &Mode"
-msgstr ""
+msgstr "وضع &المحيط"
 
 #: ui/KarbonView.cpp:884
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Import Graphic..."
-msgstr "استيراد رسم."
+msgstr "&استورد رسماً..."
 
 #: ui/KarbonView.cpp:888
 #, kde-format
@@ -479,69 +473,69 @@ msgid "&Duplicate"
 msgstr "&كرّر"
 
 #: ui/KarbonView.cpp:899
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute Center (Horizontal)"
-msgstr "توزيع وسط أفقي"
+msgstr "وزِّع المركز (أفقياً)"
 
 #: ui/KarbonView.cpp:903
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute Gaps (Horizontal)"
-msgstr "توزيع فراغات أفقي"
+msgstr "وزِّع الفجوات (أفقياً)"
 
 #: ui/KarbonView.cpp:907
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute Left Borders"
-msgstr "توزيع يسار الحدود"
+msgstr "وزِّع الحدود اليسرى"
 
 #: ui/KarbonView.cpp:911
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute Right Borders"
-msgstr "توزيع يمين الحدود"
+msgstr "وزِّع الحدود اليمنى"
 
 #: ui/KarbonView.cpp:915
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute Center (Vertical)"
-msgstr "توزيع وسط رأسي"
+msgstr "وزِّع المركز (عمودياً)"
 
 #: ui/KarbonView.cpp:919
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute Gaps (Vertical)"
-msgstr "توزيع فراغات رأسي"
+msgstr "وزِّع الفجوات (عمودياً)"
 
 #: ui/KarbonView.cpp:923
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute Bottom Borders"
-msgstr "توزيع أسفل الحدود"
+msgstr "وزِّع الحدود السفلية"
 
 #: ui/KarbonView.cpp:927
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distribute Top Borders"
-msgstr "توزيع أعلى الحدود"
+msgstr "وزِّع الحدود العلوية"
 
 #: ui/KarbonView.cpp:931
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Color Palette"
-msgstr "المعارض أو"
+msgstr "أظهر لوح الألوان"
 
 #: ui/KarbonView.cpp:933
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show or hide color palette"
-msgstr "المعارض أو"
+msgstr "أظهر أو أخف لوح الألوان"
 
 #: ui/KarbonView.cpp:937
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Clip Object"
-msgstr "&عنصر"
+msgstr "&اقطع الكائن"
 
 #: ui/KarbonView.cpp:941
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Unclip Objects"
-msgstr "تفرقة ال&عناصر"
+msgstr "&ألغِ قطع الكائنات"
 
 #: ui/KarbonView.cpp:945
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mirror Vertically"
-msgstr "أفقي:"
+msgstr "اعكس عمودياً"
 
 #: ui/KarbonView.cpp:949
 #, kde-format
@@ -554,44 +548,44 @@ msgid "&Close Path"
 msgstr "أ&غلق المسار"
 
 #: ui/KarbonView.cpp:962
-#, fuzzy, kde-format
+#, kde-format
 msgid "Com&bine Path"
-msgstr "دمج المسار"
+msgstr "ا&جمع المسار"
 
 #: ui/KarbonView.cpp:968
-#, fuzzy, kde-format
+#, kde-format
 msgid "Se&parate Path"
-msgstr "منفصل المسار"
+msgstr "ا&فصل المسار"
 
 #: ui/KarbonView.cpp:974
-#, fuzzy, kde-format
+#, kde-format
 msgid "Re&verse Path"
-msgstr "إغلاق المسار"
+msgstr "ا&عكس المسار"
 
 #: ui/KarbonView.cpp:980
-#, fuzzy, kde-format
+#, kde-format
 msgid "Intersect Paths"
-msgstr "تقاطع مسارات"
+msgstr "تقاطع المسارات"
 
 #: ui/KarbonView.cpp:986
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subtract Paths"
-msgstr "تقاطع مسارات"
+msgstr "اطرح المسارات"
 
 #: ui/KarbonView.cpp:992
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unite Paths"
-msgstr "إتّحد مسارات"
+msgstr "وحِّد المسارات"
 
 #: ui/KarbonView.cpp:998
 #, kde-format
 msgid "Exclude Paths"
-msgstr ""
+msgstr "استبعد المسارات"
 
 #: ui/KarbonView.cpp:1004
-#, fuzzy, kde-format
+#, kde-format
 msgid "Snap Path to Grid"
-msgstr "انطباق على الشبكة"
+msgstr "التقط المسار للشبكة"
 
 #: ui/KarbonView.cpp:1012
 #, kde-format
@@ -601,7 +595,7 @@ msgstr "كبر للتحديد"
 #: ui/KarbonView.cpp:1016
 #, kde-format
 msgid "Zoom to Drawing"
-msgstr ""
+msgstr "كبِّر للرسم"
 
 #: ui/KarbonZoomController.cpp:55
 #, kde-format
@@ -614,24 +608,24 @@ msgid "Show status bar:"
 msgstr "اعرض شريط الحالة:"
 
 #: ui/widgets/KarbonConfigInterfacePage.cpp:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of recent files:"
-msgstr "الرقم من ملفات:"
+msgstr "عدد الملفات الأخيرة:"
 
 #: ui/widgets/KarbonConfigInterfacePage.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Palette font size:"
-msgstr "لوحة الخط حجم:"
+msgstr "حجم خط لوح الألوان:"
 
 #: ui/widgets/KarbonPaletteBarWidget.cpp:51
 #, kde-format
 msgid "Select palette"
-msgstr ""
+msgstr "اختر لوح الألوان"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:46
 #, kde-format
 msgid "Press to apply fill to selection"
-msgstr ""
+msgstr "اضغط لتطبيق التعبئة على التحديد"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:88
 #, kde-format
@@ -642,7 +636,7 @@ msgstr "لا شيء"
 #: ui/widgets/KarbonSmallStylePreview.cpp:110
 #, kde-format
 msgid "Press to apply stroke to selection"
-msgstr ""
+msgstr "اضغط لتطبيق حدود على التحديد"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:159
 #, kde-format
@@ -657,9 +651,9 @@ msgid "None"
 msgstr "لا شيء"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:185
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stroke:"
-msgstr "شطب"
+msgstr "الحدود:"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:190
 #, kde-format

@@ -1,14 +1,14 @@
 # POT_PART_NORMAL only
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:45+0400\n"
+"PO-Revision-Date: 2025-10-05 13:14+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -22,12 +22,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "زايد السعيدي"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "zayed.alsaidi@gmail.com"
 
 #: SheetsEditor.cpp:57 SheetsEditor.cpp:124
 #, kde-format
@@ -55,11 +55,13 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"يحتوي هذا المستند على رابط خارجي لمستند بعيد\n"
+"%1"
 
 #: TableShape.cpp:301
 #, kde-format
 msgid "Confirmation Required"
-msgstr ""
+msgstr "التأكيد مطلوب"
 
 #: TableShape.cpp:302
 #, kde-format
@@ -79,12 +81,12 @@ msgstr "ورقة عمل"
 #: TableShapeFactory.cpp:37
 #, kde-format
 msgid "Spreadsheet Shape"
-msgstr ""
+msgstr "شكل جدول البيانات"
 
 #: TableTool.cpp:211
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
-msgstr ""
+msgstr "استورد ورقة عمل OpenDocument"
 
 #: TableTool.cpp:212
 #, kde-format
@@ -94,7 +96,7 @@ msgstr "استورد"
 #: TableTool.cpp:216
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
-msgstr ""
+msgstr "صدّر ورقة عمل OpenDocument"
 
 #: TableTool.cpp:217
 #, kde-format
@@ -114,7 +116,7 @@ msgstr "الورقة:"
 #: TableTool.cpp:740
 #, kde-format
 msgid "Selected Sheet"
-msgstr ""
+msgstr "الورقة المحددة"
 
 #: TableTool.cpp:754
 #, kde-format
@@ -124,7 +126,7 @@ msgstr "خيارات العرض"
 #: TableToolFactory.cpp:21
 #, kde-format
 msgid "Table editing"
-msgstr ""
+msgstr "تحرير الجدول"
 
 #: ToolHeaders.cpp:279 ToolHeaders.cpp:863
 #, kde-format

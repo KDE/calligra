@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-17 00:41+0000\n"
-"PO-Revision-Date: 2025-08-09 21:50+0400\n"
+"POT-Creation-Date: 2025-10-06 00:42+0000\n"
+"PO-Revision-Date: 2025-10-05 11:58+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -87,15 +87,15 @@ msgstr ""
 "kde.kspread، ولكن الموجود %1"
 
 #: core/ksp/SheetsKspDoc.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "This document was created with a newer version of Calligra Sheets (syntax "
 "version: %1)\n"
 "When you open it with this version of Calligra Sheets, some information may "
 "be lost."
 msgstr ""
-"هذا المستند أنشئ بواسطة إصدار أحدث من KSpread (إصدار الصياغة: %1)\n"
-"عندما تفتحه مع هذا الإصدار من  KSpread، قد تفقد بعض المعلومات."
+"أنشِئَت هذه الوثيقة بإصدار أحدث من كاليغرا Sheets (إصدار الصيغة: %1)\n"
+"عند فتحها بهذا الإصدار من كاليغرا Sheets، قد تخسر بعض المعلومات."
 
 #: core/ksp/SheetsKspDoc.cpp:55
 #, kde-format
@@ -128,9 +128,9 @@ msgid "Sheet%1"
 msgstr "الورقة%1"
 
 #: core/Sheet.cpp:660
-#, fuzzy, kde-format
+#, kde-format
 msgid "Validation for cell %1 failed"
-msgstr "فشل تحقق الصحة للخلية <i>%1</i>"
+msgstr "فشِل تحقق الخلية %1"
 
 #: core/StyleManager.cpp:38
 #, kde-format
@@ -203,7 +203,7 @@ msgstr "أي نوع من القيم"
 #: engine/FunctionDescription.cpp:47
 #, kde-format
 msgid "A string representing a date (like \"2/22/2012\")"
-msgstr ""
+msgstr "سلسلة نصية تُمثل تاريخًا (مثل \"2/22/2012\")"
 
 #: engine/FunctionDescription.cpp:52
 #, kde-format
@@ -234,12 +234,12 @@ msgstr "مدى من أي نوع من القيم"
 #, kde-format
 msgid ""
 "A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")"
-msgstr ""
+msgstr "سلسلة نصية تُمثل نطاقًا من التواريخ (مثل \"2/22/2012\"-\"5/22/2012\")"
 
 #: engine/FunctionDescription.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "<p><b>Return type:</b> %1</p>"
-msgstr "أرجع النوع:"
+msgstr "<p><b>نوع الإرجاع:</b> %1</p>"
 
 #: engine/FunctionDescription.cpp:168
 #, kde-format
@@ -252,14 +252,14 @@ msgid "Parameters"
 msgstr "معاملات"
 
 #: engine/FunctionDescription.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "<br><b>Type:</b> %1"
-msgstr "أرجع النوع:"
+msgstr "<br><b>النوع:</b> %1"
 
 #: engine/FunctionDescription.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "<li><b>Comment:</b> %1"
-msgstr "أرجع النوع:"
+msgstr "<li><b>تعليق:</b> %1"
 
 #: engine/FunctionDescription.cpp:186
 #, kde-format
@@ -585,15 +585,15 @@ msgid "Number to convert into string"
 msgstr "الرقم المراد تحويله لسلسلة نصية"
 
 #: functions/conversion.xml:64
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The NUM2STRING() function returns a string value for a given number. Note "
 "that Calligra Sheets can auto-convert numbers to strings if needed, so this "
 "function should rarely be needed."
 msgstr ""
-"الدالة NUM2STRING() ترجع قيمة نصية لرقم معطى. لاحظ أن KSpread يمكنه التحويل "
-"التلقائي من الأرقام للسلاسل النصية عند الحاجة، لذلك هذه الدالة يُحتاج إليها "
-"نادرا."
+"الدالة NUM2STRING() تُرجع قيمة سلسلة نصية لعدد مُعطى. لاحظ أن كاليغرا Sheets "
+"تستطيع التحويل آليًا للأرقام إلى سلاسل نصية عند الحاجة، لذا نادرًا ما تحتاج "
+"هذه الدالة."
 
 #: functions/conversion.xml:65
 #, kde-format
@@ -887,14 +887,14 @@ msgid "Format"
 msgstr "تنسيق"
 
 #: functions/conversion.xml:255
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ROMAN() function returns the number in Roman format. Only positive whole "
 "numbers can be converted. The optional Format argument specifies the level "
 "of conciseness, and defaults to 0."
 msgstr ""
-"الدالة ROMAN() ترجع الرقم بالتنسيق الروماني. الرقم يجب أن يكون موجبا وكليا. "
-"التنسيق المعطى الاختياري يحدد مستوى الاختصار، والافتراضي إلى 0."
+"الدالة ROMAN() تُرجع العدد بالصيغة الرومانية. يمكن تحويل الأعداد الصحيحة "
+"الموجبة فقط. الوسيط الاختياري Format يُحدد مستوى الإيجاز، والمبدئي له هو 0."
 
 #: functions/conversion.xml:256
 #, kde-format
@@ -1789,11 +1789,11 @@ msgid "ISLEAPYEAR(2000) returns True"
 msgstr "الدالة ISLEAPYEAR(2000) ترجع صحيح"
 
 #: functions/datetime.xml:423
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The function DAYSINMONTH() returns the number of days in the given year and "
 "month."
-msgstr "الدالة DAYSINMONTH() ترجع عدد الأيام في السنة والشهر المعطيان."
+msgstr "الدالة DAYSINMONTH() تُرجع عدد الأيام في السنة والشهر المُعطيان."
 
 #: functions/datetime.xml:424
 #, kde-format
@@ -2050,23 +2050,23 @@ msgid "WEEKNUM(date; method)"
 msgstr "WEEKNUM(تاريخ; وسيلة)"
 
 #: functions/datetime.xml:613
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "WEEKNUM(A1; 1) returns 11 when A1 is \"9th of March 2008\". Number of the "
 "week in the year, with a week beginning on Sunday (1, this is the default if "
 "Method is omitted.)"
 msgstr ""
-"الدالة WEEKNUM(A1; 1) ترجع 11 عندما يكون A1 هو \"9 مارس 2008\". رقم الأسبوع "
-"في السنة، بأسبوع يبدأ بالأحد (11)"
+"WEEKNUM(A1; 1) تُرجع 11 عندما يكون A1 هو \"9th of March 2008\". عدد الأسبوع "
+"في السنة، مع بدء الأسبوع يوم الأحد (1، وهذا هو المبدئي إذا حُذِفَت الطريقة)."
 
 #: functions/datetime.xml:614
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "WEEKNUM(A1; 2) returns 10 when A1 is \"9th of March 2008\". Number of the "
 "week in the year, with a week beginning on Monday (2)"
 msgstr ""
-"الدالة WEEKNUM(A1; 2) ترجع 10 حيث A1 هو \"9 مارس 2008\". رقم الأسبوع في "
-"السنة، بأسبوع يبدأ بالإثنين (10)"
+"WEEKNUM(A1; 2) تُرجع 10 عندما يكون A1 هو \"9th of March 2008\". عدد الأسبوع "
+"في السنة، مع بدء الأسبوع يوم الإثنين (2)"
 
 #: functions/datetime.xml:623 functions/datetime.xml:647
 #, kde-format
@@ -2114,13 +2114,13 @@ msgstr ""
 "1999\" ترجع عدد الأيام  1626"
 
 #: functions/datetime.xml:639
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "DATEDIF(A1;A2;\"m\") A1 is \"1st of January 1995\" and A2 is \"15th of June "
 "1999\" returns number of months 53"
 msgstr ""
-"الدالة DATEDIF(A1;A2;\"m\") حيث A1 هو\"1 يناير 1995\" و A2 هو \"15 يونيو "
-"1999\" ترجع عدد الأسابيع 53"
+"DATEDIF(A1;A2;\"m\") حيث A1 هو \"1st of January 1995\" و A2 هو \"15th of "
+"June 1999\" تُرجع عدد الأشهر 53"
 
 #: functions/datetime.xml:659
 #, kde-format
@@ -2141,9 +2141,9 @@ msgstr ""
 "فعلي/360، و 3 = فعلي/365، و 4 = أوروبي 30/360"
 
 #: functions/datetime.xml:661
-#, fuzzy, kde-format
+#, kde-format
 msgid "YEARFRAC(start date; end date; basis)"
-msgstr "YEARFRAC(تاريخ البدء; تاريخ النهاية; القاعدة)"
+msgstr "YEARFRAC(تاريخ البدء؛ تاريخ الانتهاء؛ الأساس)"
 
 #: functions/datetime.xml:669 functions/datetime.xml:692
 #, kde-format
@@ -2182,13 +2182,13 @@ msgid "WORKDAY(start date; days; holidays)"
 msgstr "WORKDAY(تاريخ البدء; أيام; عطلات)"
 
 #: functions/datetime.xml:684
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "if B9 is \"01/01/2001\", D3 is \"01/03/2001\", D4 is \"01/04/2001\" then "
 "WORKDAY(B9;2;D3:D4) returns \"Fri Jan 5 2001\""
 msgstr ""
-"الدالة WORKDAY(B9;2;D3:E4) حيث B9 هو \"01/01/2001\"، D3 هو \"01/03/2001\"، "
-"D4 هو \"01/04/2003\" يوم عمل ترجع \"الجمعة يناير 5 2001\""
+"إذا كانت B9 هي \"01/01/2001\"، و D3 هي \"01/03/2001\"، و D4 هي "
+"\"01/04/2001\" إذن WORKDAY(B9;2;D3:D4) تُرجع \"Fri Jan 5 2001\""
 
 #: functions/datetime.xml:696
 #, kde-format
@@ -2234,9 +2234,9 @@ msgid "DATE2UNIX(date)"
 msgstr "DATE2UNIX(تاريخ)"
 
 #: functions/datetime.xml:723
-#, fuzzy, kde-format
+#, kde-format
 msgid "DATE2UNIX(\"01/01/2000\") returns 946,684,800"
-msgstr "الدالة DATE2UNIX(\"01/01/2000\") ترجع 946,681,200"
+msgstr "DATE2UNIX(\"01/01/2000\") تُرجع 946,684,800"
 
 #: functions/datetime.xml:731
 #, kde-format
@@ -2390,15 +2390,14 @@ msgid ""
 msgstr "الدالة CONVERT() ترجع تحويلا من نظام قياسات لنظام قياسات آخر."
 
 #: functions/engineering.xml:130
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Supported mass units: g (gram), sg (pieces), lbm (pound), u (atomic mass), "
 "ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight "
 "(hundredweight)."
 msgstr ""
-"وحدات الكتلة المدعومة: g (جرام)، sg (قطع)، lbm (باوند)، u (كتلة ذرية)، ozm "
-"(ounce)، stone، ton، grain، pweight (pennyweight)، hweight (وزن مئوي)، bron "
-"(الطن المجمل المسجل)."
+"وحدات الكتلة المدعومة: g (غرام)، sg (قطع)، lbm (رطل)، u (كتلة ذرية)، ozm "
+"(أونصة)، stone، ton، grain، pweight (وزن القرش)، hweight (وزن المائة)."
 
 #: functions/engineering.xml:131
 #, kde-format
@@ -2450,17 +2449,17 @@ msgid "Supported temperature units: C (Celsius), F (Fahrenheit), K (Kelvin)."
 msgstr "وحدات درجة الحرارة المدعومة: C (سلزيوس)، F (فهرنهيت)، K (كلفن)."
 
 #: functions/engineering.xml:138
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Supported volume units: l (liter), tsp (teaspoon), tbs (tablespoon), oz "
 "(ounce liquid), cup, pt (pint), qt (quart), gal (gallon), barrel, m3 (cubic "
 "meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 "
 "(cubic foot), yd3 (cubic yard), GRT or regton (gross register ton)."
 msgstr ""
-"وحدات الحجم المدعومة: l (لتر)، tsp (ملعقة شاي)، tbs (ملعقة منظدة)، oz (أونس "
-"سائل)، cup، pt (باينت)، qt (كوارت)، gal (جالون)، barrel، m3 (متر مكعب)، mi3 "
+"وحدات الحجم المدعومة: l (لتر)، tsp (ملعقة شاي)، tbs (ملعقة طعام)، oz (أونصة "
+"سائلة)، cup، pt (باينت)، qt (كوارت)، gal (غالون)، barrel، m3 (متر مكعب)، mi3 "
 "(ميل مكعب)، Nmi3 (ميل بحري مكعب)، in3 (بوصة مكعبة)، ft3 (قدم مكعب)، yd3 "
-"(ياردة مكعبة)."
+"(يارد مكعب)، GRT أو regton (طن التسجيل الإجمالي)."
 
 #: functions/engineering.xml:139
 #, kde-format
@@ -2579,12 +2578,10 @@ msgid "The minimum length of the output"
 msgstr "الطول الأقل للمخرجات"
 
 #: functions/engineering.xml:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "The DEC2BIN() function returns the value formatted as a binary number."
+#, kde-format
 msgid ""
 "The DEC2BIN() function returns a decimal value formatted as a binary number."
-msgstr "الدالة DEC2BIN() ترجع القيمة مهيئة كعدد ثنائي."
+msgstr "الدالة DEC2BIN() تُرجع قيمة عشرية مُنسقة كعدد ثنائي."
 
 #: functions/engineering.xml:200
 #, kde-format
@@ -2602,14 +2599,11 @@ msgid "DEC2BIN(55) returns \"110111\""
 msgstr "الدالة DEC2BIN(55) ترجع \"110111\""
 
 #: functions/engineering.xml:218
-#, fuzzy, kde-format
-#| msgid ""
-#| "The DEC2HEX() function returns the value formatted as a hexadecimal "
-#| "number."
+#, kde-format
 msgid ""
 "The DEC2HEX() function returns a decimal value formatted as a hexadecimal "
 "number."
-msgstr "الدالة DEC2HEX() ترجع القيمة مهيئة كعدد ست عشري."
+msgstr "الدالة DEC2HEX() تُرجع قيمة عشرية مُنسقة كعدد سداسي عشري."
 
 #: functions/engineering.xml:219
 #, kde-format
@@ -2627,12 +2621,10 @@ msgid "DEC2HEX(55) returns \"37\""
 msgstr "الدالة DEC2HEX(55) ترجع \"37\""
 
 #: functions/engineering.xml:237
-#, fuzzy, kde-format
-#| msgid ""
-#| "The DEC2OCT() function returns the value formatted as an octal number."
+#, kde-format
 msgid ""
 "The DEC2OCT() function returns a decimal value formatted as an octal number."
-msgstr "الدالة DEC2OCT() ترجع القيمة مهيأة كعدد ثُماني."
+msgstr "الدالة DEC2OCT() تُرجع قيمة عشرية مُنسقة كعدد ثماني."
 
 #: functions/engineering.xml:238
 #, kde-format
@@ -2650,12 +2642,10 @@ msgid "DEC2OCT(55) returns \"67\""
 msgstr "الدالة DEC2OCT(55) ترجع \"67\""
 
 #: functions/engineering.xml:256
-#, fuzzy, kde-format
-#| msgid ""
-#| "The OCT2BIN() function returns the value formatted as a binary number."
+#, kde-format
 msgid ""
 "The OCT2BIN() function returns an octal value formatted as a binary number."
-msgstr "الدالة OCT2BIN() ترجع القيمة مهيأة كعدد ثنائي."
+msgstr "الدالة OCT2BIN() تُرجع قيمة ثمانية مُنسقة كعدد ثنائي."
 
 #: functions/engineering.xml:257
 #, kde-format
@@ -2673,12 +2663,10 @@ msgid "OCT2BIN(\"55\") returns \"101101\""
 msgstr "الدالة OCT2BIN(\"55\") ترجع \"101101\""
 
 #: functions/engineering.xml:271
-#, fuzzy, kde-format
-#| msgid ""
-#| "The OCT2DEC() function returns the value formatted as a decimal number."
+#, kde-format
 msgid ""
 "The OCT2DEC() function returns an octal value formatted as a decimal number."
-msgstr "الدالة OCT2DEC() ترجع القيمة مهيأة كعدد بالنظام العشري."
+msgstr "الدالة OCT2DEC() تُرجع قيمة ثمانية مُنسقة كعدد عشري."
 
 #: functions/engineering.xml:272
 #, kde-format
@@ -2696,14 +2684,11 @@ msgid "OCT2DEC(\"55\") returns 45 "
 msgstr "الدالة OCT2DEC(\"55\") ترجع 45 "
 
 #: functions/engineering.xml:290
-#, fuzzy, kde-format
-#| msgid ""
-#| "The OCT2HEX() function returns the value formatted as a hexadecimal "
-#| "number."
+#, kde-format
 msgid ""
 "The OCT2HEX() function returns an octal value formatted as a hexadecimal "
 "number."
-msgstr "الدالة OCT2HEX() ترجع القيمة مهيأة كعدد ست عشري."
+msgstr "الدالة OCT2HEX() تُرجع قيمة ثمانية مُنسقة كعدد سداسي عشري."
 
 #: functions/engineering.xml:291
 #, kde-format
@@ -2721,12 +2706,10 @@ msgid "OCT2HEX(\"55\") returns \"2D\""
 msgstr "الدالة OCT2HEX(\"55\") ترجع \"2D\""
 
 #: functions/engineering.xml:305
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BIN2DEC() function returns the value formatted as a decimal number."
+#, kde-format
 msgid ""
 "The BIN2DEC() function returns a binary value formatted as a decimal number."
-msgstr "الدالة BIN2DEC() ترجع القيمة مهيأة كعدد بالنظام العشري."
+msgstr "الدالة BIN2DEC() تُرجع قيمة ثنائية مُنسقة كعدد عشري."
 
 #: functions/engineering.xml:306
 #, kde-format
@@ -2744,12 +2727,10 @@ msgid "BIN2DEC(\"11111\") returns 31 "
 msgstr "الدالة BIN2DEC(\"11111\") ترجع 31 "
 
 #: functions/engineering.xml:324
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BIN2OCT() function returns the value formatted as an octal number."
+#, kde-format
 msgid ""
 "The BIN2OCT() function returns a binary value formatted as an octal number."
-msgstr "الدالة BIN2OCT() ترجع القيمة مهيأة كعدد بالنظام الثماني."
+msgstr "الدالة BIN2OCT() تُرجع قيمة ثنائية مُنسقة كعدد ثماني."
 
 #: functions/engineering.xml:325
 #, kde-format
@@ -2767,14 +2748,11 @@ msgid "BIN2OCT(\"11111\") returns \"37\" "
 msgstr "الدالة BIN2OCT(\"11111\") ترجع \"37\" "
 
 #: functions/engineering.xml:343
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BIN2HEX() function returns the value formatted as a hexadecimal "
-#| "number."
+#, kde-format
 msgid ""
 "The BIN2HEX() function returns a binary value formatted as a hexadecimal "
 "number."
-msgstr "الدالة BIN2HEX() ترجع القيمة مهيأة كعدد ست عشري."
+msgstr "الدالة BIN2HEX() تُرجع قيمة ثنائية مُنسقة كعدد سداسي عشري."
 
 #: functions/engineering.xml:344
 #, kde-format
@@ -2792,13 +2770,11 @@ msgid "BIN2HEX(\"11111\") returns \"1f\""
 msgstr "الدالة BIN2HEX(\"11111\") ترجع \"1f\""
 
 #: functions/engineering.xml:358
-#, fuzzy, kde-format
-#| msgid ""
-#| "The HEX2DEC() function returns the value formatted as a decimal number."
+#, kde-format
 msgid ""
 "The HEX2DEC() function returns a hexadecimal value formatted as a decimal "
 "number."
-msgstr "الدالة HEX2DEC() ترجع القيمة مهيأة كعدد بالنظام العشري."
+msgstr "الدالة HEX2DEC() تُرجع قيمة سداسية عشرية مُنسقة كعدد عشري."
 
 #: functions/engineering.xml:359
 #, kde-format
@@ -2816,13 +2792,11 @@ msgid "HEX2DEC(\"37\") returns 55 "
 msgstr "الدالة HEX2DEC(\"37\") ترجع 55 "
 
 #: functions/engineering.xml:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "The HEX2OCT() function returns the value formatted as an octal number."
+#, kde-format
 msgid ""
 "The HEX2OCT() function returns a hexadecimal value formatted as an octal "
 "number."
-msgstr "الدالة HEX2OCT() ترجع القيمة مهيأة كعدد ثماني."
+msgstr "الدالة HEX2OCT() تُرجع قيمة سداسية عشرية مُنسقة كعدد ثماني."
 
 #: functions/engineering.xml:374
 #, kde-format
@@ -2840,13 +2814,11 @@ msgid "HEX2OCT(\"37\") returns \"67\" "
 msgstr "الدالة HEX2OCT(\"37\") ترجع \"67\" "
 
 #: functions/engineering.xml:388
-#, fuzzy, kde-format
-#| msgid ""
-#| "The HEX2BIN() function returns the value formatted as a binary number."
+#, kde-format
 msgid ""
 "The HEX2BIN() function returns a hexadecimal value formatted as a binary "
 "number."
-msgstr "الدالة HEX2BIN() ترجع القيمة مهيأة كعدد ثنائي."
+msgstr "الدالة HEX2BIN() تُرجع قيمة سداسية عشرية مُنسقة كعدد ثنائي."
 
 #: functions/engineering.xml:389
 #, kde-format
@@ -2999,79 +2971,79 @@ msgid "IMCOSH(\"12i\") returns 0.84358 "
 msgstr "الدالة IMCOSH(\"12i\") ترجع 0.84358 "
 
 #: functions/engineering.xml:482
-#, fuzzy, kde-format
+#, kde-format
 msgid "The IMCOT(string) returns the cotangent of a complex number."
-msgstr "الدالة IMCOS(سلسلة نصية) ترجع جيب التمام لعدد مركب."
+msgstr "الدالة IMCOT(سلسلة) تُرجع ظل التمام لعدد مُركب."
 
 #: functions/engineering.xml:483
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMCOT(string)"
-msgstr "IMCOS(سلسلة نصية)"
+msgstr "IMCOT(سلسلة)"
 
 #: functions/engineering.xml:484
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMCOT(\"1+i\") returns \"0.21762-0.86801i\""
-msgstr "الدالة IMCOS(\"1+i\") ترجع \"0.83373-0.988898i\""
+msgstr "IMCOT(\"1+i\") تُرجع \"0.21762-0.86801i\""
 
 #: functions/engineering.xml:496
-#, fuzzy, kde-format
+#, kde-format
 msgid "The IMCSC(string) returns the cosecant of a complex number."
-msgstr "الدالة IMCOS(سلسلة نصية) ترجع جيب التمام لعدد مركب."
+msgstr "الدالة IMCSC(سلسلة) تُرجع القاطع التمام لعدد مُركب."
 
 #: functions/engineering.xml:497
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMCSC(string)"
-msgstr "IMCOS(سلسلة نصية)"
+msgstr "IMCSC(سلسلة)"
 
 #: functions/engineering.xml:498
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMCSC(\"1+i\") returns \"0.62151-0.30393i\""
-msgstr "الدالة IMTAN(\"1+i\") ترجع \"0.27175+1.08392i\""
+msgstr "IMCSC(\"1+i\") تُرجع \"0.62151-0.30393i\""
 
 #: functions/engineering.xml:510
-#, fuzzy, kde-format
+#, kde-format
 msgid "The IMCSCH(string) returns the hyperbolic cosecant of a complex number."
-msgstr "الدالة IMCOSH(سلسلة نصية) ترجع جيب التمام الزائدي لعدد مركب."
+msgstr "الدالة IMCSCH(سلسلة) تُرجع القاطع التمام الزائدي لعدد مُركب."
 
 #: functions/engineering.xml:511
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMCSCH(string)"
-msgstr "IMCOSH(سلسلة نصية)"
+msgstr "IMCSCH(سلسلة)"
 
 #: functions/engineering.xml:512
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMCSCH(\"1+i\") returns \"0.30393-i0.62151\""
-msgstr "الدالة IMCOS(\"1+i\") ترجع \"0.83373-0.988898i\""
+msgstr "IMCSCH(\"1+i\") تُرجع \"0.30393-i0.62151\""
 
 #: functions/engineering.xml:524
-#, fuzzy, kde-format
+#, kde-format
 msgid "The IMSEC(string) returns the secant of a complex number."
-msgstr "الدالة IMCOS(سلسلة نصية) ترجع جيب التمام لعدد مركب."
+msgstr "الدالة IMSEC(سلسلة) تُرجع القاطع لعدد مُركب."
 
 #: functions/engineering.xml:525
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMSEC(string)"
-msgstr "IMCOS(سلسلة نصية)"
+msgstr "IMSEC(سلسلة)"
 
 #: functions/engineering.xml:526
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMSEC(\"1+i\") returns \"0.49833+i0.59108\""
-msgstr "الدالة IMCOSH(\"1+i\") ترجع \"0.83373+0.988898i\""
+msgstr "IMSEC(\"1+i\") تُرجع \"0.49833+i0.59108\""
 
 #: functions/engineering.xml:538
-#, fuzzy, kde-format
+#, kde-format
 msgid "The IMSECH(string) returns the hyperbolic secant of a complex number."
-msgstr "الدالة IMCOSH(سلسلة نصية) ترجع جيب التمام الزائدي لعدد مركب."
+msgstr "الدالة IMSECH(سلسلة) تُرجع القاطع الزائدي لعدد مُركب."
 
 #: functions/engineering.xml:539
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMSECH(string)"
-msgstr "IMCOSH(سلسلة نصية)"
+msgstr "IMSECH(سلسلة)"
 
 #: functions/engineering.xml:540
-#, fuzzy, kde-format
+#, kde-format
 msgid "IMSECH(\"1+i\") returns \"0.49833-i0.59108\""
-msgstr "الدالة IMCOS(\"1+i\") ترجع \"0.83373-0.988898i\""
+msgstr "IMSECH(\"1+i\") تُرجع \"0.49833-i0.59108\""
 
 #: functions/engineering.xml:552
 #, kde-format
@@ -3558,7 +3530,7 @@ msgid "Day counting basis"
 msgstr "قاعدة حساب اليوم"
 
 #: functions/financial.xml:39
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ACCRINT function returns accrued interest for a security which pays "
 "periodic interest. Allowed frequencies are 1 - annual, 2 - semi-annual or 4 "
@@ -3566,10 +3538,10 @@ msgid ""
 "(default), 1: real days, 2: real days/360, 3: real days/365 or 4: European "
 "30/360."
 msgstr ""
-"الدالة ACCRINT ترجع الفائدة المتراكمة لسند مالي يدفع فائدة دورية. الترددات "
-"المسموحة هي 1 - سنوي، 2 - نصف سنوي أو 4 - كل ثلاثة شهور. القاعدة هي نوع "
-"حساباليوم الذي ترغب باستخدامه: 0: أمريكي 30/360 (افتراضي)، 1: أيام حقيقية، "
-"2: أيام حقيقية/360، 3: أيام حقيقية/365 أو 4: أوروبي 30/365."
+"الدالة ACCRINT تُرجع الفائدة المستحقة لورقة مالية تدفع فائدة دورية. التكرارات "
+"المسموحة هي 1 - سنوية، 2 - نصف سنوية أو 4 - ربع سنوية. الأساس هو نوع عد "
+"الأيام الذي تريد استخدامه: 0: US 30/360 (مبدئي)، 1: أيام حقيقية، 2: أيام "
+"حقيقية/360، 3: أيام حقيقية/365 أو 4: European 30/360."
 
 #: functions/financial.xml:40
 #, kde-format
@@ -3587,17 +3559,16 @@ msgstr ""
 "ترجع 16,944"
 
 #: functions/financial.xml:70
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ACCRINTM function returns accrued interest for a security which pays "
 "interests at maturity date. Basis is the type of day counting you want to "
 "use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real "
 "days/365 or 4: European 30/360."
 msgstr ""
-"الدالة ACCRINTM ترجع الفائدة المتراكمة لسند مالي يدفع فوائد عند تاريخ "
-"الاستحقاق. القاعدة هي نوع حساب اليوم الذي تريد استخدامه: 0: أمريكي 30/360 "
-"(افتراضي)، 1: أيام حقيقية، 2: أيام حقيقية/360، 3: أيام حقيقية/365 أو 4: "
-"أوروبي 30/365."
+"الدالة ACCRINTM تُرجع الفائدة المستحقة لورقة مالية تدفع فوائد في تاريخ "
+"الاستحقاق. الأساس هو نوع عد الأيام الذي تريد استخدامه: 0: US 30/360 (مبدئي)، "
+"1: أيام حقيقية، 2: أيام حقيقية/360، 3: أيام حقيقية/365 أو 4: European 30/360."
 
 #: functions/financial.xml:71
 #, kde-format
@@ -3629,13 +3600,13 @@ msgid "Fv"
 msgstr "Fv"
 
 #: functions/financial.xml:93
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The AMORDEGRC function calculates the amortization value for the French "
 "accounting system using degressive depreciation."
 msgstr ""
-"الدالة AMORDEGRC تحسب قيمة التقسيط لنظام الحسابات الفرنسي باستخدام انخفاض "
-"القيمة التدريجي."
+"الدالة AMORDEGRC تحسب قيمة الاستهلاك لنظام المحاسبة الفرنسي باستخدام "
+"الاستهلاك المتناقص."
 
 #: functions/financial.xml:94
 #, kde-format
@@ -3743,8 +3714,9 @@ msgstr ""
 "سنة تصبح CONTINUOUS(1000;.1;1) أو $1105.17."
 
 #: functions/financial.xml:172
-#, kde-format
-msgid "CONTINOUS(principal;interest;years)"
+#, fuzzy, kde-format
+#| msgid "CONTINOUS(principal;interest;years)"
+msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINOUS(الأساسية;الفائدة;السنوات)"
 
 #: functions/financial.xml:173
@@ -3772,16 +3744,16 @@ msgid "Frequency"
 msgstr "التردد"
 
 #: functions/financial.xml:197
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The COUPNUM function returns the number of coupons to be paid between the "
 "settlement and the maturity. Basis is the type of day counting you want to "
 "use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real "
 "days/365 or 4: European 30/360."
 msgstr ""
-"الدالة COUPNUM ترجع عدد القسائم المطلوب دفعها بين التسوية والاستحقاق. "
-"القاعدة هي نوع حساب اليوم الذي ترغب  باستخدامه: 0: أمريكي 30/360 (افتراضي)، "
-"1: أيام حقيقية، 2: أيام حقيقية/360، 3: أيام حقيقية/365 أو 4: أوروبي  30/365."
+"الدالة COUPNUM تُرجع عدد الكوبونات الواجب دفعها بين التسوية والاستحقاق. "
+"الأساس هو نوع عد الأيام الذي تريد استخدامه: 0: US 30/360 (مبدئي)، 1: أيام "
+"حقيقية، 2: أيام حقيقية/360، 3: أيام حقيقية/365 أو 4: European 30/360."
 
 #: functions/financial.xml:198
 #, kde-format
@@ -3829,9 +3801,9 @@ msgid "Calculates the cumulative interest payment."
 msgstr "تحسب دفعة الفائدة المتراكمة."
 
 #: functions/financial.xml:237
-#, fuzzy, kde-format
+#, kde-format
 msgid "CUMIPMT(rate; periods; value; start; end; type)"
-msgstr "CUMIPMT(المعدل, الدورات, قيمة, البدء, النهاية, النوع)"
+msgstr "CUMIPMT(المعدل؛ الفترات؛ القيمة؛ البداية؛ النهاية؛ النوع)"
 
 #: functions/financial.xml:238
 #, kde-format
@@ -3844,14 +3816,14 @@ msgid "Calculates the cumulative principal payment."
 msgstr "تحسب الدفعة الرئيسة المتراكمة."
 
 #: functions/financial.xml:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "CUMPRINC(rate; periods; value; start; end; type)"
-msgstr "CUMPRINC(المعدل, الدورات, قيمة, البدء, النهاية, النوع)"
+msgstr "CUMPRINC(المعدل؛ الفترات؛ القيمة؛ البداية؛ النهاية؛ النوع)"
 
 #: functions/financial.xml:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -11904.054201"
-msgstr "الدالة CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) تعادل -11904,054201"
+msgstr "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) يساوي -11904.054201"
 
 #: functions/financial.xml:289 functions/financial.xml:322
 #: functions/financial.xml:1245 functions/financial.xml:1269
@@ -3936,15 +3908,15 @@ msgid "Redemption"
 msgstr "الاسترداد"
 
 #: functions/financial.xml:369
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The DISC function returns the discount rate for a security. Basis is the "
 "type of day counting you want to use: 0: US 30/360 (default), 1: real days, "
 "2: real days/360, 3: real days/365 or 4: European 30/360."
 msgstr ""
-"الدالة  DISC ترجع معدل الخصم لسند مالي. القاعدة هي نوع حساب اليوم الذي ترغب "
-"باستخدامه: 0: أمريكي 30/360 (افتراضي)، 1: أيام حقيقية، 2: أيام حقيقية/360، "
-"3: أيام حقيقية/365 أو 4: أوروبي 30/365."
+"الدالة DISC تُرجع سعر الخصم لورقة مالية. الأساس هو نوع عد الأيام الذي تريد "
+"استخدامه: 0: US 30/360 (مبدئي)، 1: أيام حقيقية، 2: أيام حقيقية/360، 3: أيام "
+"حقيقية/365 أو 4: European 30/360."
 
 #: functions/financial.xml:370
 #, kde-format
@@ -4142,13 +4114,7 @@ msgid "Currency"
 msgstr "عملة"
 
 #: functions/financial.xml:521
-#, fuzzy, kde-format
-#| msgid ""
-#| "The EURO() function converts one Euro to a given national currency in the "
-#| "European monetary union. Currency is one of the following: ATS (Austria), "
-#| "BEF (Belgium), DEM (Germany), ESP (Spain), EUR (Euro), FIM (Finland), FRF "
-#| "(France), GRD (Greece), IEP (Ireland), ITL (Italy), LUF (Luxembourg), NLG "
-#| "(Netherlands), or PTE (Portugal)."
+#, kde-format
 msgid ""
 "The EURO() function converts one Euro to a given national currency in the "
 "European monetary union. Currency is one of the following: ATS (Austria), "
@@ -4157,10 +4123,12 @@ msgid ""
 "(Italy), LTL (Lithuania), LUF (Luxembourg), LVL (Latvia), MTL (Malta), NLG "
 "(Netherlands), PTE (Portugal), SIT (Slovenia), or SKK (Slovakia)."
 msgstr ""
-"الدالة EURO() تحول يورو واحد إلى عملة دولية معطاة في اتحاد العملات "
-"الأوروبية. العملة هي واحدة من: ATS (النمسا)، BEF (بلجيكا)، DEM (ألمانيا)، "
-"ESP (اسبانيا)، EUR (يورو)، FIM (فنلندا)، FRF (فرنسا)، GRD (اليونان)، IEP "
-"(أيرلندا)، ITL (إيطاليا)، LUF (لوكسمبرج)، NLG (هولندا)، أو PTE (البرتغال)."
+"الدالة EURO() تحول يورو واحد إلى عملة وطنية مُعطاة في الاتحاد النقدي "
+"الأوروبي. العملة هي واحدة مما يلي: ATS (النمسا)، BEF (بلجيكا)، CYP (قبرص)، "
+"DEM (ألمانيا)، EEK (إستونيا)، ESP (إسبانيا)، EUR (يورو)، FIM (فنلندا)، FRF "
+"(فرنسا)، GRD (اليونان)، IEP (إيرلندا)، ITL (إيطاليا)، LTL (ليتوانيا)، LUF "
+"(لوكسمبورغ)، LVL (لاتفيا)، MTL (مالطا)، NLG (هولندا)، PTE (البرتغال)، SIT "
+"(سلوفينيا)، أو SKK (سلوفاكيا)."
 
 #: functions/financial.xml:522
 #, kde-format
@@ -4178,9 +4146,9 @@ msgid "Source currency"
 msgstr "العملة المصدر"
 
 #: functions/financial.xml:540
-#, fuzzy, kde-format
+#, kde-format
 msgid "Target currency"
-msgstr "العملة المطلوبة"
+msgstr "العملة المستهدفة"
 
 #: functions/financial.xml:544
 #, kde-format
@@ -4272,16 +4240,16 @@ msgid "Investment"
 msgstr "الاستثمار"
 
 #: functions/financial.xml:624
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The INTRATE function returns the interest rate for a fully invested "
 "security. Basis is the type of day counting you want to use: 0: US 30/360 "
 "(default), 1: real days, 2: real days/360, 3: real days/365 or 4: European "
 "30/360."
 msgstr ""
-"الدالة INTRATE ترجع معدل الفائدة لسند مستثمر بالكامل. القاعدة هي نوع حساب "
-"اليوم الذي تريد استخدامه: 0: أمريكي 30/360 (افتراضي), 1: أيام حقيقية، 2: "
-"أيام حقيقية/360، 3: أيام حقيقية/365 أو 4: أوروبي 30/365."
+"الدالة INTRATE تُرجع سعر الفائدة لورقة مالية مُستثمرة بالكامل. الأساس هو نوع "
+"عد الأيام الذي تريد استخدامه: 0: US 30/360 (مبدئي)، 1: أيام حقيقية، 2: أيام "
+"حقيقية/360، 3: أيام حقيقية/365 أو 4: European 30/360."
 
 #: functions/financial.xml:625
 #, kde-format
@@ -4398,16 +4366,16 @@ msgid "Guess"
 msgstr "خمن"
 
 #: functions/financial.xml:686
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The IRR function calculates the internal rate of return for a series of cash "
 "flows."
-msgstr "الدالة  XIRR تحسب معدل العائد الداخلي لسلسلة من تدفق نقدي غير دوري."
+msgstr "الدالة IRR تحسب معدل العائد الداخلي لسلسلة من التدفقات النقدية."
 
 #: functions/financial.xml:687
-#, fuzzy, kde-format
+#, kde-format
 msgid "IRR( Values[; Guess = 0.1 ] )"
-msgstr "XIRR( القيم; التورايخ[; خمن = 0.1 ] )"
+msgstr "IRR( القيم[؛ تخمين = 0.1 ] )"
 
 #: functions/financial.xml:708
 #, kde-format
@@ -4598,17 +4566,15 @@ msgid "The net present value (NPV) for a series of periodic cash flows."
 msgstr "القيمة الحاضرة الصافية (NPV) لسلسلة من تدفقات نقدية دورية."
 
 #: functions/financial.xml:885
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Computes the net present value for a series of periodic cash flows with the\n"
 "               discount rate Rate. Values should be positive if they are "
 "received as income, and\n"
 "                   negative if the amounts are expenditure."
 msgstr ""
-"تحسب القيمة الصافية الحاضرة لسلسة من تدفقات نقدية دورية\n"
-"                مع معدل الخصم ؛ المعدل. القيم يجب أن تكون موجبة إذا كانت "
-"متلقاة كواردات،\n"
-"                وسالبة إذا كانت الكميات تدفع كمصروفات."
+"يحسب صافي القيمة الحالية لسلسلة من التدفقات النقدية الدورية بسعر الخصم Rate. "
+"يجب أن تكون القيم موجبة إذا حُصِلَ عليها كدخل، وسالبة إذا كانت المبالغ مصروفات."
 
 #: functions/financial.xml:886
 #, kde-format
@@ -4631,13 +4597,13 @@ msgid "AnnualYield"
 msgstr "الحصيلة السنوية"
 
 #: functions/financial.xml:932
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ODDLPRICE function calculates the value of the security per 100 currency "
 "units of face value. The security has an irregular last interest date."
 msgstr ""
-"الدالة  ODDLPRICE تحسب قيمة السند لكل 100 وحدة عملة للقيمة الصورية. والسند "
-"له تاريخ فائدة أخير غير منتظم."
+"الدالة ODDLPRICE تحسب قيمة الورقة المالية لكل 100 وحدة عملة من القيمة "
+"الاسمية. الورقة المالية لها تاريخ فائدة أخير غير منتظم."
 
 #: functions/financial.xml:933
 #, kde-format
@@ -4664,11 +4630,13 @@ msgid "Price"
 msgstr "السعر"
 
 #: functions/financial.xml:975
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ODDLYIELD function calculates the yield of the security which has an "
 "irregular last interest date."
-msgstr "الدالة ODDLYIELD تحسب حصيلة السند الذي له تاريخ فائدة أخيرة غير منتظم."
+msgstr ""
+"الدالة ODDLYIELD تحسب عائد الورقة المالية التي لها تاريخ فائدة أخير غير "
+"منتظم."
 
 #: functions/financial.xml:976
 #, kde-format
@@ -4850,14 +4818,14 @@ msgid "PV_ANNUITY(1000;0.05;5) equals 4329.48"
 msgstr "الدالة PV_ANNUITY(1000;0.05;5) تعادل 4329.48"
 
 #: functions/financial.xml:1150
-#, fuzzy, kde-format
+#, kde-format
 msgid "Payment period"
-msgstr "الدفعة لكل دورة"
+msgstr "فترة الدفع"
 
 #: functions/financial.xml:1154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Regular payments"
-msgstr "تعبير نمطي"
+msgstr "المدفوعات المنتظمة"
 
 #: functions/financial.xml:1166 functions/reference.xml:63
 #, kde-format
@@ -4865,34 +4833,36 @@ msgid "Type"
 msgstr "النوع"
 
 #: functions/financial.xml:1174
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The RATE() function computes the constant interest rate per period of an "
 "investment."
-msgstr "الدالة RRI تحسب معدل الفائدة الناتج من الربح (العائد) من استثمار."
+msgstr "الدالة RATE() تحسب سعر الفائدة الثابت لكل فترة من استثمار."
 
 #: functions/financial.xml:1175
-#, fuzzy, kde-format
+#, kde-format
 msgid "RATE(nper;pmt;pv;fv;type;guess)"
-msgstr "NPER(المعدل;الدفعة;قيمة الحاضر;قيمة المستقبل;النوع)"
+msgstr ""
+"RATE(الفترة_العددية؛ الدفع_البري؛ القيمة_الحالية؛ القيمة_المستقبلية؛ النوع؛ "
+"التخمين)"
 
 #: functions/financial.xml:1176
-#, fuzzy, kde-format
+#, kde-format
 msgid "RATE(4*12;-200;8000) equals 0.007701472"
-msgstr "الدالة ATAN(0.8) تعادل 0.67474094"
+msgstr "RATE(4*12;-200;8000) يساوي 0.007701472"
 
 #: functions/financial.xml:1204
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The RECEIVED function returns the amount received at the maturity date for a "
 "invested security. Basis is the type of day counting you want to use: 0: US "
 "30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: "
 "European 30/360. The settlement date must be before maturity date."
 msgstr ""
-"الدالة  RECEIVED ترجع الكمية المتلقاة عند تاريخ الاستحقاق لسند مالي مستثمر. "
-"القاعدة هي نوع حساب اليوم الذي تريد استخدامه: 0: أمريكي 30/360 (افتراضي)، 1: "
-"أيام حقيقية، 2: أيام حقيقية/360، 3: أيام حقيقية/365 أو 4: أوروبي 30/365. "
-"تاريخ التسوية يجب أن يكون قبل تاريخ الاستحقاق."
+"الدالة RECEIVED تُرجع المبلغ المستلم في تاريخ الاستحقاق لورقة مالية مُستثمرة. "
+"الأساس هو نوع عد الأيام الذي تريد استخدامه: 0: US 30/360 (مبدئي)، 1: أيام "
+"حقيقية، 2: أيام حقيقية/360، 3: أيام حقيقية/365 أو 4: European 30/360. يجب أن "
+"يكون تاريخ التسوية قبل تاريخ الاستحقاق."
 
 #: functions/financial.xml:1205
 #, kde-format
@@ -4906,11 +4876,11 @@ msgstr ""
 "الدالة RECEIVED(\"2/28/2001\"; \"8/31/2001\"; 1000; 0.05; 0) ترجع 1,025.787"
 
 #: functions/financial.xml:1226
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The RRI function calculates the interest rate resulting from the profit "
 "(return) of an investment."
-msgstr "الدالة RRI تحسب معدل الفائدة الناتج من الربح (العائد) من استثمار."
+msgstr "الدالة RRI تحسب سعر الفائدة الناتج عن ربح (عائد) استثمار."
 
 #: functions/financial.xml:1227
 #, kde-format
@@ -5227,20 +5197,21 @@ msgid "Reference"
 msgstr "المرجع"
 
 #: functions/information.xml:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "The FORMULA() function returns the formula of a cell as string."
-msgstr "الدالة LEN() ترجع طول السلسلة النصية."
+msgstr "الدالة FORMULA() تُرجع صيغة الخلية كسلسلة نصية."
 
 #: functions/information.xml:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "FORMULA(x)"
-msgstr "FLOOR(س)"
+msgstr "FORMULA(x)"
 
 #: functions/information.xml:32
 #, kde-format
 msgid ""
 "FORMULA(A1) returns \"=SUM(1+2)\" if the cell A1 contains such a formula."
 msgstr ""
+"FORMULA(A1) تُرجع \"=SUM(1+2)\" إذا كانت الخلية A1 تحتوي على هذه الصيغة."
 
 #: functions/information.xml:44
 #, kde-format
@@ -5276,7 +5247,7 @@ msgid "Type of information"
 msgstr "نوع المعلومات"
 
 #: functions/information.xml:59
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The INFO() function returns information about the current operating "
 "environment. Parameter type specifies what type of information you want to "
@@ -5287,12 +5258,12 @@ msgid ""
 "\" returns the name of the operating environment, \"osversion\" returns the "
 "current operating system."
 msgstr ""
-"الدالة  INFO() ترجع معلومات حول بيئة التشغيل الحالية. معامل النوع يحدد نوع "
-"المعلومات التي ترغب بإرجاعها. وهي واحدة مما يلي: \"directory\" يرجع مسار "
-"الفهرس الحالي, \"numfile\" يرجع عدد المستندات النشطة، \"release\" يرجع "
-"إصدار  KSpread بصورة نص، \"recalc\" يرجع نمط إعادة الحساب الحالي: \"Automatic"
-"\" أو \"Manual\"،و \"system\" يرجع اسم بيئة التشغيل، \"osversion\" يرجع نظام "
-"التشغيل الحالي."
+"الدالة INFO() تُرجع معلومات عن بيئة التشغيل الحالية. المعامل type يُحدد نوع "
+"المعلومات التي تريد إرجاعها. وهو واحد مما يلي: \"directory\" تُرجع مسار "
+"المجلد الحالي، \"numfile\" تُرجع عدد الوثائق النشطة، \"release\" تُرجع إصدار "
+"كاليغرا Sheets كنص، \"recalc\" تُرجع وضع إعادة الحساب الحالي: \"آلي\" أو "
+"\"يدوي\"، \"system\" تُرجع اسم بيئة التشغيل، \"osversion\" تُرجع نظام التشغيل "
+"الحالي."
 
 #: functions/information.xml:60
 #, kde-format
@@ -5541,16 +5512,18 @@ msgid "ISNOTTEXT(\"hello\") returns False"
 msgstr "الدالة ISNOTTEXT(\"hello\") ترجع خاطئ"
 
 #: functions/information.xml:226
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ISFORMULA() function returns True if the referenced cell contains a "
 "formula. Otherwise it returns False"
-msgstr "الدالة ISBLANK() ترجع صحيح إذا كان المعامل خاليا. غير ذلك ترجع خاطئ."
+msgstr ""
+"الدالة ISFORMULA() تُرجع True إذا كانت الخلية المشار إليها تحتوي على صيغة. "
+"وإلا فإنها تُرجع False"
 
 #: functions/information.xml:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISFORMULA(x)"
-msgstr "FLOOR(س)"
+msgstr "ISFORMULA(x)"
 
 #: functions/information.xml:239
 #, kde-format
@@ -5842,13 +5815,13 @@ msgid "NOR(false;false) returns True"
 msgstr "الدالة NOR(خاطئ;خاطئ) ترجع صحيح"
 
 #: functions/logic.xml:175
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The XOR() function returns False if the number of True values is even. "
 "Otherwise it returns True. It returns an error if any argument is an error."
 msgstr ""
-"الدالة XOR() ترجع صحيح إذا كان عدد القيم الصحيحة زوجيا. وإلا فإنها ترجع "
-"خاطئ. وترجع خطأ تنفيذ إذا كان في المعطيات خطأ تنفيذ."
+"الدالة XOR() تُرجع False إذا كان عدد القيم True زوجيًا. وإلا فإنها تُرجع True. "
+"تُرجع خطأ إذا كان أي وسيط خطأ."
 
 #: functions/logic.xml:176
 #, kde-format
@@ -5861,9 +5834,9 @@ msgid "XOR(false;false;false) returns True"
 msgstr "الدالة XOR(خاطئ;خاطئ;خاطئ) ترجع صحيح"
 
 #: functions/logic.xml:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "XOR(true;false) returns True"
-msgstr "الدالة OR(صحيح;خاطئ) ترجع صحيح"
+msgstr "XOR(true;false) تُرجع True"
 
 #: functions/logic.xml:186
 #, kde-format
@@ -5932,23 +5905,23 @@ msgstr "الدالة A1=4;A2=6;IF(A1>A2;5;3) ترجع 3"
 #: functions/logic.xml:223 functions/logic.xml:241
 #, kde-format
 msgid "Any X"
-msgstr ""
+msgstr "أي X"
 
 #: functions/logic.xml:227 functions/logic.xml:245
 #, kde-format
 msgid "Any Alternative"
-msgstr ""
+msgstr "أي بديل"
 
 #: functions/logic.xml:231
 #, kde-format
 msgid ""
 "Return X unless it is an Error, in which case return an alternative value."
-msgstr ""
+msgstr "أرجِع X ما لم يكن خطأ، وفي هذه الحالة أرجِع قيمة بديلة."
 
 #: functions/logic.xml:232
 #, kde-format
 msgid "IFERROR(AnyX;AnyAlternative)"
-msgstr ""
+msgstr "IFERROR(أي X؛ أي بديل)"
 
 #: functions/logic.xml:233
 #, kde-format
@@ -5956,16 +5929,18 @@ msgid ""
 "IFERROR(A1;A2) returns the content of A1 if that content is not an error-"
 "value else the content of A2 is returned."
 msgstr ""
+"IFERROR(A1;A2) تُرجع محتوى A1 إذا لم يكن هذا المحتوى قيمة خطأ وإلا تُرجع محتوى "
+"A2."
 
 #: functions/logic.xml:249
 #, kde-format
 msgid "Return X unless it is an NA, in which case return an alternative value."
-msgstr ""
+msgstr "أرجِع X ما لم يكن NA، وفي هذه الحالة أرجِع قيمة بديلة."
 
 #: functions/logic.xml:250
 #, kde-format
 msgid "IFNA(AnyX;AnyAlternative)"
-msgstr ""
+msgstr "IFNA(أي X؛ أي بديل)"
 
 #: functions/logic.xml:251
 #, kde-format
@@ -5973,6 +5948,8 @@ msgid ""
 "IFNA(A1;A2) returns the content of A1 if that content is not an #N/A error-"
 "value else the content of A2 is returned."
 msgstr ""
+"IFNA(A1;A2) تُرجع محتوى A1 إذا لم يكن هذا المحتوى قيمة خطأ #N/A وإلا تُرجع "
+"محتوى A2."
 
 #: functions/math.xml:5
 #, kde-format
@@ -6043,11 +6020,11 @@ msgid "M the increment by which to increase N for each term in the series"
 msgstr "المتغير م هو الزيادة التي بها يتزايد ن لكل بند في السلسلة"
 
 #: functions/math.xml:56
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Coefficients a set of coefficients by which each successive power of the "
 "variable X is multiplied"
-msgstr "المعاملات هي مجموعة من المعاملات التي تضرب فيها كل قوة ناجحة للمتغير س"
+msgstr "المعاملات هي مجموعة من المعاملات يُضرَب بها كل قوة متتالية للمتغير X"
 
 #: functions/math.xml:60
 #, kde-format
@@ -6157,9 +6134,9 @@ msgstr ""
 "حيث (1+س)-1=0 (بسبب أخطاء التقريب)."
 
 #: functions/math.xml:121
-#, fuzzy, kde-format
+#, kde-format
 msgid "EPS() is so small that Calligra Sheets displays 1+eps() as 1"
-msgstr "الدالة EPS() صغيرة جداً لذلك KSpread يعرض 1+eps() على أنه 1"
+msgstr "EPS() صغيرة جدًا لدرجة أن كاليغرا Sheets تعرض 1+eps() كـ 1"
 
 #: functions/math.xml:122
 #, kde-format
@@ -6481,9 +6458,9 @@ msgid "COUNTIF(range;criteria)"
 msgstr "COUNTIF(المدى;المعايير)"
 
 #: functions/math.xml:354
-#, fuzzy, kde-format
+#, kde-format
 msgid "COUNTIF(A2:A3;\"14\") returns 1 if A2 is -4 and A3 is 14"
-msgstr "الدالة COUNTIF(A2:A3;\"14\") ترجع 1 إذا كانت A1 هي -4 و A2 هي 14"
+msgstr "COUNTIF(A2:A3;\"14\") تُرجع 1 إذا كانت A2 هي -4 و A3 هي 14"
 
 #: functions/math.xml:364 functions/math.xml:379 functions/math.xml:654
 #: functions/math.xml:670 functions/math.xml:684 functions/math.xml:702
@@ -7114,14 +7091,13 @@ msgid "EXP(-9) equals 0.00012341"
 msgstr "الدالة EXP(-9) تعادل 0.00012341"
 
 #: functions/math.xml:836
-#, fuzzy, kde-format
-#| msgid ""
-#| "The CEIL() function rounds x up to the nearest integer, returning that "
-#| "value as a double."
+#, kde-format
 msgid ""
 "The CEIL() function rounds x up to the nearest integer which is greater than "
 "the input, returning that value as a double."
-msgstr "الدالة CEIL() تقرب س لأقرب أكبر عدد صحيح، وترجع تلك القيمة مزدوجة."
+msgstr ""
+"الدالة CEIL() تُقرب x صعودًا إلى أقرب عدد صحيح أكبر من المدخل، وتُرجع تلك "
+"القيمة كعدد مضاعف."
 
 #: functions/math.xml:837
 #, kde-format
@@ -7149,7 +7125,7 @@ msgid "Mode (optional)"
 msgstr "النمط (اختياري)"
 
 #: functions/math.xml:863
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The CEILING() function rounds x up (away from zero) to the nearest multiple "
 "of Significance which is greater than the input. The default value for "
@@ -7157,10 +7133,11 @@ msgid ""
 "to the nearest integer. If the Mode parameter is non-zero, the function "
 "rounds away from zero, instead of up towards the positive infinity."
 msgstr ""
-"الدالة  CEILING() تقرب س لأعلى (بعيدا عن الصفر) للمضاعف الأقرب للأهمية. "
-"القيمة الافتراضية للأهمية هي 1 (أو -1 إذا كانت القيمة سالبة), ما يعني "
-"التقريب لأقرب أكبر عدد صحيح. لاحظ أن هذا لا يطابق التعريف  الرياضي الطبيعي "
-"لدالة ceiling."
+"الدالة CEILING() تُقرب x صعودًا (بعيدًا عن الصفر) إلى أقرب مضاعف لـ "
+"Significance يكون أكبر من المدخل. القيمة المبدئية لـ Significance هي 1 (أو "
+"-1 إذا كانت القيمة سالبة)، ما يعني التقريب صعودًا إلى أقرب عدد صحيح. إذا كان "
+"المعامل Mode غير صفري، فالدالة تُقرب بعيدًا عن الصفر، بدلاً من التقريب نحو اللا "
+"نهاية الموجبة."
 
 #: functions/math.xml:864
 #, kde-format
@@ -7178,14 +7155,14 @@ msgid "CEILING(6.43; 4) equals 8"
 msgstr "الدالة CEILING(6.43; 4) تعادل 8"
 
 #: functions/math.xml:867
-#, fuzzy, kde-format
+#, kde-format
 msgid "CEILING(-6.43; -4; 1) equals -8"
-msgstr "الدالة CEILING(-6.43; -4) تعادل -8"
+msgstr "CEILING(-6.43; -4; 1) يساوي -8"
 
 #: functions/math.xml:868
-#, fuzzy, kde-format
+#, kde-format
 msgid "CEILING(-6.43; -4; 0) equals -4"
-msgstr "الدالة CEILING(-6.43; -4) تعادل -8"
+msgstr "CEILING(-6.43; -4; 0) يساوي -4"
 
 #: functions/math.xml:892
 #, kde-format
@@ -7195,7 +7172,7 @@ msgid ""
 msgstr "تقرب الرقم س لأسفل لأقرب مضاعف للمعامل الثاني، الأهمية."
 
 #: functions/math.xml:899
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The FLOOR() function rounds x down (towards zero) to the nearest multiple of "
 "Significance which is smaller than the input.\n"
@@ -7209,14 +7186,17 @@ msgid ""
 "                    If any of the two parameters x or Significance is zero, "
 "the result is zero."
 msgstr ""
-"الدالة  FLOOR() تقرب س لأسفل (نحو الصفر) لأقرب مضاعف للأهمية.\n"
-"\tالقيمة الافتراضية للأهمية هي 1، إذا كانت س موجبة. وهي -1، إذاكانت القية "
-"سالبة،\n"
-"\tما يعني التقريب لأقرب أكبر عدد صحيح.\n"
-"\tإذا كان النمط معطى ولا يساوي الصفر، فإن كمية س تقرب نحو الصفر لأحد "
-"مضاعفات\n"
-"\tالأهمية ثم تطبق الإشارة. غير ذلك، تقرب نحو  اللا نهاية السالبة.\n"
-"\tإذا كان أي من المعاملين س أو الأهمية هو الصفر، يكون الناتج صفرا."
+"الدالة FLOOR() تُقرب x نزولًا (نحو الصفر) إلى أقرب مضاعف لـ Significance يكون "
+"أصغر من المدخل.\n"
+"                القيمة المبدئية لـ Significance هي 1، إذا كانت x موجبة. وهي "
+"-1، إذا كانت القيمة سالبة،\n"
+"                ما يعني التقريب صعودًا إلى أقرب عدد صحيح.\n"
+"                إذا أُعطِيَ mode ولم يكن يساوي صفرًا، فكمية x تُقرب نحو الصفر إلى "
+"مضاعف\n"
+"                لـ significance ثم يُطبَق التوقيع. وإلا، فإنها تُقرب نحو اللا "
+"نهاية السالبة.\n"
+"                    إذا كان أي من المعاملين x أو Significance صفرًا، فالنتيجة "
+"صفر."
 
 #: functions/math.xml:900
 #, kde-format
@@ -7538,16 +7518,16 @@ msgid "ROUND(-1.252;0) equals -1"
 msgstr "الدالة ROUND(-1.252;0) تعادل -1"
 
 #: functions/math.xml:1143
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ROUNDUP(value;[digits]) function returns value rounded so that its "
 "absolute value is greater. Digits is the number of digits to which you want "
 "to round that number. If digits is zero or omitted, value is rounded up to "
 "the nearest integer."
 msgstr ""
-"الدالة  ROUNDUP(القيمة;[الخانات]) ترجع القيمة مقربة لأعلى. الخانات هي عدد "
-"الخانات الذي ترغب بتقريب ذلك الرقم إليها. إذا كانت الخانات صفرا أو مسقطة، "
-"فإن القيمة تقرب لأعلى لأقرب عدد صحيح."
+"الدالة ROUNDUP(القيمة؛[الأرقام]) تُرجع قيمة مُقربة بحيث تكون قيمتها المطلقة "
+"أكبر. الأرقام هي عدد الأرقام التي تريد تقريب ذلك العدد إليها. إذا كانت "
+"الأرقام صفرًا أو حُذِفَت، تُقرب القيمة صعودًا إلى أقرب عدد صحيح."
 
 #: functions/math.xml:1144
 #, kde-format
@@ -7555,9 +7535,9 @@ msgid "ROUNDUP(value;[digits])"
 msgstr "ROUNDUP(القيمة;[الخانات])"
 
 #: functions/math.xml:1145
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROUNDUP(1.252) equals 2"
-msgstr "الدالة ROUNDUP(-1.252) تعادل -1"
+msgstr "ROUNDUP(1.252) يساوي 2"
 
 #: functions/math.xml:1146
 #, kde-format
@@ -7565,26 +7545,26 @@ msgid "ROUNDUP(1.252;2) equals 1.26"
 msgstr "الدالة ROUNDUP(1.252;2) تعادل 1.26"
 
 #: functions/math.xml:1147
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROUNDUP(-1.252;2) equals -1.26"
-msgstr "الدالة ROUNDUP(-1.252;2) تعادل -1.25"
+msgstr "ROUNDUP(-1.252;2) يساوي -1.26"
 
 #: functions/math.xml:1148
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROUNDUP(-1.252) equals -2"
-msgstr "الدالة ROUNDUP(-1.252) تعادل -1"
+msgstr "ROUNDUP(-1.252) يساوي -2"
 
 #: functions/math.xml:1166
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ROUNDDOWN(value;[digits]) function returns value rounded so that its "
 "absolute value is lesser. Digits is the number of digits to which you want "
 "to round that number. If digits is zero or omitted, value is rounded down to "
 "the nearest integer."
 msgstr ""
-"الدالة  ROUNDDOWN(القيمة;[الخانات]) ترجع القيمة مقربة لأسفل. الخانات هي عدد "
-"الخانات الذي ترغب بتقريب ذلك الرقم إليها. إذا كانت الخانات صفرا أو مسقطة، "
-"فإن القيمة تقرب لأسفل لأقرب عدد صحيح."
+"الدالة ROUNDDOWN(القيمة؛[الأرقام]) تُرجع قيمة مُقربة بحيث تكون قيمتها المطلقة "
+"أقل. الأرقام هي عدد الأرقام التي تريد تقريب ذلك العدد إليها. إذا كانت "
+"الأرقام صفرًا أو حُذِفَت، تُقرب القيمة نزولًا إلى أقرب عدد صحيح."
 
 #: functions/math.xml:1167
 #, kde-format
@@ -7592,9 +7572,9 @@ msgid "ROUNDDOWN(value;[digits])"
 msgstr "ROUNDDOWN(القيمة;[الخانات])"
 
 #: functions/math.xml:1168
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROUNDDOWN(1.252) equals 1"
-msgstr "الدالة ROUNDDOWN(-1.252) تعادل -2"
+msgstr "ROUNDDOWN(1.252) يساوي 1"
 
 #: functions/math.xml:1169
 #, kde-format
@@ -7602,14 +7582,14 @@ msgid "ROUNDDOWN(1.252;2) equals 1.25"
 msgstr "الدالة ROUNDDOWN(1.252;2) تعادل 1.25"
 
 #: functions/math.xml:1170
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROUNDDOWN(-1.252;2) equals -1.25"
-msgstr "الدالة ROUNDDOWN(-1.252;2) تعادل -1.26"
+msgstr "ROUNDDOWN(-1.252;2) يساوي -1.25"
 
 #: functions/math.xml:1171
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROUNDDOWN(-1.252) equals -1"
-msgstr "الدالة ROUNDDOWN(-1.252) تعادل -2"
+msgstr "ROUNDDOWN(-1.252) يساوي -1"
 
 #: functions/math.xml:1181
 #, kde-format
@@ -7696,14 +7676,14 @@ msgid "Second matrix"
 msgstr "المصفوفة الثانية"
 
 #: functions/math.xml:1238
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Function MMULT multiplies two matrices. Number of columns of the first "
 "matrix must be the same as row count of the second one. The result is a "
 "matrix."
 msgstr ""
-"الدالة MMULT تضرب مصفوفتين. يجب أن يكون عدد الأعمدة في المصفوفة الأولى نفس "
-"عدد الصفوف في الثانية. ويكون الناتج مصفوفة."
+"الدالة MMULT تضرب مصفوفتين. يجب أن يكون عدد أعمدة المصفوفة الأولى هو نفس عدد "
+"صفوف المصفوفة الثانية. النتيجة هي مصفوفة."
 
 #: functions/math.xml:1239 functions/math.xml:1257 functions/math.xml:1274
 #: functions/math.xml:1290
@@ -7712,6 +7692,8 @@ msgid ""
 "Since the result is an array, you need to use Ctrl+Alt+Enter (instead of "
 "just Enter) to display the array elements in separate cells."
 msgstr ""
+"بما أن النتيجة هي مصفوفة، تحتاج إلى استخدام Ctrl+Alt+Enter (بدلاً من Enter "
+"فقط) لعرض عناصر المصفوفة في خلايا منفصلة."
 
 #: functions/math.xml:1240
 #, kde-format
@@ -7913,27 +7895,27 @@ msgstr "الدالة AREAS((A1; A2:A4)) ترجع 2"
 #, kde-format
 msgid ""
 "Returns information about position, formatting or contents in a reference."
-msgstr ""
+msgstr "تُرجع معلومات عن الموضع، التنسيق أو المحتويات في مرجع."
 
 #: functions/reference.xml:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "CELL(type; reference)"
-msgstr "COLUMN(مرجع)"
+msgstr "CELL(النوع؛ المرجع)"
 
 #: functions/reference.xml:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "CELL(\"COL\", C7) returns 3"
-msgstr "الدالة CODE(\"KDE\") ترجع 75"
+msgstr "CELL(\"COL\", C7) تُرجع 3"
 
 #: functions/reference.xml:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "CELL(\"ROW\", C7) returns 7"
-msgstr "الدالة CODE(\"KDE\") ترجع 75"
+msgstr "CELL(\"ROW\", C7) تُرجع 7"
 
 #: functions/reference.xml:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "CELL(\"ADDRESS\", C7) returns $C$7"
-msgstr "الدالة ADDRESS(6; 4) ترجع $D$6"
+msgstr "CELL(\"ADDRESS\", C7) تُرجع $C$7"
 
 #: functions/reference.xml:82
 #, kde-format
@@ -8118,38 +8100,36 @@ msgid "ROWS(D2) returns 1"
 msgstr "الدالة ROWS(D2) ترجع 1"
 
 #: functions/reference.xml:213
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Returns the sheet number of the reference or the string representing a sheet "
 "name."
-msgstr ""
-"ترجع عدد المناطق في السلسلة النصية المرجعية. المنطقة يمكن أن تكون خلية مفردة "
-"أو مجموعة خلايا."
+msgstr "تُرجع رقم ورقة المرجع أو السلسلة النصية التي تُمثل اسم ورقة."
 
 #: functions/reference.xml:214
-#, fuzzy, kde-format
+#, kde-format
 msgid "SHEET(reference)"
-msgstr "ROWS(مرجع)"
+msgstr "SHEET(المرجع)"
 
 #: functions/reference.xml:215
-#, fuzzy, kde-format
+#, kde-format
 msgid "SHEET(Sheet1!C7) returns 1"
-msgstr "الدالة TYPE(-7) ترجع 1"
+msgstr "SHEET(Sheet1!C7) تُرجع 1"
 
 #: functions/reference.xml:216
-#, fuzzy, kde-format
+#, kde-format
 msgid "SHEET(Sheet2!C7) returns 2"
-msgstr "الدالة EVEN(2) ترجع 2"
+msgstr "SHEET(Sheet2!C7) تُرجع 2"
 
 #: functions/reference.xml:228
-#, fuzzy, kde-format
+#, kde-format
 msgid "Returns the number of sheets in a reference or current document."
-msgstr "ترجع عدد دورات الاستثمار."
+msgstr "تُرجع عدد الأوراق في مرجع أو الوثيقة الحالية."
 
 #: functions/reference.xml:229
-#, fuzzy, kde-format
+#, kde-format
 msgid "SHEETS(reference)"
-msgstr "AREAS(المرجع)"
+msgstr "SHEETS(المرجع)"
 
 #: functions/reference.xml:236 functions/reference.xml:258
 #: functions/reference.xml:284
@@ -8206,13 +8186,13 @@ msgid "Sorted (optional)"
 msgstr "مفروز (اختياري)"
 
 #: functions/reference.xml:274
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Look for a matching value in the first row of the given table, and return "
 "the value of the indicated row."
 msgstr ""
-"البحث عن قيمة مطابقة في العمود الأول من الجدول المعطى، وإرجاع قيمة العمود "
-"المناظر."
+"ابحث عن قيمة مطابقة في الصف الأول من الجدول المُعطى، وأرجِع قيمة الصف المُشار "
+"إليه."
 
 #: functions/reference.xml:275
 #, kde-format
@@ -8234,13 +8214,13 @@ msgid "HLOOKUP(Lookup value; data source; Row; Sorted)"
 msgstr "HLOOKUP(قيمة البحث; مصدر البيانات; الصف; مفروز)"
 
 #: functions/reference.xml:300
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Look for a matching value in the first column of the given table, and return "
 "the value of the indicated column."
 msgstr ""
-"البحث عن قيمة مطابقة في العمود الأول من الجدول المعطى، وإرجاع قيمة العمود "
-"المناظر."
+"ابحث عن قيمة مطابقة في العمود الأول من الجدول المُعطى، وأرجِع قيمة العمود "
+"المُشار إليه."
 
 #: functions/reference.xml:301
 #, kde-format
@@ -8262,29 +8242,29 @@ msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
 msgstr "VLOOKUP(قيمة البحث; مصدر البيانات; العمود; مفروز)"
 
 #: functions/reference.xml:310
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula cell"
-msgstr "شريط الصيغة"
+msgstr "خلية الصيغة"
 
 #: functions/reference.xml:314
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row cell"
-msgstr "أزل الخلية"
+msgstr "خلية الصف"
 
 #: functions/reference.xml:318
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row replacement"
-msgstr "الاستبدال"
+msgstr "بديل الصف"
 
 #: functions/reference.xml:322
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column cell (optional)"
-msgstr "النمط (اختياري)"
+msgstr "خلية العمود (اختياري)"
 
 #: functions/reference.xml:326
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column replacement (optional)"
-msgstr "الرقم المطلق (اختياري)"
+msgstr "بديل العمود (اختياري)"
 
 #: functions/reference.xml:330
 #, kde-format
@@ -8296,6 +8276,11 @@ msgid ""
 "may be used to easily create tables of expressions that depend on two input "
 "parameters."
 msgstr ""
+"MULTIPLE.OPERATIONS يُنفذ تعبير الصيغة الذي تُشير إليه FormulaCell وجميع "
+"تعبيرات الصيغة التي تعتمد عليه، مع استبدال جميع المراجع إلى RowCell بمراجع "
+"إلى RowReplacement على التوالي وجميع المراجع إلى ColumnCell بمراجع إلى "
+"ColumnReplacement. يمكن استخدام الدالة لإنشاء جداول من التعبيرات التي تعتمد "
+"على معلمتين إدخال بسهولة."
 
 #: functions/reference.xml:331
 #, kde-format
@@ -8303,21 +8288,23 @@ msgid ""
 "MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; "
 "Column replacement)"
 msgstr ""
+"MULTIPLE.OPERATIONS(خلية الصيغة؛ خلية الصف؛ بديل الصف؛ خلية العمود؛ بديل "
+"العمود)"
 
 #: functions/reference.xml:339
-#, fuzzy, kde-format
+#, kde-format
 msgid "Search value"
-msgstr "القيمة الأساسية"
+msgstr "قيمة البحث"
 
 #: functions/reference.xml:343
-#, fuzzy, kde-format
+#, kde-format
 msgid "Search region"
-msgstr "اتجاه البحث:"
+msgstr "منطقة البحث"
 
 #: functions/reference.xml:347
-#, fuzzy, kde-format
+#, kde-format
 msgid "Match type (optional)"
-msgstr "النوع (اختياري)"
+msgstr "نوع المطابقة (اختياري)"
 
 #: functions/reference.xml:351
 #, kde-format
@@ -8331,41 +8318,47 @@ msgid ""
 "type is -1, the smallest value that is greater than or equal to the search "
 "value is found, and the search region needs to be sorted in descending order."
 msgstr ""
+"تجد قيمة بحث في منطقة بحث، وتُرجع موضعها (بدءًا من 1). يمكن أن يكون نوع "
+"المطابقة إما -1، 0 أو 1 ويُحدد كيفية البحث عن القيمة. إذا كان نوع المطابقة هو "
+"0، يُرجع مؤشر أول قيمة تساوي قيمة البحث. إذا كان نوع المطابقة هو 1 (أو حُذِف)، "
+"يُرجع مؤشر أول قيمة تكون أصغر من أو تساوي قيمة البحث ويجب فرز القيم في منطقة "
+"البحث بترتيب تصاعدي. إذا كان نوع المطابقة هو -1، يُعثَر على أصغر قيمة تكون "
+"أكبر من أو تساوي قيمة البحث، ويجب فرز منطقة البحث بترتيب تنازلي."
 
 #: functions/reference.xml:352
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
-msgstr ""
+msgstr "MATCH(قيمة البحث؛ منطقة البحث؛ نوع المطابقة)"
 
 #: functions/reference.xml:360
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reference or range"
-msgstr "المرجع"
+msgstr "مرجع أو نطاق"
 
 #: functions/reference.xml:364
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of rows to offset"
-msgstr "عدد العناصر المراد اختيارها"
+msgstr "عدد الصفوف للإزاحة"
 
 #: functions/reference.xml:368
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of columns to offset"
-msgstr "عدد العناصر المراد اختيارها"
+msgstr "عدد الأعمدة للإزاحة"
 
 #: functions/reference.xml:372
 #, kde-format
 msgid "Height of the offset range (optional)"
-msgstr ""
+msgstr "ارتفاع نطاق الإزاحة (اختياري)"
 
 #: functions/reference.xml:376
 #, kde-format
 msgid "Width of the offset range (optional)"
-msgstr ""
+msgstr "عرض نطاق الإزاحة (اختياري)"
 
 #: functions/reference.xml:380
 #, kde-format
 msgid "Modifies a reference's position and dimension."
-msgstr ""
+msgstr "يُعدل موضع وأبعاد مرجع."
 
 #: functions/reference.xml:381
 #, kde-format
@@ -8373,6 +8366,8 @@ msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
 "newHeight; Integer newWidth)"
 msgstr ""
+"OFFSET(المرجع المرجع؛ العدد الصحيح إزاحة_الصف؛ العدد الصحيح إزاحة_العمود؛ "
+"العدد الصحيح الارتفاع_الجديد؛ العدد الصحيح العرض_الجديد)"
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -8673,13 +8668,7 @@ msgid "COMBIN(5;5) returns 1"
 msgstr "الدالة COMBIN(5;5) ترجع 1"
 
 #: functions/statistical.xml:206
-#, fuzzy, kde-format
-#| msgid ""
-#| "The COMBINA() function calculates the count of possible combinations. The "
-#| "first parameter is the total count of elements. The second parameter is "
-#| "the count of elements to choose. Both parameters should be positive and "
-#| "the first parameter should not be less than the second. Otherwise the "
-#| "function returns an error."
+#, kde-format
 msgid ""
 "The COMBINA() function calculates the count of possible combinations "
 "allowing repetition. The first parameter is the total count of elements. The "
@@ -8687,28 +8676,25 @@ msgid ""
 "Both parameters should be positive and the first parameter should not be "
 "less than the second. Otherwise the function returns an error."
 msgstr ""
-"الدالة  COMBINA() تحسب عدد التجميعات الممكنة. المعامل الأول هو العدد "
-"الإجمالي للعناصر. المعامل الثاني هو عدد العناصر المطلوب اختيارها. كلا "
-"المعاملين يجب أن يكونا موجبين والمعامل الأول يجب ألا يقل عن الثاني. وإلا فإن "
-"الدالة ترجع خطأ."
+"الدالة COMBINA() تحسب عدد التوافيق الممكنة مع السماح بالتكرار. المعامل الأول "
+"هو العدد الكلي للعناصر. المعامل الثاني هو عدد العناصر للاختيار مع السماح "
+"بالتكرار. يجب أن يكون كلا المعاملين موجبًا ويجب ألا يقل المعامل الأول عن "
+"الثاني. وإلا فإن الدالة تُرجع خطأ."
 
 #: functions/statistical.xml:207
-#, fuzzy, kde-format
-#| msgid "COMBIN(total;chosen)"
+#, kde-format
 msgid "COMBINA(total;chosen)"
-msgstr "COMBIN(الإجمالي;المختار)"
+msgstr "COMBINA(الإجمالي؛المُختار)"
 
 #: functions/statistical.xml:208
-#, fuzzy, kde-format
-#| msgid "COMBIN(12;5) returns 792"
+#, kde-format
 msgid "COMBINA(12;5) returns 4368"
-msgstr "الدالة COMBIN(12;5) ترجع 792"
+msgstr "COMBINA(12;5) تُرجع 4368"
 
 #: functions/statistical.xml:209
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "COMBINA(5;5) returns 126"
-msgstr "الدالة COMBIN(5;5) ترجع 1"
+msgstr "COMBINA(5;5) تُرجع 126"
 
 #: functions/statistical.xml:217
 #, kde-format
@@ -8979,7 +8965,7 @@ msgid ""
 msgstr "تحسب عدد القيم لكل فترة المعطاة بواسطة قيم الحد في المعامل الثاني."
 
 #: functions/statistical.xml:420
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The values in the second parameter determine the upper boundaries of the "
 "intervals.\n"
@@ -8991,14 +8977,14 @@ msgid ""
 "                   If the second parameter is empty, all values in the first "
 "parameter are counted."
 msgstr ""
-"القيم في المعامل الثاني تحدد الحدود العليا للفترات.\n"
-"                الفترات تحتوي على الحدود العليا.\n"
-"                المصفوفة المرجعة هي متجه عمود وتزيد بعنصر واحد عن المعامل "
-"الثاني;\n"
-"                العنصر الأخير يمثل عدد كل العناصر الأكبر من القيمة الأخيرة "
+"تُحدد القيم في المعامل الثاني الحدود العليا للفواصل.\n"
+"               تشمل الفواصل الحدود العليا.\n"
+"               المصفوفة المُرجَعة هي متجه عمودي ولها عنصر واحد أكثر من المعامل "
+"الثاني؛\n"
+"               العنصر الأخير يُمثل عدد جميع العناصر الأكبر من القيمة الأخيرة "
 "في المعامل الثاني.\n"
-"                إذا كان المعامل الثاني خاليا، فإن كل القيم في المعامل الأول "
-"ستُحسَب."
+"                   إذا كان المعامل الثاني فارغًا، يُحسَب جميع القيم في المعامل "
+"الأول."
 
 #: functions/statistical.xml:421
 #, kde-format
@@ -9007,6 +8993,9 @@ msgid ""
 "array, use Ctrl+Alt+Enter (instead of just Enter) to display the array "
 "elements in separate cells. "
 msgstr ""
+"لاحظ أن البيانات يجب أن تكون في أعمدة وبما أن النتيجة هي مصفوفة عمودية، "
+"استخدم Ctrl+Alt+Enter (بدلاً من Enter فقط) لعرض عناصر المصفوفة في خلايا "
+"منفصلة. "
 
 #: functions/statistical.xml:422
 #, kde-format
@@ -9397,11 +9386,11 @@ msgid "Float"
 msgstr "العدد الحقيقي"
 
 #: functions/statistical.xml:799
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The MODE() function returns the most frequently occurring value in the data "
 "set."
-msgstr "الدالة  MODE() ترجع أكثر القيم وقوعا على فترات في مجموعة البيانات."
+msgstr "الدالة MODE() تُرجع القيمة الأكثر تكرارًا في مجموعة البيانات."
 
 #: functions/statistical.xml:800
 #, kde-format
@@ -9620,40 +9609,41 @@ msgid "PERMUT(1;1) equals 1"
 msgstr "الدالة PERMUT(1;1) تعادل 1"
 
 #: functions/statistical.xml:959
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The PERMUTATIONA() function returns the number of ordered permutations when "
 "allowing repetition. The first parameter is the number of elements, and the "
 "second parameter is the number of elements to choose. Both parameters must "
 "be positive."
 msgstr ""
-"الدالة  PERMUT() ترجع عدد التباديل. المعامل الأول هو عدد العناصر، والمعامل "
-"الثاني هو عدد العناصر المستخدمة في التبديل."
+"الدالة PERMUTATIONA() تُرجع عدد التباديل المُرتَّبة عند السماح بالتكرار. المعامل "
+"الأول هو عدد العناصر، والمعامل الثاني هو عدد العناصر للاختيار. يجب أن يكون "
+"كلا المعاملين موجبًا."
 
 #: functions/statistical.xml:960
-#, fuzzy, kde-format
+#, kde-format
 msgid "PERMUTATIONA(total;chosen)"
-msgstr "COMBIN(الإجمالي;المختار)"
+msgstr "PERMUTATIONA(الإجمالي؛المُختار)"
 
 #: functions/statistical.xml:961
-#, fuzzy, kde-format
+#, kde-format
 msgid "PERMUTATIONA(2,3) returns 8"
-msgstr "الدالة MINA(12;5; 7) ترجع 5"
+msgstr "PERMUTATIONA(2,3) تُرجع 8"
 
 #: functions/statistical.xml:962
-#, fuzzy, kde-format
+#, kde-format
 msgid "PERMUTATIONA(0,0) returns 1"
-msgstr "الدالة FACT(0) ترجع 1"
+msgstr "PERMUTATIONA(0,0) تُرجع 1"
 
 #: functions/statistical.xml:970
-#, fuzzy, kde-format
+#, kde-format
 msgid "Range of values"
-msgstr "مدى الخلايا للقيم"
+msgstr "نطاق القيم"
 
 #: functions/statistical.xml:974
 #, kde-format
 msgid "The percentile value between 0 and 1, inclusive."
-msgstr ""
+msgstr "قيمة النسبة المئوية بين 0 و 1، شاملة."
 
 #: functions/statistical.xml:978
 #, no-c-format, kde-format
@@ -9665,11 +9655,16 @@ msgid ""
 "MEDIAN. Blank cells will be considered as a zero, and cells with text will "
 "be ignored."
 msgstr ""
+"الدالة PERCENTILE() تُرجع النسبة المئوية العينية x-th من قيم البيانات في "
+"Data. تُرجع النسبة المئوية قيمة المقياس لسلسلة بيانات تنتقل من أصغر قيمة "
+"(alpha=0) إلى أكبر قيمة (alpha=1) لسلسلة بيانات. بالنسبة لـ alpha = 25%، "
+"تعني النسبة المئوية الربع الأول؛ alpha = 50% هي الوسيط. الخلايا الفارغة "
+"تُعتبر صفرًا، وتُتجاهَل الخلايا التي تحتوي على نص."
 
 #: functions/statistical.xml:979
 #, kde-format
 msgid "PERCENTILE(data;alpha)"
-msgstr ""
+msgstr "PERCENTILE(البيانات؛ألفا)"
 
 #: functions/statistical.xml:989
 #, kde-format
@@ -9750,15 +9745,14 @@ msgid "If 0 or omitted, Data is ranked in descending order."
 msgstr "إذا كانت 0 أو مهملة، ستكون البيانات مرتبة بترتيب تنازلي."
 
 #: functions/statistical.xml:1043
-#, fuzzy, kde-format
+#, kde-format
 msgid "If not 0, Data is ranked in ascending order."
-msgstr "إذا لم تكن 0، ستكون البيانات مرتبة بترتيب تنازلي."
+msgstr "إذا لم يكن 0، تُرتَّب البيانات بترتيب تصاعدي."
 
 #: functions/statistical.xml:1044
-#, fuzzy, kde-format
-#| msgid "RSQ(Value; Data; Order)"
+#, kde-format
 msgid "RANK(Value; Data; Order)"
-msgstr "RSQ(القيمة; البيانات; الترتيب)"
+msgstr "RANK(القيمة؛ البيانات؛ الترتيب)"
 
 #: functions/statistical.xml:1045
 #, kde-format
@@ -10005,10 +9999,9 @@ msgstr ""
 "الدالة STEYX() تحسب الخطأ المعياري لقيمة ص المتوقعة لكل س ضمن الارتداد."
 
 #: functions/statistical.xml:1322
-#, fuzzy, kde-format
-#| msgid "SLOPE(y;x)"
+#, kde-format
 msgid "STEYX(y;x)"
-msgstr "SLOPE(ص;س)"
+msgstr "STEYX(y؛x)"
 
 #: functions/statistical.xml:1338 functions/statistical.xml:1342
 #: functions/statistical.xml:1356 functions/statistical.xml:1360
@@ -10138,6 +10131,9 @@ msgid ""
 "must firstly select a cell-range containing the Y-values, followed by the "
 "cell-range of the corresponding X-values. "
 msgstr ""
+"الدالة TREND() تحسب تسلسلًا من قيم Y بناءً على انحدار خطي لأزواج قيم X و Y "
+"المعروفة. لمعاملات الإدخال، يجب على المستخدم أولاً اختيار نطاق خلايا يحتوي "
+"على قيم Y، يليه نطاق خلايا قيم X المقابلة. "
 
 #: functions/statistical.xml:1432
 #, kde-format
@@ -10146,6 +10142,8 @@ msgid ""
 "specified as the 3rd parameter. However, the input X-range should be given "
 "again if no extrapolation is required. "
 msgstr ""
+"يمكن استقراء خط أفضل مطابقة إلى نطاق X مختلف، يُحدد كمعامل ثالث. ومع ذلك، يجب "
+"إعطاء نطاق X المدخل مرة أخرى إذا لم يكن الاستقراء مطلوبًا. "
 
 #: functions/statistical.xml:1433
 #, kde-format
@@ -10155,6 +10153,9 @@ msgid ""
 "parameter to TRUE or 1 (the default) allows the best-fit line to intersect "
 "the vertical axis at a non-zero value of Y. "
 msgstr ""
+"يمكن إجبار خط الانحدار على تقاطع الأصل (X=0, Y=0) بضبط المعامل الرابع، "
+"allowOffset، على FALSE أو 0. ضبط هذا المعامل على TRUE أو 1 (المبدئي) يسمح "
+"لخط أفضل مطابقة بتقاطع المحور الرأسي بقيمة Y غير صفرية. "
 
 #: functions/statistical.xml:1434
 #, kde-format
@@ -10163,6 +10164,8 @@ msgid ""
 "plotting the data will be facilitated if the X- and Y- values are also in "
 "rows, rather than columns."
 msgstr ""
+"لاحظ أنه بما أن نتيجة هذه الدالة هي صف من قيم Y المحسوبة، سيسهل رسم البيانات "
+"إذا كانت قيم X و Y أيضًا في صفوف، بدلاً من أعمدة."
 
 #: functions/statistical.xml:1435
 #, kde-format
@@ -10175,14 +10178,17 @@ msgid ""
 "Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to "
 "display the values in separate cells."
 msgstr ""
+"بما أن النتيجة هي مصفوفة، استخدم Ctrl+Alt+Enter (بدلاً من Enter فقط) لعرض "
+"القيم في خلايا منفصلة."
 
 #: functions/statistical.xml:1437
-#, fuzzy, kde-format
-#| msgid "TREND(knownY[;knownX[;newX[;allowOffset = TRUE]]])"
+#, kde-format
 msgid ""
 "TREND(known Y-range; [known X-range; [new X-range; [allowOffset=TRUE/"
 "FALSE]]])"
-msgstr "TREND(knownY[;knownX[;newX[;allowOffset = TRUE]]])"
+msgstr ""
+"TREND(نطاق Y المعروف؛ [نطاق X المعروف؛ [نطاق X الجديد؛ [allowOffset=TRUE/"
+"FALSE]]])"
 
 #: functions/statistical.xml:1448
 #, kde-format
@@ -10202,6 +10208,9 @@ msgid ""
 "fraction of measurements which are to be excluded is set by the second "
 "parameter (cutOffFraction)."
 msgstr ""
+"الدالة TRIMMEAN() تحسب المتوسط لمجموعة بيانات مع حذف أصغر وأكبر القيم للقضاء "
+"على القيم الشاذة المحتملة. يُحدَد الكسر الكلي للقياسات التي يجب استبعادها "
+"بواسطة المعامل الثاني (cutOffFraction)."
 
 #: functions/statistical.xml:1457
 #, kde-format
@@ -10211,12 +10220,12 @@ msgstr "TRIMMEAN(مجموعة البيانات; كسر القطع)"
 #: functions/statistical.xml:1468
 #, kde-format
 msgid "x (array) The set of observed data for the first condition."
-msgstr ""
+msgstr "x (مصفوفة) مجموعة البيانات المُراقبة للشرط الأول."
 
 #: functions/statistical.xml:1472
 #, kde-format
 msgid "y (array) The set of observed data for the second condition."
-msgstr ""
+msgstr "y (مصفوفة) مجموعة البيانات المُراقبة للشرط الثاني."
 
 #: functions/statistical.xml:1476
 #, kde-format
@@ -10224,6 +10233,7 @@ msgid ""
 "mode Whether to look up 1-tailed (mode = 1) or 2-tailed (mode = 2) "
 "probability for t."
 msgstr ""
+"mode هل تبحث عن احتمال ذي ذيل واحد (mode = 1) أو ذي ذيلين (mode = 2) لـ t."
 
 #: functions/statistical.xml:1480
 #, kde-format
@@ -10231,13 +10241,16 @@ msgid ""
 "type The type of t-test to perform. Set this to 1 for a paired t-test, 2 or "
 "3 for an unpaired t-test."
 msgstr ""
+"type نوع اختبار t المطلوب إجراؤه. اضبطه على 1 لاختبار t مُقترِن، 2 أو 3 "
+"لاختبار t غير مُقترِن."
 
 #: functions/statistical.xml:1484
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The TTEST() function calculates the probability of a t-test given two ranges "
 "of data to compare."
-msgstr "الدالة TTEST() تحسب احتمالية اختبار  t."
+msgstr ""
+"الدالة TTEST() تحسب احتمال اختبار t عند إعطاء نطاقين من البيانات للمقارنة."
 
 #: functions/statistical.xml:1485
 #, kde-format
@@ -10249,6 +10262,11 @@ msgid ""
 "can run, a t-test can tell you how likely it is that any speed difference "
 "between the two groups of people is due to their height."
 msgstr ""
+"يقارن اختبار t مجموعتين من البيانات ويؤسس لاحتمالية أن أي فرق بين الاثنين "
+"ناجم عن تأثير متغير ما. على سبيل المثال، عند إعطاء مجموعتين من البيانات، "
+"إحداهما تحتوي على سرعة ركض 30 شخصًا طويلاً والأخرى تحتوي على سرعة ركض 30 شخصًا "
+"قصيرًا، يمكن لاختبار t إخبار كم هي احتمالية أن أي فرق في السرعة بين "
+"المجموعتين من الأشخاص يعود إلى طولهم."
 
 #: functions/statistical.xml:1486
 #, kde-format
@@ -10261,6 +10279,12 @@ msgid ""
 "which one will actually be fastest, we would use a two-tailed test (mode = "
 "2)."
 msgstr ""
+"يُستخدَم معامل mode للإشارة إلى ما إذا كنت تطلب أن يكون الفرق بين مجموعتي "
+"البيانات في اتجاه محدد أم لا. على سبيل المثال، إذا كنا نتوقع أن الأشخاص "
+"الطويلين سيكونون قادرين على الركض أسرع من الأشخاص القصيرين، نستخدم اختبارًا "
+"بذيل واحد (mode = 1)؛ ومع ذلك، إذا كنا نتوقع أن إحدى المجموعتين ستكون قادرة "
+"على الركض أسرع من الأخرى ولكن لا نعرف أي منهما سيكون الأسرع فعليًا، نستخدم "
+"اختبارًا بذيليْن (mode = 2)."
 
 #: functions/statistical.xml:1487
 #, kde-format
@@ -10276,6 +10300,15 @@ msgid ""
 "sized; for paired t-tests the two ranges are required to contain the same "
 "number of cells."
 msgstr ""
+"الاختبارات المُقترِنة (type = 1، انظر الصيغة أدناه) مناسبة فقط عندما يُسحَب كلا "
+"مجموعتي قيم البيانات من نفس المصدر (أي أن كل مصدر بيانات قَدَّم عنصرًا في نطاق "
+"البيانات الأول وعنصرًا في نطاق البيانات الثاني). في مثال سرعة الركض، هذا "
+"مستحيل لأن شخصًا واحدًا لا يمكن أن يكون طويلاً وقصيرًا: يمكن لكل شخص توفير "
+"بيانات لمجموعة واحدة فقط أو الأخرى. في مثل هذه الحالات، حيث تُسحَب القيم في كل "
+"مجموعة بيانات من مصادر مختلفة، يكون اختبار t غير المُقترِن مناسبًا (type = 2 أو "
+"type = 3). بالنسبة لاختبارات t غير المُقترِنة، لا يجب أن يكون نطاقا البيانات "
+"متساويين في الحجم؛ أما بالنسبة لاختبارات t المُقترِنة، فيُطلب أن يحتوي النطاقان "
+"على نفس عدد الخلايا."
 
 #: functions/statistical.xml:1488
 #, kde-format
@@ -10287,18 +10320,21 @@ msgid ""
 "where the variances are not sufficiently similar you must use an unpaired t-"
 "test for samples with differing variances (type = 3)."
 msgstr ""
+"عندما لا تُسحَب مجموعات قيم البيانات من نفس المصدر، يعتمد اختيار النوع المناسب "
+"من الاختبار غير المُقترِن على التباين داخل كل من العينتين. إذا كانت تباينات "
+"العينتين متشابهة، يمكنك استخدام اختبار t غير مُقترِن للعينات ذات التباينات "
+"المتشابهة (type = 2)؛ حيثما لا تكون التباينات متشابهة بما فيه الكفاية، يجب "
+"استخدام اختبار t غير مُقترِن للعينات ذات التباينات المختلفة (type = 3)."
 
 #: functions/statistical.xml:1489
-#, fuzzy, kde-format
-#| msgid "TTEST(x; y; type; mode)"
+#, kde-format
 msgid "TTEST(x; y; mode; type)"
-msgstr "TTEST(س; ص; النوع; النمط)"
+msgstr "TTEST(x؛ y؛ mode؛ type)"
 
 #: functions/statistical.xml:1518
-#, fuzzy, kde-format
-#| msgid "The VARA() function calculates the variance based on a sample."
+#, kde-format
 msgid "The VAR() function calculates the variance based on a sample."
-msgstr "الدالة VARA() تحسب التباين بناءً على عينة."
+msgstr "الدالة VAR() تحسب التباين بناءً على عينة."
 
 #: functions/statistical.xml:1519
 #, kde-format
@@ -10321,13 +10357,7 @@ msgid "VAR(6;7;8) equals 1"
 msgstr "الدالة VAR(6;7;8) تعادل 1"
 
 #: functions/statistical.xml:1554
-#, fuzzy, kde-format
-#| msgid ""
-#| "The AVERAGEA() calculates the average of the given arguments. Numbers, "
-#| "text and logical values are included in the calculation too. If the cell "
-#| "contains text or the argument evaluates to FALSE, it is counted as value "
-#| "zero (0). If the argument evaluates to TRUE, it is counted as one (1). "
-#| "Note that empty cells are not counted."
+#, kde-format
 msgid ""
 "The VARA() function calculates the variance based on a sample allowing "
 "numbers, text and logical values to be included in the calculation, too. If "
@@ -10335,10 +10365,10 @@ msgid ""
 "value zero (0). If the argument evaluates to TRUE, it is counted as one (1). "
 "Note that empty cells are not counted."
 msgstr ""
-"الدالة  AVERAGEA() تحسب متوسط المعطيات المناظرة. الأرقام، النصوص والقيم "
-"المنطقية تكون أيضا مضمنة في الحساب. إذا كانت الخلية تحتوي نصاً أو معطى يؤول "
-"إلى خاطئ، فإنها تعد على أنها صفر (0). إذا كان المعطى يؤول إلى صحيح، فإنه يعد "
-"على أنه واحد (1). لاحظ أن الخلايا الفارغة لا تعد."
+"الدالة VARA() تحسب التباين بناءً على عينة مع السماح بإدراج الأرقام والنصوص "
+"والقيم المنطقية في الحساب أيضًا. إذا احتوت الخلية على نص أو قُيّم الوسيط إلى "
+"FALSE، يُحسَب كقيمة صفر (0). إذا قُيّم الوسيط إلى TRUE، يُحسَب كواحد (1). لاحظ أن "
+"الخلايا الفارغة لا تُحسَب."
 
 #: functions/statistical.xml:1555
 #, kde-format
@@ -10361,15 +10391,11 @@ msgid "VARA(6;7;8) equals 1"
 msgstr "الدالة VARA(6;7;8) تعادل 1"
 
 #: functions/statistical.xml:1589
-#, fuzzy, kde-format
-#| msgid ""
-#| "The VARIANCE() function calculates the estimates variance based on a "
-#| "sample. It's the same as the VAR function."
+#, kde-format
 msgid ""
 "The VARIANCE() function calculates the variance based on a sample. It is the "
 "same as the VAR function."
-msgstr ""
-"الدالة VARIANCE() تحسب تباين التقديرات بناء على عينة. وهي نفس دالة VAR."
+msgstr "الدالة VARIANCE() تحسب التباين بناءً على عينة. إنها نفس الدالة VAR."
 
 #: functions/statistical.xml:1590
 #, kde-format
@@ -10418,19 +10444,15 @@ msgid "VARP(6;7;8) equals 0.6666667..."
 msgstr "الدالة VARP(6;7;8) تعادل 0.6666667..."
 
 #: functions/statistical.xml:1660
-#, fuzzy, kde-format
-#| msgid ""
-#| "The VARPA() function calculates the variance based on an entire "
-#| "population. Text and boolean values that evaluate to FALSE are counted as "
-#| "0, boolean value that evaluate to TRUE are counted as 1."
+#, kde-format
 msgid ""
 "The VARPA() function calculates the variance based on an entire population. "
 "Text and boolean values that evaluate to FALSE are counted as 0, boolean "
 "value that evaluate to TRUE are counted as 1. Empty cells are not counted."
 msgstr ""
-"الدالة VARPA() تحسب التباين بناء على العمومية الكلية. النصوص والقيم المنطقية "
-"التي تؤول إلى خاطئ تعد على أنها 0، القيمة المنطقية التي تؤول إلى صحيح تعد "
-"على أنها 1."
+"الدالة VARPA() تحسب التباين بناءً على كامل السكان. النصوص والقيم المنطقية "
+"التي تُقيّم إلى FALSE تُحسَب كـ 0، والقيمة المنطقية التي تُقيّم إلى TRUE تُحسَب كـ "
+"1. الخلايا الفارغة لا تُحسَب."
 
 #: functions/statistical.xml:1661
 #, kde-format
@@ -10504,7 +10526,7 @@ msgid ""
 msgstr "الدالة  ZTEST() تحسب الاحتمال ثنائي التعقب لاختبار z بالتوزيع الطبيعي."
 
 #: functions/statistical.xml:1717
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Performs a test of the null hypothesis, that the sample is a true sample of "
 "a normally distributed random variable with mean, mean, and standard "
@@ -10513,13 +10535,10 @@ msgid ""
 "the normal distribution. If sigma is omitted, it is estimated from sample, "
 "using STDEV."
 msgstr ""
-"تنجز اختبارا لفرضيات منعدمة، حيث العينة هي عينة\n"
-"            متغير عشوائي موزع طبيعيا مع المتوسط الحسابي المتوسط و الانحراف\n"
-"            المعياري سيجما. إرجاع القيمة 1 يدل على، أن الفرضيات\n"
-"            المنعدمة قد رفضت، أي أن العينة ليست عينة عشوائية من\n"
-"            التوزيع الطبيعي.\n"
-"            إذا أسقطت سيجما، فإنها تقدر من العينة، باستخدام STDEV.\n"
-"        "
+"يُجرِي اختبارًا للفرضية الصفرية، بأن العينة هي عينة حقيقية لمتغير عشوائي مُوَزَّع "
+"طبيعيًا بمتوسط، mean، وانحراف معياري، sigma (standardDeviation). قيمة إرجاع 1 "
+"تُشير إلى رفض الفرضية الصفرية، أي أن العينة ليست عينة عشوائية من التوزيع "
+"الطبيعي. إذا حُذِفَت sigma، تُقدَّر من العينة، باستخدام STDEV."
 
 #: functions/statistical.xml:1719
 #, kde-format
@@ -10813,37 +10832,37 @@ msgid "SEARCH(\"margin\";\"Profit Margin\") returns 8"
 msgstr "الدالة SEARCH(\"margin\";\"Profit Margin\") ترجع 8"
 
 #: functions/text.xml:122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Specified byte position to start the search"
-msgstr "حدد الدليل لبدء البحث به"
+msgstr "موقع البايت المُحدد لبدء البحث"
 
 #: functions/text.xml:126
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The SEARCHB() function finds one text string (find_text) within another text "
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
-"الدالة SEARCH() تعثر على سلسلة نصية واحدة (النص_المطلوب) ضمن سلسلة نص أخرى "
-"(ضمن_النص) وترجع رقم نقطة بداية النص_المطلوب، من أول محرف بأقصى يسار "
-"ضمن_النص."
+"الدالة SEARCHB() تجد سلسلة نصية واحدة (find_text) ضمن سلسلة نصية أخرى "
+"(within_text) وتُرجع رقم نقطة بداية find_text، من أقصى حرف يساري لـ "
+"within_text باستخدام مواقع البايت."
 
 #: functions/text.xml:128
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Parameter BytePosition specifies the character at which to start the search. "
 "The first character is character number 2. If BytePosition is omitted, it is "
 "assumed to be 2. SEARCHB does not distinguish between uppercase and "
 "lowercase letters."
 msgstr ""
-"المعامل رقم_البدء يحدد المحرف الذي سيبدأ عنده البحث. المحرف الأول هو المحرف "
-"رقم 1. إذا أُسقِط رقم_البدء، فيفترض أنه 1. دالة SEARCH لا تميز بين الأحرف "
-"العلوية والسفلية."
+"يُحدد المُعامِل (Parameter) BytePosition الحرف الذي يجب أن تبدأ منه عملية "
+"البحث. الحرف الأول هو الحرف رقم 2. إذا تم حذف BytePosition، فإنه يُفترض أن "
+"يكون 2. لا تُميّز الدالة SEARCHB بين الأحرف الكبيرة والصغيرة."
 
 #: functions/text.xml:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "SEARCHB(find_text;within_text;BytePosition Start)"
-msgstr "SEARCH(النص_المطلوب;ضمن_النص;رقم_البدء)"
+msgstr "SEARCHB(find_text;within_text;BytePosition Start)"
 
 #: functions/text.xml:144
 #, kde-format
@@ -10861,9 +10880,9 @@ msgid "T(value)"
 msgstr "T(قيمة)"
 
 #: functions/text.xml:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "T(\"Calligra\") returns \"Calligra\""
-msgstr "الدالة RIGHT(\"hello\";2) ترجع \"lo\""
+msgstr "T(\"Calligra\") تُرجع \"Calligra\""
 
 #: functions/text.xml:147
 #, kde-format
@@ -10945,19 +10964,19 @@ msgid "COMPARE(string1; string2; true|false)"
 msgstr "COMPARE(string1; string2; true|false)"
 
 #: functions/text.xml:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "COMPARE(\"Calligra\"; \"Calligra\"; true) returns 0"
-msgstr "الدالة COMPARE(\"KOffice\"; \"KOffice\"; true) ترجع 0"
+msgstr "COMPARE(\"كاليغرا\"; \"كاليغرا\"; true) ترجع 0"
 
 #: functions/text.xml:199
-#, fuzzy, kde-format
+#, kde-format
 msgid "COMPARE(\"calligra\"; \"Calligra\"; true) returns 1"
-msgstr "الدالة COMPARE(\"koffice\"; \"KOffice\"; true) ترجع 1"
+msgstr "COMPARE(\"كاليغرا\"; \"كاليغرا\"; true) ترجع 1"
 
 #: functions/text.xml:200
-#, fuzzy, kde-format
+#, kde-format
 msgid "COMPARE(\"kspread\"; \"Calligra\"; false) returns 1"
-msgstr "الدالة COMPARE(\"kspread\"; \"KOffice\"; false) ترجع 1"
+msgstr "COMPARE(\"كاليغرا\"; \"كاليغرا\"; false) ترجع 1"
 
 #: functions/text.xml:217
 #, kde-format
@@ -10974,14 +10993,14 @@ msgid "EXACT(string1;string2)"
 msgstr "EXACT(سلسلة نص1;سلسلة نص 2)"
 
 #: functions/text.xml:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "EXACT(\"Calligra\";\"Calligra\") returns True"
-msgstr "الدالة EXACT(\"KOffice\";\"KOffice\") ترجع صحيح"
+msgstr "EXACT(\"كاليغرا\";\"كاليغرا\") ترجع True"
 
 #: functions/text.xml:220
-#, fuzzy, kde-format
+#, kde-format
 msgid "EXACT(\"KSpread\";\"Calligra\") returns False"
-msgstr "الدالة EXACT(\"KSpread\";\"KOffice\") ترجع خاطئ"
+msgstr "EXACT(\"كاليغرا\";\"كاليغرا\") ترجع False"
 
 #: functions/text.xml:229
 #, kde-format
@@ -11026,31 +11045,33 @@ msgid "REPLACE(\"2002\";3;2;\"03\") returns \"2003\""
 msgstr "الدالة REPLACE(\"2002\";3;2;\"03\") ترجع \"2003\""
 
 #: functions/text.xml:260
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text which you want to replace some characters using byte position"
-msgstr "النص المراد استبدال بعض المحارف فيه"
+msgstr "نص تريد استبدال بعض حروفه باستخدام موقع البايت"
 
 #: functions/text.xml:264
-#, fuzzy, kde-format
+#, kde-format
 msgid "Byte position of the characters to replace"
-msgstr "موضع المحارف المراد استبدالها"
+msgstr "موقع البايت للحروف المراد استبدالها"
 
 #: functions/text.xml:268
-#, fuzzy, kde-format
+#, kde-format
 msgid "The byte length of characters to replace"
-msgstr "عدد المحارف المراد استبدالها"
+msgstr "طول البايت للحروف المراد استبدالها"
 
 #: functions/text.xml:276
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The REPLACEB() function replaces part of a text string with a different text "
 "string using byte positions."
-msgstr "الدالة REPLACE() تستبدل جزء من سلسلة نصية بسلسلة نصية أخرى."
+msgstr ""
+"دالة REPLACEB() تستبدل جزءًا من سلسلة نصية بسلسلة نصية أخرى باستخدام مواقع "
+"البايت."
 
 #: functions/text.xml:277
-#, fuzzy, kde-format
+#, kde-format
 msgid "REPLACEB(text;BytePosition;ByteLength Len;new_text)"
-msgstr "REPLACE(النص;الموضع;الطول;النص_الجديد)"
+msgstr "REPLACEB(نص;موقع_البايت;طول_البايت;نص_جديد)"
 
 #: functions/text.xml:297
 #, kde-format
@@ -11092,49 +11113,50 @@ msgid "FIND(find_text;within_text;start_num)"
 msgstr "FIND(النص_المطلوب;ضمن_النص;رقم_البدء)"
 
 #: functions/text.xml:305
-#, fuzzy, kde-format
+#, kde-format
 msgid "FIND(\"Cal\";\"Calligra\") returns 1"
-msgstr "الدالة FIND(\"KOf\";\"KOffice\") ترجع 1"
+msgstr "FIND(\"كال\";\"كاليغرا\") ترجع 1"
 
 #: functions/text.xml:306
-#, fuzzy, kde-format
+#, kde-format
 msgid "FIND(\"i\";\"Calligra\") returns 5"
-msgstr "الدالة FIND(\"i\";\"KOffice\") ترجع 5"
+msgstr "FIND(\"ي\";\"كاليغرا\") ترجع 5"
 
 #: functions/text.xml:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "FIND(\"a\";\"Sheets in Calligra\";4) returns 12"
-msgstr "الدالة FIND(\"K\";\"KSpread in KOffice\";4) ترجع 12"
+msgstr "FIND(\"ا\";\"جداول في كاليغرا\";4) ترجع 12"
 
 #: functions/text.xml:328
-#, fuzzy, kde-format
+#, kde-format
 msgid "Specifies byte position to start the search"
-msgstr "يحدد الدليل المراد البحث به"
+msgstr "يحدد موقع البايت لبدء البحث"
 
 #: functions/text.xml:332
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The FINDB() function finds one text string (find_text) within another text "
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
-"الدالة FIND() تعثر على سلسلة نصية (النص_المطلوب) ضمن سلسلة نصية أخرى "
-"(ضمن_النص) وترجع رقم نقطة بداية النص_المطلوب، من أول حرف بأقصى يسار ضمن_النص."
+"دالة FINDB() تجد سلسلة نصية (النص_الباحث) ضمن سلسلة نصية أخرى (النص_المبحوث) "
+"وترجع رقم نقطة البداية للنص_الباحث، من أقصى حرف يساري للنص_المبحوث، باستخدام "
+"مواقع البايت."
 
 #: functions/text.xml:333
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Parameter BytePosition specifies the character at which to start the search. "
 "The first character is character number 2. If start_num is omitted, it is "
 "assumed to be 2."
 msgstr ""
-"المعامل رقم_البدء يحدد المحرف الذي سيبدأ من عنده البحث. المحرف الأول هو "
-"المحرف رقم 1. إذا أُسقِط رقم_البدء، سيفترض أنه 1."
+"المعلمة BytePosition تحدد الحرف الذي يبدأ عنده البحث. الحرف الأول هو الحرف "
+"رقم 2. إذا أُسقطت start_num، يفترض أن تكون 2."
 
 #: functions/text.xml:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "FINDB(find_text;within_text;BytePosition Start)"
-msgstr "FIND(النص_المطلوب;ضمن_النص;رقم_البدء)"
+msgstr "FINDB(النص_الباحث;النص_المبحوث;بدء موقع البايت)"
 
 #: functions/text.xml:348 functions/text.xml:377 functions/text.xml:477
 #: functions/text.xml:501 functions/text.xml:522 functions/text.xml:546
@@ -11174,43 +11196,43 @@ msgid "MID(text;position)"
 msgstr "MID(نص;الموضع)"
 
 #: functions/text.xml:363
-#, fuzzy, kde-format
+#, kde-format
 msgid "MID(\"Calligra\";2;3) returns \"all\""
-msgstr "الدالة MID(\"KOffice\";2;3) ترجع \"Off\""
+msgstr "MID(\"كاليغرا\";2;3) ترجع \"اليغ\""
 
 #: functions/text.xml:364
-#, fuzzy, kde-format
+#, kde-format
 msgid "MID(\"Calligra\";2) returns \"alligra\""
-msgstr "الدالة RIGHT(\"hello\";2) ترجع \"lo\""
+msgstr "MID(\"كاليغرا\";2) ترجع \"اليغرا\""
 
 #: functions/text.xml:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Byte Position"
-msgstr "الموضع"
+msgstr "موقع البايت"
 
 #: functions/text.xml:385 functions/text.xml:505 functions/text.xml:550
-#, fuzzy, kde-format
+#, kde-format
 msgid "Byte Length"
-msgstr "طول النص"
+msgstr "طول البايت"
 
 #: functions/text.xml:389
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The MIDB() function returns a substring that contains 'length' characters of "
 "the string, starting at 'position' index using byte positions."
 msgstr ""
-"الدالة MID() ترجع السلسلة النصية التي تحتوي على محارف بعدد الطول من سلسلة "
-"نصية، ابتداءً من دليل الموضع."
+"دالة MIDB() ترجع سلسلة فرعية تحتوي على طول من الحروف من السلسلة، بدءًا من "
+"فهرس الموقع باستخدام مواقع البايت."
 
 #: functions/text.xml:390
-#, fuzzy, kde-format
+#, kde-format
 msgid "MIDB(text;BytePosition Start;ByteLength)"
-msgstr "MID(نص;الموضع;الطول)"
+msgstr "MIDB(نص;بدء موقع البايت;طول البايت)"
 
 #: functions/text.xml:391
-#, fuzzy, kde-format
+#, kde-format
 msgid "MIDB(text;BytePosition Start)"
-msgstr "MID(نص;الموضع)"
+msgstr "MIDB(نص;بدء موقع البايت)"
 
 #: functions/text.xml:408
 #, kde-format
@@ -11233,15 +11255,15 @@ msgid "LEN(\"KSpread\") returns 7"
 msgstr "الدالة LEN(\"KSpread\") ترجع 7"
 
 #: functions/text.xml:424
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The LENB() function returns the length of the string using byte positions."
-msgstr "الدالة LEN() ترجع طول السلسلة النصية."
+msgstr "دالة LENB() ترجع طول السلسلة باستخدام مواقع البايت."
 
 #: functions/text.xml:425
-#, fuzzy, kde-format
+#, kde-format
 msgid "LENB(text)"
-msgstr "LEN(نص)"
+msgstr "LENB(نص)"
 
 #: functions/text.xml:437
 #, kde-format
@@ -11273,12 +11295,10 @@ msgid "CONCATENATE(value;value;...)"
 msgstr "CONCATENATE(قيمة;قيمة;...)"
 
 #: functions/text.xml:469
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "CONCATENATE(\"Sheets\";\"Calligra\";\"KDE\") returns \"SheetsCalligraKDE\""
-msgstr ""
-"الدالة CONCATENATE(\"KSpread\";\"KOffice\";\"KDE\") ترجع \"KSpreadKOfficeKDE"
-"\""
+msgstr "CONCATENATE(\"جداول\";\"كاليغرا\";\"KDE\") ترجع \"جداولكاليغراKDE\""
 
 #: functions/text.xml:481 functions/text.xml:526
 #, kde-format
@@ -11317,20 +11337,20 @@ msgid "RIGHT(\"KSpread\") returns \"d\""
 msgstr "الدالة RIGHT(\"KSpread\") ترجع \"d\""
 
 #: functions/text.xml:509
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The RIGHTB() function returns a substring that contains the 'length' "
 "rightmost characters of the string using byte positions. The whole string is "
 "returned if 'length' exceeds the length of the string."
 msgstr ""
-"الدالة RIGHT() ترجع السلسلة النصية الفرعية التي تحتوي على الحروف المحددة "
-"بالطول من أقصى يمين السلسلة النصية. وترجع السلسلة النصية بأكملها إذا كان "
-"الطول يتجاوز طول السلسلة النصية."
+"دالة RIGHTB() ترجع سلسلة فرعية تحتوي على أقصى الحروف اليمينية التي يحددها "
+"'الطول' للسلسلة باستخدام مواقع البايت. ترجع السلسلة بأكملها إذا تجاوز "
+"'الطول' طول السلسلة."
 
 #: functions/text.xml:510
-#, fuzzy, kde-format
+#, kde-format
 msgid "RIGHTB(text;ByteLength)"
-msgstr "RIGHT(النص;الطول)"
+msgstr "RIGHTB(نص;طول البايت)"
 
 #: functions/text.xml:530
 #, kde-format
@@ -11365,21 +11385,21 @@ msgid "LEFT(\"KSpread\") returns \"K\""
 msgstr "الدالة LEFT(\"KSpread\") ترجع \"K\""
 
 #: functions/text.xml:554
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The LEFTB() function returns a substring that contains the 'length' leftmost "
 "characters of the string using byte positions. The whole string is returned "
 "if 'length' exceeds the length of the string. It is an error for the number "
 "of characters to be less than 0."
 msgstr ""
-"الدالة LEFT() ترجع السلسلة النصية الفرعية التي تحتوي على الحروف المحددة "
-"بالطول من أقصى يسار السلسلة النصية. وترجع السلسلة النصية بأكملها إذا كان "
-"الطول يتجاوز طول السلسلة النصية. وخطأ تنفيذ لعدد الحروف الأقل من 0."
+"دالة LEFTB() ترجع سلسلة فرعية تحتوي على أقصى الحروف اليسارية التي يحددها "
+"'الطول' للسلسلة باستخدام مواقع البايت. ترجع السلسلة بأكملها إذا تجاوز "
+"'الطول' طول السلسلة. يحدث خطأ إذا كان عدد الحروف أقل من 0."
 
 #: functions/text.xml:555
-#, fuzzy, kde-format
+#, kde-format
 msgid "LEFTB(text;ByteLength)"
-msgstr "LEFT(النص;الطول)"
+msgstr "LEFTB(نص;طول البايت)"
 
 #: functions/text.xml:571
 #, kde-format
@@ -11414,15 +11434,14 @@ msgid "REPT(\"KSpread\";0) returns \"\""
 msgstr "الدالة REPT(\"KSpread\";0) ترجع \"\""
 
 #: functions/text.xml:590
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The ROT13() function encrypts text by replacing each letter with the one 13 "
 "places along in the alphabet. If the 13th position is beyond the letter Z, "
 "it begins again at A (rotation)."
 msgstr ""
-"الدالة ROT() تُشَفِّر نصاً عن طريق استبدال كل حرف بالمقابل لكل 13 حرفا بطول حروف "
-"الهجاء.إذا كان الموضع الثالث عشر فيما بعد الحرف Z،فإنها تبدأ مجددا عند A "
-"(استدارة)."
+"دالة ROT13() تشفّر النص باستبدال كل حرف بالحرف الذي يليه بـ 13 موضعًا في "
+"الأبجدية. إذا تجاوز الموضع 13 الحرف Z، يبدأ من جديد عند A (دوران)."
 
 #: functions/text.xml:591
 #, kde-format
@@ -11432,19 +11451,19 @@ msgid ""
 msgstr "بتطبيق دالة تعمية مرة أخرى على النص الناتج، يمكنك فك تعمية النص."
 
 #: functions/text.xml:592
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROT13(Text)"
-msgstr "ROT(نص)"
+msgstr "ROT13(نص)"
 
 #: functions/text.xml:593
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROT13(\"KSpread\") returns \"XFcernq\""
-msgstr "الدالة ROT(\"KSpread\") ترجع \"XFcernq\""
+msgstr "ROT13(\"KSpread\") ترجع \"XFcernq\""
 
 #: functions/text.xml:594
-#, fuzzy, kde-format
+#, kde-format
 msgid "ROT13(\"XFcernq\") returns \"KSpread\""
-msgstr "الدالة ROT(\"XFcernq\") ترجع \"KSpread\""
+msgstr "ROT13(\"XFcernq\") ترجع \"KSpread\""
 
 #: functions/text.xml:606
 #, kde-format
@@ -11753,21 +11772,21 @@ msgid "JIS(text)"
 msgstr "JIS(نص)"
 
 #: functions/text.xml:842
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The BAHTTEXT() function converts a number to a text in Thai characters "
 "(baht)."
-msgstr "الدالة TEXT() تحول قيمة إلى نص."
+msgstr "دالة BAHTTEXT() تحول رقمًا إلى نص بأحرف تايلاندية (بات)."
 
 #: functions/text.xml:843
-#, fuzzy, kde-format
+#, kde-format
 msgid "BAHTTEXT(number)"
-msgstr "FACT(رقم)"
+msgstr "BAHTTEXT(رقم)"
 
 #: functions/text.xml:844
 #, kde-format
 msgid "BAHTTEXT(23) returns \"ยี่สิบสามบาทถ้วน\""
-msgstr ""
+msgstr "BAHTTEXT(23) ترجع \"يىسب ثلاثون ثون\""
 
 #: functions/trig.xml:4
 #, kde-format
@@ -12159,73 +12178,71 @@ msgid "PI() equals 3.141592654..."
 msgstr "الدالة PI() تعادل 3.141592654..."
 
 #: functions/trig.xml:286
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The CSC() function returns the cosecant of x, where x is given in radians."
-msgstr ""
-"الدالة COS() ترجع جيب تمام الزاوية س، حيث تكون س معطاة بالتقدير الدائري."
+msgstr "دالة CSC() ترجع قاطع التمام لـ x، حيث x يعطى بالتقدير الدائري."
 
 #: functions/trig.xml:287
-#, fuzzy, kde-format
+#, kde-format
 msgid "CSC(Float)"
-msgstr "COS(عدد حقيقي)"
+msgstr "CSC(طاف)"
 
 #: functions/trig.xml:288
-#, fuzzy, kde-format
+#, kde-format
 msgid "CSC(PI()/2) equals 1"
-msgstr "الدالة COS(PI()/2) تعادل 0"
+msgstr "CSC(PI()/2) يساوي 1"
 
 #: functions/trig.xml:300
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The CSCH() function returns the hyperbolic cosecant of x, where x is given "
 "in radians."
 msgstr ""
-"الدالة COS() ترجع جيب تمام الزاوية س، حيث تكون س معطاة بالتقدير الدائري."
+"دالة CSCH() ترجع قاطع التمام الزائدي لـ x، حيث x يعطى بالتقدير الدائري."
 
 #: functions/trig.xml:301
-#, fuzzy, kde-format
+#, kde-format
 msgid "CSCH(Float)"
-msgstr "COSH(عدد حقيقي)"
+msgstr "CSCH(طاف)"
 
 #: functions/trig.xml:302
-#, fuzzy, kde-format
+#, kde-format
 msgid "CSCH(PI()/2) equals 0.434537208..."
-msgstr "الدالة COS(PI()/2) تعادل 0"
+msgstr "CSCH(PI()/2) يساوي 0.434537208..."
 
 #: functions/trig.xml:314
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The SEC() function returns the secant of x, where x is given in radians."
-msgstr "الدالة SIN() ترجع جيب الزاوية س، حيث تكون س معطاة بالتقدير الدائري."
+msgstr "دالة SEC() ترجع القاطع لـ x، حيث x يعطى بالتقدير الدائري."
 
 #: functions/trig.xml:315
-#, fuzzy, kde-format
+#, kde-format
 msgid "SEC(Float)"
-msgstr "COS(عدد حقيقي)"
+msgstr "SEC(طاف)"
 
 #: functions/trig.xml:316
-#, fuzzy, kde-format
+#, kde-format
 msgid "SEC(0) equals 1"
-msgstr "الدالة COSH(0) تعادل 1"
+msgstr "SEC(0) يساوي 1"
 
 #: functions/trig.xml:328
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The SECH() function returns the hyperbolic secant of x, where x is given in "
 "radians."
-msgstr ""
-"الدالة COS() ترجع جيب تمام الزاوية س، حيث تكون س معطاة بالتقدير الدائري."
+msgstr "دالة SECH() ترجع القاطع الزائدي لـ x، حيث x يعطى بالتقدير الدائري."
 
 #: functions/trig.xml:329
-#, fuzzy, kde-format
+#, kde-format
 msgid "SECH(Float)"
-msgstr "COSH(عدد حقيقي)"
+msgstr "SECH(طاف)"
 
 #: functions/trig.xml:330
-#, fuzzy, kde-format
+#, kde-format
 msgid "SECH(0) equals 1"
-msgstr "الدالة COSH(0) تعادل 1"
+msgstr "SECH(0) يساوي 1"
 
 #: part/AboutData.h:26
 #, kde-format
@@ -12234,25 +12251,24 @@ msgid "Calligra Sheets"
 msgstr "كي سبريد"
 
 #: part/AboutData.h:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spreadsheet Application"
-msgstr "تطبيق KOffice للأوراق الحسابية"
+msgstr "تطبيق الجداول"
 
 #: part/AboutData.h:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
-msgstr "(c) 1998-2007، فريق KSpread "
+msgstr "حقوق النشر 1998-%1، فريق كاليغرا للجداول"
 
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "كارل شوان"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "المشرف"
+msgstr "المتعهد/النقل إلى Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12265,20 +12281,19 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "المشرف"
+msgstr "المتعهد السابق"
 
 #: part/AboutData.h:42
 #, kde-format
 msgid "Marijn Kruisselbrink"
-msgstr ""
+msgstr "ماريجن كرويسلبرينك"
 
 #: part/AboutData.h:43
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
-msgstr ""
+msgstr "ODS وإكسل، دوال، سكريبتات"
 
 #: part/AboutData.h:43
 #, kde-format
@@ -12472,7 +12487,7 @@ msgstr "ا&عرض"
 #: part/calligrasheets.rc:65
 #, kde-format
 msgid "&Go"
-msgstr ""
+msgstr "&انتقال"
 
 #. i18n: ectx: Menu (Insert)
 #: part/calligrasheets.rc:76
@@ -12524,9 +12539,9 @@ msgstr "ا&طبع النطاق"
 
 #. i18n: ectx: Menu
 #: part/calligrasheets.rc:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manual Page Breaks"
-msgstr "حدود الصفحة"
+msgstr "فواصل الصفحات اليدوية"
 
 #. i18n: ectx: Menu (Data)
 #: part/calligrasheets.rc:149
@@ -12590,14 +12605,14 @@ msgid "Comment:"
 msgstr "التعليق:"
 
 #: part/CellEditorWidget.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell Editor"
-msgstr "الخلية هي"
+msgstr "محرر الخلية"
 
 #: part/CellEditorWidget.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula"
-msgstr "شريط الصيغة"
+msgstr "صيغة"
 
 #: part/CellTool.cpp:63
 #, kde-format
@@ -12610,27 +12625,27 @@ msgid "Define the print range in the current sheet"
 msgstr "حدد نطاق الطباعة في الورقة الحالية"
 
 #: part/CellToolFactory.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell formatting"
 msgstr "تنسيق الخلية"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ChartDatabaseSelector)
 #: part/chart/ChartDatabaseSelector.ui:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Database Selector"
-msgstr "الدوال المتعلقة"
+msgstr "محدد قاعدة البيانات"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_areaBox)
 #: part/chart/ChartDatabaseSelector.ui:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data Area"
-msgstr "مصدر البيانات"
+msgstr "منطقة البيانات"
 
 #. i18n: ectx: property (text), widget (QLabel, m_areaLabel)
 #: part/chart/ChartDatabaseSelector.ui:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Area:"
-msgstr "المنطقة: %1"
+msgstr "منطقة:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstRowAsLabel)
 #: part/chart/ChartDatabaseSelector.ui:41
@@ -12646,21 +12661,21 @@ msgstr "أوّل عمود كلصيقة"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
 #: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:135
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data Format"
-msgstr "تنسيق الـ&بيانات"
+msgstr "تنسيق البيانات"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_dataInRows)
 #: part/chart/ChartDatabaseSelector.ui:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data sets in rows"
-msgstr "أدرج أعمدة"
+msgstr "مجموعات البيانات في صفوف"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_dataInColumns)
 #: part/chart/ChartDatabaseSelector.ui:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data sets in columns"
-msgstr "أدرج أعمدة"
+msgstr "مجموعات البيانات في أعمدة"
 
 #: part/commands/DefinePrintRangeCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -12668,22 +12683,21 @@ msgid "Define Print Range"
 msgstr "حدد نطاق الطباعة"
 
 #: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:201
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
 msgstr "اضبط تخطيط الصفحة"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FileOptionsWidget)
 #: part/dialogs/FileOptionsWidget.ui:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "File Options"
-msgstr "خيارات أقل"
+msgstr "خيارات الملف"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/FileOptionsWidget.ui:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of entries in Recent Files list:"
-msgstr "&عدد الملفات المطلوب عرضها في قائمة الملفات الحديثة:"
+msgstr "عدد الإدخالات في قائمة الملفات الحديثة:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
 #: part/dialogs/FileOptionsWidget.ui:28
@@ -12702,13 +12716,13 @@ msgstr "فترة الحفظ الآليّ:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Here you can select the time between autosaves, or disable this feature "
 "altogether by choosing \"No autosave\" (by selecting the minimum value)."
 msgstr ""
-"يمكنك هنا انتقاء الوقت بين مرات الحفظ التلقائي، أو تعطيل هذه الميزة بالكامل "
-"باختيار  لا تحفظ تلقائياً (اسحب الزالق لأقصى اليسار)."
+"هنا اختر الوقت بين مرات الحفظ الآلي، أو عطل هذه الميزة بالكامل باختيار \"لا "
+"حفظ آلي\" (باختيار القيمة الدنيا)."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:51
@@ -12725,9 +12739,9 @@ msgstr "دقائق"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/FileOptionsWidget.ui:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create backup file:"
-msgstr "انشئ ملفات نسخ احتياطي"
+msgstr "أنشئ ملف احتياطي:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
 #: part/dialogs/FileOptionsWidget.ui:74
@@ -12741,7 +12755,7 @@ msgstr "عين هذا الصندوق إذا أردت إنشاء بعض ملفا�
 #: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
-msgstr ""
+msgstr "حركة المؤشر بعد ضغط Enter:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
 #: part/dialogs/InterfaceOptionsWidget.ui:29
@@ -12755,9 +12769,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/InterfaceOptionsWidget.ui:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Func&tion shown in status bar:"
-msgstr "اعرض شريط الحالة"
+msgstr "الدا&لة المعروضة في شريط الحالة:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
 #: part/dialogs/InterfaceOptionsWidget.ui:46
@@ -12779,23 +12793,23 @@ msgstr "الو&حدة:"
 #: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
-msgstr ""
+msgstr "اختر الوحدة المبدئية التي ستستخدم في جداولك."
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
 #: part/dialogs/InterfaceOptionsWidget.ui:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "I&ndentation step:"
-msgstr "&خطوة الإزاحة (%1):"
+msgstr "خطوة ال&مسافة البادئة:"
 
 #. i18n: ectx: property (whatsThis), widget (KoUnitDoubleSpinBox, m_indentationStep)
 #: part/dialogs/InterfaceOptionsWidget.ui:80
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Lets you define the amount of indenting used by the Increase Indent and "
 "Decrease Indent actions."
 msgstr ""
-"يسمح لك باختيار كمية الإزاحة المستخدمة بواسطة خياري زد الإزاحة وانقص الإزاحة "
-"في قائمة تنسيق."
+"اجعلني أحدد مقدار المسافة البادئة المستخدمة بواسطة إجرائيّ زيادة المسافة "
+"البادئة وإنقاص المسافة البادئة."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
@@ -12812,9 +12826,9 @@ msgstr "انقر هنا لتغير لون الشبكة بما يعني لون ح
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Out&line Color:"
-msgstr "محيط"
+msgstr "ل&ون مخطط الصفحة:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114
@@ -12857,9 +12871,9 @@ msgstr "الشبكة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commentCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comment indicator"
-msgstr "اعرض &مميز التعليقات"
+msgstr "علامة التعليق"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chartsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:58
@@ -12875,21 +12889,21 @@ msgstr "الكائنات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, zeroValuesCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zero values"
-msgstr "القيمة الأساسية"
+msgstr "القيم الصفرية"
 
 #. i18n: ectx: property (text), widget (QCheckBox, formulaCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula indicator"
-msgstr "اعر&ض مميز الصيغة"
+msgstr "علامة الصيغة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, drawingsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:101
 #, kde-format
 msgid "Drawings"
-msgstr ""
+msgstr "الرسومات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, headersCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:114
@@ -12899,27 +12913,27 @@ msgstr "التّرويسات"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/dialogs/PageLayoutSheetPage.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page order"
-msgstr "حدود الصفحة"
+msgstr "تسلسل الصفحة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, ltrButton)
 #: part/dialogs/PageLayoutSheetPage.ui:130
 #, kde-format
 msgid "From left to right, then down"
-msgstr ""
+msgstr "من اليسار إلى اليمين، ثم للأسفل"
 
 #. i18n: ectx: property (text), widget (QRadioButton, ttbButton)
 #: part/dialogs/PageLayoutSheetPage.ui:140
 #, kde-format
 msgid "From top to bottom, then across"
-msgstr ""
+msgstr "من الأعلى إلى الأسفل، ثم عبر"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: part/dialogs/PageLayoutSheetPage.ui:150
 #, kde-format
 msgid "Table alignment on page"
-msgstr ""
+msgstr "محاذاة الجدول في الصفحة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, horizontalCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:156
@@ -12935,21 +12949,21 @@ msgstr "وسّط رأسيًّا"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/PageLayoutSheetPage.ui:173
-#, fuzzy, kde-format
+#, kde-format
 msgid "Repetitions on each page"
-msgstr "كرر الصفوف في كل صفحة:"
+msgstr "تكرارات في كل صفحة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, columnsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Columns from"
-msgstr "الأعمدة"
+msgstr "أعمدة من"
 
 #. i18n: ectx: property (text), widget (QCheckBox, rowsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:192
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rows from"
-msgstr "صفوف"
+msgstr "صفوف من"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_1)
@@ -12969,13 +12983,13 @@ msgstr "تحجيم"
 #: part/dialogs/PageLayoutSheetPage.ui:275
 #, kde-format
 msgid "Fixed zoom:"
-msgstr ""
+msgstr "تكبير ثابت:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, pageLimitsButton)
 #: part/dialogs/PageLayoutSheetPage.ui:305
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page limits:"
-msgstr "النهاية الصغرى"
+msgstr "حدود الصفحة:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (title), widget (QGroupBox, horizontalGroup)
@@ -13071,9 +13085,9 @@ msgid "Open/Save"
 msgstr "الفتح/الحفظ"
 
 #: part/dialogs/PreferenceDialog.cpp:334
-#, fuzzy, kde-format
+#, kde-format
 msgid "Function Modules"
-msgstr "الدالة"
+msgstr "وحدات الدوال"
 
 #: part/dialogs/PreferenceDialog.cpp:335 part/View.cpp:730
 #, kde-format
@@ -13163,14 +13177,15 @@ msgstr "اتجاه التخطيط:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, directionComboBox)
 #: part/dialogs/SheetPropertiesWidget.ui:55
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Default is that the first column of the sheet is on the left. If you choose "
 "Right to Left, then the first column will be on the right and the others "
 "added from right to left."
 msgstr ""
-"الافتراضي هو أن العمود الأول للورقة يكون على اليسار. إذا اخترت يمين إلى "
-"يسار، فإن العمود الأول سيكون على اليمين والأخرى تضاف من اليمين لليسار.."
+"المبدئي هو أن العمود الأول من الجدول يكون على اليسار. إذا اخترت من اليمين "
+"إلى اليسار، فسيكون العمود الأول على اليمين وتُضاف الأعمدة الأخرى من اليمين "
+"إلى اليسار."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showCommentIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:110
@@ -13219,9 +13234,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show page outline"
-msgstr "اعرض &حدود الصفحة"
+msgstr "أظهر مخطط الصفحة"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:140
@@ -13253,12 +13268,13 @@ msgstr "&اخف الصفر"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showFormulaCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:160
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "If this box is checked Calligra Sheets will display the actual formulae in "
 "cells rather than the results."
 msgstr ""
-"عند تعيين هذا الصندوق KSpread سيعرض الصيغ الفعلية في الخلايا بدلا من النتائج."
+"إذا أشر هذا المربع، سيعرض كاليغرا للجداول الصيغ الفعلية في الخلايا بدلًا من "
+"النتائج."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:163
@@ -13284,14 +13300,15 @@ msgstr "اعرض الأعمدة كأ&رقام"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showFormulaIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:180
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "If this box is checked Calligra Sheets will display a small blue triangle at "
 "the bottom left corner of cells containing formulae. This is useful if you "
 "want to protect cells with formulae."
 msgstr ""
-"عند تعيين هذا الصندوق KSpread سيعرض مثلث أزرق صغير عند الركن الأيسر الأسفل "
-"للخلايا التي تحتوي على صيغ. هذا مفيد إذا أردت أن تحمي الخلايا ذات الصيغ."
+"إذا أشر هذا المربع، سيعرض كاليغرا للجداول مثلثًا أزرق صغيرًا في الركن السفلي "
+"الأيسر من الخلايا التي تحتوي على صيغ. هذا مفيد إذا أردت حماية الخلايا التي "
+"تحتوي على صيغ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:183
@@ -13301,13 +13318,13 @@ msgstr "اعر&ض مميز الصيغة"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:190
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "If checked, the grid (the cell limits) will be shown. This is the default. "
 "If unchecked, the grid will be hidden."
 msgstr ""
-"عند تعيين هذا فإن الشبكة (نهايات الخلايا) ستكون ظاهرة. ذلك هو الافتراضي. "
-"فإذا ألغيته، ستكون الشبكة مخفية."
+"إذا أشر، ستُظهر الشبكة (حدود الخلية). هذا هو المبدئي. إذا لم يُؤشر، ستُخفى "
+"الشبكة."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:193
@@ -13344,9 +13361,9 @@ msgstr "كل الأوراق"
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeSheetButton)
 #: part/dialogs/SheetSelectWidget.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Active Sheet"
-msgstr "اخف الورقة"
+msgstr "الجدول النشط"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectedSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:57
@@ -13467,7 +13484,7 @@ msgstr "حساس للحالة"
 #: part/Find.cpp:40
 #, kde-format
 msgid "Match cases when searching"
-msgstr ""
+msgstr "طابق الحالات عند البحث"
 
 #: part/HeaderItems.cpp:155 part/HeaderWidgets.cpp:150
 #, kde-format
@@ -13500,14 +13517,14 @@ msgid "Sheet %1 could not be found for printing"
 msgstr "الورقة %1 لا يمكن العثور عليها للطباعة"
 
 #: part/PrintJob.cpp:286
-#, fuzzy, kde-format
+#, kde-format
 msgid "Nothing to print for sheet(s) %1."
-msgstr "لا شيء للطباعة للورقة %1."
+msgstr "لا يوجد شيء للطباعة للجدول (الجداول) %1."
 
 #: part/View.cpp:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sheet Properties..."
-msgstr "خصائص الورقة"
+msgstr "خصائص الجدول..."
 
 #: part/View.cpp:230
 #, kde-format
@@ -13595,14 +13612,14 @@ msgid "Reset the print range in the current sheet"
 msgstr "صفّر نطاق الطباعة في الورقة الحالية"
 
 #: part/View.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page Outline"
-msgstr "محيط"
+msgstr "مخطط الصفحة"
 
 #: part/View.cpp:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
-msgstr "اعرض على أوراق الحساب أين ستكون حدود الصفحة"
+msgstr "أظهر في الجدول أين سيكون حد الصفحة"
 
 #: part/View.cpp:279
 #, kde-format
@@ -13672,7 +13689,7 @@ msgstr "للصفحة"
 #: part/View.cpp:315
 #, kde-format
 msgid "Switch shape anchoring"
-msgstr ""
+msgstr "حول تثبيت الشكل"
 
 #: part/View.cpp:321
 #, kde-format
@@ -13741,9 +13758,9 @@ msgid "Column Header"
 msgstr "رأس العمود"
 
 #: part/View.cpp:350
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the column header"
-msgstr "اعرض ترويسة العمو&د"
+msgstr "أظهر ترويسة العمود"
 
 #: part/View.cpp:354
 #, kde-format
@@ -13751,29 +13768,29 @@ msgid "Row Header"
 msgstr "رأس الصف"
 
 #: part/View.cpp:355
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the row header"
-msgstr "اعرض تر&ويسة الصف"
+msgstr "أظهر ترويسة الصف"
 
 #: part/View.cpp:359
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Scrollbar"
-msgstr "اعرض شريط التمرير الأ&فقي"
+msgstr "شريط التمرير الأفقي"
 
 #: part/View.cpp:360
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the horizontal scrollbar"
-msgstr "اعرض شريط التمرير الأ&فقي"
+msgstr "أظهر شريط التمرير الأفقي"
 
 #: part/View.cpp:364
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Scrollbar"
-msgstr "اعرض شريط التمرير الرأ&سي"
+msgstr "شريط التمرير العمودي"
 
 #: part/View.cpp:365
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show the vertical scrollbar"
-msgstr "اعرض شريط التمرير الرأ&سي"
+msgstr "أظهر شريط التمرير العمودي"
 
 #: part/View.cpp:369
 #, kde-format
@@ -13796,9 +13813,9 @@ msgid "Show the tab bar"
 msgstr "اعرض شريط اللسان"
 
 #: part/View.cpp:380
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set various Calligra Sheets options"
-msgstr "اضبط خيارات KSpread المتنوعة"
+msgstr "اضبط خيارات كاليغرا للجداول المتنوعة"
 
 #: part/View.cpp:392
 #, kde-format
@@ -13960,28 +13977,25 @@ msgid "%1x%2"
 msgstr "%1×%2"
 
 #: part/ViewAdaptor.cpp:125
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
-msgstr "غيِّر لون النص"
+msgstr "غير لون النص"
 
 #: part/ViewAdaptor.cpp:137 part/ViewAdaptor.cpp:149
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
-msgstr "غيِّر لون الخلفية"
+msgstr "غير لون الخلفية"
 
 #: part/ViewAdaptor.cpp:161 part/ViewAdaptor.cpp:176 part/ViewAdaptor.cpp:188
 #: part/ViewAdaptor.cpp:203 part/ViewAdaptor.cpp:215 part/ViewAdaptor.cpp:232
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
-msgstr "غيّر الحد"
+msgstr "غير الحدود"
 
 #: ui/CellToolBase.cpp:813
 #, kde-format
 msgid "Unable to locate action %1"
-msgstr ""
+msgstr "غير قادر على تحديد موقع الإجراء %1"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14219,7 +14233,6 @@ msgid "Insert Cells"
 msgstr "إدراج خلايا"
 
 #: ui/commands/DataManipulators.cpp:183
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Cells"
 msgstr "أزل الخلايا"
@@ -14230,18 +14243,14 @@ msgid "Delete"
 msgstr "احذف"
 
 #: ui/commands/MergeCommand.cpp:81
-#, fuzzy
-#| msgid "Merge Cells Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
-msgstr "ادمج الخلايا أفقيا"
+msgstr "ادمج الخلايا أفقيًا"
 
 #: ui/commands/MergeCommand.cpp:83
-#, fuzzy
-#| msgid "Merge Cells Vertically"
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
-msgstr "ادمج الخلايا رأسيا"
+msgstr "ادمج الخلايا عموديًا"
 
 #: ui/commands/MergeCommand.cpp:85
 msgctxt "(qtundo-format)"
@@ -14249,8 +14258,6 @@ msgid "Merge Cells"
 msgstr "ادمج الخلايا"
 
 #: ui/commands/MergeCommand.cpp:88
-#, fuzzy
-#| msgid "Dissociate Cells"
 msgctxt "(qtundo-format)"
 msgid "Dissociate Cells"
 msgstr "افصل الخلايا"
@@ -14261,35 +14268,29 @@ msgid "Merging of columns or rows is not supported."
 msgstr "دمج الأعمدة أو الصفوف ليس مدعوماً."
 
 #: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:40
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
-msgstr "أضف منطقة مسماة"
+msgstr "أضف منطقة مُسمّاة"
 
 #: ui/commands/NamedAreaCommand.cpp:42
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
-msgstr "أزل المنطقة المسماة"
+msgstr "أزل منطقة مُسمّاة"
 
 #: ui/commands/RowColumnManipulators.cpp:35
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Column"
-msgstr "أعد تحجيم العمود"
+msgstr "غير حجم العمود"
 
 #: ui/commands/RowColumnManipulators.cpp:91
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Row"
-msgstr "أعد تحجيم الصف"
+msgstr "غير حجم الصف"
 
 #: ui/commands/RowColumnManipulators.cpp:277
-#, fuzzy
-#| msgid "Hide Columns"
 msgctxt "(qtundo-format)"
 msgid "Hide Rows/Columns"
-msgstr "اخف الأعمدة"
+msgstr "أخفِ الصفوف/الأعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:279
 msgctxt "(qtundo-format)"
@@ -14302,11 +14303,9 @@ msgid "Hide Rows"
 msgstr "أخف الصفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:284
-#, fuzzy
-#| msgid "Show Columns"
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
-msgstr "اعرض الأعمدة"
+msgstr "أظهر الصفوف/الأعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:286
 msgctxt "(qtundo-format)"
@@ -14319,25 +14318,19 @@ msgid "Show Rows"
 msgstr "أظهر الصفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:531
-#, fuzzy
-#| msgid "Adjust Columns/Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
-msgstr "عدل الأعمدة/الصفوف"
+msgstr "اضبط الأعمدة/الصفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:533
-#, fuzzy
-#| msgid "Adjust Columns"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
-msgstr "عدل الأعمدة"
+msgstr "اضبط الأعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:535
-#, fuzzy
-#| msgid "Adjust Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
-msgstr "عدل الصفوف"
+msgstr "اضبط الصفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:548
 #: ui/commands/RowColumnManipulators.cpp:566
@@ -14346,7 +14339,6 @@ msgid "Insert Columns"
 msgstr "أدرج أعمدة"
 
 #: ui/commands/RowColumnManipulators.cpp:568
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "أزل الأعمدة"
@@ -14358,7 +14350,6 @@ msgid "Insert Rows"
 msgstr "أدرج صفوف"
 
 #: ui/commands/RowColumnManipulators.cpp:643
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "أزل الصفوف"
@@ -14391,10 +14382,9 @@ msgid "Show Sheet"
 msgstr "اعرض الورقة"
 
 #: ui/commands/SheetCommands.cpp:104
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Sheet"
-msgstr "أضف ورقة"
+msgstr "أضف جدولًا"
 
 #: ui/commands/SheetCommands.cpp:130
 msgctxt "(qtundo-format)"
@@ -14407,10 +14397,9 @@ msgid "Remove Sheet"
 msgstr "أزل الورقة"
 
 #: ui/commands/SheetCommands.cpp:197
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
-msgstr "غيّر خصائص الورقة"
+msgstr "غير خصائص الجدول"
 
 #: ui/commands/StyleCommand.cpp:34
 msgctxt "(qtundo-format)"
@@ -14424,7 +14413,7 @@ msgstr "غيّر النمط"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "You can select here the font style, size and color, including some "
 "additional options like underlined or stroke out text for the current cell "
@@ -14433,11 +14422,11 @@ msgid ""
 "The default font is set for all cells in the Format -> Style Manager menu "
 "with the currently used style."
 msgstr ""
-"يمكنك هنا انتقاء أسلوب الخط، وحجمه ولونه، بما يتضمن بعض الخيارات الإضافية "
-"مثل التسطير أو الشطب لنص الخلية الحالية. الجزء السفلي من الصفحة يعطي معاينة "
-"للتنسيق المنتقى للنص.\n"
-"الخط الافتراضي يُعَين لكل الخلايا في قائمة تنسيق -> مدير الأسلوب  مع الأسلوب "
-"المستخدم الحالي."
+"اختر هنا نمط الخط وحجمه ولونه، بما في ذلك بعض الخيارات الإضافية مثل النص "
+"المسطر أو المشطوب لنص الخلية الحالي. يعطي الجزء السفلي من الصفحة معاينة "
+"لتنسيق النص المختار.\n"
+"الخط المبدئي مضبوط لكل الخلايا في قائمة تنسيق -> مدير الأنماط بالنمط "
+"المستخدم حاليًا."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -14511,9 +14500,9 @@ msgstr "اللون:"
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, underline)
 #: ui/dialogs/FontWidget.ui:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "If this is checked, the current cell text will be underlined."
-msgstr "عند تعيين هذا، فإن نص الخلية الحالية سيكون مُسَطر."
+msgstr "إذا أشر هذا، سيسطر نص الخلية الحالي."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
 #: ui/dialogs/FontWidget.ui:101
@@ -14566,7 +14555,7 @@ msgstr "شطب"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "اختر حجم الخط."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -14598,10 +14587,9 @@ msgid "Cell Format"
 msgstr "تنسيق الخلية"
 
 #: ui/dialogs/LayoutDialog.cpp:119
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "تنسيق الخلية"
+msgstr "اضبط تنسيق الخلية"
 
 #: ui/dialogs/LayoutDialog.cpp:129
 #, kde-format
@@ -14644,27 +14632,27 @@ msgid "Generic"
 msgstr "شامل"
 
 #: ui/dialogs/LayoutPage_Float.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "This is the default format and Calligra Sheets autodetects the actual data "
 "type depending on the current cell data. By default, Calligra Sheets right "
 "justifies numbers, dates and times within a cell and left justifies anything "
 "else."
 msgstr ""
-"هذا هو التنسيق الافتراضي ويقوم KSpread تلقائيا بالتعرف على نوع البيانات "
-"الحقيقي بالاعتماد على بيانات الخلية الحالية. افتراضيا، يقوم KSpread "
-"بالمحاذاة إلى اليمين للأرقام، التواريخ والأوقات ضمن الخلية ويحاذي لليسار أي "
-"شيء آخر."
+"هذا هو التنسيق المبدئي وكاليغرا للجداول يستكشف آليًا نوع البيانات الفعلي بناءً "
+"على بيانات الخلية الحالية. بشكل مبدئي، يضبط كاليغرا للجداول محاذاة الأرقام "
+"والتواريخ والأوقات لليمين داخل الخلية ويضبط محاذاة أي شيء آخر لليسار."
 
 #: ui/dialogs/LayoutPage_Float.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
 "-> Common Appearance and Behavior -> Locale -> Country/Region & Language -> "
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
-"تأشير الأرقام يستخدم الترقيم الذي اخترته عموماً في مركز التحكم -> الإقليمية "
-"وتسهيل الوصول -> تبويب الأرقام. الأرقام تُحاذَى لليمين افتراضيا."
+"يستخدم تدوين الرقم التدوين الذي تختاره عالميًا في إعدادات النظام -> المظهر "
+"والسلوك المشترك -> اللغة المحلية -> البلد/المنطقة واللغة -> ألسنة الأرقام. "
+"تضبط محاذاة الأرقام لليمين بشكل مبدئي."
 
 #: ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
@@ -14694,7 +14682,7 @@ msgid "Money"
 msgstr "مال"
 
 #: ui/dialogs/LayoutPage_Float.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
 "globally fixed in System Settings -> Common Appearance and Behavior -> "
@@ -14703,11 +14691,12 @@ msgid ""
 "You can also use the Currency icon in the Format Toolbar to set the cell "
 "formatting to look like your current currency."
 msgstr ""
-"تنسيق المال يحول الرقم إلى ترقيم المال باستخدام التعيينات المحددة عموما في "
-"مركز التحكم ضمن الإقليمية وتسهيل الوصول -> المال. رمز العملة سيكون معروضاً "
-"ومقدار الدقة سيكون هو المعين في مركز التحكم.\n"
-"يمكنك أيضا استخدام أيقونة العملة في شريط الأدوات تنسيق لضبط تنسيق  الخلية "
-"ليبدو مثل عملتك المحلية."
+"يحول تنسيق العملة رقمك إلى تدوين عملة باستخدام الإعدادات المثبتة عالميًا في "
+"إعدادات النظام -> المظهر والسلوك المشترك -> اللغة المحلية -> البلد/المنطقة "
+"واللغة -> العملة. سيعرض رمز العملة وستكون الدقة هي الدقة المحددة في إعدادات "
+"النظام.\n"
+"استخدم أيضًا أيقونة العملة في شريط أدوات التنسيق لضبط تنسيق الخلية ليبدو "
+"كعملتك الحالية."
 
 #: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
@@ -14747,7 +14736,7 @@ msgstr ""
 "ستعرض \"1 6/16\" والذي هو أقرب كسر ست عشري."
 
 #: ui/dialogs/LayoutPage_Float.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -14756,14 +14745,14 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get dates."
 msgstr ""
-"لكي تدخل تاريخا، يجب عليك إدخاله في واحد من التنسيقات المعينة في مركز التحكم "
-"في الإقليمي وتسهيل الوصول ->الوقت والتاريخ. هناك تنسيقان يُعَينان هنا: هيئة "
-"التاريخ وهيئة التاريخ القصير.\n"
-"تماما مثلما يمكنك سحب الأرقام يمكنك أيضا سحب التواريخ وستعرض الخلايا التالية "
-"التواريخ أيضا."
+"لإدخال تاريخ، أدخله في أحد التنسيقات المضبوطة في إعدادات النظام -> المظهر "
+"والسلوك المشترك -> اللغة المحلية -> البلد/المنطقة واللغة -> الوقت والتواريخ. "
+"يوجد تنسيقان مضبوطان هنا: تنسيق التاريخ وتنسيق التاريخ القصير.\n"
+"كما يمكن سحب الأرقام للأسفل، اسحب التواريخ أيضًا للأسفل وستحصل الخلايا "
+"التالية أيضًا على تواريخ."
 
 #: ui/dialogs/LayoutPage_Float.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
 "it in the Time format set in System Settings -> Common Appearance and "
@@ -14774,12 +14763,12 @@ msgid ""
 "sense as a time, Calligra Sheets will display 00:00 in the global format you "
 "have in System Settings."
 msgstr ""
-"هذا ينسق محتوى الخلية كوقت. لكي تدخل وقتا، يجب عليك إدخاله بتنسيق الوقت "
-"المعين في مركز التحكم ضمن الإقليمة وتسهيل الوصول -> الوقت والتاريخ. في صندوق "
-"الحوار تنسيق الخلية يمكنك تعيين كيف يجب عرض الوقت باختيار أحد اختيارات تنسيق "
-"الوقت المتاحة. التنسيق الافتراضي هو تنسيق النظام المعين في مركز التحكم. إذا "
-"كان الرقم في الخلية لا يصلح كوقت، سيقوم KSpread بعرض 00:00 بالتنسيق العام "
-"لديك في مركز التحكم."
+"هذا ينسق محتوى خليتك كوقت. لإدخال وقت، أدخله في تنسيق الوقت المضبوط في "
+"إعدادات النظام -> المظهر والسلوك المشترك -> اللغة المحلية -> البلد/المنطقة "
+"واللغة -> التاريخ والوقت. في مربع حوار تنسيق الخلية، اضبط كيفية عرض الوقت "
+"باختيار أحد خيارات تنسيق الوقت المتاحة. التنسيق المبدئي هو تنسيق النظام "
+"المضبوط في إعدادات النظام. عندما لا يكون الرقم في الخلية منطقيًا كوقت، سيعرض "
+"كاليغرا للجداول 00:00 بالتنسيق العام الذي لديك في إعدادات النظام."
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
 #, kde-format
@@ -14787,7 +14776,7 @@ msgid "Datetime"
 msgstr "التاريخ والوقت"
 
 #: ui/dialogs/LayoutPage_Float.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -14796,11 +14785,11 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"لكي تدخل تاريخا، يجب عليك إدخاله في واحد من التنسيقات المعينة في مركز التحكم "
-"في الإقليمي وتسهيل الوصول ->الوقت والتاريخ. هناك تنسيقان يُعَينان هنا: هيئة "
-"التاريخ وهيئة التاريخ القصير.\n"
-"تماما مثلما يمكنك سحب الأرقام يمكنك أيضا سحب التواريخ وستعرض الخلايا التالية "
-"التواريخ أيضا."
+"لإدخال تاريخ ووقت، أدخله في أحد التنسيقات المضبوطة في إعدادات النظام -> "
+"المظهر والسلوك المشترك -> اللغة المحلية -> البلد/المنطقة واللغة -> الوقت "
+"والتواريخ. يوجد تنسيقان مضبوطان هنا: تنسيق التاريخ وتنسيق التاريخ القصير.\n"
+"كما يمكن سحب الأرقام للأسفل، اسحب التواريخ أيضًا للأسفل وستحصل الخلايا "
+"التالية أيضًا على تواريخ وأوقات."
 
 #: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
@@ -15089,13 +15078,13 @@ msgstr "أسفل"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Set the amount of indent that will be used in the cell when you choose the "
 "Increase Indent or Decrease Indent actions."
 msgstr ""
-"اضبط كمية الإزاحة التي ستستخدم في الخلية حين تختار قائمتي  تنسيق -> زد "
-"الإزاحة أو  تنسيق -> انقص الإزاحة."
+"اضبط مقدار المسافة البادئة الذي سيستخدم في الخلية عندما تختار إجرائيّ زيادة "
+"المسافة البادئة أو إنقاص المسافة البادئة."
 
 #. i18n: ectx: property (title), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:168
@@ -15138,13 +15127,13 @@ msgstr "نص رأسي"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, shrinkToFit)
 #: ui/dialogs/PositionWidget.ui:200
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shrink to fit"
-msgstr "ارتباط إلى ملف"
+msgstr "صغّر لتناسب"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ProtectionWidget)
 #: ui/dialogs/ProtectionWidget.ui:35
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "This tab enables you to set Cell Protection. All cells are protected by "
 "default (that means cell content cannot be changed) and for the cell "
@@ -15157,15 +15146,14 @@ msgid ""
 "You can learn more about all these settings in the User Manual in the "
 "Advanced Calligra Sheets chapter."
 msgstr ""
-"هذا اللسان يمكنك من تعيين حماية الخلية. كل الخلايا محمية افتراضيا (يعني هذا "
-"أن محتوى الخلية لا يمكن تغييره) ولتنشيط حماية الخلية تحتاج أيضاً لحماية "
-"الورقة باستخدام قائمة أدوات -> احم المستند -> احم الورقة... وأن تعين كلمة "
-"مرور.\n"
-"يمكنك أيضاً إخفاء صيغة الخلية بهدف حماية طريقة حسابك للصيغة. يحتاج هذا أيضا "
-"إلى تفعيل حماية الورقة لكي يعمل.\n"
-"يمكنك إخفاء محتوى الخلية بواسطة  اخف الكل وأيضا ذلك يحتاج إلى حماية الورقة.\n"
-"يمكنك تعلم المزيد حول كل تلك التعيينات في دليل المستخدم  User Manual ضمن "
-"فصل  KSpread المتقدم."
+"هذا اللسان يجعلك تضبط حماية الخلية. كل الخلايا محمية بشكل مبدئي (مما يعني أن "
+"محتوى الخلية لا يمكن تغييره) ولكي تكون حماية الخلية نشطة، تحتاج أيضًا إلى "
+"حماية الجدول باستخدام قائمة أدوات -> حماية الجدول... وتوفير كلمة مرور.\n"
+"أخفِ أيضًا صيغة الخلية لحماية طريقة حسابك للصيغة. هذا يتطلب أيضًا تفعيل حماية "
+"الجدول للعمل.\n"
+"أخفِ محتوى الخلية بـ إخفاء الكل وهذا أيضًا يتطلب حماية الجدول.\n"
+"تعلّم المزيد عن كل هذه الإعدادات في دليل المستخدم في فصل كاليغرا للجداول "
+"المتقدم."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: ui/dialogs/ProtectionWidget.ui:41
@@ -15215,7 +15203,7 @@ msgstr "ا&خف الكل"
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "If checked, the cell content will be protected. This is the default "
 "behavior. You need to protect the whole sheet using the Tools -> Protect "
@@ -15223,10 +15211,10 @@ msgid ""
 "manual for more details in the Advanced Calligra Sheets chapter. When a cell "
 "is protected, its content cannot be changed."
 msgstr ""
-"حين يعين هذا، فإن محتوى الخلية سيكون محميا. هذا هو السلوك الافتراضي. تحتاج "
-"أن تحمي الورقة بأكملها باستخدام قائمة أدوات->احم المستند->احم الورقة... لكي "
-"تعمل هذه الحماية المنفردة للخلية. انظر الدليل لتفاصيل أكثر في فصل  KSpread "
-"المتقدم. حين تكون الخلية محمية، لا يمكن تغيير محتواها."
+"إذا أشر، سيُحمى محتوى الخلية. هذا هو السلوك المبدئي. تحتاج إلى حماية الجدول "
+"بالكامل باستخدام خيار قائمة أدوات -> حماية الجدول... لعمل هذه الحماية "
+"الفردية للخلية. انظر الدليل لمزيد من التفاصيل في فصل كاليغرا للجداول "
+"المتقدم. عندما تكون الخلية محمية، لا يمكن تغيير محتواها."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:100
@@ -15315,9 +15303,9 @@ msgid "Select Multiple Cells"
 msgstr "انتقِ خلايا متعددة"
 
 #: ui/strategy/HyperlinkStrategy.cpp:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link %1 activated"
-msgstr "الارتباط <i>%1</i> قد نشط"
+msgstr "الرابط %1 مفعل"
 
 #, fuzzy
 #~ msgid "Colors"

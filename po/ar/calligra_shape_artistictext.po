@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-29 00:39+0000\n"
-"PO-Revision-Date: 2024-09-06 22:44+0400\n"
+"PO-Revision-Date: 2025-10-05 12:59+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -21,27 +21,27 @@ msgstr ""
 #: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Add text range"
-msgstr ""
+msgstr "أضِف نطاق نص"
 
 #: ArtisticTextShapeFactory.cpp:17
 #, kde-format
 msgid "ArtisticTextShape"
-msgstr ""
+msgstr "شكل نص فني"
 
 #: ArtisticTextShapeFactory.cpp:19
 #, kde-format
 msgid "A shape which shows a single text line"
-msgstr ""
+msgstr "شكل يظهِر سطر نص مفردًا"
 
 #: ArtisticTextShapeFactory.cpp:29
 #, kde-format
 msgid "Artistic Text"
-msgstr ""
+msgstr "نص فني"
 
 #: ArtisticTextTool.cpp:72
 #, kde-format
 msgid "Detach Path"
-msgstr ""
+msgstr "افصِل المسار"
 
 #: ArtisticTextTool.cpp:77
 #, kde-format
@@ -71,47 +71,47 @@ msgstr "منخفض"
 #: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
-msgstr ""
+msgstr "ارْبط عند البداية"
 
 #: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
-msgstr ""
+msgstr "ارْبط عند المنتصف"
 
 #: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
-msgstr ""
+msgstr "ارْبط عند النهاية"
 
 #: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Click to change cursor position."
-msgstr ""
+msgstr "انقُر لتغيير موضع المؤشر."
 
 #: ArtisticTextTool.cpp:305
 #, kde-format
 msgid "Click to select text shape."
-msgstr ""
+msgstr "انقُر لتحديد شكل النص."
 
 #: ArtisticTextTool.cpp:308
 #, kde-format
 msgid "Double click to put text on path."
-msgstr ""
+msgstr "انقُر نقرًا مزدوجًا لوضع النص على المسار."
 
 #: ArtisticTextTool.cpp:311
 #, kde-format
 msgid "Drag handle to change start offset."
-msgstr ""
+msgstr "اسْحب المقبض لتغيير الإزاحة المبدئية."
 
 #: ArtisticTextTool.cpp:315
 #, kde-format
 msgid "Press escape to finish editing."
-msgstr ""
+msgstr "اضْغط على مفتاح الهروب لإنهاء التحرير."
 
 #: ArtisticTextTool.cpp:494
 #, kde-format
 msgid "Press return to finish editing."
-msgstr ""
+msgstr "اضْغط على مفتاح الإرجاع لإنهاء التحرير."
 
 #: ArtisticTextTool.cpp:588
 msgctxt "(qtundo-format)"
@@ -121,27 +121,27 @@ msgstr "حوّل إلى المسار"
 #: ArtisticTextTool.cpp:601
 #, kde-format
 msgid "Text Properties"
-msgstr ""
+msgstr "خصائص النص"
 
 #: ArtisticTextTool.cpp:610
 #, kde-format
 msgid "Text On Path"
-msgstr ""
+msgstr "نص على المسار"
 
 #: ArtisticTextToolFactory.cpp:17
 #, kde-format
 msgid "Artistic text editing"
-msgstr ""
+msgstr "تحرير النص الفني"
 
 #: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
-msgstr ""
+msgstr "ارْبط المسار"
 
 #: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
-msgstr ""
+msgstr "غيّر مرسى النص"
 
 #: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -151,20 +151,20 @@ msgstr "غيّر الخط"
 #: ChangeTextOffsetCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
-msgstr ""
+msgstr "غيّر إزاحة النص"
 
 #: DetachTextFromPathCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
-msgstr ""
+msgstr "افصِل المسار"
 
 #: RemoveTextRangeCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
-msgstr ""
+msgstr "أزِل نطاق النص"
 
 #: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
 #: ReplaceTextRangeCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
-msgstr ""
+msgstr "استبدِل نطاق النص"

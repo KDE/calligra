@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2025-08-04 14:14+0400\n"
+"PO-Revision-Date: 2025-10-05 12:17+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -74,10 +74,9 @@ msgstr "فحص الهجاء"
 
 #. i18n: ectx: Menu (AutoCorrection)
 #: part/calligrawords.rc:83
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "AutoCorrection"
-msgstr "تصحيح تلقائي"
+msgstr "تصحيح آلي"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
@@ -104,28 +103,24 @@ msgid "&Tools"
 msgstr "&أدوات"
 
 #: part/commands/KWChangePageStyleCommand.cpp:11
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Page Style"
-msgstr "حافة الصفحة:"
+msgstr "اضبط نمط الصفحة"
 
 #: part/commands/KWNewPageStyleCommand.cpp:12
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
-msgstr "أدرج صفحة"
+msgstr "أدرج نمط صفحة"
 
 #: part/commands/KWPageStylePropertiesCommand.cpp:19
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Page Properties"
 msgstr "خصائص الصفحة"
 
 #: part/commands/KWShapeCreateCommand.cpp:42
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create shape"
-msgstr "انشئ إطاراً"
+msgstr "أنشئ شكلاً"
 
 #: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
@@ -145,9 +140,9 @@ msgstr "صَفّ"
 
 #: part/dialogs/KWAnchoringProperties.cpp:417
 #: part/dialogs/KWAnchoringProperties.cpp:425
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page (entire) area"
-msgstr "وفّر منطقة نص رئيسية"
+msgstr "منطقة الصفحة (بأكملها)"
 
 #: part/dialogs/KWAnchoringProperties.cpp:418
 #: part/dialogs/KWAnchoringProperties.cpp:426
@@ -157,9 +152,9 @@ msgstr "مساحة نص الصفحة"
 
 #: part/dialogs/KWAnchoringProperties.cpp:419
 #: part/dialogs/KWAnchoringProperties.cpp:433
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paragraph area"
-msgstr "فقرة"
+msgstr "منطقة الفقرة"
 
 #: part/dialogs/KWAnchoringProperties.cpp:420
 #: part/dialogs/KWAnchoringProperties.cpp:434
@@ -168,80 +163,80 @@ msgid "Paragraph text area"
 msgstr "مساحة نص الفقرة"
 
 #: part/dialogs/KWAnchoringProperties.cpp:427
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left page border"
-msgstr "حدود الإطار"
+msgstr "حد الصفحة الأيسر"
 
 #: part/dialogs/KWAnchoringProperties.cpp:428
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right page border"
-msgstr "حدود الإطار"
+msgstr "حد الصفحة الأيمن"
 
 #: part/dialogs/KWAnchoringProperties.cpp:435
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right paragraph border"
-msgstr "حدود الإطار"
+msgstr "حد الفقرة الأيمن"
 
 #: part/dialogs/KWAnchoringProperties.cpp:436
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left paragraph border"
-msgstr "حدود الإطار"
+msgstr "حد الفقرة الأيسر"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWAnchoringProperties.ui:17
 #, kde-format
 msgid "Shape relation to text is:"
-msgstr ""
+msgstr "علاقة الشكل بالنص هي:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:23
 #, kde-format
 msgid "Inline with text (behaves as a character)"
-msgstr ""
+msgstr "متضمَّن مع النص (يتصرَّف كحرف)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:30
 #, kde-format
 msgid "Floating, but anchored to a character position"
-msgstr ""
+msgstr "عائم، ولكن مُرسى على موضع حرف"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWAnchoringProperties.ui:37
 #, kde-format
 msgid "Floating, but anchored to a paragraph"
-msgstr ""
+msgstr "عائم، ولكن مُرسى على فقرة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWAnchoringProperties.ui:44
 #, kde-format
 msgid "Floating free (not anchored to text)"
-msgstr ""
+msgstr "عائم حر (غير مُرسى على نص)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Positioning"
-msgstr "الموضع"
+msgstr "المَوْضَعة العمودية"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rTop)
 #: part/dialogs/KWAnchoringProperties.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Top align with:"
-msgstr "يمين"
+msgstr "محاذاة علوية مع:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
 #. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
 #: part/dialogs/KWAnchoringProperties.ui:77
 #: part/dialogs/KWAnchoringProperties.ui:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Center align with:"
-msgstr "يمين"
+msgstr "محاذاة توسيط مع:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rBottom)
 #: part/dialogs/KWAnchoringProperties.ui:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bottom align with:"
-msgstr "يمين"
+msgstr "محاذاة سفلية مع:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
 #. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
@@ -261,21 +256,21 @@ msgstr "من:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
 #: part/dialogs/KWAnchoringProperties.ui:163
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Positioning"
-msgstr "الموضع"
+msgstr "المَوْضَعة الأفقية"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rLeft)
 #: part/dialogs/KWAnchoringProperties.ui:169
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left align with:"
-msgstr "يمين"
+msgstr "محاذاة يسرى مع:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rRight)
 #: part/dialogs/KWAnchoringProperties.ui:196
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right align with:"
-msgstr "يمين"
+msgstr "محاذاة يمنى مع:"
 
 #: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
@@ -317,9 +312,9 @@ msgstr "المؤلف"
 #. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
 #: part/dialogs/KWCreateBookmark.ui:13
 #: part/dialogs/KWCreateBookmarkDialog.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create New Bookmark"
-msgstr "أنشئ صفحة جديدة"
+msgstr "أنشئ علامة مرجعية جديدة"
 
 #. i18n: ectx: property (text), widget (QLabel, lExplain)
 #: part/dialogs/KWCreateBookmark.ui:20
@@ -328,6 +323,8 @@ msgid ""
 "Bookmarks allow you to jump between parts of your document.\n"
 "Please provide the name of your bookmark."
 msgstr ""
+"العلامات المرجعية تتيح لك القفز بين أجزاء وثيقتك.\n"
+"رجاءً قدِّم اسم علامتك المرجعية."
 
 #. i18n: ectx: property (text), widget (QLabel, lName)
 #: part/dialogs/KWCreateBookmark.ui:38
@@ -382,9 +379,9 @@ msgid "Frameset Name"
 msgstr "اسم مجموعة الأطر"
 
 #: part/dialogs/KWFrameDialog.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smart Positioning"
-msgstr "الموضع"
+msgstr "المَوْضَعة الذكية"
 
 #: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
@@ -397,16 +394,15 @@ msgid "Connect Text Frames"
 msgstr "صِل إطارات النص"
 
 #: part/dialogs/KWFrameDialog.cpp:64
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Shape Properties"
-msgstr "خصائص الصفحة"
+msgstr "غيّر خصائص الشكل"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
 #: part/dialogs/KWInsertImage.ui:17
 #, kde-format
 msgid "Anchor to..."
-msgstr ""
+msgstr "أَرسِ على..."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
@@ -422,15 +418,15 @@ msgstr "ال&فقرة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWInsertImage.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "&To Character"
-msgstr "أنشئ"
+msgstr "&على حرف"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWInsertImage.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "&As Character"
-msgstr "أنشئ"
+msgstr "&كحرف"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
 #: part/dialogs/KWInsertImage.ui:59
@@ -448,7 +444,7 @@ msgstr "ي&سار"
 #: part/dialogs/KWInsertImage.ui:75
 #, kde-format
 msgid "&Center"
-msgstr ""
+msgstr "&توسيط"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
 #: part/dialogs/KWInsertImage.ui:82
@@ -476,63 +472,63 @@ msgstr "الأو&سط"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
 #: part/dialogs/KWInsertImage.ui:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Bottom"
-msgstr "الأسفل:"
+msgstr "أ&سفل"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
 #: part/dialogs/KWInsertImage.ui:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text Wrap-around"
-msgstr "التفاف النص حول"
+msgstr "التفاف النص"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runThrough)
 #: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run through this shape"
-msgstr "النص سوف يسري خلال هذا الإطار"
+msgstr "تجاوز عبر هذا الشكل"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
 #: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Skip below this shape"
-msgstr "النص سوف يسري خلال هذا الإطار"
+msgstr "تخطَّ أسفل هذا الشكل"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run on left side of this shape"
-msgstr "النص سوف يسري خلال هذا الإطار"
+msgstr "تجاوز على الجانب الأيسر لهذا الشكل"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run on right side of this shape"
-msgstr "النص سوف يسري خلال هذا الإطار"
+msgstr "تجاوز على الجانب الأيمن لهذا الشكل"
 
 #. i18n: ectx: property (text), widget (QRadioButton, longest)
 #: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run on longest side of this shape"
-msgstr "النص سوف يسري خلال هذا الإطار"
+msgstr "تجاوز على أطول جانب لهذا الشكل"
 
 #. i18n: ectx: property (text), widget (QRadioButton, both)
 #: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Run on both sides of this shape"
-msgstr "النص سوف يسري خلال هذا الإطار"
+msgstr "تجاوز على كلا جانبي هذا الشكل"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enough)
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr ""
+msgstr "تجاوز على الجوانب الأعرض من:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distance Between Shape and Text:"
-msgstr "البعد بين الإطار والنص:"
+msgstr "المسافة بين الشكل والنص:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
 #: part/dialogs/KWPageSettingsDialog.cpp:38 part/dialogs/KWStartupWidget.ui:37
@@ -556,68 +552,67 @@ msgid "Delete"
 msgstr "احذف"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:154
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
-msgstr "حافة الصفحة:"
+msgstr "غيّر نمط الصفحة"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:235
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clone Page Style"
-msgstr "حافة الصفحة:"
+msgstr "انسخ نمط الصفحة"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:236
 #, kde-format
 msgid "Add a new page style with the name:"
-msgstr ""
+msgstr "أضف نمط صفحة جديد بالاسم:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:19
 #, kde-format
 msgid "Text elsewhere will:"
-msgstr ""
+msgstr "النص في مكان آخر سـ:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:92
 #, kde-format
 msgid "The shape affects the text by its:"
-msgstr ""
+msgstr "الشكل يؤثر على النص بواسطة:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
 #: part/dialogs/KWRunAroundProperties.ui:99
 #, kde-format
 msgid "Bounding box"
-msgstr ""
+msgstr "صندوق الإحاطة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
 #: part/dialogs/KWRunAroundProperties.ui:106
 #, kde-format
 msgid "Contour"
-msgstr ""
+msgstr "المحيط"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
 #, kde-format
 msgid "Shape and text are separated left by:"
-msgstr ""
+msgstr "الشكل والنص مفصولان يسارًا بـ:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right by:"
-msgstr "اليمين:"
+msgstr "يميناً بـ:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:142
 #, kde-format
 msgid "Above by:"
-msgstr ""
+msgstr "أعلى بـ:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:155
 #, kde-format
 msgid "Below by:"
-msgstr ""
+msgstr "أسفل بـ:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
@@ -634,7 +629,7 @@ msgstr "ا&حذف"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
 msgid "Please provide a new name for the bookmark"
-msgstr ""
+msgstr "رجاءً قدِّم اسمًا جديدًا للعلامة المرجعية"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:66
 #, kde-format
@@ -644,12 +639,12 @@ msgstr "غير اسم العلامة"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr ""
+msgstr "علامة مرجعية بالاسم ”%1“ موجودة بالفعل."
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Bookmark"
-msgstr "أنشئ صفحة جديدة"
+msgstr "اختر علامة مرجعية"
 
 #: part/dialogs/KWShapeConfigFactory.cpp:43
 #, kde-format
@@ -674,10 +669,9 @@ msgid "Debug"
 msgstr "تنقيح"
 
 #: part/dockers/KWNavigationDocker.cpp:20
-#, fuzzy, kde-format
-#| msgid "Salutation"
+#, kde-format
 msgid "Navigation"
-msgstr "تحية"
+msgstr "التنقل"
 
 #: part/dockers/KWNavigationWidget.cpp:92
 #, kde-format
@@ -692,7 +686,7 @@ msgstr "القسم"
 #: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
 msgid "RDF"
-msgstr ""
+msgstr "RDF"
 
 #: part/dockers/KWStatisticsDocker.cpp:20
 #, kde-format
@@ -715,14 +709,14 @@ msgid "Syllables:"
 msgstr "المقاطع:"
 
 #: part/dockers/KWStatisticsWidget.cpp:134
-#, fuzzy, kde-format
+#, kde-format
 msgid "Characters (spaces):"
-msgstr "المحارف المحتوية على فراغات:"
+msgstr "أحرف (بمسافات):"
 
 #: part/dockers/KWStatisticsWidget.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgid "Characters (no spaces):"
-msgstr "المحارف المحتوية على فراغات:"
+msgstr "أحرف (لا مسافات):"
 
 #: part/dockers/KWStatisticsWidget.cpp:140
 #, kde-format
@@ -735,14 +729,14 @@ msgid "Readability:"
 msgstr "المقروئية:"
 
 #: part/dockers/KWStatisticsWidget.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flesch reading ease"
-msgstr "تسهيل Flesch للقراءة"
+msgstr "سهولة قراءة فليش"
 
 #: part/dockers/KWStatisticsWidget.cpp:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "East asian characters:"
-msgstr "محارف التنسيق"
+msgstr "أحرف شرق آسيوية:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_words)
 #: part/dockers/StatisticsPreferencesPopup.ui:17
@@ -770,9 +764,9 @@ msgstr "أسطر"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
 #: part/dockers/StatisticsPreferencesPopup.ui:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Characters With Spaces"
-msgstr "المحارف بدون فراغات"
+msgstr "أحرف مع مسافات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
 #: part/dockers/StatisticsPreferencesPopup.ui:52
@@ -782,15 +776,15 @@ msgstr "المحارف دون فراغات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_east)
 #: part/dockers/StatisticsPreferencesPopup.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "East Asian characters"
-msgstr "محارف التنسيق"
+msgstr "أحرف شرق آسيوية"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
 #: part/dockers/StatisticsPreferencesPopup.ui:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flesch Reading Ease"
-msgstr "تسهيل Flesch للقراءة"
+msgstr "سهولة قراءة فليش"
 
 #: part/i18n/stylenames.cpp:8
 #, kde-format
@@ -1075,10 +1069,10 @@ msgid "Gray Top and Bottom"
 msgstr "رمادي بأعلى و أسفل"
 
 #: part/KWAboutData.h:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
-msgstr "معالج كلمات KOffice"
+msgstr "كاليغرا ووردز"
 
 #: part/KWAboutData.h:20
 #, kde-format
@@ -1086,24 +1080,24 @@ msgid "Word processor"
 msgstr "معالج كلمات"
 
 #: part/KWAboutData.h:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "(c) 1998-2007، فريق KWord "
+msgstr "حقوق النسخ 1998-%1، فريق ووردز"
 
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "كارل شوان"
 
 #: part/KWAboutData.h:29
 #, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr ""
+msgstr "مشارك في الصيانة/نقل إلى Qt6"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
 msgid "Co maintainer"
-msgstr ""
+msgstr "مشارك في الصيانة"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34
 #, kde-format
@@ -1113,7 +1107,7 @@ msgstr "Pierre Ducroquet"
 #: part/KWAboutData.h:35
 #, kde-format
 msgid "C. Boemann"
-msgstr ""
+msgstr "س. بومان"
 
 #: part/KWAboutData.h:36 part/KWAboutData.h:37 part/KWAboutData.h:38
 #: part/KWAboutData.h:40
@@ -1129,17 +1123,17 @@ msgstr "Sebastian Sauer"
 #: part/KWAboutData.h:37
 #, kde-format
 msgid "Boudewijn Rempt"
-msgstr ""
+msgstr "باودوين ريمبت"
 
 #: part/KWAboutData.h:38
 #, kde-format
 msgid "Pierre Stirnweiss"
-msgstr ""
+msgstr "بيير شتيرنوايس"
 
 #: part/KWAboutData.h:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formatting stuff"
-msgstr "محارف التنسيق"
+msgstr "أشياء التنسيق"
 
 #: part/KWAboutData.h:39
 #, kde-format
@@ -1163,37 +1157,37 @@ msgstr "المرشّح"
 #: part/KWAboutData.h:41
 #, kde-format
 msgid "Matus Uzak"
-msgstr ""
+msgstr "ماتوس أوزاك"
 
 #: part/KWAboutData.h:42
 #, kde-format
 msgid "Layout and Painting"
-msgstr ""
+msgstr "تخطيط ورسم"
 
 #: part/KWAboutData.h:42
 #, kde-format
 msgid "Pavol Korinek"
-msgstr ""
+msgstr "بافول كورينيك"
 
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Shreya Pandit"
-msgstr ""
+msgstr "شريا بانديت"
 
 #: part/KWAboutData.h:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Statistics docker"
-msgstr "إحصاءات"
+msgstr "دوكر الإحصائيات"
 
 #: part/KWAboutData.h:44
 #, kde-format
 msgid "Brijesh Patel"
-msgstr ""
+msgstr "بريجش باتيل"
 
 #: part/KWAboutData.h:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Foot and endnotes"
-msgstr "تذييل"
+msgstr "الحواشي السفلية والختامية"
 
 #: part/KWAboutData.h:45
 #, kde-format
@@ -1208,27 +1202,27 @@ msgstr "سميت باتل"
 #: part/KWAboutData.h:46
 #, kde-format
 msgid "Mojtaba Shahi"
-msgstr ""
+msgstr "مجتبى شاهي"
 
 #: part/KWAboutData.h:46
 #, kde-format
 msgid "Style Manager"
-msgstr ""
+msgstr "مدير الأنماط"
 
 #: part/KWAboutData.h:47
 #, kde-format
 msgid "Lassi Nieminen"
-msgstr ""
+msgstr "لاسي نيمينين"
 
 #: part/KWAboutData.h:48
 #, kde-format
 msgid "Hanzes Matus"
-msgstr ""
+msgstr "هانزيس ماتوس"
 
 #: part/KWAboutData.h:49
 #, kde-format
 msgid "Lukáš Tvrdý"
-msgstr ""
+msgstr "لوكاش تفردي"
 
 #: part/KWAboutData.h:50
 #, kde-format
@@ -1238,18 +1232,17 @@ msgstr "Thomas Zander"
 #: part/KWAboutData.h:51
 #, kde-format
 msgid "Girish Ramakrishnan"
-msgstr ""
+msgstr "جيريش راماكريشنان"
 
 #: part/KWAboutData.h:51 part/KWAboutData.h:52
-#, fuzzy, kde-format
-#| msgid "Sorting Order"
+#, kde-format
 msgid "ODF Support"
-msgstr "ترتيب الفرز:"
+msgstr "دعم ODF"
 
 #: part/KWAboutData.h:52
 #, kde-format
 msgid "Robert Mathias Marmorstein"
-msgstr ""
+msgstr "روبرت ماتياس مارمورستين"
 
 #: part/KWAboutData.h:53
 #, kde-format
@@ -1349,12 +1342,12 @@ msgstr "Michael Johnson"
 #: part/KWAboutData.h:71
 #, kde-format
 msgid "Fatcow Web Hosting"
-msgstr ""
+msgstr "استضافة ويب فاتكاو"
 
 #: part/KWAboutData.h:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page break icon"
-msgstr "فاصل صفحات"
+msgstr "أيقونة فاصل الصفحة"
 
 #: part/KWAboutData.h:73
 #, kde-format
@@ -1437,9 +1430,9 @@ msgid "Standard"
 msgstr "قياسي"
 
 #: part/KWPart.cpp:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Can not find needed text component, Words will quit now"
-msgstr "لا يمكن العثور على مكون النص المطلوب، KWord سوف يغلق الآن"
+msgstr "لا يمكن العثور على مكوّن النص المطلوب، ووردز سيُغلق الآن"
 
 #: part/KWPart.cpp:139
 #, kde-format
@@ -1482,9 +1475,9 @@ msgid "Line Number"
 msgstr "رقم السطر"
 
 #: part/KWStatusBar.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change the page style"
-msgstr "حافة الصفحة:"
+msgstr "غيّر نمط الصفحة"
 
 #: part/KWStatusBar.cpp:165
 #, kde-format
@@ -1497,14 +1490,14 @@ msgid "Page Size"
 msgstr "حجم الصفحة"
 
 #: part/KWStatusBar.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saved/Modified"
-msgstr "الحالة: محفوظ/معدل"
+msgstr "مُحفَظ/مُعدَّل"
 
 #: part/KWStatusBar.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mouse Cursor X:Y"
-msgstr "موضع الفأرة: س:ص"
+msgstr "مؤشر الفأرة س:ص"
 
 #: part/KWStatusBar.cpp:220
 #, kde-format
@@ -1514,27 +1507,27 @@ msgstr "المتحكم بالتكبير"
 #: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
-msgstr ""
+msgstr "اخرج من وضع ملء الشاشة"
 
 #: part/KWView.cpp:278
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape Properties..."
-msgstr "خصائص الصفحة"
+msgstr "خصائص الشكل..."
 
 #: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
-msgstr ""
+msgstr "غيّر كيف يتصرَّف الشكل"
 
 #: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
-msgstr ""
+msgstr "أنشئ قالبًا من الوثيقة..."
 
 #: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
-msgstr ""
+msgstr "احفظ هذه الوثيقة واستخدِمها لاحقًا كقالب"
 
 #: part/KWView.cpp:292
 #, kde-format
@@ -1542,11 +1535,13 @@ msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
+"يمكنك حفظ هذه الوثيقة كقالب.<br><br>يمكنك استخدام هذا القالب الجديد كنقطة "
+"بداية لوثيقة أخرى."
 
 #: part/KWView.cpp:311
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Formatting Characters"
-msgstr "محارف التنسيق"
+msgstr "أظهر أحرف التنسيق"
 
 #: part/KWView.cpp:317
 #, kde-format
@@ -1554,36 +1549,37 @@ msgid "Toggle the display of non-printing characters"
 msgstr "بدّل عرض المحارف الغير مطبعية"
 
 #: part/KWView.cpp:319
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
 "enabled, Words shows you tabs, spaces, carriage returns and other non-"
 "printing characters."
 msgstr ""
-"بدّل عرض المحارف الغير مطبعية.<br/><br/>عند تمكين هذا، يعرض KWord الألسنة "
-"والفراغات ومرجعات الأسطر والمحارف الغير مطبعية الأخرى."
+"بدِّل عرض الأحرف غير القابلة للطباعة.<br/><br/>عند تفعيل هذا، ووردز يظهر لك "
+"ألسنة الجدولة والمسافات وعلامات إرجاع العربة والأحرف الأخرى غير القابلة "
+"للطباعة."
 
 #: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
-msgstr ""
+msgstr "أظهر تظليل الحقول"
 
 #: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr ""
+msgstr "بدِّل خلفية الحقول المظللة"
 
 #: part/KWView.cpp:329
 #, kde-format
 msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
-msgstr ""
+msgstr "بدِّل تصوُّر الحقول (المتغيّرات وما شابه) برسم خلفيتها بلون متباين."
 
 #: part/KWView.cpp:331
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Text Shape Borders"
-msgstr "هيئ حدود الجدول"
+msgstr "أظهر حدود شكل النص"
 
 #: part/KWView.cpp:332
 #, kde-format
@@ -1601,42 +1597,42 @@ msgstr ""
 "كيف سيبدو المستند في الصفحة المطبوعة."
 
 #: part/KWView.cpp:342
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Table Borders"
-msgstr "هيئ حدود الجدول"
+msgstr "أظهر حدود الجدول"
 
 #: part/KWView.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle the display of table borders"
-msgstr "بدّل عرض المحارف الغير مطبعية"
+msgstr "بدِّل عرض حدود الجدول"
 
 #: part/KWView.cpp:350
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
-"بدّل عرض المحارف الغير مطبعية.<br/><br/>عند تمكين هذا، يعرض KWord الألسنة "
-"والفراغات ومرجعات الأسطر والمحارف الغير مطبعية الأخرى."
+"بدِّل عرض حدود الجدول.<br/><br/>عند تفعيل هذا، ووردز يظهر لك أي حدود جدول غير "
+"مرئية بخط رمادي رفيع."
 
 #: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
-msgstr ""
+msgstr "أظهر حدود المقطع"
 
 #: part/KWView.cpp:358
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle the display of section bounds"
-msgstr "بدّل عرض المحارف الغير مطبعية"
+msgstr "بدِّل عرض حدود المقطع"
 
 #: part/KWView.cpp:360
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
-"بدّل عرض المحارف الغير مطبعية.<br/><br/>عند تمكين هذا، يعرض KWord الألسنة "
-"والفراغات ومرجعات الأسطر والمحارف الغير مطبعية الأخرى."
+"بدِّل عرض حدود المقطع.<br/><br/>عند تفعيل هذا، ستُشار أي حدود مقطع بأقواس أفقية "
+"رمادية رفيعة."
 
 #: part/KWView.cpp:362
 #, kde-format
@@ -1666,41 +1662,41 @@ msgid "Snap to Grid"
 msgstr "مطابقة للشبكة"
 
 #: part/KWView.cpp:385
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Status Bar"
-msgstr "شريط الحالة"
+msgstr "أظهر شريط الحالة"
 
 #: part/KWView.cpp:386
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shows or hides the status bar"
-msgstr "اعرض شريط الحالة"
+msgstr "يُظهر أو يُخفي شريط الحالة"
 
 #: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "وضع ملء الشاشة"
 
 #: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
-msgstr ""
+msgstr "اضبط العرض في وضع ملء الشاشة"
 
 #: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr ""
+msgstr "أوراق الأنماط الدلالية..."
 
 #: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
-msgstr ""
+msgstr "عدِّل وأضف أوراق الأنماط الدلالية"
 
 #: part/KWView.cpp:403
 #, kde-format
 msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
-msgstr ""
+msgstr "تُستخدم أوراق الأنماط لتنسيق عرض المعلومات المخزَّنة في RDF."
 
 #: part/KWView.cpp:418
 #, kde-format
@@ -1727,14 +1723,14 @@ msgstr ""
 "الترويسة والتذييل، وتعيينات العمود.</p>"
 
 #: part/KWView.cpp:434
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Header"
-msgstr "انشئ إطاراً"
+msgstr "أنشئ رأسًا"
 
 #: part/KWView.cpp:440
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Footer"
-msgstr "انشئ إطاراً"
+msgstr "أنشئ تذييلاً"
 
 #: part/KWView.cpp:447
 #, kde-format
@@ -1742,10 +1738,9 @@ msgid "Show Comments"
 msgstr "أظهر التعليقات"
 
 #: part/KWView.cpp:448
-#, fuzzy, kde-format
-#| msgid "No framesets in document"
+#, kde-format
 msgid "Shows comments in the document"
-msgstr "لا مجموعات أطر في المستند"
+msgstr "يُظهر التعليقات في الوثيقة"
 
 #: part/KWView.cpp:454
 #, kde-format
@@ -1753,9 +1748,9 @@ msgid "Word Count"
 msgstr "عدد الكلمات"
 
 #: part/KWView.cpp:455
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shows or hides word counting in status bar"
-msgstr "اعرض شريط الحالة"
+msgstr "يُظهر أو يُخفي عدَّ الكلمات في شريط الحالة"
 
 #: part/pagetool/KWPageTool.cpp:83
 #, kde-format
@@ -1845,12 +1840,12 @@ msgstr "لم يعثر على تطابقات"
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
-msgstr ""
+msgstr "وصل البحث إلى القاع، استمر من الأعلى."
 
 #: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
-msgstr ""
+msgstr "وصل البحث إلى القمة، استمر من الأسفل."
 
 #: part/Words.cpp:41
 #, kde-format
@@ -1878,9 +1873,9 @@ msgid "Main text"
 msgstr "النص الرئيسي"
 
 #: part/Words.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Other text"
-msgstr "صفحات أخرى"
+msgstr "نص آخر"
 
 #, fuzzy
 #~ msgid "Left by:"
