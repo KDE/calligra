@@ -4,6 +4,7 @@
             {
                 "Email": "sven.langkamp@gmail.com",
                 "Name": "Sven Langkamp",
+                "Name[ar]": "سفين لانغكامب",
                 "Name[ca@valencia]": "Sven Langkamp",
                 "Name[ca]": "Sven Langkamp",
                 "Name[cs]": "Sven Langkamp",
@@ -78,6 +79,7 @@
             }
         ],
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
+        "Copyright[ar]": "حقوق النشر 2012-2016 سفين لانغكامب، فريدريش ف. ه. كوسيباو",
         "Copyright[ca@valencia]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[ca]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[cs]": "Autorská práva 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
@@ -112,6 +114,7 @@
         "Copyright[zh_CN]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[zh_TW]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "RTF file renderer",
+        "Description[ar]": "عارض ملف RTF",
         "Description[ca@valencia]": "Representació de fitxers RTF",
         "Description[ca]": "Representació de fitxers RTF",
         "Description[cs]": "Vykreslovač souborů RTF",
@@ -150,6 +153,7 @@
             "text/rtf"
         ],
         "Name": "RTF Backend",
+        "Name[ar]": "خلفية RTF",
         "Name[ca@valencia]": "Dorsal de RTF",
         "Name[ca]": "Dorsal de RTF",
         "Name[cs]": "Podpůrná vrstva pro RTF",

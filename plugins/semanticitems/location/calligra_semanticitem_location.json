@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "A plugin to map location items between document and RDF database",
+        "Description[ar]": "ملحق لربط عناصر الموقع بين الوثيقة وقاعدة بيانات RDF",
         "Description[ca@valencia]": "Un connector per a relacionar elements d'ubicació entre documents i una base de dades RDF",
         "Description[ca]": "Un connector per a relacionar elements d'ubicació entre documents i una base de dades RDF",
         "Description[de]": "Ein Modul, um Ortseinträge zwischen Dokument und RDF-Datenbank zuzuordnen",
@@ -25,6 +26,7 @@
         "Description[zh_CN]": "映射文档和 RDF 数据库之间的位置项的插件",
         "Description[zh_TW]": "讓文件與 RDF 資料庫位置項目對應的外掛程式",
         "Name": "RDF Location Plugin",
+        "Name[ar]": "ملحق موقع RDF",
         "Name[ca@valencia]": "Connector d'ubicació RDF",
         "Name[ca]": "Connector d'ubicació RDF",
         "Name[de]": "RDF-Ortsmodul",

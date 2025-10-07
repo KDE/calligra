@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Animation Tool",
+        "Name[ar]": "أداة الحركة",
         "Name[ca@valencia]": "Eina d'animació",
         "Name[ca]": "Eina d'animació",
         "Name[cs]": "Nástroj pro animaci",

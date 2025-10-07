@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon Flatten Path plugin",
+        "Name[ar]": "ملحق تسطيح المسار لكربون",
         "Name[ca@valencia]": "Connector d'aplanament de camins de Karbon",
         "Name[ca]": "Connector d'aplanament de camins del Karbon",
         "Name[de]": "Karbon Pfadglättungs-Modul",

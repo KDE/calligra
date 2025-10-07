@@ -4,6 +4,7 @@
             {
                 "Email": "calligra-devel@kde.org",
                 "Name": "The KSpread Team",
+                "Name[ar]": "فريق KSpread",
                 "Name[ca@valencia]": "L'equip de KSpread",
                 "Name[ca]": "L'equip del KSpread",
                 "Name[de]": "Das KSpread-Team",
@@ -33,6 +34,7 @@
         ],
         "Category": "FunctionModule",
         "Description": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
+        "Description[ar]": "ASC، ‏BAHTTEXT، ‏CHAR، ‏CLEAN، ‏CODE، ‏COMPARE، ‏CONCATENATE، ‏DOLLAR، ‏EXACT، ‏FIND، ‏FIXED، ‏JIS، ‏LEFT، ‏LEN، ‏LOWER، ‏MID، ‏PROPER، ‏REGEXP، ‏REGEXPRE، ‏REPLACE، ‏REPT، ‏RIGHT، ‏ROT، ‏SEARCH، ‏SLEEK، ‏SUBSTITUTE، ‏T، ‏TEXT، ‏TOGGLE، ‏TRIM، ‏UNICHAR، UNICODE، ‏UPPER، ‏VALUE",
         "Description[ca@valencia]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[ca]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
         "Description[cs]": "ASC, BAHTTEXT, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE",
@@ -62,6 +64,7 @@
         "Icon": "funct",
         "License": "GPL",
         "Name": "Text Functions",
+        "Name[ar]": "دوال النص",
         "Name[ca@valencia]": "Funcions de text",
         "Name[ca]": "Funcions de text",
         "Name[cs]": "Funkce textu",

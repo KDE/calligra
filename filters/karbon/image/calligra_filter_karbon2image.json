@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon JPEG/PNG Export Filter",
+        "Name[ar]": "مرشح تصدير JPEG/PNG لكربون",
         "Name[ca@valencia]": "Filtre d'exportació JPEG/PNG de Karbon",
         "Name[ca]": "Filtre d'exportació JPEG/PNG del Karbon",
         "Name[cs]": "Exportní filtr do formátu JPEG/PNG pro Karbon",

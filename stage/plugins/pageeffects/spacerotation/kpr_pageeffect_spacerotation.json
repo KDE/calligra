@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Space Rotation Page Effect",
+        "Description[ar]": "تأثير دوران الفضاء للصفحة",
         "Description[ca@valencia]": "Efecte de pàgina de gir de l'espai",
         "Description[ca]": "Efecte de pàgina de gir de l'espai",
         "Description[de]": "Flächendrehung-Seiteneffekt",
@@ -24,6 +25,7 @@
         "Description[uk]": "Ефект обертання сторінки у просторі",
         "Description[zh_TW]": "空間旋轉頁面效果",
         "Name": "Space Rotation",
+        "Name[ar]": "دوران الفضاء",
         "Name[ca@valencia]": "Gir de l'espai",
         "Name[ca]": "Gir de l'espai",
         "Name[de]": "Flächendrehung",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "3D Scene Shape",
+        "Name[ar]": "شكل مشهد ثلاثي الأبعاد",
         "Name[ca@valencia]": "Forma d'escena 3D",
         "Name[ca]": "Forma d'escena 3D",
         "Name[de]": "3D-Szenenobjekt",

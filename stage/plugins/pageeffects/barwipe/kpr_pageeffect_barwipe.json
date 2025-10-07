@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Bar Wipe Page Effect",
+        "Description[ar]": "تأثير مسح شريطي للصفحة",
         "Description[ca@valencia]": "Efecte d'esborrat de barra de la pàgina",
         "Description[ca]": "Efecte d'esborrat de barra de la pàgina",
         "Description[de]": "Wischblenden-Seiteneffekt (Balken)",
@@ -24,6 +25,7 @@
         "Description[uk]": "Ефект пластинчастого витирання",
         "Description[zh_TW]": "條狀掃描頁面效果",
         "Name": "Bar Wipe",
+        "Name[ar]": "مسح شريطي",
         "Name[ca@valencia]": "Esborrat de barra",
         "Name[ca]": "Esborrat de barra",
         "Name[de]": "Wischblende (Balken)",

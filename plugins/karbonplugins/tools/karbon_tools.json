@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon Tools",
+        "Name[ar]": "أدوات كربون",
         "Name[ca@valencia]": "Eines de Karbon",
         "Name[ca]": "Eines del Karbon",
         "Name[cs]": "Nástroje Karbonu",

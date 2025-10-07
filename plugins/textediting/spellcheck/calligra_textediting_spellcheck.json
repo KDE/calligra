@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "SpellCheck plugin",
+        "Name[ar]": "ملحق التدقيق الإملائي",
         "Name[ca@valencia]": "Connector d'ortografia",
         "Name[ca]": "Connector d'ortografia",
         "Name[cs]": "Modul pro kontrolu pravopisu",

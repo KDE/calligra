@@ -2,6 +2,7 @@
     "KPlugin": {
         "Icon": "",
         "Name": "Presentation Variables",
+        "Name[ar]": "متغيرات العرض التقديمي",
         "Name[ca@valencia]": "Variables de presentació",
         "Name[ca]": "Variables de presentació",
         "Name[cs]": "Proměnné prezentace",

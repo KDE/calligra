@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Calligra Stencils Docker plugin",
+        "Name[ar]": "ملحق أرصفة الختم لكاليغرا",
         "Name[ca@valencia]": "Connector d'acobladors de plantilles de Calligra",
         "Name[ca]": "Connector d'acobladors de plantilles del Calligra",
         "Name[cs]": "Modul doků Calligra Stencils",

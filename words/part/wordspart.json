@@ -14,6 +14,7 @@
             "application/vnd.wordperfect"
         ],
         "Name": "Calligra Word Processing Component",
+        "Name[ar]": "عنصر معالجة الكلمات لكاليغرا",
         "Name[ca@valencia]": "Component de processament de textos de Calligra",
         "Name[ca]": "Component de processament de textos del Calligra",
         "Name[cs]": "Komponenta Calligra pro zpracování textu",

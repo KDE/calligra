@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Picture Shape",
+        "Name[ar]": "شكل صورة",
         "Name[ca@valencia]": "Forma d'imatge",
         "Name[ca]": "Forma d'imatge",
         "Name[de]": "Bild-Objekt",

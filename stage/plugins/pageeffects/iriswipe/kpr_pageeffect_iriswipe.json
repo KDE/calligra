@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Iris Wipe Page Effects",
+        "Description[ar]": "تأثير مسح القزحية للصفحة",
         "Description[ca@valencia]": "Efectes d'esborrat d'iris de la pàgina",
         "Description[ca]": "Efectes d'esborrat d'iris de la pàgina",
         "Description[de]": "Wischblenden-Seiteneffekte (Iris)",
@@ -24,6 +25,7 @@
         "Description[uk]": "Ефект витирання сторінки веселкою",
         "Description[zh_TW]": "彩虹掃描頁面效果",
         "Name": "Iris Wipe",
+        "Name[ar]": "مسح القزحية",
         "Name[ca@valencia]": "Esborrat d'iris",
         "Name[ca]": "Esborrat d'iris",
         "Name[de]": "Wischblende (Iris)",

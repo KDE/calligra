@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "HTML Import Filter for KSpread",
+        "Name[ar]": "مرشح استيراد HTML لـ KSpread",
         "Name[ca@valencia]": "Filtre d'importació HTML per a KSpread",
         "Name[ca]": "Filtre d'importació HTML per al KSpread",
         "Name[cs]": "HTML importní filtr pro KSpread",

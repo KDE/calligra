@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Quattro Pro Import Filter for KSpread",
+        "Name[ar]": "مرشح استيراد Quattro Pro لـ KSpread",
         "Name[ca@valencia]": "Filtre d'importació Quattro Pro per a KSpread",
         "Name[ca]": "Filtre d'importació Quattro Pro per al KSpread",
         "Name[cs]": "Quattro Pro importní filtr pro KSpread",

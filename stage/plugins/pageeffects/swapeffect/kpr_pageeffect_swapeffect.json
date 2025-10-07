@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Swap Page Effect",
+        "Description[ar]": "تأثير مبادلة الصفحة",
         "Description[ca@valencia]": "Efecte d'agranat de pàgina",
         "Description[ca]": "Efecte d'escombrat de pàgina",
         "Description[de]": "Seitenwechseleffekt",
@@ -25,6 +26,7 @@
         "Description[uk]": "Ефект перегортання сторінки",
         "Description[zh_TW]": "變換頁面效果",
         "Name": "Swap Effect",
+        "Name[ar]": "تأثير المبادلة",
         "Name[ca@valencia]": "Efecte d'agranat",
         "Name[ca]": "Efecte d'escombrat",
         "Name[de]": "Wechseleffekt",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Spreadsheet Shape",
+        "Name[ar]": "شكل جدول البيانات",
         "Name[ca@valencia]": "Forma de full de càlcul",
         "Name[ca]": "Forma de full de càlcul",
         "Name[cs]": "Tvar sešitu",

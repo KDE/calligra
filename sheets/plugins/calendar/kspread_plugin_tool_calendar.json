@@ -4,7 +4,7 @@
             {
                 "Email": "raphael.langerhorst@kdemail.net",
                 "Name": "Raphael Langerhorst",
-                "Name[ar]": "Raphael Langerhorst",
+                "Name[ar]": "رافائيل لانغرهورست",
                 "Name[ca@valencia]": "Raphael Langerhorst",
                 "Name[ca]": "Raphael Langerhorst",
                 "Name[cs]": "Raphael Langerhorst",
@@ -36,6 +36,7 @@
         ],
         "Category": "Tool",
         "Description": "Inserts a calendar into a cell range.",
+        "Description[ar]": "أَدرِج تقويماً في نطاق الخلايا.",
         "Description[ca@valencia]": "Inserix un calendari a un interval de cel·la.",
         "Description[ca]": "Insereix un calendari a un interval de cel·la.",
         "Description[cs]": "Vloží kalendář do rozsahu buněk.",

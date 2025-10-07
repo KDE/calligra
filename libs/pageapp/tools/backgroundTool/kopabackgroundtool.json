@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Page Application Background Tool",
+        "Name[ar]": "أداة خلفية تطبيق الصفحة",
         "Name[ca@valencia]": "Eina d'aplicació de fons de pàgina",
         "Name[ca]": "Eina d'aplicació de fons de pàgina",
         "Name[de]": "Hintergrundwerkzeug für Seitenanwendungen",

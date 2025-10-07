@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "OpenOffice.org Calc Export Filter for KSpread",
+        "Name[ar]": "مرشح تصدير OpenOffice.org Calc لـ KSpread",
         "Name[ca@valencia]": "Filtre d'exportació OpenOffice.org Calc per a KSpread",
         "Name[ca]": "Filtre d'exportació OpenOffice.org Calc per al KSpread",
         "Name[cs]": "OpenOffice.org Calc exportní filtr pro KSpread",

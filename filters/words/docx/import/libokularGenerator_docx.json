@@ -4,6 +4,7 @@
             {
                 "Email": "sven.langkamp@gmail.com",
                 "Name": "Sven Langkamp",
+                "Name[ar]": "سفين لانغكامب",
                 "Name[ca@valencia]": "Sven Langkamp",
                 "Name[ca]": "Sven Langkamp",
                 "Name[cs]": "Sven Langkamp",
@@ -78,6 +79,7 @@
             }
         ],
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
+        "Copyright[ar]": "حقوق النشر 2012-2016 سفين لانغكامب، فريدريش ف. ه. كوسيباو",
         "Copyright[ca@valencia]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[ca]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[cs]": "Autorská práva 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
@@ -112,6 +114,7 @@
         "Copyright[zh_CN]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[zh_TW]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "DOCX file renderer",
+        "Description[ar]": "عارض ملف DOCX",
         "Description[ca@valencia]": "Representació de fitxers DOCX",
         "Description[ca]": "Representació de fitxers DOCX",
         "Description[cs]": "Vykreslovač souborů DOCX",
@@ -150,6 +153,7 @@
             "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
         ],
         "Name": "DOCX Backend",
+        "Name[ar]": "خلفية DOCX",
         "Name[ca@valencia]": "Dorsal de DOCX",
         "Name[ca]": "Dorsal de DOCX",
         "Name[cs]": "Podpůrná vrstva DOCX",

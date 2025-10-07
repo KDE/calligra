@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Comment Shape",
+        "Name[ar]": "شكل تعليق",
         "Name[ca@valencia]": "Forma de comentaris",
         "Name[ca]": "Forma de comentaris",
         "Name[cs]": "Tvar komentáře",

@@ -2,6 +2,7 @@
     "KPlugin": {
         "Icon": "",
         "Name": "Text Variables",
+        "Name[ar]": "متغيرات النص",
         "Name[ca@valencia]": "Variables de text",
         "Name[ca]": "Variables de text",
         "Name[cs]": "Proměnné textu",

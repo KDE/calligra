@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Words ASCII Import Filter",
+        "Name[ar]": "مرشح استيراد ASCII لـ Words",
         "Name[ca@valencia]": "Filtre d'importació ASCII de Words",
         "Name[ca]": "Filtre d'importació ASCII del Words",
         "Name[cs]": "Importní filtr ASCII pro Words",

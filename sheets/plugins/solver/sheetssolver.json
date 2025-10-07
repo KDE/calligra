@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Sheets Solver Plugin",
+        "Name[ar]": "ملحق محلل الأوراق",
         "Name[ca@valencia]": "Connector solucionador de Sheets",
         "Name[ca]": "Connector solucionador del Sheets",
         "Name[de]": "Sheets-Lösungsmodul",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Plugin Shape",
+        "Name[ar]": "شكل ملحق",
         "Name[ca@valencia]": "Forma de connector",
         "Name[ca]": "Forma de connector",
         "Name[cs]": "Tvar modulu",

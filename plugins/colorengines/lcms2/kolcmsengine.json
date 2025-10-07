@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "LCMS Color Management Engine for Pigment",
+        "Name[ar]": "محرك إدارة الألوان LCMS لـ Pigment",
         "Name[ca@valencia]": "Motor de gestió de color LCMS per al Pigment",
         "Name[ca]": "Motor de gestió de color LCMS per al Pigment",
         "Name[de]": "LCMS-Farbverwaltung für Pigment",
