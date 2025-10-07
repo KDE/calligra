@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1719683 2025-10-06 01:23:33Z scripty $
+# $Id: calligrasheets.po 1719740 2025-10-07 01:25:33Z scripty $
 # $Source$
 #
 #
@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-06 00:42+0000\n"
-"PO-Revision-Date: 2024-08-23 06:26+0200\n"
+"PO-Revision-Date: 2025-10-06 07:05+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.7\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -3782,8 +3782,7 @@ msgstr ""
 "10 % zaslužkom za 1 leto postane CONTINUOUS(1000;0,1;1) ali 1.105,17 €."
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINUOUS(glavnica;obrestna mera;leta)"
 

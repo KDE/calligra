@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-06 00:42+0000\n"
-"PO-Revision-Date: 2024-08-23 06:42+0200\n"
+"PO-Revision-Date: 2025-10-06 10:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.7\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -3757,10 +3757,9 @@ msgid ""
 msgstr ""
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
-msgstr "CONTINOUS(principal;interest;years)"
+msgstr "CONTINUOUS(principal;interest;years)"
 
 #: functions/financial.xml:173
 #, kde-format
