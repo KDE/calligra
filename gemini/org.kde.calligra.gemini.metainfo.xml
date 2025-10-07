@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0-or-later</project_license>
   <name>Gemini</name>
+  <name xml:lang="ar">جمني</name>
   <name xml:lang="ca">Gemini</name>
   <name xml:lang="ca-valencia">Gemini</name>
   <name xml:lang="cs">Blíženec</name>
@@ -38,6 +39,7 @@
   <name xml:lang="zh-CN">Gemini</name>
   <name xml:lang="zh-TW">Gemini</name>
   <summary>Office Suite</summary>
+  <summary xml:lang="ar">حزمة مكتبيّة</summary>
   <summary xml:lang="ca">Suite d'oficina</summary>
   <summary xml:lang="ca-valencia">Suite d'oficina</summary>
   <summary xml:lang="cs">Kancelářská sada</summary>
@@ -72,6 +74,7 @@
   <summary xml:lang="zh-TW">辦公軟體</summary>
   <description>
     <p>The KDE Office suite for 2-in-1 devices. 2-in-1 devices which can act as both a touch only tablet and a classic clamshell notebook are fast becoming very popular, and after the success of Krita Gemini, the team behind it realised there were plenty of reasons to apply that same concept to other applications, and especially the others in the Calligra suite. In particular the word processor component Words and presentation tool Stage were deemed ripe for this treatment.</p>
+    <p xml:lang="ar">حزمة كاليغرا المكتبيّة لأجهزة 2 في 1. الأجهزة 2 في 1 التي تستطيع العمل كلوح لمسيّ فقط و كحاسوب محمول صدفيّ كلاسيكيّ تنتشر شعبيتها بسرعة، وبعد نجاح كريتا جمني، أدرك الفريق الذي يقف خلفها أن هناك الكثير من الأسباب لتطبيق المفهوم نفسه على تطبيقات أخرى، وخصوصاً الأخرى في حزمة كاليغرا. على وجه الخصوص، اُعتبر مكوّن معالج النصوص Words وأداة العروض التقديميّة Stage جاهزين لهذه المعالجة.</p>
     <p xml:lang="ca">La suite KDE Office per a dispositius 2 en 1. Els dispositius 2 en 1, que poden actuar tant com a tauleta tàctil i com a portàtil clàssic, estan esdevenint molt populars, i després de l'èxit del Krita Gemini, l'equip que hi ha darrere s'ha adonat que hi ha moltes raons per a aplicar el mateix concepte a altres aplicacions, i en especial, les altres del paquet Calligra. En concret, el component Words de processament de textos i l'eina de presentacions Stage s'han considerat madures per a aquest tractament.</p>
     <p xml:lang="ca-valencia">La suite KDE Office per a dispositius 2 en 1. Els dispositius 2 en 1, que poden actuar tant com a tauleta tàctil i com a portàtil clàssic, estan esdevenint molt populars, i després de l'èxit de Krita Gemini, l'equip que hi ha darrere s'ha adonat que hi ha moltes raons per a aplicar el mateix concepte a altres aplicacions, i en especial, les altres del paquet Calligra. En concret, el component Words de processament de textos i l'eina de presentacions Stage s'han considerat madures per a este tractament.</p>
     <p xml:lang="en-GB">The KDE Office suite for 2-in-1 devices. 2-in-1 devices which can act as both a touch only tablet and a classic clamshell notebook are fast becoming very popular, and after the success of Krita Gemini, the team behind it realised there were plenty of reasons to apply that same concept to other applications, and especially the others in the Calligra suite. In particular the word processor component Words and presentation tool Stage were deemed ripe for this treatment.</p>
@@ -95,6 +98,7 @@
     <p xml:lang="zh-CN">适用于二合一设备的 KDE 办公套件。二合一设备是一种兼具传统笔记本与触控平板功能的设备，它正变得越来越普及。在 Krita 推出针对二合一设备优化的 Krita Gemini 之后，其开发团队意识到许多其他程序，特别是 Calligra 套件中的文字处理工具 Words 和演示文稿工具 Stage 也可以从针对触控操作的优化中得益。</p>
     <p xml:lang="zh-TW">二合一裝置用的 KDE 辦公室套裝軟體。同時能夠當作平板電腦和筆記型電腦用的二合一裝置現在變得越來越常見。在 Krita Gemini 的成功之後，其團隊認知到同樣概念很適合套用到其他應用程式，尤其是在 Calligra 套裝軟體中的各應用程式。其中被視為最適合的是文書處理用的 Words 與簡報工具 Stage。</p>
     <p>With that realisation was born the desire to create Calligra Gemini, an application encasing word processor and presentation components which would function both as a traditional desktop application with a mouse and keyboard, and transform into a touch friendly application on the go, changing the experience to one suitable for all-touch devices without the inconvenience of having to switch to a different application.</p>
+    <p xml:lang="ar">مع هذا الإدراك وُلدت الرغبة في إنشاء كاليغرا جمني، وهو تطبيق يضمّ مكوّنات معالج النصوص والعروض التقديميّة التي تعمل كتطبيق سطح المكتب التقليديّ باستخدام فأرة ولوحة مفاتيح، وتتحوّل إلى تطبيق سهل اللمس أثناء التنقّل، وتغيّر التجربة إلى واحدة مناسبة لجميع الأجهزة التي تعمل باللمس دون إزعاج الاضطرار إلى التحويل إلى تطبيق مختلف.</p>
     <p xml:lang="ca">Amb aquesta idea, va néixer el desig de crear el Calligra Gemini, una aplicació que agrupa els components de procés de textos i presentacions que poden funcionar tant com una aplicació tradicional d'escriptori amb un ratolí i un teclat, i transformar-se en una aplicació tàctil per ella mateixa, canviant l'experiència a una adequada a tots els dispositius tàctils, sense els inconvenients d'haver de canviar a una aplicació diferent.</p>
     <p xml:lang="ca-valencia">Amb esta idea, va nàixer el desig de crear Calligra Gemini, una aplicació que agrupa els components de procés de textos i presentacions que poden funcionar tant com una aplicació tradicional d'escriptori amb un ratolí i un teclat, i transformar-se en una aplicació tàctil per ella mateixa, canviant l'experiència a una adequada a tots els dispositius tàctils, sense els inconvenients d'haver de canviar a una aplicació diferent.</p>
     <p xml:lang="el">Με αυτήν την κατανόηση γεννήθηκε η επιθυμία να δημιουργηθεί το Calligra Gemini, μια εφαρμογή που καλύπτει τα συστατικά επεξεργασίας κειμένου και παρουσιάσεων τα οποία θα λειτουργούν μαζί ως παραδοσιακή εφαρμογή επιφάνειας εργασίας με ποντίκι και πληκτρολόγιο και θα μετατρέπονται σε μια φιλική σε οθόνες αφής εφαρμογή, περνώντας σε μία εμπειρία κατάλληλη για όλες τις συσκευές αφής χωρίς τη δυσκολία της εναλλαγής σε μια διαφορετική εφαρμογή.</p>
@@ -125,6 +129,7 @@
     <p xml:lang="zh-CN">在上述指导思想下，开发团队构思了 Calligra Gemini，一款同时包含文字处理与演示文稿功能的办公软件。它能够在鼠标键盘模式与触控模式之间随意切换，还避免用户需要在不同任务切换不同程序所带来的不便。</p>
     <p xml:lang="zh-TW">在有了該認知之後，我們有了 Calligra Gemini 的目標，提供文書處理與簡報工具的應用程式，並同時支援利用鍵盤滑鼠的傳統桌面應用程式使用方式，以及對觸控友善的互動模式，讓二合一裝置變成僅觸控模式時能夠直接利用同一個應用程式的不同體驗，而不用切換到另一個應用程式。</p>
     <p>The Gemini applications combine the power of Calligra's main applications (in Calligra Gemini's case the main office desktop applications, at the moment Words and Stage), with pleasant and explicitly touch optimised experiences based around the same document types.</p>
+    <p xml:lang="ar">تجمع تطبيقات جمني قوة تطبيقات كاليغرا الرئيسيّة (في حالة كاليغرا جمني، تطبيقات سطح المكتب المكتبيّة الرئيسيّة، Words و Stage في الوقت الحالي)، مع تجارب ممتعة ومُحسَّنة بوضوح للمس ومرتكزة على أنواع المستندات نفسها.</p>
     <p xml:lang="ca">Les aplicacions Gemini combinen la potència de les principals aplicacions del Calligra (en el cas del Gemini del Calligra les principals aplicacions ofimàtiques d'escriptori, actualment el Words i l'Stage), amb una optimitzada experiència tàctil agradable i explícita, basada en els mateixos tipus de documents.</p>
     <p xml:lang="ca-valencia">Les aplicacions Gemini combinen la potència de les principals aplicacions de Calligra (en el cas de Gemini de Calligra les principals aplicacions ofimàtiques d'escriptori, actualment Words i Stage), amb una optimitzada experiència tàctil agradable i explícita, basada en els mateixos tipus de documents.</p>
     <p xml:lang="el">Οι εφαρμογές Gemini συνδυάζουν την ισχύ των κύριων εφαρμογών της Calligra (στην περίπτωση του Calligra Gemini οι κύριες εφαρμογές γραφείου για την επιφάνεια εργασίας είναι τώρα οι Words και Stage), με ευχάριστες και βελτιστοποιημένες εμπειρίες αφής με βάση τους ίδιους τύπους εγγράφων.</p>
@@ -155,6 +160,7 @@
     <p xml:lang="zh-CN">Gemini 整合了 Calligra 主程序的强大功能 (目前主要包括 Words 和 Stage 的功能)，界面美观且针对触控进行了优化，方便进行文字处理和制作演示文稿。</p>
     <p xml:lang="zh-TW">Gemini 各應用程式合併了 Calligra 的主應用程式（Calligra Gemini 的情況是主要的桌面辦公室應用程式，目前包含 Words 和 Stage），並提供好用且為觸控設計過的體驗。</p>
     <p>Calligra itself is a large suite of applications, split into three main categories: Office applications, Graphics Applications and Project Management. Please visit the Calligra website to see full descriptions of the many tools.</p>
+    <p xml:lang="ar">كاليغرا بحدّ ذاتها حزمة كبيرة من التطبيقات، وهي مقسومة إلى ثلاث فئات رئيسيّة: تطبيقات مكتبيّة وتطبيقات رسوميّات وإدارة مشاريع. تفضّل بزيارة موقع كاليغرا الإلكترونيّ لترى الأوصاف الكاملة للأدوات العديدة.</p>
     <p xml:lang="ca">El mateix Calligra és un gran paquet d'aplicacions, dividit en tres categories principals: aplicacions d'ofimàtica, aplicacions gràfiques i gestió de projectes. Si us plau, visiteu el lloc web del Calligra per a veure les descripcions completes de moltes eines.</p>
     <p xml:lang="ca-valencia">El mateix Calligra és un gran paquet d'aplicacions, dividit en tres categories principals: aplicacions d'ofimàtica, aplicacions gràfiques i gestió de projectes. Per favor, visiteu el lloc web de Calligra per a veure les descripcions completes de moltes eines.</p>
     <p xml:lang="el">Η Calligra, από μόνη της μια μεγάλη σουίτα εφαρμογών, χωρίζεται σε τρεις κύριες κατηγορίες: εφαρμογές γραφείου, εφαρμογές γραφικών και διαχείριση έργων. Επισκεφθείτε τον ιστότοπο της Calligra για να δείτε την πλήρη περιγραφή των πολλών διαθέσιμων εργαλείων.</p>
@@ -186,6 +192,7 @@
     <p xml:lang="zh-TW">Calligra 本身是一個不小的應用程式套組，包含三大分類：辦公室應用程式、圖形應用程式以及專案管理。請造訪 Calligra 網站來查看各工具的完整說明。</p>
     <ul>
       <li>Common Features</li>
+      <li xml:lang="ar">ميزات مشتركة</li>
       <li xml:lang="ca">Característiques comunes</li>
       <li xml:lang="ca-valencia">Característiques comunes</li>
       <li xml:lang="el">Κοινά χαρακτηριστικά</li>
@@ -217,6 +224,7 @@
       <li xml:lang="zh-TW">通用功能</li>
     </ul>
     <p>The applications in the Calligra Suite shares some common UI concepts that gives it a modern look better suited for the wide screens of today. One of them is that most formatting is done using dockers which are placed at the side of the windows instead of on the top. This makes more space available for the actual document contents and avoids opening dialogs on top of it. If the user chooses, s/he can rearrange the placement of the dockers around the document area or even tear loose them and let them float freely. The arrangement is saved and reused the next time Calligra is opened.</p>
+    <p xml:lang="ar">تشارك التطبيقات في حزمة كاليغرا بعض مفاهيم واجهة المستخدم المشتركة التي تمنحها مظهراً عصريّاً يناسب بشكل أفضل الشاشات العريضة اليوم. أحدها هو أن أغلب التنسيق يُنفّذ باستخدام مرّاسٍ توضع على جانب النوافذ بدلاً من الأعلى. يوفّر هذا مساحة أكبر لمحتويات المستند الفعليّة ويتجنّب فتح مربّعات حوار فوقها. إن يختار المستخدِم، يستطيع إعادة ترتيب وضع المرّاس حول منطقة المستند أو حتى فكّها وتركها تطفو بحرّيّة. يُحفظ الترتيب ويُعاد استخدامه في المرّة القادمة التي تُفتح فيها كاليغرا.</p>
     <p xml:lang="ca">Les aplicacions de la suite Calligra comparteixen diversos conceptes d'IU que ofereixen un aspecte modern adequat per a les pantalles amples d'avui en dia. Un d'ells és que la majoria del format es fa usant acobladors que estan situats als laterals de les finestres en lloc de la part superior. Això fa que hi hagi més espai disponible per al contingut real del document i evita obrir diàlegs a sobre d'ell. Si l'usuari ho tria, pot ressituar els acobladors al voltant de l'àrea del document o inclús desenganxar-los i deixar-los flotar lliurement. La configuració es desarà i reutilitzarà la pròxima vegada que s'obri el Calligra.</p>
     <p xml:lang="ca-valencia">Les aplicacions de la suite Calligra compartixen diversos conceptes d'IU que oferixen un aspecte modern adequat per a les pantalles amples d'hui en dia. Un d'ells és que la majoria del format es fa utilitzant acobladors que estan situats en els laterals de les finestres en lloc de la part superior. Açò fa que hi haja més espai disponible per al contingut real del document i evita obrir diàlegs damunt d'ell. Si l'usuari ho tria, pot ressituar els acobladors al voltant de l'àrea del document o inclús desapegar-los i deixar-los flotar lliurement. La configuració es guardarà i reutilitzarà la pròxima vegada que s'òbriga Calligra.</p>
     <p xml:lang="el">Οι εφαρμογές στη σουίτα Calligra μοιράζονται κάποιες κοινές ιδέες γραφικού περιβάλλοντος που τους δίνουν μια σύγχρονη εμφάνιση καταλληλότερη για τις σημερινές ευρείες οθόνες. Μία από αυτές είναι ότι το μεγαλύτερο μέρος της διαμόρφωσης γίνεται με χρήση προγραμμάτων προσάρτησης που τοποθετούνται στο πλάι των παραθύρων αντί στην κορυφή. Έτσι δημιουργείται μεγαλύτερος χώρος για το πραγματικό περιεχόμενο του εγγράφου και αποφεύγεται το άνοιγμα διαλόγων στο προσκήνιο. Αν ο χρήστης το επιλέξει, μπορεί να αναδιατάξει τη θέση των προσαρτήσεων γύρω από την περιοχή του εγγράφου ή ακόμη και να τα αποσπάσει και να τα αφήσει να αιωρούνται ελεύθερα. Η διευθέτηση αποθηκεύεται και επαναχρησιμοποιείται τη επόμενη φορά που θα ανοίξει το Calligra.</p>
@@ -248,6 +256,7 @@
     <p xml:lang="zh-TW">Calligra 套裝軟體當中的應用程式共享許多通用的使用者介面概念，讓它們有現代化的外觀，也適合這個時代的寬螢幕。其中一個概念是：大部分格式設定是在視窗側邊的面板當中進行的。這讓螢幕空間能夠提供給文件本身，也可以避免在文件上面開啟對話框而擋住它。如果使用者希望，您可以將工具面板移動到文件區域其他地方，或甚至讓它們自由浮動。工具面板排列會儲存，在下次開啟 Calligra 的時候會重新利用。</p>
     <ul>
       <li>Embeddable Objects</li>
+      <li xml:lang="ar">كائنات قابلة للتضمين</li>
       <li xml:lang="ca">Objectes incrustables</li>
       <li xml:lang="ca-valencia">Objectes incrustables</li>
       <li xml:lang="el">Ενσωματώσιμα αντικείμενα</li>
@@ -279,6 +288,7 @@
       <li xml:lang="zh-TW">可嵌入的物件</li>
     </ul>
     <p>There are many objects and shapes that you can insert into your document, such as geometric shapes, sheet music score, and many more amazing options. All of these shapes are available in all applications, which makes implementing these objects much easier.</p>
+    <p xml:lang="ar">هناك العديد من الكائنات والأشكال التي تستطيع إدراجها في مستندك، مثل الأشكال الهندسيّة وتدوين النوتة الموسيقيّة والعديد من الخيارات المذهلة الأخرى. كل هذه الأشكال متاحة في كل التطبيقات، مما يجعل تطبيق هذه الكائنات أسهل بكثير.</p>
     <p xml:lang="ca">Hi ha molts objectes i formes que podeu inserir als documents, com les formes geomètriques, puntuacions de partitures, i moltes opcions impressionants. Totes aquestes formes estan disponibles a totes les aplicacions, cosa que facilita molt la implementació d'aquests objectes.</p>
     <p xml:lang="ca-valencia">Hi ha molts objectes i formes que podeu inserir en els documents, com les formes geomètriques, puntuacions de partitures, i moltes opcions impressionants. Totes estes formes estan disponibles a totes les aplicacions, cosa que facilita molt la implementació d'estos objectes.</p>
     <p xml:lang="el">Υπάρχουν πολλά αντικείμενα και σχήματα που μπορείτε να εισάγετε στο έγγραφό σας, όπως γεωμετρικά σχήματα, παρτιτούρες, και πολλές άλλες θαυμαστές επιλογές. Όλα αυτά τα σχήματα είναι διαθέσιμα σε όλες τις εφαρμογές που κάνει την εφαρμογή αυτών των αντικειμένων πολύ πιο εύκολη.</p>
@@ -310,6 +320,7 @@
     <p xml:lang="zh-TW">Calligra 提供許多物件與形狀讓您插入文件當中，像是幾何圖形、樂譜，以及其他許多選項。所有 Calligra 應用程式都支援這些物件，讓使用這些物件更加容易。</p>
     <ul>
       <li>Standard file format</li>
+      <li xml:lang="ar">صيغة ملف قياسيّة</li>
       <li xml:lang="ca">Format estàndard de fitxer</li>
       <li xml:lang="ca-valencia">Format estàndard de fitxer</li>
       <li xml:lang="cs">Standardní formát souboru</li>
@@ -343,6 +354,7 @@
       <li xml:lang="zh-TW">標準檔案格式</li>
     </ul>
     <p>Calligra uses the Open Document Format (ODF) as its main file format which makes it compatible with most other office applications including OpenOffice.org, LibreOffice and Microsoft Office. It can also import the native file formats of Microsoft Office with great accuracy, in many cases the best you can find.</p>
+    <p xml:lang="ar">تستخدم كاليغرا صيغة المستند المفتوح (ODF) كصيغة ملفاتها الرئيسيّة مما يجعلها متوافقة مع أغلب التطبيقات المكتبيّة الأخرى بما في ذلك OpenOffice.org و LibreOffice و Microsoft Office. وتستطيع أيضاً استيراد صيغ الملفات الأصليّة لـ Microsoft Office بدقّة كبيرة، وفي كثير من الحالات، هي الأفضل التي تستطيع العثور عليها.</p>
     <p xml:lang="ca">El Calligra usa l'Open Document Format (ODF) com a format de fitxer principal, que el fa compatible amb la majoria d'altres aplicacions ofimàtiques, incloent-hi l'OpenOffice.org, el LibreOffice i l'Office de Microsoft. També pot importar els formats de fitxer natius de l'Office de Microsoft amb molta precisió, en molts casos el millor que trobareu.</p>
     <p xml:lang="ca-valencia">Calligra utilitza Open Document Format (ODF) com a format de fitxer principal, que el fa compatible amb la majoria d'altres aplicacions ofimàtiques, incloent-hi OpenOffice.org, LibreOffice i Office de Microsoft. També pot importar els formats de fitxer natius d'Office de Microsoft amb molta precisió, en molts casos el millor que trobareu.</p>
     <p xml:lang="el">Η Calligra χρησιμοποιεί το Open Document Format (ODF) ως τον κύριο τύπο αποθήκευσης αρχείων και έτσι γίνεται συμβατή με τις περισσότερες εφαρμογές γραφείου, όπως OpenOffice.org, LibreOffice και Microsoft Office. Μπορεί επίσης να εισάγει τους εγγενείς τύπους αποθήκευσης του Microsoft Office με μεγάλη ακρίβεια, σε πολλές περιπτώσεις την καλύτερη που μπορείτε να βρείτε.</p>
@@ -379,6 +391,7 @@
   <screenshots>
     <screenshot type="default">
       <caption>A presentation loaded directly from DropBox, in Edit mode</caption>
+      <caption xml:lang="ar">عرض تقديميّ حُمِّل مباشرة من دروبوكس، في نمط التحرير</caption>
       <caption xml:lang="ca">Una presentació carregada directament des del DropBox, en mode d'edició</caption>
       <caption xml:lang="ca-valencia">Una presentació carregada directament des de DropBox, en mode edició</caption>
       <caption xml:lang="el">Μια παρουσίαση φορτώθηκε απευθείας από το DropBox, σε λειτουργία επεξεργασίας</caption>
@@ -412,6 +425,7 @@
     </screenshot>
     <screenshot>
       <caption>A text document in the traditional desktop style UI (Create mode)</caption>
+      <caption xml:lang="ar">مستند نصيّ في واجهة المستخدم بأسلوب سطح المكتب التقليديّ (نمط الإنشاء)</caption>
       <caption xml:lang="ca">Un document de text en la IU d'estil d'escriptori tradicional (mode creació)</caption>
       <caption xml:lang="ca-valencia">Un document de text en la IU d'estil d'escriptori tradicional (mode creació)</caption>
       <caption xml:lang="el">Ένα έγγραφο κειμένου παραδοσιακό στιλ επιφάνειας εργασίας (λειτουργία δημιουργίας)</caption>
@@ -445,6 +459,7 @@
     </screenshot>
     <screenshot>
       <caption>A text document in Create mode with the notes panel shown</caption>
+      <caption xml:lang="ar">مستند نصيّ في نمط الإنشاء مع عرض لوحة الملاحظات</caption>
       <caption xml:lang="ca">Un document de text en mode creació mostrant el plafó de les notes</caption>
       <caption xml:lang="ca-valencia">Un document de text en mode creació mostrant el quadro de les notes</caption>
       <caption xml:lang="el">Ένα έγγραφο κειμένου σε λειτουργία δημιουργίας με τον πίνακα σημειώσεων</caption>

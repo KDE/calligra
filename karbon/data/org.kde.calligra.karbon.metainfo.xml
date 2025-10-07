@@ -9,6 +9,7 @@
     <url>https://kde.org</url>
   </developer>
   <name>Karbon</name>
+  <name xml:lang="ar">كربون</name>
   <name xml:lang="bs">Karbon</name>
   <name xml:lang="ca">Karbon</name>
   <name xml:lang="ca-valencia">Karbon</name>
@@ -45,6 +46,7 @@
   <name xml:lang="zh-CN">Karbon</name>
   <name xml:lang="zh-TW">Karbon</name>
   <summary>Scalable Graphics</summary>
+  <summary xml:lang="ar">رسومات قابلة للتوسيع</summary>
   <summary xml:lang="bs">Grafika koja se može skalirati</summary>
   <summary xml:lang="ca">Gràfics escalables</summary>
   <summary xml:lang="ca-valencia">Gràfics escalables</summary>
@@ -85,6 +87,7 @@
       That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists
       wanting to create breathtaking vector art.
     </p>
+    <p xml:lang="ar">كربون تطبيق رسم متجه بواجهة مستخدم سهلة الاستخدام وقابلة للتخصيص والتوسيع بدرجة عالية. هذا يجعله تطبيقًا رائعًا للمستخدمين الذين يبدؤون باستكشاف عالم رسومات المتجهات وللفنانين الراغبين في إنشاء فنون متجهات مذهلة.</p>
     <p xml:lang="bs">Karbon je vektorska aplikacija za crtanje s korisničkim sučeljem koje je jednostavno za korištenje , vrlo prilagodljivo i proširivo . To čini Karbon odličnom aplikacijom za korisnike koji počinju istraživati ​​svijet vektorske grafike , kao i za umjetnike koji žele stvoriti prekrasnu vektorsku umjetnost .</p>
     <p xml:lang="ca">El Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, que es pot personalitzar i ampliar molt. Això converteix el Karbon en una gran aplicació per a usuaris que comencin a explorar el món dels gràfics vectorials i també pels artistes que volen crear art vectorial que deixi bocabadat.</p>
     <p xml:lang="ca-valencia">Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, la qual es pot personalitzar i ampliar molt. Açò convertix Karbon en una gran aplicació per a usuaris que comencen a explorar el món dels gràfics vectorials i també pels artistes que volen crear art vectorial que deixe bocabadat.</p>
@@ -116,6 +119,7 @@
     <p xml:lang="zh-CN">Karbon 是一款矢量绘图程序，具有易用、高度可定制和可扩展的用户界面。它既适合初次接触矢量图形的新手小试牛刀，也适合经验丰富的画师绘制精美的作品。</p>
     <p xml:lang="zh-TW">Karbon 是一個向量繪圖應用程式，提供容易使用且極度可自訂又可擴展的使用者介面。Karbon 對於向量圖形初學者與專家皆適合。</p>
     <p>Features:</p>
+    <p xml:lang="ar">الميزات:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="ca-valencia">Característiques:</p>
@@ -154,6 +158,7 @@
       <li>
         Loading support for ODG, SVG, WPG, WMF, EPS/PS
       </li>
+      <li xml:lang="ar">تحميل صيغ ODG و SVG و WPG و WMF و EPS/PS</li>
       <li xml:lang="bs">Učitavanje podrške za ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="ca">Permet llegir ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="ca-valencia">Permet llegir ODG, SVG, WPG, WMF, EPS/PS</li>
@@ -189,6 +194,7 @@
       <li>
         Writing support for ODG, SVG, PNG, PDF, WMF
       </li>
+      <li xml:lang="ar">كتابة صيغ ODG و SVG و PNG و PDF و WMF</li>
       <li xml:lang="bs">Pisanje podrške za ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="ca">Permet gravar ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="ca-valencia">Permet gravar ODG, SVG, PNG, PDF, WMF</li>
@@ -224,6 +230,7 @@
       <li>
         Customizable user interface with freely placeable toolbars and dockers
       </li>
+      <li xml:lang="ar">واجهة مستخدم قابلة للتخصيص مع أشرطة أدوات ومرسّيات قابلة للوضع بحرية</li>
       <li xml:lang="bs">Prilagodljiv korisnički interfejs sa gdje se moze slobodno  staviti alatne trake i dockers</li>
       <li xml:lang="ca">Interfície d'usuari que es pot personalitzar que permet situar lliurement barres d'eines i acobladors</li>
       <li xml:lang="ca-valencia">Interfície d'usuari que es pot personalitzar que permet situar lliurement barres d'eines i acobladors</li>
@@ -259,6 +266,7 @@
         Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
         drag and drop, controlling visibility of shapes or locking
       </li>
+      <li xml:lang="ar">مرسّي الطبقات للتعامل السهل مع المستندات المعقدة، بما في ذلك معاينة المصغرات، ودعم تجميع الأشكال عن طريق السحب والإفلات، والتحكم في رؤية الأشكال أو قفلها</li>
       <li xml:lang="bs">Sloj lučki radnik za jednostavno rukovanje složenim dokumentima , uključujući pregled sličica , podršku za grupiranje oblika putem drag and drop , kontroliranje vidljivost oblika ili zaključavanje</li>
       <li xml:lang="ca">Acoblador de capa per a una gestió senzilla de documents complexos incloent la vista prèvia de miniatures, permet agrupar formes via arrossegar i deixar anar, controlar la visibilitat de les formes o el bloqueig</li>
       <li xml:lang="ca-valencia">Acoblador de capa per a una gestió senzilla de documents complexos incloent la vista prèvia de miniatures, permet agrupar formes via arrossegar i deixar anar, controlar la visibilitat de les formes o el bloqueig</li>
@@ -290,6 +298,7 @@
       <li>
         Advanced path editing tool with great on-canvas editing capabilities
       </li>
+      <li xml:lang="ar">أداة تحرير المسار متقدمة مع قدرات تحرير رائعة على لوحة الرسم</li>
       <li xml:lang="bs">Alat za napredno uređivanje puta s velikom mogućnosti uređivanja  na platnu</li>
       <li xml:lang="ca">Eina avançada d'edició de camins amb una gran capacitat d'edició en el llenç</li>
       <li xml:lang="ca-valencia">Eina avançada d'edició de camins amb una gran capacitat d'edició en el llenç</li>
@@ -321,6 +330,7 @@
       <li>
         Various drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing tool
       </li>
+      <li xml:lang="ar">أدوات رسم متنوعة لإنشاء أشكال المسارات بما في ذلك أداة رسم المسار، وأداة القلم الرصاص، بالإضافة إلى أداة رسم الخط</li>
       <li xml:lang="bs">Razni alati za crtanje za kreiranje put oblike uključujući i put alat nacrtati ,olovka alat , kao i kaligrafija alat za crtanje</li>
       <li xml:lang="ca">Diverses eines de dibuix per a crear formes de camí incloent una eina de dibuix de camins, una eina de llapis i també una eina de dibuix de cal·ligrafia</li>
       <li xml:lang="ca-valencia">Diverses eines de dibuix per a crear formes de camí incloent una eina de dibuix de camins, una eina de llapis i també una eina de dibuix de cal·ligrafia</li>
@@ -352,6 +362,7 @@
       <li>
         Gradient and pattern tools for easy on-canvas editing of gradient and pattern styles
       </li>
+      <li xml:lang="ar">أدوات التدرج والأنماط لتسهيل تحرير أنماط التدرج والأنماط بسهولة على لوحة الرسم</li>
       <li xml:lang="bs">Gradijent i uzorak alata za jednostavno na - platnu uređivanje gradijent i uzorak stilova</li>
       <li xml:lang="ca">Eines de degradats i patrons per a una edició senzilla sobre el llenç d'estils de degradats i patrons</li>
       <li xml:lang="ca-valencia">Eines de degradats i patrons per a una edició senzilla sobre el llenç d'estils de degradats i patrons</li>
@@ -384,6 +395,7 @@
         Top notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes,
         orthogonal positions, intersections of path shapes or extensions of lines and paths)
       </li>
+      <li xml:lang="ar">مرافق التقاط متفوقة للرسم والتحرير الموجه (مثل: الالتقاط إلى شبكة، دليل الخطوط، عقد المسار، مربعات الإحاطة، المواضع المتعامدة، تقاطعات أشكال المسارات أو امتدادات الخطوط والمسارات)</li>
       <li xml:lang="bs">Vrhunska snapping objekti za vođene crtanje i uređivanje ( npr snapping na mrežu , vodič linije , staze čvorova , granični kutije , okomita pozicija , preplitanja put oblikuje ili proširenja linija i staze )</li>
       <li xml:lang="ca">Capacitats d'alt nivell d'ajust per a dibuix guiat i edició (p. ex. ajust a quadrícula, línies de guia, nodes de camins, caixes contenidores, posicions ortogonals, interseccions de formes de camí o extensions de línies i camins)</li>
       <li xml:lang="ca-valencia">Capacitats d'alt nivell d'ajust per a dibuix guiat i edició (p. ex., ajust a quadrícula, línies de guia, nodes de camins, caixes contenidores, posicions ortogonals, interseccions de formes de camí o extensions de línies i camins)</li>
@@ -415,6 +427,7 @@
       <li>
         Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image
       </li>
+      <li xml:lang="ar">يضم العديد من الأشكال مبدئية التحديد بما في ذلك الأشكال الأساسية مثل النجوم، الدائرة/القطع الناقص، المستطيل، الصورة</li>
       <li xml:lang="bs">Uključuje mnoge predefinisane oblike uključujući i osnovne oblike poput zvijezda , krugova / elipsa, pravougaonika, slika</li>
       <li xml:lang="ca">Inclou moltes formes predefinides bàsiques com estels, cercles/el·lipses, rectangles, imatges</li>
       <li xml:lang="ca-valencia">Inclou moltes formes predefinides bàsiques com estreles, cercles/el·lipses, rectangles, imatges</li>
@@ -448,6 +461,7 @@
       <li>
         Artistic text shape with support for following path outlines (i.e. text on path)
       </li>
+      <li xml:lang="ar">شكل نص فني مع دعم لتتبع مخططات المسار (أي نص على مسار)</li>
       <li xml:lang="bs">Umjetnički oblik tekst s podrškom za sljedeći put naglašava ( tj tekst na putu )</li>
       <li xml:lang="ca">Formes de text artístic que permeten camins de contorns de seguiment (p. ex. text en camins)</li>
       <li xml:lang="ca-valencia">Formes de text artístic que permeten camins de contorns de seguiment (p. ex., text en camins)</li>
@@ -480,6 +494,7 @@
       <li>
         Complex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effects
       </li>
+      <li xml:lang="ar">عمليات وتأثيرات المسار المعقدة مثل عمليات المجموعة المنطقية، وتسوية المسار، وتقريب وتنقيه، بالإضافة إلى تأثيرات الدوامة/القرص</li>
       <li xml:lang="bs">Kompleksne staze poslovanja i učinci poput Booleova postavljanje poslovanja , put ravnanje , zaokruživanje i rafiniranje kao vrtlog / za hvatanje učinci</li>
       <li xml:lang="ca">Operacions complexes de camins i efectes com operacions de conjunts booleans, aplanament de camins, arrodoniment i afinació i també efectes de gir i pessic</li>
       <li xml:lang="ca-valencia">Operacions complexes de camins i efectes com operacions de conjunts booleans, aplanament de camins, arredoniment i afinació i també efectes de gir i pessic</li>
@@ -512,6 +527,7 @@
       <li>
         Extensible by writing plugins for new tools, shapes and dockers
       </li>
+      <li xml:lang="ar">قابل للتوسيع بكتابة إضافات لأدوات جديدة وأشكال ومرسّيات</li>
       <li xml:lang="bs">Extensible pisanjem dodataka za novim alatima , oblika i modnog brenda Dockers</li>
       <li xml:lang="ca">Ampliable mitjançant l'escriptura de connectors per a eines noves, formes i acobladors</li>
       <li xml:lang="ca-valencia">Ampliable mitjançant l'escriptura de connectors per a eines noves, formes i acobladors</li>
@@ -558,6 +574,7 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/karbon/karbon.png</image>
       <caption>Main window of Karbon</caption>
+      <caption xml:lang="ar">نافذة كربون الرئيسة</caption>
       <caption xml:lang="ca">Finestra principal del Karbon</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Karbon</caption>
       <caption xml:lang="cs">Hlavní okno aplikace Karbon</caption>

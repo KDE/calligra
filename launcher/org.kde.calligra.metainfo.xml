@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0-or-later</project_license>
   <name>Calligra</name>
+  <name xml:lang="ar">كاليغرا</name>
   <name xml:lang="ca">Calligra</name>
   <name xml:lang="ca-valencia">Calligra</name>
   <name xml:lang="cs">Calligra</name>
@@ -29,6 +30,7 @@
   <name xml:lang="zh-CN">Calligra</name>
   <name xml:lang="zh-TW">Calligra</name>
   <summary>All-in-one office solution</summary>
+  <summary xml:lang="ar">حل مكتب متكامل</summary>
   <summary xml:lang="ca">Solució d'oficina tot en un</summary>
   <summary xml:lang="ca-valencia">Solució d'oficina tot en un</summary>
   <summary xml:lang="en-GB">All-in-one office solution</summary>
@@ -55,6 +57,7 @@
     <p>
       Calligra is an office and graphics suite. It contains applications for word processing, spreadsheets, presentation and vector graphics.
     </p>
+    <p xml:lang="ar">كاليغرا هي مجموعة مكتب ورسومات. تضم تطبيقات لمعالجة الكلمات والجداول الممتدة والعروض التقديمية والرسومات المتجهة.</p>
     <p xml:lang="ca">Calligra és una suite d'oficina i gràfics. Conté aplicacions per a processament de textos, fulls de càlcul, presentacions i gràfics vectorials.</p>
     <p xml:lang="ca-valencia">Calligra és una suite d'oficina i gràfics. Conté aplicacions per a processament de textos, fulls de càlcul, presentacions i gràfics vectorials.</p>
     <p xml:lang="en-GB">Calligra is an office and graphics suite. It contains applications for word processing, spreadsheets, presentation and vector graphics.</p>
@@ -82,6 +85,7 @@
       Words is an intuitive word processor and desktop publisher application.
       With it, you can create informative and attractive documents with pleasure and ease.
     </p>
+    <p xml:lang="ar">Words هو تطبيق لمعالجة الكلمات ونشر مكتبي بديهي. باستخدامه، أنشئ مستندات إعلامية وجذابة بكل متعة وسهولة.</p>
     <p xml:lang="ca">El Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
     <p xml:lang="ca-valencia">Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
     <p xml:lang="en-GB">Words is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.</p>
@@ -110,6 +114,7 @@
       Calligra Sheets is a fully-featured calculation and spreadsheet tool.
       Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.
     </p>
+    <p xml:lang="ar">Calligra Sheets أداة حساب وجداول ممتدة كاملة الميزات. استخدِمه لإنشاء وحساب جداول ممتدة مختلفة متعلقة بالعمل بسرعة، مثل الدخل والمصروفات، وساعات عمل الموظفين، إلخ.</p>
     <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="ca-valencia">Sheets de Calligra és una eina de full de càlcul plenament funcional. S'utilitza per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="en-GB">Calligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.</p>
@@ -139,6 +144,7 @@
       so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility
       of the Calligra content elements are available to Stage.
     </p>
+    <p xml:lang="ar">Calligra Stage هو تطبيق عرض تقديمي سهل الاستخدام ولكنه مرن. أنشئ عروضًا تقديمية بسهولة تحتوي على مجموعة غنية من العناصر، من الرسومات إلى النص، ومن المخططات إلى الصور. Calligra Stage قابل للتوسع من خلال نظام الملحقات، لذا فمن السهل إضافة تأثيرات جديدة أو عناصر محتوى جديدة أو حتى طرق جديدة لإدارة عرضك التقديمي. بسبب التكامل مع كاليغرا، كل قوة ومرونة عناصر محتوى كاليغرا متاحة لـ Stage.</p>
     <p xml:lang="ca">L'Stage del Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear fàcilment presentacions que continguin una gran varietat d'elements, des de gràfics a text, des de diagrames a imatges. L'Stage del Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb el Calligra, tota la potència i la flexibilitat dels elements de contingut del Calligra estan disponibles per a l'Stage.</p>
     <p xml:lang="ca-valencia">Stage de Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear amb facilitat presentacions que continguen una gran varietat d'elements, des de gràfics fins a text, des de diagrames fins a imatges. Stage de Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb Calligra, tota la potència i la flexibilitat dels elements de contingut de Calligra estan disponibles per a Stage.</p>
     <p xml:lang="en-GB">Calligra Stage is an easy to use yet still flexible presentation application. You can easily create presentations containing a rich variety of elements, from graphics to text, from charts to images. Calligra Stage is extensible through a plugin system, so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility of the Calligra content elements are available to Stage.</p>
@@ -168,6 +174,7 @@
       That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists
       wanting to create breathtaking vector art.
     </p>
+    <p xml:lang="ar">Karbon هو تطبيق رسم متجه بواجهة مستخدم سهلة الاستخدام وقابلة للتخصيص والتوسيع بشكل كبير. هذا يجعل Karbon تطبيقًا رائعًا للمستخدمين الذين بدأوا استكشاف عالم الرسومات المتجهة وكذلك للفنانين الذين يريدون إنشاء فن متجه خلاب.</p>
     <p xml:lang="ca">El Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, que es pot personalitzar i ampliar molt. Això converteix el Karbon en una gran aplicació per a usuaris que comencin a explorar el món dels gràfics vectorials i també pels artistes que volen crear art vectorial que deixi bocabadat.</p>
     <p xml:lang="ca-valencia">Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, la qual es pot personalitzar i ampliar molt. Açò convertix Karbon en una gran aplicació per a usuaris que comencen a explorar el món dels gràfics vectorials i també pels artistes que volen crear art vectorial que deixe bocabadat.</p>
     <p xml:lang="en-GB">Karbon is a vector drawing application with a user interface that is easy to use, highly customisable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.</p>
@@ -198,6 +205,7 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligra/words-desktop-mode.png</image>
       <caption>Calligra Words main window showing random text in the main editor</caption>
+      <caption xml:lang="ar">نافذة Calligra Words الرئيسية تعرض نصًا عشوائيًا في المحرر الرئيسي</caption>
       <caption xml:lang="ca">Finestra principal del Words del Calligra que mostra text aleatori a l'editor principal</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Words de Calligra que mostra text aleatori a l'editor principal</caption>
       <caption xml:lang="en-GB">Calligra Words main window showing random text in the main editor</caption>
@@ -224,6 +232,7 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligrasheets/calligrasheets.png</image>
       <caption>Calligra Sheets main window</caption>
+      <caption xml:lang="ar">نافذة Calligra Sheets الرئيسة</caption>
       <caption xml:lang="ca">Finestra principal del Sheets del Calligra</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Sheets de Calligra</caption>
       <caption xml:lang="en-GB">Calligra Sheets main window</caption>
@@ -250,6 +259,7 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligra/calligrastage.png</image>
       <caption>Calligra Stage main window</caption>
+      <caption xml:lang="ar">نافذة Calligra Stage الرئيسة</caption>
       <caption xml:lang="ca">Finestra principal del Stage del Calligra</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Stage de Calligra</caption>
       <caption xml:lang="en-GB">Calligra Stage main window</caption>
@@ -276,6 +286,7 @@
     <screenshot type="default">
       <image>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/karbon.png</image>
       <caption>Main window of Karbon</caption>
+      <caption xml:lang="ar">نافذة Karbon الرئيسة</caption>
       <caption xml:lang="ca">Finestra principal del Karbon</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Karbon</caption>
       <caption xml:lang="en-GB">Main window of Karbon</caption>
