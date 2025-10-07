@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Words ASCII Export Filter",
+        "Name[ar]": "مرشح تصدير ASCII لـ Words",
         "Name[ca@valencia]": "Filtre d'exportació ASCII de Words",
         "Name[ca]": "Filtre d'exportació ASCII del Words",
         "Name[cs]": "Exportní filtr formátu ASCII pro Words",

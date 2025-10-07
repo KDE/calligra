@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Quickstates Plugin",
+        "Name[ar]": "ملحق حالات سريعة",
         "Name[ca@valencia]": "Connector Quickstates",
         "Name[ca]": "Connector Quickstates",
         "Name[de]": "Quickstates-Modul",

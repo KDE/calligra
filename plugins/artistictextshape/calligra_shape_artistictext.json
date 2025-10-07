@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Artistic Text Shape",
+        "Name[ar]": "شكل نص فني",
         "Name[ca@valencia]": "Forma de text artístic",
         "Name[ca]": "Forma de text artístic",
         "Name[cs]": "Tvar Umělecký text",

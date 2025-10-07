@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "GNUMERIC Import Filter for KSpread",
+        "Name[ar]": "مرشح استيراد GNUMERIC لـ KSpread",
         "Name[ca@valencia]": "Filtre d'importació GNUMERIC per a KSpread",
         "Name[ca]": "Filtre d'importació GNUMERIC per al KSpread",
         "Name[cs]": "Gnumeric importní filtr pro KSpread",

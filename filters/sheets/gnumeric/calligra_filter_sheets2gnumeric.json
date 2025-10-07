@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "GNUmeric Export Filter for KSpread",
+        "Name[ar]": "مرشح تصدير GNUmeric لـ KSpread",
         "Name[ca@valencia]": "Filtre d'exportació GNUmeric per a KSpread",
         "Name[ca]": "Filtre d'exportació GNUmeric per al KSpread",
         "Name[cs]": "Gnumeric exportní filtr pro KSpread",

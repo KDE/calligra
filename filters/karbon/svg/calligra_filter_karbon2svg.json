@@ -2,6 +2,7 @@
     "KPlugin": {
         "Icon": "",
         "Name": "Karbon SVG Export Filter",
+        "Name[ar]": "مرشح تصدير SVG لكربون",
         "Name[ca@valencia]": "Filtre d'exportació SVG de Karbon",
         "Name[ca]": "Filtre d'exportació SVG del Karbon",
         "Name[cs]": "Exportní filtr do formátu SVG pro Karbon",

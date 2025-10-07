@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon PDF Import Filter",
+        "Name[ar]": "مرشح استيراد PDF لكربون",
         "Name[ca@valencia]": "Filtre d'importació PDF de Karbon",
         "Name[ca]": "Filtre d'importació PDF del Karbon",
         "Name[cs]": "Importní filtr PDF pro Karbon",

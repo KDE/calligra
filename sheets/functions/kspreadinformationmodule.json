@@ -4,6 +4,7 @@
             {
                 "Email": "calligra-devel@kde.org",
                 "Name": "The KSpread Team",
+                "Name[ar]": "فريق KSpread",
                 "Name[ca@valencia]": "L'equip de KSpread",
                 "Name[ca]": "L'equip del KSpread",
                 "Name[de]": "Das KSpread-Team",
@@ -33,6 +34,7 @@
         ],
         "Category": "FunctionModule",
         "Description": "ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE",
+        "Description[ar]": "ERRORTYPE، ‏FILENAME، ‏INFO، ‏ISBLANK، ‏ISDATE، ‏ISERR، ‏ISERROR، ‏ISEVEN، ISLOGICAL، ‏ISNA، ‏ISNONTEXT، ‏ISNOTTEXT، ‏ISNUM، ‏ISNUMBER، ‏ISODD، ‏ISREF، ISTEXT، ‏ISTIME، ‏N، ‏NA، ‏TYPE",
         "Description[ca@valencia]": "ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE",
         "Description[ca]": "ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE",
         "Description[cs]": "ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE",
@@ -62,6 +64,7 @@
         "Icon": "funct",
         "License": "GPL",
         "Name": "Information Functions",
+        "Name[ar]": "دوال المعلومات",
         "Name[ca@valencia]": "Funcions d'informació",
         "Name[ca]": "Funcions d'informació",
         "Name[cs]": "Informační funkce",

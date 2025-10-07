@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Words WordPerfect Import Filter",
+        "Name[ar]": "مرشح استيراد WordPerfect لـ Words",
         "Name[ca@valencia]": "Filtre d'importació WordPerfect de Words",
         "Name[ca]": "Filtre d'importació WordPerfect del Words",
         "Name[cs]": "Importní filtr WordPerfect pro Words",

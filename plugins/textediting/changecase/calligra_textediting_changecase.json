@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Change case plugin",
+        "Name[ar]": "ملحق تغيير الحالة",
         "Name[ca@valencia]": "Connector de canvi de caixa",
         "Name[ca]": "Connector de canvi de caixa",
         "Name[cs]": "Modul pro změnu velikosti písmen",

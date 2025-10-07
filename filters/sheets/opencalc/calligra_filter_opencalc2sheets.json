@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "OpenOffice.org Calc Import Filter for KSpread",
+        "Name[ar]": "مرشح استيراد OpenOffice.org Calc لـ KSpread",
         "Name[ca@valencia]": "Filtre d'importació OpenOffice.org Calc per a KSpread",
         "Name[ca]": "Filtre d'importació OpenOffice.org Calc per al KSpread",
         "Name[cs]": "OpenOffice.org Calc importní filtr pro KSpread",

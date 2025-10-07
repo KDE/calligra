@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon EPS Import Filter",
+        "Name[ar]": "مرشح استيراد EPS لكربون",
         "Name[ca@valencia]": "Filtre d'importació EPS de Karbon",
         "Name[ca]": "Filtre d'importació EPS del Karbon",
         "Name[cs]": "Importní filtr do formátu EPS pro Karbon",

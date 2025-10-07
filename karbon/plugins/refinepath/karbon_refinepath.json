@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon Refine Path plugin",
+        "Name[ar]": "ملحق تنقيح المسار لكربون",
         "Name[ca@valencia]": "Connector de refinament de camins de Karbon",
         "Name[ca]": "Connector de refinament de camins del Karbon",
         "Name[de]": "Karbon Pfadverbeserungs-Modul",

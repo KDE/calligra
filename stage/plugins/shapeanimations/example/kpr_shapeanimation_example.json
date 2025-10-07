@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Jiggle and Wiggle that Shape!",
+        "Description[ar]": "اجعل هذا الشكل يهتز ويتمايل!",
         "Description[ca@valencia]": "Sacsa esta imatge!",
         "Description[ca]": "Sacseja aquesta imatge!",
         "Description[de]": "Am Objekt rütteln und wackeln.",
@@ -25,6 +26,7 @@
         "Description[zh_CN]": "微调那个形状！",
         "Description[zh_TW]": "讓元件動起來！",
         "Name": "Jiggle and Wiggle",
+        "Name[ar]": "اهتزاز وتمايل",
         "Name[ca@valencia]": "Sacsa",
         "Name[ca]": "Sacseja",
         "Name[de]": "Rütteln und Wackeln",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Exploding Page Page Effect",
+        "Description[ar]": "تأثير صفحة متفجرة للصفحة",
         "Description[ca@valencia]": "Efecte d'explosió de la pàgina",
         "Description[ca]": "Efecte d'explosió de la pàgina",
         "Description[de]": "Seiteneffekt mit explodierender Seite",
@@ -25,6 +26,7 @@
         "Description[uk]": "Ефект вибуху сторінки",
         "Description[zh_TW]": "爆炸頁面效果",
         "Name": "Exploding Page",
+        "Name[ar]": "صفحة متفجرة",
         "Name[ca@valencia]": "Explosió de pàgina",
         "Name[ca]": "Explosió de pàgina",
         "Name[de]": "Explodierende Seite",

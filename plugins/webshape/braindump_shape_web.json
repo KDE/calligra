@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Web Shape",
+        "Name[ar]": "شكل وب",
         "Name[ca@valencia]": "Forma de web",
         "Name[ca]": "Forma de web",
         "Name[cs]": "Tvar pro web",

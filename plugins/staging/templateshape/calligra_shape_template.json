@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Template Shape",
+        "Name[ar]": "شكل قالب",
         "Name[ca@valencia]": "Forma de plantilla",
         "Name[ca]": "Forma de plantilla",
         "Name[cs]": "Šablonový tvar",

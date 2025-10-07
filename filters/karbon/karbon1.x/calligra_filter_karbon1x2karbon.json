@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon 1.x Import Filter",
+        "Name[ar]": "مرشح استيراد Karbon 1.x",
         "Name[ca@valencia]": "Filtre d'importació Karbon 1.x",
         "Name[ca]": "Filtre d'importació Karbon 1.x",
         "Name[cs]": "Importní filtr Karbon 1.x",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Edge Wipe Page Effects",
+        "Description[ar]": "تأثير مسح الحافة للصفحة",
         "Description[ca@valencia]": "Efectes d'esborrat de vora de la pàgina",
         "Description[ca]": "Efectes d'esborrat de vora de la pàgina",
         "Description[de]": "Wischblenden-Seiteneffekte (Rand)",
@@ -24,6 +25,7 @@
         "Description[uk]": "Ефект витирання сторінки з країв",
         "Description[zh_TW]": "邊緣掃描頁面效果",
         "Name": "Edge wipe",
+        "Name[ar]": "مسح الحافة",
         "Name[ca@valencia]": "Esborrat de vora",
         "Name[ca]": "Esborrat de vora",
         "Name[de]": "Wischblende (Rand)",

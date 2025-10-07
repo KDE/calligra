@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Chart Shape",
+        "Name[ar]": "شكل رسم بياني",
         "Name[ca@valencia]": "Forma del diagrama",
         "Name[ca]": "Forma del diagrama",
         "Name[cs]": "Tvar grafu",

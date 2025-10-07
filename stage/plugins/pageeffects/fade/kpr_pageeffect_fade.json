@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Fade Effect",
+        "Description[ar]": "تأثير الإخفاء التدريجي",
         "Description[ca@valencia]": "Efecte d'esvaïment",
         "Description[ca]": "Efecte d'esvaïment",
         "Description[cs]": "Efekt mizení",

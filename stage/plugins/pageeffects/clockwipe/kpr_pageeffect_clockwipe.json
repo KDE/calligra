@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Clock wipe Page Effects",
+        "Description[ar]": "تأثير مسح عقرب الساعة للصفحة",
         "Description[ca@valencia]": "Efectes d'esborrat de rellotge de la pàgina",
         "Description[ca]": "Efectes d'esborrat de rellotge de la pàgina",
         "Description[de]": "Wischblenden-Seiteneffekt (Uhr)",
@@ -24,6 +25,7 @@
         "Description[uk]": "Ефект витирання по колу",
         "Description[zh_TW]": "時鐘掃描頁面效果",
         "Name": "Clock wipe",
+        "Name[ar]": "مسح عقرب الساعة",
         "Name[ca@valencia]": "Esborrat de rellotge",
         "Name[ca]": "Esborrat de rellotge",
         "Name[de]": "Wischblende (Uhr)",

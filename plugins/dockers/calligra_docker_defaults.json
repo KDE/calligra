@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Calligra Dockers plugin",
+        "Name[ar]": "ملحق أرصفة كاليغرا",
         "Name[ca@valencia]": "Connector d'acobladors de Calligra",
         "Name[ca]": "Connector d'acobladors del Calligra",
         "Name[cs]": "Modul doků Calligra",

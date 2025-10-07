@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Matrix wipe Page Effects",
+        "Description[ar]": "تأثير مسح المصفوفة للصفحة",
         "Description[ca@valencia]": "Efectes d'esborrat de matriu de la pàgina",
         "Description[ca]": "Efectes d'esborrat de matriu de la pàgina",
         "Description[de]": "Wischblenden-Seiteneffekte (Matrix)",
@@ -24,6 +25,7 @@
         "Description[uk]": "Ефект матричного витирання сторінки",
         "Description[zh_TW]": "矩陣掃描頁面效果",
         "Name": "Matrix wipe",
+        "Name[ar]": "مسح المصفوفة",
         "Name[ca@valencia]": "Esborrat de matriu",
         "Name[ca]": "Esborrat de matriu",
         "Name[de]": "Wischblende (Matrix)",

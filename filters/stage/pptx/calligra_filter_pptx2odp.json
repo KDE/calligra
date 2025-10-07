@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "MS PowerPoint 2007 Import Filter for Stage",
+        "Name[ar]": "مرشح استيراد MS PowerPoint 2007 لـ Stage",
         "Name[ca@valencia]": "Filtre d'importació Microsoft PowerPoint 2007 per a Stage",
         "Name[ca]": "Filtre d'importació Microsoft PowerPoint 2007 per a l'Stage",
         "Name[cs]": "Importní filtr MS PowerPoint 2007 pro Stage",

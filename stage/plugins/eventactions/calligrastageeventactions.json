@@ -2,6 +2,7 @@
     "KPlugin": {
         "Icon": "",
         "Name": "Presentation Event Actions",
+        "Name[ar]": "أفعال حدث العرض",
         "Name[ca@valencia]": "Accions de presentació d'esdeveniments",
         "Name[ca]": "Accions de presentació d'esdeveniments",
         "Name[de]": "Präsentationsaktionsereignisse",

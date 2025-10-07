@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Formula Shape",
+        "Name[ar]": "شكل صيغة",
         "Name[ca@valencia]": "Forma de la fórmula",
         "Name[ca]": "Forma de la fórmula",
         "Name[cs]": "Tvar vzorce",

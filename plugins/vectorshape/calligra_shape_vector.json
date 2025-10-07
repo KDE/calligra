@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Static Vector Shape",
+        "Name[ar]": "شكل متجه ثابت",
         "Name[ca@valencia]": "Forma de vector estàtic",
         "Name[ca]": "Forma de vector estàtic",
         "Name[de]": "Statisches Vektor-Objekt",

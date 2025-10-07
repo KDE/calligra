@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Video Shape",
+        "Name[ar]": "شكل فيديو",
         "Name[ca@valencia]": "Forma de vídeo",
         "Name[ca]": "Forma de vídeo",
         "Name[cs]": "Tvar Video",

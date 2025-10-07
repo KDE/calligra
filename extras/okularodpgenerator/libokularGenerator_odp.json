@@ -4,6 +4,7 @@
             {
                 "Email": "sven.langkamp@gmail.com",
                 "Name": "Sven Langkamp",
+                "Name[ar]": "سفين لانغكامب",
                 "Name[ca@valencia]": "Sven Langkamp",
                 "Name[ca]": "Sven Langkamp",
                 "Name[cs]": "Sven Langkamp",
@@ -78,6 +79,7 @@
             }
         ],
         "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
+        "Copyright[ar]": "حقوق النشر 2010-2016 سفين لانغكامب، فريدريش ف. ه. كوسيباو",
         "Copyright[ca@valencia]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[ca]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[cs]": "Autorská práva 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
@@ -112,6 +114,7 @@
         "Copyright[zh_CN]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[zh_TW]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "OpenDocument Presentation file renderer",
+        "Description[ar]": "عارض ملف عرض OpenDocument",
         "Description[ca@valencia]": "Representació de fitxers de presentacions en OpenDocument",
         "Description[ca]": "Representació de fitxers de presentacions en OpenDocument",
         "Description[cs]": "Vykreslovač souborů prezentací OpenDocument",
@@ -150,6 +153,7 @@
             "application/vnd.oasis.opendocument.presentation-template"
         ],
         "Name": "ODP Backend",
+        "Name[ar]": "خلفية ODP",
         "Name[ca@valencia]": "Dorsal d'ODP",
         "Name[ca]": "Dorsal d'ODP",
         "Name[cs]": "Podpůrná vrstva ODP",

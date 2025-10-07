@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "ODT to Epub2 Export Filter",
+        "Name[ar]": "مرشح تصدير ODT إلى Epub2",
         "Name[ca@valencia]": "Filtre d'exportació ODT a Epub2",
         "Name[ca]": "Filtre d'exportació ODT a Epub2",
         "Name[de]": "Exportfilter ODT zu EPUB2",
