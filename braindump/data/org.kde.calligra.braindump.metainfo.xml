@@ -9,6 +9,7 @@
     <url>https://kde.org</url>
   </developer>
   <name>Braindump</name>
+  <name xml:lang="ar">تفريغ الأفكار</name>
   <name xml:lang="bs">Braindump</name>
   <name xml:lang="ca">Braindump</name>
   <name xml:lang="ca-valencia">Braindump</name>
@@ -46,6 +47,7 @@
   <name xml:lang="zh-CN">Braindump</name>
   <name xml:lang="zh-TW">Braindump</name>
   <summary>Notes and ideas gathering</summary>
+  <summary xml:lang="ar">تدوين الملاحظات وتجميع الأفكار</summary>
   <summary xml:lang="bs">Sakupljanje poruka i ideja</summary>
   <summary xml:lang="ca">Notes i recull d'idees</summary>
   <summary xml:lang="ca-valencia">Notes i arreplega d'idees</summary>
@@ -84,6 +86,7 @@
       Braindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer.
       It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.
     </p>
+    <p xml:lang="ar">تفريغ الأفكار هي أداة لتفريغ وتنظيم محتوى عقلك (الأفكار والرسومات والصور والنصوص...) على حاسوبك. وهي تعمل من خلال السماح بإنشاء وتحرير ألواح بيضاء، وهي عبارة عن لوحات قماشية لا نهائية يمكنك إضافة نصوص وصور ومخططات ورسومات وغيرها إليها.</p>
     <p xml:lang="bs">Braindump je alat za slanje i organizaciju sadržaja vašeg mozga (ideja, crteža, slika, teksta...) na računar. Radi tako što vam dopušta da kreirate i uređujete table koja su beskonačna platna na koje možete dodati tekstove, slike, dijagrame, crteže itd.</p>
     <p xml:lang="ca">El Braindump és una eina per a bolcar i organitzar el contingut del cervell (idees, dibuixos, imatges, texts…) a l'ordinador. Funciona permetent crear i editar pissarres, que tenen llenços infinits en els quals es pot afegir texts, imatges, diagrames, dibuixos, etc.</p>
     <p xml:lang="ca-valencia">Braindump és una eina per a bolcar i organitzar el contingut del cervell (idees, dibuixos, imatges, texts…) a l'ordinador. Funciona permetent crear i editar pissarres, que tenen llenços infinits en els quals es pot afegir texts, imatges, diagrames, dibuixos, etc.</p>
@@ -122,6 +125,7 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligra/braindump.png</image>
       <caption>Main window of Braindump showing a music partition and many other shapes</caption>
+      <caption xml:lang="ar">النافذة الرئيسة لبرنامج تفريغ الأفكار تعرض قسمًا موسيقيًا والعديد من الأشكال الأخرى</caption>
       <caption xml:lang="ca">Finestra principal del Braindump que mostra una partitura musical i moltes altres formes</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Braindump que mostra una partitura musical i moltes altres formes</caption>
       <caption xml:lang="en-GB">Main window of Braindump showing a music partition and many other shapes</caption>

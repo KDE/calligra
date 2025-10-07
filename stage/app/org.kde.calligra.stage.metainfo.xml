@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0-or-later</project_license>
   <name>Calligra Stage</name>
+  <name xml:lang="ar">كاليغرا ستيغ</name>
   <name xml:lang="ca">Stage del Calligra</name>
   <name xml:lang="ca-valencia">Stage de Calligra</name>
   <name xml:lang="cs">Calligra Stage</name>
@@ -38,6 +39,7 @@
   <name xml:lang="zh-CN">Calligra Stage</name>
   <name xml:lang="zh-TW">Calligra Stage</name>
   <summary>Presentation</summary>
+  <summary xml:lang="ar">عرض تقديمي</summary>
   <summary xml:lang="bs">Prezentacija</summary>
   <summary xml:lang="ca">Presentació</summary>
   <summary xml:lang="ca-valencia">Presentació</summary>
@@ -79,6 +81,7 @@
       so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility
       of the Calligra content elements are available to Stage.
     </p>
+    <p xml:lang="ar">كاليغرا ستيغ تطبيق عرض تقديمي سهل الاستخدام ومرن في نفس الوقت. تستطِع إنشاء عروض تقديميّة بسهولة تحتوِي على تشكيلة غنيّة من العناصر، من الرسوميّات إلى النصوص، ومن المخططات إلى الصّور. كاليغرا ستيغ قابلة للتوسيع عبر نظام إضافات، لذا من السهل إضافة تأثيرات جديدة أو عناصر محتوًى جديدة أو حتى طرق جديدة لإدارة عرضك التقديميّ. بسبب التكامل مع كاليغرا، كلّ قوّة ومرونة عناصر محتوَى كاليغرا متوفّرة لـ ستيغ.</p>
     <p xml:lang="bs">Calligra Stage je lagana ali fleksibilna prezentacijska aplikacija. Možete lako kreirati prezentacije s dosta elemenata, iz grafike i teksta, dijagrama i slika. Calligra Stage se može proširivati kroz sistem dodataka, tako da je lako dodati nove efekte, nove sadržajne elemente ili čak nove načine upravljanja prezentacijom. Zbog integracije sa Calligra, sva moć i fleksibilnost od Calligra sadržaja elemenata su dostupni u Stage.</p>
     <p xml:lang="ca">L'Stage del Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear presentacions fàcilment que continguin una gran varietat d'elements, des de gràfics a text, des de diagrames a imatges. L'Stage del Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb el Calligra, tota la potència i la flexibilitat dels elements de contingut del Calligra estan disponibles per a l'Stage.</p>
     <p xml:lang="ca-valencia">Stage de Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear presentacions amb facilitat que continguen una gran varietat d'elements, des de gràfics fins a text, des de diagrames fins a imatges. Stage de Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb Calligra, tota la potència i la flexibilitat dels elements de contingut de Calligra estan disponibles per a Stage.</p>
@@ -111,6 +114,7 @@
     <p xml:lang="zh-CN">Calligra Stage 是一款易学易用却又不失强大的演示文稿制作与展示程序。您可以使用它方便地制作样式美观，包含文字、图形、图像、图表在内的演示文稿。Calligra Stage 可以通过插件进行扩展，可以方便地添加更多特效、视觉元素和演示文稿管理手段。Calligra Stage 是 Callibra 办公套件的组成部分。所有其他 Calligra 组件的功能和内容都可在 Calligra Stage 中使用。</p>
     <p xml:lang="zh-TW">Calligra Stage 是一個容易使用但仍然有彈性的簡報應用程式。它讓您可以輕易的建立包含各式各樣元素的簡報，像是圖形、文字、圖表與影像。Calligra Stage 可透過外掛程式系統進行擴展，可以輕易添加效果、新的內容元素，或甚至是管理簡報的新方法。由於它與 Calligra 整合，所有 Calligra 內容元素的功能和彈性都可以從 Stage 使用。</p>
     <p>Features:</p>
+    <p xml:lang="ar">الميزات:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="ca-valencia">Característiques:</p>
@@ -147,6 +151,7 @@
     <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>Multiple master slides</li>
+      <li xml:lang="ar">شرائح رئيسيّة متعدّدة</li>
       <li xml:lang="bs">Više master slajdova</li>
       <li xml:lang="ca">Múltiples diapositives mestres</li>
       <li xml:lang="ca-valencia">Múltiples diapositives mestres</li>
@@ -181,6 +186,7 @@
       <li xml:lang="zh-CN">多张主幻灯片</li>
       <li xml:lang="zh-TW">多個主投影片</li>
       <li>Easily switch between slides during a presentation</li>
+      <li xml:lang="ar">بدّل بسهولة بين الشرائح أثناء العرض التقديميّ</li>
       <li xml:lang="bs">Lako prebacujte između slajdova tokom prezentacije</li>
       <li xml:lang="ca">Canvi senzill entre diapositives durant una presentació</li>
       <li xml:lang="ca-valencia">Canvi senzill entre diapositives durant una presentació</li>
@@ -194,7 +200,7 @@
       <li xml:lang="fi">Helppo siirtyminen diasta toiseen esityksen aikana</li>
       <li xml:lang="fr">Passage facile d'une planche à une autre pendant une présentation</li>
       <li xml:lang="gl">Permite cambiar facilmente entre diapositivas durante as presentacións.</li>
-      <li xml:lang="he">מעבר םשוט בין שקופיות תוך הצגת מצגת</li>
+      <li xml:lang="he">מעבר פשוט בין שקופיות תוך הצגת מצגת</li>
       <li xml:lang="ia">Facilemente commuta inter diapositivas durante un presentation</li>
       <li xml:lang="id">Secara mudah beralih antara slide selagi presentasi</li>
       <li xml:lang="it">Cambia facilmente le diapositive durante una presentazione</li>
@@ -215,6 +221,7 @@
       <li xml:lang="zh-CN">演示时可以在多张幻灯片之间轻松切换</li>
       <li xml:lang="zh-TW">展示時輕易切換投影片</li>
       <li>Add notes for your slide</li>
+      <li xml:lang="ar">أضِف ملاحظات لشريحتك</li>
       <li xml:lang="bs">Dodajte zabilješke za vaš slajd</li>
       <li xml:lang="ca">Permet afegir notes a les diapositives</li>
       <li xml:lang="ca-valencia">Permet afegir notes a les diapositives</li>
@@ -250,6 +257,7 @@
       <li xml:lang="zh-CN">向幻灯片添加备注</li>
       <li xml:lang="zh-TW">加入筆記到投影片</li>
       <li>Supports most ODF file transitions</li>
+      <li xml:lang="ar">يوفر أغلب انتقالات ملفات ODF</li>
       <li xml:lang="bs">Podržava većinu tranzicija ODF datoteka</li>
       <li xml:lang="ca">Accepta la majoria de les transicions de fitxer ODF</li>
       <li xml:lang="ca-valencia">Accepta la majoria de les transicions de fitxer ODF</li>
@@ -296,6 +304,7 @@
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/calligra/calligrastage.png</image>
       <caption>Calligra Stage main window</caption>
+      <caption xml:lang="ar">النافذة الرئيسة لكاليغرا ستيغ</caption>
       <caption xml:lang="ca">Finestra principal del Stage del Calligra</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Stage de Calligra</caption>
       <caption xml:lang="cs">Hlavní okno aplikace Calligra Stage</caption>

@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0-or-later</project_license>
   <name>Calligra Sheets</name>
+  <name xml:lang="ar">كاليغرا شيت</name>
   <name xml:lang="ca">Sheets del Calligra</name>
   <name xml:lang="ca-valencia">Sheets de Calligra</name>
   <name xml:lang="cs">Calligra Sheets</name>
@@ -37,6 +38,7 @@
   <name xml:lang="zh-CN">Calligra Sheets</name>
   <name xml:lang="zh-TW">Calligra Sheets</name>
   <summary>Spreadsheet</summary>
+  <summary xml:lang="ar">جدول بيانات</summary>
   <summary xml:lang="bs">Tablica</summary>
   <summary xml:lang="ca">Full de càlcul</summary>
   <summary xml:lang="ca-valencia">Full de càlcul</summary>
@@ -77,6 +79,7 @@
       Calligra Sheets is a fully-featured calculation and spreadsheet tool.
       Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.
     </p>
+    <p xml:lang="ar">كاليغرا شيت هي أداة حاسوبية وجدول بيانات ذات ميزات كاملة. استخدمها لإنشاء وحساب جداول بيانات سريعة ومتنوعة متعلقة بالأعمال، مثل الكسب والإنفاق، وساعات عمل الموظفين، وغيرها.</p>
     <p xml:lang="bs">Calligra ListoviSheets je kompletno opremljen kalkulacijski i tabelarni alat. Koristite ga da brzo kreirate i izračunati različite poslovne vezane tabele, kao što su prihodi i rashodi, radno vrijeme, itd</p>
     <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="ca-valencia">Sheets de Calligra és una eina de full de càlcul plenament funcional. S'utilitza per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
@@ -111,6 +114,7 @@
     <p xml:lang="zh-CN">Calligra Sheets 是一款全功能的电子表格和计算统计程序。您可以使用它来快速创建电子表格并对数据进行各种计算处理，例如用度、工时等。</p>
     <p xml:lang="zh-TW">Calligra Sheets 是一個功能完善的計算與工作表工具。您可以使用它來快速建立並計算各種商業用工作表，像是收入與支出、員工工作時間等等。</p>
     <p>Features:</p>
+    <p xml:lang="ar">الميزات:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="ca-valencia">Característiques:</p>
@@ -148,6 +152,7 @@
     <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>Use shapes to take notes or mind maps</li>
+      <li xml:lang="ar">استخدم الأشكال لتدوين الملاحظات أو الخرائط الذهنية</li>
       <li xml:lang="bs">Koristite likove za uzimanje zabilješki ili mapa uma</li>
       <li xml:lang="ca">Usa formes per a prendre notes o mapes mentals</li>
       <li xml:lang="ca-valencia">Utilitza formes per a prendre notes o mapes mentals</li>
@@ -183,6 +188,7 @@
       <li xml:lang="zh-CN">插入各种图形来进行标记或制作思维导图</li>
       <li xml:lang="zh-TW">用元件來做備註或是製作心智圖</li>
       <li>Large range of pre-defined templates</li>
+      <li xml:lang="ar">نطاق واسع من القوالب المبدئية المعرّفة مسبقًا</li>
       <li xml:lang="bs">Širok opseg predefinisanih predložaka</li>
       <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
       <li xml:lang="ca-valencia">Àmplia gamma de plantilles predefinides</li>
@@ -217,6 +223,7 @@
       <li xml:lang="zh-CN">种类丰富的预制模板</li>
       <li xml:lang="zh-TW">種類廣泛的樣本</li>
       <li>Powerful and comprehensive formula list</li>
+      <li xml:lang="ar">قائمة صيغ قوية وشاملة</li>
       <li xml:lang="bs">Moćna i kompaktna lista formula</li>
       <li xml:lang="ca">Llista de fórmules potent i extensa</li>
       <li xml:lang="ca-valencia">Llista de fórmules potent i extensa</li>
@@ -251,6 +258,7 @@
       <li xml:lang="zh-CN">强大的和全面的公式列表</li>
       <li xml:lang="zh-TW">強大且完整的公式列表</li>
       <li>Work in a familiar environment</li>
+      <li xml:lang="ar">اعمل في بيئة مألوفة</li>
       <li xml:lang="bs">Rad u poznatom okruženju</li>
       <li xml:lang="ca">Treball en un entorn familiar</li>
       <li xml:lang="ca-valencia">Treball en un entorn familiar</li>
