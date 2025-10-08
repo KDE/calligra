@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-06 00:42+0000\n"
-"PO-Revision-Date: 2025-10-05 11:58+0400\n"
+"PO-Revision-Date: 2025-10-07 08:53+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -3714,10 +3714,9 @@ msgstr ""
 "سنة تصبح CONTINUOUS(1000;.1;1) أو $1105.17."
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
-msgstr "CONTINOUS(الأساسية;الفائدة;السنوات)"
+msgstr "CONTINUOUS(الأساسية;الفائدة;السنوات)"
 
 #: functions/financial.xml:173
 #, kde-format
