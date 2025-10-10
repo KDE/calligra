@@ -803,7 +803,7 @@ calligra_drop_product_on_bad_condition( FEATURE_RDF
     )
 
 calligra_drop_product_on_bad_condition( PART_SHEETS
-    EIGEN3_FOUND "Eigen devel not found"
+    Eigen3_FOUND "Eigen devel not found"
     )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
