@@ -1,10 +1,10 @@
-# Thomas Diehl <thd@kde.org>, 2002, 2003.
-# Burkhard Lück <lueck@hube-lueck.de>, 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014.
-# Oliver Dörr <digikam-de@doerr-privat.de>, 2006.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2006.
-# Jannick Kuhr <opensource@kuhr.org>, 2005, 2006, 2007, 2008, 2009.
-# Justus Seifert <justus.seifert@googlemail.com>, 2008.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010.
+# SPDX-FileCopyrightText: 2002, 2003 Thomas Diehl <thd@kde.org>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2006 Oliver Dörr <digikam-de@doerr-privat.de>
+# SPDX-FileCopyrightText: 2006 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2008 Justus Seifert <justus.seifert@googlemail.com>
+# SPDX-FileCopyrightText: 2010 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: KarbonTools\n"

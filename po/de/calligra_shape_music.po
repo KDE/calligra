@@ -1,7 +1,7 @@
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2008.
-# Burkhard Lück <lueck@hube-lueck.de>, 2007, 2011, 2014, 2015.
-# Markus Slopianka <markus.s@kdemail.net>, 2012.
-# Frederik Schwarzer <schwarzer@kde.org>, 2013.
+# SPDX-FileCopyrightText: 2007, 2008 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2007, 2011, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2012 Markus Slopianka <markus.s@kdemail.net>
+# SPDX-FileCopyrightText: 2013 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_music\n"

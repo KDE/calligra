@@ -1,6 +1,6 @@
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2008, 2009.
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2011, 2019.
-# Frederik Schwarzer <schwarzer@kde.org>, 2016.
+# SPDX-FileCopyrightText: 2007, 2008, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2009, 2011, 2019 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2016 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_paths\n"

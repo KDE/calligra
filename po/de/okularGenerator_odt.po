@@ -1,5 +1,5 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2014.
-# Frederik Schwarzer <schwarzer@kde.org>, 2016.
+# SPDX-FileCopyrightText: 2014 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2016 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: okularGenerator_odt\n"

@@ -1,5 +1,5 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2007, 2008, 2011.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010.
+# SPDX-FileCopyrightText: 2007, 2008, 2011 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_textediting_spellcheck\n"

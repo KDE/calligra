@@ -1,5 +1,5 @@
-# Frederik Schwarzer <schwarzer@kde.org>, 2011.
-# Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2015.
+# SPDX-FileCopyrightText: 2011 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2012, 2013, 2015 Burkhard Lück <lueck@hube-lueck.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-opener\n"
