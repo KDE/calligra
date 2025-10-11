@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2024 Alois.spitzbart <spitz234@hotmail.com>
-# Thomas Diehl <thd@kde.org>, 2002, 2003.
-# Stephan Johach <hunsum@gmx.de>, 2005.
-# Burkhard Lück <lueck@hube-lueck.de>, 2006, 2008, 2011, 2013, 2014.
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2009.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010.
+# SPDX-FileCopyrightText: 2002, 2003 Thomas Diehl <thd@kde.org>
+# SPDX-FileCopyrightText: 2005 Stephan Johach <hunsum@gmx.de>
+# SPDX-FileCopyrightText: 2006, 2008, 2011, 2013, 2014 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2007, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2010 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_formula\n"

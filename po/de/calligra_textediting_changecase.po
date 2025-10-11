@@ -1,4 +1,4 @@
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2009.
+# SPDX-FileCopyrightText: 2007, 2009 Jannick Kuhr <opensource@kuhr.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_textediting_changecase\n"

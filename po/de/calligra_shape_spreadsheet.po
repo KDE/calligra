@@ -1,5 +1,5 @@
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2011, 2014, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2011.
+# SPDX-FileCopyrightText: 2009, 2011, 2014, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010, 2011 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_spreadsheet\n"

@@ -1,4 +1,4 @@
-# Frederik Schwarzer <schwarzer@kde.org>, 2010.
+# SPDX-FileCopyrightText: 2010 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_plugin\n"

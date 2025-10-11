@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2024 Alois.spitzbart <spitz234@hotmail.com>
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2009.
+# SPDX-FileCopyrightText: 2007, 2009 Jannick Kuhr <opensource@kuhr.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets_solver\n"
