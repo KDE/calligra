@@ -3,14 +3,14 @@
 # Daniele Medri <madrid@linuxmeeting.net>, 2003.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2005, 2006, 2009.
 # Andrea Celli <andrea.celli@libero.it>, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011.
-# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2018, 2020, 2022, 2023, 2024 Vincenzo Reale <smart2128vr@gmail.com>
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2018, 2020, 2022, 2023, 2024, 2025 Vincenzo Reale <smart2128vr@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-06 00:42+0000\n"
-"PO-Revision-Date: 2024-08-24 10:51+0200\n"
+"PO-Revision-Date: 2025-10-07 09:15+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -3871,10 +3871,9 @@ msgstr ""
 "che ritorna €1105,17."
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
-msgstr "CONTINOUS(capitale_iniziale;interesse;anni)"
+msgstr "CONTINOUS(capitale;interesse;anni)"
 
 #: functions/financial.xml:173
 #, kde-format
