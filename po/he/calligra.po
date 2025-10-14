@@ -10,13 +10,13 @@
 # This translation is subject to the same Open Source
 # license as the program which it accompanies.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-07 00:40+0000\n"
-"PO-Revision-Date: 2025-01-24 09:23+0200\n"
+"PO-Revision-Date: 2025-10-09 13:15+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3303,7 +3303,7 @@ msgstr "נא לבחור את העצם להפנות אליו"
 #: rdf/KoDocumentRdf.cpp:594
 #, kde-format
 msgid "Reference"
-msgstr "הפנייה"
+msgstr "הפניה"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:238
 #, kde-format
@@ -3809,7 +3809,7 @@ msgstr "הפניית טקסט"
 #: text/InsertTextReferenceAction.cpp:31
 #, kde-format
 msgid "Please create an index to reference first."
-msgstr "נא ליצור מפתח להפנייה תחילה."
+msgstr "נא ליצור מפתח להפניה תחילה."
 
 #: text/InsertTextReferenceAction.cpp:40
 #, kde-format
