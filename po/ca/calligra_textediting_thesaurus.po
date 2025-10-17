@@ -2,11 +2,11 @@
 # Copyright (C) 2002-2021 This_file_is_part_of_KDE
 # This file is distributed under the same license as the thesaurus_tool package.
 #
-# Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2005, 2006.
-# Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2010, 2012, 2015, 2016, 2017, 2020, 2021.
-# Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2020.
+# SPDX-FileCopyrightText: 2002, 2003, 2005, 2006 Albert Astals Cid <aacid@kde.org>
+# SPDX-FileCopyrightText: 2006 Xavier Batlle i Pèlach <tevibp@wanadoo.es>
+# SPDX-FileCopyrightText: 2007, 2008, 2010, 2012, 2015, 2016, 2017, 2020, 2021 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"

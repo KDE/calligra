@@ -1,10 +1,10 @@
 # Translation of KarbonFilterEffects.po to Catalan
 # Copyright (C) 2002-2016 This_file_is_part_of_KDE
 #
-# Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
-# Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
-# Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
+# SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006 Albert Astals Cid <aacid@kde.org>
+# SPDX-FileCopyrightText: 2006 Xavier Batlle i Pèlach <tevibp@wanadoo.es>
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"

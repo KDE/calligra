@@ -2,8 +2,8 @@
 # Copyright (C) 2008-2016 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PictureShape package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2008.
-# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2012, 2014, 2015, 2016.
+# SPDX-FileCopyrightText: 2008 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2009, 2012, 2014, 2015, 2016 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
