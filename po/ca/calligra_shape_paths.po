@@ -2,8 +2,8 @@
 # Copyright (C) 2008-2018 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PathShapes package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2008.
-# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2016, 2018.
+# SPDX-FileCopyrightText: 2008 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2009, 2016, 2018 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"

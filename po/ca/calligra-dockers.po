@@ -2,9 +2,9 @@
 # Copyright (C) 2008-2023 This_file_is_part_of_KDE
 # This file is distributed under the same license as the koffice-dockers package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2010, 2011, 2013, 2014, 2016, 2019.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2023.
+# SPDX-FileCopyrightText: 2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2013, 2014, 2016, 2019 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
