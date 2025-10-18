@@ -2,9 +2,9 @@
 # Copyright (C) 2008-2016 This_file_is_part_of_KDE
 # This file is distributed under the same license as the SpellCheckPlugin package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2008, 2016.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2015.
+# SPDX-FileCopyrightText: 2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2008, 2016 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2015 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"

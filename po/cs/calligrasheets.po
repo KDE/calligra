@@ -3695,10 +3695,9 @@ msgid ""
 msgstr ""
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
-msgstr "CONTINUOUS(kapitál;úrok;roky)"
+msgstr ""
 
 #: functions/financial.xml:173
 #, kde-format

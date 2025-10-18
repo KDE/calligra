@@ -1,9 +1,9 @@
 # Translation of koconverter.po to Catalan (Valencian)
 # Copyright (C) 2002-2016 This_file_is_part_of_KDE
 #
-# Albert Astals Cid <aacid@kde.org>, 2002, 2004, 2005.
-# Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007.
-# Josep M. Ferrer <txemaq@gmail.com>, 2008, 2011, 2012, 2015, 2016.
+# SPDX-FileCopyrightText: 2002, 2004, 2005 Albert Astals Cid <aacid@kde.org>
+# SPDX-FileCopyrightText: 2006, 2007 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2008, 2011, 2012, 2015, 2016 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
