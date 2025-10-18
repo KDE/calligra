@@ -2,7 +2,7 @@
 # Copyright (C) 2008-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the FormulaShape package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
+# SPDX-FileCopyrightText: 2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
 # SPDX-FileCopyrightText: 2010, 2013, 2014, 2015, 2016, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""

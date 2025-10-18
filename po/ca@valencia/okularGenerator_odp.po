@@ -2,8 +2,8 @@
 # Copyright (C) 2011-2016 This_file_is_part_of_KDE
 # This file is distributed under the same license as the okularGenerator_odp package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2011.
-# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2016.
+# SPDX-FileCopyrightText: 2011 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2014, 2016 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"

@@ -2,9 +2,9 @@
 # Copyright (C) 2011-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the braindump package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2011.
+# SPDX-FileCopyrightText: 2011 Rafael Carreras <rcarreras@caliu.cat>
 # SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2016, 2020, 2024 Josep M. Ferrer <txemaq@gmail.com>
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013.
+# SPDX-FileCopyrightText: 2013 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
@@ -276,7 +276,7 @@ msgstr "Visualització detallada"
 #: src/SectionsBoxDock.cpp:59
 #, kde-format
 msgid "Thumbnail View"
-msgstr "Visualització de miniatures"
+msgstr "Vista de miniatures"
 
 #: src/SectionsBoxDock.cpp:70
 #, kde-format
@@ -328,18 +328,3 @@ msgstr "Agrupa les formes"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Desagrupa les formes"
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
-
-#~ msgid "Use a cache copy"
-#~ msgstr "Utilitza una còpia de la memòria cau"
-
-#~ msgid "Web Shape"
-#~ msgstr "Forma de web"
-
-#~ msgid "A web shape"
-#~ msgstr "Una forma de web"
-
-#~ msgid "Web shape editing"
-#~ msgstr "Edició de formes web"

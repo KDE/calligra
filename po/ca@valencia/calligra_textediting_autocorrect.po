@@ -2,10 +2,10 @@
 # Copyright (C) 2008-2022 This_file_is_part_of_KDE
 # This file is distributed under the same license as the AutoCorrectPlugin package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2008.
-# Josep M. Ferrer <txemaq@gmail.com>, 2008, 2010, 2013, 2014, 2016, 2018, 2021, 2022.
-# Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2015, 2020.
+# SPDX-FileCopyrightText: 2008 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2008, 2010, 2013, 2014, 2016, 2018, 2021, 2022 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2009 Manuel Tortosa Moreno <manutortosa@gmail.com>
+# SPDX-FileCopyrightText: 2015, 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"

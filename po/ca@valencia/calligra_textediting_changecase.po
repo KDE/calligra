@@ -2,8 +2,8 @@
 # Copyright (C) 2008-2021 This_file_is_part_of_KDE
 # This file is distributed under the same license as the ChangeCasePlugin package.
 #
-# Rafael Carreras <rcarreras@caliu.cat>, 2008.
-# Josep M. Ferrer <txemaq@gmail.com>, 2016, 2021.
+# SPDX-FileCopyrightText: 2008 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2016, 2021 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
