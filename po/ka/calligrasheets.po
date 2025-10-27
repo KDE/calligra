@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-06 00:42+0000\n"
-"PO-Revision-Date: 2025-10-06 10:39+0200\n"
+"PO-Revision-Date: 2025-10-26 11:48+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -5225,6 +5225,8 @@ msgid ""
 "The ISLOGICAL() function returns True if the parameter is a boolean value. "
 "Otherwise it returns False."
 msgstr ""
+"ფუნქცია ISLOGICAL() აბრუნებს ჭეშმარიტს, თუ პარამეტრი ლოგიკური მნიშვნელობაა. "
+"სხვა შემთხვევაში აბრუნებს ცრუს."
 
 #: functions/information.xml:73
 #, kde-format
@@ -5247,6 +5249,8 @@ msgid ""
 "The ISBLANK() function returns True if the parameter is empty. Otherwise it "
 "returns False."
 msgstr ""
+"ფუნქცია ISBLANK() აბრუნებს ჭეშმარიტს, თუ პარამეტრი ცარიელია. სხვა "
+"შემთხვევაში აბრუნებს ცრუს."
 
 #: functions/information.xml:88
 #, kde-format
@@ -5768,6 +5772,9 @@ msgid ""
 "The XOR() function returns False if the number of True values is even. "
 "Otherwise it returns True. It returns an error if any argument is an error."
 msgstr ""
+"ფუნქცია XOR() აბრუნებს ცრუს, თუ ჭეშმარიტი მნიშვნელობების რაოდენობა ლუწია. "
+"სხვა შემთხვევაში აბრუნებს ჭეშმარიტს. აბრუნებს შეცდომას, თუ ნებისმიერი "
+"არგუმენტი შეცდომას შეიცავს."
 
 #: functions/logic.xml:176
 #, kde-format
@@ -5795,6 +5802,8 @@ msgid ""
 "The NOT() function returns True if the value is False and returns False if "
 "the value is True. It returns an error if the input in an error."
 msgstr ""
+"ფუნქცია NOT() აბრუნებს ჭეშმარიტს, თუ მნიშვნელობა ცრუა და აბრუნებს ცრუს, თუ "
+"მნიშვნელობა ჭეშმარიტია. აბრუნებს შეცდომას, თუ არგუმენტი შეცდომაა."
 
 #: functions/logic.xml:191
 #, kde-format
@@ -5833,6 +5842,8 @@ msgid ""
 "second parameter if the condition is True. Otherwise it returns the third "
 "parameter (which defaults to being false)."
 msgstr ""
+"ფუნქცია IF() პირობაა. ეს ფუნქცია აბრუნებს მეორე პარამეტრს, თუ პირობა "
+"ჭეშმარიტია. თუ არა, აბრუნებს მესამეს (რაც ნაგულისხმევად ცრუა)."
 
 #: functions/logic.xml:214
 #, kde-format
@@ -5873,6 +5884,8 @@ msgid ""
 "IFERROR(A1;A2) returns the content of A1 if that content is not an error-"
 "value else the content of A2 is returned."
 msgstr ""
+"IFERROR(A1;A2) აბრუნებს A1-ის შემცველობას, თუ ის შეცდომას არ შეიცავს. "
+"წინააღმდეგ შემთხვევაში დაბრუნდება A2-ის შემცველობა."
 
 #: functions/logic.xml:249
 #, kde-format
@@ -5891,6 +5904,8 @@ msgid ""
 "IFNA(A1;A2) returns the content of A1 if that content is not an #N/A error-"
 "value else the content of A2 is returned."
 msgstr ""
+"IFNA(A1;A2) აბრუნებს A1-ის შემცველობას, თუ ის #N/A-ს არ შეიცავს. წინააღმდეგ "
+"შემთხვევაში დაბრუნდება A2-ის შემცველობა."
 
 #: functions/math.xml:5
 #, kde-format
@@ -6068,7 +6083,7 @@ msgstr ""
 #: functions/math.xml:121
 #, kde-format
 msgid "EPS() is so small that Calligra Sheets displays 1+eps() as 1"
-msgstr ""
+msgstr "EPS() ისეთი მცირეა, რომ Calligra Sheets 1+eps()-ს 1-ად აჩვენებს"
 
 #: functions/math.xml:122
 #, kde-format
@@ -6153,6 +6168,8 @@ msgid ""
 "The TRUNC() function truncates a numeric value to a certain precision. If "
 "the precision is omitted 0 is assumed."
 msgstr ""
+"ფუნქცია TRUNC() წაკვეთავს რიცხვით მნიშვნელობას გარკვეული სიზუსტით. თუ "
+"სიზუსტე მითითებული არაა, ნაგულისხმევია 0."
 
 #: functions/math.xml:195
 #, kde-format
@@ -6294,6 +6311,9 @@ msgid ""
 "can count using a range: COUNT(A1:B5) or using a list of values like "
 "COUNT(12;5;12.5)."
 msgstr ""
+"ეს ფუნქცია აბრუნებს მთელი ან წილადი რიცხვების რაოდენობას გადაცემულ "
+"არგუმენტებში. შეგიძლიათ დათვალოთ როგორც შუალედის გადაცემით: COUNT(A1:B5), "
+"ისე მნიშვნელობების სიით: COUNT(12;5;12.5)."
 
 #: functions/math.xml:297
 #, kde-format
@@ -6369,6 +6389,8 @@ msgid ""
 "The COUNTIF() function returns the number of cells in the given range that "
 "meet the given criteria."
 msgstr ""
+"ფუნქცია COUNTIF() აბრუნებს უჯრედების რაოდენობას მითითებულ შუალედში, რომლებიც "
+"მითითებულ პირობას აკმაყოფილებენ."
 
 #: functions/math.xml:353
 #, kde-format
@@ -6444,6 +6466,9 @@ msgid ""
 "You can calculate the sum of a range SUM(A1:B5) or a list of values like "
 "SUM(12;5;12.5)."
 msgstr ""
+"ფუნქცია SUM() პარამეტრებად გადაცემული მნიშვნელობების ჯამს გამოთვლის. "
+"შეგიძლიათ, გამოთვალოთ შუალედის ჯამი (SUM(A1:B5)), ან მნიშვნელობების სია "
+"(SUM(12;5;12.5))."
 
 #: functions/math.xml:399 functions/math.xml:417
 #, kde-format
@@ -6633,6 +6658,8 @@ msgid ""
 "The MAX() function returns the largest value given in the parameters. String "
 "and logical values are ignored."
 msgstr ""
+"ფუნქცია MAX() პარამეტრებიდან უდიდეს მნიშვნელობას აბრუნებს. სტრიქონები და "
+"ლოგიკური მნიშვნელობები დაიგნორდება."
 
 #: functions/math.xml:542
 #, kde-format
@@ -6660,6 +6687,8 @@ msgid ""
 "The MAXA() function returns the largest value given in the parameters. TRUE "
 "evaluates to 1, FALSE evaluates to 0. String values are ignored."
 msgstr ""
+"ფუნქცია MAXA() პარამეტრებიდან უდიდესს აბრუნებს. TRUE ნიშნავს 1-ს, FALSE - 0-"
+"ს. სტრიქონები დაიგნორდება."
 
 #: functions/math.xml:563
 #, kde-format
@@ -6687,6 +6716,8 @@ msgid ""
 "The MIN() function returns the smallest value given in the parameters. "
 "String and logical values are ignored."
 msgstr ""
+"ფუნქცია MINA() პარამეტრებიდან უმცირეს მნიშვნელობას აბრუნებს. სტრიქონები და "
+"ლოგიკური მნიშვნელობები დაიგნორდება."
 
 #: functions/math.xml:584
 #, kde-format
@@ -6714,6 +6745,8 @@ msgid ""
 "The MINA() function returns the smallest value given in the parameters. TRUE "
 "evaluates to 1, FALSE to 0. String values are ignored."
 msgstr ""
+"ფუნქცია MINA() პარამეტრებიდან უმცირესს აბრუნებს. TRUE ნიშნავს 1-ს, FALSE - 0-"
+"ს. სტრიქონები დაიგნორდება."
 
 #: functions/math.xml:605
 #, kde-format
@@ -6991,6 +7024,8 @@ msgid ""
 "The CEIL() function rounds x up to the nearest integer which is greater than "
 "the input, returning that value as a double."
 msgstr ""
+"ფუნქცია CEIL() ამრგვალებს x-ს უახლოეს მთელ რიცხვამდე, რომელიც შეყვანილ "
+"რიცხვზე დიდია და აბრუნებს იმ მნიშვნელობას ორმაგ რიცხვად."
 
 #: functions/math.xml:837
 #, kde-format
@@ -7737,6 +7772,8 @@ msgid ""
 "Returns the number of areas in the reference string. An area can be asingle "
 "cell or a set of cells."
 msgstr ""
+"აბრუნებს არეების რაოდენობას მიმართვის სტრიქონში. არე შეგიძლება, ერთი ან მეტი "
+"უჯრედი იყოს."
 
 #: functions/reference.xml:53
 #, kde-format
@@ -7757,7 +7794,7 @@ msgstr "AREAS((A1; A2:A4)) აბრუნებს 2"
 #, kde-format
 msgid ""
 "Returns information about position, formatting or contents in a reference."
-msgstr ""
+msgstr "აბრუნებს ინფორმაცია მდებარეობის ან დაფორმატების შესახებ მიმართვაში."
 
 #: functions/reference.xml:72
 #, kde-format
@@ -7834,7 +7871,7 @@ msgstr "COLUMN(D2) აბრუნებს 4"
 #: functions/reference.xml:121
 #, kde-format
 msgid "The COLUMNS function returns the number of columns in a reference."
-msgstr ""
+msgstr "ფუნქცია COLUMNS აბრუნებს სვეტების რაოდენობას მიმართვაში."
 
 #: functions/reference.xml:122
 #, kde-format
@@ -7867,6 +7904,9 @@ msgid ""
 "If a range is given, returns value stored in a given row/column. If one cell "
 "is given, which contains an array, then one element of the array is returned."
 msgstr ""
+"თუ მითითებულია შუალედი, აბრუნებს მნიშვნელობას, რომელიც მითითებულ მწკრივში/"
+"სვეტშია დამახსოვრებული. თუ მითითებულია ერთი უჯრედი, რომელიც მასივს შეიცავს, "
+"დაბრუნდება მასივის ერთი ელემენტი."
 
 #: functions/reference.xml:146
 #, kde-format
@@ -7889,6 +7929,7 @@ msgid ""
 "INDEX(A1;2;2), if A1 is a result of array calculation, returns its (2,2) "
 "element."
 msgstr ""
+"INDEX(A1;2;2), თუ A1 მასივის გამოთვლის შედეგია აბრუნებს მის (2,2) ელემენტს."
 
 #: functions/reference.xml:164
 #, kde-format
@@ -7896,6 +7937,8 @@ msgid ""
 "Returns the content of the cell specified by the reference text. The second "
 "parameter is optional."
 msgstr ""
+"აბრუნებს მიმართვის ტექსტის მიერ მითითებული უჯრედის შემცველობას. მეორე "
+"პარამეტრი სავალდებულო არაა."
 
 #: functions/reference.xml:165
 #, kde-format
@@ -7960,6 +8003,8 @@ msgid ""
 "Returns the sheet number of the reference or the string representing a sheet "
 "name."
 msgstr ""
+"აბრუნებს მიმართვის ფურცლის ნომერს, ან სტრიქონს, რომელიც ფურცლის სახელს "
+"წარმოადგენს."
 
 #: functions/reference.xml:214
 #, kde-format
@@ -8553,6 +8598,7 @@ msgid ""
 "The CORREL() function calculates the correlation coefficient of two cell "
 "ranges."
 msgstr ""
+"ფუნქცია CORREL() ორი უჯრედების შუალედის კორელაციის კოეფიციენტს გამოთვლის."
 
 #: functions/statistical.xml:249
 #, kde-format
@@ -8661,7 +8707,7 @@ msgstr "ფუნქცია FDIST() f-განაწილებას აბ
 #: functions/statistical.xml:346
 #, kde-format
 msgid "FDIST(number;degrees_freedom_1;degrees_freedom_2)"
-msgstr ""
+msgstr "FDIST(რიცხვი;თავისუფლების_ხარისხი_1;თავისუფლების_ხარისხი_2)"
 
 #: functions/statistical.xml:347
 #, kde-format
@@ -9026,6 +9072,7 @@ msgstr "მდებარეობა (უდიდესიდან)"
 #, kde-format
 msgid "The LARGE() function returns the k-th largest value from the data set."
 msgstr ""
+"LARGE() ფუნქცია აბრუნებს k-ე უმცირეს მნიშვნელობას მონაცემთა ნაკრებიდან."
 
 #: functions/statistical.xml:677
 #, kde-format
@@ -9045,7 +9092,7 @@ msgstr "ფუნქცია LEGACYDIST() f-განაწილებას �
 #: functions/statistical.xml:699
 #, kde-format
 msgid "LEGACYFDIST(number;degrees_freedom_1;degrees_freedom_2)"
-msgstr ""
+msgstr "LEGACYFDIST(რიცხვი;თავისუფლების_ხარისხი_1;თავისუფლების_ხარისხი_2)"
 
 #: functions/statistical.xml:700
 #, kde-format
@@ -10029,7 +10076,7 @@ msgstr "TTEST(x; y; mode; type)"
 #: functions/statistical.xml:1518
 #, kde-format
 msgid "The VAR() function calculates the variance based on a sample."
-msgstr ""
+msgstr "VAR() ითვლის დისპერსიას ნიმუშზე დაყრდნობით."
 
 #: functions/statistical.xml:1519
 #, kde-format
@@ -11064,6 +11111,8 @@ msgid ""
 "By applying the encryption function again to the resulting text, you can "
 "decrypt the text."
 msgstr ""
+"შედეგად მიღებულ ტექსტზე დაშიფვრის ფუნქციის გამოყენებით შეგიძლიათ, გაშიფროთ "
+"ეს ტექსტი."
 
 #: functions/text.xml:592
 #, kde-format
@@ -11085,7 +11134,7 @@ msgstr "ROT13(\"XFcernq\") აბრუნებს \"KSpread\""
 msgid ""
 "The TOGGLE() function changes lowercase characters to uppercase and "
 "uppercase characters to lowercase."
-msgstr ""
+msgstr "TOGGLE() ფუნქცია შეცვლის პატარა ასოებს დიდით და დიდ ასოებს პატარით."
 
 #: functions/text.xml:607
 #, kde-format
@@ -12887,6 +12936,8 @@ msgid ""
 "If this box is checked the column headings will show as numbers rather than "
 "as letters. Letters are default."
 msgstr ""
+"თუ ეს თოლია დასმულია, სვეტის სათაურები რიცხვებით სახით გამოჩნდება, ასოების "
+"მაგიერ. ასოები ნაგულისხმევია."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showColumnAsNumbersCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:173
@@ -12916,6 +12967,8 @@ msgid ""
 "If checked, the grid (the cell limits) will be shown. This is the default. "
 "If unchecked, the grid will be hidden."
 msgstr ""
+"თუ ჩართულია, ნაჩვენებია ბადე (უჯრედის ლიმიტები). ეს ნაგულისხმევია. თუ "
+"გამორთავთ, ბადე დაიმალება."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:193
@@ -12930,6 +12983,8 @@ msgid ""
 "This setting controls whether formulae are recalculated automatically when "
 "the value of any cell they refer to changes."
 msgstr ""
+"ეს პარამეტრი აკონტროლებს, ხდება თუ არა ფორმულების თავიდან გამოთვლა "
+"ავტომატურად, როცა ნებისმიერი უჯრედი, რომლებსაც ისინი მიმართავენ, შეიცვლება."
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoCalcCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:203
@@ -14489,6 +14544,7 @@ msgstr "სტილი მემკვიდრეობით საკუთ�
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
 msgstr ""
+"სტილის მემკვიდრეობით მიღება '%1'-დან შეუძლებელია რეკურსიული მიმართვის გამო."
 
 #: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format
@@ -14674,6 +14730,8 @@ msgid ""
 "This hides the cell content and works only when the sheet is protected. "
 "Whether the cell itself is protected or not does not matter."
 msgstr ""
+"ეს დამალავს უჯრედის შემცველობას და მხოლოდ მაშინ მუშაობს, როცა ფურცელი "
+"დაცულია. უჯრედი დაცულია თუ არა, მნიშვნელობა არ აქვს."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
 #: ui/dialogs/ProtectionWidget.ui:72
