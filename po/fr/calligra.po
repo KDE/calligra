@@ -5264,7 +5264,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr "<qt>Affiche la boîte des options d'étiquette.</qt>"
+msgstr "<qt>Affiche la boite des options d'étiquette.</qt>"
 
 #: widgets/KoTagToolButton.cpp:60
 #, kde-format

@@ -1609,7 +1609,7 @@ msgid ""
 msgstr ""
 "(Dés)activer l'affichage des bordures. <br/><br/> Les bordures ne sont "
 "jamais imprimées. Cette option est utile pour voir comment le document va "
-"apparaître sur la page imprimée."
+"apparaitre sur la page imprimée."
 
 #: part/KWView.cpp:342
 #, kde-format

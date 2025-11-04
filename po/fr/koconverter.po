@@ -85,12 +85,12 @@ msgstr "Créer une sauvegarde du fichier de destination"
 #: calligraconverter.cpp:196
 #, kde-format
 msgid "Batch mode: do not show dialogs"
-msgstr "Mode de traitement par lots : ne pas afficher de boîtes de dialogue"
+msgstr "Mode de traitement par lots : ne pas afficher de boites de dialogue"
 
 #: calligraconverter.cpp:197
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
-msgstr "Mode interactif : afficher des boîtes de dialogue (par défaut)"
+msgstr "Mode interactif : afficher des boites de dialogue (par défaut)"
 
 #: calligraconverter.cpp:198
 #, kde-format

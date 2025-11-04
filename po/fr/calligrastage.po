@@ -1760,7 +1760,7 @@ msgstr "Diagonale"
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Four Box"
-msgstr "4 boîtes"
+msgstr "4 boites"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 msgid "Corners In"
@@ -1953,55 +1953,55 @@ msgstr "Triangle"
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box Snakes"
-msgstr "Serpents boîte"
+msgstr "Serpents boite"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:34
 msgid "Two Box Top In"
-msgstr "Fermeture avec 2 boîtes en partant du haut"
+msgstr "Fermeture avec 2 boites en partant du haut"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:35
 msgid "Two Box Bottom In"
-msgstr "Fermeture avec 2 boîtes en partant du bas"
+msgstr "Fermeture avec 2 boites en partant du bas"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
 msgid "Two Box Left In"
-msgstr "Fermeture avec 2 boîtes en partant de gauche"
+msgstr "Fermeture avec 2 boites en partant de gauche"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
 msgid "Two Box Right In"
-msgstr "Fermeture avec 2 boîtes en partant de droite"
+msgstr "Fermeture avec 2 boites en partant de droite"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
 msgid "Four Box Vertical In"
-msgstr "Fermeture avec 4 boîtes en vertical"
+msgstr "Fermeture avec 4 boites en vertical"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
 msgid "Four Box Horizontal In"
-msgstr "Fermeture avec 4 boîtes en horizontal"
+msgstr "Fermeture avec 4 boites en horizontal"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
 msgid "Two Box Top Out"
-msgstr "Ouverture avec 2 boîtes vers le haut"
+msgstr "Ouverture avec 2 boites vers le haut"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
 msgid "Two Box Bottom Out"
-msgstr "Ouverture avec 2 boîtes vers le bas"
+msgstr "Ouverture avec 2 boites vers le bas"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
 msgid "Two Box Left Out"
-msgstr "Ouverture avec 2 boîtes à partir de la gauche"
+msgstr "Ouverture avec 2 boites à partir de la gauche"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
 msgid "Two Box Right Out"
-msgstr "Ouverture avec 2 boîtes par la droite"
+msgstr "Ouverture avec 2 boites par la droite"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
 msgid "Four Box Vertical Out"
-msgstr "Ouverture avec 4 boîtes en vertical"
+msgstr "Ouverture avec 4 boites en vertical"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
 msgid "Four Box Horizontal Out"
-msgstr "Ouverture avec 4 boîtes en vertical"
+msgstr "Ouverture avec 4 boites en vertical"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
 #, kde-format
