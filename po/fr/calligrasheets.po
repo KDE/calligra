@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-06 00:42+0000\n"
-"PO-Revision-Date: 2025-04-23 18:17+0200\n"
+"PO-Revision-Date: 2025-10-07 07:41+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n:
@@ -224,7 +224,7 @@ msgstr "Chaîne représentant une date (comme « 22/02/2012 »)"
 #: engine/FunctionDescription.cpp:52
 #, kde-format
 msgid "A range of strings"
-msgstr "Une plage de chaînes"
+msgstr "Une plage de chaines"
 
 #: engine/FunctionDescription.cpp:54
 #, kde-format
@@ -251,7 +251,7 @@ msgstr "Une plage de valeurs quelconques"
 msgid ""
 "A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")"
 msgstr ""
-"Une chaîne représentant une plage de dates (comme « 22/02/2012 » - "
+"Une chaine représentant une plage de dates (comme « 22/02/2012 » - "
 "« 22/05/2012 »)"
 
 #: engine/FunctionDescription.cpp:165
@@ -520,8 +520,8 @@ msgid ""
 "This method is intended for using a boolean in methods which require a string"
 msgstr ""
 "La fonction BOOL2STRING () réalise la conversion d'une valeur binaire donnée "
-"en une chaîne de caractères. Cette méthode permet l'utilisation d'une valeur "
-"booléenne pour des fonctions traitant une chaîne de caractères."
+"en une chaine de caractères. Cette méthode permet l'utilisation d'une valeur "
+"booléenne pour des fonctions traitant une chaine de caractères."
 
 #: functions/conversion.xml:16
 #, kde-format
@@ -610,7 +610,7 @@ msgstr "BOOL2INT (faux) renvoie 0"
 #: functions/conversion.xml:60 functions/conversion.xml:77
 #, kde-format
 msgid "Number to convert into string"
-msgstr "Nombre à convertir en chaîne"
+msgstr "Nombre à convertir en chaine"
 
 #: functions/conversion.xml:64
 #, kde-format
@@ -620,8 +620,8 @@ msgid ""
 "function should rarely be needed."
 msgstr ""
 "La fonction NUM2STRING () réalise la conversion d'un nombre donné en une "
-"chaîne de caractères. Veuillez noter que Calligra Sheets peut convertir "
-"automatiquement les nombres en chaînes lorsque nécessaire. Pour cette "
+"chaine de caractères. Veuillez noter que Calligra Sheets peut convertir "
+"automatiquement les nombres en chaines lorsque nécessaire. Pour cette "
 "raison, cette fonction devrait n'être utilisée que très rarement."
 
 #: functions/conversion.xml:65
@@ -651,12 +651,12 @@ msgid ""
 "same as the NUM2STRING function."
 msgstr ""
 "La fonction STRING () réalise la conversion d'un nombre entier donné en une "
-"chaîne de caractères. Elle fait la même chose que la fonction NUM2STRING."
+"chaine de caractères. Elle fait la même chose que la fonction NUM2STRING."
 
 #: functions/conversion.xml:90
 #, kde-format
 msgid "A one character string to convert"
-msgstr "Une chaîne d'un caractère à convertir"
+msgstr "Une chaine d'un caractère à convertir"
 
 #: functions/conversion.xml:94
 #, kde-format
@@ -2379,7 +2379,7 @@ msgid ""
 "target base from 2 to 36."
 msgstr ""
 "La fonction BASE () convertit un nombre d'une base 10 en une valeur de "
-"chaîne dans une base cible entre 2 et 36."
+"chaine dans une base cible entre 2 et 36."
 
 #: functions/engineering.xml:24
 #, kde-format
@@ -3026,13 +3026,13 @@ msgstr "Nombre complexe"
 #, kde-format
 msgid "The IMAGINARY(string) returns the imaginary coefficient of a complex."
 msgstr ""
-"La fonction IMAGINARY (chaîne) renvoie le coefficient imaginaire d'un nombre "
+"La fonction IMAGINARY (chaine) renvoie le coefficient imaginaire d'un nombre "
 "complexe."
 
 #: functions/engineering.xml:423
 #, kde-format
 msgid "IMAGINARY(string)"
-msgstr "IMAGINARY (chaîne)"
+msgstr "IMAGINARY (chaine)"
 
 #: functions/engineering.xml:424
 #, kde-format
@@ -3048,12 +3048,12 @@ msgstr "IMAGINARY (« 1,2 ») renvoie 0 "
 #, kde-format
 msgid "The IMREAL(string) returns the real coefficient of a complex."
 msgstr ""
-"La fonction IMREAL (chaîne) renvoie le coefficient réel d'un nombre complexe."
+"La fonction IMREAL (chaine) renvoie le coefficient réel d'un nombre complexe."
 
 #: functions/engineering.xml:438
 #, kde-format
 msgid "IMREAL(string)"
-msgstr "IMREAL (chaîne)"
+msgstr "IMREAL (chaine)"
 
 #: functions/engineering.xml:439
 #, kde-format
@@ -3068,12 +3068,12 @@ msgstr "IMREAL (« 1,2i ») renvoie 0 "
 #: functions/engineering.xml:452
 #, kde-format
 msgid "The IMCOS(string) returns the cosine of a complex number."
-msgstr "La fonction IMCOS (chaîne) renvoie le cosinus d'un nombre complexe."
+msgstr "La fonction IMCOS (chaine) renvoie le cosinus d'un nombre complexe."
 
 #: functions/engineering.xml:453
 #, kde-format
 msgid "IMCOS(string)"
-msgstr "IMCOS (chaîne)"
+msgstr "IMCOS (chaine)"
 
 #: functions/engineering.xml:454
 #, kde-format
@@ -3089,13 +3089,13 @@ msgstr "La fonction IMCOS (« 12i ») renvoie 81 377,4 "
 #, kde-format
 msgid "The IMCOSH(string) returns the hyperbolic cosine of a complex number."
 msgstr ""
-"La fonction IMCOSH (chaîne) renvoie le cosinus hyperbolique d'un nombre "
+"La fonction IMCOSH (chaine) renvoie le cosinus hyperbolique d'un nombre "
 "complexe."
 
 #: functions/engineering.xml:468
 #, kde-format
 msgid "IMCOSH(string)"
-msgstr "IMCOSH (chaîne)"
+msgstr "IMCOSH (chaine)"
 
 #: functions/engineering.xml:469
 #, kde-format
@@ -3110,12 +3110,12 @@ msgstr "La fonction IMCOSH (« 12i ») renvoie 0.84358 "
 #: functions/engineering.xml:482
 #, kde-format
 msgid "The IMCOT(string) returns the cotangent of a complex number."
-msgstr "La fonction IMCOT (chaîne) renvoie le cotangente d'un nombre complexe."
+msgstr "La fonction IMCOT (chaine) renvoie le cotangente d'un nombre complexe."
 
 #: functions/engineering.xml:483
 #, kde-format
 msgid "IMCOT(string)"
-msgstr "IMCOT (chaîne)"
+msgstr "IMCOT (chaine)"
 
 #: functions/engineering.xml:484
 #, kde-format
@@ -3125,12 +3125,12 @@ msgstr "La fonction IMCOT (« 1+i ») renvoie « 0,83373-0,988898i »"
 #: functions/engineering.xml:496
 #, kde-format
 msgid "The IMCSC(string) returns the cosecant of a complex number."
-msgstr "La fonction IMCSC (chaîne) renvoie la cosécante d'un nombre complexe."
+msgstr "La fonction IMCSC (chaine) renvoie la cosécante d'un nombre complexe."
 
 #: functions/engineering.xml:497
 #, kde-format
 msgid "IMCSC(string)"
-msgstr "IMCSC (chaîne)"
+msgstr "IMCSC (chaine)"
 
 #: functions/engineering.xml:498
 #, kde-format
@@ -3141,13 +3141,13 @@ msgstr "La fonction IMCSC (« 1+i ») renvoie « 0.27175+1.08392i »"
 #, kde-format
 msgid "The IMCSCH(string) returns the hyperbolic cosecant of a complex number."
 msgstr ""
-"La fonction IMCSCH (chaîne) renvoie la cosécante hyperbolique d'un nombre "
+"La fonction IMCSCH (chaine) renvoie la cosécante hyperbolique d'un nombre "
 "complexe."
 
 #: functions/engineering.xml:511
 #, kde-format
 msgid "IMCSCH(string)"
-msgstr "IMCSCH (chaîne)"
+msgstr "IMCSCH (chaine)"
 
 #: functions/engineering.xml:512
 #, kde-format
@@ -3157,12 +3157,12 @@ msgstr "La fonction IMCSCH (« 1+i ») renvoie « 0,83373-0,988898i »"
 #: functions/engineering.xml:524
 #, kde-format
 msgid "The IMSEC(string) returns the secant of a complex number."
-msgstr "La fonction IMSEC (chaîne) renvoie la sécante d'un nombre complexe."
+msgstr "La fonction IMSEC (chaine) renvoie la sécante d'un nombre complexe."
 
 #: functions/engineering.xml:525
 #, kde-format
 msgid "IMSEC(string)"
-msgstr "IMSEC (chaîne)"
+msgstr "IMSEC (chaine)"
 
 #: functions/engineering.xml:526
 #, kde-format
@@ -3173,13 +3173,13 @@ msgstr "La fonction IMSEC (« 1+i ») renvoie « 0.83373+0.988898i »"
 #, kde-format
 msgid "The IMSECH(string) returns the hyperbolic secant of a complex number."
 msgstr ""
-"La fonction IMSECH (chaîne) renvoie la sécante hyperbolique d'un nombre "
+"La fonction IMSECH (chaine) renvoie la sécante hyperbolique d'un nombre "
 "complexe."
 
 #: functions/engineering.xml:539
 #, kde-format
 msgid "IMSECH(string)"
-msgstr "IMSECH (chaîne)"
+msgstr "IMSECH (chaine)"
 
 #: functions/engineering.xml:540
 #, kde-format
@@ -3189,12 +3189,12 @@ msgstr "La fonction IMSECH (« 1+i ») renvoie « 0,83373-0,988898i »"
 #: functions/engineering.xml:552
 #, kde-format
 msgid "The IMSIN(string) function returns the sine of a complex number."
-msgstr "La fonction IMSIN (chaîne) renvoie le sinus d'un nombre complexe."
+msgstr "La fonction IMSIN (chaine) renvoie le sinus d'un nombre complexe."
 
 #: functions/engineering.xml:553
 #, kde-format
 msgid "IMSIN(string)"
-msgstr "IMSIN (chaîne)"
+msgstr "IMSIN (chaine)"
 
 #: functions/engineering.xml:554
 #, kde-format
@@ -3211,13 +3211,13 @@ msgstr "La fonction IMSIN (« 1,2 ») renvoie -0,536573 "
 msgid ""
 "The IMSINH(string) function returns the hyperbolic sine of a complex number."
 msgstr ""
-"La fonction IMSINH (chaîne) renvoie le sinus hyperbolique d'un nombre "
+"La fonction IMSINH (chaine) renvoie le sinus hyperbolique d'un nombre "
 "complexe."
 
 #: functions/engineering.xml:568
 #, kde-format
 msgid "IMSINH(string)"
-msgstr "IMSINH (chaîne)"
+msgstr "IMSINH (chaine)"
 
 #: functions/engineering.xml:569
 #, kde-format
@@ -3232,12 +3232,12 @@ msgstr "IMSINH (« 1,2 ») renvoie 1,50946 "
 #: functions/engineering.xml:582
 #, kde-format
 msgid "The IMTAN(string) function returns the tangent of a complex number."
-msgstr "La fonction IMTAN (chaîne) renvoie la tangente d'un nombre complexe."
+msgstr "La fonction IMTAN (chaine) renvoie la tangente d'un nombre complexe."
 
 #: functions/engineering.xml:583
 #, kde-format
 msgid "IMTAN(string)"
-msgstr "IMTAN (chaîne)"
+msgstr "IMTAN (chaine)"
 
 #: functions/engineering.xml:584
 #, kde-format
@@ -3255,13 +3255,13 @@ msgid ""
 "The IMTANH(string) function returns the hyperbolic tangent of a complex "
 "number."
 msgstr ""
-"La fonction IMTAN (chaîne) renvoie la tangente hyperbolique d'un nombre "
+"La fonction IMTAN (chaine) renvoie la tangente hyperbolique d'un nombre "
 "complexe."
 
 #: functions/engineering.xml:598
 #, kde-format
 msgid "IMTANH(string)"
-msgstr "IMTAN (chaîne)"
+msgstr "IMTAN (chaine)"
 
 #: functions/engineering.xml:599
 #, kde-format
@@ -3277,12 +3277,12 @@ msgstr "La fonction IMTANH (« 1.2 ») renvoie 0,83365"
 #, kde-format
 msgid "The IMEXP(string) returns the exponential of a complex number."
 msgstr ""
-"La fonction IMEXP (chaîne) renvoie l'exponentielle d'un nombre complexe."
+"La fonction IMEXP (chaine) renvoie l'exponentielle d'un nombre complexe."
 
 #: functions/engineering.xml:613
 #, kde-format
 msgid "IMEXP(string)"
-msgstr "IMEXP (chaîne)"
+msgstr "IMEXP (chaine)"
 
 #: functions/engineering.xml:614
 #, kde-format
@@ -3298,12 +3298,12 @@ msgstr "La fonction IMEXP (« 12i ») renvoie « 0,843854-0,536573i » "
 #, kde-format
 msgid "The IMLN(string) returns the natural logarithm of a complex number."
 msgstr ""
-"La fonction IMLN (chaîne) renvoie le logarithme naturel d'un nombre complexe."
+"La fonction IMLN (chaine) renvoie le logarithme naturel d'un nombre complexe."
 
 #: functions/engineering.xml:628
 #, kde-format
 msgid "IMLN(string)"
-msgstr "IMLN (chaîne)"
+msgstr "IMLN (chaine)"
 
 #: functions/engineering.xml:629
 #, kde-format
@@ -3319,13 +3319,13 @@ msgstr "La fonction IMLN (« 12 ») renvoie 2,48491 "
 #, kde-format
 msgid "The IMLOG2(string) returns the base-2 logarithm of a complex number."
 msgstr ""
-"La fonction IMLOG2 (chaîne) renvoie le logarithme en base-2 d'un nombre "
+"La fonction IMLOG2 (chaine) renvoie le logarithme en base-2 d'un nombre "
 "complexe."
 
 #: functions/engineering.xml:643
 #, kde-format
 msgid "IMLOG2(string)"
-msgstr "IMLOG2 (chaîne)"
+msgstr "IMLOG2 (chaine)"
 
 #: functions/engineering.xml:644
 #, kde-format
@@ -3336,13 +3336,13 @@ msgstr "La fonction IMLOG2 (« 3+4i ») renvoie « 2.321928+1.337804i »"
 #, kde-format
 msgid "The IMLOG10(string) returns the base-10 logarithm of a complex number."
 msgstr ""
-"La fonction IMLLOG10 (chaîne) renvoie le logarithme en base 10 d'un nombre "
+"La fonction IMLLOG10 (chaine) renvoie le logarithme en base 10 d'un nombre "
 "complexe."
 
 #: functions/engineering.xml:657
 #, kde-format
 msgid "IMLOG10(string)"
-msgstr "IMLOG10 (chaîne)"
+msgstr "IMLOG10 (chaine)"
 
 #: functions/engineering.xml:658
 #, kde-format
@@ -3353,12 +3353,12 @@ msgstr "La fonction IMLOG10 (« 3+4i ») renvoie « 0.69897+0.402719i »"
 #, kde-format
 msgid "The IMSQRT(string) returns the square root of a complex number."
 msgstr ""
-"La fonction IMSQRT (chaîne) renvoie la racine carrée d'un nombre complexe."
+"La fonction IMSQRT (chaine) renvoie la racine carrée d'un nombre complexe."
 
 #: functions/engineering.xml:671
 #, kde-format
 msgid "IMSQRT(string)"
-msgstr "IMSQRT (chaîne)"
+msgstr "IMSQRT (chaine)"
 
 #: functions/engineering.xml:672
 #, kde-format
@@ -3379,13 +3379,13 @@ msgstr "Puissance"
 #, kde-format
 msgid "The IMPOWER(string) returns a complex number raised to a power."
 msgstr ""
-"La fonction IMPOWER (chaîne) renvoie un nombre complexe élevé à une "
+"La fonction IMPOWER (chaine) renvoie un nombre complexe élevé à une "
 "puissance."
 
 #: functions/engineering.xml:690
 #, kde-format
 msgid "IMPOWER(string)"
-msgstr "IMPOWER (chaîne)"
+msgstr "IMPOWER (chaine)"
 
 #: functions/engineering.xml:691
 #, kde-format
@@ -3894,8 +3894,7 @@ msgstr ""
 "deviennent CONTINUOUS (1000 ; 0,1 ; 1), soit 1105,17 €."
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINUOUS (principal  ; intérêt  ; années)"
 
@@ -5469,7 +5468,7 @@ msgstr "Référence"
 #, kde-format
 msgid "The FORMULA() function returns the formula of a cell as string."
 msgstr ""
-"La fonction FORMULA () renvoie la formule d'une cellule sous forme de chaîne."
+"La fonction FORMULA () renvoie la formule d'une cellule sous forme de chaine."
 
 #: functions/information.xml:31
 #, kde-format
@@ -5730,7 +5729,7 @@ msgid ""
 "The ISTEXT() function returns True if the parameter is a string. Otherwise "
 "it returns False"
 msgstr ""
-"La fonction ISTEXT () renvoie « vrai » si le paramètre est une chaîne, sinon "
+"La fonction ISTEXT () renvoie « vrai » si le paramètre est une chaine, sinon "
 "elle renvoie « faux »"
 
 #: functions/information.xml:180
@@ -5755,7 +5754,7 @@ msgid ""
 "Otherwise it returns False. It's the same as ISNOTTEXT."
 msgstr ""
 "La fonction ISNONTEXT () renvoie « vrai » si le paramètre n'est pas une "
-"chaîne, sinon elle renvoie « faux ». Elle fonctionne comme ISNOTTEXT."
+"chaine, sinon elle renvoie « faux ». Elle fonctionne comme ISNOTTEXT."
 
 #: functions/information.xml:195
 #, kde-format
@@ -5779,7 +5778,7 @@ msgid ""
 "Otherwise it returns False. It's the same as ISNONTEXT."
 msgstr ""
 "La fonction ISNONTEXT () renvoie « vrai » si le paramètre n'est pas une "
-"chaîne, sinon elle renvoie « faux ». Elle fonctionne comme ISNONTEXT."
+"chaine, sinon elle renvoie « faux ». Elle fonctionne comme ISNONTEXT."
 
 #: functions/information.xml:211
 #, kde-format
@@ -5952,7 +5951,7 @@ msgid ""
 "string is returned."
 msgstr ""
 "Renvoie le nom du fichier courant. Si le document courant n'est pas "
-"enregistré, une chaîne vide est renvoyée."
+"enregistré, une chaine vide est renvoyée."
 
 #: functions/information.xml:339
 #, kde-format
@@ -7062,7 +7061,7 @@ msgid ""
 "and logical values are ignored."
 msgstr ""
 "La fonction MAX () renvoie la plus grande des valeurs données en paramètres. "
-"Les chaînes et les valeurs logiques sont ignorées."
+"Les chaines et les valeurs logiques sont ignorées."
 
 #: functions/math.xml:542
 #, kde-format
@@ -7091,7 +7090,7 @@ msgid ""
 "evaluates to 1, FALSE evaluates to 0. String values are ignored."
 msgstr ""
 "La fonction MAXA () renvoie la plus grande des valeurs données en "
-"paramètres. « vrai » est évalué à 1 et « faux » à 0. Les chaînes sont "
+"paramètres. « vrai » est évalué à 1 et « faux » à 0. Les chaines sont "
 "ignorées."
 
 #: functions/math.xml:563
@@ -7121,7 +7120,7 @@ msgid ""
 "String and logical values are ignored."
 msgstr ""
 "La fonction MIN () renvoie la plus petite des valeurs données en paramètres. "
-"Les chaînes et les valeurs logiques sont ignorées."
+"Les chaines et les valeurs logiques sont ignorées."
 
 #: functions/math.xml:584
 #, kde-format
@@ -7150,7 +7149,7 @@ msgid ""
 "evaluates to 1, FALSE to 0. String values are ignored."
 msgstr ""
 "La fonction MINA () renvoie la plus petite des valeurs données en "
-"paramètres. « vrai » est évalué à 1 et « faux » à 0. Les chaînes sont "
+"paramètres. « vrai » est évalué à 1 et « faux » à 0. Les chaines sont "
 "ignorées."
 
 #: functions/math.xml:605
@@ -8251,7 +8250,7 @@ msgid ""
 "Returns the number of areas in the reference string. An area can be asingle "
 "cell or a set of cells."
 msgstr ""
-"Renvoie le nombre de zones dans la chaîne de référence. Une zone peut être "
+"Renvoie le nombre de zones dans la chaine de référence. Une zone peut être "
 "une unique cellule ou un groupe de cellules."
 
 #: functions/reference.xml:53
@@ -8490,7 +8489,7 @@ msgid ""
 "Returns the sheet number of the reference or the string representing a sheet "
 "name."
 msgstr ""
-"Renvoie le numéro de la feuille d'une référence ou d'une chaîne "
+"Renvoie le numéro de la feuille d'une référence ou d'une chaine "
 "correspondant au nom d'une feuille."
 
 #: functions/reference.xml:214
@@ -8552,7 +8551,7 @@ msgstr ""
 "Si aucune valeur dans le vecteur de recherche ne correspond, une erreur est "
 "renvoyée. Le vecteur de recherche doit être ordonné dans un ordre croissant "
 "et les deux vecteurs doivent avoir la même taille. Les valeurs numériques, "
-"les chaînes et les booléens sont reconnus. La comparaison de chaînes n'est "
+"les chaines et les booléens sont reconnus. La comparaison de chaines n'est "
 "pas sensible à la casse."
 
 #: functions/reference.xml:249
@@ -8877,7 +8876,7 @@ msgstr "La fonction AVERAGE (12,5 ; 2) renvoie 7,25"
 #: functions/text.xml:455 functions/text.xml:459 functions/text.xml:463
 #, kde-format
 msgid "String values"
-msgstr "Valeurs des chaînes"
+msgstr "Valeurs des chaines"
 
 #: functions/statistical.xml:81
 #, kde-format
@@ -11216,7 +11215,7 @@ msgid ""
 "is True, thousand separators will not show up."
 msgstr ""
 "La fonction FIXED () arrondit un nombre au nombre spécifié de décimales, "
-"renvoie une chaîne représentant le nombre en format décimal et renvoie le "
+"renvoie une chaine représentant le nombre en format décimal et renvoie le "
 "résultat sous forme de texte. Si le paramètre « décimales » est négatif, le "
 "nombre est arrondi à gauche du séparateur décimal. Si vous omettez "
 "« décimales », il est supposé valoir 2. Si le paramètre optionnel « pas de "
@@ -11272,7 +11271,7 @@ msgid ""
 "to replace any text that occurs in a specific location."
 msgstr ""
 "La fonction SUBSTITUTE () substitue « nouveau texte » à « ancien texte » "
-"dans une chaîne de texte. Si le paramètre « numéro d'instance » est "
+"dans une chaine de texte. Si le paramètre « numéro d'instance » est "
 "spécifié, une seule instance de l'ancien texte sera remplacée. Sinon, toute "
 "occurrence de « ancien texte » sera changée en « nouveau texte ». Utilisez "
 "la fonction SUBSTITUTE () quand vous voulez remplacer du texte spécifique et "
@@ -11329,9 +11328,9 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text."
 msgstr ""
-"La fonction SEARCH () recherche une chaîne de texte « texte cherché » dans "
-"une autre chaîne de texte « dans le texte » et renvoie la position du début "
-"de la chaîne « texte cherché » en partant du caractère le plus à gauche de "
+"La fonction SEARCH () recherche une chaine de texte « texte cherché » dans "
+"une autre chaine de texte « dans le texte » et renvoie la position du début "
+"de la chaine « texte cherché » en partant du caractère le plus à gauche de "
 "« dans le texte »."
 
 #: functions/text.xml:99 functions/text.xml:127
@@ -11385,9 +11384,9 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
-"La fonction SEARCH () recherche une chaîne de texte « texte cherché » dans "
-"une autre chaîne de texte « dans le texte ». Elle renvoie la position du "
-"début de la chaîne « texte cherché », depuis le caractère le plus à gauche "
+"La fonction SEARCH () recherche une chaine de texte « texte cherché » dans "
+"une autre chaine de texte « dans le texte ». Elle renvoie la position du "
+"début de la chaine « texte cherché », depuis le caractère le plus à gauche "
 "de « dans le texte »."
 
 #: functions/text.xml:128
@@ -11418,7 +11417,7 @@ msgstr ""
 "La fonction T () renvoie le texte auquel on se réfère par le paramètre "
 "« valeur ». Si le paramètre « valeur » est de type texte ou se rapporte à du "
 "texte, la fonction T renvoie « valeur ». Si le paramètre « valeur » ne se "
-"rapporte pas à du texte, la fonction T renvoie une chaîne vide."
+"rapporte pas à du texte, la fonction T renvoie une chaine vide."
 
 #: functions/text.xml:145
 #, kde-format
@@ -11433,7 +11432,7 @@ msgstr "La fonction T (« Calligra ») renvoie « Calligra »"
 #: functions/text.xml:147
 #, kde-format
 msgid "T(1.2) returns \"\" (empty text)"
-msgstr "La fonction T (1,2) renvoie «  » (chaîne de texte vide)"
+msgstr "La fonction T (1,2) renvoie «  » (chaine de texte vide)"
 
 #: functions/text.xml:159
 #, kde-format
@@ -11473,7 +11472,7 @@ msgstr ""
 #: functions/text.xml:175
 #, kde-format
 msgid "PROPER(string)"
-msgstr "PROPER (chaîne)"
+msgstr "PROPER (chaine)"
 
 #: functions/text.xml:176
 #, kde-format
@@ -11484,7 +11483,7 @@ msgstr ""
 #: functions/text.xml:184
 #, kde-format
 msgid "First string"
-msgstr "Première chaîne"
+msgstr "Première chaine"
 
 #: functions/text.xml:188
 #, kde-format
@@ -11502,14 +11501,14 @@ msgid ""
 "The COMPARE() function returns 0 if the two strings are equal; -1 if the "
 "first one is lower in value than the second one; otherwise it returns 1."
 msgstr ""
-"La fonction COMPARE () renvoie 0 si les deux chaînes sont identiques  ; -1 "
+"La fonction COMPARE () renvoie 0 si les deux chaines sont identiques  ; -1 "
 "si la première est inférieure en valeur que la deuxième  ; sinon, elle "
 "renvoie 1."
 
 #: functions/text.xml:197
 #, kde-format
 msgid "COMPARE(string1; string2; true|false)"
-msgstr "COMPARE (chaîne 1 ; chaîne 2 ; vrai | faux)"
+msgstr "COMPARE (chaine 1 ; chaine 2 ; vrai | faux)"
 
 #: functions/text.xml:198
 #, kde-format
@@ -11532,13 +11531,13 @@ msgid ""
 "The EXACT() function returns True if these two strings are equal. Otherwise, "
 "it returns False."
 msgstr ""
-"La fonction EXACT () renvoie « vrai » si les deux chaînes sont identiques, "
+"La fonction EXACT () renvoie « vrai » si les deux chaines sont identiques, "
 "sinon elle renvoie « faux »."
 
 #: functions/text.xml:218
 #, kde-format
 msgid "EXACT(string1;string2)"
-msgstr "EXACT (chaîne 1 ; chaîne 2)"
+msgstr "EXACT (chaine 1 ; chaine 2)"
 
 #: functions/text.xml:219
 #, kde-format
@@ -11576,8 +11575,8 @@ msgid ""
 "The REPLACE() function replaces part of a text string with a different text "
 "string."
 msgstr ""
-"La fonction REPLACE () remplace une partie d'une chaîne de texte par une "
-"chaîne différente."
+"La fonction REPLACE () remplace une partie d'une chaine de texte par une "
+"chaine différente."
 
 #: functions/text.xml:246
 #, kde-format
@@ -11618,8 +11617,8 @@ msgid ""
 "The REPLACEB() function replaces part of a text string with a different text "
 "string using byte positions."
 msgstr ""
-"La fonction REPLACE () remplace une partie d'une chaîne de texte par une "
-"chaîne différente en utilisant des positions."
+"La fonction REPLACE () remplace une partie d'une chaine de texte par une "
+"chaine différente en utilisant des positions."
 
 #: functions/text.xml:277
 #, kde-format
@@ -11638,8 +11637,8 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text."
 msgstr ""
-"La fonction FIND () recherche une chaîne de texte « texte cherché » dans une "
-"autre chaîne de texte « dans le texte ». Elle renvoie la position du premier "
+"La fonction FIND () recherche une chaine de texte « texte cherché » dans une "
+"autre chaine de texte « dans le texte ». Elle renvoie la position du premier "
 "caractère dans de « texte cherché » dans « dans le texte » en partant du "
 "caractère le plus à gauche."
 
@@ -11696,8 +11695,8 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
-"La fonction FINDB () recherche une chaîne de texte « texte cherché » dans "
-"une autre chaîne de texte « dans le texte ». Elle renvoie la position du "
+"La fonction FINDB () recherche une chaine de texte « texte cherché » dans "
+"une autre chaine de texte « dans le texte ». Elle renvoie la position du "
 "premier caractère de « texte cherché » « dans le texte » à partir du "
 "caractère le plus à gauche."
 
@@ -11741,8 +11740,8 @@ msgid ""
 "The MID() function returns a substring that contains 'length' characters of "
 "the string, starting at 'position' index."
 msgstr ""
-"La fonction MID () renvoie une sous-chaîne qui contient le nombre de "
-"caractères de la chaîne spécifié par le paramètre « longueur » et débutant à "
+"La fonction MID () renvoie une sous-chaine qui contient le nombre de "
+"caractères de la chaine spécifié par le paramètre « longueur » et débutant à "
 "la position « position »."
 
 #: functions/text.xml:361
@@ -11781,8 +11780,8 @@ msgid ""
 "The MIDB() function returns a substring that contains 'length' characters of "
 "the string, starting at 'position' index using byte positions."
 msgstr ""
-"La fonction MIDB () renvoie une sous-chaîne qui contient le nombre de "
-"caractères de la chaîne spécifié par le paramètre « longueur » et débutant à "
+"La fonction MIDB () renvoie une sous-chaine qui contient le nombre de "
+"caractères de la chaine spécifié par le paramètre « longueur » et débutant à "
 "la position « position »."
 
 #: functions/text.xml:390
@@ -11798,7 +11797,7 @@ msgstr "MID (texte ; position)"
 #: functions/text.xml:408
 #, kde-format
 msgid "The LEN() function returns the length of the string."
-msgstr "La fonction LEN () renvoie la longueur d'une chaîne."
+msgstr "La fonction LEN () renvoie la longueur d'une chaine."
 
 #: functions/text.xml:409
 #, kde-format
@@ -11819,7 +11818,7 @@ msgstr "La fonction LEN (« KSpread ») renvoie 7"
 #, kde-format
 msgid ""
 "The LENB() function returns the length of the string using byte positions."
-msgstr "La fonction LENB () renvoie la longueur d'une chaîne."
+msgstr "La fonction LENB () renvoie la longueur d'une chaine."
 
 #: functions/text.xml:425
 #, kde-format
@@ -11848,8 +11847,8 @@ msgid ""
 "The CONCATENATE() function returns a string which is the concatenation of "
 "the strings passed as parameters."
 msgstr ""
-"La fonction CONCATENATE () renvoie une chaîne résultant de la concaténation "
-"des chaîne passées en paramètre."
+"La fonction CONCATENATE () renvoie une chaine résultant de la concaténation "
+"des chaine passées en paramètre."
 
 #: functions/text.xml:468
 #, kde-format
@@ -11876,10 +11875,10 @@ msgid ""
 "rightmost characters of the string. The whole string is returned if 'length' "
 "exceeds the length of the string."
 msgstr ""
-"La fonction RIGHT () renvoie une sous-chaîne qui contient les caractères les "
-"plus à droite de la chaîne dont le nombre est spécifié par « longueur ». La "
-"chaîne complète est retournée si le paramètre « longueur » dépasse la "
-"longueur de la chaîne."
+"La fonction RIGHT () renvoie une sous-chaine qui contient les caractères les "
+"plus à droite de la chaine dont le nombre est spécifié par « longueur ». La "
+"chaine complète est retournée si le paramètre « longueur » dépasse la "
+"longueur de la chaine."
 
 #: functions/text.xml:486
 #, kde-format
@@ -11908,10 +11907,10 @@ msgid ""
 "rightmost characters of the string using byte positions. The whole string is "
 "returned if 'length' exceeds the length of the string."
 msgstr ""
-"La fonction RIGHTB () renvoie une sous-chaîne qui contient les caractères "
-"les plus à droite de la chaîne dont le nombre est spécifié par « longueur ». "
-"La chaîne complète est retournée si le paramètre « longueur » dépasse la "
-"longueur de la chaîne."
+"La fonction RIGHTB () renvoie une sous-chaine qui contient les caractères "
+"les plus à droite de la chaine dont le nombre est spécifié par « longueur ». "
+"La chaine complète est retournée si le paramètre « longueur » dépasse la "
+"longueur de la chaine."
 
 #: functions/text.xml:510
 #, kde-format
@@ -11926,10 +11925,10 @@ msgid ""
 "the length of the string. It is an error for the number of characters to be "
 "less than 0."
 msgstr ""
-"La fonction LEFT () renvoie une sous-chaîne qui contient les caractères les "
-"plus à gauche de la chaîne dont le nombre est spécifié par « longueur ». La "
-"chaîne complète est retournée si le paramètre « longueur » dépasse la "
-"longueur de la chaîne. Une erreur est indiquée si le nombre de caractères "
+"La fonction LEFT () renvoie une sous-chaine qui contient les caractères les "
+"plus à gauche de la chaine dont le nombre est spécifié par « longueur ». La "
+"chaine complète est retournée si le paramètre « longueur » dépasse la "
+"longueur de la chaine. Une erreur est indiquée si le nombre de caractères "
 "est inférieur à 0."
 
 #: functions/text.xml:531
@@ -11960,10 +11959,10 @@ msgid ""
 "if 'length' exceeds the length of the string. It is an error for the number "
 "of characters to be less than 0."
 msgstr ""
-"La fonction LEFTB () renvoie une sous-chaîne qui contient les caractères les "
-"plus à gauche de la chaîne dont le nombre est spécifié par « longueur » en "
-"utilisant une position. La chaîne complète est retournée si le paramètre "
-"« longueur » dépasse la longueur de la chaîne. Une erreur est indiquée si le "
+"La fonction LEFTB () renvoie une sous-chaine qui contient les caractères les "
+"plus à gauche de la chaine dont le nombre est spécifié par « longueur » en "
+"utilisant une position. La chaine complète est retournée si le paramètre "
+"« longueur » dépasse la longueur de la chaine. Une erreur est indiquée si le "
 "nombre de caractères est inférieur à 0."
 
 #: functions/text.xml:555
@@ -11986,7 +11985,7 @@ msgid ""
 msgstr ""
 "La fonction REPT () répète le premier paramètre autant de fois qu'indiqué "
 "par le second paramètre. Le second paramètre ne doit pas être négatif et "
-"cette fonction retourne une chaîne vide si ce deuxième paramètre est à zéro "
+"cette fonction retourne une chaine vide si ce deuxième paramètre est à zéro "
 "(ou arrondi à zéro)."
 
 #: functions/text.xml:576
@@ -12073,7 +12072,7 @@ msgstr "La fonction TOGGLE (« HeLlO ») renvoie « hElLo »"
 msgid ""
 "The CLEAN() function removes every non-printable character from the string"
 msgstr ""
-"La fonction CLEAN () enlève tous les caractères non imprimables d'une chaîne."
+"La fonction CLEAN () enlève tous les caractères non imprimables d'une chaine."
 
 #: functions/text.xml:625
 #, kde-format
@@ -12088,7 +12087,7 @@ msgstr "La fonction CLEAN (ASCIITOCHAR (7) + « HELLO ») renvoie « HELLO �
 #: functions/text.xml:638
 #, kde-format
 msgid "The SLEEK() function removes all spaces from the string."
-msgstr "La fonction SLEEK () enlève toutes les espaces d'une chaîne."
+msgstr "La fonction SLEEK () enlève toutes les espaces d'une chaine."
 
 #: functions/text.xml:639
 #, kde-format
@@ -12103,7 +12102,7 @@ msgstr "La fonction SLEEK (« Voici du texte ») renvoie « Voicidutexte »"
 #: functions/text.xml:653
 #, kde-format
 msgid "The UPPER() function converts a string to upper case."
-msgstr "La fonction UPPER () convertit une chaîne en majuscules."
+msgstr "La fonction UPPER () convertit une chaine en majuscules."
 
 #: functions/text.xml:654
 #, kde-format
@@ -12123,7 +12122,7 @@ msgstr "La fonction UPPER (« HELLO ») renvoie « HELLO »"
 #: functions/text.xml:670
 #, kde-format
 msgid "The LOWER() function converts a string to lower case."
-msgstr "La fonction LOWER () convertit une chaîne en minuscules."
+msgstr "La fonction LOWER () convertit une chaine en minuscules."
 
 #: functions/text.xml:671
 #, kde-format
@@ -12167,7 +12166,7 @@ msgid ""
 "string."
 msgstr ""
 "La fonction CODE () renvoie un code numérique pour le premier caractère dans "
-"une chaîne de texte."
+"une chaine de texte."
 
 #: functions/text.xml:703
 #, kde-format
@@ -12183,7 +12182,7 @@ msgstr "La fonction CODE (« KDE ») renvoie 75"
 #, kde-format
 msgid "Converts text string that represents a value to the real value.  "
 msgstr ""
-"Convertit une chaîne de texte qui représente une valeur en la valeur réelle. "
+"Convertit une chaine de texte qui représente une valeur en la valeur réelle. "
 
 #: functions/text.xml:718
 #, kde-format
@@ -12222,8 +12221,8 @@ msgid ""
 "string does not match the given regular expression, value specified as "
 "default is returned."
 msgstr ""
-"Renvoie la partie d'une chaîne correspondant à une expression rationnelle. "
-"Si la chaîne ne correspond pas à l'expression rationnelle donnée, la valeur "
+"Renvoie la partie d'une chaine correspondant à une expression rationnelle. "
+"Si la chaine ne correspond pas à l'expression rationnelle donnée, la valeur "
 "spécifiée par défaut est renvoyée."
 
 #: functions/text.xml:744
@@ -12241,7 +12240,7 @@ msgid ""
 "If no default value is given, an empty string is assumed. If no back-"
 "reference is given, 0 is assumed (so that entire matching part is returned)."
 msgstr ""
-"Si aucun paramètre par défaut n'est précisé, une chaîne vide est prise en "
+"Si aucun paramètre par défaut n'est précisé, une chaine vide est prise en "
 "compte. Si aucune référence arrière n'est donnée, 0 est pris en compte "
 "(toute la partie correspondante est ainsi renvoyée)."
 
@@ -12296,7 +12295,7 @@ msgid ""
 "in a text string."
 msgstr ""
 "La fonction UNICODE () renvoie un code numérique unicode pour le premier "
-"caractère d'une chaîne de texte."
+"caractère d'une chaine de texte."
 
 #: functions/text.xml:783
 #, kde-format
@@ -13389,7 +13388,7 @@ msgid ""
 "This drop down selection box can be used to choose the calculation performed "
 "by the Statusbar Summary  function."
 msgstr ""
-"Cette boîte de dialogue avec liste déroulante permet de choisir le calcul "
+"Cette boite de dialogue avec liste déroulante permet de choisir le calcul "
 "effectué par la fonction de consolidation de la barre d'état."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
@@ -13877,7 +13876,7 @@ msgid ""
 "If this box is checked any cell containing the value zero will appear blank."
 msgstr ""
 "Si cette option est sélectionnée, toute cellule contenant la valeur zéro "
-"apparaîtra vide."
+"apparaitra vide."
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideZeroCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:153
@@ -15905,7 +15904,7 @@ msgid ""
 "protected for this to work."
 msgstr ""
 "Lorsque cette option est sélectionnée, la cellule est toujours visible. "
-"Cependant, son contenu n'apparaît pas dans la barre de formule. Le masquage "
+"Cependant, son contenu n'apparait pas dans la barre de formule. Le masquage "
 "de la formule ne fonctionne que pour les cellules contenant une formule, "
 "pour que l'utilisateur ne puisse pas la voir. La feuille doit être protégée "
 "pour que cela fonctionne."

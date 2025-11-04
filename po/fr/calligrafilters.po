@@ -538,7 +538,7 @@ msgid ""
 "Use this option to define how many pixels there should be between the cells. "
 "This effect is better visible if you check <b>Use borders</b> too."
 msgstr ""
-"Utilisez cette option pour définir combien de pixels doivent apparaître "
+"Utilisez cette option pour définir combien de pixels doivent apparaitre "
 "entre les cellules. Cet effet est plus visible si vous cochez l'option "
 "<b>Utiliser des bordures</b>."
 
@@ -809,7 +809,7 @@ msgstr "Impossible de trouver la partie pour le type « %1 » "
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:171
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
-msgstr "Le nombre déclaré de chaînes partagées est trop faible (%1)"
+msgstr "Le nombre déclaré de chaines partagées est trop faible (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:564
 #, kde-format

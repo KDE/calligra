@@ -2958,7 +2958,7 @@ msgid ""
 "be changed using the dialog box.</p>"
 msgstr ""
 "<p>Modifie les attributs du paragraphe et de la police des styles.</p><p>La "
-"boîte de dialogue permet de modifier plusieurs modèles en une fois.</p>"
+"boite de dialogue permet de modifier plusieurs modèles en une fois.</p>"
 
 #: TextTool.cpp:474
 #, kde-format
