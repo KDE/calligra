@@ -17,7 +17,7 @@
 </authorgroup>
 </chapterinfo>
 <title
->La boîte de dialogue de configuration de &sheets;</title>
+>La boite de dialogue de configuration de &sheets;</title>
 
 <para
 >La sélection de <menuchoice
@@ -26,7 +26,7 @@
 ><guimenuitem
 >Configurer &sheets;...</guimenuitem
 ></menuchoice
-> ouvre une boîte de dialogue avec plusieurs pages, sélectionnables par les icônes à gauche, qui permettent de changer plusieurs aspects des opérations de &sheets;.</para>
+> ouvre une boite de dialogue avec plusieurs pages, sélectionnables par les icônes à gauche, qui permettent de changer plusieurs aspects des opérations de &sheets;.</para>
 
 <sect1 id="configinterface">
 <title
@@ -62,7 +62,7 @@
 >bas, première colonne</guilabel
 > ou <guilabel
 >Aucun</guilabel
-> comme déterminé par le réglage dans la boîte de sélection déroulante. </para
+> comme déterminé par le réglage dans la boite de sélection déroulante. </para
 ></listitem>
 </varlistentry>
 
@@ -73,7 +73,7 @@
 ></term>
 <listitem
 ><para
->Cette boîte à sélection peut être utilisée pour choisir le calcul fourni par la fonction <link linkend="statusbarsum"
+>Cette boite à sélection peut être utilisée pour choisir le calcul fourni par la fonction <link linkend="statusbarsum"
 >Résumé de la barre d'état</link
 >. </para
 ></listitem>
@@ -112,7 +112,7 @@
 ></term>
 <listitem
 ><para
->Capte toutes les touches de navigation, &cad; les touches flèches, haut/bas de page, touche de tabulation avant et arrière, pendant l'édition d'une cellule avec l'éditeur inclus. L'éditeur inclus apparaît directement dans la cellule. Si elles sont captées, ces clés sont utilisées pour la navigation dans l'éditeur. Sinon, elles sont utilisées pour la navigation de la cellule.</para>
+>Capte toutes les touches de navigation, &cad; les touches flèches, haut/bas de page, touche de tabulation avant et arrière, pendant l'édition d'une cellule avec l'éditeur inclus. L'éditeur inclus apparait directement dans la cellule. Si elles sont captées, ces clés sont utilisées pour la navigation dans l'éditeur. Sinon, elles sont utilisées pour la navigation de la cellule.</para>
 </listitem>
 </varlistentry>
 
@@ -124,7 +124,7 @@
 >Couleurs</guilabel
 > vous permet de choisir la couleur du quadrillage de la feuille. Si vous ne voulez pas que le quadrillage apparaisse du tout, décochez la case <guilabel
 >Afficher le quadrillage</guilabel
-> dans la boîte le dialogue <menuchoice
+> dans la boite le dialogue <menuchoice
 ><guimenu
 >Format</guimenu
 ><guisubmenu
@@ -143,7 +143,7 @@
 <para
 >Choisissez <guilabel
 >Personnaliser...</guilabel
-> dans la couleur courante pour afficher la boîte de dialogue &kde; standard <guilabel
+> dans la couleur courante pour afficher la boite de dialogue &kde; standard <guilabel
 >Choisir une couleur</guilabel
 >.</para>
 
@@ -236,7 +236,7 @@
 ></term>
 <listitem
 ><para
->Cocher cette boîte si vous souhaitez créer des fichiers de sauvegarde. Elle est cochée par défaut. </para
+>Cocher cette boite si vous souhaitez créer des fichiers de sauvegarde. Elle est cochée par défaut. </para
 ></listitem>
 </varlistentry>
 
@@ -409,7 +409,7 @@ tables(15468)/kdecore (trader) KServiceTypeTrader::defaultOffers: KServiceTypeTr
 </para>
 
 <para
->Vérifie un module externe dans la liste pour l'activer. Affiche la boîte de dialogue <guilabel
+>Vérifie un module externe dans la liste pour l'activer. Affiche la boite de dialogue <guilabel
 >À propos</guilabel
 > en cliquant sur le bouton info à droite de la liste des éléments. </para>
 

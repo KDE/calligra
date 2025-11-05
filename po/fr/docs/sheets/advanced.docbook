@@ -73,7 +73,7 @@
 >Série...</guimenuitem
 > du menu <guimenu
 >Insertion</guimenu
->, vous verrez la boîte de dialogue <guilabel
+>, vous verrez la boite de dialogue <guilabel
 >Séries</guilabel
 >. C'est utile pour créer des séries qui sont trop longues pour être facilement construites en utilisant la méthode Tirer et Copier, ou pour créer des séries géométriques comme 1, 1.5, 2.25, 3.375... où la valeur du pas, 1,5 dans ce cas, est un multiplicateur.</para>
 <para
@@ -97,13 +97,13 @@
 >Fonction...</guimenuitem
 > du menu <guimenu
 >Insertion</guimenu
->. Ceci ouvre la boîte de dialogue <guilabel
+>. Ceci ouvre la boite de dialogue <guilabel
 >Fonction</guilabel
 >.</para>
 <para
->Sélectionnez la fonction que vous voulez utiliser dans la boîte à liste à gauche de la boîte de dialogue, La page d'onglet <guilabel
+>Sélectionnez la fonction que vous voulez utiliser dans la boite à liste à gauche de la boite de dialogue, La page d'onglet <guilabel
 >Aide</guilabel
-> affiche la description, le résultat retourné, la syntaxe, les paramètres de cette fonction. En supplément, la page affiche souvent des liens vers des fonctions en relation. Ensuite actionner le bouton avec la flèche vers le bas pour coller l'expression dans la zone d'édition en bas de la boîte de dialogue.</para>
+> affiche la description, le résultat retourné, la syntaxe, les paramètres de cette fonction. En supplément, la page affiche souvent des liens vers des fonctions en relation. Ensuite actionner le bouton avec la flèche vers le bas pour coller l'expression dans la zone d'édition en bas de la boite de dialogue.</para>
 <para
 >La page à onglet <guilabel
 >Paramètres</guilabel
@@ -111,7 +111,7 @@
 >Paramètres</guilabel
 >. Pour saisir une référence à une cellule plutôt qu'une valeur, cliquez du bouton <mousebutton
 >gauche</mousebutton
-> dans la boîte de texte appropriée dans la page <guilabel
+> dans la boite de texte appropriée dans la page <guilabel
 >Paramètres</guilabel
 >, puis cliquez du bouton <mousebutton
 >gauche</mousebutton
@@ -121,7 +121,7 @@
 >Paramètres</guilabel
 >, les références aux cellules comme <userinput
 >B6</userinput
-> peuvent être écrites directement dans la zone d'édition en bas de la boîte de dialogue <guilabel
+> peuvent être écrites directement dans la zone d'édition en bas de la boite de dialogue <guilabel
 >Fonction</guilabel
 >. Si une expression a plusieurs paramètres, séparez-les par un point-virgule (<keysym
 >;</keysym
@@ -129,13 +129,13 @@
 <para
 >Cliquer le bouton <guibutton
 >Ok</guibutton
-> insérera la fonction dans la cellule courante et fermera la boîte de dialogue <guilabel
+> insérera la fonction dans la cellule courante et fermera la boite de dialogue <guilabel
 >Fonction</guilabel
 >.</para>
 <para
->Vous pouvez, bien sur, faire sans la boîte de dialogue <guilabel
+>Vous pouvez, bien sur, faire sans la boite de dialogue <guilabel
 >Fonction</guilabel
-> et simplement écrire l'expression complète dans la boîte de saisie de texte de l'<guilabel
+> et simplement écrire l'expression complète dans la boite de saisie de texte de l'<guilabel
 >éditeur de cellule</guilabel
 >. Les noms des fonctions ne sont pas sensibles à la casse. N'oubliez pas que toutes les expressions doivent commencer par un symbole <keysym
 >=</keysym
@@ -353,7 +353,7 @@
 >Division</guilabel
 > de la section <guilabel
 >Opérations</guilabel
-> de la boîte de dialogue.</para>
+> de la boite de dialogue.</para>
 <para
 >Vous pouvez aussi appliquer différentes valeurs de modificateurs à différentes lignes ou colonnes de la zone cible en copiant une zone contenant les modificateurs voulus avant de sélectionner la zone cible et de faire <guimenuitem
 > Collage spécial...</guimenuitem
@@ -407,7 +407,7 @@
 >Recherche de solution</guimenuitem
 > dans le menu <guimenu
 >Données</guimenu
->. Ceci ouvre une boîte de dialogue dans laquelle vous devez saisir la référence de la cellule qui doit avoir la valeur (<userinput
+>. Ceci ouvre une boite de dialogue dans laquelle vous devez saisir la référence de la cellule qui doit avoir la valeur (<userinput
 >A1</userinput
 > dans ce cas), dans la zone <guilabel
 >Définir la cellule</guilabel
@@ -469,7 +469,7 @@
 ></menuchoice
 >. </para>
      <para
->La boîte de dialogue qui apparaîtra, permet à l'utilisateur de choisir la source de données. Les données peuvent être sélectionnées à partir de la feuille de travail courante ou à partir d'une source externe comme une base de données ou un fichier <abbrev
+>La boite de dialogue qui apparaitra, permet à l'utilisateur de choisir la source de données. Les données peuvent être sélectionnées à partir de la feuille de travail courante ou à partir d'une source externe comme une base de données ou un fichier <abbrev
 >ODS</abbrev
 >. </para>
      <para>
@@ -484,7 +484,7 @@
        </mediaobject>
      </para>
      <para
->Cette boîte de dialogue permet à l'utilisateur de personnaliser la table avec pivot. Les étiquettes de colonne dans les données source sont converties en étiquettes, servant de champs. Les étiquettes peuvent être glissées et déposées dans l'une des trois zones (<guilabel
+>Cette boite de dialogue permet à l'utilisateur de personnaliser la table avec pivot. Les étiquettes de colonne dans les données source sont converties en étiquettes, servant de champs. Les étiquettes peuvent être glissées et déposées dans l'une des trois zones (<guilabel
 >Lignes</guilabel
 >, <guilabel
 >Colonnes</guilabel
@@ -523,7 +523,7 @@
      <para
 >Le bouton <guibutton
 >Ajouter un filtre</guibutton
-> peut être utilisé pour ouvrir une boîte de dialogue pour filtrer les données souhaitées. En utilisant cette dernière, vous pouvez définir de nombreux filtres reposant sur les étiquettes de colonnes ou les relations entre elles (<guimenuitem
+> peut être utilisé pour ouvrir une boite de dialogue pour filtrer les données souhaitées. En utilisant cette dernière, vous pouvez définir de nombreux filtres reposant sur les étiquettes de colonnes ou les relations entre elles (<guimenuitem
 >Et</guimenuitem
 > ou <guimenuitem
 >Ou</guimenuitem
@@ -614,15 +614,15 @@
 >Données</guimenu
 >.</para>
 <para
->La sélection de cette option ouvre la boîte de dialogue <guilabel
+>La sélection de cette option ouvre la boite de dialogue <guilabel
 >Consolidation</guilabel
 >.</para>
 <para
->Pour chacune des feuilles sources, saisissez une référence à la zone de données voulues dans la boîte <guilabel
+>Pour chacune des feuilles sources, saisissez une référence à la zone de données voulues dans la boite <guilabel
 >Références</guilabel
 >. Actionnez <guibutton
 >Ajouter</guibutton
-> qui devrait la transférer dans la boîte des <guilabel
+> qui devrait la transférer dans la boite des <guilabel
 >Entrées référencées</guilabel
 >. La référence devrait inclure le nom de la feuille contenant la source de données, comme <userinput
 >Janvier!A1:A10</userinput
@@ -638,7 +638,7 @@
 >Détails
 >
 ></guibutton
-> de la boîte de dialogue, et cochez la case <guilabel
+> de la boite de dialogue, et cochez la case <guilabel
 >Copier les données</guilabel
 >, les valeurs résultant de la consolidation seront placées dans les cellules cibles plutôt que les formules qui servent à les calculer. </para>
 </sect2>
@@ -665,15 +665,15 @@
 >Ajouter une forme</guilabel
 >. Glissez le curseur sur la feuille, tout en maintenant le bouton <mousebutton
 >gauche</mousebutton
-> de la souris enfoncé pour définir la zone où vous voulez que le graphique apparaisse ; il n'y a pas besoin d'être précis pour le moment, car la taille du diagramme peut être facilement changée n'importe quand. Quand vous relâchez le bouton de la souris, la boîte de dialogue <guilabel
+> de la souris enfoncé pour définir la zone où vous voulez que le graphique apparaisse ; il n'y a pas besoin d'être précis pour le moment, car la taille du diagramme peut être facilement changée n'importe quand. Quand vous relâchez le bouton de la souris, la boite de dialogue <guilabel
 >Options diagramme</guilabel
-> apparaît.</para>
+> apparait.</para>
 <para
 >Les données sont préremplies avec la plage de cellules sélectionnées. Choisissez si vous voulez utiliser la première ligne et la première colonne comme en-tête, cochez <guilabel
 >Configuration des données dans les lignes</guilabel
 > et cliquez sur le bouton <guibutton
 >Ok</guibutton
->. La boîte de dialogue disparaîtra et vous pourrez voir le diagramme intégré dans la feuille.</para>
+>. La boite de dialogue disparaitra et vous pourrez voir le diagramme intégré dans la feuille.</para>
 <para
 >Sélectionnez maintenant <guibutton
 >Outil d'édition des diagrammes</guibutton
@@ -696,7 +696,7 @@
 <para
 >Pour déplacer, redimensionner ou même supprimer le diagramme intégré, allez dans l'outil <guibutton
 >Manipulations simples de formes</guibutton
-> et cliquez n'importe où dans la zone de diagramme. Il devrait apparaître avec une bordure verte et avec de petits carrés jaunes à chaque coin et au milieu de chaque bord. </para>
+> et cliquez n'importe où dans la zone de diagramme. Il devrait apparaitre avec une bordure verte et avec de petits carrés jaunes à chaque coin et au milieu de chaque bord. </para>
 <para
 >Si vous déplacez le curseur sur n'importe lequel des carrés, il devrait se transformer en une flèche à deux têtes. Vous pouvez redimensionner le diagramme en tirant l'un de ces carrés avec le bouton <mousebutton
 >gauche</mousebutton
@@ -716,7 +716,7 @@
 >gauche</mousebutton
 > dans la zone de diagramme. La <guilabel
 >Modification du diagramme</guilabel
-> devrait apparaître dans le panneau. Vous pouvez alors utiliser ces outils pour modifier le diagramme.</para>
+> devrait apparaitre dans le panneau. Vous pouvez alors utiliser ces outils pour modifier le diagramme.</para>
 </sect1>
 
 <sect1 id="insertdata">
@@ -737,7 +737,7 @@
 <para
 >Dans les deux cas, &sheets; supposera que les données sont en format <acronym
 >CSV</acronym
-> et ouvrira une boîte de dialogue vous permettant de contrôler comment les données sont extraites du fichier ou du presse-papiers et placées dans les cellules de la feuille de travail.</para>
+> et ouvrira une boite de dialogue vous permettant de contrôler comment les données sont extraites du fichier ou du presse-papiers et placées dans les cellules de la feuille de travail.</para>
 <para
 >Si votre système le prend en charge, &sheets; peut aussi insérer des données d'une base de données <acronym
 >SQL</acronym
@@ -764,7 +764,7 @@
 ><guimenuitem
 >Hyperlien...</guimenuitem
 ></menuchoice
->. Ceci ouvrira la boîte de dialogue <guilabel
+>. Ceci ouvrira la boite de dialogue <guilabel
 >Créer un hyperlien</guilabel
 >, qui vous permet de choisir entre quatre types d'hyperliens :</para>
 
@@ -775,7 +775,7 @@
 >Internet</guilabel
 > essayera d'ouvrir votre navigateur par défaut à l'&URL; donnée dans la zone de texte <guilabel
 >Adresse Internet</guilabel
-> de la boîte de dialogue <guilabel
+> de la boite de dialogue <guilabel
 >Insérer un lien</guilabel
 > quand on la cliquera. Ce peut être par exemple <userinput
 >http://www.calligra.org</userinput
@@ -817,16 +817,16 @@
 <para
 >Les quatre types d'hyperliens ont besoin que du texte convenable soit écrit dans le champ <guilabel
 >Texte à afficher</guilabel
-> de la boîte de dialogue <guilabel
+> de la boite de dialogue <guilabel
 >Insérer un lien</guilabel
->. Il s'agit du texte qui apparaît dans la cellule.</para>
+>. Il s'agit du texte qui apparait dans la cellule.</para>
 </sect1>
 
 <sect1 id="validcheck">
 <title
 >Vérification de validité</title>
 <para
->&sheets; peut vérifier automatiquement la validité de données saisies contre un certain nombre de critères, et faire surgir une boîte de dialogue si une donnée est non valable.</para>
+>&sheets; peut vérifier automatiquement la validité de données saisies contre un certain nombre de critères, et faire surgir une boite de dialogue si une donnée est non valable.</para>
 <para
 >Pour activer cette fonction, sélectionnez les cellules à surveiller et choisissez <menuchoice
 ><guimenu
@@ -834,7 +834,7 @@
 ><guimenuitem
 >Validité...</guimenuitem
 ></menuchoice
->. Ceci ouvre la boîte de dialogue de &sheets; <guilabel
+>. Ceci ouvre la boite de dialogue de &sheets; <guilabel
 >Validité</guilabel
 >, qui présente trois pages à onglets.</para>
 <para
@@ -848,13 +848,13 @@
 <para
 >Quand vous avez fait ceci, passez à l'onglet <guilabel
 >Alerte d'erreur</guilabel
->. Ici, vous pouvez choisir le type de boîte de message (<guimenuitem
+>. Ici, vous pouvez choisir le type de boite de message (<guimenuitem
 >Arrêter</guimenuitem
 >, <guimenuitem
 >Avertissement</guimenuitem
 > ou <guimenuitem
 >Information</guimenuitem
->) qui apparaîtra quand une valeur non valable est donnée, et définira le titre de la boîte de message et le texte du message.</para>
+>) qui apparaitra quand une valeur non valable est donnée, et définira le titre de la boite de message et le texte du message.</para>
 <!--FIXME missing Input Help tab-->
 <para
 >Noter que cette fonction ne vérifie que les données que vous avez saisies dans la cellule. Pour la manière de vérifier les résultats de formules, voyez la section <link linkend="formatdata"
@@ -878,7 +878,7 @@
 ><guimenuitem
 >Protéger document...</guimenuitem
 ></menuchoice
->. Une boîte de dialogue apparaît, vous demandant un mot de passe. L'indicateur de longueur du <guilabel
+>. Une boite de dialogue apparait, vous demandant un mot de passe. L'indicateur de longueur du <guilabel
 >Mot de passe :</guilabel
 > vous indique si votre mot de passe est assez sécurisé. Plus il est long, plus votre mot de passe est sécurisé.</para>
 <para>
@@ -888,7 +888,7 @@
 </imageobject>
 <textobject>
 <phrase
->La boîte de dialogue de protection de document</phrase>
+>La boite de dialogue de protection de document</phrase>
 </textobject>
 </mediaobject>
 </para>
@@ -901,7 +901,7 @@
 </imageobject>
 <textobject>
 <phrase
->La boîte de dialogue pour la suppression de la protection de document</phrase>
+>La boite de dialogue pour la suppression de la protection de document</phrase>
 </textobject>
 </mediaobject>
 </para>
@@ -953,7 +953,7 @@
 ><guimenuitem
 >Protéger feuille...</guimenuitem
 ></menuchoice
->. Une boîte de dialogue apparaît et vous demande un mot de passe. L'indicateur de longueur du <guilabel
+>. Une boite de dialogue apparait et vous demande un mot de passe. L'indicateur de longueur du <guilabel
 >Mot de passe</guilabel
 > vous indique si votre mot de passe est suffisamment sécurisé. Plus il est long, plus votre mot de passe est sécurisé. Cette protection de cellule est active pour toutes les cellules par défaut et est effective quand vous activez la protection de la feuille. Ainsi si vous conservez les options par défaut et si vous protégez la feuille, toutes les cellules seront protégées.</para>
 <para
@@ -1019,7 +1019,7 @@
 ></listitem>
 <listitem
 ><para
->Dans la boîte de dialogue qui apparaît, aller à l'onglet <guilabel
+>Dans la boite de dialogue qui apparait, aller à l'onglet <guilabel
 >Protection de cellule</guilabel
 >  </para
 ></listitem>
@@ -1053,13 +1053,13 @@
 ></listitem>
 <listitem
 ><para
->Dans la boîte de dialogue qui apparaît, aller à l'onglet <guilabel
+>Dans la boite de dialogue qui apparait, aller à l'onglet <guilabel
 >Protection de cellule</guilabel
 >  </para
 ></listitem>
 <listitem
 ><para
->Cliquer sur la boîte de dialogue jusqu'à <guilabel
+>Cliquer sur la boite de dialogue jusqu'à <guilabel
 >Protégé</guilabel
 > puis cliquer sur <guibutton
 >Ok</guibutton
@@ -1081,7 +1081,7 @@
 ></listitem>
 <listitem
 ><para
->Dans la boîte de dialogue qui apparaît, fournir un mot de passe valable, puis le confirmer en le saisissant de nouveau. Cliquer sur <guibutton
+>Dans la boite de dialogue qui apparait, fournir un mot de passe valable, puis le confirmer en le saisissant de nouveau. Cliquer sur <guibutton
 >Ok</guibutton
 >. </para
 ></listitem>
@@ -1117,7 +1117,7 @@
 ><guimenuitem
 >Format de cellule </guimenuitem
 ></menuchoice
->. Dans la boîte de dialogue, cliquer sur l'onglet <guilabel
+>. Dans la boite de dialogue, cliquer sur l'onglet <guilabel
 >Protection de cellule</guilabel
 > et sélectionner <guilabel
 >Masquer formule </guilabel
@@ -1129,7 +1129,7 @@
 ><guimenuitem
 >Protection de feuille</guimenuitem
 ></menuchoice
-> pour afficher la boîte de dialogue. Saisir un mot de passe valable deux fois pour prévenir contre une suppression de la protection de la feuille. </para>
+> pour afficher la boite de dialogue. Saisir un mot de passe valable deux fois pour prévenir contre une suppression de la protection de la feuille. </para>
 <para
 >Quand <guilabel
 >Masquer formule</guilabel
@@ -1294,11 +1294,11 @@ Remove View</guimenuitem
 >Nom de la zone...</guimenuitem
 > du menu du bouton <mousebutton
 >droit</mousebutton
-> de la souris. Ceci ouvrira la boîte de dialogue <guilabel
+> de la souris. Ceci ouvrira la boite de dialogue <guilabel
 >Nom de la zone</guilabel
 > où vous pouvez écrire n'importe quel nom.</para>
 <para
->Vous pouvez aussi nommer une cellule ou une zone en la sélectionnant, puis en écrivant le nom dans la petite boîte de texte à l'extrémité gauche de la barre de formules, écrasant la référence de cellule qui apparaît normalement ici.</para>
+>Vous pouvez aussi nommer une cellule ou une zone en la sélectionnant, puis en écrivant le nom dans la petite boite de texte à l'extrémité gauche de la barre de formules, écrasant la référence de cellule qui apparait normalement ici.</para>
 <para
 >Si vous écrivez un nom qui a déjà été utilisé dans cette zone de texte, la sélection de &sheets; changera pour afficher les cellules nommées.</para>
 <para
@@ -1335,11 +1335,11 @@ Remove View</guimenuitem
 >droit</mousebutton
 > de la souris ou du menu <guimenu
 >Insertion</guimenu
-> et écrivez votre commentaire dans la boîte de dialogue <guilabel
+> et écrivez votre commentaire dans la boite de dialogue <guilabel
 >Commentaire de cellule</guilabel
 > qui en résulte.</para>
 <para
->Pour voir le commentaire, passez le pointeur de la souris sur la cellule. Le commentaire apparaîtra comme si c'était une infobulle. </para>
+>Pour voir le commentaire, passez le pointeur de la souris sur la cellule. Le commentaire apparaitra comme si c'était une infobulle. </para>
 <para
 >Si vous cochez la case <guilabel
 >Afficher l'indicateur de commentaires</guilabel
@@ -1353,7 +1353,7 @@ Remove View</guimenuitem
 ></menuchoice
 >, ces cellules qui contiennent des commentaires seront repérées avec un petit triangle rouge dans le coin supérieur droit.</para>
 <para
->Pour ouvrir cette boîte de dialogue, cliquer avec le bouton <mousebutton
+>Pour ouvrir cette boite de dialogue, cliquer avec le bouton <mousebutton
 >droit</mousebutton
 > de la souris dans l'onglet de la fenêtre principale de la feuille et sélectionner <guimenuitem
 >Propriétés de feuille</guimenuitem

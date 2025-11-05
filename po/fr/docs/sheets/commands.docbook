@@ -189,9 +189,9 @@
 <para
 >Si vous demandez à &sheets; d'ouvrir un fichier de texte, il suppose que ce fichier est au format <acronym
 >CSV</acronym
-> et lance une boîte de dialogue qui vous permet de spécifier le délimiteur (caractère de séparation) utilisé par le fichier, et affiche comment les éléments seront placés dans les différentes cellules du tableur.</para>
+> et lance une boite de dialogue qui vous permet de spécifier le délimiteur (caractère de séparation) utilisé par le fichier, et affiche comment les éléments seront placés dans les différentes cellules du tableur.</para>
 <para
->Les autres options dans cette boîte de dialogue vous permettent de définir le <guilabel
+>Les autres options dans cette boite de dialogue vous permettent de définir le <guilabel
 >Format</guilabel
 > des cellules du tableau, si les caractères guillemets doivent être supprimés et si les premières lignes du fichier doivent être ignorées.</para>
 </listitem>
@@ -1253,7 +1253,7 @@ to insert a picture.
 <listitem
 ><para
 ><action
->Formater automatiquement les cellules sélectionnées : une boîte de dialogue vous laisse sélectionner entre deux propositions de format.</action>
+>Formater automatiquement les cellules sélectionnées : une boite de dialogue vous laisse sélectionner entre deux propositions de format.</action>
 </para
 ></listitem>
 </varlistentry>
@@ -1460,7 +1460,7 @@ to insert a picture.
 ><para
 ><action
 >Ouvre</action
-> la boîte de dialogue <guilabel
+> la boite de dialogue <guilabel
 >Zones nommées...</guilabel
 > pour choisir, ajouter, modifier et supprimer des zones nommées. Voyez la section<link linkend="namedareas"
 > Cellules et zones nommées</link
@@ -1535,7 +1535,7 @@ to insert a picture.
 <listitem
 ><para
 ><action
->Ouvre la boîte de dialogue de recherche de solution</action
+>Ouvre la boite de dialogue de recherche de solution</action
 >. Voir <link linkend="goalseek"
 >Recherche de solution</link
 > pour les détails. </para
@@ -1554,7 +1554,7 @@ to insert a picture.
 <listitem
 ><para
 ><action
->Ouvre la boîte de dialogue de recherche de configuration des tables de pivot</action
+>Ouvre la boite de dialogue de recherche de configuration des tables de pivot</action
 >. Voir <link linkend="pivottable"
 >les tables de pivot</link
 > pour les détails. </para
@@ -1617,7 +1617,7 @@ to insert a picture.
 <listitem
 ><para>
 <action
->Protéger la feuille avec un mot de passe. Une boîte de dialogue vous demande un mot de passe. Décocher cette option vous demandera ce mot de passe pour déprotéger la feuille. La protection d'une feuille signifie la protection de toutes les cellules de la feuille. Dans une feuille protégée, les cellules ne peuvent pas être reformatées ou écrasées.</action>
+>Protéger la feuille avec un mot de passe. Une boite de dialogue vous demande un mot de passe. Décocher cette option vous demandera ce mot de passe pour déprotéger la feuille. La protection d'une feuille signifie la protection de toutes les cellules de la feuille. Dans une feuille protégée, les cellules ne peuvent pas être reformatées ou écrasées.</action>
 </para
 ></listitem>
 </varlistentry>
@@ -1634,7 +1634,7 @@ to insert a picture.
 <listitem
 ><para>
 <action
->Protéger le document complet avec un mot de passe. Une boîte de dialogue vous demande un mot de passe. Décocher cette option vous demandera ce mot de passe pour déprotéger le document. Il est impossible de renommer ou déplacer une feuille dans un document protégé. La protection d'un document ne signifie pas que toutes les feuilles individuelles soient protégées.</action>
+>Protéger le document complet avec un mot de passe. Une boite de dialogue vous demande un mot de passe. Décocher cette option vous demandera ce mot de passe pour déprotéger le document. Il est impossible de renommer ou déplacer une feuille dans un document protégé. La protection d'un document ne signifie pas que toutes les feuilles individuelles soient protégées.</action>
 </para
 ></listitem>
 </varlistentry>
@@ -1757,7 +1757,7 @@ to insert a picture.
 ><para
 ><action
 >Ouvrir</action
-> la boîte de dialogue <guilabel
+> la boite de dialogue <guilabel
 >Manager de scripts</guilabel
 > pour exécuter, charger, décharger, installer, désinstaller les scripts. </para
 ></listitem>
@@ -1776,7 +1776,7 @@ to insert a picture.
 ><para
 ><action
 >Ouvre</action
-> la boîte de dialogue <guilabel
+> la boite de dialogue <guilabel
 >Optimiseur de fonctions</guilabel
 > dans laquelle vous pouvez choisir une cellule fonction objectif, une cible d'optimisation (<guilabel
 >Maximiser</guilabel

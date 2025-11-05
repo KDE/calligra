@@ -210,7 +210,7 @@
 <para
 >Grâce au concept <quote
 >d'action</quote
-> de &Qt; et &kde;, vous pouvez librement personnaliser les barres d'outils et de menus de &calligra;. Malheureusement, pour le moment, il n'y a pas de boîte de dialogue facile à utiliser pour faire ceci. &calligra; stocke sa configuration de l'interface graphique dans des fichiers &XML; et vous devrez les éditer à la main. Par chance, cette situation changera dans l'avenir ; pour le moment, vous devrez avoir quelques connaissances de base sur le fonctionnement des documents &XML; (ou &HTML;, qui est un sous-ensemble de &XML;). </para>
+> de &Qt; et &kde;, vous pouvez librement personnaliser les barres d'outils et de menus de &calligra;. Malheureusement, pour le moment, il n'y a pas de boite de dialogue facile à utiliser pour faire ceci. &calligra; stocke sa configuration de l'interface graphique dans des fichiers &XML; et vous devrez les éditer à la main. Par chance, cette situation changera dans l'avenir ; pour le moment, vous devrez avoir quelques connaissances de base sur le fonctionnement des documents &XML; (ou &HTML;, qui est un sous-ensemble de &XML;). </para>
 
 <para
 >Normalement, chaque application &calligra; a au moins deux de ces fichiers &XML; : l'un qui décrit l'interface graphique de l'atelier (en gros, ce que vous voyez lorsqu'il n'y a pas de document ouvert) et un qui décrit l'interface graphique des différents composants (ce que vous voyez normalement). Par exemple, pour &words;, ces deux fichiers se nomment <filename
@@ -296,7 +296,7 @@
 <para
 ><ulink url="http://qt-project.org/"
 >Page &Qt;</ulink
->. Les créateurs de la boîte à outils C++ &Qt;. &kde; et &calligra; font usage de &Qt;. </para
+>. Les créateurs de la boite à outils C++ &Qt;. &kde; et &calligra; font usage de &Qt;. </para
 ></listitem>
 </itemizedlist>
 

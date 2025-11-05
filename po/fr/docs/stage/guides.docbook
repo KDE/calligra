@@ -91,7 +91,7 @@
 ></menuchoice
 ></para>
 <para
->Vous obtenez alors une boîte de dialogue qui vous demande quelques détails : </para>
+>Vous obtenez alors une boite de dialogue qui vous demande quelques détails : </para>
 
 <screenshot>
 <screeninfo
@@ -226,7 +226,7 @@
 </screenshot>
 
 <para
->La page devrait maintenant avoir le fond que vous avez choisi. Double-cliquez dans la boîte de texte pour ajouter un titre à votre diapositive.</para>
+>La page devrait maintenant avoir le fond que vous avez choisi. Double-cliquez dans la boite de texte pour ajouter un titre à votre diapositive.</para>
 
 <screenshot>
 <screeninfo
@@ -251,7 +251,7 @@
 ></menuchoice
 > dans la barre de menus et choisissez le filtre <guilabel
 >Modèle de présentation OpenDocument</guilabel
-> dans la boîte de dialogue.</para>
+> dans la boite de dialogue.</para>
 
 </sect1>
 

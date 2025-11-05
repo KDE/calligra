@@ -57,11 +57,11 @@ Be sure to comment it out again when you are done -->
 >Démarrer un nouveau document</title>
 
 <para
->Quand vous lancez &stage;, la boîte de dialogue de démarrage de &calligra; apparaît. </para>
+>Quand vous lancez &stage;, la boite de dialogue de démarrage de &calligra; apparait. </para>
 
 <screenshot>
 <screeninfo
->La boîte de dialogue de démarrage de <guilabel
+>La boite de dialogue de démarrage de <guilabel
 >&calligra;</guilabel
 ></screeninfo>
 <mediaobject>
@@ -69,7 +69,7 @@ Be sure to comment it out again when you are done -->
 <imagedata fileref="tut01.png" format="PNG"/></imageobject>
 <textobject
 ><phrase
->La boîte de dialogue de démarrage de &calligra;</phrase
+>La boite de dialogue de démarrage de &calligra;</phrase
 ></textobject>
 </mediaobject>
 </screenshot>
@@ -89,12 +89,12 @@ Be sure to comment it out again when you are done -->
 >. Ceci ouvre la fenêtre d'édition de diapositive, où vous pouvez voir et modifier les diapos (et les objets qui s'y trouvent) dans votre document. </para>
 
 <para
->Pour le moment, nous n'avons qu'une diapositive vide, donc sélectionnez la diapositive avec la seule boîte texte dans le coin en haut à gauche du panneau <guilabel
+>Pour le moment, nous n'avons qu'une diapositive vide, donc sélectionnez la diapositive avec la seule boite texte dans le coin en haut à gauche du panneau <guilabel
 >Mises en page des diapositives</guilabel
 >.</para>
 
 <para
->Double-cliquez sur la boîte de texte. Le curseur se transforme en une barre verticale pour vous indiquer que vous pouvez saisir du texte. </para>
+>Double-cliquez sur la boite de texte. Le curseur se transforme en une barre verticale pour vous indiquer que vous pouvez saisir du texte. </para>
 
 <screenshot>
 <screeninfo
@@ -127,7 +127,7 @@ Be sure to comment it out again when you are done -->
 </screenshot>
 
 <para
->Cliquez en dehors du texte pour désélectionner la boîte de texte quand vous avez terminé la saisie. </para>
+>Cliquez en dehors du texte pour désélectionner la boite de texte quand vous avez terminé la saisie. </para>
 
 </sect1>
 
@@ -159,10 +159,10 @@ Be sure to comment it out again when you are done -->
 </screenshot>
 
 <para
->La nouvelle diapositive apparaît maintenant dans la fenêtre d'édition. Pour naviguer entre les pages de la présentation, vous pouvez sélectionner les diapos dans le panneau à gauche (marqué en bleu dans cette capture d'écran). </para>
+>La nouvelle diapositive apparait maintenant dans la fenêtre d'édition. Pour naviguer entre les pages de la présentation, vous pouvez sélectionner les diapos dans le panneau à gauche (marqué en bleu dans cette capture d'écran). </para>
 
 <para
->La diapositive nouvellement insérée possède deux boîtes de texte. Il y en a une pour un titre et une qui contient une liste à puces. </para>
+>La diapositive nouvellement insérée possède deux boites de texte. Il y en a une pour un titre et une qui contient une liste à puces. </para>
 
 <screenshot>
 <screeninfo
@@ -178,7 +178,7 @@ Be sure to comment it out again when you are done -->
 </screenshot>
 
 <para
->Double-cliquez et saisissez le titre. Puis, double-cliquez sur la deuxième boîte de texte avec la puce. Saisissez du texte et terminez le paragraphe en pressant la touche <keycap
+>Double-cliquez et saisissez le titre. Puis, double-cliquez sur la deuxième boite de texte avec la puce. Saisissez du texte et terminez le paragraphe en pressant la touche <keycap
 >Entrée</keycap
 > ou <keycap
 >Retour</keycap
@@ -198,7 +198,7 @@ Be sure to comment it out again when you are done -->
 </screenshot>
 
 <para
->Vous pouvez désélectionner la boîte de texte en cliquant à l'extérieur. </para>
+>Vous pouvez désélectionner la boite de texte en cliquant à l'extérieur. </para>
 
 </sect1>
 
@@ -226,7 +226,7 @@ Be sure to comment it out again when you are done -->
 > et cliquez avec le &BGS; où vous voulez placer l'image dans sa taille originale ou dessinez un rectangle avec le bouton gauche de la souris (cliquez sur le &BGS; et gardez le bouton pressé) pour spécifier la position et la taille pour le logo. </para>
 
 <para
->Ceci ouvre une boîte de dialogue de sélection de fichiers. Pour en apprendre plus sur ceci ou sur les autres boîtes de dialogue de &kde; en détail, veuillez consulter la documentation de &kde;. Vous pouvez naviguer en cliquant sur une icône <guiicon
+>Ceci ouvre une boite de dialogue de sélection de fichiers. Pour en apprendre plus sur ceci ou sur les autres boites de dialogue de &kde; en détail, veuillez consulter la documentation de &kde;. Vous pouvez naviguer en cliquant sur une icône <guiicon
 >dossier</guiicon
 > ou en utilisant les boutons de style <guiicon
 >navigateur</guiicon
@@ -313,7 +313,7 @@ Be sure to comment it out again when you are done -->
 <para
 >Pour déplacer, redimensionner ou même supprimer le diagramme ajouté, cliquez sur le bouton <guibutton
 >Manipulations simples de formes</guibutton
-> dans le panneau Outils puis cliquez n'importe où dans la zone du diagramme. Il devrait maintenant apparaître avec une bordure verte et avec un petit carré jaune à chaque coin et au milieu de chaque côté. </para>
+> dans le panneau Outils puis cliquez n'importe où dans la zone du diagramme. Il devrait maintenant apparaitre avec une bordure verte et avec un petit carré jaune à chaque coin et au milieu de chaque côté. </para>
 <para
 >Si vous déplacez le curseur sur un des carrés il change en une flèche à deux têtes. Vous pouvez redimensionner le diagramme en déplaçant un de ces carrés avec le bouton <mousebutton
 >gauche</mousebutton
@@ -442,7 +442,7 @@ Now the title has a shadow!
 >Changement de la couleur du texte de titre</title>
 
 <para
->Finissons en changeant la couleur du texte de titre de noir en bleu. Pour ce faire, sélectionnez le texte de titre en double-cliquant sur la boîte de texte et sélectionnez-le. </para>
+>Finissons en changeant la couleur du texte de titre de noir en bleu. Pour ce faire, sélectionnez le texte de titre en double-cliquant sur la boite de texte et sélectionnez-le. </para>
 <!-- Font from menu Format or contextmenu with a lot of options-->
 <para
 >Ouvrez le sélecteur de couleurs en cliquant sur l'icône <inlinemediaobject
@@ -488,9 +488,9 @@ Now the title has a shadow!
 <para
 >La sélection de la couleur du texte est aussi disponible dans l'onglet <guilabel
 >Décorations</guilabel
-> de la boîte de dialogue <guilabel
+> de la boite de dialogue <guilabel
 >Sélectionner une police</guilabel
->. Ouvrez cette boîte de dialogue en cliquant sur <guimenuitem
+>. Ouvrez cette boite de dialogue en cliquant sur <guimenuitem
 >Police...</guimenuitem
 > dans le menu <guimenu
 >Format</guimenu
@@ -517,7 +517,7 @@ Now the title has a shadow!
 <para
 >Maintenant qu'il y a deux diapositives, nous allons tenter un diaporama ! Pour démarrer le spectacle, cliquez sur le bouton <guiicon
 >Démarrer la présentation</guiicon
-> dans la barre d'outils. La première diapositive devrait apparaître sur votre écran. </para>
+> dans la barre d'outils. La première diapositive devrait apparaitre sur votre écran. </para>
 
 <para
 >Pour avancer de la première diapo à la suivante, cliquez simplement n'importe où sur l'écran ou utilisez la touche <keycap

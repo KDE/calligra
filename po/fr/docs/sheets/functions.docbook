@@ -661,7 +661,7 @@ all changes will be overwritten on the next script run
 <title
 >BOOL2STRING</title>
 <para
->La fonction BOOL2STRING() renvoie une valeur de chaîne pour une valeur booléenne donnée. Cette méthode est prévue pour utiliser un booléen dans les méthodes qui ont besoin d'une chaîne.</para>
+>La fonction BOOL2STRING() renvoie une valeur de chaine pour une valeur booléenne donnée. Cette méthode est prévue pour utiliser un booléen dans les méthodes qui ont besoin d'une chaine.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -942,7 +942,7 @@ all changes will be overwritten on the next script run
 >Type</segtitle>
 <seglistitem
 ><seg
->Une chaîne d'un caractère à convertir</seg
+>Une chaine d'un caractère à convertir</seg
 ><seg
 >Texte</seg
 ></seglistitem
@@ -1119,7 +1119,7 @@ all changes will be overwritten on the next script run
 <title
 >NUM2STRING</title>
 <para
->La fonction NUM2STRING() renvoie une valeur de chaîne pour un nombre donné. Notez que &sheets; peut convertir automatiquement les nombres en chaîne si nécessaire ; cette fonction est par conséquent rarement requise.</para>
+>La fonction NUM2STRING() renvoie une valeur de chaine pour un nombre donné. Notez que &sheets; peut convertir automatiquement les nombres en chaine si nécessaire ; cette fonction est par conséquent rarement requise.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -1151,7 +1151,7 @@ all changes will be overwritten on the next script run
 >Type</segtitle>
 <seglistitem
 ><seg
->Nombre à convertir en chaîne</seg
+>Nombre à convertir en chaine</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem
@@ -1545,7 +1545,7 @@ all changes will be overwritten on the next script run
 <title
 >CHAÎNE</title>
 <para
->La fonction STRING() renvoie une valeur de chaîne pour un nombre donné. Elle est identique à la fonction NUM2STRING().</para>
+>La fonction STRING() renvoie une valeur de chaine pour un nombre donné. Elle est identique à la fonction NUM2STRING().</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -1577,7 +1577,7 @@ all changes will be overwritten on the next script run
 >Type</segtitle>
 <seglistitem
 ><seg
->Nombre à convertir en chaîne</seg
+>Nombre à convertir en chaine</seg
 ><seg
 >Une valeur à virgule flottante (comme 1,3 ou 0,343 ou 253)</seg
 ></seglistitem
@@ -1643,7 +1643,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -1655,7 +1655,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -1710,7 +1710,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -1722,7 +1722,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -1789,7 +1789,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -1801,7 +1801,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -1868,7 +1868,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -1880,7 +1880,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -1935,7 +1935,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -1947,7 +1947,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2014,7 +2014,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -2026,7 +2026,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2093,7 +2093,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -2105,7 +2105,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2160,7 +2160,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -2172,7 +2172,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2239,7 +2239,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -2251,7 +2251,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2318,7 +2318,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -2330,7 +2330,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2385,7 +2385,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -2397,7 +2397,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2464,7 +2464,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la base de données</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -2476,7 +2476,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant les conditions</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2543,7 +2543,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Plage marquant la table-pivot</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -5412,7 +5412,7 @@ all changes will be overwritten on the next script run
 <title
 >BASE</title>
 <para
->La fonction BASE() convertit un nombre d'une base 10 en une valeur de chaîne dans une base cible entre 2 et 36.</para>
+>La fonction BASE() convertit un nombre d'une base 10 en une valeur de chaine dans une base cible entre 2 et 36.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -6956,7 +6956,7 @@ all changes will be overwritten on the next script run
 <title
 >IMAGINARY</title>
 <para
->IMAGINARY(chaîne) renvoie le coefficient imaginaire d'un nombre complexe.</para>
+>IMAGINARY(chaine) renvoie le coefficient imaginaire d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -6973,7 +6973,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMAGINARY(chaîne)</para
+>IMAGINARY(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7161,7 +7161,7 @@ all changes will be overwritten on the next script run
 <title
 >IMCOS</title>
 <para
->IMCOS(chaîne) renvoie le cosinus d'un nombre complexe.</para>
+>IMCOS(chaine) renvoie le cosinus d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7178,7 +7178,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMCOS(chaîne)</para
+>IMCOS(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7224,7 +7224,7 @@ all changes will be overwritten on the next script run
 <title
 >IMCOSH</title>
 <para
->IMCOSH(chaîne) renvoie le cosinus hyperbolique d'un nombre complexe.</para>
+>IMCOSH(chaine) renvoie le cosinus hyperbolique d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7242,7 +7242,7 @@ all changes will be overwritten on the next script run
 
 <listitem
 ><para
->IMCOSH(chaîne)</para
+>IMCOSH(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7288,7 +7288,7 @@ all changes will be overwritten on the next script run
 <title
 >IMCOT</title>
 <para
->IMCOT(chaîne) renvoie la cotangente d'un nombre complexe.</para>
+>IMCOT(chaine) renvoie la cotangente d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7305,7 +7305,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMCOT(chaîne)</para
+>IMCOT(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7360,7 +7360,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMCSC(chaîne)</para
+>IMCSC(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7398,7 +7398,7 @@ all changes will be overwritten on the next script run
 <title
 >IMCSCH</title>
 <para
->IMCSCH(chaîne) renvoie la cosécante hyperbolique d'un nombre complexe.</para>
+>IMCSCH(chaine) renvoie la cosécante hyperbolique d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7415,7 +7415,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMCSCH(chaîne)</para
+>IMCSCH(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7487,31 +7487,31 @@ all changes will be overwritten on the next script run
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -7540,7 +7540,7 @@ all changes will be overwritten on the next script run
 <title
 >IMEXP</title>
 <para
->IMEXP(chaîne) renvoie l'exponentielle d'un nombre complexe.</para>
+>IMEXP(chaine) renvoie l'exponentielle d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7557,7 +7557,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMEXP(chaîne)</para
+>IMEXP(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7603,7 +7603,7 @@ all changes will be overwritten on the next script run
 <title
 >IMLN</title>
 <para
->IMLN(chaîne) renvoie le logarithme naturel d'un nombre complexe.</para>
+>IMLN(chaine) renvoie le logarithme naturel d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7620,7 +7620,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMLN(chaîne)</para
+>IMLN(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7666,7 +7666,7 @@ all changes will be overwritten on the next script run
 <title
 >IMLOG10</title>
 <para
->IMLLOG10chaîne) renvoie le logarithme en base 10 d'un nombre complexe.</para>
+>IMLLOG10chaine) renvoie le logarithme en base 10 d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7683,7 +7683,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMLOG10(chaîne)</para
+>IMLOG10(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7721,7 +7721,7 @@ all changes will be overwritten on the next script run
 <title
 >IMLOG2</title>
 <para
->IMLOG2(chaîne) renvoie le logarithme en base-2 d'un nombre complexe.</para>
+>IMLOG2(chaine) renvoie le logarithme en base-2 d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7738,7 +7738,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMLOG2(chaîne)</para
+>IMLOG2(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7776,7 +7776,7 @@ all changes will be overwritten on the next script run
 <title
 >IMPOWER</title>
 <para
->IMPOWER(chaîne) renvoie un nombre complexe élevé à une puissance.</para>
+>IMPOWER(chaine) renvoie un nombre complexe élevé à une puissance.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7793,7 +7793,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMPOWER(chaîne)</para
+>IMPOWER(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7879,31 +7879,31 @@ all changes will be overwritten on the next script run
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -7932,7 +7932,7 @@ all changes will be overwritten on the next script run
 <title
 >IMREAL</title>
 <para
->IMREAL(chaîne) renvoie le coefficient réel d'un nombre complexe.</para>
+>IMREAL(chaine) renvoie le coefficient réel d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -7949,7 +7949,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMREAL(chaîne)</para
+>IMREAL(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -7995,7 +7995,7 @@ all changes will be overwritten on the next script run
 <title
 >IMSEC</title>
 <para
->IMSEC(chaîne) renvoie la sécante d'un nombre complexe.</para>
+>IMSEC(chaine) renvoie la sécante d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -8012,7 +8012,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMSEC(chaîne)</para
+>IMSEC(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8050,7 +8050,7 @@ all changes will be overwritten on the next script run
 <title
 >IMSECH</title>
 <para
->IMSECH(chaîne) renvoie la sécante hyperbolique d'un nombre complexe.</para>
+>IMSECH(chaine) renvoie la sécante hyperbolique d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -8067,7 +8067,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMSECH(chaîne)</para
+>IMSECH(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8105,7 +8105,7 @@ all changes will be overwritten on the next script run
 <title
 >IMSIN</title>
 <para
->La fonction IMSIN(chaîne) renvoie le sinus d'un nombre complexe.</para>
+>La fonction IMSIN(chaine) renvoie le sinus d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -8122,7 +8122,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMSIN(chaîne)</para
+>IMSIN(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8168,7 +8168,7 @@ all changes will be overwritten on the next script run
 <title
 >IMSINH</title>
 <para
->La fonction IMSINH(chaîne) renvoie le sinus hyperbolique d'un nombre complexe.</para>
+>La fonction IMSINH(chaine) renvoie le sinus hyperbolique d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -8185,7 +8185,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMSINH(chaîne)</para
+>IMSINH(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8231,7 +8231,7 @@ all changes will be overwritten on the next script run
 <title
 >IMSQRT</title>
 <para
->IMSQRT(chaîne) renvoie la racine carrée d'un nombre complexe.</para>
+>IMSQRT(chaine) renvoie la racine carrée d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -8248,7 +8248,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMSQRT(chaîne)</para
+>IMSQRT(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8328,31 +8328,31 @@ all changes will be overwritten on the next script run
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -8415,31 +8415,31 @@ all changes will be overwritten on the next script run
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Nombre complexe</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -8468,7 +8468,7 @@ all changes will be overwritten on the next script run
 <title
 >IMTAN</title>
 <para
->La fonction IMTAN(chaîne) renvoie la tangente d'un nombre complexe.</para>
+>La fonction IMTAN(chaine) renvoie la tangente d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -8485,7 +8485,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMTAN(chaîne)</para
+>IMTAN(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -8531,7 +8531,7 @@ all changes will be overwritten on the next script run
 <title
 >IMTANH</title>
 <para
->La fonction IMTAN(chaîne) renvoie la tangente hyperbolique d'un nombre complexe.</para>
+>La fonction IMTAN(chaine) renvoie la tangente hyperbolique d'un nombre complexe.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -8548,7 +8548,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->IMTAN(chaîne)</para
+>IMTAN(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -13447,7 +13447,7 @@ all changes will be overwritten on the next script run
 <title
 >FILENAME</title>
 <para
->Renvoie le nom du fichier courant. Si le document courant n'est pas enregistré, une chaîne vide est renvoyée.</para>
+>Renvoie le nom du fichier courant. Si le document courant n'est pas enregistré, une chaine vide est renvoyée.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -13482,7 +13482,7 @@ all changes will be overwritten on the next script run
 <title
 >FORMULA</title>
 <para
->La fonction FORMULA() renvoie la d'une cellule comme une chaîne.</para>
+>La fonction FORMULA() renvoie la d'une cellule comme une chaine.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -14073,7 +14073,7 @@ all changes will be overwritten on the next script run
 <title
 >ISNONTEXT</title>
 <para
->La fonction ISNONTEXT() renvoie "Vrai" si le paramètre n'est pas une chaîne, sinon elle renvoie "Faux". Elle agit comme ISNOTTEXT.</para>
+>La fonction ISNONTEXT() renvoie "Vrai" si le paramètre n'est pas une chaine, sinon elle renvoie "Faux". Elle agit comme ISNOTTEXT.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -14148,7 +14148,7 @@ all changes will be overwritten on the next script run
 <title
 >ISNOTTEXT</title>
 <para
->La fonction ISNONTEXT() renvoie "Vrai" si le paramètre n'est pas une chaîne, sinon elle renvoie "Faux". Elle agit comme ISNONTEXT.</para>
+>La fonction ISNONTEXT() renvoie "Vrai" si le paramètre n'est pas une chaine, sinon elle renvoie "Faux". Elle agit comme ISNONTEXT.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -14499,7 +14499,7 @@ all changes will be overwritten on the next script run
 <title
 >ISTEXT</title>
 <para
->La fonction ISTEXT() renvoie "Vrai" si le paramètre est une chaîne, sinon elle renvoie "Faux"</para>
+>La fonction ISTEXT() renvoie "Vrai" si le paramètre est une chaine, sinon elle renvoie "Faux"</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -15716,7 +15716,7 @@ all changes will be overwritten on the next script run
 <title
 >AREAS</title>
 <para
->Renvoie le nombre de zones dans la chaîne de référence. Une zone peut être une seule cellule ou un lot de cellules.</para>
+>Renvoie le nombre de zones dans la chaine de référence. Une zone peut être une seule cellule ou un lot de cellules.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -15750,7 +15750,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Référence</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -16296,7 +16296,7 @@ all changes will be overwritten on the next script run
 <title
 >LOOKUP</title>
 <para
->La fonction LOOKUP cherche le premier paramètre dans le vecteur de recherche. Elle renvoie une valeur dans le vecteur résultat, en conservant les index du vecteur initial. Si la valeur est introuvable, une erreur est renvoyée. Le vecteur de recherche doit être dans l'ordre croissant et les deux doivent avoir la même taille. Les valeurs numériques, les chaînes et les booléens sont reconnus. La comparaison de chaînes n'est pas sensible à la casse.</para>
+>La fonction LOOKUP cherche le premier paramètre dans le vecteur de recherche. Elle renvoie une valeur dans le vecteur résultat, en conservant les index du vecteur initial. Si la valeur est introuvable, une erreur est renvoyée. Le vecteur de recherche doit être dans l'ordre croissant et les deux doivent avoir la même taille. Les valeurs numériques, les chaines et les booléens sont reconnus. La comparaison de chaines n'est pas sensible à la casse.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -16722,7 +16722,7 @@ all changes will be overwritten on the next script run
 <title
 >SHEET</title>
 <para
->Renvoie le numéro de la feuille de la référence ou la chaîne représentant un nom de feuille.</para>
+>Renvoie le numéro de la feuille de la référence ou la chaine représentant un nom de feuille.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -19133,7 +19133,7 @@ all changes will be overwritten on the next script run
 <title
 >MAX</title>
 <para
->La fonction MAX() renvoie la plus grande des valeurs données en paramètres. Les chaînes et les valeurs logiques sont ignorées.</para>
+>La fonction MAX() renvoie la plus grande des valeurs données en paramètres. Les chaines et les valeurs logiques sont ignorées.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -19233,7 +19233,7 @@ all changes will be overwritten on the next script run
 <title
 >MAXA</title>
 <para
->La fonction MAXA() renvoie la plus grande des valeurs données en paramètres sans ignorer les valeurs booléennes. "Vrai" vaut 1 et "Faux" vaut 0. Les chaînes sont ignorées.</para>
+>La fonction MAXA() renvoie la plus grande des valeurs données en paramètres sans ignorer les valeurs booléennes. "Vrai" vaut 1 et "Faux" vaut 0. Les chaines sont ignorées.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -19399,7 +19399,7 @@ all changes will be overwritten on the next script run
 <title
 >Min</title>
 <para
->La fonction MIN() renvoie la plus petite des valeurs données en paramètres. Les chaînes et les valeurs logiques sont ignorées.</para>
+>La fonction MIN() renvoie la plus petite des valeurs données en paramètres. Les chaines et les valeurs logiques sont ignorées.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -19498,7 +19498,7 @@ all changes will be overwritten on the next script run
 <title
 >MINA</title>
 <para
->La fonction MINA() renvoie la plus petite des valeurs données en paramètres sans ignorer les valeurs booléennes. "Vrai" vaut 1 et "Faux" vaut 0. Les chaînes sont ignorées.</para>
+>La fonction MINA() renvoie la plus petite des valeurs données en paramètres sans ignorer les valeurs booléennes. "Vrai" vaut 1 et "Faux" vaut 0. Les chaines sont ignorées.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -22580,7 +22580,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Valeurs des chaînes</seg
+>Valeurs des chaines</seg
 ><seg
 >Texte</seg
 ></seglistitem
@@ -28146,7 +28146,7 @@ all changes will be overwritten on the next script run
 <title
 >CLEAN</title>
 <para
->La fonction CLEAN() enlève tous les caractères non imprimables d'une chaîne</para>
+>La fonction CLEAN() enlève tous les caractères non imprimables d'une chaine</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28201,7 +28201,7 @@ all changes will be overwritten on the next script run
 <title
 >CODE</title>
 <para
->La fonction CODE() renvoie un code numérique pour le premier caractère dans une chaîne de texte.</para>
+>La fonction CODE() renvoie un code numérique pour le premier caractère dans une chaine de texte.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28268,7 +28268,7 @@ all changes will be overwritten on the next script run
 <title
 >COMPARE</title>
 <para
->La fonction COMPARE() renvoie 0 si ces deux chaînes sont identiques ; -1 si la première est plus basse en valeur que la deuxième ; sinon, elle renvoie 1.</para>
+>La fonction COMPARE() renvoie 0 si ces deux chaines sont identiques ; -1 si la première est plus basse en valeur que la deuxième ; sinon, elle renvoie 1.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28285,7 +28285,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->COMPARE(chaîne1;chaîne2; vrai|faux)</para
+>COMPARE(chaine1;chaine2; vrai|faux)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28300,7 +28300,7 @@ all changes will be overwritten on the next script run
 >Type</segtitle>
 <seglistitem
 ><seg
->Première chaîne</seg
+>Première chaine</seg
 ><seg
 >Texte</seg
 ></seglistitem>
@@ -28363,7 +28363,7 @@ all changes will be overwritten on the next script run
 <title
 >CONCATENATE</title>
 <para
->La fonction CONCATENATE() renvoie une chaîne qui est la concaténation des chaîne passées en paramètres.</para>
+>La fonction CONCATENATE() renvoie une chaine qui est la concaténation des chaine passées en paramètres.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28395,33 +28395,33 @@ all changes will be overwritten on the next script run
 >Type</segtitle>
 <seglistitem
 ><seg
->Valeurs des chaînes</seg
+>Valeurs des chaines</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
->Valeurs des chaînes</seg
+>Valeurs des chaines</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
->Valeurs des chaînes</seg
+>Valeurs des chaines</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
->Valeurs des chaînes</seg
+>Valeurs des chaines</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem>
 <seglistitem
 ><seg
->Valeurs des chaînes</seg
+>Valeurs des chaines</seg
 ><seg
->Une plage de chaînes</seg
+>Une plage de chaines</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -28511,7 +28511,7 @@ all changes will be overwritten on the next script run
 <title
 >EXACT</title>
 <para
->La fonction EXACT() renvoie "Vrai" si ces deux chaînes sont identiques, sinon elle renvoie "Faux".</para>
+>La fonction EXACT() renvoie "Vrai" si ces deux chaines sont identiques, sinon elle renvoie "Faux".</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28528,7 +28528,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->EXACT(chaîne1;chaîne2)</para
+>EXACT(chaine1;chaine2)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -28592,7 +28592,7 @@ all changes will be overwritten on the next script run
 <title
 >FIND</title>
 <para
->La fonction FIND() cherche une chaîne de texte (texte-cherché) dans une autre chaîne de texte (dans-le-texte) et renvoie le numéro du point de départ du "texte-cherché", depuis le caractère le plus à gauche de "dans-le-texte".</para>
+>La fonction FIND() cherche une chaine de texte (texte-cherché) dans une autre chaine de texte (dans-le-texte) et renvoie le numéro du point de départ du "texte-cherché", depuis le caractère le plus à gauche de "dans-le-texte".</para>
 <para
 >Le paramètre « numéro-départ » spécifie le caractère où la recherche commencera. Le premier caractère est le caractère numéro 1. Si « numéro-départ »» est omis, on suppose qu'il vaut 1.</para>
 <para
@@ -28707,7 +28707,7 @@ all changes will be overwritten on the next script run
 <title
 >FINDB</title>
 <para
->La fonction FINDB() cherche une chaîne de texte (texte-cherché) dans une autre chaîne de texte (dans-le-texte) et renvoie le numéro du point de départ du « texte-cherché », depuis le caractère le plus à gauche de « dans-le-texte » en utilisant la position des octets.</para>
+>La fonction FINDB() cherche une chaine de texte (texte-cherché) dans une autre chaine de texte (dans-le-texte) et renvoie le numéro du point de départ du « texte-cherché », depuis le caractère le plus à gauche de « dans-le-texte » en utilisant la position des octets.</para>
 <para
 >Le paramètre Position-Octet spécifie le caractère où la recherche commencera. Le premier caractère est le caractère numéro 2. Si « numéro-départ » est omis, on suppose qu'il vaut 2.</para>
 <para
@@ -28796,7 +28796,7 @@ all changes will be overwritten on the next script run
 <title
 >FIXED</title>
 <para
->La fonction FIXED() arrondit un nombre au nombre spécifié de décimales, formate le nombre en chaîne de format décimal et renvoie le résultat en texte. Si « Décimales » est négatif, le nombre est arrondi à gauche du séparateur décimal. Si vous omettez « Décimales », il est supposé valoir 2. Si le paramètre optionnel « Aucun-séparateur » est « Vrai », le séparateur des milliers ne sera pas affiché.</para>
+>La fonction FIXED() arrondit un nombre au nombre spécifié de décimales, formate le nombre en chaine de format décimal et renvoie le résultat en texte. Si « Décimales » est négatif, le nombre est arrondi à gauche du séparateur décimal. Si vous omettez « Décimales », il est supposé valoir 2. Si le paramètre optionnel « Aucun-séparateur » est « Vrai », le séparateur des milliers ne sera pas affiché.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28938,7 +28938,7 @@ all changes will be overwritten on the next script run
 <title
 >LEFT</title>
 <para
->La fonction LEFT() renvoie une sous-chaîne qui contient la longueur des caractères les plus à gauche de la chaîne. La chaîne complète est renvoyée si cette longueur dépasse la longueur de la chaîne. Une erreur est indiquée si le nombre de caractères est inférieur à 0.</para>
+>La fonction LEFT() renvoie une sous-chaine qui contient la longueur des caractères les plus à gauche de la chaine. La chaine complète est renvoyée si cette longueur dépasse la longueur de la chaine. Une erreur est indiquée si le nombre de caractères est inférieur à 0.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29039,7 +29039,7 @@ all changes will be overwritten on the next script run
 <title
 >LEFTB</title>
 <para
->La fonction LEFTB() renvoie une sous-chaîne qui contient la longueur des caractères les plus à gauche de la chaîne en utilisant la position des octets. La chaîne complète est renvoyée si cette longueur dépasse la longueur de la chaîne. Une erreur est indiquée si le nombre de caractères est inférieur à 0.</para>
+>La fonction LEFTB() renvoie une sous-chaine qui contient la longueur des caractères les plus à gauche de la chaine en utilisant la position des octets. La chaine complète est renvoyée si cette longueur dépasse la longueur de la chaine. Une erreur est indiquée si le nombre de caractères est inférieur à 0.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29116,7 +29116,7 @@ all changes will be overwritten on the next script run
 <title
 >LEN</title>
 <para
->La fonction LEN() renvoie la longueur d'une chaîne.</para>
+>La fonction LEN() renvoie la longueur d'une chaine.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29191,7 +29191,7 @@ all changes will be overwritten on the next script run
 <title
 >LENB</title>
 <para
->La fonction LENB() renvoie la longueur de la chaîne en utilisant la position des octets.</para>
+>La fonction LENB() renvoie la longueur de la chaine en utilisant la position des octets.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29238,7 +29238,7 @@ all changes will be overwritten on the next script run
 <title
 >LOWER</title>
 <para
->La fonction LOWER() convertit une chaîne en minuscules.</para>
+>La fonction LOWER() convertit une chaine en minuscules.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29317,7 +29317,7 @@ all changes will be overwritten on the next script run
 <title
 >MID</title>
 <para
->La fonction MID() renvoie une sous-chaîne qui contient les "longueur" caractères de la chaîne, débutant à l'index "position".</para>
+>La fonction MID() renvoie une sous-chaine qui contient les "longueur" caractères de la chaine, débutant à l'index "position".</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29420,7 +29420,7 @@ all changes will be overwritten on the next script run
 <title
 >MIDB</title>
 <para
->La fonction MIDB() renvoie une sous-chaîne qui contient les « longueur » caractères de la chaîne, débutant à l'index « position », en utilisant la position des octets.</para>
+>La fonction MIDB() renvoie une sous-chaine qui contient les « longueur » caractères de la chaine, débutant à l'index « position », en utilisant la position des octets.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29524,7 +29524,7 @@ all changes will be overwritten on the next script run
 >Syntaxe</term>
 <listitem
 ><para
->PROPER(chaîne)</para
+>PROPER(chaine)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -29562,11 +29562,11 @@ all changes will be overwritten on the next script run
 <title
 >REGEXP</title>
 <para
->Renvoie la partie d'une chaîne correspondant à une expression rationnelle. Si la chaîne ne correspond pas à l'expression rationnelle donnée, la valeur spécifiée dans défaut est renvoyée.</para>
+>Renvoie la partie d'une chaine correspondant à une expression rationnelle. Si la chaine ne correspond pas à l'expression rationnelle donnée, la valeur spécifiée dans défaut est renvoyée.</para>
 <para
 >Si une référence arrière est fournie, alors la valeur de cette référence arrière est renvoyée.</para>
 <para
->Si le paramètre défaut n'est pas précisé, on suppose que c'est la chaîne vide. Si aucune référence arrière n'est donnée, on suppose que c'est 0 (toute la partie correspondante est ainsi renvoyée).</para>
+>Si le paramètre défaut n'est pas précisé, on suppose que c'est la chaine vide. Si aucune référence arrière n'est donnée, on suppose que c'est 0 (toute la partie correspondante est ainsi renvoyée).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29715,7 +29715,7 @@ all changes will be overwritten on the next script run
 <title
 >REPLACE</title>
 <para
->La fonction REPLACE() remplace une partie d'une chaîne de texte par une chaîne différente.</para>
+>La fonction REPLACE() remplace une partie d'une chaine de texte par une chaine différente.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29820,7 +29820,7 @@ all changes will be overwritten on the next script run
 <title
 >REPLACEB</title>
 <para
->La fonction REPLACEB() remplace une partie d'une chaîne de texte par une chaîne différente en utilisant la position des octets.</para>
+>La fonction REPLACEB() remplace une partie d'une chaine de texte par une chaine différente en utilisant la position des octets.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29909,7 +29909,7 @@ all changes will be overwritten on the next script run
 <title
 >REPT</title>
 <para
->La fonction REPT() répète le premier paramètre autant de fois qu'indiqué par le second paramètre. Le second paramètre ne doit pas être négatif, et cette fonction retourne une chaîne vide si ce deuxième paramètre est à zéro (ou arrondi à zéro).</para>
+>La fonction REPT() répète le premier paramètre autant de fois qu'indiqué par le second paramètre. Le second paramètre ne doit pas être négatif, et cette fonction retourne une chaine vide si ce deuxième paramètre est à zéro (ou arrondi à zéro).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29978,7 +29978,7 @@ all changes will be overwritten on the next script run
 <title
 >RIGHT</title>
 <para
->La fonction RIGHT() renvoie une sous-chaîne qui contient les "longueur" caractères les plus à droite de la chaîne. La chaîne complète est retournée si "longueur" dépasse la longueur de la chaîne.</para>
+>La fonction RIGHT() renvoie une sous-chaine qui contient les "longueur" caractères les plus à droite de la chaine. La chaine complète est retournée si "longueur" dépasse la longueur de la chaine.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30079,7 +30079,7 @@ all changes will be overwritten on the next script run
 <title
 >RIGHTB</title>
 <para
->La fonction RIGHTB() renvoie une sous-chaîne qui contient les « longueur » caractères les plus à droite de la chaîne en utilisant les positions des octets. La chaîne complète est retournée si « longueur » dépasse la longueur de la chaîne.</para>
+>La fonction RIGHTB() renvoie une sous-chaine qui contient les « longueur » caractères les plus à droite de la chaine en utilisant les positions des octets. La chaine complète est retournée si « longueur » dépasse la longueur de la chaine.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30221,7 +30221,7 @@ all changes will be overwritten on the next script run
 <title
 >SEARCH</title>
 <para
->La fonction SEARCH() cherche une chaîne de texte (texte-cherché) dans une autre chaîne de texte (dans-le-texte) et renvoie le nombre du point de démarrage de "texte-cherché", depuis le caractère le plus à gauche de "dans-le-texte".</para>
+>La fonction SEARCH() cherche une chaine de texte (texte-cherché) dans une autre chaine de texte (dans-le-texte) et renvoie le nombre du point de démarrage de "texte-cherché", depuis le caractère le plus à gauche de "dans-le-texte".</para>
 <para
 >Vous pouvez utiliser les jokers, points d'interrogation (?) et astérisque (*). Un point d'interrogation correspond à un seul caractère, un astérisque à n'importe quelle séquence de caractères.</para>
 <para
@@ -30320,7 +30320,7 @@ all changes will be overwritten on the next script run
 <title
 >SEARCHB</title>
 <para
->La fonction SEARCHB() cherche une chaîne de texte (texte-cherché) dans une autre chaîne de texte (dans-le-texte) et renvoie le nombre du point de démarrage de « texte-cherché », depuis le caractère le plus à gauche de « dans-le-texte » en utilisant les positions des octets.</para>
+>La fonction SEARCHB() cherche une chaine de texte (texte-cherché) dans une autre chaine de texte (dans-le-texte) et renvoie le nombre du point de démarrage de « texte-cherché », depuis le caractère le plus à gauche de « dans-le-texte » en utilisant les positions des octets.</para>
 <para
 >Vous pouvez utiliser les jokers, points d'interrogation (?) et astérisque (*). Un point d'interrogation correspond à un seul caractère, un astérisque à n'importe quelle séquence de caractères.</para>
 <para
@@ -30403,7 +30403,7 @@ all changes will be overwritten on the next script run
 <title
 >SLEEK</title>
 <para
->La fonction SLEEK() enlève toutes les espaces d'une chaîne.</para>
+>La fonction SLEEK() enlève toutes les espaces d'une chaine.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30470,7 +30470,7 @@ all changes will be overwritten on the next script run
 <title
 >SUBSTITUTE</title>
 <para
->La fonction SUBSTITUTE() substitue « nouveau-texte » à « ancien-texte » dans une chaîne de texte. Si « numéro-instance » est spécifié, seule cette instance de l'ancien texte sera remplacée. Sinon, chaque occurrence d'« ancien-texte » sera changée en « nouveau-texte ». Utilisez « SUBSTITUTE » quand vous voulez remplacer du texte spécifique, utilisez « REPLACE » quand vous voulez remplacer du texte qui se trouve à un endroit précis.</para>
+>La fonction SUBSTITUTE() substitue « nouveau-texte » à « ancien-texte » dans une chaine de texte. Si « numéro-instance » est spécifié, seule cette instance de l'ancien texte sera remplacée. Sinon, chaque occurrence d'« ancien-texte » sera changée en « nouveau-texte ». Utilisez « SUBSTITUTE » quand vous voulez remplacer du texte spécifique, utilisez « REPLACE » quand vous voulez remplacer du texte qui se trouve à un endroit précis.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30922,7 +30922,7 @@ all changes will be overwritten on the next script run
 <title
 >UNICODE</title>
 <para
->La fonction UNICODE() renvoie un code numérique pour le premier caractère dans une chaîne de texte.</para>
+>La fonction UNICODE() renvoie un code numérique pour le premier caractère dans une chaine de texte.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30993,7 +30993,7 @@ all changes will be overwritten on the next script run
 <title
 >UPPER</title>
 <para
->La fonction UPPER() convertit une chaîne en majuscules.</para>
+>La fonction UPPER() convertit une chaine en majuscules.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -31072,7 +31072,7 @@ all changes will be overwritten on the next script run
 <title
 >VALUE</title>
 <para
->Convertit une chaîne de texte qui représente une valeur en la valeur réelle. </para>
+>Convertit une chaine de texte qui représente une valeur en la valeur réelle. </para>
 <para
 ><segmentedlist
 ><segtitle
