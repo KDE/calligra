@@ -116,7 +116,7 @@
 ><para
 >Insérer la référence de la cellule (par exemple <userinput
 >B5</userinput
->) dans la boîte de dialogue de référencement de cellules à gauche de l'outil <guilabel
+>) dans la boite de dialogue de référencement de cellules à gauche de l'outil <guilabel
 >Éditeur de cellule</guilabel
 > et appuyez sur &Entree;.</para
 ></listitem>
@@ -138,7 +138,7 @@
 >. En actionnant la touche &Entree;, la sélection courante se déplacera d'une position vers le haut, vers le bas, vers la gauche ou vers la droite, en fonction des réglages dans la page <guilabel
 >Interface</guilabel
 > de la <link linkend="configinterface"
->boîte de dialogue de configuration</link
+>boite de dialogue de configuration</link
 > de &sheets;.</para
 > <para
 >Si vous maintenez enfoncée la touche <keycombo action="simul"
@@ -149,11 +149,11 @@
 <para
 >Pour sélectionner une zone de cellules, faites glisser le pointeur de souris au travers de la zone désirée avec le bouton <mousebutton
 >gauche</mousebutton
-> enfoncé, ou donnez les références des cellules du coin gauche haut et du bas à droite séparées par un deux-points dans la boîte de référence de la cellule de l'<guilabel
+> enfoncé, ou donnez les références des cellules du coin gauche haut et du bas à droite séparées par un deux-points dans la boite de référence de la cellule de l'<guilabel
 >éditeur de cellule</guilabel
 > (par exemple <userinput
 >B7:C14</userinput
->) et actionnez &Enter; ou donnez ces références de cellules dans un format similaire dans la boîte de dialogue amenée par <menuchoice
+>) et actionnez &Enter; ou donnez ces références de cellules dans un format similaire dans la boite de dialogue amenée par <menuchoice
 ><guimenu
 >Aller</guimenu
 ><guimenuitem
@@ -368,9 +368,9 @@
 ><guimenuitem
 >Collage spécial...</guimenuitem
 ></menuchoice
-> ouvre la boîte de dialogue <guilabel
+> ouvre la boite de dialogue <guilabel
 >Collage spécial</guilabel
->. En sélectionnant l'élément approprié de la partie gauche de cette boîte de dialogue, vous pouvez choisir de coller <guilabel
+>. En sélectionnant l'élément approprié de la partie gauche de cette boite de dialogue, vous pouvez choisir de coller <guilabel
 >Tout</guilabel
 >, seulement le <guilabel
 >Texte</guilabel
@@ -380,7 +380,7 @@
 >Commentaire</guilabel
 > dans les cellules ou <guilabel
 >Tout sauf les bordures</guilabel
->. Les éléments de la partie basse de cette boîte de dialogue vous permettent de faire de simples <link linkend="sumspecialpaste"
+>. Les éléments de la partie basse de cette boite de dialogue vous permettent de faire de simples <link linkend="sumspecialpaste"
 >opérations arithmétiques sur une zone de cellules</link
 >. </para>
 
@@ -500,7 +500,7 @@
 >Fonction...</guimenuitem
 > dans le menu <guimenu
 >Insertion</guimenu
-> et jetez un coup d'œil à la boîte de dialogue <guilabel
+> et jetez un coup d'œil à la boite de dialogue <guilabel
 >Fonction</guilabel
 > qui sera affichée.</para>
 <para
@@ -571,7 +571,7 @@
 >Trier...</guimenuitem
 > depuis <guimenu
 >Données</guimenu
->. Ceci ouvrira la boîte de dialogue <guilabel
+>. Ceci ouvrira la boite de dialogue <guilabel
 >Trier</guilabel
 >.</para
 > 
@@ -613,7 +613,7 @@ selected area. For more complex sorting select <menuchoice
 <para
 >Dans la partie nommée <guilabel
 >Direction</guilabel
-> de cette boîte de dialogue, choisissez de trier les lignes ou les colonnes. Si vous cochez <guilabel
+> de cette boite de dialogue, choisissez de trier les lignes ou les colonnes. Si vous cochez <guilabel
 >La première ligne contient les en-têtes</guilabel
 > ou <guilabel
 >La première colonne contient les en-têtes</guilabel
@@ -640,7 +640,7 @@ selected area. For more complex sorting select <menuchoice
 >Détail
 >
 ></guilabel
-> de la boîte de dialogue vous permet de trier en utilisant les éléments d'une liste personnalisée comme Janvier, Février... au lieu d'une liste alphanumérique. Le format de cellule est déplacé avec le contenu de la cellule, si vous sélectionnez <guilabel
+> de la boite de dialogue vous permet de trier en utilisant les éléments d'une liste personnalisée comme Janvier, Février... au lieu d'une liste alphanumérique. Le format de cellule est déplacé avec le contenu de la cellule, si vous sélectionnez <guilabel
 >Copier format de cellule (Bordures, Couleurs, Style de texte)</guilabel
 >. </para>
 </sect1>
@@ -654,7 +654,7 @@ selected area. For more complex sorting select <menuchoice
 >Fonctions montrées dans la barre d'état</guilabel
 > dans la page <guilabel
 >Interface</guilabel
-> de la boîte de dialogue de configuration de &sheets;, ce sommaire peut être :</para>
+> de la boite de dialogue de configuration de &sheets;, ce sommaire peut être :</para>
 
 <variablelist>
 <varlistentry>
@@ -754,7 +754,7 @@ selected area. For more complex sorting select <menuchoice
 ><guimenuitem
 >Enregistrer sous...</guimenuitem
 ></menuchoice
->. Ceci ouvrira la boîte de dialogue commune de &kde; <guilabel
+>. Ceci ouvrira la boite de dialogue commune de &kde; <guilabel
 >Enregistrer le document sous</guilabel
 >. Choisissez le dossier où vous voulez enregistrer le document et donnez un nom convenable dans la zone de texte <guilabel
 >Nom :</guilabel
@@ -807,7 +807,7 @@ selected area. For more complex sorting select <menuchoice
 ><guimenuitem
 > Créer un modèle à partir du document</guimenuitem
 ></menuchoice
->. en faisant cela, s'ouvre la boîte de dialogue <guilabel
+>. en faisant cela, s'ouvre la boite de dialogue <guilabel
 >Créer un modèle</guilabel
 >. Saisissez un nom pour votre nouveau modèle dans la zone de texte <guilabel
 >Nom :</guilabel
@@ -819,15 +819,15 @@ selected area. For more complex sorting select <menuchoice
 ><guimenuitem
 >Nouveau</guimenuitem
 ></menuchoice
-> ou quand vous démarrerez &sheets;, la boîte de dialogue <guilabel
+> ou quand vous démarrerez &sheets;, la boite de dialogue <guilabel
 >Choisir</guilabel
 > vous donnera l'option de créer le nouveau document à partir de votre modèle.</para>
 <para
->La boîte de dialogue <guilabel
+>La boite de dialogue <guilabel
 >Créer un modèle</guilabel
-> vous permet aussi de choisir une image différente à afficher au-dessus du nom du modèle dans la boîte de dialogue <guilabel
+> vous permet aussi de choisir une image différente à afficher au-dessus du nom du modèle dans la boite de dialogue <guilabel
 >Choisir</guilabel
-> et vous permet d'enregistrer vos modèles sous différents groupes de noms, qui apparaîtront comme différentes pages à onglets dans la boîte de dialogue <guilabel
+> et vous permet d'enregistrer vos modèles sous différents groupes de noms, qui apparaitront comme différentes pages à onglets dans la boite de dialogue <guilabel
 >Choisir</guilabel
 >.</para>
 <para
@@ -850,7 +850,7 @@ selected area. For more complex sorting select <menuchoice
 ><guimenuitem
 >Imprimer...</guimenuitem
 ></menuchoice
-> qui amène la boîte de dialogue <guilabel
+> qui amène la boite de dialogue <guilabel
 >Imprimer</guilabel
 > de &kde;, où vous pouvez choisir entre autres options, l'imprimante à utiliser, le nombre de copies et si toutes ou seulement les pages sélectionnées seront imprimées.</para>
 <para
@@ -887,7 +887,7 @@ selected area. For more complex sorting select <menuchoice
 > pour plus de détails sur le sujet.</para>
 
 <para
->Vous pouvez aussi utiliser la boîte de dialogue <guilabel
+>Vous pouvez aussi utiliser la boite de dialogue <guilabel
 >Mise en page</guilabel
 > invoquée en sélectionnant <menuchoice
 ><guimenu

@@ -30,7 +30,7 @@
 ><guimenuitem
 >Configurer les raccourcis clavier...</guimenuitem
 ></menuchoice
->. Ceci ouvrira une boîte de dialogue comme ci-dessous. </para>
+>. Ceci ouvrira une boite de dialogue comme ci-dessous. </para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="shortcut1.png" format="PNG"/>
@@ -80,7 +80,7 @@
 >Configuration</guimenu
 >.</para>
 <para
->Si les barres d'outils sont déverrouillées, vous pouvez choisir si une barre d'outils apparaît en <guimenuitem
+>Si les barres d'outils sont déverrouillées, vous pouvez choisir si une barre d'outils apparait en <guimenuitem
 >haut</guimenuitem
 >, à <guimenuitem
 >gauche</guimenuitem
@@ -114,9 +114,9 @@
 >Configurer les barres d'outils...</guimenuitem
 > du menu <guimenu
 >Configuration</guimenu
-> ouvre une boîte de dialogue qui vous permet d'ajouter des boutons ou d'en enlever des barres d'outils de &sheets;.</para>
+> ouvre une boite de dialogue qui vous permet d'ajouter des boutons ou d'en enlever des barres d'outils de &sheets;.</para>
 <para
->Pour utiliser cette boîte de dialogue <guilabel
+>Pour utiliser cette boite de dialogue <guilabel
 >Configurer les barres d'outils</guilabel
 >, sélectionnez d'abord une barre d'outils dans la liste combinée <guilabel
 >Barre d'outils :</guilabel

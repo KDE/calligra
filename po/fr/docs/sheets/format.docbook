@@ -70,7 +70,7 @@
 </mediaobject>
 </para>
 <para
->Ceci ouvrira la boîte de dialogue <guilabel
+>Ceci ouvrira la boite de dialogue <guilabel
 >Format de cellule</guilabel
 > qui présente plusieurs pages à onglets :</para>
 <sect2 id="formatdata">
@@ -93,7 +93,7 @@
 <para
 >La page <guilabel
 >Format de données</guilabel
-> de la boîte de dialogue de <guilabel
+> de la boite de dialogue de <guilabel
 >format de cellule</guilabel
 > vous permet de contrôler comment les valeurs des cellules sont affichées.</para>
 <para
@@ -101,7 +101,7 @@
 >d'aperçu</guilabel
 > vous permet de voir l'effet du nouveau format. </para>
 <para
->Vous pouvez définir le même format de date pour une ligne ou une colonne en sélectionnant la ligne ou la colonne et en ouvrant la boîte de dialogue <guilabel
+>Vous pouvez définir le même format de date pour une ligne ou une colonne en sélectionnant la ligne ou la colonne et en ouvrant la boite de dialogue <guilabel
 >Format de cellule</guilabel
 > avec le &BDS;.</para>
 <note
@@ -329,7 +329,7 @@ better-->
 ><guimenuitem
 >Date et Heure</guimenuitem
 ></menuchoice
->. Dans la boîte de dialogue <guilabel
+>. Dans la boite de dialogue <guilabel
 >Format de cellule</guilabel
 > vous pouvez définir la manière d'afficher la date et l'heure en choisissant une des options. Le format par défaut est celui du système choisi dans la &configurationDuSysteme;. Quand le nombre dans la cellule n'a pas de sens en temps que date, &sheets; affiche 00:00 dans le format général existant dans la &configurationDuSysteme;.</para>
 </listitem>
@@ -351,7 +351,7 @@ better-->
 ><guimenuitem
 >Date et Heure</guimenuitem
 ></menuchoice
->. Dans la boîte de dialogue <guilabel
+>. Dans la boite de dialogue <guilabel
 >Format de cellule</guilabel
 > vous pouvez définir la manière d'afficher la date et l'heure en choisissant une des options. Le format par défaut est celui du système choisi dans la &configurationDuSysteme;. Quand le nombre dans la cellule n'a pas de sens en temps que date, &sheets; affiche 00:00 dans le format général existant dans la &configurationDuSysteme;.</para>
 </listitem>
@@ -482,7 +482,7 @@ better-->
 ></term>
 <listitem
 ><para
->Choisir la couleur pour le texte des cellules actuellement sélectionnées. Cliquer sur la barre des couleurs ouvrira la boîte de dialogue standard de KDE <guilabel
+>Choisir la couleur pour le texte des cellules actuellement sélectionnées. Cliquer sur la barre des couleurs ouvrira la boite de dialogue standard de KDE <guilabel
 >Sélectionner couleur</guilabel
 > dans laquelle vous pourrez choisir la nouvelle couleur. </para>
 </listitem>
@@ -594,7 +594,7 @@ better-->
 ></term>
 <listitem
 ><para
->Votre texte apparaîtra orienté selon l'angle que vous avez défini. Des valeurs positives le déplaceront dans le sens contraire aux aiguilles d'une montre et des valeurs négatives dans le sens des aiguilles d'une montre. </para>
+>Votre texte apparaitra orienté selon l'angle que vous avez défini. Des valeurs positives le déplaceront dans le sens contraire aux aiguilles d'une montre et des valeurs négatives dans le sens des aiguilles d'une montre. </para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -782,7 +782,7 @@ better-->
 ></term>
 <listitem
 ><para
->Quand cette option est cochée, la cellule est encore visible. De toute manière, son contenu n'apparaît pas dans la barre <guilabel
+>Quand cette option est cochée, la cellule est encore visible. De toute manière, son contenu n'apparait pas dans la barre <guilabel
 >Formule</guilabel
 >. Masquer les formules fonctionne seulement pour les cellules qui contiennent des formules. Ainsi, l'utilisateur ne peut voir les formules. La feuille doit être protégée ainsi pour être fonctionnelle.</para>
 </listitem>
@@ -814,7 +814,7 @@ better-->
 >Styles conditionnels...</guimenuitem
 > dans le menu <guimenu
 >Format</guimenu
->. Ceci ouvre la boîte de dialogue <guilabel
+>. Ceci ouvre la boite de dialogue <guilabel
 >Styles conditionnels</guilabel
 > où vous pouvez faire changer le type de police et la couleur de la cellule quand la valeur rencontre une ou plusieurs conditions. Notez que les deuxième et troisième conditions ne s'appliquent que si les précédentes ne sont pas rencontrées.</para>
 <para
@@ -864,7 +864,7 @@ better-->
 > de la souris et tirer le bord entre les deux lignes, changeant la hauteur de la ligne supérieure. Une technique semblable peut être utilisée pour changer la largeur d'une colonne.</para>
 
 <para
->Pour établir la hauteur de la ligne ou la largeur de la colonne au minimum nécessaire pour afficher le contenu, sélectionnez la ligne ou la colonne entière et cliquez du bouton droit sur le libellé de la ligne ou de la colonne. Dans le menu qui apparaît, sélectionnez <guimenuitem
+>Pour établir la hauteur de la ligne ou la largeur de la colonne au minimum nécessaire pour afficher le contenu, sélectionnez la ligne ou la colonne entière et cliquez du bouton droit sur le libellé de la ligne ou de la colonne. Dans le menu qui apparait, sélectionnez <guimenuitem
 >Ajuster la ligne</guimenuitem
 > ou <guimenuitem
 >Ajuster la colonne</guimenuitem
@@ -956,7 +956,7 @@ better-->
 ></menuchoice
 > dans le menu <guimenu
 >Format</guimenu
->. Dans la boîte de dialogue qui apparaît, vous pouvez sélectionner n'importe quel nombre de lignes à afficher.</para>
+>. Dans la boite de dialogue qui apparait, vous pouvez sélectionner n'importe quel nombre de lignes à afficher.</para>
 </sect1>
 
 <sect1 id="sheet-properties">
@@ -1013,7 +1013,7 @@ better-->
 ></term>
 <listitem
 ><para
->Si la boîte de dialogue est décochée, toute cellule contenant la valeur zéro apparaîtra blanche.</para>
+>Si la boite de dialogue est décochée, toute cellule contenant la valeur zéro apparaitra blanche.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
