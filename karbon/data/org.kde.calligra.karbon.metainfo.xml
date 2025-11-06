@@ -25,6 +25,7 @@
   <name xml:lang="fi">Karbon</name>
   <name xml:lang="fr">Karbon</name>
   <name xml:lang="gl">Karbon</name>
+  <name xml:lang="hu">Karbon</name>
   <name xml:lang="ia">Karbon</name>
   <name xml:lang="id">Karbon</name>
   <name xml:lang="it">Karbon</name>
@@ -61,6 +62,7 @@
   <summary xml:lang="fi">Skaalautuva grafiikka</summary>
   <summary xml:lang="fr">Graphisme vectoriel</summary>
   <summary xml:lang="gl">Gráficos de tamaño variábel</summary>
+  <summary xml:lang="hu">Vektoros rajzoló</summary>
   <summary xml:lang="ia">Graphicos scalabile</summary>
   <summary xml:lang="id">Grafik Dapat Diskala</summary>
   <summary xml:lang="it">Grafica scalabile</summary>
@@ -101,6 +103,7 @@
     <p xml:lang="fi">Karbon on vektorigrafiikkasovellus, jonka käyttöliittymä on helppo ja laajasti mukautettavissa ja laajennettavissa. Karbon on näin loistava sovellus vektorigrafiikan maailmaan vasta tutustuville käyttäjille samoin kuin henkeäsalpaavaa vektoritaidetta luoville taiteilijoille.</p>
     <p xml:lang="fr">Karbon est une application de dessin vectoriel avec une interface facile à utiliser, personnalisable et extensible. Cela fait de Karbon une application majeure pour les utilisateurs s'initiant au dessin vectoriel et pour les artistes voulant créer des œuvres à couper le souffle.</p>
     <p xml:lang="gl">Karbon é unha aplicación de debuxo vectorial cunha interface de usuario fácil de usar, personalizar e ampliar. Iso fai de Karbon unha grande aplicación para usuarios que comezan a explorar o mundo das imaxes vectoriais, pero tamén para artistas que queren crear impresionantes obras de arte vectoriais.</p>
+    <p xml:lang="hu">A Karbon egy vektorgrafikus rajzolóalkalmazás, amely könnyen használható, rendkívül testre szabható és bővíthető felhasználói felülettel rendelkezik. Ezáltal ideális választás mindazok számára, akik most ismerkednek a vektorgrafika világával, valamint azoknak a művészeknek, akik lenyűgöző vektorgrafikákat szeretnének alkotni.</p>
     <p xml:lang="id">Karbon adalah aplikasi menggambar vektor dengan antarmuka pengguna yang mudah digunakan, sangat dapat disesuaikan, dan dapat diekstensi. Itu membuat Karbon adalah aplikasi yang bagus untuk pengguna yang mulai menjelajahi dunia grafis vektor dan juga bagi para seniman yang ingin membuat seni vektor yang menakjubkan.</p>
     <p xml:lang="it">Karbon è un'applicazione di disegno vettoriale con un'interfaccia utente facile da utilizzare, altamente personalizzabile ed estendibile. Ciò rende Karbon un'ottima applicazione per gli utenti che iniziano a esplorare il mondo della grafica vettoriale così come per gli artisti che vogliono creare straordinarie opere vettoriali. </p>
     <p xml:lang="ka">Karbon ვექტორული ხაზვის აპლიკაციაა მომხმარებლის ინტერფეისით რომელიც იოლი, მორგებადი და გაფართოებადია. ეს Karbon-ს გადასარევ აპლიკაციად ქმნის მოხმარებლებისთვის, რომლებსაც სურთ, მიმოიხილონ ვექტორული გრაფიკის სამყარო და ხელოვნებისთვის, რომლებიც სუნთქვისშემკვრელ ვექტორულ გრაფიკას ქმნიან.</p>
@@ -134,6 +137,7 @@
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
+    <p xml:lang="hu">Funkciók:</p>
     <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
@@ -172,6 +176,7 @@
       <li xml:lang="fi">Lukutuki ODG-, SVG-, WPG-, WMF- ja EPS/PS-muodoista</li>
       <li xml:lang="fr">Lecture des formats ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="gl">Posibilidade de cargar ODG, SVG, WPG, WMF e EPS/PS.</li>
+      <li xml:lang="hu">ODG, SVG, WPG, WMF, EPS/PS formátumok betöltésének támogatása</li>
       <li xml:lang="ia">Cargante supporto pro ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="id">Dukungan pemuatan untuk ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="it">Supporto per il caricamento di ODG, SVG, WPG, WMF, EPS/PS</li>
@@ -208,6 +213,7 @@
       <li xml:lang="fi">Kirjoitustuki ODG-, SVG-, PNG-, PDF- ja WMF-muotoihin</li>
       <li xml:lang="fr">Écriture des formats ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="gl">Posibilidade de xerar ODG, SVG, PNG, PDF e WMF.</li>
+      <li xml:lang="hu">ODG, SVG, PNG, PDF, WMF formátumokba mentés támogatása</li>
       <li xml:lang="ia">Supporto de scriber pro ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="id">Dukungan penilisan untuk ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="it">Supporto per la scrittura di ODG, SVG, PNG, PDF, WMF</li>
@@ -244,6 +250,7 @@
       <li xml:lang="fi">Mukautettava käyttöliittymä, jonka työkalurivit ja telakat ovat vapaasti sijoitettavissa</li>
       <li xml:lang="fr">Interface utilisateur personnalisable avec des barres d'outil librement déplaçables.</li>
       <li xml:lang="gl">Interface de usuario personalizábel con barras de ferramentas e docas que poden recolocarse libremente.</li>
+      <li xml:lang="hu">Testreszabható felhasználói felület, szabadon elhelyezhető eszköztárakkal és dokkokkal</li>
       <li xml:lang="ia">Interfacie de usator personalisabile con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
       <li xml:lang="id">Antarmuka pengguna yang dapat dikustomisasi dengan docker dan toolbar yang secara bebas dapat ditempatkan</li>
       <li xml:lang="it">Interfaccia utente personalizzabile con barre degli strumenti posizionabili liberamente e aree di aggancio</li>
@@ -279,6 +286,7 @@
       <li xml:lang="fi">Monimutkaisten tiedostojen helppoon hallintaan tasotelakka, joka sisältää esikatselukuvat, muotojen ryhmittelyn tuen vetämällä ja pudottamalla sekä muotojen näkyvyyden ja lukitsemisen hallinnan</li>
       <li xml:lang="fr">Conteneurs de calques pour la manipulation facile de documents complexes incluant les vignettes d'aperçu, la prise en charge du groupement de formes par glisser-déposer, contrôle de la visibilité des formes et verrouillage</li>
       <li xml:lang="gl">Doca de capas para xestionar facilmente documentos complexos. Inclúe miniaturas de vista previa, permite agrupar formas arrastrando e soltando, controlar a visibilidade das formas ou bloquealas.</li>
+      <li xml:lang="hu">Rétegdokkoló az összetett dokumentumok egyszerű kezeléséhez, előnézeti miniatűrökkel, az alakzatok csoportosításának támogatásával (fogd-és-vidd módszerrel), valamint az alakzatok láthatóságának és zárolásának vezérlésével</li>
       <li xml:lang="id">Docker layer untuk memudahkan penanganan dokumen rumit termasuk gambar-mini pratinjau, dukungan untuk pengelompokan bentuk melalui seret dan taruh, mengontrol visibilitas bentuk atau penguncian</li>
       <li xml:lang="it">Area di aggancio di livelli per una facile gestione di documenti complessi incluse miniature di anteprima, supporto di forme raggruppate tramite il trascinamento e rilascio, controllo della visibilità delle forme e blocco</li>
       <li xml:lang="ka">ფენის მიმაგრება კომპლექსური დოკუმენტების ადვილად დასამუშავებლად მინიატურების ჩათვლით. მონახაზებს დაჯგუფების მხარდაჭერა გადათრევა/დაგდებით. აკონტროლეთ მონახაზების ხილვადობა და ჩაკეტვა</li>
@@ -311,6 +319,7 @@
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
       <li xml:lang="fr">Outil avancé d'édition d'emplacement avec des capacités d'édition dans les canevas performantes</li>
       <li xml:lang="gl">Ferramenta avanzada de edición de rutas cunha gran funcionalidade de edición sobre o lenzo.</li>
+      <li xml:lang="hu">Fejlett útvonalszerkesztő eszköz, kiváló közvetlen a vásznon történő szerkesztési lehetőségekkel</li>
       <li xml:lang="id">Alat pengeditan alur tingkat-lanjut dengan kemampuan pengeditan di kanvas yang bagus</li>
       <li xml:lang="it">Strumento avanzato di modifica di tracciati con grandi capacità di modifica sul posto</li>
       <li xml:lang="ka">დამატებითი ბილიკის ჩასწორების ხელსაწყო ტილოზე ჩასწორების შესაძლებლობებით</li>
@@ -343,6 +352,7 @@
       <li xml:lang="fi">Eri piirrostyökalut polkumuotojen luontiin: polunpiirto-, kynä- ja kalligrafinen piirrostyökalu</li>
       <li xml:lang="fr">Outils de dessin variés incluant un outil de création d'emplacement, un crayon ainsi qu'un outil pour la calligraphie</li>
       <li xml:lang="gl">Varias ferramentas de debuxo para crear formas de rutas, incluíndo unha ferramenta de debuxo de rutas, unha ferramenta de lapis, e unha ferramenta de debuxo caligráfico.</li>
+      <li xml:lang="hu">Különféle rajzeszközök útvonalalakzatok létrehozásához, beleértve az útvonalrajzoló eszközt, a ceruzaeszközt, valamint a kalligráfiai rajzeszközt</li>
       <li xml:lang="id">Berbagai alat menggambar untuk membuat bentuk alur termasuk alat alur gambar, alat pensil serta alat menggambar kaligrafi</li>
       <li xml:lang="it">Vari strumenti di disegno per creare percorsi e forme che include uno strumento di tracciati, un matita e uno strumento calligrafico</li>
       <li xml:lang="ka">სხვადასხვა სახატავი ხელსაწყოები ბილიკის მოხაზულობების შესაქმნელად ბილიკის ხაზვის ხელსაწყოს ჩათვლით, ფანქარი და კალიგრაფიის სახატავი ხელსაწყო</li>
@@ -375,6 +385,7 @@
       <li xml:lang="fi">Työkalut liukuvärien ja täyttökuvioiden helppoon muokkaukseen</li>
       <li xml:lang="fr">Outils de gradient et de tramage pour l'édition facile de styles de gradients et de trames</li>
       <li xml:lang="gl">Ferramentas de gradacións e padróns para editar degradados e estilos de padróns facilmente sobre o lenzo.</li>
+      <li xml:lang="hu">Színátmenet- és mintázateszközök a színátmenetek és minták vásznon történő egyszerű szerkesztéséhez</li>
       <li xml:lang="id">Alat gradien dan pola untuk pengeditan gradien dan pola yang mudah di kanvas</li>
       <li xml:lang="it">Strumenti di gradienti e motivi per una facile modifica sul posto di stili di gradienti e motivi</li>
       <li xml:lang="ka">გრადიენტისა და ნიუშის ხელსაწყოები მათი ტილოზე ადვილად ჩასასწორებლად</li>
@@ -408,6 +419,7 @@
       <li xml:lang="fi">Huippulaatuinen kiinnitysominaisuus ohjattuun piirtämiseen ja muokkaukseen (esim. kiinnitys ruudukkoon, apuviivoihin, rajauslaatikkoon, kohtisuoraan asemaan, leikkaukseen, polkumuotoon tai viivojen ja polkujen jatkeisiin)</li>
       <li xml:lang="fr">Fonctionnalités d'alignement top-niveau pour guider le dessin et l'édition (p.ex. alignement sur la grille, lignes de guidage, nœuds d'emplacement, boites, positions orthogonales, intersections de formes ou extensions de lignes ou de formes)</li>
       <li xml:lang="gl">Funcionalidades de axuste de última xeración para editar e debuxar de maneira guiada (por exemplo, axustar á grade, liñas de guía, nodos de rutas, caixas de límites, posicións ortogonais, cruzamento de formas de rutas ou extensións de liñas e rutas).</li>
+      <li xml:lang="hu">Kiváló illesztési funkciók az irányított rajzoláshoz és szerkesztéshez (pl. illesztés rácshoz, segédvonalakhoz, útvonalcsomópontokhoz, határolókeretekhez, derékszögű pozíciókhoz, útvonalak metszéspontjaihoz vagy vonalak és útvonalak meghosszabbításaihoz)</li>
       <li xml:lang="id">Fasilitas snapping yang berada di atas untuk menggambar dan mengedit yang dipandu (mis. Snapping ke kisi, garis pandu, simpul alur, kotak pembatas, posisi ortogonal, persimpangan bentuk lintasan atau ekstensi garis dan alur)</li>
       <li xml:lang="it">Capacità di alto livello di regolazione per disegno e modifica guidata (ad es. aggancio alla griglia, linee guida, nodi di tracciato, riquadri collegati, posizioni ortgonali, intersezioni di forme di tracciato o estensioni di linee e tracciati)</li>
       <li xml:lang="ka">საკაიფო მიბმის ხელსაწყოები წინასწარ მითითებული ხატვისა და ჩასწორებისთვის (მაგ: ბადეზე მიმაგრება, გიდის ხაზები, ბილიკის კვანძები, ჩარჩოები, ორთოგონალური მდებარეობები და ხაზებისა და ბილიკის გაფართოებები)</li>
@@ -441,6 +453,7 @@
       <li xml:lang="fi">Lukuisia esimääritettyjä muotoja (perusmuodot kuten tähdet, ympyrä ja soikio, nelikulmio, kuva)</li>
       <li xml:lang="fr">Inclut de nombreuses formes prédéfinies, telles que les étoiles, cercles/ellipses, rectangles, images</li>
       <li xml:lang="gl">Inclúe moitas formas predefinidas, entre elas formas básicas como estrelas, círculos, elipses, rectángulos e imaxes.</li>
+      <li xml:lang="hu">Számos előre definiált alakzatot tartalmaz, beleértve az alapformákat, például csillagokat, köröket/ellipsziseket, téglalapokat és képeket</li>
       <li xml:lang="id">Memasukkan banyak bentuk standar termasuk bentuk dasar seperti bintang, lingkaran/bulatan, persegi panjang, gambar</li>
       <li xml:lang="it">Include molte forme predefinite tra cui forme base come stelle, cerchi/ellissi, rettangoli e immagini</li>
       <li xml:lang="ka">შეიცავს მრავალ წინასწარ აღწერილ მოხაზულობას ისეთი ძირითადი მოხაზულობების ჩათვლით, როგორიცაა ვარსკვლავი, წრე/ოვალი, მართკუთხედი, გამოსახულება</li>
@@ -474,6 +487,7 @@
       <li xml:lang="fi">Taiteelliset tekstimuodot polunseurantatuella</li>
       <li xml:lang="fr">Formes de texte artistiques prenant par exemple en charge la création de texte le long d'une courbe</li>
       <li xml:lang="gl">Forma de texto artístico que permite seguir o contorno de rutas (é dicir, texto sobre rutas).</li>
+      <li xml:lang="hu">Művészi szöveg alakzat, amely támogatja az útvonal mentén történő elhelyezést (azaz szöveg útvonalon).</li>
       <li xml:lang="id">Bentuk teks artistik dengan dukungan untuk kerangka alur berikut (yaitu teks di alur)</li>
       <li xml:lang="it">Forme di testo artistico con supporto per le bordature che seguono il tracciato (ad es. testo su tracciato)</li>
       <li xml:lang="ka">არტისტული ტექსტის მოხაზულობა ბილიკის მიყოლით (ანუ ტექსტი ბილიკზე)</li>
@@ -507,6 +521,7 @@
       <li xml:lang="fi">Monimutkaiset polku-operaatiot ja -tehosteet kuten totuusarvo-operaatiot, polun tasoitus, pyöristys ja hienosäätö sekä pyörre- ja nipistystehosteet</li>
       <li xml:lang="fr">Opérations d'emplacements complexes et effets tels que les opérateurs booléens, mise à plat et ajustements, de même que les effets de spirale et de pincement.</li>
       <li xml:lang="gl">Operacións de rutas complexas e efectos como operacións de grupos de valores booleanos; aplanamento, arredondamento e refinamento de rutas; así como efectos de xiro e picada.</li>
+      <li xml:lang="hu">Összetett útvonalműveletek és -effektusok, például logikai halmazműveletek, útvonal-simítás, lekerekítés és finomítás, valamint örvénylő és csípő effektusok</li>
       <li xml:lang="id">Operasi dan efek alur yang rumit seperti operasi set boolean, perataan alur, pembulatan dan pemurnian serta efek pusaran/cubitan</li>
       <li xml:lang="it">Operazioni complesse su tracciati ed effetti del tipo operazioni su insiemi booleani, appiattimento di tracciati, arrotondamento e affinamento così come effetti di vortice/pizzico</li>
       <li xml:lang="ka">კომპლექსური ბილიკის ოპერაციები და ეფექტები, როგორიცაა ლოგიკური ოპერაციები, ბილიკის გაბრტყელება, მომრგვალება და დაზუსტება, სხვადასხვა ეფექტებთან ერთად</li>
@@ -541,6 +556,7 @@
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
       <li xml:lang="fr">Extensible par l'écriture de modules pour de nouveaux outils, formes et conteneurs</li>
       <li xml:lang="gl">Permite ampliar as súas funcionalidades mediante complementos de ferramentas novas, de formas e de docas.</li>
+      <li xml:lang="hu">Bővíthető új eszközökhöz, alakzatokhoz és dokkolókhoz írt beépülő modulokkal</li>
       <li xml:lang="id">Dapat diekstensi dengan plugin penulisan untuk alat, shape, dan docker baru</li>
       <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>
       <li xml:lang="ka">გაფართოებადი დამატებებით ახალი ხელსაწყოებისთვის, მოხაზულობებისთვის და პანელებისთვის</li>
@@ -585,6 +601,7 @@
       <caption xml:lang="fi">Karbonin pääikkuna</caption>
       <caption xml:lang="fr">Fenêtre principale de Karbon</caption>
       <caption xml:lang="gl">Xanela principal de Karbon.</caption>
+      <caption xml:lang="hu">A Karbon főablaka</caption>
       <caption xml:lang="it">Finestra principale di Karbon</caption>
       <caption xml:lang="ka">Karbon-ის მთავარი ფანჯარა</caption>
       <caption xml:lang="lv">„Karbon“ pamata logs</caption>
