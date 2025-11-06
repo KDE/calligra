@@ -63,6 +63,7 @@
   <summary xml:lang="fr">Notes et ensemble d'idées</summary>
   <summary xml:lang="gl">Recolección de notas e ideas</summary>
   <summary xml:lang="he">איסוף הערות ורעיונות</summary>
+  <summary xml:lang="hu">Jegyzetek és ötletek gyűjtése</summary>
   <summary xml:lang="id">Penghasil gagasan dan catatan</summary>
   <summary xml:lang="it">Note e raccolta di idee</summary>
   <summary xml:lang="ka">შენიშვნების და იდეების შეგროვება</summary>
@@ -100,6 +101,7 @@
     <p xml:lang="fr">Braindump est un outil pour mettre en ordre le contenu de votre cerveau (idées, dessins, images, textes…) sur votre ordinateur. Il vous permet de créer et d'éditer des tableaux blancs illimités sur lesquels vous pouvez ajouter des textes, des images, des graphiques, des dessins, etc.</p>
     <p xml:lang="gl">Braindump é unha ferramenta para envorcar e organizar o que pasa pola súa cabeza (ideas, debuxos, imaxes, textos…) no seu computador. Permítelle crear e editar encerados, que son lenzos infinitos nos que pode engadir textos, imaxes, gráficos, debuxos…</p>
     <p xml:lang="he">סיעור מוחין הוא כלי לתיעוד וסידור תוכן המוח שלך (רעיונות, ציורים, תמונות, טקסטים…) למחשב שלך. הוא עובד דרך הרשאה ליצירת ועריכת לוחות תכנון, שהן משטחי ציור אינסופיים שאפשר להוסיף להם טקסטים, תמונות, תרשימים, ציורים ועוד.</p>
+    <p xml:lang="hu">A Braindump egy eszköz, amellyel az ötleteit, rajzait, képeit, szövegeit és egyéb gondolatait „kiöntheti” és rendszerezheti a számítógépén. Úgy működik, hogy lehetővé teszi digitális rajztáblák létrehozását és szerkesztését, amelyekre szövegeket, képeket, diagramokat, rajzokat és sok egyebet helyezhet el.</p>
     <p xml:lang="ia">Braindump es un instrumento pro discargar e organizar le contento de tu cerebro (ideas, designos, imagines, textos...) in tu computator. Illo functiona per permitter crear e modificar tabula blanc, que es telas infinite sur le qual on pote adder textos, imagines, diagrammas, designos, etc.</p>
     <p xml:lang="id">Braindump adalah alat untuk membuang dan mengorganisir konten pikiran Anda (gagasan, gambar, citra, teks ...) ke komputer Anda. Ini bekerja dengan membolehkankan untuk menciptakan dan mengedit papan tulis, yang merupakan kanvas tanpa batas di mana kamu bisa menambahkan teks, gambar, grafik, citra, dll.</p>
     <p xml:lang="it">Braindump è uno strumento per estrarre e organizzare il contenuto del tuo cervello (idee, disegni, immagini, testi...) sul tuo computer. Ti consente di creare e modificare lavagne bianche, che sono tele infinite sulle quali puoi aggiungere testi, immagini, grafici, disegni, ecc.</p>
@@ -135,6 +137,7 @@
       <caption xml:lang="fr">Fenêtre principale de Braindump affichant une partition musicale et de nombreuses autres formes</caption>
       <caption xml:lang="gl">Xanela principal de Braindump amosando unha división musical e moitas outras formas.</caption>
       <caption xml:lang="he">החלון הראשי של סיעור מוחין שמציג חלק מוזיקלי ושלל צורות נוספות</caption>
+      <caption xml:lang="hu">A Braindump főablaka, amely egy kottát és számos egyéb alakzatot jelenít meg</caption>
       <caption xml:lang="it">Finestra principale di Braindump che mostra una partitura musicale e molte altre forme</caption>
       <caption xml:lang="ka">Braindump-ის მთავარი ფანჯარა, რომელიც მუსიკის დანაყოფს და ბევრ სხვა ფიგურას აჩვენებს</caption>
       <caption xml:lang="lv">„Brandump“ galvenais logs ar nošu pierakstu un citiem objektiem.</caption>
