@@ -2,20 +2,21 @@
 # Tamas Szanto <tszanto@mol.hu>, 2000.
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2012.
 # Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+# SPDX-FileCopyrightText: 2025 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-03 00:39+0000\n"
-"PO-Revision-Date: 2014-06-21 12:47+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"PO-Revision-Date: 2025-11-06 21:14+0100\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -85,10 +86,6 @@ msgid "Delete custom slide show"
 msgstr "Egyéni diavetítés törlése"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete slide"
-#| msgid_plural "Delete slides"
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
 msgstr "Dia törlése"
@@ -126,11 +123,9 @@ msgid "Delete Slide Effect"
 msgstr "Diaeffektus törlése"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
-#, fuzzy
-#| msgid "Slide Transitions"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
-msgstr "Diaátmenetek"
+msgstr "Diaátmenet módosítása"
 
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -143,34 +138,30 @@ msgid "Reorder animations"
 msgstr "Animációk újrarendezése"
 
 #: part/KPrAboutData.h:19
-#, fuzzy, kde-format
-#| msgid "Configure Stage..."
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
-msgstr "A Stage beállítása…"
+msgstr "Calligra Stage"
 
 #: part/KPrAboutData.h:21
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Presentation Tool"
-msgstr "Bemutató"
+msgstr "Prezentációs program"
 
 #: part/KPrAboutData.h:23
-#, fuzzy, kde-format
-#| msgid "© 1998-%1, The Stage Team"
+#, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr "© A Stage csapata, 1998-%1."
+msgstr "Copyright A Stage fejlesztői, 1998-%1."
 
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KPrAboutData.h:30
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Karbantartó"
+msgstr "Karbantartó/Portolás Qt 6-ra"
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format
@@ -608,10 +599,9 @@ msgid "From First Slide"
 msgstr "Az első diától"
 
 #: part/KPrView.cpp:293
-#, fuzzy, kde-format
-#| msgid "Loop presentation"
+#, kde-format
 msgid "Stop presentation"
-msgstr "A bemutató körkörös lejátszása"
+msgstr "Bemutató leállítása"
 
 #: part/KPrView.cpp:299
 #, kde-format
@@ -836,18 +826,17 @@ msgstr " mp"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
-msgstr ""
+msgstr "Kézi"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "Automatikus"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
-#, fuzzy, kde-format
-#| msgid "Slide Transitions"
+#, kde-format
 msgid "Slide Transition:"
-msgstr "Diaátmenetek"
+msgstr "Diaátmenet:"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, kde-format
