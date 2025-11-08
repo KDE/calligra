@@ -3,20 +3,21 @@
 # Reuss András <tinstall@freemail.c3.hu>, 1999.
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2012, 2015.
 # Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+# SPDX-FileCopyrightText: 2025 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 00:39+0000\n"
-"PO-Revision-Date: 2015-09-09 09:40+0200\n"
-"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"PO-Revision-Date: 2025-11-07 21:24+0100\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -69,10 +70,9 @@ msgstr "Helyesírás-ellenőrzés"
 
 #. i18n: ectx: Menu (AutoCorrection)
 #: part/calligrawords.rc:83
-#, fuzzy, kde-format
-#| msgid "Apply Autocorrection"
+#, kde-format
 msgid "AutoCorrection"
-msgstr "Automatikus javítás végrehajtása"
+msgstr "Automatikus javítás"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
@@ -589,10 +589,9 @@ msgstr "Körvonal"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:116
-#, fuzzy, kde-format
-#| msgid "Shape and text is separated:"
+#, kde-format
 msgid "Shape and text are separated left by:"
-msgstr "Alakzat és szöveg elválasztása:"
+msgstr "Alakzat és szöveg elválasztása balról:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
@@ -1078,21 +1077,19 @@ msgid "Word processor"
 msgstr "Szövegszerkesztő"
 
 #: part/KWAboutData.h:22
-#, fuzzy, kde-format
-#| msgid "© 1998-%1, The Words Team"
+#, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "© A Words fejlesztői, 1998-%1."
+msgstr "Copyright A Words fejlesztői, 1998-%1."
 
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
-#, fuzzy, kde-format
-#| msgid "Co maintainer"
+#, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr "Segédkarbantartó"
+msgstr "Segédkarbantartó, portolás Qt 6-ra"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
@@ -1353,7 +1350,7 @@ msgstr "Oldaltörés ikon"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
+msgstr "ulysses@fsf.hu,ur.balazs@fsf.hu"
 
 #. i18n translator strings
 #: part/KWAboutData.h:73
@@ -1423,8 +1420,7 @@ msgstr ""
 "Ez nem szöveges dokumentum, hanem: %1. Más alkalmazással kell megnyitni."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
-#, fuzzy, kde-format
-#| msgid "Standard"
+#, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Standard"
@@ -1475,9 +1471,7 @@ msgid "Line Number"
 msgstr "Sorszám"
 
 #: part/KWStatusBar.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Page Style"
+#, kde-format
 msgid "Change the page style"
 msgstr "Oldalstílus megváltoztatása"
 
@@ -1507,10 +1501,9 @@ msgid "Zoom Controller"
 msgstr "Nagyításvezérlő"
 
 #: part/KWView.cpp:186
-#, fuzzy, kde-format
-#| msgid "Exit Distraction-Free Mode"
+#, kde-format
 msgid "Exit Fullscreen Mode"
-msgstr "Kilépés a zaklatottságmentes módból"
+msgstr "Kilépés a teljes képernyős módból"
 
 #: part/KWView.cpp:278
 #, kde-format
@@ -1623,28 +1616,23 @@ msgstr ""
 "táblázatszegélyeket."
 
 #: part/KWView.cpp:352
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Section Bounds"
-msgstr "Az automatikus javítás beállításainak megváltoztatása."
+msgstr "Szakaszhatárok megjelenítése"
 
 #: part/KWView.cpp:358
-#, fuzzy, kde-format
-#| msgid "Toggle the display of table borders"
+#, kde-format
 msgid "Toggle the display of section bounds"
-msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
+msgstr "Szakaszhatárok megjelenítésének be/kikapcsolása"
 
 #: part/KWView.cpp:360
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
-#| "shows you any invisible table borders with a thin gray line."
+#, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
-"Táblázatszegélyek megjelenítésének bekapcsolása<br/><br/>Ha engedélyezve "
-"van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
-"táblázatszegélyeket."
+"Szakaszhatárok megjelenítésének be/kikapcsolása<br/><br/>Ha engedélyezve "
+"van, a szakaszhatárok vékony, szürke, vízszintes kapcsokkal lesznek jelölve."
 
 #: part/KWView.cpp:362
 #, kde-format
@@ -1687,13 +1675,12 @@ msgstr "Az állapotsor megjelenítése és elrejtése"
 #: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Teljes képernyős mód"
 
 #: part/KWView.cpp:393
-#, fuzzy, kde-format
-#| msgid "Set view in distraction free mode"
+#, kde-format
 msgid "Set view in fullscreen mode"
-msgstr "Nézet beállítása a zaklatottságmentes módban"
+msgstr "Nézet beállítása teljes képernyős módra"
 
 #: part/KWView.cpp:400
 #, kde-format
@@ -1794,78 +1781,71 @@ msgstr "…"
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
-msgstr ""
+msgstr "Keresés:"
 
 #: part/widgets/KoFindToolbar.cpp:81
-#, fuzzy, kde-format
-#| msgid "Next Page"
+#, kde-format
 msgctxt "Next search result"
 msgid "Next"
-msgstr "Következő oldal"
+msgstr "Következő"
 
 #: part/widgets/KoFindToolbar.cpp:93
-#, fuzzy, kde-format
-#| msgid "Previous Page"
+#, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
-msgstr "Előző oldal"
+msgstr "Előző"
 
 #: part/widgets/KoFindToolbar.cpp:104
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "Search options"
 msgid "Options"
 msgstr "Beállítások"
 
 #: part/widgets/KoFindToolbar.cpp:134
-#, fuzzy, kde-format
-#| msgid "Replace Word"
+#, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
-msgstr "A szó cseréje"
+msgstr "Csere:"
 
 #: part/widgets/KoFindToolbar.cpp:146
-#, fuzzy, kde-format
-#| msgid "Replace Word"
+#, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
-msgstr "A szó cseréje"
+msgstr "Csere"
 
 #: part/widgets/KoFindToolbar.cpp:154
-#, fuzzy, kde-format
-#| msgid "Replace Word"
+#, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
-msgstr "A szó cseréje"
+msgstr "Összes cseréje"
 
 #: part/widgets/KoFindToolbar.cpp:164
-#, fuzzy, kde-format
-#| msgid "Replace Word"
+#, kde-format
 msgid "Replace"
-msgstr "A szó cseréje"
+msgstr "Csere"
 
 #: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 találat"
+msgstr[1] "%1 találat"
 
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
-msgstr ""
+msgstr "Nincs találat"
 
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
-msgstr ""
+msgstr "A keresés elérte a dokumentum végét, folytatás az elejétől."
 
 #: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
-msgstr ""
+msgstr "A keresés elérte a dokumentum elejét, folytatás a végétől."
 
 #: part/Words.cpp:41
 #, kde-format
