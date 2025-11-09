@@ -70,7 +70,7 @@ msgstr "拼写检查"
 #: part/calligrawords.rc:83
 #, kde-format
 msgid "AutoCorrection"
-msgstr ""
+msgstr "自动更正"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
@@ -1417,7 +1417,7 @@ msgstr "这不是一个字处理文档，而是%1。请试着使用相应的应�
 #, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
-msgstr ""
+msgstr "标准"
 
 #: part/KWPart.cpp:139
 #, kde-format
@@ -1666,7 +1666,7 @@ msgstr "全屏模式"
 #: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
-msgstr ""
+msgstr "以全屏模式查看"
 
 #: part/KWView.cpp:400
 #, kde-format

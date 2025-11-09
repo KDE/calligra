@@ -3606,10 +3606,9 @@ msgid ""
 msgstr ""
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
-msgstr "CONTINOUS(本金;利率;年数)"
+msgstr "CONTINUOUS(本金;利率;年数)"
 
 #: functions/financial.xml:173
 #, kde-format

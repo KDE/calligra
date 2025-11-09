@@ -135,7 +135,7 @@ msgstr "线性"
 #: ComponentTransferEffectConfigWidget.cpp:52
 #, kde-format
 msgid "Gamma"
-msgstr "伽玛"
+msgstr "伽马"
 
 #: ComponentTransferEffectConfigWidget.cpp:65
 #: ComponentTransferEffectConfigWidget.cpp:75

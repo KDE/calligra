@@ -86,7 +86,7 @@ msgstr "设置(&S)"
 #: data/karbon.rc:137
 #, kde-format
 msgid "&Page"
-msgstr ""
+msgstr "页面(&P)"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: data/karbon.rc:150
