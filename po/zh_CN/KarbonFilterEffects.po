@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/KarbonFilterEffects.pot\n"
-"X-Crowdin-File-ID: 53620\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/KarbonFilterEffects.pot\n"
+"X-Crowdin-File-ID: 56680\n"
 
 #: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
 #, kde-format
@@ -135,7 +135,7 @@ msgstr "线性"
 #: ComponentTransferEffectConfigWidget.cpp:52
 #, kde-format
 msgid "Gamma"
-msgstr "伽玛"
+msgstr "伽马"
 
 #: ComponentTransferEffectConfigWidget.cpp:65
 #: ComponentTransferEffectConfigWidget.cpp:75

@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/calligra_shape_webshape.pot\n"
-"X-Crowdin-File-ID: 55750\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/calligra_shape_webshape.pot\n"
+"X-Crowdin-File-ID: 56518\n"
 
 #: WebShapeFactory.cpp:30
 #, kde-format

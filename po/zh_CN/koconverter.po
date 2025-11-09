@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/koconverter.pot\n"
-"X-Crowdin-File-ID: 53624\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/koconverter.pot\n"
+"X-Crowdin-File-ID: 56454\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -90,17 +90,17 @@ msgstr "输出文件的 MIME 类型"
 #: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
-msgstr ""
+msgstr "打印方向，可为竖向或横向。"
 
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr ""
+msgstr "纸张大小。A4, Legal, 信纸, ..."
 
 #: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
-msgstr ""
+msgstr "页边距大小。默认是 0.2 ."
 
 #: calligraconverter.cpp:215
 #, kde-format

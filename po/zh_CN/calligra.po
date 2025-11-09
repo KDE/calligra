@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/calligra.pot\n"
-"X-Crowdin-File-ID: 53566\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/calligra.pot\n"
+"X-Crowdin-File-ID: 56614\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -117,7 +117,7 @@ msgstr "转换为路径"
 #: flake/commands/KoPathBreakAtPointCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr "在指定点断开子路径"
+msgstr "断开子路径于指定点"
 
 #: flake/commands/KoPathCombineCommand.cpp:47
 msgctxt "(qtundo-format)"
@@ -174,12 +174,12 @@ msgstr "断开子路径"
 #: flake/commands/KoPathSegmentTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
-msgstr "将线段更改为曲线"
+msgstr "更改线段为曲线"
 
 #: flake/commands/KoPathSegmentTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
-msgstr "将线段更改为直线"
+msgstr "更改线段为直线"
 
 #: flake/commands/KoPathShapeMarkerCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -564,12 +564,12 @@ msgstr "拖拽直接修改曲线。双击插入新路径点。"
 #: flake/tools/KoPathTool.cpp:620
 #, kde-format
 msgid "Press B to break path at selected point."
-msgstr "按 B 可在选中点断开路径。"
+msgstr "按 B 在选中点处断开路径。"
 
 #: flake/tools/KoPathTool.cpp:622
 #, kde-format
 msgid "Press B to break path at selected segments."
-msgstr "按 B 可在选中线段断开路径。"
+msgstr "按 B 在选中线段处断开路径。"
 
 #: flake/tools/KoPathToolFactory.cpp:17
 #, kde-format
@@ -1800,7 +1800,7 @@ msgstr "美国信纸 (Letter)"
 #: odf/KoPageFormat.cpp:52
 msgctxt "Page size"
 msgid "US Legal"
-msgstr "美国法律 (Legal)"
+msgstr "美国法律纸 (Legal)"
 
 #: odf/KoPageFormat.cpp:53
 msgctxt "Page size"
@@ -1820,7 +1820,7 @@ msgstr "ISO B5"
 #: odf/KoPageFormat.cpp:56
 msgctxt "Page size"
 msgid "US Executive"
-msgstr "美国行政 (Executive)"
+msgstr "美国行政纸 (Executive)"
 
 #: odf/KoPageFormat.cpp:57
 msgctxt "Page size"
@@ -1920,7 +1920,7 @@ msgstr "美国账簿 (Ledger)"
 #: odf/KoPageFormat.cpp:76
 msgctxt "Page size"
 msgid "US Tabloid"
-msgstr "美国小报 (Tabloid)"
+msgstr "美国大报纸 (Tabloid)"
 
 #: odf/KoUnit.cpp:27
 #, kde-format
@@ -2770,7 +2770,7 @@ msgstr "柔光(Photoshop)"
 #: pigment/KoCompositeOpRegistry.cpp:50
 #, kde-format
 msgid "Gamma Light"
-msgstr "伽玛变亮"
+msgstr "伽马变亮"
 
 #: pigment/compositeops/KoCompositeOps.h:125
 #: pigment/KoCompositeOpRegistry.cpp:46
@@ -2811,7 +2811,7 @@ msgstr "变暗"
 #: pigment/KoCompositeOpRegistry.cpp:37
 #, kde-format
 msgid "Gamma Dark"
-msgstr "伽玛变暗"
+msgstr "伽马变暗"
 
 #: pigment/compositeops/KoCompositeOps.h:134
 #: pigment/KoCompositeOpRegistry.cpp:28
@@ -3606,7 +3606,7 @@ msgstr "此文档包含未知的校验和。可能无法用密码来正确验证
 #, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
 #, kde-format
@@ -3620,7 +3620,7 @@ msgstr "此文档包含未知的加密方式。某些部分可能无法读取。
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: store/KoEncryptedStore.cpp:308
 #, kde-format
