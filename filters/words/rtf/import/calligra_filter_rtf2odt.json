@@ -25,6 +25,7 @@
         "Name[sv]": "Words RTF-importfilter",
         "Name[tr]": "Sözcükler RTF İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту RTF для Words",
+        "Name[zh_CN]": "Words RTF 导入过滤器",
         "Name[zh_TW]": "Words RTF 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

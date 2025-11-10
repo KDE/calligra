@@ -25,6 +25,7 @@
         "Name[sv]": "MS Word 2007-importfilter för Words",
         "Name[tr]": "Sözcükler için MS Word 2007 İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних MS Word 2007 для Words",
+        "Name[zh_CN]": "Words MS Word 2007 导入过滤器",
         "Name[zh_TW]": "Words 的 Microsoft Word 2007 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

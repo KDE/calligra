@@ -25,6 +25,7 @@
         "Name[sv]": "Flow WPG-importfilter",
         "Name[tr]": "Flow WPG İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування WPG до Flow",
+        "Name[zh_CN]": "Flow 的 DPG 导入过滤器",
         "Name[zh_TW]": "Flow WPG 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

@@ -23,6 +23,7 @@
         "Name[sv]": "Karbon-insticksprogram Platta ut kontur",
         "Name[tr]": "Karbon Yolu Düzleştir Eklentisi",
         "Name[uk]": "Додаток спрощення контурів для Karbon",
+        "Name[zh_CN]": "Karbon 拼合路径插件",
         "Name[zh_TW]": "Karbon 《使路徑平坦》外掛程式",
         "ServiceTypes": [
             "Karbon/ViewPlugin"

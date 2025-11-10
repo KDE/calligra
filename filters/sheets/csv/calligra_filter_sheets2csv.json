@@ -25,6 +25,7 @@
         "Name[sv]": "CSV-exportfilter för Calligra Sheets",
         "Name[tr]": "Calligra Tablolar için Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту CSV для Calligra Sheets",
+        "Name[zh_CN]": "用于 Calligra Sheets 的 CSV 导出过滤器",
         "Name[zh_TW]": "Calligra Sheets 的 CSV 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

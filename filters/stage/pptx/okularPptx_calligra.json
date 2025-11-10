@@ -31,6 +31,7 @@
         "Name[sv]": "okular",
         "Name[tr]": "Okular",
         "Name[uk]": "Okular",
+        "Name[zh_CN]": "Okular",
         "Name[zh_TW]": "okular",
         "ServiceTypes": [
             "KParts/ReadOnlyPart"

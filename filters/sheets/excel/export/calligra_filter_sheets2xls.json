@@ -25,6 +25,7 @@
         "Name[sv]": "KSpread Microsoft Excel-exportfilter",
         "Name[tr]": "KSpread Microsoft Excel Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту до формату Microsoft Excel для KSpread",
+        "Name[zh_CN]": "KSpread Microsoft Excel 导出过滤器",
         "Name[zh_TW]": "KSpread Microsoft Excel 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

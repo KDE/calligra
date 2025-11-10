@@ -23,6 +23,7 @@
         "Name[sv]": "Karbon-insticksprogram Virvla och kläm",
         "Name[tr]": "Karbon Çimdikleyip Döndür Eklentisi",
         "Name[uk]": "Додаток вихору для Karbon",
+        "Name[zh_CN]": "Karbon 旋转捏插件",
         "Name[zh_TW]": "Karbon 《漩渦擠壓》外掛程式",
         "ServiceTypes": [
             "Karbon/ViewPlugin"

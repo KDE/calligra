@@ -23,6 +23,7 @@
         "Description[sv]": "Sideffekter: Kantsuddning",
         "Description[tr]": "Kenar Sil Sayfa Efektleri",
         "Description[uk]": "Ефект витирання сторінки з країв",
+        "Description[zh_CN]": "边缘擦除页面特效",
         "Description[zh_TW]": "邊緣掃描頁面效果",
         "Name": "Edge wipe",
         "Name[ar]": "مسح الحافة",
@@ -48,6 +49,7 @@
         "Name[sv]": "Kantsuddning",
         "Name[tr]": "Kenar Sil",
         "Name[uk]": "Витирання з країв",
+        "Name[zh_CN]": "边缘擦除",
         "Name[zh_TW]": "邊緣掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

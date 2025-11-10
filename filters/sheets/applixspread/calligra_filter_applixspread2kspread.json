@@ -25,6 +25,7 @@
         "Name[sv]": "KSpread Applix kalkylark-importfilter",
         "Name[tr]": "KSpread Applix Hesap Tablosu İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування Applix Spreadsheet для KSpread",
+        "Name[zh_CN]": "KSpread Applix 电子表格导入过滤器",
         "Name[zh_TW]": "KSpread Applix 電子表單匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

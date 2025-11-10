@@ -25,6 +25,7 @@
         "Name[sv]": "Words Applixword-importfilter",
         "Name[tr]": "Sözcükler Applixword İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Applixword для Words",
+        "Name[zh_CN]": "Words Applixword 导入过滤器",
         "Name[zh_TW]": "Words Applixword 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

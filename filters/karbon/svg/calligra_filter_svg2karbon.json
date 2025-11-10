@@ -26,6 +26,7 @@
         "Name[sv]": "Karbon SVG-importfilter",
         "Name[tr]": "Karbon SVG İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування малюнків SVG до Karbon",
+        "Name[zh_CN]": "Karbon SVG 导入过滤器",
         "Name[zh_TW]": "Karbon SVG 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

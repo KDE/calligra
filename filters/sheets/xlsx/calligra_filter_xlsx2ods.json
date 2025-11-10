@@ -26,6 +26,7 @@
         "Name[sv]": "MS Excel 2007-importfilter för KSpread",
         "Name[tr]": "KSpread için MS Excel 2007 İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту MS Excel 2007 для KSpread",
+        "Name[zh_CN]": "KSpread MS Excel 2007 导入过滤器",
         "Name[zh_TW]": "KSpread 的 Microsoft Excel 2007 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

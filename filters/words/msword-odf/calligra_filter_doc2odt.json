@@ -25,6 +25,7 @@
         "Name[sv]": "Words MS Word-ODF-importfilter",
         "Name[tr]": "Sözcükler MS Word–ODF İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних MS Word-ODF для Words",
+        "Name[zh_CN]": "Words MS Word-ODF 导入过滤器",
         "Name[zh_TW]": "Words MS Word-ODF 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

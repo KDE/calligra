@@ -23,6 +23,7 @@
         "Description[sv]": "Sideffekter: Klockformad suddning",
         "Description[tr]": "Saat Sil Sayfa Efektleri",
         "Description[uk]": "Ефект витирання по колу",
+        "Description[zh_CN]": "时钟式擦除页面特效",
         "Description[zh_TW]": "時鐘掃描頁面效果",
         "Name": "Clock wipe",
         "Name[ar]": "مسح عقرب الساعة",
@@ -48,6 +49,7 @@
         "Name[sv]": "Klockformad suddning",
         "Name[tr]": "Saat Sil",
         "Name[uk]": "Витирання по колу",
+        "Name[zh_CN]": "时钟式擦除",
         "Name[zh_TW]": "時鐘掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

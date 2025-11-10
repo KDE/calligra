@@ -25,6 +25,7 @@
         "Name[sv]": "GNUmeric-exportfilter för KSpread",
         "Name[tr]": "KSpread için GNUMERIC Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту GNUmeric для KSpread",
+        "Name[zh_CN]": "KSpread GNUmeric 导出过滤器",
         "Name[zh_TW]": "KSpread 的 GNUmeric 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

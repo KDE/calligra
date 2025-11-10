@@ -26,6 +26,7 @@
         "Name[sv]": "Quattro Pro-importfilter för KSpread",
         "Name[tr]": "KSpread için Quattro Pro İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Quattro Pro для KSpread",
+        "Name[zh_CN]": "KSpread Quattro Pro 导入过滤器",
         "Name[zh_TW]": "KSpread 的 Quattro Pro 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

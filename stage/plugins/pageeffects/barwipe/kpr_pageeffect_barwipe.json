@@ -23,6 +23,7 @@
         "Description[sv]": "Sideffekt: Suddning med staplar",
         "Description[tr]": "Çubuk Sil Sayfa Efekti",
         "Description[uk]": "Ефект пластинчастого витирання",
+        "Description[zh_CN]": "条形擦除页面特效",
         "Description[zh_TW]": "條狀掃描頁面效果",
         "Name": "Bar Wipe",
         "Name[ar]": "مسح شريطي",
@@ -48,6 +49,7 @@
         "Name[sv]": "Suddning med staplar",
         "Name[tr]": "Çubuk Sil",
         "Name[uk]": "Пластинчасте витирання",
+        "Name[zh_CN]": "条形擦除",
         "Name[zh_TW]": "條狀掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

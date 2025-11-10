@@ -24,6 +24,7 @@
         "Name[sv]": "ODT till Epub2-exportfilter",
         "Name[tr]": "ODT–Epub2 Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту ODT до Epub2",
+        "Name[zh_CN]": "ODT 到 Epub2 导出过滤器",
         "Name[zh_TW]": "ODT 到 Epub2 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

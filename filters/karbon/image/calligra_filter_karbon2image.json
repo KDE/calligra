@@ -26,6 +26,7 @@
         "Name[sv]": "Karbon JPEG/PNG-exportfilter",
         "Name[tr]": "Karbon JPEG/PNG Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту JPEG/PNG для Karbon",
+        "Name[zh_CN]": "Karbon 的 JPEG/PNG 导出过滤器",
         "Name[zh_TW]": "Karbon JPEG/PNG 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
