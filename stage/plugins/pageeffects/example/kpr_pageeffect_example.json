@@ -24,6 +24,7 @@
         "Description[sv]": "Sideffekt: Exploderande sida",
         "Description[tr]": "Patlayan Sayfa Sayfa Efekti",
         "Description[uk]": "Ефект вибуху сторінки",
+        "Description[zh_CN]": "爆炸页面特效",
         "Description[zh_TW]": "爆炸頁面效果",
         "Name": "Exploding Page",
         "Name[ar]": "صفحة متفجرة",
@@ -49,6 +50,7 @@
         "Name[sv]": "Exploderande sida",
         "Name[tr]": "Patlayan Sayfa",
         "Name[uk]": "Вибух сторінки",
+        "Name[zh_CN]": "爆炸页面",
         "Name[zh_TW]": "爆炸頁面",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

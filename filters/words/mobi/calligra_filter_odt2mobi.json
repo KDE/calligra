@@ -25,6 +25,7 @@
         "Name[sv]": "ODT till Mobi-exportfilter",
         "Name[tr]": "ODT–Mobi Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту ODT до Mobi",
+        "Name[zh_CN]": "ODT 到 Mobi 导出过滤器",
         "Name[zh_TW]": "ODT 到 Mobi 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

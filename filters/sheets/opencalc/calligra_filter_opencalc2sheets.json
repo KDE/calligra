@@ -26,6 +26,7 @@
         "Name[sv]": "OpenOffice.org Calc-importfilter för KSpread",
         "Name[tr]": "KSpread için Apache OpenOffice Calc İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних OpenOffice.org Calc для KSpread",
+        "Name[zh_CN]": "KSpread OpenOffice.org Calc 导入过滤器",
         "Name[zh_TW]": "KSpread 的 OpenOffice.org Calc 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

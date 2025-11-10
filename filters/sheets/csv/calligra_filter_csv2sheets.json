@@ -25,6 +25,7 @@
         "Name[sv]": "CSV-importfilter för Kspread",
         "Name[tr]": "KSpread için CSV İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування CSV для KSpread",
+        "Name[zh_CN]": "KSpread CSV 导入过滤器",
         "Name[zh_TW]": "KSpread 的 CSV 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

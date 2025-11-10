@@ -23,6 +23,7 @@
         "Name[sv]": "Karbon-insticksprogram Runda hörn",
         "Name[tr]": "Karbon Köşeleri Yuvarla Eklentisi",
         "Name[uk]": "Додаток скруглення кутів для Karbon",
+        "Name[zh_CN]": "Karbon 圆角插件",
         "Name[zh_TW]": "Karbon 《圓角》外掛程式",
         "ServiceTypes": [
             "Karbon/ViewPlugin"

@@ -25,6 +25,7 @@
         "Description[sv]": "Toningseffekt",
         "Description[tr]": "Soldur Efekti",
         "Description[uk]": "Ефект згасання",
+        "Description[zh_CN]": "淡出淡入特效",
         "Description[zh_TW]": "淡出效果",
         "Name": "Fade",
         "Name[ar]": "تبهيت",
@@ -51,6 +52,7 @@
         "Name[sv]": "Tona",
         "Name[tr]": "Soldur",
         "Name[uk]": "Згасання",
+        "Name[zh_CN]": "淡出淡入特效",
         "Name[zh_TW]": "淡化",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

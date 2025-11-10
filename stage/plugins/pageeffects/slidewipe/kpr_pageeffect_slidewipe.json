@@ -23,6 +23,7 @@
         "Description[sv]": "Sideffekt: Glidsuddning",
         "Description[tr]": "Slayt Sil Sayfa Efekti",
         "Description[uk]": "Ефект ковзного витирання сторінки",
+        "Description[zh_CN]": "滑动擦除页面特效",
         "Description[zh_TW]": "滑動掃描頁面效果",
         "Name": "Slide Wipe",
         "Name[ar]": "مسح انزلاقي",
@@ -48,6 +49,7 @@
         "Name[sv]": "Glidsuddning",
         "Name[tr]": "Slayt Sil",
         "Name[uk]": "Ковзне витирання",
+        "Name[zh_CN]": "滑动擦除",
         "Name[zh_TW]": "滑動掃描",
         "ServiceTypes": [
             "CalligraStage/PageEffect"

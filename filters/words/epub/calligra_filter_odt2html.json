@@ -25,6 +25,7 @@
         "Name[sv]": "ODT till HTML-exportfilter",
         "Name[tr]": "ODT–HTML Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту ODT до HTML",
+        "Name[zh_CN]": "ODT 到 HTML 导出过滤器",
         "Name[zh_TW]": "ODT 到 HTML 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

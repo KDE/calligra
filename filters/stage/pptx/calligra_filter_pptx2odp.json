@@ -25,6 +25,7 @@
         "Name[sv]": "MS PowerPoint 2007-importfilter för Stage",
         "Name[tr]": "Sahne için MS PowerPoint 2007 İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних MS PowerPoint 2007 для Stage",
+        "Name[zh_CN]": "Stage 的 Microsoft PowerPoint 2007 导入过滤器",
         "Name[zh_TW]": "Stage 的 Microsoft PowerPoint 2007 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

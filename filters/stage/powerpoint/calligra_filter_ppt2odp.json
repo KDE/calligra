@@ -25,6 +25,7 @@
         "Name[sv]": "Microsoft PowerPoint-importfilter för Stage",
         "Name[tr]": "Sahne için Microsoft PowerPoint İçe Aktarma Süzgeci",
         "Name[uk]": "Фільтр імпортування даних Microsoft PowerPoint для Stage",
+        "Name[zh_CN]": "Stage 的 Microsoft PowerPoint 导入过滤器",
         "Name[zh_TW]": "Stage 的 Microsoft PowerPoint 匯入過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"

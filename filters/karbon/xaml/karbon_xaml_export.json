@@ -27,6 +27,7 @@
         "Name[sv]": "Karbon WVG-exportfilter",
         "Name[tr]": "Karbon WMG Dışa Aktarma Süzgeci",
         "Name[uk]": "Фільтр експорту WVG для Karbon",
+        "Name[zh_CN]": "Karbon WVG 导出过滤器",
         "Name[zh_TW]": "Karbon WVG 匯出過濾程式",
         "ServiceTypes": [
             "Calligra/Filter"
