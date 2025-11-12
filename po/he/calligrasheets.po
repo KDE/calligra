@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-06 00:42+0000\n"
-"PO-Revision-Date: 2025-10-05 12:16+0300\n"
+"PO-Revision-Date: 2025-11-11 09:01+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -11086,10 +11086,10 @@ msgid "LEN(\"KSpread\") returns 7"
 msgstr "(\"LEN(\"KSpread מחזירה 7"
 
 #: functions/text.xml:424
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The LENB() function returns the length of the string using byte positions."
-msgstr "הפונקציה ()LEN מחזירה את האורך של המחרוזת הנתונה."
+msgstr "הפונקציה LENB()‎ מחזירה את האורך של המחרוזת הנתונה במקומות של בתים."
 
 #: functions/text.xml:425
 #, kde-format
@@ -11602,11 +11602,11 @@ msgid "JIS(text)"
 msgstr "JIS(טקסט)"
 
 #: functions/text.xml:842
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The BAHTTEXT() function converts a number to a text in Thai characters "
 "(baht)."
-msgstr "הפונקציה ()TEXT ממירה ערך לטקסט."
+msgstr "הפונקציה BAHTTEXT()‎ ממירה מספר לטקסט בתווים תאילנדיים (באט)."
 
 #: functions/text.xml:843
 #, kde-format
