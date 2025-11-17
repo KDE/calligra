@@ -1,6 +1,6 @@
 # translation of kofficefilters.po to Slovenian
 # Translation of kofficefilters.po to Slovenian
-# $Id: calligrafilters.po 1694453 2024-11-07 01:16:38Z scripty $
+# $Id: calligrafilters.po 1723120 2025-11-17 15:24:07Z scripty $
 # $Source$
 # Gregor Rakar <gregor.rakar@kiss.si>, 2004.
 # Andrej Vernekar <andrej.vernekar@moj.net>, 2005, 2006, 2007, 2012, 2013.
@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-07 00:40+0000\n"
+"POT-Creation-Date: 2025-11-17 14:40+0000\n"
 "PO-Revision-Date: 2024-08-23 06:27+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
