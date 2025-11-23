@@ -77,7 +77,7 @@ Be sure to comment it out again when you are done -->
 <para
 >Si vous n'aimez pas faire glisser les barres d'outils, cliquez avec le bouton <mousebutton
 >droit</mousebutton
-> sur la poignée et un menu apparaît. </para>
+> sur la poignée et un menu apparait. </para>
 
 <para
 >En choisissant l'élément du menu, <guisubmenu
@@ -99,10 +99,10 @@ Be sure to comment it out again when you are done -->
 </screenshot>
 
 <para
->Vous pouvez choisir d'afficher les éléments de la barre d'outils sous forme de textes au lieu d'icônes ou même une combinaison de textes et d'icônes. Si vous voulez à la fois du texte et des icônes, le menu cascadé vous permet de choisir si le texte doit apparaître à côté de l'icône ou en dessous. </para>
+>Vous pouvez choisir d'afficher les éléments de la barre d'outils sous forme de textes au lieu d'icônes ou même une combinaison de textes et d'icônes. Si vous voulez à la fois du texte et des icônes, le menu cascadé vous permet de choisir si le texte doit apparaitre à côté de l'icône ou en dessous. </para>
 
 <para
->Dans la vue par icônes, si vous ne savez pas ce qu'une icône signifie, vous pouvez placer la souris au dessus de l'icône et au bout d'une seconde ou deux, une petite aide apparaît dans une bulle de texte colorée. </para>
+>Dans la vue par icônes, si vous ne savez pas ce qu'une icône signifie, vous pouvez placer la souris au dessus de l'icône et au bout d'une seconde ou deux, une petite aide apparait dans une bulle de texte colorée. </para>
 
 <para
 >L'élément <guilabel
@@ -141,7 +141,7 @@ Be sure to comment it out again when you are done -->
 <para
 ><action
 >Commence une nouvelle présentation.</action
-> La boîte de dialogue de démarrage s'ouvrira pour vous permettre de choisir un modèle pour votre présentation. </para>
+> La boite de dialogue de démarrage s'ouvrira pour vous permettre de choisir un modèle pour votre présentation. </para>
 </listitem>
 </varlistentry>
 
@@ -164,7 +164,7 @@ Be sure to comment it out again when you are done -->
 <para
 ><action
 >Ouvre une présentation existante.</action
-> Une boîte de dialogue standard &kde; pour l'ouverture de fichiers apparaîtra pour vous permettre de choisir un fichier. </para>
+> Une boite de dialogue standard &kde; pour l'ouverture de fichiers apparaitra pour vous permettre de choisir un fichier. </para>
 </listitem>
 </varlistentry>
 
@@ -364,7 +364,7 @@ often.</para>
 <para
 ><action
 >Imprime la présentation</action
->. Plus précisément, une boîte de dialogue d'impression s'ouvre, dans laquelle vous pouvez ajuster les réglages d'impression de votre présentation.</para>
+>. Plus précisément, une boite de dialogue d'impression s'ouvre, dans laquelle vous pouvez ajuster les réglages d'impression de votre présentation.</para>
 </listitem>
 </varlistentry>
 
@@ -381,7 +381,7 @@ often.</para>
 <para
 ><action
 >Affiche la présentation</action
-> avec un afficheur, exactement comme elle apparaîtra à l'impression.</para>
+> avec un afficheur, exactement comme elle apparaitra à l'impression.</para>
 </listitem>
 </varlistentry>
 
@@ -937,7 +937,7 @@ see an overview of all the slides in your presentation.</para>
 > </term>
 <listitem>
 <para
->Avec ces actions, passez du mode de vue Normale, où vous éditez les diapositives, à Notes, qui affiche un aperçu de la diapositive avec une boîte de texte pour vos annotations pour la diapositive courante, ou à Trieuse de diapositives, où vous pouvez renommez, couper, copier et coller des diapositives et les organiser pour votre présentation.</para>
+>Avec ces actions, passez du mode de vue Normale, où vous éditez les diapositives, à Notes, qui affiche un aperçu de la diapositive avec une boite de texte pour vos annotations pour la diapositive courante, ou à Trieuse de diapositives, où vous pouvez renommez, couper, copier et coller des diapositives et les organiser pour votre présentation.</para>
 </listitem>
 </varlistentry>
 
@@ -960,7 +960,7 @@ see an overview of all the slides in your presentation.</para>
 <para
 ><action
 >(Dés)active l'affichage de la diapositive maître</action
-> où vous pouvez mettre des objets que vous voulez faire apparaître sur chaque diapositive de votre présentation.</para>
+> où vous pouvez mettre des objets que vous voulez faire apparaitre sur chaque diapositive de votre présentation.</para>
 </listitem>
 </varlistentry>
 <!--
@@ -1216,7 +1216,7 @@ before or after the currently selected page.
 <para
 ><action
 >Insère une présentation déjà existante.</action
-> Une boîte de dialogue standard de &kde; pour l'ouverture de fichiers apparaîtra, vous permettant de choisir une <guilabel
+> Une boite de dialogue standard de &kde; pour l'ouverture de fichiers apparaitra, vous permettant de choisir une <guilabel
 >Présentation OpenDocument</guilabel
 > (.odp) qui sera insérée juste après la dernière diapositive de votre présentation courante.</para>
 </listitem>
@@ -1408,7 +1408,7 @@ section.</para>
 <para
 ><action
 >Numérise une image avec un scanner.</action
-> Nécessite que vous ayez un scanner installé. Une boîte de dialogue s'ouvre pour vous permettre d'utiliser votre scanner.</para>
+> Nécessite que vous ayez un scanner installé. Une boite de dialogue s'ouvre pour vous permettre d'utiliser votre scanner.</para>
 </listitem>
 </varlistentry>
 
@@ -1435,15 +1435,15 @@ section.</para>
 <listitem>
 
 <para
->La boîte de dialogue <guilabel
+>La boite de dialogue <guilabel
 >Sélectionner une police</guilabel
 > comporte des options pour les segments de texte sélectionnés :</para>
 
 <para
->Avec cette boîte de dialogue, vous pouvez <action
+>Avec cette boite de dialogue, vous pouvez <action
 >changer la police, le style et la taille du texte sélectionné</action
 >. La <interface
->boîte d'aperçu</interface
+>boite d'aperçu</interface
 > en bas vous permet <action
 >d'estimer les modifications avant que vous ne les appliquiez</action
 >. </para>
@@ -1469,9 +1469,9 @@ section.</para>
 <listitem>
 
 <para
->La boîte de dialogue <guilabel
+>La boite de dialogue <guilabel
 >Format de paragraphe</guilabel
-> contient des réglages pour des blocs de texte plus grands, comme des paragraphes. En utilisant cette boîte de dialogue, vous pouvez régler l'indentation, l'interligne, les listes à puces / numéros et les bordures.</para>
+> contient des réglages pour des blocs de texte plus grands, comme des paragraphes. En utilisant cette boite de dialogue, vous pouvez régler l'indentation, l'interligne, les listes à puces / numéros et les bordures.</para>
 
 </listitem>
 </varlistentry>
@@ -2623,7 +2623,7 @@ transition <emphasis
 >Contrôle</keycap
 > et <keycap
 >Y</keycap
-> pour appeler la boîte de dialogue <quote
+> pour appeler la boite de dialogue <quote
 >À propos de KDE</quote
 >.</para>
 
@@ -2634,7 +2634,7 @@ transition <emphasis
 >Réinitialiser aux valeurs par défaut</guibutton
 > pour restaurer la configuration d'origine, cliquez sur <guibutton
 >Annuler</guibutton
-> pour ne rien faire et quitter la boîte de dialogue.</para>
+> pour ne rien faire et quitter la boite de dialogue.</para>
 
 </listitem>
 </varlistentry>
