@@ -13537,7 +13537,7 @@ all changes will be overwritten on the next script run
 <title
 >INFO</title>
 <para
->A função INFO() retorna informação sobre o ambiente operacional atual. Tipos de parâmetros especificam que tipo de informação você deseja retornar. Pode ser um dos seguintes: "directory" retorna o caminho do diretório atual, "numfile" retorna número de documentos ativos, "release" retorna a versão do &sheets; como texto, "recalc" retorna o modo atual de recálculo: "Automatic" ou "Manual", "system" retorna o nome do ambiente operacional, "osversion" retorna a versão do sistema operacional atual.</para>
+>A função INFO() retorna informação sobre o ambiente operacional atual. Tipos de parâmetros especificam que tipo de informação você deseja retornar. Pode ser um dos seguintes: "directory" retorna o caminho da pasta atual, "numfile" retorna número de documentos ativos, "release" retorna a versão do &sheets; como texto, "recalc" retorna o modo atual de recálculo: "Automatic" ou "Manual", "system" retorna o nome do ambiente operacional, "osversion" retorna a versão do sistema operacional atual.</para>
 <para
 ><segmentedlist
 ><segtitle

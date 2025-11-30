@@ -103,11 +103,11 @@
 > da janela do &sheets; clicando com o botão <mousebutton
 >direito</mousebutton
 > do mouse na barra de ferramentas, o que faz aparecer o <guilabel
->Menu de Barra de Ferramentas</guilabel
+>Menu de barra de ferramentas</guilabel
 >, e escolhendo no submenu <guisubmenu
 >Orientação</guisubmenu
 > a posição desejada. O <guilabel
->Menu de Barra de Ferramentas</guilabel
+>Menu de barra de ferramentas</guilabel
 > também possui submenus para escolher se a barra de ferramentas mostra ícones, texto ou ambos e o tamanho dos ícones.</para>
 
 <para
@@ -116,7 +116,7 @@
 > do mouse pressionado enquanto arrasta a barra de ferramentas para a posição desejada. Quando você arrasta a barra de ferramentas desta maneira, você pode soltar o botão do mouse quando ela estiver a alguma distância de qualquer dos lados da janela do &sheets;, e então você obterá uma barra de ferramentas flutuante, que não fica vinculada a nenhuma parte da janela do &sheets; e pode ser de fato movida para fora da janela. Para colocar uma barra de ferramentas flutuante de volta a sua posição tradicional, clique com o botão <mousebutton
 >direito</mousebutton
 > em seu título para levantar o <guilabel
->Menu da Barra de Ferramentas</guilabel
+>Menu da barra de ferramentas</guilabel
 > e então escolha uma das opções no submenu <guisubmenu
 >Orientação</guisubmenu
 >.</para>
@@ -129,9 +129,9 @@
 > trara a caixa de diálogo que lhe permitirá adicionar ou remover botões das barras de ferramentas do &sheets;.</para>
 <para
 >Para usar isto na caixa de diálogo <guilabel
->Configurar Barras de Ferramentas</guilabel
+>Configurar barras de ferramentas</guilabel
 > primeiro selecione uma barra de ferramentas na caixa combinada <guilabel
->Barra de Ferramenta:</guilabel
+>Barra de ferramenta:</guilabel
 >. A janela <guilabel
 >Ações atuais:</guilabel
 > à direita então mostrará os botões atualmente presentes na barra de ferramentas. Você pode remover um botão selecionando-o nesta janela e então pressionado o botão com seta para esquerda, ou movê-lo pela barra pressionando os botões com seta para cima e para baixo. Para adicionar um novo botão à barra de ferramentas, selecione-o na lista de <guilabel
