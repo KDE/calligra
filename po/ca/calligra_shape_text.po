@@ -3047,33 +3047,3 @@ msgstr "Tecla premuda"
 #, kde-format
 msgid "Text editing"
 msgstr "Edició de text"
-
-#~ msgid "Number of characters:"
-#~ msgstr "Nombre de caràcters:"
-
-#~ msgid "Alignment"
-#~ msgstr "Alineació"
-
-#~ msgid "Left:"
-#~ msgstr "Esquerra:"
-
-#~ msgid "Right:"
-#~ msgstr "Dreta:"
-
-#~ msgid "Before:"
-#~ msgstr "Abans:"
-
-#~ msgid "After:"
-#~ msgstr "Després:"
-
-#~ msgid ""
-#~ "This link points to the program or script '%1'.\n"
-#~ "Malicious programs can harm your computer. Are you sure that you want to "
-#~ "run this program?"
-#~ msgstr ""
-#~ "Aquest enllaç apunta a un programa o script «%1».\n"
-#~ "Els programes maliciosos poden fer malbé el vostre ordinador. Esteu segur "
-#~ "que voleu executar aquest programa?"
-
-#~ msgid "Open Link?"
-#~ msgstr "Obro l'enllaç?"
