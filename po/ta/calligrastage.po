@@ -1,28 +1,27 @@
-# translation of kpresenter.po to 
+# translation of kpresenter.po to
 # translation of kpresenter.po to
 # translation of kpresenter.po to
 # translation of kpresenter.po to
 # translation of kpresenter.po to Tamil
 # Copyright (C) 2004 Free Software Foundation, Inc.
-# , 2004
-# , 2004
-# , 2004
 # Ambalam <tamilpc@ambalam.com>, 2004.
 # root <root@localhost.localdomain>, 2004.
 #
+# SPDX-FileCopyrightText: 2025 Kishore G <kishore96@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2004-11-29 01:52-0800\n"
-"Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
-"Language-Team:  <ta@li.org>\n"
+"PO-Revision-Date: 2025-11-30 15:16+0530\n"
+"Last-Translator: Kishore G <kishore96@gmail.com>\n"
+"Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -526,7 +525,7 @@ msgstr "படவில்லையை நகலெடு   "
 #: part/KPrSlidesSorterDocumentModel.cpp:287
 #, kde-format
 msgid "C&ancel"
-msgstr ""
+msgstr "ரத்து செய்"
 
 #: part/KPrView.cpp:74
 #, kde-format

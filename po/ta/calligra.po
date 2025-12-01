@@ -7,21 +7,21 @@
 #
 # Ambalam <tamilpc@ambalam.com>, 2004.
 # root <root@localhost.localdomain>, 2004.
-# Kishore G <kishore96@gmail.com>, 2021.
+# SPDX-FileCopyrightText: 2021, 2025 Kishore G <kishore96@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2021-01-18 19:22+0530\n"
+"PO-Revision-Date: 2025-11-30 15:16+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
-"Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
+"Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.12.1\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #, fuzzy, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2397,9 +2397,9 @@ msgid "&Copy Here"
 msgstr "பச்சை"
 
 #: pageapp/KoPADocumentModel.cpp:684
-#, fuzzy, kde-format
+#, kde-format
 msgid "C&ancel"
-msgstr "எழுத்துவகையை மாற்று"
+msgstr "ரத்து செய்"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:98
 #, fuzzy, kde-format
