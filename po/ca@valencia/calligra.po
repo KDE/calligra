@@ -988,7 +988,7 @@ msgstr "S'està autodesant…"
 #: main/KoDocument.cpp:724
 #, kde-format
 msgid "Error during autosave! Partition full?"
-msgstr "Error durant la guardada automàtica! Partició plena?"
+msgstr "S'ha produït un error durant la guardada automàtica! Partició plena?"
 
 #: main/KoDocument.cpp:812
 #, kde-format
@@ -1119,7 +1119,7 @@ msgstr "S'ha intentat carregar dins la classe de document incorrecta"
 #: main/KoDocument.cpp:1513
 #, kde-format
 msgid "Failed to download remote file"
-msgstr "No s'ha pogut baixar el fitxer remot"
+msgstr "Ha fallat mentre es baixava el fitxer remot"
 
 #: main/KoDocument.cpp:1522
 #, kde-format

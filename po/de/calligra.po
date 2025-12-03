@@ -1,4 +1,3 @@
-# SPDX-FileCopyrightText: 2024 Alois.spitzbart <spitz234@hotmail.com>
 # SPDX-FileCopyrightText: 2002, 2003 Thomas Diehl <thd@kde.org>
 # SPDX-FileCopyrightText: 2005 Stephan Johach <hunsum@gmx.de>
 # SPDX-FileCopyrightText: 2006 Oliver Dörr <digikam-de@doerr-privat.de>
@@ -7,20 +6,21 @@
 # SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2010 Jannick Kuhr <opensource@kuhr.org>
 # SPDX-FileCopyrightText: 2010 Markus Slopianka <markus.s@kdemail.net>
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2024, 2025 Alois.spitzbart <spitz234@hotmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2024-09-04 10:02+0200\n"
-"Last-Translator: Alois.spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2025-11-22 14:55+0100\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -750,18 +750,16 @@ msgid "Grid color:"
 msgstr "Gitterfarbe:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgid "Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "Waagerecht:"
+msgstr "Waagerechter Abstand:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgid "Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "Senkrecht:"
+msgstr "Senkrechter Abstand:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -1605,10 +1603,9 @@ msgid "Default"
 msgstr "Standard"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Geometrisches Mittel"
+msgstr "Geometrie"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
@@ -2244,10 +2241,9 @@ msgid "Add a new slide or layer"
 msgstr "Eine neue Folie oder Ebene hinzufügen"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:99
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Folie"
+msgstr "Folien"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
@@ -4615,13 +4611,13 @@ msgstr "Dieses Dokument unterstützt keine Verschlüsselung"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Nicht angegeben"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -4907,28 +4903,24 @@ msgid "Apply to document"
 msgstr "Auf Dokument anwenden"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Linker Rand"
+msgstr "Linker Seitenrand:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Rechter Rand"
+msgstr "Rechter Seitenrand:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
 msgstr "Bundsteg:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
 msgstr "Außensteg:"
 
@@ -5152,11 +5144,10 @@ msgid "Shape Properties"
 msgstr "Objekteigenschaften"
 
 #: widgets/KoShapePropertyWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "Kein Bild verfügbar."
+msgstr "Keine Eigenschaften verfügbar"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
