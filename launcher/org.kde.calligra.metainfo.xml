@@ -8,6 +8,7 @@
   <name xml:lang="ca">Calligra</name>
   <name xml:lang="ca-valencia">Calligra</name>
   <name xml:lang="cs">Calligra</name>
+  <name xml:lang="de">Calligra</name>
   <name xml:lang="en-GB">Calligra</name>
   <name xml:lang="es">Calligra</name>
   <name xml:lang="eu">Calligra</name>
@@ -91,6 +92,7 @@
     <p xml:lang="ar">Words هو تطبيق لمعالجة الكلمات ونشر مكتبي بديهي. باستخدامه، أنشئ مستندات إعلامية وجذابة بكل متعة وسهولة.</p>
     <p xml:lang="ca">El Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
     <p xml:lang="ca-valencia">Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
+    <p xml:lang="de">Words ist ein intuitives Programm zur Textverarbeitung und für Publikationen. Damit Sie können leicht informative und attraktive Dokumente erstellen.</p>
     <p xml:lang="en-GB">Words is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.</p>
     <p xml:lang="es">Words es un procesador de textos intuitivo y una aplicación de edición para el escritorio. Con ella se pueden crear documentos informativos y atractivos de forma placentera y con facilidad.</p>
     <p xml:lang="eu">Words, testu-prozesatzaile eta argitaratzeko mahaigaineko aplikazio intuitibo bat da. Hori erabiliz, dokumentu informatibo eta erakargarriak sor ditzakezu, erraz eta aise.</p>
@@ -121,6 +123,7 @@
     <p xml:lang="ar">Calligra Sheets أداة حساب وجداول ممتدة كاملة الميزات. استخدِمه لإنشاء وحساب جداول ممتدة مختلفة متعلقة بالعمل بسرعة، مثل الدخل والمصروفات، وساعات عمل الموظفين، إلخ.</p>
     <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="ca-valencia">Sheets de Calligra és una eina de full de càlcul plenament funcional. S'utilitza per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
+    <p xml:lang="de">Calligra Sheets ist ein voll funktionsfähiges Berechnungs- und Tabellenkalkulationsprogramm. Verwenden Sie es, um schnell verschiedene geschäftliche Tabellenkalkulationen zu erstellen und zu berechnen, wie wie z. B. Einnahmen und Ausgaben, Arbeitszeiten der Mitarbeiter usw.</p>
     <p xml:lang="en-GB">Calligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.</p>
     <p xml:lang="es">Calligra Sheets es una herramienta de cálculo y de hojas de cálculo rica en funciones. Puede usarla para calcular y crear rápidamente diversas hojas de cálculo empresariales, como las de gastos e ingresos, horas de trabajo de los empleados, etc.</p>
     <p xml:lang="eu">Calligra Sheets, kalkulatzeko tresna eta kalkulu-orri tresna guztiz funtzional bat da. Erabil ezazu negozioarekin lotutako hainbat kalkulu-orri azkar sortzeko eta kalkulatzeko, hala nola, diru-sarrerak eta gastuak, enplegatuen lanorduak, etab.</p>
@@ -183,6 +186,7 @@
     <p xml:lang="ar">Karbon هو تطبيق رسم متجه بواجهة مستخدم سهلة الاستخدام وقابلة للتخصيص والتوسيع بشكل كبير. هذا يجعل Karbon تطبيقًا رائعًا للمستخدمين الذين بدأوا استكشاف عالم الرسومات المتجهة وكذلك للفنانين الذين يريدون إنشاء فن متجه خلاب.</p>
     <p xml:lang="ca">El Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, que es pot personalitzar i ampliar molt. Això converteix el Karbon en una gran aplicació per a usuaris que comencin a explorar el món dels gràfics vectorials i també pels artistes que volen crear art vectorial que deixi bocabadat.</p>
     <p xml:lang="ca-valencia">Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, la qual es pot personalitzar i ampliar molt. Açò convertix Karbon en una gran aplicació per a usuaris que comencen a explorar el món dels gràfics vectorials i també pels artistes que volen crear art vectorial que deixe bocabadat.</p>
+    <p xml:lang="de">Karbon ist ein Vektorzeichenprogramm mit einer einfach zu bedienenden Benutzeroberfläche, die hochgradig anpassbar und erweiterbar ist. Das macht Karbon zu einer großartigen Anwendung – sowohl für Anwender, die in die Welt der Vektorgrafik einsteigen als auch für Künstler, die atemberaubende Vektorgrafiken erstellen möchten.</p>
     <p xml:lang="en-GB">Karbon is a vector drawing application with a user interface that is easy to use, highly customisable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.</p>
     <p xml:lang="es">Karbon es una aplicación de dibujo vectorial con una interfaz de usuario fácil de usar, altamente personalizable y extensible. Esto hace que Karbon sea una gran aplicación para los usuarios que empiezan a explorar el mundo de los gráficos vectoriales así como para los artistas que quieren crear composiciones vectoriales sorprendentes.</p>
     <p xml:lang="eu">Karbon, marrazketa bektorialeko aplikazio bat da, erabiltzen erraza den erabiltzaile-interfaze bat, norbere gustura oso egokigarria, duena. Hori dela eta, Karbon bikaina da grafiko bektorialen mundua esploratzen hasitako erabiltzaileentzat, baita arte bektorial txundigarriak sortu nahi dituzten artistentzat ere.</p>
@@ -243,6 +247,7 @@
       <caption xml:lang="ar">نافذة Calligra Sheets الرئيسة</caption>
       <caption xml:lang="ca">Finestra principal del Sheets del Calligra</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Sheets de Calligra</caption>
+      <caption xml:lang="de">Hauptfenster von Calligra Sheets</caption>
       <caption xml:lang="en-GB">Calligra Sheets main window</caption>
       <caption xml:lang="es">Ventana principal de Calligra Sheets</caption>
       <caption xml:lang="eu">Calligra Sheets leiho nagusia</caption>
@@ -271,6 +276,7 @@
       <caption xml:lang="ar">نافذة Calligra Stage الرئيسة</caption>
       <caption xml:lang="ca">Finestra principal del Stage del Calligra</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Stage de Calligra</caption>
+      <caption xml:lang="de">Hauptfenster von Calligra Stage</caption>
       <caption xml:lang="en-GB">Calligra Stage main window</caption>
       <caption xml:lang="es">Ventana principal de Calligra Stage</caption>
       <caption xml:lang="eu">Calligra Stage leiho nagusia</caption>
@@ -299,6 +305,7 @@
       <caption xml:lang="ar">نافذة Karbon الرئيسة</caption>
       <caption xml:lang="ca">Finestra principal del Karbon</caption>
       <caption xml:lang="ca-valencia">Finestra principal de Karbon</caption>
+      <caption xml:lang="de">Hauptfenster von Karbon</caption>
       <caption xml:lang="en-GB">Main window of Karbon</caption>
       <caption xml:lang="es">Ventana principal de Karbon</caption>
       <caption xml:lang="eu">Karbon-en leiho nagusia</caption>
