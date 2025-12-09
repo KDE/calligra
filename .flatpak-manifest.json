@@ -227,6 +227,10 @@
                         "stable-only": true,
                         "url-template": "https://sourceforge.net/projects/libwpd/files/libodfgen/libodfgen-$version/libodfgen-$version.tar.xz"
                     }
+                },
+                {
+		    "type": "patch",
+                    "path": "includes.patch"
                 }
             ]
         },
