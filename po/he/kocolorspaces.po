@@ -2,13 +2,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
 #
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-07-02 10:32+0300\n"
+"PO-Revision-Date: 2025-12-11 10:14+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.1\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
@@ -31,7 +31,7 @@ msgstr "ציאן"
 #: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:22
 #, kde-format
 msgid "Magenta"
-msgstr "ארגמן"
+msgstr "מג׳נטה"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:27
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:22
