@@ -21,7 +21,7 @@
         "Description[sa]": "दस्तावेजस्य RDF-दत्तांशकोशस्य च मध्ये स्थान-वस्तूनाम् नक्शाङ्कनार्थं प्लगिन्",
         "Description[sl]": "Vtičnik za preslikavo elementov lokacije med dokumentom in bazo podatkov RDF",
         "Description[sv]": "Ett insticksprogram för att avbilda platsobjekt mellan dokument och en RDF-databas",
-        "Description[tr]": "Belge ve RDF veritabanı arasında konum ögelerini eşlemlemek için bir eklenti",
+        "Description[tr]": "Belge ve RDF veri tabanı arasında konum ögelerini eşlemlemek için bir eklenti",
         "Description[uk]": "Додаток для створення зв’язку між записами місць у документі та у базі даних RDF",
         "Description[zh_CN]": "映射文档和 RDF 数据库之间的位置项的插件",
         "Description[zh_TW]": "讓文件與 RDF 資料庫位置項目對應的外掛程式",
