@@ -492,7 +492,11 @@ void SvgOutputDev::drawImage(GfxState *state,
     Q_UNUSED(interpolate)
     Q_UNUSED(inlineImg)
     ImageStream *imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(26, 1, 0)
     imgStr->reset();
+#else
+    imgStr->rewind();
+#endif
 
     unsigned int *dest = nullptr;
     unsigned char *buffer = new unsigned char[width * height * 4];
