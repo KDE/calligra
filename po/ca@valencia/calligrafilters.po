@@ -292,7 +292,7 @@ msgstr "Estil &Windows (tecla de retorn «\\r» i salt de línia «\\n»)"
 #: sheets/csv/exportdialogui.ui:83
 #, kde-format
 msgid "&MacOS style (carriage return only)"
-msgstr "&Estil MacOS (només tecla de retorn)"
+msgstr "&Estil macOS (només tecla de retorn)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: sheets/csv/exportdialogui.ui:96
