@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2025-10-26 11:48+0100\n"
+"PO-Revision-Date: 2026-01-17 03:24+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1118,6 +1118,8 @@ msgid ""
 "Returns the product of all numeric  values in a column of a database "
 "specified by a set of conditions."
 msgstr ""
+"აბრუნებს მონაცემთა ბაზის სვეტში მოცემული პირობების შესაბამისი ყველა რიცხვითი "
+"მნიშვნელობის ნამრავლს."
 
 #: functions/database.xml:182
 #, kde-format
@@ -1136,6 +1138,9 @@ msgid ""
 "sample using all numeric values in a column of a database specified by a set "
 "of conditions."
 msgstr ""
+"აბრუნებს პოპულაციის სტანდარტული გადახრის შეფასებას შერჩევაზე დაყრდნობით, "
+"მონაცემთა ბაზის სვეტში მოცემული პირობების შესაბამისი ყველა რიცხვითი "
+"მნიშვნელობის გამოყენებით."
 
 #: functions/database.xml:204
 #, kde-format
@@ -1154,6 +1159,9 @@ msgid ""
 "population using all numeric values in a column of a database specified by a "
 "set of conditions."
 msgstr ""
+"აბრუნებს პოპულაციის სტანდარტულ გადახრას მთელ პოპულაციაზე დაყრდნობით, "
+"მონაცემთა ბაზის სვეტში მოცემული პირობების შესაბამისი ყველა რიცხვითი "
+"მნიშვნელობის გამოყენებით."
 
 #: functions/database.xml:227
 #, kde-format
@@ -1172,6 +1180,9 @@ msgid ""
 "all numeric values in a column of a database specified by a set of "
 "conditions."
 msgstr ""
+"აბრუნებს პოპულაციის დისპერსიის შეფასებას შერჩევაზე დაყრდნობით, მონაცემთა "
+"ბაზის სვეტში მოცემული პირობების შესაბამისი ყველა რიცხვითი მნიშვნელობის "
+"გამოყენებით."
 
 #: functions/database.xml:250
 #, kde-format
@@ -1190,6 +1201,8 @@ msgid ""
 "all numeric values in a column of a database specified by a set of "
 "conditions."
 msgstr ""
+"აბრუნებს პოპულაციის დისპერსიას მთელ პოპულაციაზე დაყრდნობით, მონაცემთა ბაზის "
+"სვეტში მოცემული პირობების შესაბამისი ყველა რიცხვითი მნიშვნელობის გამოყენებით."
 
 #: functions/database.xml:273
 #, kde-format
@@ -2044,6 +2057,10 @@ msgid ""
 "always begins on a Monday, and ends on a Sunday. The first week of a year is "
 "that week which contains the first Thursday of the year."
 msgstr ""
+"ISOWEEKNUM() ფუნქცია აბრუნებს კვირის ნომერს, რომელშიც მოცემული თარიღი "
+"ხვდება. გაითვალისწინეთ, რომ ეს ფუნქცია შეესაბამება ISO8601 სტანდარტს: კვირა "
+"ყოველთვის იწყება ორშაბათს და მთავრდება კვირას. წლის პირველი კვირა არის ის "
+"კვირა, რომელიც შეიცავს წლის პირველ ხუთშაბათს."
 
 #: functions/datetime.xml:593
 #, kde-format
@@ -3598,6 +3615,11 @@ msgid ""
 "(default), 1: real days, 2: real days/360, 3: real days/365 or 4: European "
 "30/360."
 msgstr ""
+"ACCRINT ფუნქცია აბრუნებს დარიცხულ პროცენტს ფასიანი ქაღალდისთვის, რომელიც "
+"იხდის პერიოდულ პროცენტს. დასაშვები სიხშირეებია: 1 - წლიური, 2 - "
+"ნახევარწლიური ან 4 - კვარტალური. ბაზისი არის დღეების დათვლის ტიპი, რომლის "
+"გამოყენებაც გსურთ: 0: US 30/360 (ნაგულისხმევი), 1: რეალური დღეები, 2: "
+"რეალური დღეები/360, 3: რეალური დღეები/365 ან 4: ევროპული 30/360."
 
 #: functions/financial.xml:40
 #, kde-format
@@ -3622,6 +3644,10 @@ msgid ""
 "use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real "
 "days/365 or 4: European 30/360."
 msgstr ""
+"ფუნქცია ACCRINTM აბრუნებს დარიცხულ პროცენტს ფასიანი ქაღალდისთვის, რომელიც "
+"იხდის პროცენტს დაფარვის თარიღში. ბაზისი არის დღეების დათვლის ტიპი, რომლის "
+"გამოყენებაც გსურთ: 0: US 30/360 (ნაგულისხმევი), 1: რეალური დღეები, 2: "
+"რეალური დღეები/360, 3: რეალური დღეები/365 ან 4: European 30/360."
 
 #: functions/financial.xml:71
 #, kde-format
@@ -3659,6 +3685,8 @@ msgid ""
 "The AMORDEGRC function calculates the amortization value for the French "
 "accounting system using degressive depreciation."
 msgstr ""
+"ფუნქცია AMORDEGRC გამოთვლის ამორტიზაციის ღირებულებას ფრანგული საბუღალტრო "
+"სისტემისთვის, რეგრესიული ამორტიზაციის (ცვეთის) მეთოდის გამოყენებით."
 
 #: functions/financial.xml:94
 #, kde-format
@@ -3687,6 +3715,8 @@ msgid ""
 "The AMORLINC function calculates the amortization value for the French "
 "accounting system using linear depreciation."
 msgstr ""
+"ფუნქცია AMORLINC გამოთვლის ამორტიზაციის ღირებულებას ფრანგული საბუღალტრო "
+"სისტემისთვის, წრფივი ამორტიზაციის (ცვეთის) მეთოდის გამოყენებით."
 
 #: functions/financial.xml:120
 #, kde-format
@@ -3737,6 +3767,11 @@ msgid ""
 "example: $5000 at 12% interest compounded quarterly for 5 years will become "
 "COMPOUND(5000;0.12;4;5) or $9030.56."
 msgstr ""
+"ფუნქცია COMPOUND() აბრუნებს ინვესტიციის ღირებულებას მოცემული ძირითადი "
+"თანხის, ნომინალური საპროცენტო განაკვეთის, დარიცხვის სიხშირისა და დროის "
+"მიხედვით. მაგალითად: 5000 აშშ დოლარი 12%-იანი განაკვეთით, რომელიც ირიცხება "
+"კვარტალურად 5 წლის განმავლობაში, გახდება COMPOUND(5000;0.12;4;5) ანუ 9030.56 "
+"აშშ დოლარი."
 
 #: functions/financial.xml:150
 #, kde-format
@@ -3755,6 +3790,10 @@ msgid ""
 "interest, given the principal, nominal rate and time in years. For example: "
 "$1000 earning 10% for 1 year becomes CONTINUOUS(1000;.1;1) or $1105.17."
 msgstr ""
+"ფუნქცია CONTINUOUS() გამოთვლის უწყვეტად დარიცხული რთული პროცენტის ამონაგებს "
+"მოცემული ძირითადი თანხის, ნომინალური განაკვეთისა და წლებში მოცემული დროის "
+"მიხედვით. მაგალითად: 1000 აშშ დოლარი, რომელიც 1 წლის განმავლობაში "
+"გამოიმუშავებს 10%-ს, გახდება CONTINUOUS(1000;.1;1) ანუ 1105.17 აშშ დოლარი."
 
 #: functions/financial.xml:172
 #, kde-format
@@ -3793,6 +3832,10 @@ msgid ""
 "use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real "
 "days/365 or 4: European 30/360."
 msgstr ""
+"ფუნქცია COUPNUM აბრუნებს კუპონების რაოდენობას, რომელიც უნდა გადაიხადოს "
+"ანგარიშსწორებასა და დაფარვის თარიღს შორის. ბაზისი არის დღეების დათვლის ტიპი, "
+"რომლის გამოყენებაც გსურთ: 0: US 30/360 (ნაგულისხმევი), 1: რეალური დღეები, 2: "
+"რეალური დღეები/360, 3: რეალური დღეები/365 ან 4: European 30/360."
 
 #: functions/financial.xml:198
 #, kde-format
@@ -3890,6 +3933,9 @@ msgid ""
 "period using the fixed-declining balance method. Month is optional, if "
 "omitted it is assumed to be 12."
 msgstr ""
+"ფუნქცია DB() გამოთვლის აქტივის ცვეთას მოცემული პერიოდისთვის, ფიქსირებული "
+"კლებადი ნაშთის მეთოდის გამოყენებით. თვე არასავალდებულო არგუმენტია; მისი "
+"გამოტოვების შემთხვევაში იგულისხმება 12."
 
 #: functions/financial.xml:306
 #, kde-format
@@ -3918,6 +3964,9 @@ msgid ""
 "period using the arithmetic-declining method. The factor is optional, if "
 "omitted it is assumed to be 2. All the parameter must be greater than zero."
 msgstr ""
+"ფუნქცია DDB() გამოთვლის აქტივის ცვეთას მოცემული პერიოდისთვის, არითმეტიკულ-"
+"კლებადი ნაშთის მეთოდის გამოყენებით. კოეფიციენტი არასავალდებულოა; მისი "
+"გამოტოვების შემთხვევაში იგულისხმება 2. ყველა პარამეტრი უნდა იყოს ნულზე მეტი."
 
 #: functions/financial.xml:339
 #, kde-format
@@ -3948,6 +3997,10 @@ msgid ""
 "type of day counting you want to use: 0: US 30/360 (default), 1: real days, "
 "2: real days/360, 3: real days/365 or 4: European 30/360."
 msgstr ""
+"ფუნქცია DISC აბრუნებს ფასიანი ქაღალდის დისკონტირების განაკვეთს. ბაზისი არის "
+"დღეების დათვლის ტიპი, რომლის გამოყენებაც გსურთ: 0: US 30/360 (ნაგულისხმევი), "
+"1: რეალური დღეები, 2: რეალური დღეები/360, 3: რეალური დღეები/365 ან 4: "
+"European 30/360."
 
 #: functions/financial.xml:370
 #, kde-format
@@ -3977,6 +4030,9 @@ msgid ""
 "number. The fractional dollar is the number to be converted and the fraction "
 "is the denominator of the fraction"
 msgstr ""
+"ფუნქცია DOLLARDE() აბრუნებს დოლარის ფასს, გამოხატულს ათწილადი რიცხვის სახით. "
+"წილადური დოლარი არის გამოსათვლელი რიცხვი, ხოლო ფრაქცია (fraction) არის "
+"წილადის მნიშვნელი"
 
 #: functions/financial.xml:389
 #, kde-format
@@ -4000,6 +4056,8 @@ msgid ""
 "decimal dollar is the number to be converted and the fraction is the "
 "denominator of the fraction"
 msgstr ""
+"ფუნქცია DOLLARFR() აბრუნებს დოლარის ფასს, გამოხატულს წილადის სახით. ათწილადი "
+"დოლარი არის გამოსათვლელი რიცხვი, ხოლო ფრაქცია არის წილადის მნიშვნელი"
 
 #: functions/financial.xml:409
 #, kde-format
@@ -4038,6 +4096,8 @@ msgid ""
 "Returns the number of periods needed for an investment to retain a desired "
 "value."
 msgstr ""
+"აბრუნებს პერიოდების რაოდენობას, რომელიც საჭიროა ინვესტიციისთვის სასურველი "
+"ღირებულების შესანარჩუნებლად."
 
 #: functions/financial.xml:433
 #, kde-format
@@ -4073,11 +4133,15 @@ msgstr "ბაზისი"
 #, kde-format
 msgid "Returns the Macauley duration of a fixed interest security in years."
 msgstr ""
+"აბრუნებს ფიქსირებული საპროცენტო განაკვეთის მქონე ფასიანი ქაღალდის მაკოლეის "
+"დურაციას წლებში."
 
 #: functions/financial.xml:469
 #, kde-format
 msgid "DURATION_ADD(Settlement; Maturity; Coupon; Yield; Frequency; Basis)"
 msgstr ""
+"DURATION_ADD(ანგარიშსწორება; დაფარვა; კუპონი; შემოსავლიანობა; სიხშირე; "
+"ბაზისი)"
 
 #: functions/financial.xml:470
 #, kde-format
@@ -4108,6 +4172,10 @@ msgid ""
 "rate (annual rate or APR). For example: 8% interest compounded monthly "
 "provides an effective yield of EFFECT(.08;12) or 8.3%."
 msgstr ""
+"ფუნქცია EFFECT() გამოთვლის ეფექტურ ამონაგებს ნომინალური საპროცენტო "
+"განაკვეთისთვის (წლიური განაკვეთი ან APR). მაგალითად: 8%-იანი საპროცენტო "
+"განაკვეთი ყოველთვიური დარიცხვით უზრუნველყოფს ეფექტურ ამონაგებს "
+"EFFECT(.08;12) ანუ 8.3%."
 
 #: functions/financial.xml:488
 #, kde-format
@@ -4386,7 +4454,7 @@ msgstr "საწყისი ფასი (PV)"
 #: functions/financial.xml:712
 #, kde-format
 msgid "Calculates the interest paid on a given period of an investment."
-msgstr ""
+msgstr "გამოთვლის ინვესტიციის მოცემულ პერიოდში გადახდილ პროცენტს."
 
 #: functions/financial.xml:714
 #, kde-format
@@ -4394,11 +4462,15 @@ msgid ""
 "Period is the amortizement period. 1 for the first and NPer for the last "
 "period."
 msgstr ""
+"პერიოდი არის ამორტიზაციის პერიოდი. 1 პირველი პერიოდისთვის და NPer ბოლო "
+"პერიოდისთვის."
 
 #: functions/financial.xml:715
 #, kde-format
 msgid "NPer is the total number of periods during which annuity is paid."
 msgstr ""
+"NPer არის პერიოდების ჯამური რაოდენობა, რომელთა განმავლობაშიც ანუიტეტის "
+"გადახდა ხდება."
 
 #: functions/financial.xml:717
 #, kde-format
@@ -5981,7 +6053,7 @@ msgstr ""
 #: functions/math.xml:60
 #, kde-format
 msgid "The SERIESSUM() function returns the sum of a power series."
-msgstr ""
+msgstr "ფუნქცია SERIESSUM() აბრუნებს ხარისხოვანი მწკრივის ჯამს."
 
 #: functions/math.xml:61
 #, kde-format
@@ -5999,6 +6071,8 @@ msgid ""
 "The LCM() function returns the least common multiple for two or more float "
 "values"
 msgstr ""
+"ფუნქცია LCM() აბრუნებს ყველაზე მცირე საერთო ჯერადს ორი ან მეტი წილადი "
+"მნიშვნელობისთვის"
 
 #: functions/math.xml:80
 #, kde-format
@@ -9991,12 +10065,12 @@ msgstr "TRIMMEAN(dataSet; cutOffFraction)"
 #: functions/statistical.xml:1468
 #, kde-format
 msgid "x (array) The set of observed data for the first condition."
-msgstr ""
+msgstr "x (მასივი) დაკვირვებადი მონაცემების ერთობლიობა პირველი პირობისთვის."
 
 #: functions/statistical.xml:1472
 #, kde-format
 msgid "y (array) The set of observed data for the second condition."
-msgstr ""
+msgstr "y (მასივი) დაკვირვებადი მონაცემების ერთობლიობა მეორე პირობისთვის."
 
 #: functions/statistical.xml:1476
 #, kde-format
