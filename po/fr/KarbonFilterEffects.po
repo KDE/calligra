@@ -1,21 +1,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vincent Pinon <vpinon@kde.org>, 2014.
+# SPDX-FileCopyrightText: 2026 Xavier Besnard <xavier.besnard@kde.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2015-06-11 15:34+0200\n"
-"Last-Translator: Vincent Pinon <vpinon@kde.org>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2026-01-18 10:14+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 25.12.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -185,7 +186,7 @@ msgstr "Opération"
 #: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
 #, kde-format
 msgid "Convolve Matrix"
-msgstr "Convoluer la matrice"
+msgstr "Réaliser une convolution de la matrice"
 
 #: ConvolveMatrixEffectConfigWidget.cpp:33
 #, kde-format
