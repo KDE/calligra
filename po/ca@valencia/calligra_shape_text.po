@@ -2525,7 +2525,7 @@ msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
 msgstr ""
-"Mostra una finestra emergent que té les opcions per a afegir adreces "
+"Mostra una finestra emergent que allotja les opcions per a afegir adreces "
 "d'interés noves o gestionar les existents"
 
 #: ReferencesTool.cpp:195
