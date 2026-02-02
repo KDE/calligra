@@ -2,12 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # SPDX-FileCopyrightText: 2013, 2014, 2015, 2016, 2017, 2020, 2022, 2025 Giovanni Sora <g.sora@tiscali.it>
+# giovanni <g.sora@tiscali.it>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-05-14 12:16+0200\n"
+"PO-Revision-Date: 2026-02-01 11:22+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1142,7 +1143,7 @@ msgstr ""
 #: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
 #: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
