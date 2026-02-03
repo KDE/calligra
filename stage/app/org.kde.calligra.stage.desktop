@@ -149,6 +149,6 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.presentation
 X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.presentation-template,application/x-kpresenter,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template
 X-DBUS-StartupType=multi
 X-DBUS-ServiceName=org.kde.calligra.stage
-X-DocPath=calligrastage/index.html
+X-DocPath=stage/index.html
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;Presentation;
