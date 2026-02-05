@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2016, 2020, 2021, 2022, 2024, 2025 Giovanni Sora <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2016, 2020, 2021, 2022, 2024, 2025, 2026 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-04-16 11:43+0200\n"
+"PO-Revision-Date: 2026-02-04 09:39+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -2714,7 +2714,7 @@ msgstr "Mix dur"
 #: pigment/KoCompositeOpRegistry.cpp:70
 #, kde-format
 msgid "Geometric Mean"
-msgstr ""
+msgstr "Geometric Medie"
 
 #: pigment/compositeops/KoCompositeOps.h:114
 #: pigment/KoCompositeOpRegistry.cpp:68
@@ -3114,7 +3114,7 @@ msgstr "B"
 #: pigment/KoBasicHistogramProducers.cpp:411
 #, kde-format
 msgid "L*a*b* Histogram"
-msgstr ""
+msgstr "L*a*b* Histogramma"
 
 #: pigment/KoBasicHistogramProducers.cpp:415
 #, kde-format
