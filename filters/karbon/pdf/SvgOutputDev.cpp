@@ -210,7 +210,11 @@ QString SvgOutputDev::convertMatrix(const QTransform &matrix)
     return QString("matrix(%1 %2 %3 %4 %5 %6)").arg(matrix.m11()).arg(matrix.m12()).arg(matrix.m21()).arg(matrix.m22()).arg(matrix.dx()).arg(matrix.dy());
 }
 
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(26, 2, 0)
 QString SvgOutputDev::convertMatrix(const double *matrix)
+#else
+QString SvgOutputDev::convertMatrix(const std::array<double, 6> &matrix)
+#endif
 {
     return QString("matrix(%1 %2 %3 %4 %5 %6)").arg(matrix[0]).arg(matrix[1]).arg(matrix[2]).arg(matrix[3]).arg(matrix[4]).arg(matrix[5]);
 }
@@ -434,7 +438,11 @@ void SvgOutputDev::drawString(GfxState *state, const GooString *s)
     double x = state->getCurX();
     double y = state->getCurY();
 
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(26, 2, 0)
     const double *ctm = state->getCTM();
+#else
+    const std::array<double, 6> &ctm = state->getCTM();
+#endif
     QTransform transform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
 
     QTransform mirror;
@@ -539,7 +547,11 @@ void SvgOutputDev::drawImage(GfxState *state,
         return;
     }
 
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(26, 2, 0)
     const double *ctm = state->getCTM();
+#else
+    const std::array<double, 6> &ctm = state->getCTM();
+#endif
     QTransform m(ctm[0] / width, ctm[1] / width, -ctm[2] / height, -ctm[3] / height, ctm[2] + ctm[4], ctm[3] + ctm[5]);
 
     QByteArray ba;
