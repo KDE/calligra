@@ -12,6 +12,10 @@
 
 #include <QString>
 
+#include <poppler-version.h>
+
+#define POPPLER_VERSION_MACRO ((POPPLER_VERSION_MAJOR << 16) | (POPPLER_VERSION_MINOR << 8) | (POPPLER_VERSION_MICRO))
+
 class GfxPath;
 class QTransform;
 class GooString;
@@ -69,7 +73,11 @@ public:
 private:
     QString convertPath(const GfxPath *path);
     QString convertMatrix(const QTransform &matrix);
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(26, 2, 0)
     QString convertMatrix(const double *matrix);
+#else
+    QString convertMatrix(const std::array<double, 6> &matrix);
+#endif
     QString printFill();
     QString printStroke();
 
