@@ -2,22 +2,23 @@
 # Copyright (C) 2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the ChangecasePlugin package.
 # Laurenţiu Buzdugan <lbuz@rolix.org>, 2008".
-# Sergiu Bivol <sergiu@cip.md>, 2009.
+# SPDX-FileCopyrightText: 2009, 2026 Sergiu Bivol <sergiu@cip.md>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ChangecasePlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2009-04-26 13:32+0300\n"
+"PO-Revision-Date: 2026-02-09 16:20+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
-"Language-Team: Romanian <kde-i18n-ro@lists.kde.org>\n"
+"Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: Changecase.cpp:49 Changecase.cpp:77
 #, kde-format
@@ -27,7 +28,7 @@ msgstr "Schimbă registrul"
 #: Changecase.cpp:54
 #, kde-format
 msgid "Sentence case"
-msgstr "Registru de porpoziție"
+msgstr "Prima majusculă"
 
 #: Changecase.cpp:55
 #, kde-format
@@ -42,7 +43,7 @@ msgstr "MAJUSCULE"
 #: Changecase.cpp:57
 #, kde-format
 msgid "Initial Caps"
-msgstr "Caps inițial"
+msgstr "Majuscule Inițiale"
 
 #: Changecase.cpp:58
 #, kde-format
@@ -52,4 +53,4 @@ msgstr "cOMUTĂ rEGISTRUL"
 #: ChangecaseFactory.cpp:16
 #, kde-format
 msgid "Change Case..."
-msgstr "Schimbare registru..."
+msgstr "Schimbă registrul…"
