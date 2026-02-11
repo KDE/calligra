@@ -4,7 +4,6 @@
 #ifndef RTFREADER_FONTTABLEENTRY_H
 #define RTFREADER_FONTTABLEENTRY_H
 #include "rtfreader_export.h"
-#include <QStringConverter>
 
 namespace RtfReader
 {
@@ -64,12 +63,12 @@ public:
         m_fontName = fontName;
     }
 
-    QStringConverter::Encoding encoding() const
+    QString encoding() const
     {
         return m_encoding;
     }
 
-    void setEncoding(QStringConverter::Encoding encoding)
+    void setEncoding(const QString &encoding)
     {
         m_encoding = encoding;
     }
@@ -78,7 +77,7 @@ protected:
     enum FontFamily m_fontFamily;
     enum FontPitch m_fontPitch;
     QString m_fontName;
-    QStringConverter::Encoding m_encoding;
+    QString m_encoding;
 };
 }
 
