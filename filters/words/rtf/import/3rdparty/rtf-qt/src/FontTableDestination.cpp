@@ -76,11 +76,8 @@ void FontTableDestination::handleControlWord(const QByteArray &controlWord, bool
     } else if (controlWord == "fcharset") {
         for (const auto &entry : charsetToCodec) {
             if (entry.id == value) {
-                const auto encoding = QStringConverter::encodingForName(entry.name);
-                if (encoding) {
-                    m_fontTableEntry.setEncoding(*encoding);
-                    break;
-                }
+                m_fontTableEntry.setEncoding(entry.name);
+                break;
             }
         }
     } else {

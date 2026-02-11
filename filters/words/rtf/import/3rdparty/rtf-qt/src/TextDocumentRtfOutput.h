@@ -115,7 +115,7 @@ protected:
     QHash<int, StyleSheetTableEntry> m_stylesheetTable;
 
     QTextDocument *m_document;
-    QStringConverter::Encoding m_encoding;
+    QString m_encoding;
 
     /**
       Convenience routine to convert a size in twips into pixels
