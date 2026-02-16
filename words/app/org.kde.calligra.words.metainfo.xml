@@ -429,13 +429,22 @@
       <url>https://carlschwan.eu/2024/09/02/calligra-office-4.0.1/</url>
       <description>
         <p>This release add flatpak support to the Calligra Office suite.</p>
+        <p xml:lang="ca">Aquesta versió afegeix el suport per a flatpak a la suite Calligra Office.</p>
+        <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
+        <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
       <url>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/</url>
       <description>
         <p>The most significant changes are that Calligra has been fully transitioned to Qt6 and KF6, along with a major overhaul of its user interface.</p>
+        <p xml:lang="ca">Els canvis més significatius són que el Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seva interfície d'usuari.</p>
+        <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
+        <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
         <p>Word now features the new sidebar design, and the main view uses a shadow to define the document borders. The Style Manager and Page Layout dialog were also updated with a new design.</p>
+        <p xml:lang="ca">El Word ara presenta el disseny nou de la barra lateral, i la vista principal utilitza una ombra per a definir les vores del document. El diàleg del gestor d'estils i la disposició de pàgines també s'han actualitzat amb un disseny nou.</p>
+        <p xml:lang="ca-valencia">Word ara presenta el disseny nou de la barra lateral, i la vista principal utilitza una ombra per a definir les vores del document. El diàleg del gestor d'estils i la disposició de pàgines també s'han actualitzat amb un disseny nou.</p>
+        <p xml:lang="pt-BR">O Word agora apresenta o novo design da barra lateral, e a visualização principal usa uma sombra para definir as bordas do documento. O Gerenciador de Estilos e a caixa de diálogo Layout da Página também foram atualizados com um novo design.</p>
       </description>
     </release>
   </releases>
