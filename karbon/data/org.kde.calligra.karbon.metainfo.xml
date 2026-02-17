@@ -641,8 +641,10 @@
       <url>https://carlschwan.eu/2024/09/02/calligra-office-4.0.1/</url>
       <description>
         <p>This release add flatpak support to the Calligra Office suite.</p>
+        <p xml:lang="ar">يضيف هذا الإصدار دعم ”فلاتباك“ إلى مجموعة برامج كاليغرا أوفيس.</p>
         <p xml:lang="ca">Aquesta versió afegeix el suport per a flatpak a la suite Calligra Office.</p>
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
+        <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
       </description>
     </release>
@@ -650,12 +652,16 @@
       <url>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/</url>
       <description>
         <p>The most significant changes are that Calligra has been fully transitioned to Qt6 and KF6, along with a major overhaul of its user interface.</p>
+        <p xml:lang="ar">التغييرات الأكثر أهمية هي أن كالغرا قد انتقلت بالكامل إلى Qt6 و KF6، إلى جانب إجراء تعديل جذري على واجهة المستخدم الخاصة بها.</p>
         <p xml:lang="ca">Els canvis més significatius són que el Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seva interfície d'usuari.</p>
         <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
+        <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
         <p>Karbon didn’t received much change outside of the one affecting the whole platform.</p>
+        <p xml:lang="ar">لم تشهد كربون تغييرات كبيرة باستثناء التغيير الذي أثر على المنصة بأكملها.</p>
         <p xml:lang="ca">El Karbon no rebut gaires canvis fora del que afectava tota la plataforma.</p>
         <p xml:lang="ca-valencia">Karbon no rebut gaires canvis fora del que afectava tota la plataforma.</p>
+        <p xml:lang="nl">Karbon kreeg niet veel wijzigingen buiten die het gehele platform beïnvloedden.</p>
         <p xml:lang="pt-BR">O Karbon não recebeu muitas alterações além daquela que afetou toda a plataforma.</p>
       </description>
     </release>
