@@ -375,25 +375,37 @@
       <url>https://carlschwan.eu/2024/09/02/calligra-office-4.0.1/</url>
       <description>
         <p>This release add flatpak support to the Calligra Office suite. This also contains some small graphical changes to the slides list and fix the automatic preview of the animations.</p>
+        <p xml:lang="ar">يضيف هذا الإصدار دعم ”فلاتباك“ إلى مجموعة برامج ”كاليغرا أوفيس“. كما يتضمن بعض التغييرات الرسومية الصغيرة على قائمة الشرائح ويصلح المعاينة التلقائية للرسوم المتحركة.</p>
         <p xml:lang="ca">Aquesta versió afegeix el suport per a flatpak a la suite Calligra Office. Això també conté alguns canvis petits gràfics a la llista de diapositives i corregeix la vista prèvia automàtica de les animacions.</p>
+        <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office. Açò també conté alguns canvis petits gràfics a la llista de diapositives i corregix la vista prèvia automàtica de les animacions.</p>
         <p xml:lang="ka">ეს ვერსია Calligra-ის საოფისე პაკეტს flatpak-ის მხარდაჭერას ამატებს. ის ასევე შეიცავს რამდენიმე პატარა გრაფიკულ ცვლილებას სლაიდების სიაში და გასწორდა ანიმაციების ავტომატური მინიატურა.</p>
+        <p xml:lang="nl">Deze uitgave voegt ondersteuning van Flatpak toe aan de Calligra kantoorsuite. Het bevat ook enkele kleine grafische wijzigingen in de dia-lijst en lost het probleem op met de automatische preview van de animaties.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte a Flatpak ao pacote Calligra Office. Ela também inclui algumas pequenas alterações gráficas na lista de slides e corrige a pré-visualização automática das animações.</p>
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office. Vsebuje tudi nekaj manjših grafičnih sprememb seznama predstavitev in odpravlja samodejni predogled animacij.</p>
+        <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office. Також було реалізовано незначні графічні зміни для слайдів та виправлено автоматичний перегляд анімацій.</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
       <url>https://carlschwan.eu/2024/08/27/calligra-office-4.0-is-out/</url>
       <description>
         <p>The most significant changes are that Calligra has been fully transitioned to Qt6 and KF6, along with a major overhaul of its user interface.</p>
+        <p xml:lang="ar">التغييرات الأكثر أهمية هي أن كالغرا قد انتقلت بالكامل إلى Qt6 و KF6، إلى جانب إجراء تعديل جذري على واجهة المستخدم الخاصة بها.</p>
         <p xml:lang="ca">Els canvis més significatius són que el Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seva interfície d'usuari.</p>
+        <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
+        <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
+        <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p>Stage didn’t really change aside of the sidebar redesign. The tooltip for the slides are also now compatible with Wayland.</p>
+        <p xml:lang="ar">لم يتغير المسرح كثيرًا باستثناء إعادة تصميم الشريط الجانبي. أصبحت تلميحات الأدوات الخاصة بالشرائح متوافقة الآن مع ويلاند.</p>
         <p xml:lang="ca">L'Stage no ha canviat realment a part del redisseny de la barra lateral. El consell d'eina per a les diapositives ara també és compatible amb el Wayland.</p>
+        <p xml:lang="ca-valencia">Stage no ha canviat realment a part del redisseny de la barra lateral. El consell d'eina per a les diapositives ara també és compatible amb Wayland.</p>
         <p xml:lang="ka">Stage არ შეცვლილა, თუ გვერდითა პანელის დიზაინის ცვლილებას არ ჩავთვლით. სლაიდების მინიშნებები ახლა თავსებადია Wayland-თან.</p>
+        <p xml:lang="nl">Stage is, afgezien van het herontwerp van de zijbalk, niet echt veranderd. De tekstballon voor de dia's is nu ook compatibel met Wayland.</p>
         <p xml:lang="pt-BR">O Stage não mudou muito além da reformulação da barra lateral. As dicas de ferramentas para os slides agora também são compatíveis com Wayland.</p>
         <p xml:lang="sl">Stage se razen prenove stranske vrstice ni bistveno spremenil. Opisi orodij za predstavitve so zdaj združljivi z Waylandom.</p>
+        <p xml:lang="uk">Окрім редизайну бічної панелі, Stage практично не змінився. Підказки для слайдів тепер також сумісні з Wayland.</p>
       </description>
     </release>
   </releases>
