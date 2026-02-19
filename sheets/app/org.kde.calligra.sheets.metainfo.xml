@@ -348,6 +348,8 @@
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
+        <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
+        <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -359,12 +361,16 @@
         <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
+        <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
+        <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p>As part of the Qt6 port, Sheets lost its scripting system based on the unmaintained Kross framework. Visually a noticable change is that the cell editor moved from a docker positioned on the left of the spreadsheet view by default to a normal widget on the top. This takes a lot less space which can be used by the spreadsheet.</p>
         <p xml:lang="ar">كجزء من منفذ Qt6، فقد شيت نظام البرمجة النصية الخاص به القائم على إطار عمل Kross غير المدعوم. ومن التغييرات الملحوظة بصريًا أن محرر الخلايا انتقل من موضعه الافتراضي على يسار عرض جدول البيانات إلى عنصر واجهة مستخدم عادي في الأعلى. وهذا يستهلك مساحة أقل بكثير يمكن استخدامها في جدول البيانات.</p>
         <p xml:lang="ca">Com a part de l'adaptació a les Qt6, el Sheets ha perdut el seu sistema de creació de scripts basat en l'entorn de treball Kross que no tenia manteniment. Visualment un canvi notable és que l'editor de cel·les s'ha mogut des d'un acoblador situat a l'esquerra de la vista del full de càlcul de manera predeterminada a un giny normal a la part superior. Això necessita molt menys espai que pot ser utilitzat pel full de càlcul.</p>
         <p xml:lang="ca-valencia">Com a part de l'adaptació a les Qt6, Sheets ha perdut el seu sistema de creació de scripts basat en l'entorn de treball Kross que no tenia manteniment. Visualment un canvi notable és que l'editor de cel·les s'ha mogut des d'un acoblador situat a l'esquerra de la vista del full de càlcul de manera predeterminada a un giny normal a la part superior. Açò necessita molt menys espai que pot ser utilitzat pel full de càlcul.</p>
         <p xml:lang="nl">Als onderdeel van de overzetting naar Qt6 verloor Sheets zijn scriptingsysteem, gebaseerd op het niet langer onderhouden Kross-framework. Visueel is een opvallende verandering dat de celbewerker is verplaatst van een vastzetter aan de linkerkant van de rekenbladweergave naar een normaal widget bovenaan. Dit neemt veel minder ruimte in beslag, die nu door het rekenblad zelf kan worden gebruikt.</p>
         <p xml:lang="pt-BR">Como parte da migração para o Qt6, o Sheets perdeu seu sistema de scripts baseado no framework Kross, que não recebe mais manutenção. Visualmente, uma mudança perceptível é que o editor de células passou de um painel posicionado à esquerda da visualização da planilha por padrão para um widget normal na parte superior. Isso ocupa muito menos espaço, que pode ser usado pela planilha.</p>
+        <p xml:lang="sl">Kot del prenosa na Qt6 je Sheets izgubil svoj skriptni sistem, ki je temeljil na nevzdrževanem ogrodju Kross. Vizualno opazna sprememba je, da se je urejevalnik celic premaknil iz priklopnega okna, ki je bilo privzeto nameščeno na levi strani pogleda preglednice, v običajen pripomoček na vrhu. To zavzame veliko manj prostora, ki ga lahko uporabi preglednica.</p>
+        <p xml:lang="uk">У рамках портування Qt6, Таблиці втратили свою систему скриптів, засновану на непідтримуваних бібліотеках Kross. Візуально помітною зміною є те, що редактор комірок перемістився з бічної панелі, типово розташованої ліворуч від панелі перегляду електронної таблиці, до звичайного віджета згори. Це набагато зменшує займане місце, яке може використати для електронної таблиці.</p>
       </description>
     </release>
   </releases>
