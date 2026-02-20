@@ -28,65 +28,55 @@ msgid "Your emails"
 msgstr ""
 
 #: FormulaCommand.cpp:59
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add text to formula"
-msgstr "Cuir téacs le foirmle"
+msgstr ""
 
 #: FormulaCommand.cpp:218
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change rows"
-msgstr "Athraigh rónna"
+msgstr ""
 
 #: FormulaEditor.cpp:71
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add text"
-msgstr "Cuir téacs leis"
+msgstr ""
 
 #: FormulaEditor.cpp:104
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert row"
-msgstr "Ionsáigh ró"
+msgstr ""
 
 #: FormulaEditor.cpp:109
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove row"
-msgstr "Bain ró"
+msgstr ""
 
 #: FormulaEditor.cpp:117
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert column"
-msgstr "Ionsáigh colún"
+msgstr ""
 
 #: FormulaEditor.cpp:122
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove column"
-msgstr "Bain colún"
+msgstr ""
 
 #: FormulaEditor.cpp:148
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
-msgstr "Ionsáigh eilimintí foirmle."
+msgstr ""
 
 #: FormulaEditor.cpp:184
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
-msgstr "Bain eilimintí foirmle"
+msgstr ""
 
 #: FormulaToolEditWidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgctxt "@title:group"
 msgid "Edit"
-msgstr "Eagar"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: FormulaToolEditWidget.ui:17
@@ -95,11 +85,10 @@ msgid "Font:"
 msgstr "Cló:"
 
 #: FormulaToolWidget.cpp:28
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgctxt "@title:group"
 msgid "Insert"
-msgstr "Ionsáigh"
+msgstr ""
 
 #: FormulaToolWidget.cpp:70
 #, kde-format
@@ -128,24 +117,21 @@ msgstr "Rudaí éagsúla"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Elements"
+#, kde-format
 msgid "Elements:"
-msgstr "Dúile"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
-#, fuzzy, kde-format
-#| msgid "Symbols"
+#, kde-format
 msgid "Symbols:"
-msgstr "Siombailí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgid "Actions:"
-msgstr "Gníomhartha"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
 #: FormulaToolWidget.ui:245
@@ -285,10 +271,9 @@ msgid "Remove column"
 msgstr "Bain colún"
 
 #: KoFormulaToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Formula editing tool"
+#, kde-format
 msgid "Formula editing"
-msgstr "Uirlis eagarthóireachta foirmlí"
+msgstr ""
 
 #: KoM2MMLForumulaTool.cpp:98
 #, kde-format
@@ -319,290 +304,3 @@ msgstr ""
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr ""
-
-#~ msgid "General options"
-#~ msgstr "Roghanna ginearálta"
-
-#~ msgid "Colors:"
-#~ msgstr "Dathanna:"
-
-#~ msgid "Specific options"
-#~ msgstr "Sainroghanna"
-
-#~ msgid "Rows:"
-#~ msgstr "Rónna:"
-
-#~ msgid "Columns:"
-#~ msgstr "Colúin:"
-
-#~ msgid "View MathML"
-#~ msgstr "Féach ar MathML"
-
-#, fuzzy
-#~| msgid "Insert"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert"
-#~ msgstr "Ionsáigh"
-
-#, fuzzy
-#~| msgid "Elements"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Elements"
-#~ msgstr "Dúile"
-
-#, fuzzy
-#~| msgid "Symbols"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Symbols"
-#~ msgstr "Siombailí"
-
-#, fuzzy
-#~| msgid "Actions"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Actions"
-#~ msgstr "Gníomhartha"
-
-#, fuzzy
-#~| msgctxt "This button opens a file dialog to load a MathML file"
-#~| msgid "Load..."
-#~ msgctxt ""
-#~ "(qtundo-format) This button opens a file dialog to load a MathML file"
-#~ msgid "Load..."
-#~ msgstr "Luchtaigh..."
-
-#, fuzzy
-#~| msgid "Save..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Save..."
-#~ msgstr "Sábháil..."
-
-#, fuzzy
-#~| msgid "Edit"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit"
-#~ msgstr "Eagar"
-
-#, fuzzy
-#~| msgid "General options"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "General options"
-#~ msgstr "Roghanna ginearálta"
-
-#, fuzzy
-#~| msgid "Font:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Font:"
-#~ msgstr "Cló:"
-
-#, fuzzy
-#~| msgid "Colors:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Colors:"
-#~ msgstr "Dathanna:"
-
-#, fuzzy
-#~| msgid "Specific options"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Specific options"
-#~ msgstr "Sainroghanna"
-
-#, fuzzy
-#~| msgid "Rows:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rows:"
-#~ msgstr "Rónna:"
-
-#, fuzzy
-#~| msgid "Columns:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Columns:"
-#~ msgstr "Colúin:"
-
-#, fuzzy
-#~| msgid "View MathML"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "View MathML"
-#~ msgstr "Féach ar MathML"
-
-#, fuzzy
-#~| msgid "Arrows"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Arrows"
-#~ msgstr "Saigheada"
-
-#, fuzzy
-#~| msgid "Greek"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Greek"
-#~ msgstr "Gréagach"
-
-#, fuzzy
-#~| msgid "Relations"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Relations"
-#~ msgstr "Gaolta"
-
-#, fuzzy
-#~| msgid "Operators"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Operators"
-#~ msgstr "Oibreoirí"
-
-#, fuzzy
-#~| msgid "Miscellaneous"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Miscellaneous"
-#~ msgstr "Rudaí éagsúla"
-
-#, fuzzy
-#~| msgid ""
-#~| "This document contains an external link to a remote document\n"
-#~| "%1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "This document contains an external link to a remote document\n"
-#~ "%1"
-#~ msgstr ""
-#~ "Tá nasc seachtrach le cáipéis chianda sa cháipéis seo\n"
-#~ "%1"
-
-#, fuzzy
-#~| msgid "Confirmation Required"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Confirmation Required"
-#~ msgstr "Ní mór cinntiú"
-
-#, fuzzy
-#~| msgid "Download"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Download"
-#~ msgstr "Íosluchtaigh"
-
-#, fuzzy
-#~| msgid "Skip"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Skip"
-#~ msgstr "Ná bac leis"
-
-#, fuzzy
-#~| msgid "Formula"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Formula"
-#~ msgstr "Foirmle"
-
-#, fuzzy
-#~| msgid "A formula"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A formula"
-#~ msgstr "Foirmle"
-
-#, fuzzy
-#~| msgid "Insert fenced element"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert fenced element"
-#~ msgstr "Ionsáigh eilimint fhálaithe"
-
-#, fuzzy
-#~| msgid "Insert enclosed element"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert enclosed element"
-#~ msgstr "Ionsáigh eilimint iata"
-
-#, fuzzy
-#~| msgid "Insert root"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert root"
-#~ msgstr "Ionsáigh fréamh"
-
-#, fuzzy
-#~| msgid "Insert square root"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert square root"
-#~ msgstr "Ionsáigh fréamh chearnach"
-
-#, fuzzy
-#~| msgid "Insert fraction"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert fraction"
-#~ msgstr "Ionsáigh codán"
-
-#, fuzzy
-#~| msgid "Insert bevelled fraction"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert bevelled fraction"
-#~ msgstr "Ionsáigh codán beibhealta"
-
-#, fuzzy
-#~| msgid "Insert 3x3 table"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert 3x3 table"
-#~ msgstr "Ionsáigh tábla 3×3"
-
-#, fuzzy
-#~| msgid "Insert 2 dimensional vector"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert 2 dimensional vector"
-#~ msgstr "Ionsáigh veicteoir déthoiseach"
-
-#, fuzzy
-#~| msgid "Insert subscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert subscript"
-#~ msgstr "Ionsáigh foscript"
-
-#, fuzzy
-#~| msgid "Insert superscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert superscript"
-#~ msgstr "Ionsáigh forscript"
-
-#, fuzzy
-#~| msgid "Insert sub- and superscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert sub- and superscript"
-#~ msgstr "Ionsáigh foscript agus forscript"
-
-#, fuzzy
-#~| msgid "Insert overscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert overscript"
-#~ msgstr "Ionsáigh forscript"
-
-#, fuzzy
-#~| msgid "Insert underscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert underscript"
-#~ msgstr "Ionsáigh foscript"
-
-#, fuzzy
-#~| msgid "Insert under- and overscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert under- and overscript"
-#~ msgstr "Ionsáigh foscript agus forscript"
-
-#, fuzzy
-#~| msgid "Formula editing tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Formula editing"
-#~ msgstr "Uirlis eagarthóireachta foirmlí"
-
-#~ msgid "Formula tool"
-#~ msgstr "Uirlis fhoirmlí"
-
-#~ msgid "Insert fence"
-#~ msgstr "Ionsáigh claí"
-
-#~ msgid "Insert 2x2 table"
-#~ msgstr "Ionsáigh tábla 2×2"
-
-#~ msgid "Insert 3 dimensional vector"
-#~ msgstr "Ionsáigh veicteoir tríthoiseach"
-
-#~ msgid "Insert table row"
-#~ msgstr "Ionsáigh ró i dtábla"
-
-#~ msgid "Replace Element"
-#~ msgstr "Ionadaigh Eilimint"
-
-#~ msgid "Attribute Changed"
-#~ msgstr "Athraíodh Aitreabúid"

@@ -19,11 +19,10 @@ msgstr ""
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpui.rc:8
-#, fuzzy, kde-format
-#| msgid "Shapes"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Shapes"
-msgstr "Cruthanna"
+msgstr ""
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpview.rc:23
@@ -39,10 +38,9 @@ msgstr "Le Déanamh"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:4
-#, fuzzy, kde-format
-#| msgid "Checked"
+#, kde-format
 msgid "Unchecked"
-msgstr "Deimhnithe"
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:5
@@ -93,16 +91,14 @@ msgstr "Staideanna"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/stateshape/StateShapeConfigWidget.ui:17
-#, fuzzy, kde-format
-#| msgid "States"
+#, kde-format
 msgid "State:"
-msgstr "Staideanna"
+msgstr ""
 
 #: plugins/stateshape/StateShapeFactory.cpp:30
-#, fuzzy, kde-format
-#| msgid "Shapes"
+#, kde-format
 msgid "State Shape"
-msgstr "Cruthanna"
+msgstr ""
 
 #: plugins/stateshape/StateShapeFactory.cpp:32
 #, kde-format
@@ -137,10 +133,9 @@ msgid ""
 msgstr ""
 
 #: src/AboutData.h:38
-#, fuzzy, kde-format
-#| msgid "(c) 2009, 2010, 2011, 2012 Cyrille Berger"
+#, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
-msgstr "© 2009, 2010, 2011, 2012 Cyrille Berger"
+msgstr ""
 
 #: src/AboutData.h:42
 #, kde-format
@@ -148,10 +143,9 @@ msgid "Somsubhra Bairi"
 msgstr ""
 
 #: src/AboutData.h:43 src/AboutData.h:46
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former maintainer"
-msgstr "Cothaitheoir"
+msgstr ""
 
 #: src/AboutData.h:46
 #, kde-format
@@ -310,10 +304,9 @@ msgid "&Duplicate"
 msgstr "&Dúblach"
 
 #: src/View.cpp:194
-#, fuzzy, kde-format
-#| msgid "Ungroup Shapes"
+#, kde-format
 msgid "Group Shapes"
-msgstr "Díghrúpáil Giuirléidí"
+msgstr ""
 
 #: src/View.cpp:199
 #, kde-format
@@ -321,237 +314,11 @@ msgid "Ungroup Shapes"
 msgstr "Díghrúpáil Giuirléidí"
 
 #: src/View.cpp:377
-#, fuzzy
-#| msgid "Ungroup Shapes"
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr "Díghrúpáil Giuirléidí"
+msgstr ""
 
 #: src/View.cpp:399
-#, fuzzy
-#| msgid "Ungroup Shapes"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr "Díghrúpáil Giuirléidí"
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
-
-#, fuzzy
-#~| msgid "Shapes"
-#~ msgid "Web Shape"
-#~ msgstr "Cruthanna"
-
-#, fuzzy
-#~| msgid "Shapes"
-#~ msgid "A web shape"
-#~ msgstr "Cruthanna"
-
-#, fuzzy
-#~| msgid "Shapes"
-#~ msgid "Web shape editing"
-#~ msgstr "Cruthanna"
-
-#, fuzzy
-#~| msgid "Layout:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Layout:"
-#~ msgstr "Leagan Amach:"
-
-#, fuzzy
-#~| msgid "States"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "State:"
-#~ msgstr "Staideanna"
-
-#, fuzzy
-#~| msgid "URL:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "URL:"
-#~ msgstr "URL:"
-
-#, fuzzy
-#~| msgid "Shapes"
-#~ msgctxt "(qtundo-format) @title:menu"
-#~ msgid "Shapes"
-#~ msgstr "Cruthanna"
-
-#, fuzzy
-#~| msgid "Shapes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shapes"
-#~ msgstr "Cruthanna"
-
-#, fuzzy
-#~| msgid "Todo"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Todo"
-#~ msgstr "Le Déanamh"
-
-#, fuzzy
-#~| msgid "Checked"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unchecked"
-#~ msgstr "Deimhnithe"
-
-#, fuzzy
-#~| msgid "Checked"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Checked"
-#~ msgstr "Deimhnithe"
-
-#, fuzzy
-#~| msgid "Progress"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Progress"
-#~ msgstr "Dul chun cinn"
-
-#, fuzzy
-#~| msgid "0 %"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "0 %"
-#~ msgstr "0 %"
-
-#, fuzzy
-#~| msgid "25 %"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "25 %"
-#~ msgstr "25 %"
-
-#, fuzzy
-#~| msgid "50 %"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "50 %"
-#~ msgstr "50 %"
-
-#, fuzzy
-#~| msgid "75 %"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "75 %"
-#~ msgstr "75 %"
-
-#, fuzzy
-#~| msgid "100 %"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "100 %"
-#~ msgstr "100 %"
-
-#, fuzzy
-#~| msgid "States"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "States"
-#~ msgstr "Staideanna"
-
-#, fuzzy
-#~| msgid "Braindump"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Braindump"
-#~ msgstr "Braindump"
-
-#, fuzzy
-#~| msgid "(c) 2009, 2010, 2011, 2012 Cyrille Berger"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
-#~ msgstr "© 2009, 2010, 2011, 2012 Cyrille Berger"
-
-#, fuzzy
-#~| msgid "Maintainer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Former maintainer"
-#~ msgstr "Cothaitheoir"
-
-#, fuzzy
-#~| msgid "Cyrille Berger"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Cyrille Berger"
-#~ msgstr "Cyrille Berger"
-
-#, fuzzy
-#~| msgctxt "NAME OF TRANSLATORS"
-#~| msgid "Your names"
-#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#, fuzzy
-#~| msgctxt "EMAIL OF TRANSLATORS"
-#~| msgid "Your emails"
-#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#, fuzzy
-#~| msgid "Column"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Column"
-#~ msgstr "Colún"
-
-#, fuzzy
-#~| msgid "Free"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Free"
-#~ msgstr "Saor"
-
-#, fuzzy
-#~| msgid "Dockers"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dockers"
-#~ msgstr "Dugairí"
-
-#, fuzzy
-#~| msgid "Untitled %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Untitled %1"
-#~ msgstr "Gan Teideal %1"
-
-#, fuzzy
-#~| msgid "Minimal View"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Minimal View"
-#~ msgstr "Amharc Íosta"
-
-#, fuzzy
-#~| msgid "Detailed View"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Detailed View"
-#~ msgstr "Amharc Mionsonraithe"
-
-#, fuzzy
-#~| msgid "Thumbnail View"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Thumbnail View"
-#~ msgstr "Amharc Mionsamhlacha"
-
-#, fuzzy
-#~| msgid "View mode"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "View mode"
-#~ msgstr "Mód amhairc"
-
-#, fuzzy
-#~| msgid "D&elete"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "D&elete"
-#~ msgstr "S&crios"
-
-#, fuzzy
-#~| msgctxt "Duplicate selection"
-#~| msgid "&Duplicate"
-#~ msgctxt "(qtundo-format) Duplicate selection"
-#~ msgid "&Duplicate"
-#~ msgstr "&Dúblach"
-
-#, fuzzy
-#~| msgid "Ungroup Shapes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ungroup Shapes"
-#~ msgstr "Díghrúpáil Giuirléidí"
-
-#~ msgid "Maintainer"
-#~ msgstr "Cothaitheoir"
-
-#~ msgid "&Edit"
-#~ msgstr "&Eagar"
-
-#~ msgid "&View"
-#~ msgstr "&Amharc"
+msgstr ""

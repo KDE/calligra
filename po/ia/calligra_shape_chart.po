@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2013, 2014, 2015, 2016, 2017, 2020, 2022, 2025 Giovanni Sora <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2013, 2014, 2015, 2016, 2017, 2020, 2022, 2025, 2026 Giovanni Sora <g.sora@tiscali.it>
 # giovanni <g.sora@tiscali.it>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-02-01 11:22+0100\n"
+"PO-Revision-Date: 2026-02-19 16:54+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -48,7 +48,7 @@ msgstr ""
 #: AxesConfigWidget.cpp:81
 #, kde-format
 msgid "Other-side"
-msgstr ""
+msgstr "Altere-latere"
 
 #: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
 #: DataSetConfigWidget.cpp:345
@@ -139,27 +139,27 @@ msgstr "Monstra titulo:"
 #: AxesConfigWidget.ui:201
 #, kde-format
 msgid "Primary X Axis"
-msgstr ""
+msgstr "Axe X Primari"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
 #, kde-format
 msgid "Primary Y Axis"
-msgstr ""
+msgstr "Axe Y Primari"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:211
 #, kde-format
 msgid "Secondary X Axis"
-msgstr ""
+msgstr "Axe X Secondari"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
 #, kde-format
 msgid "Secondary Y Axis"
-msgstr ""
+msgstr "Axe Y Secondari"
 
 #: ChartShape.cpp:299
 #, kde-format
@@ -465,17 +465,17 @@ msgstr "Crescimento in %"
 #: ChartShapeFactory.cpp:454
 #, kde-format
 msgid "Share A"
-msgstr ""
+msgstr "Comparti A"
 
 #: ChartShapeFactory.cpp:455
 #, kde-format
 msgid "Share B"
-msgstr ""
+msgstr "Comparti B"
 
 #: ChartShapeFactory.cpp:456
 #, kde-format
 msgid "Share C"
-msgstr ""
+msgstr "Comparti C"
 
 #: ChartShapeFactory.cpp:459
 #, kde-format
@@ -605,12 +605,12 @@ msgstr "Cela lineas de grillia minor de axe"
 #: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
 msgid "Logarithmic Scaling"
-msgstr ""
+msgstr "Scalar Logarithmic"
 
 #: commands/AxisCommand.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
-msgstr ""
+msgstr "Scalar Linear"
 
 #: commands/AxisCommand.cpp:192
 msgctxt "(qtundo-format)"
@@ -625,22 +625,22 @@ msgstr "Fixa  largessa de subpasso de axe"
 #: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
-msgstr ""
+msgstr "Assigna Largessa de Passo automatic"
 
 #: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
-msgstr ""
+msgstr "Assigna largessa de passo manual"
 
 #: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
-msgstr ""
+msgstr "Largessa de Subpasso Automatic"
 
 #: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
-msgstr ""
+msgstr "Largessa de subpasso Manual"
 
 #: commands/AxisCommand.cpp:228
 msgctxt "(qtundo-format)"
@@ -860,12 +860,12 @@ msgstr "Fixa Orientation de Legenda"
 #: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
-msgstr ""
+msgstr "Assigna barras horizontal"
 
 #: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
-msgstr ""
+msgstr "Assigna barras vertical"
 
 #: DataSet.cpp:272
 #, kde-format
@@ -1058,7 +1058,7 @@ msgstr "Dialogo"
 #: dialogs/AxisScalingDialog.ui:19
 #, kde-format
 msgid "Logarithmic Scaling"
-msgstr ""
+msgstr "Scalar Logarithmic"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AxisScalingDialog.ui:32
@@ -1680,7 +1680,7 @@ msgstr "3D"
 #: PlotAreaConfigWidget.ui:69
 #, kde-format
 msgid "Vertical Bars"
-msgstr ""
+msgstr "Barras vertical"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
 #: PlotAreaConfigWidget.ui:74
@@ -1726,13 +1726,13 @@ msgstr ""
 #: StockConfigWidget.ui:47
 #, kde-format
 msgid "Gain marker"
-msgstr ""
+msgstr "Marcator de Ganio"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
 #: StockConfigWidget.ui:73
 #, kde-format
 msgid "Loss marker"
-msgstr ""
+msgstr "Marcator de Perdita"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
@@ -1790,12 +1790,12 @@ msgstr "Delimitator (Miter limit)"
 #: widgets/StrokeConfigWidget.cpp:196
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr ""
+msgstr "Assigna largessa de linea del selection actual"
 
 #: widgets/StrokeConfigWidget.cpp:210
 #, kde-format
 msgid "Change the color of the line"
-msgstr ""
+msgstr "Cambia le color del linea"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Set Dataset Marker Style"

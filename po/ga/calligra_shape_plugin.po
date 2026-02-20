@@ -36,27 +36,3 @@ msgstr "Ionadchoinneálaí Breiseáin"
 #, kde-format
 msgid "Plugin Placeholder, embedded or fullscreen"
 msgstr "Ionadchoinneálaí Breiseáin, leabaithe nó lánscáileán"
-
-#, fuzzy
-#~| msgid "Unknown"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unknown"
-#~ msgstr "Anaithnid"
-
-#, fuzzy
-#~| msgid "Plugin of mimetype: %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Plugin of mimetype: %1"
-#~ msgstr "Breiseán de chineál MIME: %1"
-
-#, fuzzy
-#~| msgid "Plugin Placeholder"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Plugin Placeholder"
-#~ msgstr "Ionadchoinneálaí Breiseáin"
-
-#, fuzzy
-#~| msgid "Plugin Placeholder, embedded or fullscreen"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Plugin Placeholder, embedded or fullscreen"
-#~ msgstr "Ionadchoinneálaí Breiseáin, leabaithe nó lánscáileán"

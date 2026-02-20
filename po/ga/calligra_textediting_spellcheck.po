@@ -28,9 +28,9 @@ msgid "Auto Spell Check"
 msgstr "Seiceáil Uathoibríoch"
 
 #: SpellCheckFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Check Spelling"
-msgstr "Litriú"
+msgstr ""
 
 #: SpellCheckMenu.cpp:28
 #, kde-format
@@ -41,62 +41,3 @@ msgstr "Litriú"
 #, kde-format
 msgid "Add to Dictionary"
 msgstr "Cuir leis an bhFoclóir"
-
-#, fuzzy
-#~| msgid "Configure &Spell Checking..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure &Spell Checking..."
-#~ msgstr "Cumraigh an &Litreoir..."
-
-#, fuzzy
-#~| msgid "Auto Spell Check"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto Spell Check"
-#~ msgstr "Seiceáil Uathoibríoch"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Check Spelling"
-#~ msgstr "Litriú"
-
-#, fuzzy
-#~| msgid "Spelling"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spelling"
-#~ msgstr "Litriú"
-
-#, fuzzy
-#~| msgid "Add to Dictionary"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add to Dictionary"
-#~ msgstr "Cuir leis an bhFoclóir"
-
-#~ msgid "Ignore Word"
-#~ msgstr "Déan neamhaird den fhocal seo"
-
-#~ msgid "Spell Check"
-#~ msgstr "Seiceáil Litrithe"
-
-#~ msgid "Spell Check Configuration"
-#~ msgstr "Cumraíocht an Litreora"
-
-#~ msgid "Default Language:"
-#~ msgstr "Teanga Réamhshocraithe:"
-
-#~ msgid "Options"
-#~ msgstr "Roghanna"
-
-#~ msgid "Enable &background spellchecking"
-#~ msgstr "&Cumasaigh seiceáil an litriú sa chúlra"
-
-#~ msgid "Skip all &uppercase words"
-#~ msgstr "Gabh thar fhocail atá sa chás &uachtair"
-
-#~ msgid "S&kip run-together words"
-#~ msgstr "Gabh thar fhocail chomh&tháite"
-
-#~ msgid "&Add"
-#~ msgstr "C&uir Leis"
-
-#~ msgid "&Remove"
-#~ msgstr "&Bain"

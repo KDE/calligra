@@ -60,116 +60,97 @@ msgid "&Settings"
 msgstr "&Socruithe"
 
 #: part/commands/KPrAddCustomSlideShowCommand.cpp:19
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add custom slide show"
-msgstr "Cuir taispeántais saincheaptha sleamhnán in eagar..."
+msgstr ""
 
 #: part/commands/KPrAnimationCreateCommand.cpp:32
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create shape animation"
-msgstr "Cruthaigh beochan ghiuirléide"
+msgstr ""
 
 #: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/commands/KPrAnimationRemoveCommand.cpp:30
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove shape animation"
-msgstr "Cruthaigh beochan ghiuirléide"
+msgstr ""
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete custom slide show"
-msgstr "Scrios an taispeántas"
+msgstr ""
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr "Scrios Sleamhnán"
+msgstr ""
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:44
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] "Scrios Sleamhnán"
-msgstr[1] "Scrios Sleamhnán"
-msgstr[2] "Scrios Sleamhnán"
-msgstr[3] "Scrios Sleamhnán"
-msgstr[4] "Scrios Sleamhnán"
+msgstr[0] ""
+msgstr[1] ""
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
-msgstr "Cuir taispeántais saincheaptha sleamhnán in eagar..."
+msgstr ""
 
 #: part/commands/KPrPageEffectSetCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
-msgstr "Cruthaigh maisíocht leathanaigh"
+msgstr ""
 
 #: part/commands/KPrPageEffectSetCommand.cpp:40
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
-msgstr "Athraigh maisíocht leathanaigh"
+msgstr ""
 
 #: part/commands/KPrPageEffectSetCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
-msgstr "Scrios Sleamhnán"
+msgstr ""
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
-msgstr "Trasdulta"
+msgstr ""
 
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
-msgstr "Sainigh Taispeántas Saincheaptha Sleamhnán"
+msgstr ""
 
 #: part/commands/KPrReorderAnimationCommand.cpp:34
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
-msgstr "Trasdulta"
+msgstr ""
 
 #: part/KPrAboutData.h:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
-msgstr "Cumraigh Taispeántas Sleamhnán..."
+msgstr ""
 
 #: part/KPrAboutData.h:21
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Presentation Tool"
-msgstr "Láithreoireacht"
+msgstr ""
 
 #: part/KPrAboutData.h:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr "© 1998-2008, Foireann KPresenter"
+msgstr ""
 
 #: part/KPrAboutData.h:29
 #, kde-format
@@ -177,10 +158,9 @@ msgid "Carl Schwan"
 msgstr ""
 
 #: part/KPrAboutData.h:30
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Cothaitheoir"
+msgstr ""
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format
@@ -258,9 +238,9 @@ msgid "Carlos Licea "
 msgstr "Carlos Licea "
 
 #: part/KPrAboutData.h:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "C. Boemann "
-msgstr "Casper Boemann "
+msgstr ""
 
 #: part/KPrAboutData.h:48
 #, kde-format
@@ -307,9 +287,9 @@ msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
 
 #: part/KPrCustomSlideShowsModel.cpp:52
 #: part/KPrSlidesSorterDocumentModel.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown"
-msgstr "Fochineál anaithnid"
+msgstr ""
 
 #: part/KPrCustomSlideShowsModel.cpp:57
 #: part/KPrSlidesSorterDocumentModel.cpp:88 part/ui/KPrHtmlExportDialog.cpp:114
@@ -323,10 +303,9 @@ msgid "End of presentation. Click to exit."
 msgstr ""
 
 #: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
-#, fuzzy, kde-format
-#| msgid "Set Layout"
+#, kde-format
 msgid "Layout"
-msgstr "Socraigh Leagan Amach"
+msgstr ""
 
 #: part/KPrPart.cpp:69
 #, kde-format
@@ -344,10 +323,9 @@ msgid "Installation Error"
 msgstr "Earráid Suiteála"
 
 #: part/KPrPicturesImport.cpp:59
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Pictures"
-msgstr "Ionsáigh Pictiúir"
+msgstr ""
 
 #: part/KPrPlaceholderShapeFactory.cpp:32
 #, kde-format
@@ -452,16 +430,16 @@ msgstr ""
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
-#, fuzzy, kde-format
+#, kde-format
 msgid "start after previous animation"
-msgstr "Cruthaigh beochan ghiuirléide"
+msgstr ""
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
-#, fuzzy, kde-format
+#, kde-format
 msgid "start with previous animation"
-msgstr "Cruthaigh beochan ghiuirléide"
+msgstr ""
 
 #: part/KPrShapeAnimations.cpp:206
 #, kde-format
@@ -470,9 +448,9 @@ msgstr ""
 
 #: part/KPrShapeAnimations.cpp:225
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Animation"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/KPrShapeAnimations.cpp:229
 #, kde-format
@@ -480,19 +458,19 @@ msgid "Shape"
 msgstr "Giuirléid"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:279
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Move Here"
-msgstr "Bog Sleamhnán"
+msgstr ""
 
 #: part/KPrSlidesSorterDocumentModel.cpp:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Copy Here"
-msgstr "Cóipeáil Sleamhnán"
+msgstr ""
 
 #: part/KPrSlidesSorterDocumentModel.cpp:287
-#, fuzzy, kde-format
+#, kde-format
 msgid "C&ancel"
-msgstr "Cealaigh"
+msgstr ""
 
 #: part/KPrView.cpp:74
 #, kde-format
@@ -505,9 +483,9 @@ msgid "Show Master Slides"
 msgstr "Taispeáin Máistirshleamhnáin"
 
 #: part/KPrView.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import Slideshow..."
-msgstr "Taispeántas Sleamhnán Reatha:"
+msgstr ""
 
 #: part/KPrView.cpp:81
 #, kde-format
@@ -540,10 +518,9 @@ msgid "Delete the current slide"
 msgstr "Scrios an sleamhnán reatha"
 
 #: part/KPrView.cpp:90
-#, fuzzy, kde-format
-#| msgid "Show Master Slides"
+#, kde-format
 msgid "Master Slide..."
-msgstr "Taispeáin Máistirshleamhnáin"
+msgstr ""
 
 #: part/KPrView.cpp:91
 #, kde-format
@@ -551,14 +528,14 @@ msgid "Previous Slide"
 msgstr "An Sleamhnán Roimhe Seo"
 
 #: part/KPrView.cpp:92 part/KPrView.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Go to previous slide"
-msgstr "An sleamhnán roimhe seo"
+msgstr ""
 
 #: part/KPrView.cpp:95 part/KPrView.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Go to next slide"
-msgstr "Téigh go sleamhnán::"
+msgstr ""
 
 #: part/KPrView.cpp:97
 #, kde-format
@@ -566,9 +543,9 @@ msgid "First Slide"
 msgstr "An Chéad Sleamhnán"
 
 #: part/KPrView.cpp:98 part/KPrView.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Go to first slide"
-msgstr "Téigh go sleamhnán::"
+msgstr ""
 
 #: part/KPrView.cpp:100
 #, kde-format
@@ -576,14 +553,14 @@ msgid "Last Slide"
 msgstr "An Sleamhnán Deiridh"
 
 #: part/KPrView.cpp:101 part/KPrView.cpp:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Go to last slide"
-msgstr "Téigh go sleamhnán::"
+msgstr ""
 
 #: part/KPrView.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure Stage..."
-msgstr "Cumraigh Taispeántas Sleamhnán..."
+msgstr ""
 
 #: part/KPrView.cpp:238
 #, kde-format
@@ -591,15 +568,14 @@ msgid "Export as HTML..."
 msgstr "Easpórtáil mar HTML..."
 
 #: part/KPrView.cpp:264
-#, fuzzy, kde-format
-#| msgid "Insert Pictures..."
+#, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr "Ionsáigh Pictiúir..."
+msgstr ""
 
 #: part/KPrView.cpp:273
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Appear Animation"
-msgstr "Cruthaigh beochan ghiuirléide"
+msgstr ""
 
 #: part/KPrView.cpp:277
 #, kde-format
@@ -622,25 +598,24 @@ msgid "From First Slide"
 msgstr "Ón Chéad Sleamhnán"
 
 #: part/KPrView.cpp:293
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Stop presentation"
-msgstr "Tosaigh an Láithreoireacht"
+msgstr ""
 
 #: part/KPrView.cpp:299
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Status Bar"
-msgstr "Taispeáin an barra stádais"
+msgstr ""
 
 #: part/KPrView.cpp:300
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide Status Bar"
-msgstr "Taispeáin an barra stádais"
+msgstr ""
 
 #: part/KPrView.cpp:301
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shows or hides the status bar"
-msgstr "Taispeáin an barra stádais"
+msgstr ""
 
 #: part/KPrView.cpp:310
 #, kde-format
@@ -653,22 +628,19 @@ msgid "Configure Presenter View..."
 msgstr "Cumraigh Amharc KPresenter..."
 
 #: part/KPrView.cpp:318
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Draw on the presentation..."
-msgstr "Tosaigh an Láithreoireacht"
+msgstr ""
 
 #: part/KPrView.cpp:325
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Highlight the presentation..."
-msgstr "Tosaigh an Láithreoireacht"
+msgstr ""
 
 #: part/KPrView.cpp:332
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr "Tosaigh an Láithreoireacht"
+msgstr ""
 
 #: part/KPrViewModeNotes.cpp:36
 #, kde-format
@@ -676,80 +648,79 @@ msgid "Notes"
 msgstr "Nótaí"
 
 #: part/KPrViewModeSlidesSorter.cpp:64
-#, fuzzy, kde-format
-#| msgid "Slide Show"
+#, kde-format
 msgid "Slides Sorter"
-msgstr "Taispeántas Sleamhnán"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Show: "
-msgstr "Taispeántas Sleamhnán"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new custom slide show"
-msgstr "Cuir taispeántas nua leis"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete current custom slide show"
-msgstr "Scrios an sleamhnán reatha"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add slides to current custom slide show"
-msgstr "Cuir taispeántais saincheaptha sleamhnán in eagar..."
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove slides from current custom slide show"
-msgstr "Cuir taispeántais saincheaptha sleamhnán in eagar..."
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:173
-#, fuzzy, kde-format
+#, kde-format
 msgid "Duplicate Slide"
-msgstr "Scrios Sleamhnán"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start Slideshow"
-msgstr "Taispeántas Sleamhnán Reatha:"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:532
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new slide"
-msgstr "Cuir taispeántas nua leis"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete selected slides"
-msgstr "Sleamhnáin roghnaithe:"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:537
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename"
-msgstr "Bain"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:541
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cut"
-msgstr "Sain&cheaptha"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:542
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy"
-msgstr "Bearr"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:543
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste"
-msgstr "Conair"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Show %1"
-msgstr "Taispeántas Sleamhnán"
+msgstr ""
 
 #: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
@@ -770,46 +741,45 @@ msgstr "Ní cheadaítear dhá taispeántas sleamhnán leis an ainm céanna."
 
 #: part/pagelayout/KPrPlaceholders.cpp:46
 #: part/pagelayout/KPrPlaceholders.cpp:47
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
-msgstr "Socraigh Leagan Amach"
+msgstr ""
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Automatic animation preview"
-msgstr "Fleiscíniú uathoibríoch"
+msgstr ""
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:301
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:309
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preview animation"
-msgstr "Láithreoireacht"
+msgstr ""
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:215
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Transitions"
-msgstr "Trasdulta"
+msgstr ""
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:217
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape Click Actions"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape Animations"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manage animation delay and duration: "
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start: "
-msgstr "Réiltín"
+msgstr ""
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
 #, kde-format
@@ -817,14 +787,14 @@ msgid "on mouse click"
 msgstr ""
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "after previous animation"
-msgstr "Cruthaigh beochan ghiuirléide"
+msgstr ""
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "with previous animation"
-msgstr "Cruthaigh beochan ghiuirléide"
+msgstr ""
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
 #, kde-format
@@ -838,9 +808,9 @@ msgstr "Aga: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preview Shape Animation"
-msgstr "Cruthaigh beochan ghiuirléide"
+msgstr ""
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:50
 #, kde-format
@@ -863,22 +833,19 @@ msgid "Automatic"
 msgstr ""
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Slide Transition:"
-msgstr "Trasdulta"
+msgstr ""
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
-#, fuzzy, kde-format
-#| msgid "Apply Styles"
+#, kde-format
 msgid "Apply To All Slides"
-msgstr "Cuir Stíleanna i bhFeidhm"
+msgstr ""
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:253
-#, fuzzy
-#| msgid "Apply Style to Frames"
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
-msgstr "Cuir an Stíl i bhFeidhm ar Fhrámaí"
+msgstr ""
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
@@ -896,9 +863,9 @@ msgid "Emphasis"
 msgstr "Béim"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom"
-msgstr "Sleamhnán saincheaptha:"
+msgstr ""
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
@@ -906,9 +873,9 @@ msgid "Motion path"
 msgstr ""
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ole Action"
-msgstr "Airde:"
+msgstr ""
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
@@ -918,19 +885,19 @@ msgstr ""
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:505
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit animation"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add new animation"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove animation"
-msgstr "Bain Nasc"
+msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
@@ -938,24 +905,24 @@ msgid "Order: "
 msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move animation up"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move animation down"
-msgstr "Uirlis Bheochana"
+msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new animation"
-msgstr "Cuir taispeántas nua leis"
+msgstr ""
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete current animation"
-msgstr "Scrios an sleamhnán reatha"
+msgstr ""
 
 #: part/tools/animationtool/KPrTimeLineHeader.cpp:71
 #, kde-format
@@ -1035,10 +1002,9 @@ msgid "&Crop"
 msgstr "&Bearr"
 
 #: part/tools/KPrPlaceholderTool.cpp:90
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Edit Shape"
-msgstr "Cuir Giuirléid in Eagar"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/ui/KPrConfigurePresenterView.ui:16
@@ -1048,17 +1014,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/ui/KPrConfigurePresenterView.ui:24
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Presentation monitor:"
-msgstr "Láithreoireacht"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
 #: part/ui/KPrConfigurePresenterView.ui:39
-#, fuzzy, kde-format
-#| msgid "Configure Presenter View"
+#, kde-format
 msgid "Enable presenter view"
-msgstr "Cumraigh Amharc KPresenter"
+msgstr ""
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:27
 #, kde-format
@@ -1174,10 +1138,9 @@ msgid "Open in browser"
 msgstr "Oscail i mbrabhsálaí"
 
 #: part/ui/KPrHtmlExportDialog.cpp:34
-#, fuzzy, kde-format
-#| msgid "HTML Export"
+#, kde-format
 msgid "Html Export"
-msgstr "Easpórtáil HTML"
+msgstr ""
 
 #: part/ui/KPrHtmlExportDialog.cpp:35
 #, kde-format
@@ -1225,10 +1188,9 @@ msgid "Are you sure you want to remove \"%1\"?"
 msgstr ""
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:78
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
-msgstr "Athraigh Táblóirí"
+msgstr ""
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:101
 #, kde-format
@@ -1368,46 +1330,33 @@ msgid "From Nine Counterclockwise"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Diamond"
+#, kde-format
 msgid "Double Fan"
-msgstr "Muileata"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:29
-#, fuzzy
-#| msgid "Vertical"
 msgid "Fan Out Vertical"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:30
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Fan Out Horizontal"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
-#, fuzzy
-#| msgid "Vertical"
 msgid "Fan In Vertical"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Fan In Horizontal"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
-#, fuzzy
-#| msgid "Vertical"
 msgid "Fan In Vertical Reverse"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Fan In Horizontal Reverse"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
 #, kde-format
@@ -1415,76 +1364,52 @@ msgid "Double Sweep"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "Vertical"
 msgid "Parallel Vertical"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Parallel Diagonal"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Vertical"
 msgid "Opposite Vertical"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Opposite Horizontal"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Parallel Diagonal Top Left"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Parallel Diagonal Bottom Left"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "Vertical"
 msgid "Parallel Vertical Reverse"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Parallel Diagonal Reverse"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "Vertical"
 msgid "Opposite Vertical Reverse"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Opposite Horizontal Reverse"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Parallel Diagonal Top Left Reverse"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Parallel Diagonal Bottom Left Reverse"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
@@ -1493,79 +1418,55 @@ msgstr "Gaothrán"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:37
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "From Right"
 msgid "Center Right"
-msgstr "Ón Dheis"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:38
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "Werner Trobin"
 msgid "Center Top"
-msgstr "Werner Trobin"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "From Left"
 msgid "Center Left"
-msgstr "Ón Chlé"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "From Bottom"
 msgid "Center Bottom"
-msgstr "Ón Bhun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "From Bottom"
 msgid "Fan Out Top"
-msgstr "Ón Bhun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "From Right"
 msgid "Fan Out Right"
-msgstr "Ón Dheis"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "From Bottom"
 msgid "Fan Out Bottom"
-msgstr "Ón Bhun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "From Left"
 msgid "Fan Out Left"
-msgstr "Ón Chlé"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "From Bottom"
 msgid "Fan In Top"
-msgstr "Ón Bhun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "From Right"
 msgid "Fan In Right"
-msgstr "Ón Dheis"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "From Bottom"
 msgid "Fan In Bottom"
-msgstr "Ón Bhun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
-#, fuzzy
-#| msgid "From Left"
 msgid "Fan In Left"
-msgstr "Ón Chlé"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
 #, kde-format
@@ -1581,10 +1482,8 @@ msgid "Two Blades Horizontal Clockwise"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Four Blades Horizontal Clockwise"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
 msgid "Two Blades Vertical Counterclockwise"
@@ -1595,10 +1494,8 @@ msgid "Two Blades Horizontal Counterclockwise"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Four Blades Horizontal Counterclockwise"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
 #, kde-format
@@ -1631,98 +1528,68 @@ msgid "Single Sweep"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Top"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "To Right"
 msgid "Clockwise Right"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Bottom"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "To Right"
 msgid "Clockwise Left"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Top Left"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Counterclockwise Bottom Left"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Bottom Right"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "To Right"
 msgid "Counterclockwise Top Right"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Counterclockwise Top"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
-#, fuzzy
-#| msgid "To Right"
 msgid "Counterclockwise Right"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Counterclockwise Bottom"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
-#, fuzzy
-#| msgid "From Left"
 msgid "Counterclockwise Left"
-msgstr "Ón Chlé"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
 msgid "Counterclockwise Top Left"
 msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Bottom Left"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Counterclockwise Bottom Right"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
-#, fuzzy
-#| msgid "To Right"
 msgid "Clockwise Top Right"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
 #, kde-format
@@ -1766,19 +1633,15 @@ msgstr "Cothrománach"
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
-#, fuzzy
-#| msgid "Circle"
 msgid "Right Reverse"
-msgstr "Ciorcal"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:73
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:69
-#, fuzzy
-#| msgid "Circle"
 msgid "Up Reverse"
-msgstr "Ciorcal"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:31
@@ -1786,10 +1649,8 @@ msgstr "Ciorcal"
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:45
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Vertical"
 msgid "Vertical Reverse"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
@@ -1797,10 +1658,8 @@ msgstr "Ingearach"
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:47
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Horizontal Reverse"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
 #, kde-format
@@ -1808,28 +1667,20 @@ msgid "Barn Door"
 msgstr ""
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Diagonal Bottom Left"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Diagonal Bottom Left Reverse"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Diagonal Top Left"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Diagonal Top Left Reverse"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
 #, kde-format
@@ -1837,22 +1688,17 @@ msgid "Barn Vee"
 msgstr ""
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
-#, fuzzy, kde-format
-#| msgid "Zig Zag"
+#, kde-format
 msgid "Barn Zig Zag"
-msgstr "Fiarlán"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:25
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Horizontal Reversed"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:25
-#, fuzzy
-#| msgid "Vertical"
 msgid "Vertical Reversed"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
@@ -1862,34 +1708,26 @@ msgstr "Bosca"
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:30
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "From Left"
 msgid "From Top Left"
-msgstr "Ón Chlé"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:31
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "From Right"
 msgid "From Top Right"
-msgstr "Ón Dheis"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "From Bottom"
 msgid "From Bottom Left"
-msgstr "Ón Bhun"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "From Bottom"
 msgid "From Bottom Right"
-msgstr "Ón Bhun"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
 #, kde-format
@@ -1906,36 +1744,29 @@ msgid "Corners In"
 msgstr "Cúinní Isteach"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
-#, fuzzy
-#| msgid "Corners In"
 msgid "Corners In Reverse"
-msgstr "Cúinní Isteach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 msgid "Corners Out"
 msgstr "Cúinní Amach"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
-#, fuzzy
-#| msgid "Corners Out"
 msgid "Corners Out Reverse"
-msgstr "Cúinní Amach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Diagonal"
+#, kde-format
 msgid "Misc Diagonal"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:26
 msgid "Double Barn Door"
 msgstr ""
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:27
-#, fuzzy
-#| msgid "Diamond"
 msgid "Double Diamond"
-msgstr "Muileata"
+msgstr ""
 
 #: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
 #, kde-format
@@ -1974,10 +1805,8 @@ msgstr "Síos"
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
-#, fuzzy
-#| msgid "Diamond"
 msgid "Down Reverse"
-msgstr "Muileata"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
@@ -1986,10 +1815,8 @@ msgstr "Ar Chlé"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
-#, fuzzy
-#| msgid "Vertical"
 msgid "Left Reverse"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
@@ -2001,10 +1828,8 @@ msgid "Circle"
 msgstr "Ciorcal"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Circle"
 msgid "Circle Reverse"
-msgstr "Ciorcal"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
@@ -2026,20 +1851,16 @@ msgid "Diamond"
 msgstr "Muileata"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Diamond"
 msgid "Diamond Reverse"
-msgstr "Muileata"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 msgid "Rectangular"
 msgstr "Dronuilleogach"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Rectangular"
 msgid "Rectangular Reverse"
-msgstr "Dronuilleogach"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
@@ -2051,20 +1872,16 @@ msgid "Heart"
 msgstr "Croí"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Vertical"
 msgid "Heart Reverse"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
 msgid "Keyhole"
 msgstr ""
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "Circle"
 msgid "Keyhole Reverse"
-msgstr "Ciorcal"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
 #, kde-format
@@ -2086,30 +1903,24 @@ msgid "Four Point Star"
 msgstr ""
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:84
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Four Point Star Reverse"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
 msgid "Five Point Star"
 msgstr ""
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Five Point Star Reverse"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 msgid "Six Point Star"
 msgstr ""
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Six Point Star Reverse"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
 #, kde-format
@@ -2117,124 +1928,86 @@ msgid "Triangle"
 msgstr "Triantán"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
-#, fuzzy, kde-format
-#| msgid "Snake"
+#, kde-format
 msgid "Box Snakes"
-msgstr "Nathair"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "To Top"
 msgid "Two Box Top In"
-msgstr "Go dtí an Barr"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Two Box Bottom In"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "To Left"
 msgid "Two Box Left In"
-msgstr "Faoi Chlé"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "To Right"
 msgid "Two Box Right In"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Four Box Vertical In"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Four Box Horizontal In"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "To Top"
 msgid "Two Box Top Out"
-msgstr "Go dtí an Barr"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Two Box Bottom Out"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "To Left"
 msgid "Two Box Left Out"
-msgstr "Faoi Chlé"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "To Right"
 msgid "Two Box Right Out"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Four Box Vertical Out"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Four Box Horizontal Out"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
-#, fuzzy, kde-format
-#| msgid "Diagonal"
+#, kde-format
 msgid "Parallel Snakes"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "Vertical Alignment"
 msgid "Vertical Top Same In"
-msgstr "Ailíniú Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "Vertical Alignment"
 msgid "Vertical Top Same Out"
-msgstr "Ailíniú Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
-#, fuzzy
-#| msgid "Vertical Alignment"
 msgid "Vertical Bottom Same In"
-msgstr "Ailíniú Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
-#, fuzzy
-#| msgid "Vertical Alignment"
 msgid "Vertical Bottom Same Out"
-msgstr "Ailíniú Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
-#, fuzzy
-#| msgid "Vertical Alignment"
 msgid "Vertical Top Left Opposite In"
-msgstr "Ailíniú Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
-#, fuzzy
-#| msgid "Vertical Alignment"
 msgid "Vertical Top Left Opposite Out"
-msgstr "Ailíniú Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
 msgid "Vertical Bottom Left Opposite In"
@@ -2245,74 +2018,52 @@ msgid "Vertical Bottom Left Opposite Out"
 msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
-#, fuzzy
-#| msgid "Horizontal declination:"
 msgid "Horizontal Left Same In"
-msgstr "Díochlaonadh cothrománach:"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
-#, fuzzy
-#| msgid "Horizontal declination:"
 msgid "Horizontal Left Same Out"
-msgstr "Díochlaonadh cothrománach:"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
-#, fuzzy
-#| msgid "Horizontal Flip"
 msgid "Horizontal Right Same In"
-msgstr "Smeach Go Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
-#, fuzzy
-#| msgid "Horizontal Flip"
 msgid "Horizontal Right Same Out"
-msgstr "Smeach Go Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
-#, fuzzy
-#| msgid "Horizontal declination:"
 msgid "Horizontal Top Left Opposite In"
-msgstr "Díochlaonadh cothrománach:"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
-#, fuzzy
-#| msgid "Horizontal declination:"
 msgid "Horizontal Top Left Opposite Out"
-msgstr "Díochlaonadh cothrománach:"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
-#, fuzzy
-#| msgid "Horizontal Flip"
 msgid "Horizontal Top Right Opposite In"
-msgstr "Smeach Go Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
-#, fuzzy
-#| msgid "Horizontal Flip"
 msgid "Horizontal Top Right Opposite Out"
-msgstr "Smeach Go Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Diagonal Bottom Left Opposite In"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
 msgid "Diagonal Bottom Left Opposite Out"
 msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Diagonal Top Left Opposite In"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
-#, fuzzy
-#| msgid "Diagonal"
 msgid "Diagonal Top Left Opposite Out"
-msgstr "Trasnánach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
 #, kde-format
@@ -2325,52 +2076,36 @@ msgid "Spiral"
 msgstr "Bís"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Top Left In"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Top Left Out"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "To Right"
 msgid "Clockwise Top Right In"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
-#, fuzzy
-#| msgid "To Right"
 msgid "Clockwise Top Right Out"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Bottom Left In"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Bottom Left Out"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Bottom Right In"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Clockwise Bottom Right Out"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
 msgid "Counterclockwise Top Left In"
@@ -2381,40 +2116,28 @@ msgid "Counterclockwise Top Left Out"
 msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
-#, fuzzy
-#| msgid "To Right"
 msgid "Counterclockwise Top Right In"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
-#, fuzzy
-#| msgid "To Right"
 msgid "Counterclockwise Top Right Out"
-msgstr "Faoi Dheis"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Counterclockwise Bottom Left In"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Counterclockwise Bottom Left Out"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Counterclockwise Bottom Right In"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
-#, fuzzy
-#| msgid "To Bottom"
 msgid "Counterclockwise Bottom Right Out"
-msgstr "Go dtí an Bun"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
 #, kde-format
@@ -2422,52 +2145,36 @@ msgid "Waterfall"
 msgstr "Eas"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:33
-#, fuzzy
-#| msgid "Vertical"
 msgid "Top Left Vertical"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:34
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Top Left Horizontal"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
-#, fuzzy
-#| msgid "Vertical"
 msgid "Top Right Vertical"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Top Right Horizontal"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
-#, fuzzy
-#| msgid "Vertical"
 msgid "Bottom Left Vertical"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Bottom Left Horizontal"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
-#, fuzzy
-#| msgid "Vertical"
 msgid "Bottom Right Vertical"
-msgstr "Ingearach"
+msgstr ""
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
-#, fuzzy
-#| msgid "Horizontal"
 msgid "Bottom Right Horizontal"
-msgstr "Cothrománach"
+msgstr ""
 
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
 #, kde-format
@@ -2475,15 +2182,14 @@ msgid "Slide"
 msgstr "Sleamhnán"
 
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Space Rotation"
-msgstr "Uirlis bheochana"
+msgstr ""
 
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
-#, fuzzy, kde-format
-#| msgid "No Effect"
+#, kde-format
 msgid "Swap effect"
-msgstr "Gan Mhaisíocht"
+msgstr ""
 
 #: plugins/variable/PresentationVariableFactory.cpp:25
 #, kde-format
@@ -2494,2472 +2200,3 @@ msgstr "Ceanntásc"
 #, kde-format
 msgid "Footer"
 msgstr "Buntásc"
-
-#, fuzzy
-#~| msgid "&Edit"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Edit"
-#~ msgstr "&Eagar"
-
-#, fuzzy
-#~| msgid "&View"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&View"
-#~ msgstr "&Amharc"
-
-#, fuzzy
-#~| msgid "&Insert"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Insert"
-#~ msgstr "&Ionsáigh"
-
-#, fuzzy
-#~| msgid "F&ormat"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "F&ormat"
-#~ msgstr "F&ormáid"
-
-#, fuzzy
-#~| msgid "&Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Slide"
-#~ msgstr "&Sleamhnán"
-
-#, fuzzy
-#~| msgid "Sli&de Show"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sli&de Show"
-#~ msgstr "Tai&speántas Sleamhnán"
-
-#, fuzzy
-#~| msgid "&Settings"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Settings"
-#~ msgstr "&Socruithe"
-
-#, fuzzy
-#~| msgid "Crop"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Crop"
-#~ msgstr "Bearr"
-
-#, fuzzy
-#~| msgid "X:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "X:"
-#~ msgstr "X:"
-
-#, fuzzy
-#~| msgid "W&idth:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "W&idth:"
-#~ msgstr "L&eithead:"
-
-#, fuzzy
-#~| msgid "&Height:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Height:"
-#~ msgstr "&Airde:"
-
-#, fuzzy
-#~| msgid "Y:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Y:"
-#~ msgstr "Y:"
-
-#, fuzzy
-#~| msgid "R&atio:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "R&atio:"
-#~ msgstr "&Cóimheas:"
-
-#, fuzzy
-#~| msgid "Layer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Layer"
-#~ msgstr "Sraith"
-
-#, fuzzy
-#~| msgid "Image"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Image"
-#~ msgstr "Íomhá"
-
-#, fuzzy
-#~| msgid "&Crop"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Crop"
-#~ msgstr "&Bearr"
-
-#, fuzzy
-#~| msgid "Slides"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Slides"
-#~ msgstr "Sleamhnáin"
-
-#, fuzzy
-#~| msgid "Presentation Slides:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Presentation Slides:"
-#~ msgstr "Sleamhnáin na Láithreoireachta:"
-
-#, fuzzy
-#~| msgid "Edit Custom Slide Shows ..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit Custom Slide Shows ..."
-#~ msgstr "Cuir Taispeántais Saincheaptha Sleamhnán in Eagar..."
-
-#, fuzzy
-#~| msgid "HTML Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "HTML Export"
-#~ msgstr "Easpórtáil HTML"
-
-#, fuzzy
-#~| msgid "Select all"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select all"
-#~ msgstr "Roghnaigh uile"
-
-#, fuzzy
-#~| msgid "Select template (.css) :"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select template (.css) :"
-#~ msgstr "Roghnaigh teimpléad (.css):"
-
-#, fuzzy
-#~| msgid "Deselect all"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Deselect all"
-#~ msgstr "Díroghnaigh uile"
-
-#, fuzzy
-#~| msgid "Title"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Title"
-#~ msgstr "Teideal"
-
-#, fuzzy
-#~| msgid "Output preview"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Output preview"
-#~ msgstr "Réamhamharc aschuir"
-
-#, fuzzy
-#~| msgid "..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~| msgid "Browse"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Browse"
-#~ msgstr "Brabhsáil"
-
-#, fuzzy
-#~| msgid "Author"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Author"
-#~ msgstr "Údar"
-
-#, fuzzy
-#~| msgid "Delete Favorite"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete Favorite"
-#~ msgstr "Scrios Ceanán"
-
-#, fuzzy
-#~| msgid "Open in browser"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Open in browser"
-#~ msgstr "Oscail i mbrabhsálaí"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) application name"
-#~ msgid "Calligra Stage"
-#~ msgstr "Cumraigh Taispeántas Sleamhnán..."
-
-#, fuzzy
-#~| msgid "Presentation"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Presentation Tool"
-#~ msgstr "Láithreoireacht"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copyright 1998-%1, The Stage Team"
-#~ msgstr "© 1998-2008, Foireann KPresenter"
-
-#, fuzzy
-#~| msgid "Former maintainer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Former maintainer"
-#~ msgstr "Iarchothaitheoir"
-
-#, fuzzy
-#~| msgid "Thorsten Zachmann"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Thorsten Zachmann"
-#~ msgstr "Thorsten Zachmann"
-
-#, fuzzy
-#~| msgid "Laurent Montel"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Laurent Montel"
-#~ msgstr "Laurent Montel"
-
-#, fuzzy
-#~| msgid "Original author"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Original author"
-#~ msgstr "An chéad údar"
-
-#, fuzzy
-#~| msgid "Reginald Stadlbauer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reginald Stadlbauer"
-#~ msgstr "Reginald Stadlbauer"
-
-#, fuzzy
-#~| msgid "Werner Trobin"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Werner Trobin"
-#~ msgstr "Werner Trobin"
-
-#, fuzzy
-#~| msgid "David Faure"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "David Faure"
-#~ msgstr "David Faure"
-
-#, fuzzy
-#~| msgid "Toshitaka Fujioka"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Toshitaka Fujioka"
-#~ msgstr "Toshitaka Fujioka"
-
-#, fuzzy
-#~| msgid "Lukáš Tinkl"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Lukáš Tinkl"
-#~ msgstr "Lukáš Tinkl"
-
-#, fuzzy
-#~| msgid "Ariya Hidayat"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ariya Hidayat"
-#~ msgstr "Ariya Hidayat"
-
-#, fuzzy
-#~| msgid "Percy Leonhardt"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Percy Leonhardt"
-#~ msgstr "Percy Leonhardt"
-
-#, fuzzy
-#~| msgid "Thomas Zander"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Thomas Zander"
-#~ msgstr "Thomas Zander"
-
-#, fuzzy
-#~| msgid "Peter Simonsson"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Peter Simonsson"
-#~ msgstr "Peter Simonsson"
-
-#, fuzzy
-#~| msgid "Boudewijn Rempt "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Boudewijn Rempt "
-#~ msgstr "Boudewijn Rempt "
-
-#, fuzzy
-#~| msgid "Carlos Licea "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Carlos Licea "
-#~ msgstr "Carlos Licea "
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "C. Boemann "
-#~ msgstr "Casper Boemann "
-
-#, fuzzy
-#~| msgid "Fredy Yanardi "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fredy Yanardi "
-#~ msgstr "Fredy Yanardi "
-
-#, fuzzy
-#~| msgid "Jan Hambrecht "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Jan Hambrecht "
-#~ msgstr "Jan Hambrecht "
-
-#, fuzzy
-#~| msgid "Marijn Kruisselbrink "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Marijn Kruisselbrink "
-#~ msgstr "Marijn Kruisselbrink "
-
-#, fuzzy
-#~| msgid "Martin Pfeiffer "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Martin Pfeiffer "
-#~ msgstr "Martin Pfeiffer "
-
-#, fuzzy
-#~| msgid "Sven Langkamp "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sven Langkamp "
-#~ msgstr "Sven Langkamp "
-
-#, fuzzy
-#~| msgid "Timothée Lacroix "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Timothée Lacroix "
-#~ msgstr "Timothée Lacroix "
-
-#, fuzzy
-#~| msgctxt "NAME OF TRANSLATORS"
-#~| msgid "Your names"
-#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
-
-#, fuzzy
-#~| msgctxt "EMAIL OF TRANSLATORS"
-#~| msgid "Your emails"
-#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "seoc@iolfree.ie,kscanne@gmail.com"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unknown"
-#~ msgstr "Fochineál anaithnid"
-
-#, fuzzy
-#~| msgid "Slide %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Slide %1"
-#~ msgstr "Sleamhnán %1"
-
-#, fuzzy
-#~| msgid "Set Layout"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Layout"
-#~ msgstr "Socraigh Leagan Amach"
-
-#, fuzzy
-#~| msgid "Installation Error"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Installation Error"
-#~ msgstr "Earráid Suiteála"
-
-#, fuzzy
-#~| msgid "Pen Color"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pen Color"
-#~ msgstr "Dath an Phinn"
-
-#, fuzzy
-#~| msgid "Pen Size"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pen Size"
-#~ msgstr "Méid an Phinn"
-
-#, fuzzy
-#~| msgid "Black"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Black"
-#~ msgstr "Dubh"
-
-#, fuzzy
-#~| msgid "White"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "White"
-#~ msgstr "Bán"
-
-#, fuzzy
-#~| msgid "Green"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Green"
-#~ msgstr "Uaine"
-
-#, fuzzy
-#~| msgid "Red"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Red"
-#~ msgstr "Dearg"
-
-#, fuzzy
-#~| msgid "Blue"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Blue"
-#~ msgstr "Gorm"
-
-#, fuzzy
-#~| msgid "Yellow"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Yellow"
-#~ msgstr "Buí"
-
-#, fuzzy
-#~| msgid "Next Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Next Slide"
-#~ msgstr "An Chéad Sleamhnán Eile"
-
-#, fuzzy
-#~| msgid "Current Slide %1 of %2"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Current Slide %1 of %2"
-#~ msgstr "Taispeántas Sleamhnán Reatha %1 as %2"
-
-#, fuzzy
-#~| msgid "End of Slide Show"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "End of Slide Show"
-#~ msgstr "Deireadh an Taispeántais Sleamhnán"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "start after previous animation"
-#~ msgstr "Cruthaigh beochan ghiuirléide"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "start with previous animation"
-#~ msgstr "Cruthaigh beochan ghiuirléide"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Animation"
-#~ msgstr "Uirlis bheochana"
-
-#, fuzzy
-#~| msgid "Shape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shape"
-#~ msgstr "Giuirléid"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Move Here"
-#~ msgstr "Bog Sleamhnán"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Copy Here"
-#~ msgstr "Cóipeáil Sleamhnán"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "C&ancel"
-#~ msgstr "Cealaigh"
-
-#, fuzzy
-#~| msgid "Normal"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Normal"
-#~ msgstr "Gnách"
-
-#, fuzzy
-#~| msgid "Show Master Slides"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Show Master Slides"
-#~ msgstr "Taispeáin Máistirshleamhnáin"
-
-#, fuzzy
-#~| msgid "Insert Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert Slide"
-#~ msgstr "Ionsáigh Sleamhnán"
-
-#, fuzzy
-#~| msgid "Copy Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copy Slide"
-#~ msgstr "Cóipeáil Sleamhnán"
-
-#, fuzzy
-#~| msgid "Copy the current slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copy the current slide"
-#~ msgstr "Cóipeáil an sleamhnán reatha"
-
-#, fuzzy
-#~| msgid "Delete Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete Slide"
-#~ msgstr "Scrios Sleamhnán"
-
-#, fuzzy
-#~| msgid "Delete the current slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete the current slide"
-#~ msgstr "Scrios an sleamhnán reatha"
-
-#, fuzzy
-#~| msgid "Previous Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Previous Slide"
-#~ msgstr "An Sleamhnán Roimhe Seo"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Go to previous slide"
-#~ msgstr "An sleamhnán roimhe seo"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Go to next slide"
-#~ msgstr "Téigh go sleamhnán::"
-
-#, fuzzy
-#~| msgid "First Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "First Slide"
-#~ msgstr "An Chéad Sleamhnán"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Go to first slide"
-#~ msgstr "Téigh go sleamhnán::"
-
-#, fuzzy
-#~| msgid "Last Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Last Slide"
-#~ msgstr "An Sleamhnán Deiridh"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Go to last slide"
-#~ msgstr "Téigh go sleamhnán::"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure Stage..."
-#~ msgstr "Cumraigh Taispeántas Sleamhnán..."
-
-#, fuzzy
-#~| msgid "Export as HTML..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export as HTML..."
-#~ msgstr "Easpórtáil mar HTML..."
-
-#, fuzzy
-#~| msgid "Insert Pictures..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert Pictures as Slides..."
-#~ msgstr "Ionsáigh Pictiúir..."
-
-#, fuzzy
-#~| msgid "Edit Custom Slide Shows..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit Custom Slide Shows..."
-#~ msgstr "Cuir Taispeántais Saincheaptha Sleamhnán in Eagar..."
-
-#, fuzzy
-#~| msgid "Start Presentation"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Start Presentation"
-#~ msgstr "Tosaigh an Láithreoireacht"
-
-#, fuzzy
-#~| msgid "From Current Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "From Current Slide"
-#~ msgstr "Ón Sleamhnán Reatha"
-
-#, fuzzy
-#~| msgid "From First Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "From First Slide"
-#~ msgstr "Ón Chéad Sleamhnán"
-
-#, fuzzy
-#~| msgid "Start Presentation"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Stop presentation"
-#~ msgstr "Tosaigh an Láithreoireacht"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Show Status Bar"
-#~ msgstr "Taispeáin an barra stádais"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Hide Status Bar"
-#~ msgstr "Taispeáin an barra stádais"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shows or hides the status bar"
-#~ msgstr "Taispeáin an barra stádais"
-
-#, fuzzy
-#~| msgid "Configure Slide Show..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure Slide Show..."
-#~ msgstr "Cumraigh Taispeántas Sleamhnán..."
-
-#, fuzzy
-#~| msgid "Configure Presenter View..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure Presenter View..."
-#~ msgstr "Cumraigh Amharc KPresenter..."
-
-#, fuzzy
-#~| msgid "Notes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Notes"
-#~ msgstr "Nótaí"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Slide Show: "
-#~ msgstr "Taispeántas Sleamhnán"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add a new custom slide show"
-#~ msgstr "Cuir taispeántas nua leis"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete current custom slide show"
-#~ msgstr "Scrios an sleamhnán reatha"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add slides to current custom slide show"
-#~ msgstr "Cuir taispeántais saincheaptha sleamhnán in eagar..."
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Duplicate Slide"
-#~ msgstr "Scrios Sleamhnán"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Start Slideshow"
-#~ msgstr "Taispeántas Sleamhnán Reatha:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add a new slide"
-#~ msgstr "Cuir taispeántas nua leis"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete selected slides"
-#~ msgstr "Sleamhnáin roghnaithe:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rename"
-#~ msgstr "Bain"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Cut"
-#~ msgstr "Sain&cheaptha"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copy"
-#~ msgstr "Bearr"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Paste"
-#~ msgstr "Conair"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Slide Show %1"
-#~ msgstr "Taispeántas Sleamhnán"
-
-#, fuzzy
-#~| msgid "All slides"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "All slides"
-#~ msgstr "Gach sleamhnán"
-
-#, fuzzy
-#~| msgid "Error"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Error"
-#~ msgstr "Earráid"
-
-#, fuzzy
-#~| msgid "There cannot be two slideshows with the same name."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "There cannot be two slideshows with the same name."
-#~ msgstr "Ní cheadaítear dhá taispeántas sleamhnán leis an ainm céanna."
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Automatic animation preview"
-#~ msgstr "Fleiscíniú uathoibríoch"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Preview animation"
-#~ msgstr "Láithreoireacht"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Slide Transitions"
-#~ msgstr "Trasdulta"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shape Animations"
-#~ msgstr "Uirlis bheochana"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Start: "
-#~ msgstr "Réiltín"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "after previous animation"
-#~ msgstr "Cruthaigh beochan ghiuirléide"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "with previous animation"
-#~ msgstr "Cruthaigh beochan ghiuirléide"
-
-#, fuzzy
-#~| msgid "Duration: "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Duration: "
-#~ msgstr "Aga: "
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Preview Shape Animation"
-#~ msgstr "Cruthaigh beochan ghiuirléide"
-
-#, fuzzy
-#~| msgid "No Effect"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "No Effect"
-#~ msgstr "Gan Mhaisíocht"
-
-#, fuzzy
-#~| msgid " sec"
-#~ msgctxt "(qtundo-format)"
-#~ msgid " sec"
-#~ msgstr " s"
-
-#, fuzzy
-#~| msgid "Apply Styles"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Apply To All Slides"
-#~ msgstr "Cuir Stíleanna i bhFeidhm"
-
-#, fuzzy
-#~| msgid "Exit"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Exit"
-#~ msgstr "Scoir"
-
-#, fuzzy
-#~| msgid "Emphasis"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Emphasis"
-#~ msgstr "Béim"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Custom"
-#~ msgstr "Sleamhnán saincheaptha:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ole Action"
-#~ msgstr "Airde:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit animation"
-#~ msgstr "Uirlis bheochana"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add new animation"
-#~ msgstr "Uirlis bheochana"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove animation"
-#~ msgstr "Bain Nasc"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Move animation up"
-#~ msgstr "Uirlis bheochana"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Move animation down"
-#~ msgstr "Uirlis Bheochana"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add a new animation"
-#~ msgstr "Cuir taispeántas nua leis"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete current animation"
-#~ msgstr "Scrios an sleamhnán reatha"
-
-#, fuzzy
-#~| msgid "seconds"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "seconds"
-#~ msgstr "soicind"
-
-#, fuzzy
-#~| msgid "Configure Presenter View"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure Presenter View"
-#~ msgstr "Cumraigh Amharc KPresenter"
-
-#, fuzzy
-#~| msgid "Configure Slide Show"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure Slide Show"
-#~ msgstr "Cumraigh Taispeántas Sleamhnán"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export"
-#~ msgstr "Easpórtáil"
-
-#, fuzzy
-#~| msgid "Delete Template"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete Template"
-#~ msgstr "Scrios Teimpléad"
-
-#, fuzzy
-#~| msgid "Add Template"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add Template"
-#~ msgstr "Cuir Teimpléad Leis"
-
-#, fuzzy
-#~| msgid "No sound"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "No sound"
-#~ msgstr "Gan fuaim"
-
-#, fuzzy
-#~| msgid "Import..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import..."
-#~ msgstr "Iompórtáil..."
-
-#, fuzzy
-#~| msgid "Bar"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bar"
-#~ msgstr "Barra"
-
-#, fuzzy
-#~| msgid "From Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "From Left"
-#~ msgstr "Ón Chlé"
-
-#, fuzzy
-#~| msgid "From Top"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "From Top"
-#~ msgstr "Ón Bharr"
-
-#, fuzzy
-#~| msgid "From Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "From Right"
-#~ msgstr "Ón Dheis"
-
-#, fuzzy
-#~| msgid "From Bottom"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "From Bottom"
-#~ msgstr "Ón Bhun"
-
-#, fuzzy
-#~| msgid "Unknown subtype"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unknown subtype"
-#~ msgstr "Fochineál anaithnid"
-
-#, fuzzy
-#~| msgid "Clock"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clock"
-#~ msgstr "Clog"
-
-#, fuzzy
-#~| msgid "Fan"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fan"
-#~ msgstr "Gaothrán"
-
-#, fuzzy
-#~| msgid "To Top"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "To Top"
-#~ msgstr "Go dtí an Barr"
-
-#, fuzzy
-#~| msgid "To Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "To Left"
-#~ msgstr "Faoi Chlé"
-
-#, fuzzy
-#~| msgid "To Bottom"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "To Bottom"
-#~ msgstr "Go dtí an Bun"
-
-#, fuzzy
-#~| msgid "To Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "To Right"
-#~ msgstr "Faoi Dheis"
-
-#, fuzzy
-#~| msgid "Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Right"
-#~ msgstr "Ar Dheis"
-
-#, fuzzy
-#~| msgid "Up"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Up"
-#~ msgstr "Suas"
-
-#, fuzzy
-#~| msgid "Vertical"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vertical"
-#~ msgstr "Ingearach"
-
-#, fuzzy
-#~| msgid "Horizontal"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Horizontal"
-#~ msgstr "Cothrománach"
-
-#, fuzzy
-#~| msgid "Box"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Box"
-#~ msgstr "Bosca"
-
-#, fuzzy
-#~| msgid "Diagonal"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Diagonal"
-#~ msgstr "Trasnánach"
-
-#, fuzzy
-#~| msgid "Corners In"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Corners In"
-#~ msgstr "Cúinní Isteach"
-
-#, fuzzy
-#~| msgid "Corners Out"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Corners Out"
-#~ msgstr "Cúinní Amach"
-
-#, fuzzy
-#~| msgid "Zig Zag"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Zig Zag"
-#~ msgstr "Fiarlán"
-
-#, fuzzy
-#~| msgid "Fade"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fade"
-#~ msgstr "Céimnigh"
-
-#, fuzzy
-#~| msgid "Down"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Down"
-#~ msgstr "Síos"
-
-#, fuzzy
-#~| msgid "Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Left"
-#~ msgstr "Ar Chlé"
-
-#, fuzzy
-#~| msgid "Ellipse"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ellipse"
-#~ msgstr "Éilips"
-
-#, fuzzy
-#~| msgid "Circle"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Circle"
-#~ msgstr "Ciorcal"
-
-#, fuzzy
-#~| msgid "Hexagon"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Hexagon"
-#~ msgstr "Heicseagán"
-
-#, fuzzy
-#~| msgid "Iris"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Iris"
-#~ msgstr "Imreasc"
-
-#, fuzzy
-#~| msgid "Rectangular"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rectangular"
-#~ msgstr "Dronuilleogach"
-
-#, fuzzy
-#~| msgid "Diamond"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Diamond"
-#~ msgstr "Muileata"
-
-#, fuzzy
-#~| msgid "Misc"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Misc"
-#~ msgstr "Éagsúil"
-
-#, fuzzy
-#~| msgid "Heart"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Heart"
-#~ msgstr "Croí"
-
-#, fuzzy
-#~| msgid "Pentagon"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pentagon"
-#~ msgstr "Peinteagán"
-
-#, fuzzy
-#~| msgid "Star"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Star"
-#~ msgstr "Réiltín"
-
-#, fuzzy
-#~| msgid "Triangle"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Triangle"
-#~ msgstr "Triantán"
-
-#, fuzzy
-#~| msgid "Snake"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Snake"
-#~ msgstr "Nathair"
-
-#, fuzzy
-#~| msgid "Spiral"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spiral"
-#~ msgstr "Bís"
-
-#, fuzzy
-#~| msgid "Waterfall"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Waterfall"
-#~ msgstr "Eas"
-
-#, fuzzy
-#~| msgid "Slide"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Slide"
-#~ msgstr "Sleamhnán"
-
-#, fuzzy
-#~| msgid "Header"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Header"
-#~ msgstr "Ceanntásc"
-
-#, fuzzy
-#~| msgid "Footer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Footer"
-#~ msgstr "Buntásc"
-
-#, fuzzy
-#~ msgid "Calligra Presentation Tool"
-#~ msgstr "Uirlis Láithreoireachta KOffice"
-
-#, fuzzy
-#~ msgctxt "application name"
-#~ msgid "Stage"
-#~ msgstr "Íomhá"
-
-#~ msgid "File to open"
-#~ msgstr "Comhad le hoscailt"
-
-#~ msgid "Set Layout"
-#~ msgstr "Socraigh Leagan Amach"
-
-#~ msgid "Layout Tool"
-#~ msgstr "Uirlis Leagain Amach"
-
-#~ msgid "&File"
-#~ msgstr "&Comhad"
-
-#~ msgid "Line"
-#~ msgstr "Líne"
-
-#~ msgid "Arra&nge Objects"
-#~ msgstr "Leag &Réada Amach"
-
-#~ msgid "&Align Objects"
-#~ msgstr "&Ailínigh Réada"
-
-#~ msgid "Te&xt"
-#~ msgstr "Téa&cs"
-
-#~ msgid "&Align"
-#~ msgstr "&Ailínigh"
-
-#~ msgid "T&ype"
-#~ msgstr "C&ineál"
-
-#~ msgid "Spellcheck"
-#~ msgstr "Seiceáil an litriú"
-
-#~ msgid "Autocorrection"
-#~ msgstr "Uathcheartú"
-
-#~ msgid "File"
-#~ msgstr "Comhad"
-
-#~ msgid "Edit"
-#~ msgstr "Eagar"
-
-#~ msgid "Insert"
-#~ msgstr "Ionsáigh"
-
-#~ msgid "Tools"
-#~ msgstr "Uirlisí"
-
-#~ msgid "Format"
-#~ msgstr "Formáid"
-
-#~ msgid "Text"
-#~ msgstr "Téacs"
-
-#~ msgid "Navigation"
-#~ msgstr "Nascleanúint"
-
-#, fuzzy
-#~| msgid "&Align Objects"
-#~ msgid "Flip Objects"
-#~ msgstr "&Ailínigh Réada"
-
-#~ msgid "Spell Check Result"
-#~ msgstr "Torthaí an Litreora"
-
-#~ msgid "Slide Layouts"
-#~ msgstr "Leaganacha Amach Sleamhnán"
-
-#~ msgid "Not implemented in 2.0"
-#~ msgstr "Níl sé ar fáil i leagan 2.0"
-
-#~ msgid "Configure KPresenter..."
-#~ msgstr "Cumraigh KPresenter..."
-
-#~ msgid "Slide Title"
-#~ msgstr "Teideal an tSleamhnáin"
-
-#~ msgid "New Slide Show %1"
-#~ msgstr "Taispeántas Sleamhnán Nua %1"
-
-#~ msgid "Custom Slideshows editor"
-#~ msgstr "Eagarthóir Taispeántas Saincheaptha Sleamhnán"
-
-#~ msgid "Customs Slideshows"
-#~ msgstr "Taispeántais Saincheaptha Sleamhnán"
-
-#~ msgid "Available Slides"
-#~ msgstr "Sleamhnáin Ar Fáil"
-
-#~ msgid "Add Slide"
-#~ msgstr "Cuir Sleamhnán Leis"
-
-#~ msgid "Undo"
-#~ msgstr "Cealaigh"
-
-#~ msgid "Ok"
-#~ msgstr "OK"
-
-#~ msgid "Close"
-#~ msgstr "Dún"
-
-#~ msgid "KPresenter"
-#~ msgstr "KPresenter"
-
-#~ msgid "&Cancel"
-#~ msgstr "&Cealaigh"
-
-#~ msgid "&OK"
-#~ msgstr "&OK"
-
-#~ msgid "&Page"
-#~ msgstr "&Leathanach"
-
-#~ msgid "Click to preview the page effect."
-#~ msgstr "Cliceáil chun réamhamharc ar an maisíocht leathanaigh a fheiceáil."
-
-#~ msgid "Form"
-#~ msgstr "Foirm"
-
-#~ msgid "Insert &new slide:"
-#~ msgstr "Ionsáigh sleamhnán &nua:"
-
-#~ msgid "Use &default template"
-#~ msgstr "Úsáid an teimpléa&d réamhshocraithe"
-
-#~ msgid "Use cu&rrent slide as default"
-#~ msgstr "Úsáid an sleamhnán reatha mar &réamhshocrú"
-
-#~ msgid "Choose di&fferent template"
-#~ msgstr "Roghnaigh &teimpléad eile"
-
-#~ msgid "A&ngle:"
-#~ msgstr "Uillin&n:"
-
-#~ msgid "Pie"
-#~ msgstr "Píchairt"
-
-#~ msgid "&Type:"
-#~ msgstr "&Cineál:"
-
-#~ msgid "&Length:"
-#~ msgstr "&Fad:"
-
-#~ msgid "Set here the start position."
-#~ msgstr "Socraigh an t-ionad tosaigh anseo."
-
-#~ msgid "Start position:"
-#~ msgstr "Ionad tosaigh:"
-
-#~ msgid "Preview"
-#~ msgstr "Réamhamharc"
-
-#~ msgid "Channel Intensity"
-#~ msgstr "Déine an Chainéil"
-
-#~ msgid "Intensity"
-#~ msgstr "Déine"
-
-#~ msgid "Desaturate"
-#~ msgstr "Dísháithigh"
-
-#~ msgid "Contrast"
-#~ msgstr "Codarsnacht"
-
-#~ msgid "Normalize"
-#~ msgstr "Normalaigh"
-
-#~ msgid "Equalize"
-#~ msgstr "Comhardaigh"
-
-#~ msgid "Threshold"
-#~ msgstr "Tairseach"
-
-#~ msgid "Solarize"
-#~ msgstr "Grian"
-
-#~ msgid "Emboss"
-#~ msgstr "Cabhraíocht"
-
-#~ msgid "Charcoal"
-#~ msgstr "Gualach"
-
-#~ msgid "Noise"
-#~ msgstr "Torann"
-
-#~ msgid "Blur"
-#~ msgstr "Doiléirigh"
-
-#~ msgid "Edge"
-#~ msgstr "Ciumhais"
-
-#~ msgid "Implode"
-#~ msgstr "Inphléasc"
-
-#~ msgid "Sharpen"
-#~ msgstr "Géaraigh"
-
-#~ msgid "Spread"
-#~ msgstr "Leath"
-
-#~ msgid "Shade"
-#~ msgstr "Scáthaigh"
-
-#~ msgid "Wave"
-#~ msgstr "Tonn"
-
-#~ msgid "Value:"
-#~ msgstr "Luach:"
-
-#~ msgid " %"
-#~ msgstr " %"
-
-#~ msgid "Gray"
-#~ msgstr "Liath"
-
-#~ msgid "Color:"
-#~ msgstr "Dath:"
-
-#~ msgid "Color 1:"
-#~ msgstr "Dath 1:"
-
-#~ msgid "Color 2:"
-#~ msgstr "Dath 2:"
-
-#~ msgid "Intensity:"
-#~ msgstr "Déine:"
-
-#~ msgid "Factor:"
-#~ msgstr "Fachtóir:"
-
-#~ msgid "Type:"
-#~ msgstr "Cineál:"
-
-#~ msgid "Uniform"
-#~ msgstr "Aonfhoirmeach"
-
-#~ msgid "Gaussian"
-#~ msgstr "Gaussach"
-
-#~ msgid "Multiplicative Gaussian"
-#~ msgstr "Gaussach iolraíoch"
-
-#~ msgid "Impulse"
-#~ msgstr "Ríog"
-
-#~ msgid "LaPlace"
-#~ msgstr "LaPlace"
-
-#~ msgid "Poisson"
-#~ msgstr "Poisson"
-
-#~ msgid "Radius:"
-#~ msgstr "Ga:"
-
-#~ msgid "Azimuth:"
-#~ msgstr "Asamat:"
-
-#~ msgid "Angle:"
-#~ msgstr "Uillinn:"
-
-#~ msgid "Amplitude:"
-#~ msgstr "Aimplitiúid:"
-
-#~ msgid "Wave length:"
-#~ msgstr "Tonnfhad:"
-
-#~ msgid "Pen"
-#~ msgstr "Peann"
-
-#~ msgid "&Begin:"
-#~ msgstr "&Tosaigh:"
-
-#~ msgid "&End:"
-#~ msgstr "D&eireadh:"
-
-#~ msgid "&Width:"
-#~ msgstr "&Leithead:"
-
-#~ msgid "St&yle:"
-#~ msgstr "S&tíl:"
-
-#~ msgid "C&olor:"
-#~ msgstr "D&ath:"
-
-#~ msgid " pt"
-#~ msgstr " pt"
-
-#~ msgid "Vertical declination:"
-#~ msgstr "Díochlaonadh ingearach:"
-
-#~ msgid "Set the horizontal declination."
-#~ msgstr "Socraigh an díochlaonadh cothrománach."
-
-#~ msgid "Set the vertical declination."
-#~ msgstr "Socraigh an díochlaonadh ingearach."
-
-#~ msgid "Polygon"
-#~ msgstr "Polagán"
-
-#~ msgid "&Sharpness:"
-#~ msgstr "&Géire:"
-
-#~ msgid "Brush"
-#~ msgstr "Scuab"
-
-#~ msgid "&Style:"
-#~ msgstr "&Stíl:"
-
-#~ msgid "&Preview"
-#~ msgstr "&Réamhamharc"
-
-#~ msgid "&Effect:"
-#~ msgstr "&Maisíocht:"
-
-#~ msgid "&Speed:"
-#~ msgstr "&Luas:"
-
-#~ msgid "&File:"
-#~ msgstr "&Comhad:"
-
-#~ msgid "Gradient:"
-#~ msgstr "Grádán:"
-
-#~ msgid "X-fac&tor:"
-#~ msgstr "X-fach&tóir:"
-
-#~ msgid "Un&balanced:"
-#~ msgstr "&Neamhchothromaithe:"
-
-#~ msgid "&Y-factor:"
-#~ msgstr "&Y-fachtóir:"
-
-#~ msgid "Margin"
-#~ msgstr "Imeall"
-
-#~ msgid "Margins"
-#~ msgstr "Imill"
-
-#~ msgid "General"
-#~ msgstr "Ginearálta"
-
-#~ msgid "Na&me:"
-#~ msgstr "Ain&m:"
-
-#~ msgid "Protect si&ze and position"
-#~ msgstr "&Cosain an mhéid agus an t-ionad"
-
-#~ msgid "Keep &aspect ratio"
-#~ msgstr "Caomh&naigh an cóimheas treoíochta"
-
-#~ msgid "Position"
-#~ msgstr "Ionad"
-
-#~ msgid "Shadow"
-#~ msgstr "Scáth"
-
-#~ msgid "Color && Distance"
-#~ msgstr "Dath agus Fad"
-
-#~ msgid "Distance:"
-#~ msgstr "Fad:"
-
-#~ msgid "Orientation"
-#~ msgstr "Treoshuíomh"
-
-#~ msgid "&Apply"
-#~ msgstr "&Cuir i bhFeidhm"
-
-#~ msgid "Picture"
-#~ msgstr "Pictiúr"
-
-#~ msgid "Depth"
-#~ msgstr "Doimhneacht"
-
-#~ msgid "%"
-#~ msgstr "%"
-
-#~ msgid "Gra&yscale"
-#~ msgstr "&Liathscála"
-
-#~ msgid "&Brightness:"
-#~ msgstr "&Gile:"
-
-#~ msgid "&Qt::DockTop:"
-#~ msgstr "&Qt::DockTop:"
-
-#~ msgid "&Qt::DockLeft:"
-#~ msgstr "&Qt::DockLeft:"
-
-#~ msgid "Background type:"
-#~ msgstr "Cineál cúlra:"
-
-#~ msgid "Color/Gradient"
-#~ msgstr "Dath/Grádán"
-
-#~ msgid "Plain"
-#~ msgstr "Simplí"
-
-#~ msgid "Pyramid Gradient"
-#~ msgstr "Grádán Pirimideach"
-
-#~ msgid "Unbalanced"
-#~ msgstr "Neamhchothromaithe"
-
-#~ msgid "X-factor:"
-#~ msgstr "X-fachtóir:"
-
-#~ msgid "Y-factor:"
-#~ msgstr "Y-fachtóir:"
-
-#~ msgid "Scaled"
-#~ msgstr "Scálaithe"
-
-#~ msgid "Apply &Global"
-#~ msgstr "Cuir i bhFeidhm &go Comhchoiteann"
-
-#~ msgid "&Reset"
-#~ msgstr "Athshoc&raigh"
-
-#~ msgid "Single Color"
-#~ msgstr "Dath Aonair"
-
-#~ msgid "Transparent"
-#~ msgstr "Trédhearcach"
-
-#~ msgid "Diagonal Lines ( \\ )"
-#~ msgstr "Línte Trasnánacha ( \\ )"
-
-#~ msgid "Pyramid"
-#~ msgstr "Pirimid"
-
-#~ msgid "&Continue"
-#~ msgstr "&Lean ar aghaidh"
-
-#~ msgid "&Goto Slide..."
-#~ msgstr "Téigh &go Sleamhnán..."
-
-#~ msgid "&End"
-#~ msgstr "&Deireadh"
-
-#~ msgid "Change Text Font"
-#~ msgstr "Athraigh Cló Téacs"
-
-#~ msgid "Underline Text"
-#~ msgstr "Cuir Líne Faoi"
-
-#~ msgid "Set Text Font"
-#~ msgstr "Socraigh Cló Téacs"
-
-#~ msgid "Change Text Size"
-#~ msgstr "Athraigh an Chlómhéid"
-
-#~ msgid "Change Left Indent"
-#~ msgstr "Athraigh Eang Chlé"
-
-#~ msgid "Change Right Indent"
-#~ msgstr "Athraigh Eang Ar Dheis"
-
-#~ msgid "Printing..."
-#~ msgstr "Á Phriontáil..."
-
-#~ msgid "Align Objects Centered (horizontal)"
-#~ msgstr "Ailínigh Réada Sa Lár (cothrománach)"
-
-#~ msgid "Align Objects Center/Vertical"
-#~ msgstr "Ailínigh Réada Sa Lár/Ingearach"
-
-#~ msgid "Closed Polyline"
-#~ msgstr "Il-líne Dúnta"
-
-#~ msgid "Interface"
-#~ msgstr "Comhéadan"
-
-#~ msgid "Spelling"
-#~ msgstr "Litriú"
-
-#~ msgid "Document"
-#~ msgstr "Cáipéis"
-
-#~ msgid "Document Settings"
-#~ msgstr "Socruithe Cáipéise"
-
-#~ msgid "Paths"
-#~ msgstr "Conairí"
-
-#~ msgid "Path Settings"
-#~ msgstr "Socruithe Conaire"
-
-#~ msgid "Show rulers"
-#~ msgstr "Taispeáin rialóirí"
-
-#~ msgid "Grid color:"
-#~ msgstr "Dath na greille:"
-
-#~ msgid "Display links"
-#~ msgstr "Taispeáin naisc"
-
-#~ msgid "&Underline all links"
-#~ msgstr "C&uir líne faoi gach nasc"
-
-#~ msgid "Display comments"
-#~ msgstr "Taispeáin nótaí"
-
-#~ msgid "Display field code"
-#~ msgstr "Taispeáin cód réimse"
-
-#~ msgid "Grid"
-#~ msgstr "Greille"
-
-#~ msgid "Document Defaults"
-#~ msgstr "Réamhshocruithe na Cáipéise"
-
-#~ msgid "Default font:"
-#~ msgstr "Cló réamhshocraithe:"
-
-#~ msgid "Choose..."
-#~ msgstr "Roghnaigh..."
-
-#~ msgid "Global language:"
-#~ msgstr "Teanga comhchoiteann:"
-
-#~ msgid "Create backup file"
-#~ msgstr "Cruthaigh comhad cúltaca"
-
-#~ msgid "Autosave (min):"
-#~ msgstr "Uathshábháil (noim):"
-
-#~ msgid "No autosave"
-#~ msgstr "Ná sábháil go huathoibríoch"
-
-#~ msgid "min"
-#~ msgstr "nóiméad"
-
-#~ msgid "Tab stop:"
-#~ msgstr "Tábstop:"
-
-#~ msgid "Cursor"
-#~ msgstr "Cúrsóir"
-
-#~ msgid "Outl&ine"
-#~ msgstr "&Imlíne"
-
-#~ msgid "&Fill"
-#~ msgstr "&Líon"
-
-#~ msgid "Polygo&n"
-#~ msgstr "Polagá&n"
-
-#~ msgid "&Pie"
-#~ msgstr "&Píchairt"
-
-#~ msgid "Type"
-#~ msgstr "Cineál"
-
-#~ msgid "Backup Path"
-#~ msgstr "Conair Chúltaca"
-
-#~ msgid "Modify Path..."
-#~ msgstr "Athraigh an Chonair..."
-
-#~ msgid "&Add..."
-#~ msgstr "C&uir Leis..."
-
-#~ msgid "&Modify..."
-#~ msgstr "&Athraigh..."
-
-#~ msgid "&Remove"
-#~ msgstr "&Bain"
-
-#~ msgid "Test"
-#~ msgstr "Tástáil"
-
-#~ msgid "(Copy %1)"
-#~ msgstr "(Cóip %1)"
-
-#~ msgid "Name:"
-#~ msgstr "Ainm:"
-
-#~ msgid "Existing slides:"
-#~ msgstr "Sleamhnáin atá ann:"
-
-#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
-#~ msgstr ""
-#~ "Cáipéis neamhbhailí OASIS OpenDocument. Níor aimsíodh clib office:body."
-
-#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
-#~ msgstr ""
-#~ "Cáipéis neamhbhailí OASIS OpenDocument. Níor aimsíodh aon chlib isteach i "
-#~ "office:body."
-
-#~ msgid ""
-#~ "Invalid OASIS OpenDocument file. No master-style found inside office:"
-#~ "master-styles."
-#~ msgstr ""
-#~ "Cáipéis neamhbhailí OASIS OpenDocument. Níor aimsíodh aon mháistirstíl "
-#~ "isteach i office:body."
-
-#~ msgid "Invalid document, DOC tag missing."
-#~ msgstr "Cáipéis neamhbhailí. Clib DOC ar iarraidh."
-
-#~ msgid ""
-#~ "Invalid document, expected mimetype application/x-kpresenter or "
-#~ "application/vnd.kde.kpresenter, got %1"
-#~ msgstr ""
-#~ "Cáipéis neamhbhailí, ag súil le cineál MIME application/x-kpresenter nó "
-#~ "application/vnd.kde.kpresenter, fuarthas %1"
-
-#~ msgid "Paste Objects"
-#~ msgstr "Greamaigh Réada"
-
-#~ msgid "Set New Options"
-#~ msgstr "Socraigh Roghanna Nua"
-
-#~ msgid "Insert File"
-#~ msgstr "Ionsáigh Comhad"
-
-#~ msgid "Insert New Slide"
-#~ msgstr "Ionsáigh Sleamhnán Nua"
-
-#~ msgid "Duplicate Object"
-#~ msgstr "Cóipeáil Réad"
-
-#~ msgid "Number of copies:"
-#~ msgstr "Líon na gCóip:"
-
-#~ msgid "Rotation angle:"
-#~ msgstr "Uillinn rothlaithe:"
-
-#~ msgid "Increase width:"
-#~ msgstr "Méadaigh an leithead:"
-
-#~ msgid "Increase height:"
-#~ msgstr "Méadaigh an airde:"
-
-#~ msgid "Move X:"
-#~ msgstr "Bog X:"
-
-#~ msgid "Move Y:"
-#~ msgstr "Bog Y:"
-
-#~ msgid "Appear"
-#~ msgstr "Nocht"
-
-#~ msgid "Speed:"
-#~ msgstr "Luas:"
-
-#~ msgid "Medium"
-#~ msgstr "Measartha"
-
-#~ msgid "Fast"
-#~ msgstr "Tapa"
-
-#~ msgid "File name:"
-#~ msgstr "Ainm ar an gcomhad:"
-
-#~ msgid "Play"
-#~ msgstr "Seinn"
-
-#~ msgid "Stop"
-#~ msgstr "Stad"
-
-#~ msgid "Disappear"
-#~ msgstr "Imigh"
-
-#~ msgid "*.%1|%2 Files"
-#~ msgstr "*.%1|Comhaid %2"
-
-#~ msgid "All Supported Files"
-#~ msgstr "Gach Comhad a dTacaítear Leis"
-
-#~ msgid "Import Style"
-#~ msgstr "Iompórtáil Stíl"
-
-#~ msgid "File name is empty."
-#~ msgstr "Tá ainm an chomhaid folamh."
-
-#~ msgid "File is not a KPresenter file!"
-#~ msgstr "Ní comhad KPresenter é seo!"
-
-#~ msgid "Path:"
-#~ msgstr "Conair:"
-
-#~ msgid "&Set Colors"
-#~ msgstr "&Socraigh Dathanna"
-
-#~ msgid "Text color:"
-#~ msgstr "Dath téacs:"
-
-#~ msgid "Directory Not Found"
-#~ msgstr "Comhadlann Gan Aimsiú"
-
-#~ msgid "Cannot create directory."
-#~ msgstr "Ní féidir an chomhadlann a chruthú."
-
-#~ msgid "Create directory structure"
-#~ msgstr "Cruthaigh struchtúr comhadlainne"
-
-#~ msgid "Position:"
-#~ msgstr "Ionad:"
-
-#~ msgid "Add New Help Line"
-#~ msgstr "Cuir Líne Nua Chabhrach Leis"
-
-#~ msgid "Add New Help Point"
-#~ msgstr "Cuir Pointe Nua Cabhrach Leis"
-
-#~ msgid "X position:"
-#~ msgstr "Ionad X:"
-
-#~ msgid "Y position:"
-#~ msgstr "Ionad Y:"
-
-#~ msgid "Delete Objects"
-#~ msgstr "Scrios Réada"
-
-#~ msgid "Group Objects"
-#~ msgstr "Grúpáil Réada"
-
-#~ msgid "Ungroup Objects"
-#~ msgstr "Díghrúpáil Réada"
-
-#~ msgid "Insert Line"
-#~ msgstr "Ionsáigh Líne"
-
-#~ msgid "Insert Rectangle"
-#~ msgstr "Ionsáigh Dronuilleog"
-
-#~ msgid "Insert Ellipse"
-#~ msgstr "Ionsáigh éilips"
-
-#~ msgid "Insert Textbox"
-#~ msgstr "Ionsáigh Bosca Téacs"
-
-#~ msgid "Insert Autoform"
-#~ msgstr "Ionsáigh Uathfhoirm"
-
-#~ msgid "Insert Freehand"
-#~ msgstr "Ionsáigh Saorlámhach"
-
-#~ msgid "Insert Polyline"
-#~ msgstr "Ionsáigh Il-líne"
-
-#~ msgid "Insert Polygon"
-#~ msgstr "Ionsáigh polagán"
-
-#~ msgid "Embed Object"
-#~ msgstr "Leabaigh Réad"
-
-#~ msgid "Change Pixmap"
-#~ msgstr "Athraigh Mapa Picteilíní"
-
-#~ msgid "Move Objects"
-#~ msgstr "Bog Réada"
-
-#~ msgid "Change Vertical Alignment"
-#~ msgstr "Athraigh an tAilíniú Ingearach"
-
-#~ msgid "No Outline"
-#~ msgstr "Gan Imlíne"
-
-#~ msgid "Square"
-#~ msgstr "Cearnóg"
-
-#~ msgid "Dimension Line"
-#~ msgstr "Toislíne"
-
-#~ msgid "&General"
-#~ msgstr "&Ginearálta"
-
-#~ msgid "&Infinite loop"
-#~ msgstr "Lúb é&igríochta"
-
-# OK --KPS
-#~ msgid "Arc"
-#~ msgstr "Arc"
-
-#~ msgid "Chord"
-#~ msgstr "Corda"
-
-#~ msgid "Convex/Concave"
-#~ msgstr "Dronnach/Cuasach"
-
-#~ msgid "Slides in the pages:"
-#~ msgstr "Sleamhnáin sna leathanaigh:"
-
-#~ msgid "Rows: "
-#~ msgstr "Rónna: "
-
-#~ msgid "Columns: "
-#~ msgstr "Colúin: "
-
-#~ msgid "Draw border around the slides"
-#~ msgstr "Dear imlíne timpeall na sleamhnáin"
-
-#~ msgid "Apply Properties"
-#~ msgstr "Cuir Airíonna i bhFeidhm"
-
-#~ msgid "Name Object"
-#~ msgstr "Cuir Ainm ar Réad"
-
-#~ msgid "Protect Object"
-#~ msgstr "Cosain Réad"
-
-#~ msgid "Keep Ratio"
-#~ msgstr "Caomhnaigh an Cóimheas"
-
-#~ msgid "Pict&ure"
-#~ msgstr "&Pictiúr"
-
-#~ msgid "pt"
-#~ msgstr "pt"
-
-#~ msgctxt "Structure of the presentation"
-#~ msgid "Outline"
-#~ msgstr "Imlíne"
-
-#~ msgid "(%1)"
-#~ msgstr "(%1)"
-
-#~ msgid "Rename Slide"
-#~ msgstr "Athainmnigh Sleamhnán"
-
-#~ msgid "Slide title:"
-#~ msgstr "Teideal an shleamhnáin:"
-
-#~ msgid "Checkerboard Across"
-#~ msgstr "Clár Táiplise Trasna"
-
-#~ msgid "Checkerboard Down"
-#~ msgstr "Clár Táiplise Síos"
-
-#~ msgid "Uncover Down"
-#~ msgstr "Nocht Síos"
-
-#~ msgid "Uncover Up"
-#~ msgstr "Nocht Suas"
-
-#~ msgid "Dissolve"
-#~ msgstr "Díscaoil"
-
-#~ msgid "Paste Text"
-#~ msgstr "Greamaigh Téacs"
-
-#~ msgid "Insert Variable"
-#~ msgstr "Ionsáigh Athróg"
-
-#~ msgid "Protect content"
-#~ msgstr "Cosain an t-ábhar"
-
-#~ msgid "Effect:"
-#~ msgstr "Maisíocht:"
-
-#~ msgid "Remove Slide"
-#~ msgstr "Bain Sleamhnán"
-
-#~ msgid "&Delete"
-#~ msgstr "&Scrios"
-
-#~ msgid "Insert new slide"
-#~ msgstr "Ionsáigh sleamhnán nua"
-
-#~ msgid "Save Picture"
-#~ msgstr "Sábháil Pictiúr"
-
-#~ msgid "Save Failed"
-#~ msgstr "Theip ar shábháil"
-
-#~ msgid "Properties"
-#~ msgstr "Airíonna"
-
-#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
-#~ msgstr "*.kpweb|Láithreoireacht HTML KPresenter (*.kpweb)"
-
-#~ msgid "Only local files are currently supported."
-#~ msgstr "Ní thacaítear faoi láthair ach le comhaid logánta."
-
-#~ msgid "You did not select any slide."
-#~ msgstr "Ní raibh aon sleamhnán roghnaithe agat."
-
-#~ msgid "Change List Type"
-#~ msgstr "Athraigh an Cineál Liosta"
-
-#~ msgid "Change Outline Color"
-#~ msgstr "Athraigh Dath na hImlíne"
-
-#~ msgid "Change Fill Color"
-#~ msgstr "Athraigh Dath an Líonta"
-
-#~ msgid "Show Sidebar"
-#~ msgstr "Taispeáin an Barra Taoibh"
-
-#~ msgid "Hide Sidebar"
-#~ msgstr "Folaigh an Barra Taoibh"
-
-#~ msgid "Slide &Master"
-#~ msgstr "&Máistirshleamhnán"
-
-#~ msgid "Guide Lines"
-#~ msgstr "Treoirlínte"
-
-#~ msgid "Show &Grid"
-#~ msgstr "Taispeáin &Greille"
-
-#~ msgid "Hide &Grid"
-#~ msgstr "Folaigh &Greille"
-
-#~ msgid "Snap to Grid"
-#~ msgstr "Léim go Greille"
-
-#~ msgid "&Slide..."
-#~ msgstr "&Sleamhnán..."
-
-#~ msgid "P&icture..."
-#~ msgstr "P&ictiúr..."
-
-#~ msgid "&Rotate"
-#~ msgstr "&Rothlaigh"
-
-#~ msgid "&Zoom"
-#~ msgstr "&Súmáil"
-
-#~ msgid "&Shape"
-#~ msgstr "&Cruth"
-
-#~ msgid "&Circle/Ellipse"
-#~ msgstr "&Ciorcal/Éilips"
-
-#~ msgid "&Text"
-#~ msgstr "&Téacs"
-
-#~ msgid "&Chart"
-#~ msgstr "&Cairt"
-
-#~ msgid "Ta&ble"
-#~ msgstr "Tábla"
-
-#~ msgid "&Object"
-#~ msgstr "&Réad"
-
-#~ msgid "&Line"
-#~ msgstr "&Líne"
-
-#~ msgid "&Freehand"
-#~ msgstr "&Saorlámhach"
-
-#~ msgid "Po&lyline"
-#~ msgstr "I&l-líne"
-
-#~ msgid "&Quadric Bezier Curve"
-#~ msgstr "Cuar &Cuadrach Bézier"
-
-#~ msgid "C&ubic Bezier Curve"
-#~ msgstr "C&uar Ciúbach Bézier"
-
-#~ msgid "Co&nvex/Concave Polygon"
-#~ msgstr "Polagán Dro&nnach/Cuasach"
-
-#~ msgid "Closed Po&lyline"
-#~ msgstr "Il-líne Dúnta"
-
-#~ msgid "&Font..."
-#~ msgstr "C&ló..."
-
-#~ msgid "&Bold"
-#~ msgstr "Cló &Trom"
-
-#~ msgid "&Italic"
-#~ msgstr "Cló &Iodálach"
-
-#~ msgid "&Underline"
-#~ msgstr "&Líne Faoi"
-
-#~ msgid "&Color..."
-#~ msgstr "&Dath..."
-
-#~ msgid "Align &Left"
-#~ msgstr "Ailínigh Ar Chlé"
-
-#~ msgid "Align &Center"
-#~ msgstr "Ailínigh &sa lár"
-
-#~ msgid "Align &Right"
-#~ msgstr "Ailínigh Ar Dheis"
-
-#~ msgid "Align &Block"
-#~ msgstr "Ailínigh &Bloc"
-
-#~ msgid "Number"
-#~ msgstr "Uimhir"
-
-#~ msgid "Bullet"
-#~ msgstr "Urchar"
-
-#~ msgid "&Insert Slide Number"
-#~ msgstr "&Ionsáigh Uimhir an tSleamhnáin"
-
-#~ msgid "&Properties"
-#~ msgstr "&Airíonna"
-
-#~ msgid "Bring to Front"
-#~ msgstr "Tabhair chun Tosaigh"
-
-#~ msgid "Send to Back"
-#~ msgstr "Cuir go dtí an Cúl"
-
-#~ msgid "R&otate Objects..."
-#~ msgstr "R&othlaigh Réada..."
-
-#~ msgid "Align Center (&horizontally)"
-#~ msgstr "Ailínigh Sa Lár (go cot&hrománach)"
-
-#~ msgid "Align Center (&vertically)"
-#~ msgstr "Ailínigh Sa Lár (go h&ingearach)"
-
-#~ msgid "Create &HTML Slideshow..."
-#~ msgstr "Cruthaigh Taispeántas Sleamhnán &HTML..."
-
-#~ msgid "Template Manager"
-#~ msgstr "Bainisteoir na dTeimpléad"
-
-#~ msgid "Align O&bjects"
-#~ msgstr "Ailínigh Réada"
-
-#~ msgid "Outline Style"
-#~ msgstr "Stíl na hImlíne"
-
-#~ msgid "Outline Width"
-#~ msgstr "Leithead na hImlíne"
-
-#~ msgid "&Group Objects"
-#~ msgstr "&Grúpáil Réada"
-
-#~ msgid "&Ungroup Objects"
-#~ msgstr "&Díghrúpáil Réada"
-
-#~ msgid "Goto &Slide..."
-#~ msgstr "Téigh go &Sleamhnán..."
-
-#~ msgid "Fill Color..."
-#~ msgstr "Dath an Líonta..."
-
-#~ msgid "Outline Color..."
-#~ msgstr "Dath na hImlíne..."
-
-#~ msgid "&Rename Slide..."
-#~ msgstr "Athainmnigh &Sleamhnán..."
-
-#~ msgid "&Change Picture..."
-#~ msgstr "&Athraigh Pictiúr..."
-
-#~ msgid "Superscript"
-#~ msgstr "Forscript"
-
-#~ msgid "Subscript"
-#~ msgstr "Foscript"
-
-#~ msgid "Sp&ecial Character..."
-#~ msgstr "Carachtar Sp&eisialta..."
-
-#~ msgid "Link..."
-#~ msgstr "Nasc..."
-
-#~ msgid "Configure &Autocorrection..."
-#~ msgstr "Cumraigh U&athcheartú..."
-
-#~ msgid "&Paragraph..."
-#~ msgstr "&Alt..."
-
-#~ msgid "Default Format"
-#~ msgstr "Formáid Réamhshocraithe"
-
-#~ msgid "Open Link"
-#~ msgstr "Oscail Nasc"
-
-#~ msgid "Change Link..."
-#~ msgstr "Athraigh Nasc..."
-
-#~ msgid "Copy Link"
-#~ msgstr "Cóipeáil Nasc"
-
-#~ msgid "Add to Bookmark"
-#~ msgstr "Cuir le Leabharmharcanna"
-
-#~ msgid "&Custom Variables..."
-#~ msgstr "Athróga Sain&cheaptha..."
-
-#~ msgid "Edit Variable..."
-#~ msgstr "Cuir Athróg in Eagar..."
-
-#~ msgid "&Variable"
-#~ msgstr "&Athróg"
-
-#~ msgid "&Property"
-#~ msgstr "&Airí"
-
-#~ msgid "&Date"
-#~ msgstr "&Dáta"
-
-#~ msgid "&Time"
-#~ msgstr "&Am"
-
-#~ msgid "&Statistic"
-#~ msgstr "&Staitistic"
-
-#~ msgid "&Refresh All Variables"
-#~ msgstr "Athnuaigh Gach Ath&róg"
-
-#~ msgid "Change Case..."
-#~ msgstr "Athraigh an Cás..."
-
-#~ msgid "Zoom"
-#~ msgstr "Súmáil"
-
-#~ msgid "&Style Manager"
-#~ msgstr "&Bainisteoir na Stíleanna"
-
-#~ msgid "St&yle"
-#~ msgstr "S&tíl"
-
-#~ msgid "Enable Autocorrection"
-#~ msgstr "Cumasaigh Uathcheartú"
-
-#~ msgid "Disable Autocorrection"
-#~ msgstr "Díchumasaigh Uathcheartú"
-
-#~ msgid "Insert Non-Breaking Space"
-#~ msgstr "Ionsáigh Spás Neamhbhristeach"
-
-#~ msgid "Insert Non-Breaking Hyphen"
-#~ msgstr "Ionsáigh Fleiscín Neamhbhristeach"
-
-#~ msgid "Insert Soft Hyphen"
-#~ msgstr "Ionsáigh Fleiscín Bog"
-
-#~ msgid "Line Break"
-#~ msgstr "Briseadh Líne"
-
-#~ msgid "Completion"
-#~ msgstr "Comhlánú"
-
-#~ msgid "Comment..."
-#~ msgstr "Nóta..."
-
-#~ msgid "Edit Comment..."
-#~ msgstr "Cuir Nóta in Eagar..."
-
-#~ msgid "Add Guide Line..."
-#~ msgstr "Cuir Treoirlíne Leis..."
-
-#~ msgid "Remove Comment"
-#~ msgstr "Bain Nóta"
-
-#~ msgid "Copy Text of Comment..."
-#~ msgstr "Cóipeáil Téacs an Nóta..."
-
-#~ msgid "Zoom Out"
-#~ msgstr "Súmáil Amach"
-
-#~ msgid "Zoom In"
-#~ msgstr "Súmáil Isteach"
-
-#~ msgid "Zoom Selected Objects"
-#~ msgstr "Súmáil Réada Roghnaithe"
-
-#~ msgid "Zoom All Objects"
-#~ msgstr "Súmáil Gach Réad"
-
-#~ msgid "Vertical Flip"
-#~ msgstr "Smeach Go hIngearach"
-
-#~ msgid "Duplicate Object..."
-#~ msgstr "Cóipeáil Réad..."
-
-#~ msgid "Apply Autocorrection"
-#~ msgstr "Cuir Uathcheartú i bhFeidhm"
-
-#~ msgid "Align Top"
-#~ msgstr "Ailínigh leis an mBarr"
-
-#~ msgid "Save Picture..."
-#~ msgstr "Sábháil Pictiúr..."
-
-#~ msgid "Autospellcheck"
-#~ msgstr "Seiceáil an litriú go huathoibríoch"
-
-#~ msgid "File..."
-#~ msgstr "Comhad..."
-
-#~ msgid "Ignore All"
-#~ msgstr "Déan neamhshuim ar gach"
-
-#~ msgid "Add Word to Dictionary"
-#~ msgstr "Cuir Focal leis an bhFoclóir"
-
-#~ msgid "Hide Background"
-#~ msgstr "Folaigh an Cúlra"
-
-#~ msgid "Display Background"
-#~ msgstr "Taispeáin an Cúlra"
-
-#~ msgid "Set Background"
-#~ msgstr "Socraigh Cúlra"
-
-#~ msgid "Select New Picture"
-#~ msgstr "Roghnaigh Pictiúr Nua"
-
-#~ msgid "Next slide"
-#~ msgstr "An chéad sleamhnán eile"
-
-#~ msgid "Slide %1/%2"
-#~ msgstr "Sleamhnán %1/%2"
-
-#~ msgctxt "Statusbar info"
-#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
-#~ msgstr "%1: %2, %3 - %4, %5 (leithead: %6, airde: %7)"
-
-#~ msgctxt "1 object selected"
-#~ msgid "%n objects selected"
-#~ msgstr "Tá %n réad roghnaithe"
-
-#~ msgid "Change Link"
-#~ msgstr "Athraigh Nasc"
-
-#~ msgid "Correct Misspelled Word"
-#~ msgstr "Ceartaigh Focal Mílitrithe"
-
-#~ msgid "Change Custom Variable"
-#~ msgstr "Athraigh Athróg Shaincheaptha"
-
-#~ msgid "Change Case of Text"
-#~ msgstr "Athraigh Cás an Téacs"
-
-#~ msgid "Whole Slide"
-#~ msgstr "Sleamhnán Iomlán"
-
-#~ msgid "%1%"
-#~ msgstr "%1%"
-
-#~ msgid "Apply Style to Frame"
-#~ msgstr "Cuir an Stíl i bhFeidhm ar Fhráma"
-
-#~ msgid "Apply Autoformat"
-#~ msgstr "Uathfhormáidigh"
-
-#~ msgid "Replace Word"
-#~ msgstr "Ionadaigh Focal"
-
-#~ msgid "First"
-#~ msgstr "An Chéad"
-
-#~ msgid "Previous"
-#~ msgstr "Siar"
-
-#~ msgid "Next"
-#~ msgstr "Ar Aghaidh"
-
-#~ msgid "Last"
-#~ msgstr "Roimhe Seo"
-
-#~ msgid "Home"
-#~ msgstr "Baile"
-
-#~ msgid "Table of Contents"
-#~ msgstr "Clár Ábhair"
-
-#~ msgid "Email address:"
-#~ msgstr "Seoladh Ríomhphoist:"
-
-#~ msgid "Zoom:"
-#~ msgstr "Súmáil:"
-
-#~ msgid "Encoding:"
-#~ msgstr "Ionchódú:"
-
-#~ msgid "Document type:"
-#~ msgstr "Cineál na cáipéise:"
-
-#~ msgid "Disabled"
-#~ msgstr "Díchumasaithe"
-
-#~ msgid "Initialize (create file structure, etc.)"
-#~ msgstr "Túsaigh (cruthaigh comhadstruchtúr, srl.)"
-
-#~ msgid "Create Main Page (Table of Contents)"
-#~ msgstr "Cruthaigh an Príomhleathanach (Clár na nÁbhar)"
-
-#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
-#~ msgstr "*.kpweb|Láithreoireacht Ghréasáin KPresenter (*.kpweb)"
-
-#~ msgid "Save Web Presentation Configuration"
-#~ msgstr "Sábháil Cumraíocht na Láithreoireachta Gréasáin"
-
-#~ msgid "Freehand"
-#~ msgstr "Saorlámhach"
-
-#~ msgid "Autoform"
-#~ msgstr "Uathfhoirmigh"
-
-#~ msgid "Group"
-#~ msgstr "Grúpa"
-
-#~ msgid "Polyline"
-#~ msgstr "Il-líne"
-
-#~ msgid "Embedded Object"
-#~ msgstr "Réad Leabaithe"
-
-#~ msgid "Cubic Bezier Curve"
-#~ msgstr "Cuar Ciúbach Bézier"
-
-#~ msgid "Quadric Bezier Curve"
-#~ msgstr "Cuar Cuadrach Bézier"
-
-#~ msgid "Prot&ect content"
-#~ msgstr "Cosain an t-ábhar"
-
-#~ msgid "Spellchecker Behavior"
-#~ msgstr "Oibriú an Litreora"
-
-#~ msgctxt "Abbreviation for Text-to-Speech"
-#~ msgid "TTS"
-#~ msgstr "TgC"
-
-#~ msgid "Text-to-Speech Settings"
-#~ msgstr "Socruithe Téacs-go-Caint"
-
-#~ msgid "Speak &What's This?"
-#~ msgstr "Abair &Cad É Seo?"
-
-#~ msgid "Spea&k accelerators"
-#~ msgstr "Abai&r aicearraí"
-
-#~ msgctxt "Keyboard accelerator, such as Alt+F"
-#~ msgid "Accelerator"
-#~ msgstr "Aicearra"

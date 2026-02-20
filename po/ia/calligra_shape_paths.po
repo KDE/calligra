@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2013, 2016, 2017, 2020, 2022.
+# SPDX-FileCopyrightText: 2013, 2016, 2017, 2020, 2022, 2026 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2022-12-14 12:23+0100\n"
+"PO-Revision-Date: 2026-02-19 17:00+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: ellipse/EllipseShapeConfigCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -25,7 +25,7 @@ msgstr "Cambia ellipse"
 #: ellipse/EllipseShapeConfigWidget.cpp:16
 #, kde-format
 msgid "Arc"
-msgstr ""
+msgstr "Arco"
 
 #: ellipse/EllipseShapeConfigWidget.cpp:17
 #, kde-format
@@ -61,7 +61,7 @@ msgstr "Angulo de initio:"
 #: ellipse/EllipseShapeConfigWidget.ui:56
 #, kde-format
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ellipse/EllipseShapeConfigWidget.ui:46
@@ -94,7 +94,7 @@ msgstr "Un forma de didascalia"
 #: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
 msgid "Rectangular Callout"
-msgstr ""
+msgstr "Didascalia rectangular"
 
 #: enhancedpath/CalloutShapeFactory.cpp:150
 #, kde-format
@@ -104,7 +104,7 @@ msgstr "Un didascalia rectangular"
 #: enhancedpath/CalloutShapeFactory.cpp:229
 #, kde-format
 msgid "Rounded Callout"
-msgstr ""
+msgstr "Didascalia tundite"
 
 #: enhancedpath/CalloutShapeFactory.cpp:231
 #, kde-format
@@ -114,17 +114,17 @@ msgstr "Un didascalia rectangular tundite"
 #: enhancedpath/CalloutToolFactory.cpp:23
 #, kde-format
 msgid "Callout editing"
-msgstr ""
+msgstr "Editar Didascalia"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:26
 #, kde-format
 msgid "An enhanced path shape"
-msgstr ""
+msgstr "Un avantiate forma de percurso"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:28
 #, kde-format
 msgid "An enhanced path"
-msgstr ""
+msgstr "Un avantiate percurso"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:142
 #, kde-format
@@ -193,13 +193,13 @@ msgstr "Forma de Rectangulo"
 #: rectangle/RectangleShapeConfigWidget.ui:21
 #, kde-format
 msgid "Corner radius x:"
-msgstr ""
+msgstr "Radius de angulo x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: rectangle/RectangleShapeConfigWidget.ui:34
 #, kde-format
 msgid "Corner radius y:"
-msgstr ""
+msgstr "Radius de angulo y:"
 
 #: rectangle/RectangleShapeFactory.cpp:20
 #, kde-format
@@ -214,7 +214,7 @@ msgstr "Un Rectangulo"
 #: spiral/SpiralShapeConfigCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Change spiral"
-msgstr ""
+msgstr "Cambiaspiral"
 
 #: spiral/SpiralShapeConfigWidget.cpp:16
 #, kde-format
@@ -234,7 +234,7 @@ msgstr "In senso horari"
 #: spiral/SpiralShapeConfigWidget.cpp:24
 #, kde-format
 msgid "Anticlockwise"
-msgstr ""
+msgstr "Anti Horari"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: spiral/SpiralShapeConfigWidget.ui:13

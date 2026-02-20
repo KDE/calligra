@@ -51,17 +51,15 @@ msgstr ""
 
 #: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
 #: DataSetConfigWidget.cpp:345
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Axistitle"
-msgstr "Eochair eolais"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Show Axis"
-msgstr "Eochair eolais"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
 #: AxesConfigWidget.ui:58
@@ -71,45 +69,31 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
 #: AxesConfigWidget.ui:65
-#, fuzzy, kde-format
-#| msgid "Labels"
+#, kde-format
 msgid "Show Labels"
-msgstr "Lipéid"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
 #: AxesConfigWidget.ui:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Font"
-msgstr "Cuir na Sonraí in Eagar..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Show Major Grid"
-msgstr "Eochair eolais"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Show Minor Grid"
-msgstr "Eochair eolais"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
 #: AxesConfigWidget.ui:119
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -122,16 +106,6 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
-"weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, explodeFactor)
 #. i18n: ectx: property (suffix), widget (QSpinBox, gapBetweenBars)
@@ -156,10 +130,9 @@ msgstr "Bearna Idir Barraí"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
 #: AxesConfigWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Show Title"
-msgstr "Eochair eolais"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:201
@@ -270,34 +243,29 @@ msgid "Bar Chart"
 msgstr "Barra-Chairt"
 
 #: ChartShapeFactory.cpp:78
-#, fuzzy, kde-format
-#| msgid "Polar Chart"
+#, kde-format
 msgid "Normal bar chart"
-msgstr "Cairt Pholach"
+msgstr ""
 
 #: ChartShapeFactory.cpp:88
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "Stacked Bar Chart"
-msgstr "Cairt Stoic"
+msgstr ""
 
 #: ChartShapeFactory.cpp:89
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "Stacked bar chart"
-msgstr "Cairt Stoic"
+msgstr ""
 
 #: ChartShapeFactory.cpp:99
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent Bar Chart"
-msgstr "Barra-Chairt"
+msgstr ""
 
 #: ChartShapeFactory.cpp:100
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent bar chart"
-msgstr "Barra-Chairt"
+msgstr ""
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
 #: PlotAreaConfigWidget.cpp:236
@@ -306,34 +274,29 @@ msgid "Line Chart"
 msgstr "Cairt Líne"
 
 #: ChartShapeFactory.cpp:111
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Normal line chart"
-msgstr "Cairt Líne"
+msgstr ""
 
 #: ChartShapeFactory.cpp:121
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Stacked Line Chart"
-msgstr "Cairt Líne"
+msgstr ""
 
 #: ChartShapeFactory.cpp:122
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Stacked line chart"
-msgstr "Cairt Líne"
+msgstr ""
 
 #: ChartShapeFactory.cpp:132
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Percent Line Chart"
-msgstr "Cairt Líne"
+msgstr ""
 
 #: ChartShapeFactory.cpp:133
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Percent line chart"
-msgstr "Cairt Líne"
+msgstr ""
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
 #: PlotAreaConfigWidget.cpp:242
@@ -342,34 +305,29 @@ msgid "Area Chart"
 msgstr "Cairt Limistéir"
 
 #: ChartShapeFactory.cpp:144
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Normal area chart"
-msgstr "Cairt Limistéir"
+msgstr ""
 
 #: ChartShapeFactory.cpp:154
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Stacked Area Chart"
-msgstr "Cairt Limistéir"
+msgstr ""
 
 #: ChartShapeFactory.cpp:155
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Stacked area chart"
-msgstr "Cairt Limistéir"
+msgstr ""
 
 #: ChartShapeFactory.cpp:165
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Percent Area Chart"
-msgstr "Cairt Limistéir"
+msgstr ""
 
 #: ChartShapeFactory.cpp:166
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Percent area chart"
-msgstr "Cairt Limistéir"
+msgstr ""
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
 #: PlotAreaConfigWidget.cpp:250
@@ -378,10 +336,9 @@ msgid "Pie Chart"
 msgstr "Píchairt"
 
 #: ChartShapeFactory.cpp:177
-#, fuzzy, kde-format
-#| msgid "Pie Chart"
+#, kde-format
 msgid "Pie chart"
-msgstr "Píchairt"
+msgstr ""
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
 #: PlotAreaConfigWidget.cpp:251
@@ -390,10 +347,9 @@ msgid "Ring Chart"
 msgstr "Cairt Fháinne"
 
 #: ChartShapeFactory.cpp:188
-#, fuzzy, kde-format
-#| msgid "Ring Chart"
+#, kde-format
 msgid "Ring chart"
-msgstr "Cairt Fháinne"
+msgstr ""
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
 #: PlotAreaConfigWidget.cpp:264
@@ -402,10 +358,9 @@ msgid "Bubble Chart"
 msgstr "Cairt Bhoilgeoige"
 
 #: ChartShapeFactory.cpp:199
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble chart"
-msgstr "Cairt Bhoilgeoige"
+msgstr ""
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
 #: PlotAreaConfigWidget.cpp:263
@@ -414,40 +369,34 @@ msgid "Scatter Chart"
 msgstr "Scaipchairt"
 
 #: ChartShapeFactory.cpp:210
-#, fuzzy, kde-format
-#| msgid "Scatter Chart"
+#, kde-format
 msgid "Scatter chart"
-msgstr "Scaipchairt"
+msgstr ""
 
 #: ChartShapeFactory.cpp:220
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Radar Chart"
-msgstr "Barra-Chairt"
+msgstr ""
 
 #: ChartShapeFactory.cpp:221
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Radar chart"
-msgstr "Barra-Chairt"
+msgstr ""
 
 #: ChartShapeFactory.cpp:231
-#, fuzzy, kde-format
-#| msgid "Polar Chart"
+#, kde-format
 msgid "Filled Radar Chart"
-msgstr "Cairt Pholach"
+msgstr ""
 
 #: ChartShapeFactory.cpp:232
-#, fuzzy, kde-format
-#| msgid "Polar Chart"
+#, kde-format
 msgid "Filled radar chart"
-msgstr "Cairt Pholach"
+msgstr ""
 
 #: ChartShapeFactory.cpp:242
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "Candle Stick Stock Chart"
-msgstr "Cairt Stoic"
+msgstr ""
 
 #: ChartShapeFactory.cpp:243
 #, kde-format
@@ -455,10 +404,9 @@ msgid "Japanese candle stick stock chart"
 msgstr ""
 
 #: ChartShapeFactory.cpp:253
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "OHLC Stock Chart"
-msgstr "Cairt Stoic"
+msgstr ""
 
 #: ChartShapeFactory.cpp:254
 #, kde-format
@@ -466,10 +414,9 @@ msgid "Open High Low Close stock chart"
 msgstr ""
 
 #: ChartShapeFactory.cpp:264
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "HLC Stock Chart"
-msgstr "Cairt Stoic"
+msgstr ""
 
 #: ChartShapeFactory.cpp:265
 #, kde-format
@@ -550,10 +497,9 @@ msgid "Close"
 msgstr ""
 
 #: ChartShapeFactory.cpp:581
-#, fuzzy, kde-format
-#| msgid "Growth in %"
+#, kde-format
 msgid "Growth"
-msgstr "Fás %"
+msgstr ""
 
 #: ChartTool.cpp:97
 #, kde-format
@@ -566,10 +512,9 @@ msgid "Do something else"
 msgstr "Déan rud éigin eile"
 
 #: ChartTool.cpp:269
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgid "Titles"
-msgstr "Teideal"
+msgstr ""
 
 #: ChartTool.cpp:284
 #, kde-format
@@ -577,37 +522,29 @@ msgid "Legend"
 msgstr "Eochair eolais"
 
 #: ChartTool.cpp:297
-#, fuzzy, kde-format
-#| msgid "Data Area"
+#, kde-format
 msgid "Plot Area"
-msgstr "Limistéar Sonraí"
+msgstr ""
 
 #: ChartTool.cpp:1061
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: ChartTool.cpp:1063
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: ChartToolFactory.cpp:26
-#, fuzzy, kde-format
-#| msgid "Chart Editing Tool"
+#, kde-format
 msgid "Chart editing"
-msgstr "Uirlis Eagarthóireachta Cairte"
+msgstr ""
 
 #: commands/AddRemoveAxisCommand.cpp:37
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Add Axis"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/AddRemoveAxisCommand.cpp:40
 msgctxt "(qtundo-format)"
@@ -625,39 +562,29 @@ msgid "Hide Axis Title"
 msgstr ""
 
 #: commands/AxisCommand.cpp:138
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/AxisCommand.cpp:140
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/AxisCommand.cpp:149
-#, fuzzy
-#| msgid "Labels"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
-msgstr "Lipéid"
+msgstr ""
 
 #: commands/AxisCommand.cpp:151
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/AxisCommand.cpp:160
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
@@ -665,11 +592,9 @@ msgid "Hide Axis Major Gridlines"
 msgstr ""
 
 #: commands/AxisCommand.cpp:171
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
@@ -687,18 +612,14 @@ msgid "Linear Scaling"
 msgstr ""
 
 #: commands/AxisCommand.cpp:192
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/AxisCommand.cpp:199
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
@@ -721,25 +642,19 @@ msgid "Manual Substep Width"
 msgstr ""
 
 #: commands/AxisCommand.cpp:228
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/AxisCommand.cpp:234
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/AxisCommand.cpp:255
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -752,270 +667,194 @@ msgid "Hide Text Shape"
 msgstr ""
 
 #: commands/ChartTypeCommand.cpp:75
-#, fuzzy
-#| msgid "Polar Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
-msgstr "Cairt Pholach"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:78
-#, fuzzy
-#| msgid "Stock Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr "Cairt Stoic"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:81
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
-msgstr "Barra-Chairt"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:90
-#, fuzzy
-#| msgid "Line Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
-msgstr "Cairt Líne"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:93
-#, fuzzy
-#| msgid "Line Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
-msgstr "Cairt Líne"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:96
-#, fuzzy
-#| msgid "Line Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
-msgstr "Cairt Líne"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:105
-#, fuzzy
-#| msgid "Area Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
-msgstr "Cairt Limistéir"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:108
-#, fuzzy
-#| msgid "Area Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
-msgstr "Cairt Limistéir"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:111
-#, fuzzy
-#| msgid "Area Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
-msgstr "Cairt Limistéir"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:118
-#, fuzzy
-#| msgid "Pie Chart"
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
-msgstr "Píchairt"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:121
-#, fuzzy
-#| msgid "Ring Chart"
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
-msgstr "Cairt Fháinne"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:124
-#, fuzzy
-#| msgid "Scatter Chart"
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
-msgstr "Scaipchairt"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:127
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
-msgstr "Barra-Chairt"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:130
-#, fuzzy
-#| msgid "Polar Chart"
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
-msgstr "Cairt Pholach"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:133
-#, fuzzy
-#| msgid "Stock Chart"
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
-msgstr "Cairt Stoic"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:136
-#, fuzzy
-#| msgid "Bubble Chart"
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
-msgstr "Cairt Bhoilgeoige"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:139
-#, fuzzy
-#| msgid "Surface Chart"
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
-msgstr "Cairt Dromchla"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:142
-#, fuzzy
-#| msgid "Gantt Chart"
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
-msgstr "Cairt Gantt"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:135
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:143
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:145
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:154
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:156
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:165
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:167
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:176
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:178
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:186
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:193
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:202
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:204
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:212
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: commands/GapCommand.cpp:58
-#, fuzzy
-#| msgid "Gap Between Bars"
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
-msgstr "Bearna Idir Barraí"
+msgstr ""
 
 #: commands/GapCommand.cpp:65
-#, fuzzy
-#| msgid "Gap Between Sets"
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
-msgstr "Bearna Idir Tacair"
+msgstr ""
 
 #: commands/LegendCommand.cpp:73
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/LegendCommand.cpp:81
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/LegendCommand.cpp:88
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: commands/LegendCommand.cpp:95
-#, fuzzy
-#| msgid "Orientation"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
-msgstr "Treoshuíomh"
+msgstr ""
 
 #: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
@@ -1033,10 +872,9 @@ msgid "Series %1"
 msgstr "Sraith %1"
 
 #: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:226
-#, fuzzy, kde-format
-#| msgid "Chart Tool"
+#, kde-format
 msgid "Chart Type"
-msgstr "Uirlis Chairte"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
@@ -1071,9 +909,9 @@ msgid "Polar Chart"
 msgstr "Cairt Pholach"
 
 #: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:258
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filled"
-msgstr "Líon"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
 #, kde-format
@@ -1126,10 +964,9 @@ msgstr "Roghnaigh"
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
 #: widgets/RadarDataSetConfigWidget.cpp:189
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgid "Auto"
-msgstr "Uathoibríoch"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:651 PlotAreaConfigWidget.cpp:625
 #: PlotAreaConfigWidget.cpp:675 PlotAreaConfigWidget.cpp:851
@@ -1152,10 +989,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Attach To Axis"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
@@ -1184,9 +1020,9 @@ msgstr ""
 #: DataSetConfigWidget.ui:231 dialogs/PieDataEditor.cpp:35
 #: PieConfigWidget.ui:175 widgets/RadarDataSetConfigWidget.ui:152
 #: widgets/RingConfigWidget.ui:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Category"
-msgstr "Catagóirí:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowNumber)
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetShowNumber)
@@ -1206,9 +1042,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
 #: DataSetConfigWidget.ui:312 dialogs/PieDataEditor.cpp:64
 #: dialogs/PieDataEditor.ui:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert"
-msgstr "Ionsáigh Rónna"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, CellRegionDialog)
 #. i18n: ectx: property (windowTitle), widget (QDialog, AxisScalingDialog)
@@ -1225,65 +1061,56 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AxisScalingDialog.ui:32
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Step Width:"
-msgstr "Eochair eolais"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AxisScalingDialog.ui:65
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Substep Width:"
-msgstr "Eochair eolais"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:108
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Bubble Data Editor"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:121
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Column Before"
-msgstr "Ionsáigh Colúin"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:115 dialogs/ScatterDataEditor.cpp:122
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Column After"
-msgstr "Ionsáigh Colúin"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:116 dialogs/ScatterDataEditor.cpp:123
 #: dialogs/StockDataEditor.cpp:98
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Row Above"
-msgstr "Ionsáigh Rónna"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:117 dialogs/ScatterDataEditor.cpp:124
 #: dialogs/StockDataEditor.cpp:99
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Row Below"
-msgstr "Ionsáigh Rónna"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
 #: dialogs/BubbleDataEditor.cpp:118 dialogs/PieDataEditor.cpp:65
 #: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:125
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete"
-msgstr "Scrios Rónna"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
 #: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubbles Editor"
-msgstr "Cairt Bhoilgeoige"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
@@ -1342,10 +1169,9 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
 #: dialogs/ScatterDataEditor.ui:119
-#, fuzzy, kde-format
-#| msgid "Delete Cells"
+#, kde-format
 msgid "Delete selection"
-msgstr "Scrios Cealla"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
@@ -1365,17 +1191,15 @@ msgstr ""
 #: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
 #: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
 #: TitlesConfigWidget.ui:153
-#, fuzzy, kde-format
-#| msgid "January"
+#, kde-format
 msgid "Manual"
-msgstr "Eanáir"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
-#, fuzzy, kde-format
-#| msgid "Select a data set"
+#, kde-format
 msgid "Remove data set"
-msgstr "Roghnaigh tacar sonraí"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1387,36 +1211,33 @@ msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Dataset Name"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:105
 #: dialogs/ScatterDataSetTableModel.cpp:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "X-Values"
-msgstr "Luachanna Sonraí"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:107
 #: dialogs/ScatterDataSetTableModel.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Y-Values"
-msgstr "Luachanna Sonraí"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble Size"
-msgstr "Cairt Bhoilgeoige"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:149
 #: dialogs/ScatterDataSetTableModel.cpp:144
-#, fuzzy, kde-format
-#| msgid "Label"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Label: %1"
-msgstr "Lipéad"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:151
 #: dialogs/ScatterDataSetTableModel.cpp:146
@@ -1457,15 +1278,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Y Values:"
-msgstr "Luachanna Sonraí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/CellRegionDialog.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "X Values:"
-msgstr "Luachanna Sonraí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CellRegionDialog.ui:72
@@ -1481,18 +1302,7 @@ msgstr "Catagóirí:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/CellRegionDialog.ui:96
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#| "style=\" font-weight:600;\">Labels</span></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -1505,37 +1315,24 @@ msgid ""
 "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
 "style=\" font-weight:600;\">Name:</span></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
-"weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span style="
-"\" font-weight:600;\">Lipéid</span></p></body></html>"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
 #: dialogs/ChartTableEditor.ui:14
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Data Editor"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "&Data sets in rows"
-msgstr "Tacair sonraí i rónna"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
 #: dialogs/ChartTableEditor.ui:36
-#, fuzzy, kde-format
-#| msgid "Data sets in columns"
+#, kde-format
 msgid "Data sets in &columns"
-msgstr "Tacair sonraí i gcolúin"
+msgstr ""
 
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
@@ -1550,7 +1347,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/FormatErrorBarDialog.ui:69
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -1566,16 +1363,6 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "weight:600;\"></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
-"weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:94
@@ -1585,9 +1372,9 @@ msgstr "Tairiseach"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Percentage"
-msgstr "Céatadán"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:104
@@ -1609,15 +1396,15 @@ msgstr "Athraitheas"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "From Data table"
-msgstr "Luachanna Sonraí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, valueLabel)
 #: dialogs/FormatErrorBarDialog.ui:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "Positive "
-msgstr "Ionad"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QRadioButton, negIndicator)
@@ -1634,19 +1421,19 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Value"
-msgstr "Luachanna Sonraí"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, percentageValue)
 #: dialogs/FormatErrorBarDialog.ui:233
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgid " %"
-msgstr "%"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/FormatErrorBarDialog.ui:303
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -1659,22 +1446,12 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "weight:600;\">Error Indicator</span></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
-"weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span style="
-"\" font-weight:600;\">Lipéid</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
 #: dialogs/FormatErrorBarDialog.ui:325
-#, fuzzy, kde-format
+#, kde-format
 msgid "Positive"
-msgstr "Ionad"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, posAndNegIndicator)
 #: dialogs/FormatErrorBarDialog.ui:351
@@ -1684,10 +1461,9 @@ msgstr "Araon"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, NewAxisDialog)
 #: dialogs/NewAxisDialog.ui:20
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "New Axis"
-msgstr "Eochair eolais"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dimensionIsX)
 #: dialogs/NewAxisDialog.ui:46
@@ -1710,17 +1486,15 @@ msgid "Title:"
 msgstr "Teideal:"
 
 #: dialogs/PieDataEditor.cpp:58
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Pie Data Editor"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
 #: dialogs/PieDataEditor.ui:52
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Del"
-msgstr "Scrios Rónna"
+msgstr ""
 
 #: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
@@ -1728,60 +1502,51 @@ msgid "Row %1"
 msgstr ""
 
 #: dialogs/ScatterDataEditor.cpp:115
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Scatter Data Editor"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Stock Data Editor"
-msgstr "Ais Cheangailte"
+msgstr ""
 
 #: dialogs/StockDataEditor.cpp:100
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete Row"
-msgstr "Scrios Rónna"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/StockDataEditor.ui:77
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete row"
-msgstr "Scrios Rónna"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Above"
-msgstr "Ionsáigh Rónna"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:57
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Below"
-msgstr "Ionsáigh Rónna"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Before"
-msgstr "Ionsáigh Colúin"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:59
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert After"
-msgstr "Ionsáigh Colúin"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:60
-#, fuzzy, kde-format
-#| msgid "Delete Cells"
+#, kde-format
 msgid "Delete Selection"
-msgstr "Scrios Cealla"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:163 dialogs/TableEditorDialog.cpp:187
 #, kde-format
@@ -1789,10 +1554,9 @@ msgid "New Row"
 msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:212 dialogs/TableEditorDialog.cpp:236
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "New Column"
-msgstr "Ionsáigh Colúin"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:19
@@ -1838,44 +1602,39 @@ msgstr "Ar Chlé"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:72
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Top-left"
-msgstr "Bun"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:77
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Top-right"
-msgstr "Bun"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Bottom-left"
-msgstr "Bun"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Bottom-right"
-msgstr "Bun"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: LegendConfigWidget.ui:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Position"
-msgstr "Ionad"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLegend)
 #: LegendConfigWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Show Legend"
-msgstr "Eochair eolais"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: LegendConfigWidget.ui:130
@@ -1885,15 +1644,14 @@ msgstr "Treoshuíomh"
 
 #. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
 #: LegendConfigWidget.ui:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fonts..."
-msgstr "Cuir na Sonraí in Eagar..."
+msgstr ""
 
 #: PieConfigWidget.cpp:98
-#, fuzzy, kde-format
-#| msgid "Data Set %1"
+#, kde-format
 msgid "Data Point %1"
-msgstr "Tacar Sonraí %1"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
@@ -1953,10 +1711,9 @@ msgstr "Tacair Sonraí"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: PlotAreaConfigWidget.ui:131
-#, fuzzy, kde-format
-#| msgid "Data Sets"
+#, kde-format
 msgid "Data Points"
-msgstr "Tacair Sonraí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
@@ -1978,9 +1735,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Positioning"
-msgstr "Ionad"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: TitlesConfigWidget.ui:28
@@ -1990,10 +1747,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/RingConfigWidget.ui:18
-#, fuzzy, kde-format
-#| msgid "Categories:"
+#, kde-format
 msgid "Categories"
-msgstr "Catagóirí:"
+msgstr ""
 
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
@@ -2039,950 +1795,3 @@ msgstr ""
 #, kde-format
 msgid "Change the color of the line"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Attached Axis"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Set Dataset Marker Style"
-#~ msgstr "Ais Cheangailte"
-
-#~ msgid "Symbol"
-#~ msgstr "Siombail"
-
-#~ msgid "Data Format"
-#~ msgstr "Formáid na Sonraí"
-
-#~ msgid "Actions"
-#~ msgstr "Gníomhartha"
-
-#~ msgid "Insert Rows"
-#~ msgstr "Ionsáigh Rónna"
-
-#~ msgid "Delete Columns"
-#~ msgstr "Scrios Colúin"
-
-#, fuzzy
-#~| msgid "Bar Chart"
-#~ msgid "Bar chart"
-#~ msgstr "Barra-Chairt"
-
-#, fuzzy
-#~| msgid "Line Chart"
-#~ msgid "Line chart"
-#~ msgstr "Cairt Líne"
-
-#, fuzzy
-#~| msgid "Area Chart"
-#~ msgid "Area chart"
-#~ msgstr "Cairt Limistéir"
-
-#, fuzzy
-#~| msgid "Data Area"
-#~ msgid "Area"
-#~ msgstr "Limistéar Sonraí"
-
-#, fuzzy
-#~| msgid "Bar Chart"
-#~ msgid "Radar"
-#~ msgstr "Barra-Chairt"
-
-#, fuzzy
-#~| msgid "Scatter Chart"
-#~ msgid "Scatter"
-#~ msgstr "Scaipchairt"
-
-#, fuzzy
-#~| msgid "Bubble Chart"
-#~ msgid "Bubbles"
-#~ msgstr "Cairt Bhoilgeoige"
-
-#, fuzzy
-#~| msgid "Stock Chart"
-#~ msgid "Stock HLC"
-#~ msgstr "Cairt Stoic"
-
-#~ msgid "Data Ranges..."
-#~ msgstr "Raonta na Sonraí..."
-
-#~ msgid "Axis %1"
-#~ msgstr "Ais %1"
-
-#, fuzzy
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Chart Titles</"
-#~ "span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
-
-#~ msgid "Scaling..."
-#~ msgstr "Á Scálú..."
-
-#, fuzzy
-#~ msgid "Edit Label Fonts..."
-#~ msgstr "Cuir na Sonraí in Eagar..."
-
-#~ msgid "Custom Type"
-#~ msgstr "Cineál Saincheaptha"
-
-#, fuzzy
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
-#~ "weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
-#~ "span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
-
-#~ msgid "v"
-#~ msgstr "i"
-
-#~ msgid "h"
-#~ msgstr "c"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#~ "style=\" font-weight:600;\">Labels</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#~ "style=\" font-weight:600;\">Lipéid</span></p></body></html>"
-
-#, fuzzy
-#~| msgid "Legend"
-#~ msgid "Show Frame"
-#~ msgstr "Eochair eolais"
-
-#, fuzzy
-#~| msgid "Legend"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Show Legend Frame"
-#~ msgstr "Eochair eolais"
-
-#, fuzzy
-#~| msgid "Legend"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Hide Legend Frame"
-#~ msgstr "Eochair eolais"
-
-#, fuzzy
-#~| msgid "Dialog"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dialog"
-#~ msgstr "Dialóg"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
-#~ "weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "weight:600;\">Error Category</span></p>\n"
-#~ "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#~ "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-#~ "font-weight:600;\"></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
-
-#, fuzzy
-#~| msgid "Constant"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Constant"
-#~ msgstr "Tairiseach"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Percentage"
-#~ msgstr "Céatadán"
-
-#, fuzzy
-#~| msgid "Standard Deviation"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Standard Deviation"
-#~ msgstr "Diall Caighdeánach"
-
-#, fuzzy
-#~| msgid "Variance"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Variance"
-#~ msgstr "Athraitheas"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "From Data table"
-#~ msgstr "Luachanna Sonraí"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Positive "
-#~ msgstr "Ionad"
-
-#, fuzzy
-#~| msgid "Negative"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Negative"
-#~ msgstr "Diúltach"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Value"
-#~ msgstr "Luachanna Sonraí"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid " %"
-#~ msgstr "%"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
-#~ "weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "weight:600;\">Error Indicator</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#~ "style=\" font-weight:600;\">Lipéid</span></p></body></html>"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Positive"
-#~ msgstr "Ionad"
-
-#, fuzzy
-#~| msgid "Both"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Both"
-#~ msgstr "Araon"
-
-#, fuzzy
-#~| msgid "Title:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Title:"
-#~ msgstr "Teideal:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Y Values:"
-#~ msgstr "Luachanna Sonraí"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "X Values:"
-#~ msgstr "Luachanna Sonraí"
-
-#, fuzzy
-#~| msgid "Categories:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Categories:"
-#~ msgstr "Catagóirí:"
-
-#, fuzzy
-#~| msgid ""
-#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
-#~| "TR/REC-html40/strict.dtd\">\n"
-#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~| "css\">\n"
-#~| "p, li { white-space: pre-wrap; }\n"
-#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~| "font-weight:400; font-style:normal;\">\n"
-#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~| "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#~| "style=\" font-weight:600;\">Labels</span></p></body></html>"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
-#~ "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
-#~ "style=\" font-weight:600;\">Name:</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#~ "style=\" font-weight:600;\">Lipéid</span></p></body></html>"
-
-#, fuzzy
-#~| msgid "Data Format"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Data Format"
-#~ msgstr "Formáid na Sonraí"
-
-#, fuzzy
-#~| msgid "Data sets in rows"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Data sets in rows"
-#~ msgstr "Tacair sonraí i rónna"
-
-#, fuzzy
-#~| msgid "Data sets in columns"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Data sets in columns"
-#~ msgstr "Tacair sonraí i gcolúin"
-
-#, fuzzy
-#~| msgid "Actions"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Actions"
-#~ msgstr "Gníomhartha"
-
-#, fuzzy
-#~| msgid "3D"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "3D"
-#~ msgstr "3T"
-
-#, fuzzy
-#~| msgid "Edit Data..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit Data..."
-#~ msgstr "Cuir na Sonraí in Eagar..."
-
-#, fuzzy
-#~| msgid "Data Area"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Plot Area"
-#~ msgstr "Limistéar Sonraí"
-
-#, fuzzy
-#~| msgid ""
-#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
-#~| "TR/REC-html40/strict.dtd\">\n"
-#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~| "css\">\n"
-#~| "p, li { white-space: pre-wrap; }\n"
-#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~| "font-weight:400; font-style:normal;\">\n"
-#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~| "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#~| "style=\" font-weight:600;\">Labels</span></p></body></html>"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#~ "style=\" font-weight:600;\">Labels</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><span "
-#~ "style=\" font-weight:600;\">Lipéid</span></p></body></html>"
-
-#, fuzzy
-#~| msgid ""
-#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
-#~| "TR/REC-html40/strict.dtd\">\n"
-#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~| "css\">\n"
-#~| "p, li { white-space: pre-wrap; }\n"
-#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~| "font-weight:400; font-style:normal;\">\n"
-#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~| "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
-
-#, fuzzy
-#~| msgid "Label"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Label"
-#~ msgstr "Lipéad"
-
-#, fuzzy
-#~| msgid "Scaling..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scaling..."
-#~ msgstr "Á Scálú..."
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit Fonts..."
-#~ msgstr "Cuir na Sonraí in Eagar..."
-
-#, fuzzy
-#~| msgid "Data Sets"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Data Sets"
-#~ msgstr "Tacair Sonraí"
-
-#, fuzzy
-#~| msgid "Select a data set"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select a data set"
-#~ msgstr "Roghnaigh tacar sonraí"
-
-#, fuzzy
-#~| msgid "Custom Type"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Custom Type"
-#~ msgstr "Cineál Saincheaptha"
-
-#, fuzzy
-#~| msgid "Gap Between Bars"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Gap Between Bars"
-#~ msgstr "Bearna Idir Barraí"
-
-#, fuzzy
-#~| msgid "%"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "%"
-#~ msgstr "%"
-
-#, fuzzy
-#~| msgid "Gap Between Sets"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Gap Between Sets"
-#~ msgstr "Bearna Idir Tacair"
-
-#, fuzzy
-#~| msgid ""
-#~| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/"
-#~| "TR/REC-html40/strict.dtd\">\n"
-#~| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~| "css\">\n"
-#~| "p, li { white-space: pre-wrap; }\n"
-#~| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~| "font-weight:400; font-style:normal;\">\n"
-#~| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~| "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Bar Properties</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
-#~ "weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "family:'Sans Serif'; font-size:8pt; font-weight:600;\">Pie Properties</"
-#~ "span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#~ "css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#~ "font-weight:400; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:8pt; font-weight:600;\">Aiseanna</span></p></body></html>"
-
-#, fuzzy
-#~| msgid "Attached Axis"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Attached Axis"
-#~ msgstr "Ais Cheangailte"
-
-#, fuzzy
-#~| msgid "Stroke"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Stroke"
-#~ msgstr "Stríoc"
-
-#, fuzzy
-#~| msgid "Fill"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fill"
-#~ msgstr "Líon"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert"
-#~ msgstr "Ionsáigh Rónna"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Category"
-#~ msgstr "Catagóirí:"
-
-#, fuzzy
-#~| msgid "Symbol"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Symbol"
-#~ msgstr "Siombail"
-
-#, fuzzy
-#~| msgid "Number"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number"
-#~ msgstr "Uimhir"
-
-#, fuzzy
-#~| msgid "Legend"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Legend"
-#~ msgstr "Eochair eolais"
-
-#, fuzzy
-#~| msgid "Legend"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Show Frame"
-#~ msgstr "Eochair eolais"
-
-#, fuzzy
-#~| msgid "Orientation"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Orientation"
-#~ msgstr "Treoshuíomh"
-
-#, fuzzy
-#~| msgid "v"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "v"
-#~ msgstr "i"
-
-#, fuzzy
-#~| msgid "h"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "h"
-#~ msgstr "c"
-
-#, fuzzy
-#~| msgid "Bar Chart"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bar Chart"
-#~ msgstr "Barra-Chairt"
-
-#, fuzzy
-#~| msgid "Normal"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Normal"
-#~ msgstr "Gnách"
-
-#, fuzzy
-#~| msgid "Stacked"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Stacked"
-#~ msgstr "Cruachta"
-
-#, fuzzy
-#~| msgid "Percent"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Percent"
-#~ msgstr "Céatadán"
-
-#, fuzzy
-#~| msgid "Line Chart"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Line Chart"
-#~ msgstr "Cairt Líne"
-
-#, fuzzy
-#~| msgid "Area Chart"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Area Chart"
-#~ msgstr "Cairt Limistéir"
-
-#, fuzzy
-#~| msgid "Pie Chart"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pie Chart"
-#~ msgstr "Píchairt"
-
-#, fuzzy
-#~| msgid "Polar Chart"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Polar Chart"
-#~ msgstr "Cairt Pholach"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Filled"
-#~ msgstr "Líon"
-
-#, fuzzy
-#~| msgid "None"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "None"
-#~ msgstr "Neamhní"
-
-#, fuzzy
-#~| msgid "Automatic"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Automatic"
-#~ msgstr "Uathoibríoch"
-
-#, fuzzy
-#~| msgid "Select"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select"
-#~ msgstr "Roghnaigh"
-
-#, fuzzy
-#~| msgid "Data Ranges..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Data Ranges..."
-#~ msgstr "Raonta na Sonraí..."
-
-#, fuzzy
-#~| msgid "Axis %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Axis %1"
-#~ msgstr "Ais %1"
-
-#, fuzzy
-#~| msgid "Data Set %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Data Set %1"
-#~ msgstr "Tacar Sonraí %1"
-
-#, fuzzy
-#~| msgid "Plugin Missing"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Plugin Missing"
-#~ msgstr "Breiseán Ar Iarraidh"
-
-#, fuzzy
-#~| msgid "Plugin Incompatible"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Plugin Incompatible"
-#~ msgstr "Breiseán Neamh-Chomhoiriúnach"
-
-#, fuzzy
-#~| msgid "Title"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Title"
-#~ msgstr "Teideal"
-
-#, fuzzy
-#~| msgid "Subtitle"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Subtitle"
-#~ msgstr "Fotheideal"
-
-#, fuzzy
-#~| msgid "Footer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Footer"
-#~ msgstr "Buntásc"
-
-#, fuzzy
-#~| msgid ""
-#~| "This document contains an external link to a remote document\n"
-#~| "%1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "This document contains an external link to a remote document\n"
-#~ "%1"
-#~ msgstr ""
-#~ "Tá nasc seachtrach le cáipéis chianda sa cháipéis seo\n"
-#~ "%1"
-
-#, fuzzy
-#~| msgid "Confirmation Required"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Confirmation Required"
-#~ msgstr "Ní mór cinntiú"
-
-#, fuzzy
-#~| msgid "Download"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Download"
-#~ msgstr "Íosluchtaigh"
-
-#, fuzzy
-#~| msgid "Skip"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Skip"
-#~ msgstr "Ná bac leis"
-
-#, fuzzy
-#~| msgid "Chart"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Chart"
-#~ msgstr "Cairt"
-
-#, fuzzy
-#~| msgid "Business charts"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Business charts"
-#~ msgstr "Cairteacha gnó"
-
-#, fuzzy
-#~| msgid "January"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "January"
-#~ msgstr "Eanáir"
-
-#, fuzzy
-#~| msgid "July"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "July"
-#~ msgstr "Iúil"
-
-#, fuzzy
-#~| msgid "December"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "December"
-#~ msgstr "Mí na Nollag"
-
-#, fuzzy
-#~| msgid "Column %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Column %1"
-#~ msgstr "Colún %1"
-
-#, fuzzy
-#~| msgid "Month"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Month"
-#~ msgstr "Mí"
-
-#, fuzzy
-#~| msgid "Growth in %"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Growth in %"
-#~ msgstr "Fás %"
-
-#, fuzzy
-#~| msgid "Do something"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Do something"
-#~ msgstr "Déan rud éigin"
-
-#, fuzzy
-#~| msgid "Do something else"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Do something else"
-#~ msgstr "Déan rud éigin eile"
-
-#, fuzzy
-#~| msgid "Chart Editing Tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Chart editing"
-#~ msgstr "Uirlis Eagarthóireachta Cairte"
-
-#, fuzzy
-#~| msgid "Series %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Series %1"
-#~ msgstr "Sraith %1"
-
-#, fuzzy
-#~| msgid "Select Font"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select Font"
-#~ msgstr "Roghnaigh Cló"
-
-#, fuzzy
-#~| msgid "Insert Rows"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert Rows"
-#~ msgstr "Ionsáigh Rónna"
-
-#, fuzzy
-#~| msgid "Delete Rows"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete Rows"
-#~ msgstr "Scrios Rónna"
-
-#, fuzzy
-#~| msgid "Insert Columns"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert Columns"
-#~ msgstr "Ionsáigh Colúin"
-
-#, fuzzy
-#~| msgid "Delete Columns"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete Columns"
-#~ msgstr "Scrios Colúin"
-
-#~ msgid "Color"
-#~ msgstr "Dath"
-
-#~ msgid "Cut Rows"
-#~ msgstr "Gearr Rónna"
-
-#~ msgid "Cut Columns"
-#~ msgstr "Gearr Colúin"
-
-#~ msgid "Cut Cells"
-#~ msgstr "Gearr Cealla"
-
-#~ msgid "Copy Rows"
-#~ msgstr "Cóipeáil Rónna"
-
-#~ msgid "Copy Columns"
-#~ msgstr "Cóipeáil Colúin"
-
-#~ msgid "Copy Cells"
-#~ msgstr "Cóipeáil Cealla"
-
-#~ msgid "Insert Cells"
-#~ msgstr "Ionsáigh Cealla"

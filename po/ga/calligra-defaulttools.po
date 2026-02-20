@@ -31,9 +31,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelAlign)
 #: connectionTool/ConnectionPointWidget.ui:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alignment"
-msgstr "Ailínigh Ar Chlé"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, alignPercent)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
@@ -46,39 +46,39 @@ msgid "%"
 msgstr "%"
 
 #: connectionTool/ConnectionTool.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit connection points"
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align to left edge"
-msgstr "Ailínigh Ar Chlé"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align to horizontal center"
-msgstr "Ailínigh Ar Dheis"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align to right edge"
-msgstr "Ailínigh Ar Dheis"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align to top edge"
-msgstr "Ailínigh leis an mBun"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align to vertical center"
-msgstr "Ailínigh Ar Chlé"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align to bottom edge"
-msgstr "Ailínigh leis an mBun"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:91
 #, kde-format
@@ -116,25 +116,24 @@ msgid "Escape in down direction"
 msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:427
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
-#, fuzzy, kde-format
+#, kde-format
 msgid "Drag to edit connection."
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
-#, fuzzy, kde-format
+#, kde-format
 msgid "Double click connection or press delete to remove it."
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:772
-#, fuzzy, kde-format
+#, kde-format
 msgid "Click to edit connection points."
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:786
 #, kde-format
@@ -144,24 +143,24 @@ msgid ""
 msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:788
-#, fuzzy, kde-format
+#, kde-format
 msgid "Double click connection point or press delete to remove it."
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:790
-#, fuzzy, kde-format
+#, kde-format
 msgid "Double click to add connection point."
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:793
-#, fuzzy, kde-format
+#, kde-format
 msgid "Drag to create new connection."
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:821
-#, fuzzy, kde-format
+#, kde-format
 msgid "Connection"
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
@@ -169,9 +168,9 @@ msgid "Line"
 msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:831
-#, fuzzy, kde-format
+#, kde-format
 msgid "Connection Point"
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: connectionTool/ConnectionToolFactory.cpp:18
 #, kde-format
@@ -204,10 +203,9 @@ msgid "Align Left"
 msgstr "Ailínigh Ar Chlé"
 
 #: defaulttool/DefaultTool.cpp:244
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontally Center"
-msgstr "Cothrománach"
+msgstr ""
 
 #: defaulttool/DefaultTool.cpp:248
 #, kde-format
@@ -220,10 +218,9 @@ msgid "Align Top"
 msgstr "Ailínigh leis an mBarr"
 
 #: defaulttool/DefaultTool.cpp:256
-#, fuzzy, kde-format
-#| msgid "Vertical"
+#, kde-format
 msgid "Vertically Center"
-msgstr "Ingearach"
+msgstr ""
 
 #: defaulttool/DefaultTool.cpp:260
 #, kde-format
@@ -273,16 +270,14 @@ msgid ""
 msgstr ""
 
 #: defaulttool/DefaultTool.cpp:1044
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr "Grúpáil giuirléidí"
+msgstr ""
 
 #: defaulttool/DefaultTool.cpp:1076
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr "Díghrúpáil giuirléidí"
+msgstr ""
 
 #: defaulttool/DefaultTool.cpp:1169
 #, kde-format
@@ -311,29 +306,25 @@ msgstr ""
 
 #: defaulttool/DefaultToolTransformWidget.cpp:97
 #: defaulttool/ShapeRotateStrategy.cpp:140
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate"
-msgstr "Rothlaigh"
+msgstr ""
 
 #: defaulttool/DefaultToolTransformWidget.cpp:135
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear X"
-msgstr "Fiar"
+msgstr ""
 
 #: defaulttool/DefaultToolTransformWidget.cpp:173
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Y"
-msgstr "Fiar"
+msgstr ""
 
 #: defaulttool/DefaultToolTransformWidget.cpp:215
 #: defaulttool/DefaultToolTransformWidget.cpp:252
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale"
-msgstr "Scála"
+msgstr ""
 
 #: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
@@ -354,15 +345,15 @@ msgstr "Rothlaigh"
 
 #. i18n: ectx: property (text), widget (QPushButton, shearXButton)
 #: defaulttool/DefaultToolTransformWidget.ui:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shear X"
-msgstr "Fiar"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, shearYButton)
 #: defaulttool/DefaultToolTransformWidget.ui:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shear Y"
-msgstr "Fiar"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, scaleXButton)
 #: defaulttool/DefaultToolTransformWidget.ui:122
@@ -390,10 +381,9 @@ msgstr ""
 
 #: defaulttool/DefaultToolWidget.cpp:217
 #: defaulttool/ShapeResizeStrategy.cpp:332
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr "Athraigh an mhéid"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: defaulttool/DefaultToolWidget.ui:35
@@ -423,15 +413,14 @@ msgid "Press ALT to rotate in 45 degree steps."
 msgstr ""
 
 #: defaulttool/ShapeShearStrategy.cpp:193
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear"
-msgstr "Fiar"
+msgstr ""
 
 #: guidestool/GuidesTool.cpp:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "Double click to add guide line."
-msgstr "Giuirléid Cheangail"
+msgstr ""
 
 #: guidestool/GuidesTool.cpp:134
 #, kde-format
@@ -526,232 +515,3 @@ msgstr ""
 #, kde-format
 msgid "Create"
 msgstr "Cruthaigh"
-
-#, fuzzy
-#~| msgid "X:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "X:"
-#~ msgstr "X:"
-
-#, fuzzy
-#~| msgid "Y:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Y:"
-#~ msgstr "Y:"
-
-#, fuzzy
-#~| msgid "°"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "°"
-#~ msgstr "°"
-
-#, fuzzy
-#~| msgid "%"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "%"
-#~ msgstr "%"
-
-#, fuzzy
-#~| msgid "Scale X"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale X"
-#~ msgstr "Scála X"
-
-#, fuzzy
-#~| msgid "Scale Y"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale Y"
-#~ msgstr "Scála Y"
-
-#, fuzzy
-#~| msgid "Keep aspect ratio"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Keep aspect ratio"
-#~ msgstr "Caomhnaigh an cóimheas treoíochta"
-
-#, fuzzy
-#~| msgid "Orientation:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Orientation:"
-#~ msgstr "Treoshuíomh:"
-
-#, fuzzy
-#~| msgid "Position:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Position:"
-#~ msgstr "Ionad:"
-
-#, fuzzy
-#~| msgid "Add"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add"
-#~ msgstr "Cuir Leis"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove"
-#~ msgstr "Bain"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create"
-#~ msgstr "Cruthaigh"
-
-#, fuzzy
-#~| msgid "Edit Mode"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit Mode"
-#~ msgstr "Mód Eagarthóireachta"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Alignment"
-#~ msgstr "Ailínigh Ar Chlé"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit connection points"
-#~ msgstr "Giuirléid Cheangail"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to left edge"
-#~ msgstr "Ailínigh Ar Chlé"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to right edge"
-#~ msgstr "Ailínigh Ar Dheis"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to top edge"
-#~ msgstr "Ailínigh leis an mBun"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to bottom edge"
-#~ msgstr "Ailínigh leis an mBun"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Connection"
-#~ msgstr "Giuirléid Cheangail"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Connection Point"
-#~ msgstr "Giuirléid Cheangail"
-
-#, fuzzy
-#~| msgid "Connect shapes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Connect shapes"
-#~ msgstr "Ceangail giuirléidí"
-
-#, fuzzy
-#~| msgid "Bring to &Front"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bring to &Front"
-#~ msgstr "Tabhair c&hun Tosaigh"
-
-#, fuzzy
-#~| msgid "&Raise"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Raise"
-#~ msgstr "&Ardaigh"
-
-#, fuzzy
-#~| msgid "&Lower"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Lower"
-#~ msgstr "Í&sligh"
-
-#, fuzzy
-#~| msgid "Align Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align Left"
-#~ msgstr "Ailínigh Ar Chlé"
-
-#, fuzzy
-#~| msgid "Align Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align Right"
-#~ msgstr "Ailínigh Ar Dheis"
-
-#, fuzzy
-#~| msgid "Align Top"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align Top"
-#~ msgstr "Ailínigh leis an mBarr"
-
-#, fuzzy
-#~| msgid "Align Bottom"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align Bottom"
-#~ msgstr "Ailínigh leis an mBun"
-
-#, fuzzy
-#~| msgid "Group"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Group"
-#~ msgstr "Grúpa"
-
-#, fuzzy
-#~| msgid "Ungroup"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ungroup"
-#~ msgstr "Díghrúpáil"
-
-#, fuzzy
-#~| msgid "Arrange"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Arrange"
-#~ msgstr "Leag Amach"
-
-#, fuzzy
-#~| msgid "Geometry"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Geometry"
-#~ msgstr "Céimseata"
-
-#, fuzzy
-#~| msgid "Edit guidelines"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit guidelines"
-#~ msgstr "Cuir treoirlíne in eagar"
-
-#, fuzzy
-#~| msgid "Horizontal"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Horizontal"
-#~ msgstr "Cothrománach"
-
-#, fuzzy
-#~| msgid "Vertical"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vertical"
-#~ msgstr "Ingearach"
-
-#~ msgid "None"
-#~ msgstr "Neamhní"
-
-#~ msgid "Snapping"
-#~ msgstr "Léim"
-
-#~ msgid "Default tool"
-#~ msgstr "Uirlis réamhshocraithe"
-
-#~ msgid "Type:"
-#~ msgstr "Cineál:"
-
-#~ msgid "Standard"
-#~ msgstr "Caighdeánach"
-
-#~ msgid "Default Tool"
-#~ msgstr "Uirlis Réamhshocraithe"
-
-#~ msgid "Edit Guidelines"
-#~ msgstr "Cuir Treoirlínte in Eagar"

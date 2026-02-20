@@ -65,10 +65,9 @@ msgid "Calligra Document Opener"
 msgstr ""
 
 #: main.cpp:160
-#, fuzzy, kde-format
-#| msgid "(c) 2010-2011 Calligra developers"
+#, kde-format
 msgid "Copyright 2010-%1 Calligra developers"
-msgstr "© 2010-2011 Forbróirí Calligra"
+msgstr ""
 
 #: main.cpp:161
 #, kde-format
@@ -84,35 +83,3 @@ msgstr ""
 #, kde-format
 msgid "Files to open"
 msgstr "Comhaid le hoscailt"
-
-#, fuzzy
-#~| msgctxt "NAME OF TRANSLATORS"
-#~| msgid "Your names"
-#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#, fuzzy
-#~| msgctxt "EMAIL OF TRANSLATORS"
-#~| msgid "Your emails"
-#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
-
-#, fuzzy
-#~| msgid "(c) 2010-2011 Calligra developers"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copyright 2010-%1 Calligra developers"
-#~ msgstr "© 2010-2011 Forbróirí Calligra"
-
-#, fuzzy
-#~| msgid "Jarosław Staniek"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Jarosław Staniek"
-#~ msgstr "Jarosław Staniek"
-
-#, fuzzy
-#~| msgid "Files to open"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Files to open"
-#~ msgstr "Comhaid le hoscailt"

@@ -71,9 +71,9 @@ msgid "Alpha"
 msgstr "Alfa"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.h:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "CMYK (32 bits floating/channel)"
-msgstr "CMYK (slánuimhir 8-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.h:72
 #, kde-format
@@ -94,14 +94,14 @@ msgid "Gray"
 msgstr "Liath"
 
 #: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.h:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grayscale/Alpha (16-bit float/channel)"
-msgstr "Liathscála (slánuimhir 8-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.h:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grayscale/Alpha (32-bit float/channel)"
-msgstr "Liathscála (slánuimhir 8-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.h:68
 #, kde-format
@@ -135,9 +135,9 @@ msgid "b*"
 msgstr "b*"
 
 #: lcms2/colorspaces/lab_f32/LabF32ColorSpace.h:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "L*a*b* (32-bit float/channel)"
-msgstr "L*a*b* (slánuimhir 16-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/lab_u16/LabColorSpace.h:77
 #, kde-format
@@ -145,9 +145,9 @@ msgid "L*a*b* (16-bit integer/channel)"
 msgstr "L*a*b* (slánuimhir 16-giotán/cainéal)"
 
 #: lcms2/colorspaces/lab_u8/LabU8ColorSpace.h:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "L*a*b* (8-bit integer/channel)"
-msgstr "L*a*b* (slánuimhir 16-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:23
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:26
@@ -174,14 +174,14 @@ msgid "Blue"
 msgstr "Gorm"
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.h:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGBA (16-bit floating/channel)"
-msgstr "RGB (slánuimhir 8-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.h:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGBA (32-bit floating/channel)"
-msgstr "RGB (slánuimhir 8-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.h:61
 #, kde-format
@@ -222,9 +222,9 @@ msgstr "Z"
 
 #: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.h:71
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.h:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZ (32-bit float/channel)"
-msgstr "XYZ (slánuimhir 16-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.h:63
 #, kde-format
@@ -232,9 +232,9 @@ msgid "XYZ (16-bit integer/channel)"
 msgstr "XYZ (slánuimhir 16-giotán/cainéal)"
 
 #: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.h:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZ (8-bit integer/channel)"
-msgstr "XYZ (slánuimhir 16-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:33
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:27
@@ -251,19 +251,19 @@ msgid "Cr"
 msgstr "Cr"
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCBCR (32-bit float/channel)"
-msgstr "RGB (slánuimhir 8-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCBCR (16-bit integer/channel)"
-msgstr "RGB (slánuimhir 16-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.h:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCBCR (8-bit integer/channel)"
-msgstr "RGB (slánuimhir 8-giotán/cainéal)"
+msgstr ""
 
 #: lcms2/compositeops/RgbCompositeOpBumpmap.h:20
 #, kde-format
@@ -342,19 +342,19 @@ msgid "RGB8 Histogram"
 msgstr "Histeagram RGB8"
 
 #: lcms2/LcmsEnginePlugin.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGB16 Histogram"
-msgstr "Histeagram RGB8"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGBF16 Histogram"
-msgstr "Histeagram RGB8"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:160
-#, fuzzy, kde-format
+#, kde-format
 msgid "RGBF32 Histogram"
-msgstr "Histeagram RGB8"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:180
 #, kde-format
@@ -367,14 +367,14 @@ msgid "GRAY/Alpha16 Histogram"
 msgstr "Histeagram LIATH/Alfa16"
 
 #: lcms2/LcmsEnginePlugin.cpp:190
-#, fuzzy, kde-format
+#, kde-format
 msgid "GRAYF16 Histogram"
-msgstr "Histeagram RGB8"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:196
-#, fuzzy, kde-format
+#, kde-format
 msgid "GRAY/Alpha 32 float Histogram"
-msgstr "Histeagram GRAY/Alpha8"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:207
 #, kde-format
@@ -387,14 +387,14 @@ msgid "CMYK16 Histogram"
 msgstr "Histeagram CMYK16"
 
 #: lcms2/LcmsEnginePlugin.cpp:217
-#, fuzzy, kde-format
+#, kde-format
 msgid "CMYK F32 Histogram"
-msgstr "Histeagram CMYK8"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:234
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZ8 Histogram"
-msgstr "Histeagram XYZ16"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:239
 #, kde-format
@@ -402,422 +402,26 @@ msgid "XYZ16 Histogram"
 msgstr "Histeagram XYZ16"
 
 #: lcms2/LcmsEnginePlugin.cpp:245
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZF16 Histogram"
-msgstr "Histeagram XYZ16"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:251
-#, fuzzy, kde-format
+#, kde-format
 msgid "XYZF32 Histogram"
-msgstr "Histeagram XYZ16"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:265
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCBCR8 Histogram"
-msgstr "Histeagram RGB8"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:270
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCBCR16 Histogram"
-msgstr "Histeagram XYZ16"
+msgstr ""
 
 #: lcms2/LcmsEnginePlugin.cpp:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "YCBCRF32 Histogram"
-msgstr "Histeagram RGB8"
-
-#, fuzzy
-#~| msgid "Cyan"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Cyan"
-#~ msgstr "Cian"
-
-#, fuzzy
-#~| msgid "Magenta"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Magenta"
-#~ msgstr "Maigeanta"
-
-#, fuzzy
-#~| msgid "Yellow"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Yellow"
-#~ msgstr "Buí"
-
-#, fuzzy
-#~| msgid "Black"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Black"
-#~ msgstr "Dubh"
-
-#, fuzzy
-#~| msgid "Alpha"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Alpha"
-#~ msgstr "Alfa"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "CMYK (32 bits floating/channel)"
-#~ msgstr "CMYK (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "CMYK (16-bit integer/channel)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "CMYK (16-bit integer/channel)"
-#~ msgstr "CMYK (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "CMYK (8-bit integer/channel)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "CMYK (8-bit integer/channel)"
-#~ msgstr "CMYK (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "Gray"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Gray"
-#~ msgstr "Liath"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Grayscale/Alpha (16-bit float/channel)"
-#~ msgstr "Liathscála (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Grayscale/Alpha (32-bit float/channel)"
-#~ msgstr "Liathscála (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "Grayscale (16-bit integer/channel)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Grayscale (16-bit integer/channel)"
-#~ msgstr "Liathscála (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "Grayscale (8-bit integer/channel)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Grayscale (8-bit integer/channel)"
-#~ msgstr "Liathscála (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "Lightness"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Lightness"
-#~ msgstr "Gile"
-
-#, fuzzy
-#~| msgid "a*"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "a*"
-#~ msgstr "a*"
-
-#, fuzzy
-#~| msgid "b*"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "b*"
-#~ msgstr "b*"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "L*a*b* (32-bit float/channel)"
-#~ msgstr "L*a*b* (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "L*a*b* (16-bit integer/channel)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "L*a*b* (16-bit integer/channel)"
-#~ msgstr "L*a*b* (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "L*a*b* (8-bit integer/channel)"
-#~ msgstr "L*a*b* (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "Red"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Red"
-#~ msgstr "Dearg"
-
-#, fuzzy
-#~| msgid "Green"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Green"
-#~ msgstr "Uaine"
-
-#, fuzzy
-#~| msgid "Blue"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Blue"
-#~ msgstr "Gorm"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "RGBA (16-bit floating/channel)"
-#~ msgstr "RGB (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "RGBA (32-bit floating/channel)"
-#~ msgstr "RGB (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "RGB (16-bit integer/channel)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "RGB (16-bit integer/channel)"
-#~ msgstr "RGB (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "RGB (8-bit integer/channel)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "RGB (8-bit integer/channel)"
-#~ msgstr "RGB (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "X"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "X"
-#~ msgstr "X"
-
-#, fuzzy
-#~| msgid "Y"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Y"
-#~ msgstr "Y"
-
-#, fuzzy
-#~| msgid "Z"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Z"
-#~ msgstr "Z"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "XYZ (32-bit float/channel)"
-#~ msgstr "XYZ (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "XYZ (16-bit integer/channel)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "XYZ (16-bit integer/channel)"
-#~ msgstr "XYZ (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "XYZ (8-bit integer/channel)"
-#~ msgstr "XYZ (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "Cb"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Cb"
-#~ msgstr "Cb"
-
-#, fuzzy
-#~| msgid "Cr"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Cr"
-#~ msgstr "Cr"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "YCBCR (32-bit float/channel)"
-#~ msgstr "RGB (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "YCBCR (16-bit integer/channel)"
-#~ msgstr "RGB (slánuimhir 16-giotán/cainéal)"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "YCBCR (8-bit integer/channel)"
-#~ msgstr "RGB (slánuimhir 8-giotán/cainéal)"
-
-#, fuzzy
-#~| msgid "Bumpmap"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bumpmap"
-#~ msgstr "Bumpmap"
-
-#, fuzzy
-#~| msgid "Clear"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clear"
-#~ msgstr "Glan"
-
-#, fuzzy
-#~| msgid "Color"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Color"
-#~ msgstr "Dath"
-
-#, fuzzy
-#~| msgid "Darken"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Darken"
-#~ msgstr "Dorchaigh"
-
-#, fuzzy
-#~| msgid "Diff"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Diff"
-#~ msgstr "Difríochtaí"
-
-#, fuzzy
-#~| msgid "Dissolve"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dissolve"
-#~ msgstr "Díscaoil"
-
-#, fuzzy
-#~| msgid "Hue"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Hue"
-#~ msgstr "Lí"
-
-#, fuzzy
-#~| msgid "In"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "In"
-#~ msgstr "Isteach"
-
-#, fuzzy
-#~| msgid "Lighten"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Lighten"
-#~ msgstr "Sorchaigh"
-
-#, fuzzy
-#~| msgid "Out"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Out"
-#~ msgstr "Amach"
-
-#, fuzzy
-#~| msgid "Saturation"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Saturation"
-#~ msgstr "Sáithiú"
-
-#, fuzzy
-#~| msgid "Value"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Value"
-#~ msgstr "Luach"
-
-#, fuzzy
-#~| msgid "ICC Engine"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "ICC Engine"
-#~ msgstr "Inneall ICC"
-
-#, fuzzy
-#~| msgid "L*a*b* Histogram"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "L*a*b* Histogram"
-#~ msgstr "Histeagram L*a*b*"
-
-#, fuzzy
-#~| msgid "RGB8 Histogram"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "RGB8 Histogram"
-#~ msgstr "Histeagram RGB8"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "RGB16 Histogram"
-#~ msgstr "Histeagram RGB8"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "RGBF16 Histogram"
-#~ msgstr "Histeagram RGB8"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "RGBF32 Histogram"
-#~ msgstr "Histeagram RGB8"
-
-#, fuzzy
-#~| msgid "GRAY/Alpha8 Histogram"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "GRAY/Alpha8 Histogram"
-#~ msgstr "Histeagram GRAY/Alpha8"
-
-#, fuzzy
-#~| msgid "GRAY/Alpha16 Histogram"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "GRAY/Alpha16 Histogram"
-#~ msgstr "Histeagram LIATH/Alfa16"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "GRAYF16 Histogram"
-#~ msgstr "Histeagram RGB8"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "GRAY/Alpha 32 float Histogram"
-#~ msgstr "Histeagram GRAY/Alpha8"
-
-#, fuzzy
-#~| msgid "CMYK8 Histogram"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "CMYK8 Histogram"
-#~ msgstr "Histeagram CMYK8"
-
-#, fuzzy
-#~| msgid "CMYK16 Histogram"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "CMYK16 Histogram"
-#~ msgstr "Histeagram CMYK16"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "CMYK F32 Histogram"
-#~ msgstr "Histeagram CMYK8"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "XYZ8 Histogram"
-#~ msgstr "Histeagram XYZ16"
-
-#, fuzzy
-#~| msgid "XYZ16 Histogram"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "XYZ16 Histogram"
-#~ msgstr "Histeagram XYZ16"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "XYZF16 Histogram"
-#~ msgstr "Histeagram XYZ16"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "XYZF32 Histogram"
-#~ msgstr "Histeagram XYZ16"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "YCBCR8 Histogram"
-#~ msgstr "Histeagram RGB8"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "YCBCR16 Histogram"
-#~ msgstr "Histeagram XYZ16"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "YCBCRF32 Histogram"
-#~ msgstr "Histeagram RGB8"
-
-#~ msgid "Grayscale without alpha (8-bit integer/channel)"
-#~ msgstr "Liathscála gan alfa (slánuimhir 8-giotán/cainéal)"
-
-#~ msgid "Grayscale (no transparency) (8-bit integer/channel)"
-#~ msgstr "Liathscála (gan trédhearcacht) (slánuimhir 8-giotán/cainéal)"
+msgstr ""

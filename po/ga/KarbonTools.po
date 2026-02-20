@@ -33,9 +33,9 @@ msgid "Save profile as..."
 msgstr "Sábháil an phróifíl mar..."
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove profile"
-msgstr "Uirlis Eagarthóireachta Patrún"
+msgstr ""
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
 #, kde-format
@@ -139,42 +139,36 @@ msgid "Fill"
 msgstr "Líon"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:358
-#, fuzzy, kde-format
-#| msgid "Calligraphic Shape"
+#, kde-format
 msgid "Calligraphy: increase width"
-msgstr "Giuirléid Challagrafaíochta"
+msgstr ""
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:363
-#, fuzzy, kde-format
-#| msgid "Calligraphic Shape"
+#, kde-format
 msgid "Calligraphy: decrease width"
-msgstr "Giuirléid Challagrafaíochta"
+msgstr ""
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:368
-#, fuzzy, kde-format
-#| msgid "Calligraphic Shape"
+#, kde-format
 msgid "Calligraphy: increase angle"
-msgstr "Giuirléid Challagrafaíochta"
+msgstr ""
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:373
-#, fuzzy, kde-format
-#| msgid "Calligraphic Shape"
+#, kde-format
 msgid "Calligraphy: decrease angle"
-msgstr "Giuirléid Challagrafaíochta"
+msgstr ""
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:380
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
-#, fuzzy, kde-format
-#| msgid "Calligraphic Shape"
+#, kde-format
 msgid "Calligraphy"
-msgstr "Giuirléid Challagrafaíochta"
+msgstr ""
 
 #: filterEffectTool/FilterAddCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add filter effect"
-msgstr "Cuir Scagaire Leis"
+msgstr ""
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, kde-format
@@ -182,20 +176,19 @@ msgid "Add effect to current filter stack"
 msgstr ""
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add to filter presets"
-msgstr "Cuir Scagaire Leis"
+msgstr ""
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove filter preset"
-msgstr "Uirlis Eagarthóireachta Patrún"
+msgstr ""
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
-#, fuzzy, kde-format
-#| msgid "Effects"
+#, kde-format
 msgid "Effect name"
-msgstr "Maisíochtaí"
+msgstr ""
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
@@ -205,16 +198,15 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
 #: filterEffectTool/FilterEffectEditWidget.ui:32
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:320
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter Effect Editor"
-msgstr "Cuir Scagaire Leis"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: filterEffectTool/FilterEffectEditWidget.ui:40
-#, fuzzy, kde-format
-#| msgid "Effects"
+#, kde-format
 msgid "Effects and Connections"
-msgstr "Maisíochtaí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, removeEffect)
 #. i18n: ectx: property (text), widget (QToolButton, addEffect)
@@ -234,9 +226,9 @@ msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: filterEffectTool/FilterEffectEditWidget.ui:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter Presets"
-msgstr "Cuir Scagaire Leis"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: filterEffectTool/FilterEffectEditWidget.ui:116
@@ -246,16 +238,14 @@ msgid "Effect Properties"
 msgstr ""
 
 #: filterEffectTool/FilterRemoveCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove filter effect"
-msgstr "Uirlis Eagarthóireachta Patrún"
+msgstr ""
 
 #: filterEffectTool/FilterStackSetCommand.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
-msgstr "Uirlis Eagarthóireachta Patrún"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:439
 #, kde-format
@@ -268,9 +258,9 @@ msgid "View and edit filter"
 msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:453
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove filter from object"
-msgstr "Uirlis Eagarthóireachta Patrún"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:457
 #, kde-format
@@ -298,15 +288,14 @@ msgid "H:"
 msgstr "A:"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:509
-#, fuzzy, kde-format
-#| msgid "Effects"
+#, kde-format
 msgid "Effect Region"
-msgstr "Maisíochtaí"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter effects editing"
-msgstr "Cuir Scagaire Leis"
+msgstr ""
 
 #: KarbonGradientTool.cpp:199
 #, kde-format
@@ -339,10 +328,9 @@ msgid "Predefined Gradients"
 msgstr "Grádáin Réamhshainithe"
 
 #: KarbonGradientToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Gradient Editing Tool"
+#, kde-format
 msgid "Gradient editing"
-msgstr "Uirlis Eagarthóireachta Grádán"
+msgstr ""
 
 #: KarbonPatternOptionsWidget.cpp:22
 #, kde-format
@@ -415,319 +403,6 @@ msgid "Patterns"
 msgstr "Patrúin"
 
 #: KarbonPatternToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Pattern Editing Tool"
+#, kde-format
 msgid "Pattern editing"
-msgstr "Uirlis Eagarthóireachta Patrún"
-
-#, fuzzy
-#~| msgid "..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~| msgid "A calligraphic shape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A calligraphic shape"
-#~ msgstr "Giuirléid challagrafaíochta"
-
-#, fuzzy
-#~| msgid "Calligraphic Shape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calligraphic Shape"
-#~ msgstr "Giuirléid Challagrafaíochta"
-
-#, fuzzy
-#~| msgid "Save profile as..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Save profile as..."
-#~ msgstr "Sábháil an phróifíl mar..."
-
-#, fuzzy
-#~| msgid "Width:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Width:"
-#~ msgstr "Leithead:"
-
-#, fuzzy
-#~| msgid "Angle:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Angle:"
-#~ msgstr "Uillinn:"
-
-#, fuzzy
-#~| msgid "Mass:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mass:"
-#~ msgstr "Mais:"
-
-#, fuzzy
-#~| msgid "Current"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Current"
-#~ msgstr "Reatha"
-
-#, fuzzy
-#~| msgid "Profile name"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Profile name"
-#~ msgstr "Ainm na próifíle"
-
-#, fuzzy
-#~| msgid "Mouse"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mouse"
-#~ msgstr "Luch"
-
-#, fuzzy
-#~| msgid "Fill"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fill"
-#~ msgstr "Líon"
-
-#, fuzzy
-#~| msgid "Calligraphic Shape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calligraphy"
-#~ msgstr "Giuirléid Challagrafaíochta"
-
-#, fuzzy
-#~| msgid "Effects"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Effects"
-#~ msgstr "Maisíochtaí"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove filter from object"
-#~ msgstr "Uirlis Eagarthóireachta Patrún"
-
-#, fuzzy
-#~| msgid "Add Filter"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add Filter"
-#~ msgstr "Cuir Scagaire Leis"
-
-#, fuzzy
-#~| msgid "X:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "X:"
-#~ msgstr "X:"
-
-#, fuzzy
-#~| msgid "Y:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Y:"
-#~ msgstr "Y:"
-
-#, fuzzy
-#~| msgid "W:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "W:"
-#~ msgstr "L:"
-
-#, fuzzy
-#~| msgid "H:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "H:"
-#~ msgstr "A:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Filter effects editing"
-#~ msgstr "Cuir Scagaire Leis"
-
-#, fuzzy
-#~| msgid "Edit Gradient"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit Gradient"
-#~ msgstr "Cuir Grádán in Eagar"
-
-#, fuzzy
-#~| msgid "Predefined Gradients"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Predefined Gradients"
-#~ msgstr "Grádáin Réamhshainithe"
-
-#, fuzzy
-#~| msgid "Gradient Editing Tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Gradient editing"
-#~ msgstr "Uirlis Eagarthóireachta Grádán"
-
-#, fuzzy
-#~| msgid "Original"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Original"
-#~ msgstr "Bunúsach"
-
-#, fuzzy
-#~| msgid "Tiled"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Tiled"
-#~ msgstr "Tílithe"
-
-#, fuzzy
-#~| msgid "Stretched"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Stretched"
-#~ msgstr "Sínte"
-
-#, fuzzy
-#~| msgid "Top Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Top Left"
-#~ msgstr "Barr ar Chlé"
-
-#, fuzzy
-#~| msgid "Top"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Top"
-#~ msgstr "Barr"
-
-#, fuzzy
-#~| msgid "Top Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Top Right"
-#~ msgstr "Barr ar Dheis"
-
-#, fuzzy
-#~| msgid "Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Left"
-#~ msgstr "Ar Chlé"
-
-#, fuzzy
-#~| msgid "Center"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Center"
-#~ msgstr "Lár"
-
-#, fuzzy
-#~| msgid "Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Right"
-#~ msgstr "Ar Dheis"
-
-#, fuzzy
-#~| msgid "Bottom Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bottom Left"
-#~ msgstr "Bun ar Chlé"
-
-#, fuzzy
-#~| msgid "Bottom"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bottom"
-#~ msgstr "Bun"
-
-#, fuzzy
-#~| msgid "Bottom Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bottom Right"
-#~ msgstr "Bun ar dheis"
-
-#, fuzzy
-#~| msgid "Pattern Options"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pattern Options"
-#~ msgstr "Roghanna Patrúin"
-
-#, fuzzy
-#~| msgid "Patterns"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Patterns"
-#~ msgstr "Patrúin"
-
-#, fuzzy
-#~| msgid "Pattern Editing Tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pattern editing"
-#~ msgstr "Uirlis Eagarthóireachta Patrún"
-
-#~ msgid "Target:"
-#~ msgstr "Sprioc:"
-
-#, fuzzy
-#~| msgctxt "Linear gradient type"
-#~| msgid "Linear"
-#~ msgid "Line"
-#~ msgstr "Líneach"
-
-#~ msgid "Type:"
-#~ msgstr "Cineál:"
-
-#~ msgctxt "Linear gradient type"
-#~ msgid "Linear"
-#~ msgstr "Líneach"
-
-#~ msgctxt "Radial gradient type"
-#~ msgid "Radial"
-#~ msgstr "Gathach"
-
-#~ msgctxt "Conical gradient type"
-#~ msgid "Conical"
-#~ msgstr "Cónúil"
-
-#~ msgid "Repeat:"
-#~ msgstr "Arís:"
-
-#~ msgctxt "No gradient spread"
-#~ msgid "None"
-#~ msgstr "Neamhní"
-
-#~ msgid "Reflect"
-#~ msgstr "Frithchaith"
-
-#~ msgid "Repeat"
-#~ msgstr "Arís"
-
-#~ msgid "Overall opacity:"
-#~ msgstr "Teimhneacht fhoriomlán:"
-
-#~ msgid "&Add to Predefined Gradients"
-#~ msgstr "&Cuir le Grádáin Réamhshainithe"
-
-#~ msgid "Pattern Size"
-#~ msgstr "Méid an Phatrúin"
-
-#~ msgid "Stroke"
-#~ msgstr "Stríoc"
-
-#~ msgid "Precision:"
-#~ msgstr "Beachtas:"
-
-#~ msgctxt "The raw line data"
-#~ msgid "Raw"
-#~ msgstr "Amh"
-
-#~ msgid "Curve"
-#~ msgstr "Cuar"
-
-#~ msgid "Straight"
-#~ msgstr "Sraith"
-
-#~ msgid "Optimize"
-#~ msgstr "Optamaigh"
-
-#~ msgid "Exactness:"
-#~ msgstr "Cruinneas:"
-
-#~ msgid "Combine angle:"
-#~ msgstr "Uillinn chomhcheangail:"
-
-#~ msgid "Freehand Path Drawing Tool"
-#~ msgstr "Uirlis Líníochta Saorláimhe"
-
-#~ msgid "Gradient tool"
-#~ msgstr "Uirlis ghrádáin"
-
-#~ msgid "Pattern tool"
-#~ msgstr "Uirlis phatrúin"
-
-#~ msgid "Pencil tool"
-#~ msgstr "Uirlis phionsail"
-
-#~ msgid "Choose Pattern"
-#~ msgstr "Roghnaigh Patrún"
+msgstr ""

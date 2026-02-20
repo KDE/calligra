@@ -18,19 +18,19 @@ msgstr ""
 "3 : 4\n"
 
 #: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Format:"
-msgstr "Foirm"
+msgstr ""
 
 #: ChapterVariable.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number"
-msgstr "Uimhir Leathanaigh"
+msgstr ""
 
 #: ChapterVariable.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "Name"
-msgstr "Ainm Fada"
+msgstr ""
 
 #: ChapterVariable.cpp:206
 #, kde-format
@@ -224,9 +224,9 @@ msgid "..."
 msgstr "..."
 
 #: InfoVariableFactory.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Author Name"
-msgstr "Ainm Fada"
+msgstr ""
 
 #: InfoVariableFactory.cpp:32
 #, kde-format
@@ -239,9 +239,9 @@ msgid "Subject"
 msgstr "Ábhar"
 
 #: InfoVariableFactory.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "File Name"
-msgstr "Ainm Fada"
+msgstr ""
 
 #: InfoVariableFactory.cpp:56
 #, kde-format
@@ -264,14 +264,14 @@ msgid "Page Number"
 msgstr "Uimhir Leathanaigh"
 
 #: UserVariableFactory.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom"
-msgstr "Formáid saincheaptha"
+msgstr ""
 
 #: UserVariableOptionsWidget.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Name:"
-msgstr "Ainm Fada"
+msgstr ""
 
 #: UserVariableOptionsWidget.cpp:45
 #, kde-format
@@ -319,9 +319,9 @@ msgid "Time"
 msgstr "Am"
 
 #: UserVariableOptionsWidget.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula"
-msgstr "Foirm"
+msgstr ""
 
 #: UserVariableOptionsWidget.cpp:70
 #, kde-format
@@ -352,374 +352,3 @@ msgstr ""
 #, kde-format
 msgid "Delete Variable"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Date Correction:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Date Correction:"
-#~ msgstr "Ceartú Dáta:"
-
-#, fuzzy
-#~| msgid " days"
-#~ msgctxt "(qtundo-format)"
-#~ msgid " days"
-#~ msgstr " lá"
-
-#, fuzzy
-#~| msgid "Select the way the date should be displayed:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select the way the date should be displayed:"
-#~ msgstr "Roghnaigh an chaoi ar mian leat an dáta a thaispeáint:"
-
-#, fuzzy
-#~| msgid "Custom format"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Custom format"
-#~ msgstr "Formáid saincheaptha"
-
-#, fuzzy
-#~| msgid "..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Format:"
-#~ msgstr "Foirm"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Name"
-#~ msgstr "Ainm Fada"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number"
-#~ msgstr "Uimhir Leathanaigh"
-
-#, fuzzy
-#~| msgid "Number without separator"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number and name without separator"
-#~ msgstr "Uimhir gan deighilteoir"
-
-#, fuzzy
-#~| msgid "Number without separator"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number without separator"
-#~ msgstr "Uimhir gan deighilteoir"
-
-#, fuzzy
-#~| msgid "Level:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Level:"
-#~ msgstr "Leibhéal:"
-
-#, fuzzy
-#~| msgid "Chapter"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Chapter"
-#~ msgstr "Caibidil"
-
-#, fuzzy
-#~| msgctxt "date that can not be changed later"
-#~| msgid "Date (Fixed)"
-#~ msgctxt "(qtundo-format) date that can not be changed later"
-#~ msgid "Date (Fixed)"
-#~ msgstr "Dáta (Seasta)"
-
-#, fuzzy
-#~| msgid "Locale date format"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Locale date format"
-#~ msgstr "Formáid dátaí an logchaighdeáin"
-
-#, fuzzy
-#~| msgid "Short locale date format"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Short locale date format"
-#~ msgstr "Gearrfhormáid dátaí an logchaighdeáin"
-
-#, fuzzy
-#~| msgid "Locale date & time format"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Locale date & time format"
-#~ msgstr "Formáid dátaí agus amanna sa logchaighdeán"
-
-#, fuzzy
-#~| msgid "Short locale date & time format"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Short locale date & time format"
-#~ msgstr "Gearrfhormáid dátaí agus amanna sa logchaighdeán"
-
-#, fuzzy
-#~| msgid "Day"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Day"
-#~ msgstr "Lá"
-
-#, fuzzy
-#~| msgid "Month"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Month"
-#~ msgstr "Mí"
-
-#, fuzzy
-#~| msgid "Year"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Year"
-#~ msgstr "Bliain"
-
-#, fuzzy
-#~| msgid "Hour"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Hour"
-#~ msgstr "Uair"
-
-#, fuzzy
-#~| msgid "Minute"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Minute"
-#~ msgstr "Nóiméad"
-
-#, fuzzy
-#~| msgid "Second"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Second"
-#~ msgstr "Soicind"
-
-#, fuzzy
-#~| msgid "Flexible Digits (1-31)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Flexible Digits (1-31)"
-#~ msgstr "Digití Solúbtha (1-31)"
-
-#, fuzzy
-#~| msgid "2 Digits (01-31)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "2 Digits (01-31)"
-#~ msgstr "2 Dhigit (01-31)"
-
-#, fuzzy
-#~| msgid "Abbreviated Name"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Abbreviated Name"
-#~ msgstr "Ainm Giorraithe"
-
-#, fuzzy
-#~| msgid "Long Name"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Long Name"
-#~ msgstr "Ainm Fada"
-
-#, fuzzy
-#~| msgid "Flexible Digits (1-12)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Flexible Digits (1-12)"
-#~ msgstr "Digití Solúbtha (1-12)"
-
-#, fuzzy
-#~| msgid "2 Digits (01-12)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "2 Digits (01-12)"
-#~ msgstr "2 Dhigit (01-12)"
-
-#, fuzzy
-#~| msgid "Possessive Abbreviated Name"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Possessive Abbreviated Name"
-#~ msgstr "Ainm Giorraithe Sealbhach"
-
-#, fuzzy
-#~| msgid "Possessive Long Name"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Possessive Long Name"
-#~ msgstr "Ainm Fada Sealbhach"
-
-#, fuzzy
-#~| msgid "2 Digits (01-99)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "2 Digits (01-99)"
-#~ msgstr "2 Dhigit (01-99)"
-
-#, fuzzy
-#~| msgid "4 Digits"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "4 Digits"
-#~ msgstr "4 Dhigit"
-
-#, fuzzy
-#~| msgid "Flexible Digits (1-23)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Flexible Digits (1-23)"
-#~ msgstr "Digití Solúbtha (1-23)"
-
-#, fuzzy
-#~| msgid "2 Digits (01-23)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "2 Digits (01-23)"
-#~ msgstr "2 Dhigit (01-23)"
-
-#, fuzzy
-#~| msgid "Flexible Digits (1-59)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Flexible Digits (1-59)"
-#~ msgstr "Digití Solúbtha (1-59)"
-
-#, fuzzy
-#~| msgid "2 Digits (01-59)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "2 Digits (01-59)"
-#~ msgstr "2 Dhigit (01-59)"
-
-#, fuzzy
-#~| msgid "am/pm"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "am/pm"
-#~ msgstr "rn/in"
-
-#, fuzzy
-#~| msgid "AM/PM"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "AM/PM"
-#~ msgstr "RN/IN"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Author Name"
-#~ msgstr "Ainm Fada"
-
-#, fuzzy
-#~| msgid "Title"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Title"
-#~ msgstr "Teideal"
-
-#, fuzzy
-#~| msgid "Subject"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Subject"
-#~ msgstr "Ábhar"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "File Name"
-#~ msgstr "Ainm Fada"
-
-#, fuzzy
-#~| msgid "Keywords"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Keywords"
-#~ msgstr "Lorgfhocail"
-
-#, fuzzy
-#~| msgid "Comments"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Comments"
-#~ msgstr "Nótaí"
-
-#, fuzzy
-#~| msgid "Page Count"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page Count"
-#~ msgstr "Líon na Leathanach"
-
-#, fuzzy
-#~| msgid "Page Number"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page Number"
-#~ msgstr "Uimhir Leathanaigh"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Custom"
-#~ msgstr "Formáid saincheaptha"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Name:"
-#~ msgstr "Ainm Fada"
-
-#, fuzzy
-#~| msgid "New"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "New"
-#~ msgstr "Nua"
-
-#, fuzzy
-#~| msgid "Delete"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete"
-#~ msgstr "Scrios"
-
-#, fuzzy
-#~| msgid "String"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "String"
-#~ msgstr "Teaghrán"
-
-#, fuzzy
-#~| msgid "Boolean"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Boolean"
-#~ msgstr "Boole"
-
-#, fuzzy
-#~| msgid "Percentage"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Percentage"
-#~ msgstr "Céatadán"
-
-#, fuzzy
-#~| msgid "Currency"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Currency"
-#~ msgstr "Airgeadra"
-
-#, fuzzy
-#~| msgid "Date"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Date"
-#~ msgstr "Dáta"
-
-#, fuzzy
-#~| msgid "Time"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Time"
-#~ msgstr "Am"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Formula"
-#~ msgstr "Foirm"
-
-#, fuzzy
-#~| msgid "Value:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Value:"
-#~ msgstr "Luach:"
-
-#, fuzzy
-#~| msgid "New Variable"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Name for new variable:"
-#~ msgstr "Athróg Nua"
-
-#, fuzzy
-#~| msgid "New Variable"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "New Variable"
-#~ msgstr "Athróg Nua"
-
-#, fuzzy
-#~| msgid "New Variable"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete Variable"
-#~ msgstr "Athróg Nua"
-
-#~ msgid "Fixed"
-#~ msgstr "Socraithe"
-
-#~ msgid "TextLabel"
-#~ msgstr "Lipéad"

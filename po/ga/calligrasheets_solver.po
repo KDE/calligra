@@ -23,11 +23,9 @@ msgid "Function Optimizer..."
 msgstr "Optamóir Feidhme..."
 
 #: Solver.cpp:101
-#, fuzzy
-#| msgid "Optimization"
 msgctxt "(qtundo-format)"
 msgid "Optimize"
-msgstr "Optamú"
+msgstr ""
 
 #. i18n: ectx: Menu (tools)
 #: solver.rc:4
@@ -87,69 +85,3 @@ msgstr "Paraiméadair:"
 #, kde-format
 msgid "Function:"
 msgstr "Feidhm:"
-
-#, fuzzy
-#~| msgid "Precision:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Precision:"
-#~ msgstr "Beachtas:"
-
-#, fuzzy
-#~| msgid "Maximum Iterations:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Maximum Iterations:"
-#~ msgstr "Uasmhéid na dTimthriallta:"
-
-#, fuzzy
-#~| msgid "Optimization"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Optimization"
-#~ msgstr "Optamú"
-
-#, fuzzy
-#~| msgid "Maximize"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Maximize"
-#~ msgstr "Uasmhéadaigh"
-
-#, fuzzy
-#~| msgid "Minimize"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Minimize"
-#~ msgstr "Íoslaghdaigh"
-
-#, fuzzy
-#~| msgid "Value:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Value:"
-#~ msgstr "Luach:"
-
-#, fuzzy
-#~| msgid "Parameters:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Parameters:"
-#~ msgstr "Paraiméadair:"
-
-#, fuzzy
-#~| msgid "Function:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Function:"
-#~ msgstr "Feidhm:"
-
-#, fuzzy
-#~| msgid "&Tools"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Tools"
-#~ msgstr "&Uirlisí"
-
-#, fuzzy
-#~| msgid "Function Optimizer..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Function Optimizer..."
-#~ msgstr "Optamóir Feidhme..."
-
-#, fuzzy
-#~| msgid "Function Optimizer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Function Optimizer"
-#~ msgstr "Optamóir Feidhme"
