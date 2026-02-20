@@ -30,10 +30,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnPlay)
 #: forms/VideoToolWidget.ui:40
-#, fuzzy, kde-format
-#| msgid "Video"
+#, kde-format
 msgid "Play Video"
-msgstr "Físeán"
+msgstr ""
 
 #: FullScreenPlayer.cpp:54 VideoTool.cpp:34
 #, kde-format
@@ -79,61 +78,3 @@ msgstr "Físeán, leabaithe nó lánscáileáin"
 #, kde-format
 msgid "Video handling"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Video"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Play Video"
-#~ msgstr "Físeán"
-
-#, fuzzy
-#~| msgid "Play"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Play"
-#~ msgstr "Seinn"
-
-#, fuzzy
-#~| msgid "Pause"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pause"
-#~ msgstr "Sos"
-
-#, fuzzy
-#~| msgid "Stop"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Stop"
-#~ msgstr "Stad"
-
-#, fuzzy
-#~| msgid "Unmute"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unmute"
-#~ msgstr "Le fuaim"
-
-#, fuzzy
-#~| msgid "Mute"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mute"
-#~ msgstr "Gan fuaim"
-
-#, fuzzy
-#~| msgid "Save as part of document"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Save as part of document"
-#~ msgstr "Sábháil mar chuid de cháipéis"
-
-#, fuzzy
-#~| msgid "Video"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Video"
-#~ msgstr "Físeán"
-
-#, fuzzy
-#~| msgid "Video, embedded or fullscreen"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Video, embedded or fullscreen"
-#~ msgstr "Físeán, leabaithe nó lánscáileáin"
-
-#, fuzzy
-#~ msgid "Video tool"
-#~ msgstr "Físeán"

@@ -26,9 +26,3 @@ msgstr "Radhac 3T"
 #, kde-format
 msgid "Shape that displays a simple 3D scene."
 msgstr ""
-
-#, fuzzy
-#~| msgid "3D Scene"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "3D Scene"
-#~ msgstr "Radhac 3T"

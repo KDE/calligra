@@ -28,19 +28,19 @@ msgid "Your emails"
 msgstr "seoc@iolfree.ie,kscanne@gmail.com"
 
 #: calligraconverter.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "CalligraConverter"
-msgstr "Tiontaire Cáipéise KOffice"
+msgstr ""
 
 #: calligraconverter.cpp:181
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calligra Document Converter"
-msgstr "Tiontaire Cáipéise KOffice"
+msgstr ""
 
 #: calligraconverter.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 2001-%1 Calligra developers"
-msgstr "© 2001-2004 Forbróirí KOffice"
+msgstr ""
 
 #: calligraconverter.cpp:184
 #, kde-format
@@ -126,131 +126,3 @@ msgstr "Níor aimsíodh cineál MIME; bain triail as an rogha -mimetype"
 #, kde-format
 msgid "*** The conversion failed! ***"
 msgstr "*** Theip ar thiontú! ***"
-
-#, fuzzy
-#~| msgctxt "NAME OF TRANSLATORS"
-#~| msgid "Your names"
-#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
-
-#, fuzzy
-#~| msgctxt "EMAIL OF TRANSLATORS"
-#~| msgid "Your emails"
-#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "seoc@iolfree.ie,kscanne@gmail.com"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "CalligraConverter"
-#~ msgstr "Tiontaire Cáipéise KOffice"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calligra Document Converter"
-#~ msgstr "Tiontaire Cáipéise KOffice"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copyright 2001-%1 Calligra developers"
-#~ msgstr "© 2001-2004 Forbróirí KOffice"
-
-#, fuzzy
-#~| msgid "David Faure"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "David Faure"
-#~ msgstr "David Faure"
-
-#, fuzzy
-#~| msgid "Nicolas Goutte"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Nicolas Goutte"
-#~ msgstr "Nicolas Goutte"
-
-#, fuzzy
-#~| msgid "Dan Leinir Turthra Jensen"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dan Leinir Turthra Jensen"
-#~ msgstr "Dan Leinir Turthra Jensen"
-
-#, fuzzy
-#~| msgid "Input file"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Input file"
-#~ msgstr "Inchomhad"
-
-#, fuzzy
-#~| msgid "Output file"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Output file"
-#~ msgstr "Aschomhad"
-
-#, fuzzy
-#~| msgid "Make a backup of the destination file"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Make a backup of the destination file"
-#~ msgstr "Déan cúltaca den sprioc-chomhad"
-
-#, fuzzy
-#~| msgid "Batch mode: do not show dialogs"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Batch mode: do not show dialogs"
-#~ msgstr "Mód baiscphróiseála: ná taispeáin dialóga"
-
-#, fuzzy
-#~| msgid "Interactive mode: show dialogs (default)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Interactive mode: show dialogs (default)"
-#~ msgstr "Mód idirghníomhach: taispeáin dialóga (réamhshocrú)"
-
-#, fuzzy
-#~| msgid "Mimetype of the output file"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mimetype of the output file"
-#~ msgstr "Cineál MIME den aschomhad"
-
-#, fuzzy
-#~| msgid "The print orientation. This could be either Portrait or Landscape."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "The print orientation. This could be either Portrait or Landscape."
-#~ msgstr "Treoshuíomh priontála. Is féidir Portráid nó Tírdhreach a roghnú."
-
-#, fuzzy
-#~| msgid "The paper size. A4, Legal, Letter, ..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "The paper size. A4, Legal, Letter, ..."
-#~ msgstr "Páipéarmhéid. A4, Dlí, Litir, ..."
-
-#, fuzzy
-#~| msgid "Two arguments required"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Two arguments required"
-#~ msgstr "Dhá argóint de dhíth"
-
-#, fuzzy
-#~| msgid "Mimetype for input file %1 not found!"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mimetype for input file %1 not found!"
-#~ msgstr "Níor aimsíodh cineál MIME d'inchomhad %1!"
-
-#, fuzzy
-#~| msgid "Mimetype not found %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mimetype not found %1"
-#~ msgstr "Cineál MIME gan aimsiú %1"
-
-#, fuzzy
-#~| msgid "Mimetype not found, try using the -mimetype option"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mimetype not found, try using the -mimetype option"
-#~ msgstr "Níor aimsíodh cineál MIME; bain triail as an rogha -mimetype"
-
-#, fuzzy
-#~| msgid "*** The conversion failed! ***"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "*** The conversion failed! ***"
-#~ msgstr "*** Theip ar thiontú! ***"
-
-#~ msgid "KOConverter"
-#~ msgstr "KOConverter"

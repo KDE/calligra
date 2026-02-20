@@ -18,22 +18,19 @@ msgstr ""
 "3 : 4\n"
 
 #: ChangeImageCommand.cpp:26
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change image"
-msgstr "Athraigh an íomhá"
+msgstr ""
 
 #: ChangeImageCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop image"
-msgstr "Athraigh an íomhá"
+msgstr ""
 
 #: ChangeImageCommand.cpp:57
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change image color mode"
-msgstr "Athraigh an íomhá"
+msgstr ""
 
 #: ClipCommand.cpp:18
 msgctxt "(qtundo-format)"
@@ -89,11 +86,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbContour)
 #: forms/wdgPictureTool.ui:148
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Contour image (by image analysis)"
+#, kde-format
 msgid "Contour (by image analysis)"
-msgstr "Íomhá chomhlíne (trí anailís íomhá)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: forms/wdgPictureTool.ui:178
@@ -138,68 +133,6 @@ msgid "Watermark"
 msgstr "Comhartha Uisce"
 
 #: PictureToolFactory.cpp:18
-#, fuzzy, kde-format
-#| msgid "Picture editing tool"
+#, kde-format
 msgid "Picture editing"
-msgstr "Uirlis eagarthóireachta pictiúr"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Contour image (by image analysis)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Contour (by image analysis)"
-#~ msgstr "Íomhá chomhlíne (trí anailís íomhá)"
-
-#, fuzzy
-#~| msgid "Image"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Image"
-#~ msgstr "Íomhá"
-
-#, fuzzy
-#~| msgid "Image shape that can display jpg, png etc."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Image shape that can display jpg, png etc."
-#~ msgstr "Giuirléid íomhá a thaispeánann jpg, png, srl."
-
-#, fuzzy
-#~| msgid "Standard"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Standard"
-#~ msgstr "Caighdeánach"
-
-#, fuzzy
-#~| msgid "Greyscale"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Greyscale"
-#~ msgstr "Liathscála"
-
-#, fuzzy
-#~| msgid "Monochrome"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Monochrome"
-#~ msgstr "Monacrómach"
-
-#, fuzzy
-#~| msgid "Watermark"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Watermark"
-#~ msgstr "Comhartha Uisce"
-
-#, fuzzy
-#~| msgid "Picture editing tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Picture editing"
-#~ msgstr "Uirlis eagarthóireachta pictiúr"
-
-#~ msgid "Open"
-#~ msgstr "Oscail"
-
-#~ msgid "Picture Tool"
-#~ msgstr "Uirlis Phictiúir"
-
-#~ msgid "Picture Shape"
-#~ msgstr "Giuirléid Phictiúir"
-
-#~ msgid "A shape which displays a picture"
-#~ msgstr "Giuirléid a thaispeánann pictiúr"
+msgstr ""

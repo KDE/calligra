@@ -236,137 +236,115 @@ msgid "Tied notes"
 msgstr "Nótaí ceangailte"
 
 #: commands/AddBarsCommand.cpp:19
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add measures"
-msgstr "Cuir tomhais leis"
+msgstr ""
 
 #: commands/AddDotCommand.cpp:18
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add dot"
-msgstr "Cuir ponc leis"
+msgstr ""
 
 #: commands/AddNoteCommand.cpp:34
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
-msgstr "Socraigh tréimhse an chorda"
+msgstr ""
 
 #: commands/AddNoteCommand.cpp:36
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add note"
-msgstr "Cuir nóta leis"
+msgstr ""
 
 #: commands/AddPartCommand.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add part"
-msgstr "Cuir páirt leis"
+msgstr ""
 
 #: commands/AddPartCommand.cpp:26
-#, fuzzy, kde-format
-#| msgid "Parts"
+#, kde-format
 msgid "Part %1"
-msgstr "Comhpháirteanna"
+msgstr ""
 
 #: commands/ChangePartDetailsCommand.cpp:36
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change part details"
-msgstr "Athraigh mionsonraí na páirte"
+msgstr ""
 
 #: commands/CreateChordCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add chord"
-msgstr "Cuir corda leis"
+msgstr ""
 
 #: commands/CreateChordCommand.cpp:31
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add rest"
-msgstr "Cuir sos leis"
+msgstr ""
 
 #: commands/MakeRestCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert chord to rest"
-msgstr "Athraigh an corda go sos"
+msgstr ""
 
 #: commands/RemoveBarCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
-msgstr "Bain barra"
+msgstr ""
 
 #: commands/RemoveChordCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
-msgstr "Bain sos"
+msgstr ""
 
 #: commands/RemoveChordCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
-msgstr "Bain corda"
+msgstr ""
 
 #: commands/RemoveNoteCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove note"
-msgstr "Bain nóta"
+msgstr ""
 
 #: commands/RemovePartCommand.cpp:21
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove part"
-msgstr "Bain páirt"
+msgstr ""
 
 #: commands/RemoveStaffElementCommand.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
-msgstr "Bain eochair"
+msgstr ""
 
 #: commands/RemoveStaffElementCommand.cpp:27
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove staff element"
-msgstr "Bain ball cléithe"
+msgstr ""
 
 #: commands/SetAccidentalsCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
-msgstr "Socraigh seachtráin"
+msgstr ""
 
 #: commands/SetClefCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change clef"
-msgstr "Athraigh an eochair"
+msgstr ""
 
 #: commands/SetKeySignatureCommand.cpp:26
 #: commands/SetKeySignatureCommand.cpp:76
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change key signature"
-msgstr "Athraigh an gléaschomhartha"
+msgstr ""
 
 #: commands/SetTimeSignatureCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change time signature"
-msgstr "Athraigh an t-amchomhartha"
+msgstr ""
 
 #: commands/ToggleTiedNoteCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Toggle Note Tie"
-msgstr "Scoránaigh Nasc idir Nótaí"
+msgstr ""
 
 #: dialogs/KeySignatureDialog.cpp:15
 #, kde-format
@@ -500,10 +478,9 @@ msgid "Export"
 msgstr "Easpórtáil"
 
 #: MusicShape.cpp:71
-#, fuzzy, kde-format
-#| msgid "Parts"
+#, kde-format
 msgid "Part 1"
-msgstr "Comhpháirteanna"
+msgstr ""
 
 #: MusicShapeFactory.cpp:34
 #, kde-format
@@ -521,10 +498,9 @@ msgid "Parts"
 msgstr "Comhpháirteanna"
 
 #: MusicToolFactory.cpp:18
-#, fuzzy, kde-format
-#| msgid "Music editing tool, parts"
+#, kde-format
 msgid "Music editing, parts"
-msgstr "Uirlis eagarthóireachta ceoil, comhpháirteanna"
+msgstr ""
 
 #: SimpleEntryTool.cpp:227
 #, kde-format
@@ -542,16 +518,15 @@ msgid "Key signature"
 msgstr "Gléaschomhartha"
 
 #: SimpleEntryTool.cpp:681
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add how many measures?"
-msgstr "Cuir tomhais leis"
+msgstr ""
 
 #: SimpleEntryTool.cpp:743
-#, fuzzy, kde-format
-#| msgid "Import"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import"
-msgstr "Iompórtáil"
+msgstr ""
 
 #: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
 #, kde-format
@@ -559,474 +534,12 @@ msgid "MusicXML files (*.xml)"
 msgstr ""
 
 #: SimpleEntryTool.cpp:761
-#, fuzzy, kde-format
-#| msgid "Export"
+#, kde-format
 msgctxt "@title:window"
 msgid "Export"
-msgstr "Easpórtáil"
+msgstr ""
 
 #: SimpleEntryToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Music editing tool"
+#, kde-format
 msgid "Music editing"
-msgstr "Uirlis eagarthóireachta ceoil"
-
-#, fuzzy
-#~| msgid "Region"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Region"
-#~ msgstr "Réigiún"
-
-#, fuzzy
-#~| msgid "Measure"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Measure"
-#~ msgstr "Tomhas"
-
-#, fuzzy
-#~| msgid "through"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "through"
-#~ msgstr "trí"
-
-#, fuzzy
-#~| msgid "through end of piece"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "through end of piece"
-#~ msgstr "trí dheireadh an phíosa"
-
-#, fuzzy
-#~| msgid "to next key change"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "to next key change"
-#~ msgstr "go dtí an chéad athrú gléis eile"
-
-#, fuzzy
-#~| msgid "Staves"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Staves"
-#~ msgstr "Cliatha"
-
-#, fuzzy
-#~| msgid "Update all staves"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Update all staves"
-#~ msgstr "Nuashonraigh gach cliath"
-
-#, fuzzy
-#~| msgid "Only update selected staff"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Only update selected staff"
-#~ msgstr "Nuashonraigh an cliath roghnaithe amháin"
-
-#, fuzzy
-#~| msgid "Name:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Name:"
-#~ msgstr "Ainm:"
-
-#, fuzzy
-#~| msgid "Short name:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Short name:"
-#~ msgstr "Ainm gearr:"
-
-#, fuzzy
-#~| msgid "Staves:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Staves:"
-#~ msgstr "Cliatha:"
-
-#, fuzzy
-#~| msgid "Voice 1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Voice 1"
-#~ msgstr "Guth 1"
-
-#, fuzzy
-#~| msgid "Voice 2"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Voice 2"
-#~ msgstr "Guth 2"
-
-#, fuzzy
-#~| msgid "Voice 3"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Voice 3"
-#~ msgstr "Guth 3"
-
-#, fuzzy
-#~| msgid "Voice 4"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Voice 4"
-#~ msgstr "Guth 4"
-
-#, fuzzy
-#~| msgid "..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~| msgid "Double flat"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Double flat"
-#~ msgstr "Maol dúbailte"
-
-#, fuzzy
-#~| msgctxt "lowered half a step"
-#~| msgid "Flat"
-#~ msgctxt "(qtundo-format) lowered half a step"
-#~ msgid "Flat"
-#~ msgstr "Maol"
-
-#, fuzzy
-#~| msgid "Natural"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Natural"
-#~ msgstr "Nádúrtha"
-
-#, fuzzy
-#~| msgctxt "raised half a step"
-#~| msgid "Sharp"
-#~ msgctxt "(qtundo-format) raised half a step"
-#~ msgid "Sharp"
-#~ msgstr "Géar"
-
-#, fuzzy
-#~| msgid "Double sharp"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Double sharp"
-#~ msgstr "Géar dúbailte"
-
-#, fuzzy
-#~| msgid "%1 flats"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "%1 flats"
-#~ msgstr "%1 maol"
-
-#, fuzzy
-#~| msgid "%1 sharps"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "%1 sharps"
-#~ msgstr "%1 géar"
-
-#, fuzzy
-#~| msgid "Dots"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dots"
-#~ msgstr "Poncanna"
-
-#, fuzzy
-#~| msgid "Eraser"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Eraser"
-#~ msgstr "Léirscriosán"
-
-#, fuzzy
-#~| msgid "Ab Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ab Major"
-#~ msgstr "Mórghléas A♭ "
-
-#, fuzzy
-#~| msgid "Eb Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Eb Major"
-#~ msgstr "Mórghléas E♭"
-
-#, fuzzy
-#~| msgid "Bb Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bb Major"
-#~ msgstr "Mórghléas B♭"
-
-#, fuzzy
-#~| msgid "F Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "F Major"
-#~ msgstr "Mórghléas F"
-
-#, fuzzy
-#~| msgid "C Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "C Major"
-#~ msgstr "Mórghléas C"
-
-#, fuzzy
-#~| msgid "G Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "G Major"
-#~ msgstr "Mórghléas G"
-
-#, fuzzy
-#~| msgid "D Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "D Major"
-#~ msgstr "Mórghléas D"
-
-#, fuzzy
-#~| msgid "A Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A Major"
-#~ msgstr "Mórghléas A"
-
-#, fuzzy
-#~| msgid "E Major"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "E Major"
-#~ msgstr "Mórghléas E"
-
-#, fuzzy
-#~| msgctxt "Other key signature"
-#~| msgid "Other"
-#~ msgctxt "(qtundo-format) Other key signature"
-#~ msgid "Other"
-#~ msgstr "Eile"
-
-#, fuzzy
-#~| msgid "note"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "note"
-#~ msgstr "nóta"
-
-#, fuzzy
-#~| msgid "rest"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "rest"
-#~ msgstr "sos"
-
-#, fuzzy
-#~| msgid "Double whole "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Double whole "
-#~ msgstr "Lán-nóta dúbailte "
-
-#, fuzzy
-#~| msgid "Whole "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Whole "
-#~ msgstr "Lán-Nóta "
-
-#, fuzzy
-#~| msgid "Half "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Half "
-#~ msgstr "Leathnóta "
-
-#, fuzzy
-#~| msgid "Quarter "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Quarter "
-#~ msgstr "Ceathrú "
-
-#, fuzzy
-#~| msgid "Eighth "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Eighth "
-#~ msgstr "Ochtú "
-
-#, fuzzy
-#~| msgid "16th "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "16th "
-#~ msgstr "16ú "
-
-#, fuzzy
-#~| msgid "32nd "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "32nd "
-#~ msgstr "32ú "
-
-#, fuzzy
-#~| msgid "64th "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "64th "
-#~ msgstr "64ú "
-
-#, fuzzy
-#~| msgid "128th "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "128th "
-#~ msgstr "128ú "
-
-#, fuzzy
-#~| msgid "Unknown note"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unknown note"
-#~ msgstr "Nóta anaithnid"
-
-#, fuzzy
-#~| msgid "Unknown rest"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unknown rest"
-#~ msgstr "Sos anaithnid"
-
-#, fuzzy
-#~| msgid "Select"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select"
-#~ msgstr "Roghnaigh"
-
-#, fuzzy
-#~| msgctxt "Treble clef"
-#~| msgid "Treble"
-#~ msgctxt "(qtundo-format) Treble clef"
-#~ msgid "Treble"
-#~ msgstr "Eochair na Tribile"
-
-#, fuzzy
-#~| msgctxt "Bass clef"
-#~| msgid "Bass"
-#~ msgctxt "(qtundo-format) Bass clef"
-#~ msgid "Bass"
-#~ msgstr "Dordeochair"
-
-#, fuzzy
-#~| msgctxt "Soprano clef"
-#~| msgid "Soprano"
-#~ msgctxt "(qtundo-format) Soprano clef"
-#~ msgid "Soprano"
-#~ msgstr "Eochair an tsopráin"
-
-#, fuzzy
-#~| msgctxt "Alto clef"
-#~| msgid "Alto"
-#~ msgctxt "(qtundo-format) Alto clef"
-#~ msgid "Alto"
-#~ msgstr "Alteochair"
-
-#, fuzzy
-#~| msgctxt "Tenor clef"
-#~| msgid "Tenor"
-#~ msgctxt "(qtundo-format) Tenor clef"
-#~ msgid "Tenor"
-#~ msgstr "Eochair an teanóir"
-
-#, fuzzy
-#~| msgid "C clef on line %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "C clef on line %1"
-#~ msgstr "C-eochair ar líne %1"
-
-#, fuzzy
-#~| msgid "Unknown clef"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unknown clef"
-#~ msgstr "Eochair anaithnid"
-
-#, fuzzy
-#~| msgid "Tied notes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Tied notes"
-#~ msgstr "Nótaí ceangailte"
-
-#, fuzzy
-#~| msgid "Parts"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Part %1"
-#~ msgstr "Comhpháirteanna"
-
-#, fuzzy
-#~| msgid "Set key signature"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Set key signature"
-#~ msgstr "Faigh gléaschomhartha"
-
-#, fuzzy
-#~| msgid "Part details"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Part details"
-#~ msgstr "Mionsonraí na páirte"
-
-#, fuzzy
-#~| msgid "Parts"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Part 1"
-#~ msgstr "Comhpháirteanna"
-
-#, fuzzy
-#~| msgid "Music Shape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Music Shape"
-#~ msgstr "Giuirléid Cheoil"
-
-#, fuzzy
-#~| msgid "A shape which provides a music editor"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A shape which provides a music editor"
-#~ msgstr "Giuirléid a sholáthraíonn eagarthóir ceoil"
-
-#, fuzzy
-#~| msgid "Parts"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Parts"
-#~ msgstr "Comhpháirteanna"
-
-#, fuzzy
-#~| msgid "Music editing tool, parts"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Music editing, parts"
-#~ msgstr "Uirlis eagarthóireachta ceoil, comhpháirteanna"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import"
-#~ msgstr "Iompórtáil"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export"
-#~ msgstr "Easpórtáil"
-
-#, fuzzy
-#~| msgid "Clef"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clef"
-#~ msgstr "Eochair"
-
-#, fuzzy
-#~| msgid "Time signature"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Time signature"
-#~ msgstr "Amchomhartha"
-
-#, fuzzy
-#~| msgid "Key signature"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Key signature"
-#~ msgstr "Gléaschomhartha"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add how many measures?"
-#~ msgstr "Cuir tomhais leis"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format) @title:window"
-#~ msgid "Import"
-#~ msgstr "Iompórtáil"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format) @title:window"
-#~ msgid "Export"
-#~ msgstr "Easpórtáil"
-
-#, fuzzy
-#~| msgid "Music editing tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Music editing"
-#~ msgstr "Uirlis eagarthóireachta ceoil"
-
-#~ msgid "Music Tool"
-#~ msgstr "Uirlis Cheoil"
-
-#~ msgid "Form"
-#~ msgstr "Foirm"
-
-#~ msgid "Voices"
-#~ msgstr "Guthanna"
+msgstr ""

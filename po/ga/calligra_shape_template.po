@@ -41,9 +41,3 @@ msgstr "Oscail"
 #, kde-format
 msgid "Template shape editing"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Open"
-#~ msgstr "Oscail"

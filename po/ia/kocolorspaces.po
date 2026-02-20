@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2013, 2020, 2022.
+# SPDX-FileCopyrightText: 2013, 2020, 2022, 2026 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2022-12-14 12:29+0100\n"
+"PO-Revision-Date: 2026-02-19 17:24+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
@@ -334,7 +334,7 @@ msgstr ""
 #: lcms2/LcmsEnginePlugin.cpp:126
 #, kde-format
 msgid "L*a*b* Histogram"
-msgstr ""
+msgstr "L*a*b* Histogramma"
 
 #: lcms2/LcmsEnginePlugin.cpp:143
 #, kde-format

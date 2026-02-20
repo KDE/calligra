@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2015, 2017, 2020, 2022, 2023.
+# SPDX-FileCopyrightText: 2013, 2014, 2015, 2017, 2020, 2022, 2023, 2026 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2023-01-09 11:52+0100\n"
+"PO-Revision-Date: 2026-02-19 17:19+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: actions/AccidentalAction.cpp:52
 #, kde-format
@@ -148,7 +148,7 @@ msgstr "Quarto"
 #: actions/NoteEntryAction.cpp:65
 #, kde-format
 msgid "Eighth "
-msgstr ""
+msgstr "Octave"
 
 #: actions/NoteEntryAction.cpp:67
 #, kde-format
@@ -173,7 +173,7 @@ msgstr "128ve "
 #: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown note"
-msgstr ""
+msgstr "Nota incognoscite"
 
 #: actions/NoteEntryAction.cpp:75
 #, kde-format
@@ -206,7 +206,7 @@ msgstr "Basse"
 #, kde-format
 msgctxt "Soprano clef"
 msgid "Soprano"
-msgstr ""
+msgstr "Soprano"
 
 #: actions/SetClefAction.cpp:48
 #, kde-format
@@ -364,7 +364,7 @@ msgstr "Region"
 #: dialogs/KeySignatureDialog.ui:163
 #, kde-format
 msgid "Measure"
-msgstr ""
+msgstr "Mesura"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/KeySignatureDialog.ui:88
@@ -495,7 +495,7 @@ msgstr ""
 #: MusicTool.cpp:81
 #, kde-format
 msgid "Parts"
-msgstr ""
+msgstr "Partes"
 
 #: MusicToolFactory.cpp:18
 #, kde-format
@@ -510,12 +510,12 @@ msgstr ""
 #: SimpleEntryTool.cpp:256
 #, kde-format
 msgid "Time signature"
-msgstr ""
+msgstr "Signatura de tempore"
 
 #: SimpleEntryTool.cpp:286
 #, kde-format
 msgid "Key signature"
-msgstr ""
+msgstr "Signatura de clave"
 
 #: SimpleEntryTool.cpp:681
 #, kde-format
@@ -542,7 +542,7 @@ msgstr "Exporta"
 #: SimpleEntryToolFactory.cpp:17
 #, kde-format
 msgid "Music editing"
-msgstr ""
+msgstr "Editar musica"
 
 #, fuzzy
 #~| msgid "Region"

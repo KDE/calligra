@@ -115,16 +115,14 @@ msgid "Selected Sheet"
 msgstr "Bileog Roghnaithe"
 
 #: TableTool.cpp:754
-#, fuzzy, kde-format
-#| msgid "Table Options"
+#, kde-format
 msgid "View Options"
-msgstr "Roghanna Tábla"
+msgstr ""
 
 #: TableToolFactory.cpp:21
-#, fuzzy, kde-format
-#| msgid "Table editing tool"
+#, kde-format
 msgid "Table editing"
-msgstr "Uirlis eagarthóireachta tábla"
+msgstr ""
 
 #: ToolHeaders.cpp:279 ToolHeaders.cpp:863
 #, kde-format
@@ -142,141 +140,11 @@ msgid "Height: %1 %2"
 msgstr ""
 
 #: ToolHeaders.cpp:1031
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Hide Column"
-msgstr "Colúin:"
+msgstr ""
 
 #: ToolHeaders.cpp:1033
 #, kde-format
 msgid "Width: %1 %2"
 msgstr ""
-
-#~ msgid "Number of columns"
-#~ msgstr "Líon na gcolún"
-
-#~ msgid "Rows:"
-#~ msgstr "Rónna:"
-
-#~ msgid "Number of rows"
-#~ msgstr "Líon na rónna"
-
-#, fuzzy
-#~| msgid "Rename"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rename"
-#~ msgstr "Athainmnigh"
-
-#, fuzzy
-#~| msgid "Add"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add"
-#~ msgstr "Cuir Leis"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove"
-#~ msgstr "Bain"
-
-#, fuzzy
-#~| msgid "Enter Name:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Enter Name:"
-#~ msgstr "Iontráil Ainm:"
-
-#, fuzzy
-#~| msgid "Spreadsheet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spreadsheet"
-#~ msgstr "Scarbhileog"
-
-#, fuzzy
-#~| msgid "Spreadsheet Shape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spreadsheet Shape"
-#~ msgstr "Giuirléid Scarbhileoige"
-
-#, fuzzy
-#~| msgid "Import OpenDocument Spreadsheet File"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import OpenDocument Spreadsheet File"
-#~ msgstr "Iompórtáil Scarbhileog OpenDocument"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import"
-#~ msgstr "Iompórtáil"
-
-#, fuzzy
-#~| msgid "Export OpenDocument Spreadsheet File"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export OpenDocument Spreadsheet File"
-#~ msgstr "Easpórtáil Scarbhileog OpenDocument"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export"
-#~ msgstr "Easpórtáil"
-
-#, fuzzy
-#~| msgid "Sheets"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sheets"
-#~ msgstr "Bileoga"
-
-#, fuzzy
-#~| msgid "Sheet:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sheet:"
-#~ msgstr "Bileog:"
-
-#, fuzzy
-#~| msgid "Selected Sheet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Selected Sheet"
-#~ msgstr "Bileog Roghnaithe"
-
-#, fuzzy
-#~| msgid "Columns:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Columns:"
-#~ msgstr "Colúin:"
-
-#, fuzzy
-#~| msgid "Number of columns"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number of columns"
-#~ msgstr "Líon na gcolún"
-
-#, fuzzy
-#~| msgid "Rows:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rows:"
-#~ msgstr "Rónna:"
-
-#, fuzzy
-#~| msgid "Number of rows"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number of rows"
-#~ msgstr "Líon na rónna"
-
-#, fuzzy
-#~| msgid "Table Options"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Table Options"
-#~ msgstr "Roghanna Tábla"
-
-#, fuzzy
-#~| msgid "Table editing tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Table editing"
-#~ msgstr "Uirlis eagarthóireachta tábla"
-
-#~ msgid "Table"
-#~ msgstr "Tábla"
-
-#~ msgid "Table Shape"
-#~ msgstr "Giuirléid Tábla"

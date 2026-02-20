@@ -18,10 +18,9 @@ msgstr ""
 "3 : 4\n"
 
 #: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add text range"
-msgstr "Cuir raon téacs leis"
+msgstr ""
 
 #: ArtisticTextShapeFactory.cpp:17
 #, kde-format
@@ -104,10 +103,9 @@ msgid "Drag handle to change start offset."
 msgstr ""
 
 #: ArtisticTextTool.cpp:315
-#, fuzzy, kde-format
-#| msgid "Press return to finish editing."
+#, kde-format
 msgid "Press escape to finish editing."
-msgstr "Brúigh Return chun eagarthóireacht a chur i gcrích."
+msgstr ""
 
 #: ArtisticTextTool.cpp:494
 #, kde-format
@@ -115,10 +113,9 @@ msgid "Press return to finish editing."
 msgstr "Brúigh Return chun eagarthóireacht a chur i gcrích."
 
 #: ArtisticTextTool.cpp:588
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
-msgstr "Tiontaigh go Conair"
+msgstr ""
 
 #: ArtisticTextTool.cpp:601
 #, kde-format
@@ -131,113 +128,42 @@ msgid "Text On Path"
 msgstr "Téacs Ar Chonair"
 
 #: ArtisticTextToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Artistic Text Editing Tool"
+#, kde-format
 msgid "Artistic text editing"
-msgstr "Uirlis Eagarthóireachta Téacs Ealaíonta"
+msgstr ""
 
 #: AttachTextToPathCommand.cpp:17
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
-msgstr "Ceangail Conair"
+msgstr ""
 
 #: ChangeTextAnchorCommand.cpp:15
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
-msgstr "Athraigh ancaire téacs"
+msgstr ""
 
 #: ChangeTextFontCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change font"
-msgstr "Athraigh an cló"
+msgstr ""
 
 #: ChangeTextOffsetCommand.cpp:18
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
-msgstr "Athraigh Fritháireamh an Téacs"
+msgstr ""
 
 #: DetachTextFromPathCommand.cpp:16
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
-msgstr "Díscoir an Chonair"
+msgstr ""
 
 #: RemoveTextRangeCommand.cpp:19
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
-msgstr "Bain an raon téacs"
+msgstr ""
 
 #: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
 #: ReplaceTextRangeCommand.cpp:57
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
-msgstr "Bain an raon téacs"
-
-#, fuzzy
-#~| msgid "ArtisticTextShape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "ArtisticTextShape"
-#~ msgstr "Giuirléid Téacs Ealaíonta"
-
-#, fuzzy
-#~| msgid "A shape which shows a single text line"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A shape which shows a single text line"
-#~ msgstr "Giuirléid a thaispeánann líne amháin de théacs"
-
-#, fuzzy
-#~| msgid "Artistic Text"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Artistic Text"
-#~ msgstr "Téacs Ealaíonta"
-
-#, fuzzy
-#~| msgid "Superscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Superscript"
-#~ msgstr "Forscript"
-
-#, fuzzy
-#~| msgid "Subscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Subscript"
-#~ msgstr "Foscript"
-
-#, fuzzy
-#~| msgid "Press return to finish editing."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Press return to finish editing."
-#~ msgstr "Brúigh Return chun eagarthóireacht a chur i gcrích."
-
-#, fuzzy
-#~| msgid "Text Properties"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text Properties"
-#~ msgstr "Airíonna Téacs"
-
-#, fuzzy
-#~| msgid "Text On Path"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text On Path"
-#~ msgstr "Téacs Ar Chonair"
-
-#, fuzzy
-#~| msgid "Artistic Text Editing Tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Artistic text editing"
-#~ msgstr "Uirlis Eagarthóireachta Téacs Ealaíonta"
-
-#~ msgid "Family:"
-#~ msgstr "Clann:"
-
-#~ msgid "Size:"
-#~ msgstr "Méid:"
-
-#~ msgid "Offset:"
-#~ msgstr "Fritháireamh:"
+msgstr ""

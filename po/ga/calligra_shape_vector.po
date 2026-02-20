@@ -28,9 +28,9 @@ msgid "Vector image"
 msgstr "Íomhá veicteoireach"
 
 #: VectorShapeFactory.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "A shape that shows a vector image (EMF/WMF/SVM)"
-msgstr "Giuirléid a thaispeánann íomhá veicteoireach"
+msgstr ""
 
 #: VectorTool.cpp:63
 #, kde-format
@@ -38,30 +38,6 @@ msgid "Open Vector Image (EMF/WMF/SVM)"
 msgstr "Oscail Íomhá Veicteoireach (EMF/WMF/SVN)"
 
 #: VectorToolFactory.cpp:19
-#, fuzzy, kde-format
-#| msgid "Vector Image (EMF/WMF/SVM) tool"
+#, kde-format
 msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
-msgstr "Uirlis Íomhá Veicteoirí (EMF/WMF/SVM)"
-
-#, fuzzy
-#~| msgid "Vector image"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vector image"
-#~ msgstr "Íomhá veicteoireach"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
-#~ msgstr "Giuirléid a thaispeánann íomhá veicteoireach"
-
-#, fuzzy
-#~| msgid "Open Vector Image (EMF/WMF/SVM)"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Open Vector Image (EMF/WMF/SVM)"
-#~ msgstr "Oscail Íomhá Veicteoireach (EMF/WMF/SVN)"
-
-#, fuzzy
-#~| msgid "Vector Image (EMF/WMF/SVM) tool"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
-#~ msgstr "Uirlis Íomhá Veicteoirí (EMF/WMF/SVM)"
+msgstr ""
