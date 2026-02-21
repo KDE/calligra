@@ -436,6 +436,7 @@
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
+        <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
       </description>
     </release>
@@ -450,6 +451,7 @@
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
+        <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p>Word now features the new sidebar design, and the main view uses a shadow to define the document borders. The Style Manager and Page Layout dialog were also updated with a new design.</p>
         <p xml:lang="ar">يتميز وورد الآن بتصميم جديد للشريط الجانبي، ويستخدم العرض الرئيسي ظلًا لتحديد حدود المستند. كما حُدث مربع حوار ”مدير الأنماط“ و”تخطيط الصفحة“ بتصميم جديد.</p>
@@ -459,6 +461,7 @@
         <p xml:lang="nl">Word heeft nu een nieuw ontwerp voor de zijbalk en de hoofdweergave gebruikt een schaduw om de documentranden te definiëren. Het dialoogvenster Stijlbeheer en Pagina-indeling zijn ook bijgewerkt met een nieuw ontwerp.</p>
         <p xml:lang="pt-BR">O Word agora apresenta o novo design da barra lateral, e a visualização principal usa uma sombra para definir as bordas do documento. O Gerenciador de Estilos e a caixa de diálogo Layout da Página também foram atualizados com um novo design.</p>
         <p xml:lang="sl">Word zdaj uporablja novo zasnovo stranske vrstice, glavni pogled pa uporablja senco za določanje robov dokumenta. Pogovorno okno Upravitelj slogov in Postavitev strani sta bila prav tako posodobljena z novo zasnovo.</p>
+        <p xml:lang="tr">Sözcükler artık yeni bir kenar çubuğu tasarımı kullanıyor ve ana görünüm belge kenarlıklarını göstermek için gölge yapıyor. Biçem Yöneticisi ve Sayfa Yerleşimi iletişim kutuları da yeni bir tasarıma geçtiler.</p>
         <p xml:lang="uk">У Word оновлено дизайн бічної панелі, а на головній панелі перегляду використано тінь для визначення меж документа. Диспетчер стилів і діалогове вікно «Компонування сторінки» також отримали новий дизайн.</p>
       </description>
     </release>

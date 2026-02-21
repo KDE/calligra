@@ -17,6 +17,7 @@
   <name xml:lang="gl">Calligra</name>
   <name xml:lang="he">Calligra</name>
   <name xml:lang="hu">Calligra</name>
+  <name xml:lang="ia">Calligra</name>
   <name xml:lang="it">Calligra</name>
   <name xml:lang="ka">Calligra</name>
   <name xml:lang="lv">Calligra</name>
@@ -43,6 +44,7 @@
   <summary xml:lang="gl">Solución de oficina todo en un</summary>
   <summary xml:lang="he">פתרון משרדי אחוד</summary>
   <summary xml:lang="hu">Minden egyben irodai megoldás</summary>
+  <summary xml:lang="ia">Solution Complete (All in One)  de Officio</summary>
   <summary xml:lang="it">Soluzione per ufficio completa</summary>
   <summary xml:lang="ka">სრული საოფისე პაკეტი</summary>
   <summary xml:lang="lv">Viss vienā biroja programmatūra</summary>
@@ -71,6 +73,7 @@
     <p xml:lang="gl">Calligra e unha suite de oficina e de gráficos. Contén aplicacións para procesamento de texto, follas de cálculo, presentacións e gráficos vectoriais.</p>
     <p xml:lang="he">Calligra היא חבילה של כלים משרדיים וגרפיים. היא מכילה יישומים לעיבוד תמלילים, גיליונות נתונים, מצגות וגרפיקת וקטורים.</p>
     <p xml:lang="hu">A Calligra egy irodai és grafikai programcsomag, amely szövegszerkesztéshez, táblázatkezeléshez, prezentációkészítéshez és vektorgrafikához kínál alkalmazásokat.</p>
+    <p xml:lang="ia">Calligra es un suite de officio e graphic. Il contine applicationes per word processing (elaboration de textos), spreadsheets (folios de calculo electronic), presentation e vector graphics (graphics vectorial).</p>
     <p xml:lang="it">Calligra è una suite per ufficio e grafica. Contiene applicazioni per elaborazione testi, fogli di calcolo, presentazioni e grafica vettoriale.</p>
     <p xml:lang="ka">Calligra საოფისე და გრაფიკული პროგრამების პაკეტია. შეიცავს ტექსტის დასამუშავებელ. ელცხრილებთან სამუშაო, პრეზენტაციის ქმნის და ვექტორული გრაფიკის პროგრამებს.</p>
     <p xml:lang="lv">„Calligra“ ir biroja un grafikas programmatūra. Tā satur programmas teksta, izklājlapu, prezentācijas un vektorgrafikas apstrādei.</p>
@@ -101,6 +104,7 @@
     <p xml:lang="gl">Words é unha aplicación intuitiva de procesamento de texto e publicación de escritorio. Con ela pode crear documentos informativos e atractivos plácida e facilmente.</p>
     <p xml:lang="he">„מילים” הוא יישום נהיר למחשב לעיבוד תמלילים והפקת תוכן. באמצעותו, אפשר ליצור מסמכים רבי משמעות ומושכי עין בצורה מהנה ופשוטה.</p>
     <p xml:lang="hu">A Words egy intuitív szövegszerkesztő és kiadványszerkesztő alkalmazás, amellyel könnyedén és örömmel készíthet informatív és tetszetős dokumentumokat.</p>
+    <p xml:lang="ia">Words es un application per elaborar texto intuitive e un editor de scriptorio. Co illo, tu pote crear documentos informative e attractive con placer e facilemente.</p>
     <p xml:lang="it">Words è un'applicazione intuitiva per l'elaborazione di testi e l'editoria desktop. Con essa, puoi creare documenti informativi e accattivanti con piacere e facilità.</p>
     <p xml:lang="ka">Words ინტუიტიური ტექსტის პროცესორი და ამუშაო მაგიის გამომცემლის აპლიკაციაა. მასთან ერთად შეგიძლიათ ინფორმატიული და მიმზიდველი დოკუმენტები სიამოვნებითა და ადვილად შექმნათ.</p>
     <p xml:lang="lv">„Words“ ir intuitīva teksta apstrādes un datorizdevniecības programma. Ar to varat patīkami un ērti veidot informatīvus un pievilcīgus dokumentus.</p>
@@ -131,6 +135,7 @@
     <p xml:lang="gl">Calligra Sheets é unha ferramenta completa de follas de cálculo. Úsea para crear rapidamente follas de cálculo de negocios, como por exemplo follas de gastos e ingresos, de horas de traballo, etc.</p>
     <p xml:lang="he">גיליונות של Calligra הוא כלי חישוב וגיליון נתונים עתיר יכולות. אפשר להשתמש בו כדי ליצור ולחשב גיליונות נתונים עסקיים במהירות, כגון הכנסות והוצאות, שעות עבודה של עובדים ועוד.</p>
     <p xml:lang="hu">A Calligra Sheets egy teljes funkcionalitású táblázatkezelő és számítási eszköz. Használhatja különféle üzleti táblázatok — például bevétel- és kiadáskimutatások, munkavállalói munkaidő-nyilvántartások, stb. — gyors létrehozására és számítására.</p>
+    <p xml:lang="ia">Calligra Sheets es un instrumento de calculation complete de characteristicas e un folio de calculo electronic. Usa lo per crear rapidemente e calcular varie folios de calculo relate a affaires, tal como ganio e expensa, horas de labor de empleato, etc. </p>
     <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e foglio di calcolo completo. Utilizzalo per creare e calcolare rapidamente vari fogli di calcolo aziendali, come entrate e uscite, ore di lavoro dei dipendenti, ecc.</p>
     <p xml:lang="ka">Callgra Sheets სრულაფსოვანი გამოთვლებისა და ელცხრილებთან სამუშაო პროგრამაა. გამოიყენეთ ის, რომ შექმნათ და გამოთვალოთ ბიზნესთან დაკავშირებული საჭიროებები. მაგალითად: შემოსავალ/გასავალი, თანამშრომლების სამუშაო საათები და ა.შ.</p>
     <p xml:lang="lv">„Calligra Sheets“ ir iespējām bagāts aprēķinu un izklājlapu rīks. Izmantojiet „Sheets“, lai ātri izveidotu un aprēķinātu dažādas ar uzņēmējdarbību saistītas izklājlapas, piemēram, ienākumus, izdevumus, darbinieku darba stundas u.c. vajadzībām.</p>
@@ -227,6 +232,7 @@
       <caption xml:lang="gl">Xanela principal de Calligra Words amosando texto aleatorio no editor principal.</caption>
       <caption xml:lang="he">החלון הראשי של Calligra מילים שמציג טקסט אקראי בעורך הראשי</caption>
       <caption xml:lang="hu">A Calligra Words főablaka, amely véletlenszerű szöveget jelenít meg a fő szerkesztőben</caption>
+      <caption xml:lang="ia">Fenestra principal de Calligra Words monstrante texto aleatori in le editor principal </caption>
       <caption xml:lang="it">La finestra principale di Calligra Words che mostra testo casuale nell'editor principale</caption>
       <caption xml:lang="ka">Calligra Words-ის მთავარი ფანჯარა შემთხვევითი ტექსტით რედაქტორში</caption>
       <caption xml:lang="lv">„Calligra Words“ pamata logs ar tekstu galvenajā teksta laukā</caption>
@@ -256,6 +262,7 @@
       <caption xml:lang="gl">Xanela principal de Calligra Sheets.</caption>
       <caption xml:lang="he">החלון הראשי של Calligra גיליונות</caption>
       <caption xml:lang="hu">A Calligra Sheets főablaka</caption>
+      <caption xml:lang="ia">Fenestra principal de Calligra Sheets </caption>
       <caption xml:lang="it">La finestra principale di Calligra Sheets</caption>
       <caption xml:lang="ka">Calligra Sheets-ის მთავარი ფანჯარა</caption>
       <caption xml:lang="lv">„Calligra Sheets“ pamata logs</caption>
@@ -286,6 +293,7 @@
       <caption xml:lang="gl">Xanela principal de Calligra Stage.</caption>
       <caption xml:lang="he">החלון הראשי של Calligra במה</caption>
       <caption xml:lang="hu">A Calligra Stage főablaka</caption>
+      <caption xml:lang="ia">Calligra Stage Fenestra Principal</caption>
       <caption xml:lang="it">La finestra principale di Calligra Stage</caption>
       <caption xml:lang="ka">Calligra Stage-ის მთავარი ფანჯარა</caption>
       <caption xml:lang="lv">„Calligra Stage“ pamata logs</caption>
@@ -316,6 +324,7 @@
       <caption xml:lang="gl">Xanela principal de Karbon.</caption>
       <caption xml:lang="he">החלון הראשי של Karbon</caption>
       <caption xml:lang="hu">A Karbon főablaka</caption>
+      <caption xml:lang="ia">Fenestra principal de Karbon</caption>
       <caption xml:lang="it">La finestra principale di Karbon</caption>
       <caption xml:lang="ka">Karbon-ის მთავარი ფანჯარა</caption>
       <caption xml:lang="lv">„Karbon“ pamata logs</caption>
@@ -365,10 +374,12 @@
         <p xml:lang="ar">يضيف هذا الإصدار دعم ”فلاتباك“ إلى مجموعة برامج كاليغرا أوفيس.</p>
         <p xml:lang="ca">Aquesta versió afegeix el suport per a flatpak a la suite Calligra Office.</p>
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
+        <p xml:lang="ia">Iste version adde supporto de flatpak al suite de Calligra Office</p>
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
+        <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
       </description>
     </release>
@@ -383,6 +394,7 @@
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
+        <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p>Words, Sheets, and Stage now feature a new sidebar design. The “Custom Shape” docker has been removed, and custom shapes are now accessible through a popup menu in the toolbar across all Calligra applications. We simplified the toolbar and removed the basic copy, paste and cut actions.</p>
         <p xml:lang="ar">تتميز كلمات وأوراق ومرحلة الآن بتصميم جديد للشريط الجانبي. أُزيلت أداة ”الشكل المخصص“ وأصبح من الممكن الآن الوصول إلى الأشكال المخصصة من خلال قائمة منبثقة في شريط الأدوات في جميع تطبيقات كاليغرا. قمنا بتبسيط شريط الأدوات وأزلنا إجراءات النسخ واللصق والقص الأساسية.</p>
@@ -392,6 +404,7 @@
         <p xml:lang="nl">Words, Sheets en Stage hebben nu een nieuw ontwerp voor de zijbalk. Het vastzettermenu 'Aangepaste vorm' is verwijderd en aangepaste vormen zijn nu toegankelijk via een pop-upmenu in de werkbalk in alle Calligra-toepassingen. We hebben de werkbalk vereenvoudigd en de basisfuncties voor kopiëren, plakken en knippen verwijderd.</p>
         <p xml:lang="pt-BR">O Word, o Sheets e o Stage agora apresentam um novo design de barra lateral. O painel de "Formas personalizadas" foi removido e as formas personalizadas agora podem ser acessadas por meio de um menu pop-up na barra de ferramentas em todos os aplicativos do Calligra. Simplificamos a barra de ferramentas e removemos as ações básicas de copiar, colar e recortar.</p>
         <p xml:lang="sl">Words, Sheets in Stage imajo zdaj novo zasnovo stranske vrstice. Priklopno okno »Oblika po meri« je bilo odstranjeno, oblike po meri pa so zdaj dostopne prek pojavnega menija v orodni vrstici v vseh aplikacijah Calligra. Orodno vrstico smo poenostavili in odstranili osnovna dejanja kopiranja, lepljenja in izrezovanja.</p>
+        <p xml:lang="tr">Sözcükler, Tablolar ve Sahne artık yeni bir kenar çubuğu tasarımı sunuyor. “Özel Şekil” paneli kaldırıldı ve özel şekillere artık tüm Calligra uygulamalarında araç çubuğundaki bir açılır menüden erişilebiliyor. Araç çubuğunu basitleştirdik ve temel Kes, Kopyala, Yapıştır eylemlerini çıkardık.</p>
         <p xml:lang="uk">У Words, Sheets та Stage представлено новий дизайн бічної панелі. Бічну панель «Нетипова форма» було вилучено, а доступ до нетипових форм здійснюється через контекстне меню на панелі інструментів у всіх програмах Calligra. Ми спростили панель інструментів і вилучили базові дії копіювання, вставляння та вирізання.</p>
       </description>
     </release>
