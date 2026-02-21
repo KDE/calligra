@@ -6,7 +6,7 @@
 # Ilpo Kantonen <ilpo@iki.fi>, 2005.
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2006.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007, 2008.
-# Tommi Nieminen <translator@legisign.org>, 2011, 2019, 2022.
+# SPDX-FileCopyrightText: 2011, 2019, 2022, 2026 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014, 2015.
 #
 # KDE Finnish translation sprint participants:
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: artwork\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2022-07-29 11:52+0300\n"
+"PO-Revision-Date: 2026-02-06 11:42+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -23,6 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
@@ -93,7 +94,7 @@ msgstr "&Asetukset"
 #: data/karbon.rc:137
 #, kde-format
 msgid "&Page"
-msgstr ""
+msgstr "&Sivu"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: data/karbon.rc:150
@@ -121,10 +122,9 @@ msgstr "Tehosteet"
 
 #. i18n: ectx: ToolBar (add_shape_toolbar)
 #: data/karbon.rc:177
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgid "Add Shape"
-msgstr "Muoto"
+msgstr "Lisää kuvio"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -340,12 +340,12 @@ msgstr "Ylläpitäjä"
 #: ui/KarbonAboutData.h:30
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: ui/KarbonAboutData.h:31
 #, kde-format
 msgid "Port to Qt6"
-msgstr ""
+msgstr "Siirros Qt6:een"
 
 #: ui/KarbonAboutData.h:35
 #, kde-format

@@ -161,7 +161,7 @@ msgstr "Configura bibliographia"
 #: dialogs/BibliographyConfigureDialog.ui:20
 #, kde-format
 msgid "Formatting of bibliography entries"
-msgstr "Formattar entratas de Bibliographia"
+msgstr "Fnormatar entratas de Bibliographia"
 
 #. i18n: ectx: property (text), widget (QLabel, prefixLabel)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -2882,7 +2882,7 @@ msgstr "Deletion"
 #: TextTool.cpp:575
 #, kde-format
 msgid "Formatting"
-msgstr "Formattation"
+msgstr "Fnormatation"
 
 #: TextTool.cpp:590
 #, kde-format
@@ -4528,7 +4528,7 @@ msgstr "Modifica de texto"
 #~| msgid "Formatting"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Formatting"
-#~ msgstr "Formattation"
+#~ msgstr "Fnormatation"
 
 #, fuzzy
 #~| msgid "Character"

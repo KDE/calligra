@@ -14857,11 +14857,11 @@ msgstr "Ligamine %1 activate"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove Conditional Formatting"
-#~ msgstr "Remove formattation conditional"
+#~ msgstr "Remove fnormatation conditional"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add Conditional Formatting"
-#~ msgstr "adde formattation conditional"
+#~ msgstr "adde fnormatation conditional"
 
 #~ msgid "Select a new border color"
 #~ msgstr "Selige un nove color de bordo"
