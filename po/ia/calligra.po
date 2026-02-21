@@ -3711,7 +3711,7 @@ msgstr "Nove section"
 #: text/commands/ParagraphFormattingCommand.cpp:82
 msgctxt "(qtundo-format)"
 msgid "Direct Paragraph Formatting"
-msgstr "Formattation directe de paragrapho"
+msgstr "Fnormatation directe de paragrapho"
 
 #: text/commands/RenameSectionCommand.cpp:20
 msgctxt "(qtundo-format)"

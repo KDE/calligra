@@ -6,7 +6,7 @@
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2006.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2014, 2018, 2019, 2023.
+# SPDX-FileCopyrightText: 2014, 2018, 2019, 2023, 2026 Tommi Nieminen <translator@legisign.org>
 # KDE Finnish translation sprint participants:
 # Author: Artnay
 # Author: Lliehu
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2023-05-18 11:50+0300\n"
+"PO-Revision-Date: 2026-02-06 11:40+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -23,6 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -770,24 +771,21 @@ msgid "Create backup file:"
 msgstr "Luo varmuuskopiotiedosto:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Näytä ruudukko:"
+msgstr "Näytä ruudukko"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Kiinnitä ruudukkoon:"
+msgstr "Kiinnitä ruudukkoon"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Ruudukko"
+msgstr "Ruudukko:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -795,20 +793,16 @@ msgid "Grid color:"
 msgstr "Ruudukon väri:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Vaakasuuntaan:"
+msgstr "Vaakavälistys:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Pystysuuntaan:"
+msgstr "Pystyvälistys:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -831,11 +825,10 @@ msgid "Paste offset:"
 msgstr "Liittämisen siirtymä:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Liitä kohdistimen kohdalle:"
+msgstr "Liitä kohdistimen kohdalle"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -950,7 +943,7 @@ msgstr "Tiedostojen palautus"
 #: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "Hylkää kaikki"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -969,6 +962,8 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Jos valitset Peru, kaikki palautettavissa olevat tiedostot säilytetään.\n"
+"Jos napsautat OK, valitut tiedostot palautetaan, valitsemattomat hylätään."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1643,7 +1638,7 @@ msgstr "Geometrinen keskiarvo"
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Nuolet"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
@@ -1812,11 +1807,10 @@ msgid "Date: %1"
 msgstr "Päivämäärä: %1"
 
 #: main/KoView.cpp:347
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Muoto"
+msgstr "Lisää kuvio"
 
 #: main/KoView.cpp:358
 #, kde-format
@@ -2305,10 +2299,9 @@ msgid "Add a new slide or layer"
 msgstr "Lisää uusi dia tai taso"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:99
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Dia"
+msgstr "Diat"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
@@ -2975,7 +2968,7 @@ msgstr "Ero"
 #: pigment/KoCompositeOpRegistry.cpp:56
 #, kde-format
 msgid "Exclusion"
-msgstr ""
+msgstr "Pois sulku"
 
 #: pigment/compositeops/KoCompositeOps.h:143
 #: pigment/KoCompositeOpRegistry.cpp:54
@@ -3745,8 +3738,7 @@ msgstr ""
 "vahvisteta."
 
 #: store/KoEncryptedStore.cpp:245
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Varoitus"
@@ -3761,8 +3753,7 @@ msgstr ""
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Varoitus"
@@ -4601,11 +4592,10 @@ msgid "Get help..."
 msgstr "Etsi ohjeita…"
 
 #: widgets/KoDockWidgetTitleBar.cpp:54
-#, fuzzy, kde-format
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr "Näytä telakat"
+msgstr "Kelluva telakka"
 
 #: widgets/KoDockWidgetTitleBar.cpp:61
 #, kde-format
@@ -4770,13 +4760,13 @@ msgstr "Tämä tiedosto ei tue salausta"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Ei asetettu"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -5032,10 +5022,9 @@ msgid "Icon only"
 msgstr "Vain kuvake"
 
 #: widgets/KoModeBox.cpp:505
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Yksipuolinen"
+msgstr "Sivupaneelin sivu"
 
 #: widgets/KoModeBox.cpp:514
 #, kde-format
@@ -5058,28 +5047,24 @@ msgid "Apply to document"
 msgstr "Käytä tiedostoon"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Vasen reunus"
+msgstr "Vasen reunus:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Oikea reunus"
+msgstr "Oikea reunus:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
 msgstr "Sidontareunus:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
 msgstr "Sivun reuna:"
 
@@ -5190,17 +5175,15 @@ msgstr "Oikealta vasemmalle"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Yläreunus"
+msgstr "Yläreunus:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Alareunus"
+msgstr "Alareunus:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5257,6 +5240,8 @@ msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
+"<qt>Luokitus, jota yrität palauttaa, on jo luokitusluettelossa.<br>Anna "
+"sille uusi, ainutkertainen nimi.</qt>"
 
 #: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
@@ -5299,14 +5284,13 @@ msgstr "Etäisyys:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Kuvion ominaisuudet"
 
 #: widgets/KoShapePropertyWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "Ei kuvaa."
+msgstr "Ei käytettävissä olevia ominaisuuksia."
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5324,10 +5308,9 @@ msgid "Square cap"
 msgstr "Nelikulmainen pääty"
 
 #: widgets/KoStrokeConfigWidget.cpp:108
-#, fuzzy, kde-format
-#| msgid "Merge points"
+#, kde-format
 msgid "Miter join"
-msgstr "Liitä pisteet"
+msgstr "Hiippaliitos"
 
 #: widgets/KoStrokeConfigWidget.cpp:115
 #, kde-format
@@ -5340,10 +5323,9 @@ msgid "Bevel join"
 msgstr "Viisteliitos"
 
 #: widgets/KoStrokeConfigWidget.cpp:132
-#, fuzzy, kde-format
-#| msgid "Merge points"
+#, kde-format
 msgid "Miter limit"
-msgstr "Liitä pisteet"
+msgstr "Hiippaliitoksen raja"
 
 #: widgets/KoStrokeConfigWidget.cpp:202
 #, kde-format
@@ -5361,10 +5343,9 @@ msgid "Change the color of the line/border"
 msgstr "Muuta viivan väriä"
 
 #: widgets/KoTagChooserWidget.cpp:42
-#, fuzzy, kde-format
-#| msgid "Tags"
+#, kde-format
 msgid "Tag"
-msgstr "Tunnisteet"
+msgstr "Luokitus"
 
 #: widgets/KoTagFilterWidget.cpp:39
 #, kde-format
@@ -5381,6 +5362,18 @@ msgid ""
 "clearing the filter box will restore all items.<br>Create and/or switch to a "
 "different tag if you want to save filtered resources into named sets.</qt>"
 msgstr ""
+"<qt>Hakusanojen kirjoittaminen tähän lisää tai poistaa resursseja nykyisestä "
+"luokitusnäkymästä.<para>Suodattaaksesi resurssin osittaisella nimellä "
+"kirjainkoosta riippumatta:<br><icode>osittainennimi</icode> tai <icode>!"
+"osittainennimi</icode>.</para><para>Muiden luokitusjoukkojen mukaan tai pois "
+"sulkeminen:<br><icode>[luokituksennimi]</icode> tai <icode>!"
+"[luokituksennimi]</icode>.</para><para>Mukaan tai pois sulkeminen "
+"kirjainkoko huomioon ottaen koko nimellä:<br><icode>\"TarkkaOsuma\"</icode> "
+"tai <icode>!\"TarkkaOsuma\"</icode>.</para>Suodatustuloksia ei voi tallentaa "
+"<interface>Kaikki esiasetukset</interface> -näkymään.<br><interface>Enter</"
+"interface>in painaminen tässä näkymässä tai suodatuskentän tyhjentäminen "
+"palauttaa kaikki kohteet.<br>Luo uusi tai vaihda toiseen luokitukseen, jos "
+"haluat tallentaa suodatetut resurssit nimetyksi joukoksi.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
@@ -5469,32 +5462,28 @@ msgid "Icon Size"
 msgstr "Kuvakekoko"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "Sivun asettelu"
+msgstr "Asettelu"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automaattinen"
+msgstr "&Automaattinen"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Vasemmalta oikealle"
+msgstr "&Vasemmalta oikealle"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Oikealta vasemmalle"
+msgstr "&Oikealta vasemmalle"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format

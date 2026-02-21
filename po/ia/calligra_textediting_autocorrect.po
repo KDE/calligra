@@ -74,14 +74,14 @@ msgstr "Correction automatic"
 #~ "coincidente con le modo que un navigator de internet monstrara un URL."
 
 #~ msgid "Autoformat &URLs"
-#~ msgstr "Autoformatta &URLs"
+#~ msgstr "Autofnormata &URLs"
 
 #~ msgid ""
 #~ "Make sure that more than one space cannot be typed, as this is a common "
 #~ "mistake which is quite hard to find in formatted text."
 #~ msgstr ""
 #~ "Face secur que plus que un spatio non pote esser typate, que isto es un "
-#~ "error commun que es difficile de trovar in texto formattate."
+#~ "error commun que es difficile de trovar in texto fnormatate."
 
 #~ msgid "&Suppress double spaces"
 #~ msgstr "&Supprime duple spatios"
@@ -90,7 +90,7 @@ msgstr "Correction automatic"
 #~ "Keep correct formatting and indenting of sentences by automatically "
 #~ "removing spaces typed at the beginning and end of a paragraph."
 #~ msgstr ""
-#~ "Mantene formattation e indentation correcte de phrases per remover de "
+#~ "Mantene fnormatation e indentation correcte de phrases per remover de "
 #~ "modo automaticspatios typate al initio e fin de un paragrapho. "
 
 #~ msgid "R&emove spaces at the beginning and end of paragraphs"
@@ -300,7 +300,7 @@ msgstr "Correction automatic"
 #~| msgid "Autoformat &URLs"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Autoformat &URLs"
-#~ msgstr "Autoformatta &URLs"
+#~ msgstr "Autofnormata &URLs"
 
 #, fuzzy
 #~| msgid ""
@@ -312,7 +312,7 @@ msgstr "Correction automatic"
 #~ "mistake which is quite hard to find in formatted text."
 #~ msgstr ""
 #~ "Face secur que plus que un spatio non pote esser typate, que isto es un "
-#~ "error commun que es difficile de trovar in texto formattate."
+#~ "error commun que es difficile de trovar in texto fnormatate."
 
 #, fuzzy
 #~| msgid "&Suppress double spaces"
@@ -329,7 +329,7 @@ msgstr "Correction automatic"
 #~ "Keep correct formatting and indenting of sentences by automatically "
 #~ "removing spaces typed at the beginning and end of a paragraph."
 #~ msgstr ""
-#~ "Mantene formattation e indentation correcte de phrases per remover de "
+#~ "Mantene fnormatation e indentation correcte de phrases per remover de "
 #~ "modo automaticspatios typate al initio e fin de un paragrapho. "
 
 #, fuzzy
