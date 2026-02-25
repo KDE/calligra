@@ -2,13 +2,13 @@
 # Copyright (C) 2004, 2007 Free Software Foundation, Inc.
 # Ahmad M. Zawawi <azawawi@emirates.net.ae>, 2004.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
-# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2025-10-05 13:00+0400\n"
+"PO-Revision-Date: 2026-02-24 22:50+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -92,7 +92,7 @@ msgstr "Mimetype لملف الإخراج"
 #: calligraconverter.cpp:202
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
-msgstr "اتّجاه الطباعة. قد يكون عموديًا أو أفقيًا."
+msgstr "اتّجاه الطباعة. قد يكون طولي أو عرضي."
 
 #: calligraconverter.cpp:205
 #, kde-format

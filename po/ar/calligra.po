@@ -5,13 +5,13 @@
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
-# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2025-10-05 12:05+0400\n"
+"PO-Revision-Date: 2026-02-24 23:00+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -4970,13 +4970,13 @@ msgstr "الاتّجاه:"
 #: widgets/KoPageLayoutWidget.ui:129
 #, kde-format
 msgid "Portrait"
-msgstr "بالطّول"
+msgstr "طولي"
 
 #. i18n: ectx: property (text), widget (QRadioButton, landscape)
 #: widgets/KoPageLayoutWidget.ui:136
 #, kde-format
 msgid "Landscape"
-msgstr "بالعرض"
+msgstr "عرضي"
 
 #. i18n: ectx: property (text), widget (QLabel, facingPageLabel)
 #: widgets/KoPageLayoutWidget.ui:143
