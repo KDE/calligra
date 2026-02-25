@@ -432,6 +432,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار دعم ”فلاتباك“ إلى مجموعة برامج كاليغرا أوفيس.</p>
         <p xml:lang="ca">Aquesta versió afegeix el suport per a flatpak a la suite Calligra Office.</p>
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
+        <p xml:lang="es">Esta versión añade compatibilidad con flatpak al paquete Calligra Office.</p>
         <p xml:lang="fr">Cette version ajoute la prise en charge de FlatPak à la suite Calligra Office.</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
@@ -447,6 +448,7 @@
         <p xml:lang="ar">التغييرات الأكثر أهمية هي أن كالغرا قد انتقلت بالكامل إلى Qt6 و KF6، إلى جانب إجراء تعديل جذري على واجهة المستخدم الخاصة بها.</p>
         <p xml:lang="ca">Els canvis més significatius són que el Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seva interfície d'usuari.</p>
         <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
+        <p xml:lang="es">Los cambios más significativos son que Calligra ha realizado la transición completa a Qt6 y KF6, y que se ha llevado a cabo una gran reorganización de la interfaz de usuario.</p>
         <p xml:lang="fr">Les modifications les plus significatives sont que Calligra a été entièrement migré vers Qt6 et KF6 et une refonte majeure de son interface utilisateur.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
@@ -457,6 +459,7 @@
         <p xml:lang="ar">يتميز وورد الآن بتصميم جديد للشريط الجانبي، ويستخدم العرض الرئيسي ظلًا لتحديد حدود المستند. كما حُدث مربع حوار ”مدير الأنماط“ و”تخطيط الصفحة“ بتصميم جديد.</p>
         <p xml:lang="ca">El Word ara presenta el disseny nou de la barra lateral, i la vista principal utilitza una ombra per a definir les vores del document. El diàleg del gestor d'estils i la disposició de pàgines també s'han actualitzat amb un disseny nou.</p>
         <p xml:lang="ca-valencia">Word ara presenta el disseny nou de la barra lateral, i la vista principal utilitza una ombra per a definir les vores del document. El diàleg del gestor d'estils i la disposició de pàgines també s'han actualitzat amb un disseny nou.</p>
+        <p xml:lang="es">Word muestra ahora el nuevo diseño de la barra lateral. La vista principal usa una sombra para definir los bordes del documento. El gestor de estilos y el diálogo del diseño de la página también se han actualizado con un nuevo diseño.</p>
         <p xml:lang="fr">Word présente désormais la nouvelle conception graphique de la barre latérale. La vue principale utilise une ombre pour définir les bordures du document. Le gestionnaire de styles et la boîte de dialogue de mise en page ont également été mis à jour avec une nouvelle conception graphique.</p>
         <p xml:lang="it">Word ora presenta il nuovo aspetto della barra laterale e la vista principale utilizza un'ombra per definire i bordi del documento. Anche la finestra Gestione stili e Impaginazione sono state aggiornate con un nuovo aspetto.</p>
         <p xml:lang="nl">Word heeft nu een nieuw ontwerp voor de zijbalk en de hoofdweergave gebruikt een schaduw om de documentranden te definiëren. Het dialoogvenster Stijlbeheer en Pagina-indeling zijn ook bijgewerkt met een nieuw ontwerp.</p>

@@ -644,6 +644,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار دعم ”فلاتباك“ إلى مجموعة برامج كاليغرا أوفيس.</p>
         <p xml:lang="ca">Aquesta versió afegeix el suport per a flatpak a la suite Calligra Office.</p>
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
+        <p xml:lang="es">Esta versión añade compatibilidad con flatpak al paquete Calligra Office.</p>
         <p xml:lang="fr">Cette version ajoute la prise en charge de FlatPak à la suite Calligra Office.</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
@@ -659,6 +660,7 @@
         <p xml:lang="ar">التغييرات الأكثر أهمية هي أن كالغرا قد انتقلت بالكامل إلى Qt6 و KF6، إلى جانب إجراء تعديل جذري على واجهة المستخدم الخاصة بها.</p>
         <p xml:lang="ca">Els canvis més significatius són que el Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seva interfície d'usuari.</p>
         <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
+        <p xml:lang="es">Los cambios más significativos son que Calligra ha realizado la transición completa a Qt6 y KF6, y que se ha llevado a cabo una gran reorganización de la interfaz de usuario.</p>
         <p xml:lang="fr">Les modifications les plus significatives sont que Calligra a été entièrement migré vers Qt6 et KF6 et une refonte majeure de son interface utilisateur.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
@@ -669,6 +671,7 @@
         <p xml:lang="ar">لم تشهد كربون تغييرات كبيرة باستثناء التغيير الذي أثر على المنصة بأكملها.</p>
         <p xml:lang="ca">El Karbon no rebut gaires canvis fora del que afectava tota la plataforma.</p>
         <p xml:lang="ca-valencia">Karbon no rebut gaires canvis fora del que afectava tota la plataforma.</p>
+        <p xml:lang="es">Karbon no ha recibido muchos cambios aparte del que afecta a toda la plataforma.</p>
         <p xml:lang="fr">Karbon n’a pas subi beaucoup de modifications en dehors de celle affectant la totalité de la plateforme.</p>
         <p xml:lang="it">Karbon non ha subito grandi cambiamenti, a parte quelli che hanno interessato l'intera piattaforma.</p>
         <p xml:lang="nl">Karbon kreeg niet veel wijzigingen buiten die het gehele platform beïnvloedden.</p>
