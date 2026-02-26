@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-02-19 16:55+0100\n"
+"PO-Revision-Date: 2026-02-25 17:38+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -178,7 +178,7 @@ msgstr "Nota incognoscite"
 #: actions/NoteEntryAction.cpp:75
 #, kde-format
 msgid "Unknown rest"
-msgstr ""
+msgstr "Reposo incognite"
 
 #: actions/RemoveBarAction.cpp:22
 #, kde-format
@@ -223,12 +223,12 @@ msgstr "Tenor"
 #: actions/SetClefAction.cpp:52
 #, kde-format
 msgid "C clef on line %1"
-msgstr ""
+msgstr "C clave in linea %1"
 
 #: actions/SetClefAction.cpp:55
 #, kde-format
 msgid "Unknown clef"
-msgstr ""
+msgstr "Clave incognite"
 
 #: actions/TiedNoteAction.cpp:33
 #, kde-format
@@ -248,7 +248,7 @@ msgstr "Adde puncto"
 #: commands/AddNoteCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
-msgstr ""
+msgstr "Assigna duration de accordo"
 
 #: commands/AddNoteCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -268,12 +268,12 @@ msgstr "Parte %1"
 #: commands/ChangePartDetailsCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Change part details"
-msgstr ""
+msgstr "Cambia detalios de parte"
 
 #: commands/CreateChordCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add chord"
-msgstr ""
+msgstr "Adde accordo"
 
 #: commands/CreateChordCommand.cpp:31
 msgctxt "(qtundo-format)"
@@ -283,7 +283,7 @@ msgstr "Adde resto"
 #: commands/MakeRestCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Convert chord to rest"
-msgstr ""
+msgstr "Converte accordo a reposo"
 
 #: commands/RemoveBarCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -328,18 +328,18 @@ msgstr ""
 #: commands/SetClefCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change clef"
-msgstr ""
+msgstr "Cambia clave"
 
 #: commands/SetKeySignatureCommand.cpp:26
 #: commands/SetKeySignatureCommand.cpp:76
 msgctxt "(qtundo-format)"
 msgid "Change key signature"
-msgstr ""
+msgstr "Cambia signatura de clave"
 
 #: commands/SetTimeSignatureCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change time signature"
-msgstr ""
+msgstr "Cambia signatura de tempore"
 
 #: commands/ToggleTiedNoteCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -505,7 +505,7 @@ msgstr ""
 #: SimpleEntryTool.cpp:227
 #, kde-format
 msgid "Clef"
-msgstr ""
+msgstr "Chiave"
 
 #: SimpleEntryTool.cpp:256
 #, kde-format

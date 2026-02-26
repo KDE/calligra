@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-02-19 17:15+0100\n"
+"PO-Revision-Date: 2026-02-25 17:54+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -777,12 +777,12 @@ msgstr "Colla displaciamento:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr ""
+msgstr "Colla a Cursor"
 
 #: main/KoApplication.cpp:194
 #, kde-format
 msgid "Only print and exit"
-msgstr ""
+msgstr "Solmente imprimeeexi"
 
 #: main/KoApplication.cpp:196
 #, kde-format
@@ -5086,7 +5086,7 @@ msgstr ""
 #: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
 msgid "Enter resource filters here"
-msgstr ""
+msgstr "Inserta filtros de ressources hic"
 
 #: widgets/KoTagFilterWidget.cpp:76
 #, kde-format
