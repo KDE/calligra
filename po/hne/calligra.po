@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-03-03 00:46+0000\n"
 "PO-Revision-Date: 2009-03-03 09:35+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -3723,82 +3723,37 @@ msgstr ""
 msgid "SPARQL"
 msgstr ""
 
-#. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
-#: rdf/KoDocumentRdfEditWidget.ui:182
+#. i18n: ectx: property (plainText), widget (QTextEdit, m_sparqlQuery)
+#: rdf/KoDocumentRdfEditWidget.ui:172
 #, kde-format
 msgid ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
-"size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\"># Insert your SPARQL query here<br /># "
-"Results are shown below.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
-"family:'Verdana'; font-size:13pt;\"></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
-"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
-"foaf/0.1/&gt; </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
-"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
-"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
-"family:'Verdana'; font-size:13pt;\"></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
-"family:'Verdana'; font-size:13pt;\"></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
-"family:'Verdana'; font-size:13pt;\"></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
-"family:'Verdana'; font-size:13pt;\"></p></body></html>"
+"\n"
+"            prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+"            prefix foaf: <http://xmlns.com/foaf/0.1/>\n"
+"            prefix pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/"
+"pkg#>\n"
+"            prefix geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n"
+"\n"
+"            select ?s ?p ?o\n"
+"            where { ?s ?p ?o }"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
-#: rdf/KoDocumentRdfEditWidget.ui:191
+#: rdf/KoDocumentRdfEditWidget.ui:181
 #, fuzzy, kde-format
 #| msgid "US Executive"
 msgid "Execute"
 msgstr "यूएस एक्जीक्यूटिव"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
-#: rdf/KoDocumentRdfEditWidget.ui:221
+#: rdf/KoDocumentRdfEditWidget.ui:211
 #, fuzzy, kde-format
 #| msgid "Styles"
 msgid "Stylesheets"
 msgstr "सैली"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: rdf/KoDocumentRdfEditWidget.ui:227
+#: rdf/KoDocumentRdfEditWidget.ui:217
 #, kde-format
 msgid ""
 "Set the default stylesheet for Semantic objects in this document. New RDF "
