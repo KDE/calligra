@@ -17,7 +17,7 @@
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
 # Sander Koning <ask@macedon.demon.nl>, 2005.
 # Natalie Koning <nat@switch.demon.nl>, 2006.
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2024, 2026 Freek de Kruijf <freekdekruijf@kde.nl>
 # Hannie Dumoleyn <hannie@kde.nl>, 2010.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016, 2017, 2019, 2021, 2022, 2023.
 msgid ""
@@ -25,14 +25,14 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2024-09-14 00:15+0200\n"
+"PO-Revision-Date: 2026-03-03 10:51+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.0\n"
+"X-Generator: Lokalize 25.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -3413,6 +3413,15 @@ msgid ""
 "            select ?s ?p ?o\n"
 "            where { ?s ?p ?o }"
 msgstr ""
+"\n"
+"            voorvoegsel rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+"            voorvoegsel foaf: <http://xmlns.com/foaf/0.1/>\n"
+"            voorvoegsel pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/"
+"pkg#>\n"
+"            voorvoegsel geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n"
+"\n"
+"            selecteer ?s ?p ?o\n"
+"            waar { ?s ?p ?o }"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
 #: rdf/KoDocumentRdfEditWidget.ui:181

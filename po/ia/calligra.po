@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-02-25 17:54+0100\n"
+"PO-Revision-Date: 2026-03-03 17:59+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -787,42 +787,42 @@ msgstr "Solmente imprimeeexi"
 #: main/KoApplication.cpp:196
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
-msgstr ""
+msgstr "Aperi un nove documento sur le date patrono  (nomine de desktopfile)"
 
 #: main/KoApplication.cpp:197
 #, kde-format
 msgid "Open a new document based on the given template file"
-msgstr ""
+msgstr "Aperi un nove documento basate sur le date file de patrono"
 
 #: main/KoApplication.cpp:198
 #, kde-format
 msgid "Override display DPI"
-msgstr ""
+msgstr "Superscribe DPI de monstrator"
 
 #: main/KoApplication.cpp:199
 #, kde-format
 msgid "Only export to PDF and exit"
-msgstr ""
+msgstr "Solmente exporta a PDF e exi"
 
 #: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename for export-pdf"
-msgstr ""
+msgstr "Nomine de file per exportar-pdf"
 
 #: main/KoApplication.cpp:201
 #, kde-format
 msgid "just load the file and then exit"
-msgstr ""
+msgstr "juste carga le file e post exi"
 
 #: main/KoApplication.cpp:203
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
-msgstr ""
+msgstr "carga le file, monstra le fenestra e lebarra de progression e post exi"
 
 #: main/KoApplication.cpp:205
 #, kde-format
 msgid "Filename to write profiling information into."
-msgstr ""
+msgstr "Nomine del file ubi scriber information de profilar."
 
 #: main/KoApplication.cpp:208
 #, kde-format
@@ -868,7 +868,7 @@ msgstr "Il trovava nimie patronos pro: %1"
 #: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr ""
+msgstr "Patrono %1 falleva a cargar."
 
 #: main/KoApplication.cpp:530
 #, kde-format
@@ -890,11 +890,13 @@ msgstr "Abandona toto"
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr ""
+"Le sequente file de salveguardar automaticamente pote esser recuperate:"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:167
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr ""
+"Le sequente files de salveguardar automaticamente pote esser recuperate:"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:205
 #, kde-format
@@ -908,7 +910,7 @@ msgstr ""
 #: main/KoDetailsPaneBase.ui:97
 #, kde-format
 msgid "Always use this template at application start up"
-msgstr ""
+msgstr "Usa sempre iste patrono al startar del application"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:100
@@ -919,7 +921,7 @@ msgstr "Sempre usa iste patrono"
 #: main/KoDocument.cpp:548
 #, kde-format
 msgid "Making backup..."
-msgstr ""
+msgstr "Facer retrocopia..."
 
 #: main/KoDocument.cpp:563
 #, kde-format
@@ -964,7 +966,7 @@ msgstr "Salveguardante automaticamente..."
 #: main/KoDocument.cpp:724
 #, kde-format
 msgid "Error during autosave! Partition full?"
-msgstr ""
+msgstr "Error durante le salveguardar automatic! Partition plen?"
 
 #: main/KoDocument.cpp:812
 #, kde-format
@@ -975,17 +977,17 @@ msgstr "Il non pote crear le file per salveguardar"
 #: main/KoDocument.cpp:942
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr ""
+msgstr "Incapace a scriber '%1'. Partition plen?"
 
 #: main/KoDocument.cpp:863
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
-msgstr ""
+msgstr "Incapace a scriber metadatos  RDF. Partition plen?"
 
 #: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
-msgstr ""
+msgstr "Error durante que esseyava a scriber '%1'. Partition plen?"
 
 #: main/KoDocument.cpp:1217
 #, kde-format
@@ -1002,6 +1004,8 @@ msgid ""
 "An autosaved file exists for this document.\n"
 "Do you want to open it instead?"
 msgstr ""
+"Un file de salveguarda automaticamente existe per iste documento.\n"
+"Tu vole in loco aperirlo?"
 
 #: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
 #, kde-format
@@ -1081,17 +1085,17 @@ msgstr "Foras de Memoria"
 #: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Empty Filter Plugin"
-msgstr ""
+msgstr "Plugin de filtro vacue"
 
 #: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
-msgstr ""
+msgstr "Essayante a cargar in le genere errate de documento"
 
 #: main/KoDocument.cpp:1513
 #, kde-format
 msgid "Failed to download remote file"
-msgstr ""
+msgstr "Falleva a discargar file remote"
 
 #: main/KoDocument.cpp:1522
 #, kde-format
@@ -1136,7 +1140,7 @@ msgstr "%1 non es un file."
 #: main/KoDocument.cpp:1692
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
-msgstr ""
+msgstr "Non poteva aperir lefile per leger (verifica permissiones de lectura)"
 
 #: main/KoDocument.cpp:1703
 #, kde-format
@@ -1161,7 +1165,7 @@ msgstr "Non es un valide file de Calligra: %1"
 #: main/KoDocument.cpp:1836
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr ""
+msgstr "Documento invalide:necun file 'maindoc.xml'."
 
 #: main/KoDocument.cpp:1860
 #, kde-format
@@ -1188,7 +1192,7 @@ msgstr ""
 #: main/KoDocument.cpp:2147
 #, kde-format
 msgid "Internal error: saveXML not implemented"
-msgstr ""
+msgstr "Error Interne : saveXML non implementate"
 
 #: main/KoDocument.cpp:2180
 #, kde-format
@@ -1309,12 +1313,12 @@ msgstr "Solmente parolas integre"
 #: main/KoFindText.cpp:49
 #, kde-format
 msgid "Find from Cursor"
-msgstr ""
+msgstr "Trova ab cursor"
 
 #: main/KoFindText.cpp:49
 #, kde-format
 msgid "Start searching from the current cursor"
-msgstr ""
+msgstr "Starta ab le cursor currente"
 
 #: main/KoMainWindow.cpp:154
 #, kde-format
@@ -1459,7 +1463,7 @@ msgstr "Exporta como PDF"
 #: main/KoMainWindow.cpp:1414
 #, kde-format
 msgid "Cannot export to the specified file"
-msgstr ""
+msgstr "Non pote exportar alfilespecificate"
 
 #: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
@@ -1631,12 +1635,12 @@ msgstr "&Selige..."
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
 msgid "Use the new template as default"
-msgstr ""
+msgstr "Usa le nove patrono como predefinite"
 
 #: main/KoTemplateCreateDia.cpp:304
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr ""
+msgstr "Tu vole vermente superscriber le patrono existente '%1'?"
 
 #: main/KoTemplateCreateDia.cpp:416 main/KoTemplateCreateDia.cpp:421
 #, kde-format
@@ -1681,7 +1685,7 @@ msgstr "Il non pote cargar pictura."
 #: main/KoTemplateCreateDia.cpp:499
 #, kde-format
 msgid "No picture available."
-msgstr ""
+msgstr "Nulle imagine disponibile"
 
 #: main/KoTemplatesPane.cpp:36
 #, kde-format
@@ -1726,7 +1730,7 @@ msgstr "&Aperi"
 #: main/KoVersionDialog.cpp:114
 #, kde-format
 msgid "A new version could not be added"
-msgstr ""
+msgstr "Un nove version non poteva esser addite"
 
 #: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
 #, kde-format
@@ -1763,7 +1767,7 @@ msgstr "Incognite"
 #: odf/KoOdfReadStore.cpp:91
 #, kde-format
 msgid "No store backend"
-msgstr ""
+msgstr "Necun retroadministration de immagazinar"
 
 #: odf/KoOdfReadStore.cpp:126
 #, kde-format
@@ -2567,7 +2571,7 @@ msgstr "Alpha"
 #: pigment/colorspaces/KoAlphaColorSpace.h:188
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr ""
+msgstr "Operation indefinite in spatio de color alpha"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:26
 #: pigment/colorspaces/KoLabColorSpace.h:55
@@ -3430,7 +3434,7 @@ msgstr "Definition de Stylesheets (Folios de stilo)"
 #: rdf/KoSemanticStylesheetsEditor.ui:29
 #, kde-format
 msgid "Variables Available"
-msgstr ""
+msgstr "Variabiles disponibile"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: rdf/KoSemanticStylesheetsEditor.ui:62
@@ -3497,7 +3501,7 @@ msgstr "Typo de Datos"
 #: rdf/KoSopranoTableModel.cpp:131
 #, kde-format
 msgid "Stored In"
-msgstr ""
+msgstr "Immagazinate in"
 
 #: store/KoEncryptedStore.cpp:244
 #, kde-format
@@ -3551,12 +3555,12 @@ msgstr ""
 #: store/KoEncryptedStore.cpp:569
 #, kde-format
 msgid "Please enter the password to open this file."
-msgstr ""
+msgstr "Pro favor inserta le contrasigno per aperir iste file."
 
 #: store/KoEncryptedStore.cpp:768
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
-msgstr ""
+msgstr "Pro favor inserta le contrasigno con le qual cryptar le documento."
 
 #: store/KoEncryptedStore.cpp:783
 #, kde-format
@@ -3581,7 +3585,7 @@ msgstr "Calligra Storage (Immagazinage de Calligra)"
 #: store/KoStore.cpp:152
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
-msgstr ""
+msgstr "Le modode directorio non es supportate per locationes remote."
 
 #: text/commands/ChangeListCommand.cpp:30
 #: text/commands/ChangeListCommand.cpp:78
@@ -3681,7 +3685,7 @@ msgstr "Adaptar Largessa de Columna"
 #: text/commands/ResizeTableCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
-msgstr ""
+msgstr "Adapta Altessa de Rango"
 
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -3716,12 +3720,12 @@ msgstr "Referentia de texto"
 #: text/InsertTextReferenceAction.cpp:31
 #, kde-format
 msgid "Please create an index to reference first."
-msgstr ""
+msgstr "Pro favor tu crea prime un indice per referer."
 
 #: text/InsertTextReferenceAction.cpp:40
 #, kde-format
 msgid "Select the index you want to reference"
-msgstr ""
+msgstr "Selige leindice que tu vole referer"
 
 #: text/KoFindStrategy.cpp:55
 #, kde-format
@@ -3742,6 +3746,9 @@ msgid ""
 "\n"
 "No text was replaced"
 msgstr ""
+"Trovate necun coincidentia\n"
+"\n"
+"Necun texto esseva reimplaciate"
 
 #: text/KoReplaceStrategy.cpp:45
 #, kde-format
@@ -3834,7 +3841,7 @@ msgstr "Adapta largessa de tabula"
 #: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
-msgstr ""
+msgstr "Cambia Formatar del Bordo"
 
 #: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
 #: text/KoTextEditor.cpp:1197
@@ -3972,7 +3979,7 @@ msgstr "Adde/Remove colores..."
 #: widgets/KoConfigAuthorPage.cpp:50
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
-msgstr ""
+msgstr "Adde nove profilo de autor (initia como un copia del currente)"
 
 #: widgets/KoConfigAuthorPage.cpp:54
 #, kde-format
@@ -3982,7 +3989,7 @@ msgstr "Dele le profilo de autor"
 #: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
 msgid "Name (not duplicate or blank name):"
-msgstr ""
+msgstr "Nomine (non duplicate o nomine vacue)"
 
 #: widgets/KoConfigAuthorPage.cpp:128
 #, kde-format
@@ -4118,13 +4125,13 @@ msgstr "Datos"
 #: widgets/KoCsvImportDialog.ui:64
 #, kde-format
 msgid "First row contains headers"
-msgstr ""
+msgstr "Prime rango contine capites"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
 #: widgets/KoCsvImportDialog.ui:77
 #, kde-format
 msgid "First column contains headers"
-msgstr ""
+msgstr "Primecolumnacontine capites"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
 #: widgets/KoCsvImportDialog.ui:101
@@ -4551,7 +4558,7 @@ msgstr "Nomine de color:"
 #: widgets/KoEditColorSetDialog.cpp:174
 #, kde-format
 msgid "Gimp Color Palette (*.gpl)"
-msgstr ""
+msgstr "Paletta Color de Gimp (*.gpl)"
 
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
@@ -4631,7 +4638,7 @@ msgstr "Radial"
 #, kde-format
 msgctxt "Conical gradient type"
 msgid "Conical"
-msgstr ""
+msgstr "Conic"
 
 #: widgets/KoGradientEditWidget.cpp:162
 #, kde-format
@@ -4672,7 +4679,7 @@ msgstr "Stoppa color."
 #: widgets/KoGradientEditWidget.cpp:185
 #, kde-format
 msgid "&Add to Predefined Gradients"
-msgstr ""
+msgstr "&Adde a Gradientes Predefinite"
 
 #: widgets/KoModeBox.cpp:501
 #, kde-format
@@ -4895,7 +4902,7 @@ msgstr "Etiquettas"
 #: widgets/KoResourceTaggingManager.cpp:131
 #, kde-format
 msgid "Unable to undelete tag"
-msgstr ""
+msgstr "Incapace a recuperar (undelete) etiquetta "
 
 #: widgets/KoResourceTaggingManager.cpp:132
 #, kde-format
