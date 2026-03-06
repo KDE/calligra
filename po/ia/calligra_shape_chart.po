@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-02-25 17:31+0100\n"
+"PO-Revision-Date: 2026-03-05 11:53+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -416,7 +416,7 @@ msgstr "Diagramma de stock a candela"
 #: ChartShapeFactory.cpp:243
 #, kde-format
 msgid "Japanese candle stick stock chart"
-msgstr ""
+msgstr "Diagramma de stock de baston de candela japonese"
 
 #: ChartShapeFactory.cpp:253
 #, kde-format
@@ -426,7 +426,7 @@ msgstr "Diagramma de stock OHLC"
 #: ChartShapeFactory.cpp:254
 #, kde-format
 msgid "Open High Low Close stock chart"
-msgstr ""
+msgstr "Aperir Alte Basse Clauder diagramma de stock"
 
 #: ChartShapeFactory.cpp:264
 #, kde-format
@@ -436,7 +436,7 @@ msgstr "Diagramma de stock HLC"
 #: ChartShapeFactory.cpp:265
 #, kde-format
 msgid "High Low Close stock chart"
-msgstr ""
+msgstr "Alte Basse Clauder diagramma de stock"
 
 #: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
 #: ChartShapeFactory.cpp:631
@@ -941,12 +941,12 @@ msgstr "Candlestick (Candelabro)"
 #: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
-msgstr ""
+msgstr "AperirAlteBasseClauder"
 
 #: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
-msgstr ""
+msgstr "AlteBasseClauder"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
@@ -1266,7 +1266,7 @@ msgstr "Etiquetta predefinite: %1"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "X-Values cell region: %1"
-msgstr ""
+msgstr "Region de cella de Valor-X: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:158
 #: dialogs/BubbleDataSetTableModel.cpp:165
@@ -1276,20 +1276,20 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr ""
+msgstr "Valores predefinite usate"
 
 #: dialogs/BubbleDataSetTableModel.cpp:163
 #: dialogs/ScatterDataSetTableModel.cpp:158
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Y-Values cell region: %1"
-msgstr ""
+msgstr "Region de cella de Valor-Y: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Bubble size cell region: %1"
-msgstr ""
+msgstr "Region de cella de grandor de bulla: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
@@ -1307,7 +1307,7 @@ msgstr "Valores de X:"
 #: dialogs/CellRegionDialog.ui:72
 #, kde-format
 msgid "<b>Choose a Data Set</b>"
-msgstr ""
+msgstr "<b>Selige un insimul de Datos</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/CellRegionDialog.ui:82
@@ -1705,7 +1705,7 @@ msgstr "Puncto de datos %1"
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
 #, kde-format
 msgid "E&xplode Factor"
-msgstr ""
+msgstr "E&xploder Factor"
 
 #: PlotAreaConfigWidget.cpp:275
 #, kde-format
@@ -1767,7 +1767,7 @@ msgstr "Punctos de datos"
 #: StockConfigWidget.ui:18
 #, kde-format
 msgid "Range line"
-msgstr ""
+msgstr "Linea de Extension"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: StockConfigWidget.ui:47
@@ -1802,12 +1802,12 @@ msgstr "Categorias"
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "Butt cap (punctal)"
 
 #: widgets/StrokeConfigWidget.cpp:98
 #, kde-format
 msgid "Round cap"
-msgstr ""
+msgstr "Round cap (tappo circular)"
 
 #: widgets/StrokeConfigWidget.cpp:105
 #, kde-format
@@ -1817,17 +1817,17 @@ msgstr "Capsula quadrate"
 #: widgets/StrokeConfigWidget.cpp:116
 #, kde-format
 msgid "Miter join"
-msgstr ""
+msgstr "Juncto mitra"
 
 #: widgets/StrokeConfigWidget.cpp:123
 #, kde-format
 msgid "Round join"
-msgstr ""
+msgstr "Juncto circular"
 
 #: widgets/StrokeConfigWidget.cpp:130
 #, kde-format
 msgid "Bevel join"
-msgstr ""
+msgstr "Juncto blasate"
 
 #: widgets/StrokeConfigWidget.cpp:140
 #, kde-format

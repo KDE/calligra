@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-02-25 17:39+0100\n"
+"PO-Revision-Date: 2026-03-05 11:54+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -2957,7 +2957,7 @@ msgstr ""
 #: TextTool.cpp:930
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
-msgstr ""
+msgstr "Cambia Formatar del Bordo"
 
 #: TextTool.cpp:1154
 msgctxt "(qtundo-format)"
@@ -2972,7 +2972,7 @@ msgstr "Adaptar Largessa de Columna"
 #: TextTool.cpp:1458
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
-msgstr ""
+msgstr "Adapta Altessa de Rango"
 
 #: TextTool.cpp:2259
 #, kde-format
