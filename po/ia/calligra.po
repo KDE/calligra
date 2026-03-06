@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2026-03-03 17:55+0100\n"
+"PO-Revision-Date: 2026-03-05 12:00+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -5008,12 +5008,12 @@ msgstr ""
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "Butt cap (punctal)"
 
 #: widgets/KoStrokeConfigWidget.cpp:90
 #, kde-format
 msgid "Round cap"
-msgstr ""
+msgstr "Round cap (tappo circular)"
 
 #: widgets/KoStrokeConfigWidget.cpp:97
 #, kde-format
@@ -5023,17 +5023,17 @@ msgstr "Capsula quadrate"
 #: widgets/KoStrokeConfigWidget.cpp:108
 #, kde-format
 msgid "Miter join"
-msgstr ""
+msgstr "Juncto mitra"
 
 #: widgets/KoStrokeConfigWidget.cpp:115
 #, kde-format
 msgid "Round join"
-msgstr ""
+msgstr "Juncto circular"
 
 #: widgets/KoStrokeConfigWidget.cpp:122
 #, kde-format
 msgid "Bevel join"
-msgstr ""
+msgstr "Juncto blasate"
 
 #: widgets/KoStrokeConfigWidget.cpp:132
 #, kde-format
