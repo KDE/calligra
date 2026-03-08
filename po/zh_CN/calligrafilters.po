@@ -825,7 +825,7 @@ msgstr "Words 纯文本导入过滤器"
 #: words/ascii/ImportDialogUI.ui:16
 #, kde-format
 msgid "Plain Text Import Dialog"
-msgstr "普通文本导入对话框"
+msgstr "纯文本导入对话框"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
 #: words/ascii/ImportDialogUI.ui:22

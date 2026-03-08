@@ -172,7 +172,7 @@ msgstr "秒"
 #: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:120
 #, kde-format
 msgid "Text"
-msgstr "文字"
+msgstr "文本"
 
 #: engine/FunctionDescription.cpp:39
 #, kde-format
@@ -5063,7 +5063,7 @@ msgstr "N(3.14) 返回 3.14"
 #: functions/information.xml:47
 #, kde-format
 msgid "N(\"7\") returns 0 (because \"7\" is text)"
-msgstr "N(\"7\") 返回 0 (因为 \"7\" 是文字)"
+msgstr "N(\"7\") 返回 0 (因为 \"7\" 是文本)"
 
 #: functions/information.xml:55
 #, kde-format
@@ -7581,7 +7581,7 @@ msgstr ""
 #: functions/reference.xml:34
 #, kde-format
 msgid "Sheet name is the text specifying the name of the sheet."
-msgstr "工作表名是指定工作表名称的文字。"
+msgstr "工作表名是指定工作表名称的文本。"
 
 #: functions/reference.xml:35
 #, kde-format
@@ -10302,17 +10302,17 @@ msgstr "FIXED(44.332) 返回 \"44.33\""
 #: functions/text.xml:54
 #, kde-format
 msgid "Text for which you want to substitute"
-msgstr "您要替换成的文字"
+msgstr "您要替换成的文本"
 
 #: functions/text.xml:58
 #, kde-format
 msgid "Part of text you want to replace"
-msgstr "您要替换掉的文字部分"
+msgstr "您要替换掉的文本部分"
 
 #: functions/text.xml:62
 #, kde-format
 msgid "New text which will be replacement"
-msgstr "替换后的新的文字"
+msgstr "替换后的新的文本"
 
 #: functions/text.xml:66
 #, kde-format
@@ -11177,7 +11177,7 @@ msgstr "VALUE(\"14.03\") 返回 14.03"
 #: functions/text.xml:727 functions/text.xml:756
 #, kde-format
 msgid "Searched text"
-msgstr "搜索的文字"
+msgstr "搜索的文本"
 
 #: functions/text.xml:731 functions/text.xml:760
 #, kde-format
@@ -14031,7 +14031,7 @@ msgstr ""
 #: ui/dialogs/FontWidget.ui:139
 #, kde-format
 msgid "This will strike out the current cell text if this is checked."
-msgstr "如果选中的话，当前单元格中的文字将会加删除线。"
+msgstr "如果选中的话，当前单元格中的文本将会加删除线。"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, strike)
 #: ui/dialogs/FontWidget.ui:142
@@ -14373,7 +14373,7 @@ msgstr "三位数 153/652"
 #: ui/dialogs/LayoutPage_Font.cpp:45
 #, kde-format
 msgid "Dolor Ipse"
-msgstr "AaBbCc 文字范例"
+msgstr "AaBbCc 文本范例"
 
 #: ui/dialogs/LayoutPage_General.cpp:42
 #, kde-format
@@ -14531,13 +14531,13 @@ msgstr "文本选项"
 #: ui/dialogs/PositionWidget.ui:186
 #, kde-format
 msgid "Wrap text"
-msgstr "文字换行"
+msgstr "文本换行"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, vertical)
 #: ui/dialogs/PositionWidget.ui:193
 #, kde-format
 msgid "Vertical text"
-msgstr "垂直文字"
+msgstr "竖排文本"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, shrinkToFit)
 #: ui/dialogs/PositionWidget.ui:200
@@ -14580,7 +14580,7 @@ msgstr ""
 #: ui/dialogs/ProtectionWidget.ui:51
 #, kde-format
 msgid "&Do not print text"
-msgstr "不打印文字(&D)"
+msgstr "不打印文本(&D)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/ProtectionWidget.ui:61
