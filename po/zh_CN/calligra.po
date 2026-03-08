@@ -5192,7 +5192,7 @@ msgstr "实际像素"
 
 #: widgets/KoZoomMode.cpp:19
 msgid "Fit Text Width"
-msgstr "适合文字宽度"
+msgstr "适合文本宽度"
 
 #: widgets/KoZoomWidget.cpp:69
 #, kde-format

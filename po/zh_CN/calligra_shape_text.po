@@ -1577,13 +1577,13 @@ msgstr "继续提示："
 #: dialogs/NotesConfigurationDialog.ui:305
 #, kde-format
 msgid "Text saying it is a continuation:"
-msgstr "继续标记文字："
+msgstr "继续标记文本："
 
 #. i18n: ectx: property (text), widget (QLabel, cont1)
 #: dialogs/NotesConfigurationDialog.ui:315
 #, kde-format
 msgid " Text saying it will continue:"
-msgstr "内容将继续的说明文字："
+msgstr "内容将继续的说明文本："
 
 #: dialogs/ParagraphBulletsNumbers.cpp:34
 #, kde-format
@@ -2646,7 +2646,7 @@ msgstr "两端对齐"
 #: TextTool.cpp:273
 #, kde-format
 msgid "Change text direction"
-msgstr "更改文字方向"
+msgstr "更改文本方向"
 
 #: TextTool.cpp:275
 #, kde-format
