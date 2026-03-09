@@ -127,7 +127,7 @@ msgstr "التدرج الرمادي"
 #: PictureTool.cpp:96
 #, kde-format
 msgid "Monochrome"
-msgstr "أُحاديِّ اللون"
+msgstr "أحاديّ اللون"
 
 #: PictureTool.cpp:97
 #, kde-format
