@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/calligrawords.pot\n"
-"X-Crowdin-File-ID: 53634\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/calligrawords.pot\n"
+"X-Crowdin-File-ID: 56566\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
