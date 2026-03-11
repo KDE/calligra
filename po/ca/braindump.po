@@ -328,18 +328,3 @@ msgstr "Agrupa les formes"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Desagrupa les formes"
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
-
-#~ msgid "Use a cache copy"
-#~ msgstr "Usa una còpia de la memòria cau"
-
-#~ msgid "Web Shape"
-#~ msgstr "Forma de web"
-
-#~ msgid "A web shape"
-#~ msgstr "Una forma de web"
-
-#~ msgid "Web shape editing"
-#~ msgstr "Edició de formes web"

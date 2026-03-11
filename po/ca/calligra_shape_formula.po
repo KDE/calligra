@@ -309,21 +309,3 @@ msgstr "Edita fórmula amb la sintaxi LaTeX/Matlab"
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
 msgstr "Edita fórmula amb la sintaxi LaTeX"
-
-#~ msgid "General options"
-#~ msgstr "Opcions generals"
-
-#~ msgid "Colors:"
-#~ msgstr "Colors:"
-
-#~ msgid "Specific options"
-#~ msgstr "Opcions específiques"
-
-#~ msgid "Rows:"
-#~ msgstr "Files:"
-
-#~ msgid "Columns:"
-#~ msgstr "Columnes:"
-
-#~ msgid "View MathML"
-#~ msgstr "Visualització MathML"

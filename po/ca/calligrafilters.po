@@ -933,37 +933,3 @@ msgstr "Filtre d'importació RTF del Words"
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "No s'ha pogut carregar el fitxer."
-
-#~ msgid "Encoding"
-#~ msgstr "Codificació"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Recommended ( %1 )"
-#~ msgstr "Recomanat (%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Locale ( %1 )"
-#~ msgstr "Configuració regional (%1)"
-
-#~ msgctxt "Descriptive encoding name"
-#~ msgid "Other ( %1 )"
-#~ msgstr "Altres (%1)"
-
-#~ msgid "Cannot find encoding: %1"
-#~ msgstr "No s'ha pogut trobar la codificació: %1"
-
-#~ msgid "Recommended: UTF-8"
-#~ msgstr "Recomanat: UTF-8"
-
-#~ msgid "Locale (%1)"
-#~ msgstr "Configuració regional (%1)"
-
-#~ msgid "En&coding:"
-#~ msgstr "Co&dificació:"
-
-#~ msgid ""
-#~ "With this option you can define the encoding of the HTML file. The "
-#~ "recommended encoding (UTF8) is selected as default."
-#~ msgstr ""
-#~ "Amb aquesta opció, podeu definir la codificació del fitxer HTML. La "
-#~ "recomanada (UTF8) és la seleccionada per defecte."

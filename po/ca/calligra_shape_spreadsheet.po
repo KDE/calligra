@@ -153,12 +153,3 @@ msgstr "Oculta la columna"
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Amplada: %1 %2"
-
-#~ msgid "Number of columns"
-#~ msgstr "Nombre de columnes"
-
-#~ msgid "Rows:"
-#~ msgstr "Files:"
-
-#~ msgid "Number of rows"
-#~ msgstr "Nombre de files"
