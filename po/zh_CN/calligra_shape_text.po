@@ -1876,7 +1876,7 @@ msgstr " %"
 #: dialogs/ParagraphIndentSpacing.ui:129
 #, kde-format
 msgid "Use Font Metrics"
-msgstr "使用字体度量标准"
+msgstr "使用字体度量"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
