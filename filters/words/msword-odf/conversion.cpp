@@ -52,6 +52,10 @@ QString Conversion::styleName2QString(const wvWare::UString &str)
 
 QString Conversion::processStyleName(QString str)
 {
+    if (str.isEmpty()) {
+        return str;
+    }
+
     // first replace all spaces with _20_
     str.replace(' ', "_20_");
     for (int i = 0; i < str.size(); i++) {
