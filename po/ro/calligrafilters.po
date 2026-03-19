@@ -1,12 +1,12 @@
 # translation of kofficefilters.po to Romanian
+# SPDX-FileCopyrightText: 2011, 2013, 2026 Sergiu Bivol <sergiu@cip.md>
 # Claudiu Costin <claudiuc@kde.org>, 2004.
-# Sergiu Bivol <sergiu@cip.md>, 2011, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-01-12 05:06+0200\n"
+"PO-Revision-Date: 2026-03-16 16:26+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #: karbon/image/ImageExport.cpp:88
 #, fuzzy, kde-format
@@ -213,24 +214,24 @@ msgstr ""
 #: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
-msgstr "Intrarea '%1' nu este găsită."
+msgstr "Înregistrarea „%1” nu a fost găsită."
 
 #: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
-msgstr "Intrearea '%1' nu este un fișier."
+msgstr "Înregistrarea „%1” nu este un fișier."
 
 #: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
 #: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
-msgstr "Nu se poate deschide intrarea \"%1\" pentru scriere."
+msgstr "Nu se poate deschide înregistrarea „%1” pentru scriere."
 
 #: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
 #: libmsooxml/MsooXmlUtils.cpp:390
 #, kde-format
 msgid "Could not write block"
-msgstr "Nu se poate scrie sectorul"
+msgstr "Nu se poate scrie blocul"
 
 #: sheets/csv/csvexport.cc:253
 #, kde-format
@@ -238,54 +239,52 @@ msgid "<SHEETNAME>"
 msgstr "<NUMEFOAIE>"
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Export Sheet to HTML"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "Exportă foaia în HTML"
+msgstr "Exportă în CVS"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
 #, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr ""
+msgstr "Exportă"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
 msgid "CSV filter cannot open input file - please report."
-msgstr "Filtrul CSV nu poate deschide fișierul de intrare - raportați"
+msgstr "Filtrul CSV nu poate deschide fișierul de intrare - raportați."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
 #: sheets/csv/exportdialogui.ui:48
 #, kde-format
 msgid "End of Line"
-msgstr "Sfârsit de linie"
+msgstr "Sfârșit de linie"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End of Line:"
-msgstr "Sfârsit de linie"
+msgstr "Sfârșit de linie:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
 #, kde-format
 msgid "&UNIX style (recommended; line feed only)"
-msgstr "&stil UNIX (recomandat; doar fluxul de linie)"
+msgstr "Stil &UNIX (recomandat; doar avans de linie)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
 #: sheets/csv/exportdialogui.ui:73
 #, kde-format
 msgid "&Windows style (carriage return and line feed)"
-msgstr "&stil Windows (CR și fluxul de linie)"
+msgstr "&stil Windows (CR și avans de linie)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
 #: sheets/csv/exportdialogui.ui:83
 #, kde-format
 msgid "&MacOS style (carriage return only)"
-msgstr "&stil MacOS (doar CR)"
+msgstr "Stil &MacOS (doar CR)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: sheets/csv/exportdialogui.ui:96
@@ -327,14 +326,13 @@ msgstr "Imprimă linia de delimitare deasupra fiecărei foi"
 #: sheets/csv/exportdialogui.ui:174
 #, kde-format
 msgid "Cells"
-msgstr "CeluleȘ"
+msgstr "Celule"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
-#, fuzzy, kde-format
-#| msgid "Delimiter"
+#, kde-format
 msgid "Delimiter:"
-msgstr "Delimitator"
+msgstr "Delimitator:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
