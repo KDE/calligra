@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-03-19 00:46+0000\n"
 "PO-Revision-Date: 2025-08-01 17:43-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -885,32 +885,32 @@ msgstr "&Linha vazia: Se a linha estiver vazia"
 msgid "End notes"
 msgstr "Notas de fim"
 
-#: words/msword-odf/conversion.cpp:783
+#: words/msword-odf/conversion.cpp:787
 #, kde-format
 msgid "Even Pages Header"
 msgstr "Cabeçalho das páginas pares"
 
-#: words/msword-odf/conversion.cpp:785
+#: words/msword-odf/conversion.cpp:789
 #, kde-format
 msgid "Odd Pages Header"
 msgstr "Cabeçalho das páginas ímpares"
 
-#: words/msword-odf/conversion.cpp:787
+#: words/msword-odf/conversion.cpp:791
 #, kde-format
 msgid "Even Pages Footer"
 msgstr "Rodapé das páginas pares"
 
-#: words/msword-odf/conversion.cpp:789
+#: words/msword-odf/conversion.cpp:793
 #, kde-format
 msgid "Odd Pages Footer"
 msgstr "Rodapé das páginas ímpares"
 
-#: words/msword-odf/conversion.cpp:791
+#: words/msword-odf/conversion.cpp:795
 #, kde-format
 msgid "First Page Header"
 msgstr "Cabeçalho da 1ª página"
 
-#: words/msword-odf/conversion.cpp:793
+#: words/msword-odf/conversion.cpp:797
 #, kde-format
 msgid "First Page Footer"
 msgstr "Rodapé da 1ª página"

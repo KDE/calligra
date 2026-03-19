@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-03-19 00:46+0000\n"
 "PO-Revision-Date: 2024-09-04 09:49+0200\n"
 "Last-Translator: Alois.spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -883,32 +883,32 @@ msgstr "&Leere Zeile: Wenn die Zeile leer ist"
 msgid "End notes"
 msgstr "Endnoten"
 
-#: words/msword-odf/conversion.cpp:783
+#: words/msword-odf/conversion.cpp:787
 #, kde-format
 msgid "Even Pages Header"
 msgstr "Kopfzeile für gerade Seiten"
 
-#: words/msword-odf/conversion.cpp:785
+#: words/msword-odf/conversion.cpp:789
 #, kde-format
 msgid "Odd Pages Header"
 msgstr "Kopfzeile für ungerade Seiten"
 
-#: words/msword-odf/conversion.cpp:787
+#: words/msword-odf/conversion.cpp:791
 #, kde-format
 msgid "Even Pages Footer"
 msgstr "Fußzeile für gerade Seiten"
 
-#: words/msword-odf/conversion.cpp:789
+#: words/msword-odf/conversion.cpp:793
 #, kde-format
 msgid "Odd Pages Footer"
 msgstr "Fußzeile für ungerade Seiten"
 
-#: words/msword-odf/conversion.cpp:791
+#: words/msword-odf/conversion.cpp:795
 #, kde-format
 msgid "First Page Header"
 msgstr "Kopfzeile für erste Seite"
 
-#: words/msword-odf/conversion.cpp:793
+#: words/msword-odf/conversion.cpp:797
 #, kde-format
 msgid "First Page Footer"
 msgstr "Fußzeile für erste Seite"

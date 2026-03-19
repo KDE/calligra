@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-03-19 00:46+0000\n"
 "PO-Revision-Date: 2013-03-23 14:48+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -849,32 +849,32 @@ msgstr ""
 msgid "End notes"
 msgstr ""
 
-#: words/msword-odf/conversion.cpp:783
+#: words/msword-odf/conversion.cpp:787
 #, kde-format
 msgid "Even Pages Header"
 msgstr "सम पाने शिर्षक"
 
-#: words/msword-odf/conversion.cpp:785
+#: words/msword-odf/conversion.cpp:789
 #, kde-format
 msgid "Odd Pages Header"
 msgstr "विषम पाने शिर्षक"
 
-#: words/msword-odf/conversion.cpp:787
+#: words/msword-odf/conversion.cpp:791
 #, kde-format
 msgid "Even Pages Footer"
 msgstr "सम पाने अधोशिर्षक"
 
-#: words/msword-odf/conversion.cpp:789
+#: words/msword-odf/conversion.cpp:793
 #, kde-format
 msgid "Odd Pages Footer"
 msgstr "विषम पाने अधोशिर्षक"
 
-#: words/msword-odf/conversion.cpp:791
+#: words/msword-odf/conversion.cpp:795
 #, kde-format
 msgid "First Page Header"
 msgstr ""
 
-#: words/msword-odf/conversion.cpp:793
+#: words/msword-odf/conversion.cpp:797
 #, kde-format
 msgid "First Page Footer"
 msgstr ""

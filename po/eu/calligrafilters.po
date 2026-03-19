@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-03-19 00:46+0000\n"
 "PO-Revision-Date: 2024-08-30 20:17+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -872,32 +872,32 @@ msgstr "Lerro &hutsa: lerroa hutsik badago"
 msgid "End notes"
 msgstr "Amaiera-oharrak"
 
-#: words/msword-odf/conversion.cpp:783
+#: words/msword-odf/conversion.cpp:787
 #, kde-format
 msgid "Even Pages Header"
 msgstr "Orri bikoitien goiburua"
 
-#: words/msword-odf/conversion.cpp:785
+#: words/msword-odf/conversion.cpp:789
 #, kde-format
 msgid "Odd Pages Header"
 msgstr "Orri bakoitien goiburua"
 
-#: words/msword-odf/conversion.cpp:787
+#: words/msword-odf/conversion.cpp:791
 #, kde-format
 msgid "Even Pages Footer"
 msgstr "Orri bikoitien orri-oina"
 
-#: words/msword-odf/conversion.cpp:789
+#: words/msword-odf/conversion.cpp:793
 #, kde-format
 msgid "Odd Pages Footer"
 msgstr "Orri bakoitien orri-oina"
 
-#: words/msword-odf/conversion.cpp:791
+#: words/msword-odf/conversion.cpp:795
 #, kde-format
 msgid "First Page Header"
 msgstr "Lehen orriaren goiburua"
 
-#: words/msword-odf/conversion.cpp:793
+#: words/msword-odf/conversion.cpp:797
 #, kde-format
 msgid "First Page Footer"
 msgstr "Lehen orriaren orri-oina"
