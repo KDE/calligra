@@ -2569,7 +2569,7 @@ msgstr "在 Alpha 色彩空间的未定义操作"
 #: pigment/colorspaces/KoLabColorSpace.h:55
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
-msgstr "L*a*b* (16 位整数/通道，无色彩管理)"
+msgstr "L*a*b* (16 位整数/通道，不进行色彩管理)"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:28
 #: pigment/compositeops/KoCompositeOps.h:207
@@ -2594,13 +2594,13 @@ msgstr "b*"
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:47
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr "RGB (16 位整数/通道，无色彩管理)"
+msgstr "RGB (16 位整数/通道，不进行色彩管理)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:27
 #: pigment/colorspaces/KoRgbU8ColorSpace.h:47
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr "RGB (8 位整数/通道，无色彩管理)"
+msgstr "RGB (8 位整数/通道，不进行色彩管理)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:29
 #, kde-format
