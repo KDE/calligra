@@ -10,13 +10,13 @@
 # This translation is subject to the same Open Source
 # license as the program which it accompanies.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2025-10-09 13:15+0300\n"
+"PO-Revision-Date: 2026-03-20 08:13+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1080,7 +1080,7 @@ msgstr "לא ממומש"
 #: main/KoDocument.cpp:1481
 #, kde-format
 msgid "Parsing error"
-msgstr "שגיאת פענוח"
+msgstr "שגיאת פיענוח"
 
 #: main/KoDocument.cpp:1485
 #, kde-format
@@ -1149,7 +1149,7 @@ msgid ""
 "Parsing error in %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
-"שגיאת פענוח ב־%1, בשורה %2, עמודה %3\n"
+"שגיאת פיענוח ב־%1, בשורה %2, עמודה %3\n"
 "הודעת שגיאה: %4"
 
 #: main/KoDocument.cpp:1677
@@ -1173,7 +1173,7 @@ msgid ""
 "parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
-"שגיאת פענוח במסמך הראשי בשורה %1, עמודה %2\n"
+"שגיאת פיענוח במסמך הראשי בשורה %1, עמודה %2\n"
 "הודעת שגיאה: %3"
 
 #: main/KoDocument.cpp:1755
@@ -1799,7 +1799,7 @@ msgid ""
 "Parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
-"שגיאת פענוח במסמך הראשי בשורה %1, עמודה %2\n"
+"שגיאת פיענוח במסמך הראשי בשורה %1, עמודה %2\n"
 "הודעת שגיאה: %3"
 
 #: odf/KoPageFormat.cpp:48
@@ -4465,7 +4465,7 @@ msgstr "המסמך הזה מוצפו"
 #: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
 #, kde-format
 msgid "D&ecrypt"
-msgstr "&פענוח"
+msgstr "&פיענוח"
 
 #: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
@@ -4505,12 +4505,12 @@ msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
-"<qt>פענוח המסמך יסיר את הסיסמה שמגנה עליו<p>להמשיך לפענח את המסמך?</qt>"
+"<qt>פיענוח המסמך יסיר את הסיסמה שמגנה עליו<p>להמשיך לפענח את המסמך?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:339
 #, kde-format
 msgid "Confirm Decrypt"
-msgstr "אישור פענוח"
+msgstr "אישור פיענוח"
 
 #: widgets/KoDocumentInfoDlg.cpp:340
 #, kde-format
@@ -4523,7 +4523,7 @@ msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
 "decryption, please save the document.</qt>"
 msgstr ""
-"<qt>לא ניתן לשמור את המסמך שלך אוטומטית.<p>כדי להשלים את הפענוח נא לשמור את "
+"<qt>לא ניתן לשמור את המסמך שלך אוטומטית.<p>כדי להשלים את הפיענוח נא לשמור את "
 "המסמך.</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358

@@ -9,20 +9,20 @@
 # This translation is subject to the same Open Source
 # license as the program which it accompanies.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-19 00:46+0000\n"
-"PO-Revision-Date: 2024-12-16 07:53+0200\n"
+"PO-Revision-Date: 2026-03-20 08:13+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 25.12.3\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -215,7 +215,7 @@ msgid ""
 "Parsing error in the main document at line %1, column %2.\n"
 "Error message: %3"
 msgstr ""
-"שגיאת פענוח המסמך הראשי בשורה %1, עמודה %2.\n"
+"שגיאת פיענוח המסמך הראשי בשורה %1, עמודה %2.\n"
 "הודעת השגיאה: %3"
 
 #: libmsooxml/MsooXmlUtils.cpp:213
