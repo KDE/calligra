@@ -774,7 +774,7 @@ msgstr "粘贴偏移："
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "在光标处粘贴"
+msgstr "粘贴到光标处"
 
 #: main/KoApplication.cpp:194
 #, kde-format

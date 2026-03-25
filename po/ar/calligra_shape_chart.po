@@ -84,7 +84,7 @@ msgstr "الخط"
 #: AxesConfigWidget.ui:81
 #, kde-format
 msgid "Show Major Grid"
-msgstr "أظهِر الشبكة الرئيسية"
+msgstr "أظهِر الشبكة الرئيسة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
@@ -597,12 +597,12 @@ msgstr "أخفِ لصائق المحور"
 #: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr "أظهِر خطوط الشبكة الرئيسية للمحور"
+msgstr "أظهِر خطوط الشبكة الرئيسة للمحور"
 
 #: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
-msgstr "أخفِ خطوط الشبكة الرئيسية للمحور"
+msgstr "أخفِ خطوط الشبكة الرئيسة للمحور"
 
 #: commands/AxisCommand.cpp:171
 msgctxt "(qtundo-format)"

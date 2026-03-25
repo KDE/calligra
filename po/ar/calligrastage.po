@@ -3,13 +3,13 @@
 # Sayed Jaffer Al-Mosawi <mosawi@arabeyes.org>, 2002.
 # IBRAHIM ALIBRAHIM <iki2@eudoramail.com>, 2003.
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
-# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-10-05 21:04+0400\n"
+"PO-Revision-Date: 2026-03-24 10:18+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -487,7 +487,7 @@ msgstr "عادي"
 #: part/KPrView.cpp:79
 #, kde-format
 msgid "Show Master Slides"
-msgstr "أظهر الشرائح الرئيسية"
+msgstr "أظهر الشرائح الرئيسة"
 
 #: part/KPrView.cpp:80
 #, kde-format
@@ -1624,7 +1624,7 @@ msgstr "أعلى"
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
 msgid "Vertical"
-msgstr "رأسي"
+msgstr "عمودي"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:32
