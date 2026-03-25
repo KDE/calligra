@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-03-05 09:26+0400\n"
+"PO-Revision-Date: 2026-03-24 11:02+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -758,7 +758,7 @@ msgstr "مسافات أفقية:"
 #, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "مسافات رأسية:"
+msgstr "مسافات عمودية:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -1989,12 +1989,12 @@ msgstr "وحدة غير مدعومة"
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change master slide"
-msgstr "غيِّر الشريحة الرئيسية"
+msgstr "غيِّر الشريحة الرئيسة"
 
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change master page"
-msgstr "غيِّر الصفحة الرئيسية"
+msgstr "غيِّر الصفحة الرئيسة"
 
 #: pageapp/commands/KoPAChangePageLayoutCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -2004,7 +2004,7 @@ msgstr "اضبط تخطيط الصفحة"
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Display master background"
-msgstr "اعرض خلفية الرئيسية"
+msgstr "اعرض خلفية الرئيسة"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -2019,12 +2019,12 @@ msgstr "اعرض خلفية الصفحة"
 #: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Show master shapes"
-msgstr "أظهِر أشكال الرئيسية"
+msgstr "أظهِر أشكال الرئيسة"
 
 #: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Hide master shapes"
-msgstr "أخفِ أشكال الرئيسية"
+msgstr "أخفِ أشكال الرئيسة"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
 msgctxt "(qtundo-format) Delete one slide"
@@ -2133,7 +2133,7 @@ msgstr "المؤلف"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
 #, kde-format
 msgid "Select a master slide design:"
-msgstr "اختر تصميم شريحة رئيسية:"
+msgstr "اختر تصميم شريحة رئيسة:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
 #, kde-format
@@ -2143,7 +2143,7 @@ msgstr "الشريحة الرئيسة"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
 #, kde-format
 msgid "Select a master page design:"
-msgstr "اختر تصميم صفحة رئيسية:"
+msgstr "اختر تصميم صفحة رئيسة:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
@@ -2520,22 +2520,22 @@ msgstr "تصميم الشريحة"
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, kde-format
 msgid "Use background of master page"
-msgstr "استخدِم خلفية الصفحة الرئيسية"
+msgstr "استخدِم خلفية الصفحة الرئيسة"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, kde-format
 msgid "Use background of master slide"
-msgstr "استخدِم خلفية الشريحة الرئيسية"
+msgstr "استخدِم خلفية الشريحة الرئيسة"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, kde-format
 msgid "Display shapes of master page"
-msgstr "اعرض أشكال الصفحة الرئيسية"
+msgstr "اعرض أشكال الصفحة الرئيسة"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, kde-format
 msgid "Display shapes of master slide"
-msgstr "اعرض أشكال الشريحة الرئيسية"
+msgstr "اعرض أشكال الشريحة الرئيسة"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 msgctxt "(qtundo-format)"

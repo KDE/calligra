@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-10-05 12:26+0400\n"
+"PO-Revision-Date: 2026-03-24 10:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -74,7 +74,7 @@ msgstr "حاذِ إلى الحافّة العليا"
 #: connectionTool/ConnectionTool.cpp:84
 #, kde-format
 msgid "Align to vertical center"
-msgstr "حاذِ إلى المركز الرّأسي"
+msgstr "حاذِ إلى المركز العمودي"
 
 #: connectionTool/ConnectionTool.cpp:87
 #, kde-format
@@ -94,7 +94,7 @@ msgstr "أفلت في الاتّجاهات الأفقية"
 #: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
-msgstr "أفلت في الاتّجاهات الرّأسية"
+msgstr "أفلت في الاتّجاهات العمودية"
 
 #: connectionTool/ConnectionTool.cpp:100
 #, kde-format
@@ -223,7 +223,7 @@ msgstr "حاذِ إلى الأعلى"
 #: defaulttool/DefaultTool.cpp:256
 #, kde-format
 msgid "Vertically Center"
-msgstr "رأسيًا وسطًا"
+msgstr "التوسيط العمودي"
 
 #: defaulttool/DefaultTool.cpp:260
 #, kde-format

@@ -6,13 +6,13 @@
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
-# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-10-07 08:53+0400\n"
+"PO-Revision-Date: 2026-03-24 10:27+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -10154,7 +10154,7 @@ msgid ""
 msgstr ""
 "يمكن إجبار خط الانحدار على تقاطع الأصل (X=0, Y=0) بضبط المعامل الرابع، "
 "allowOffset، على FALSE أو 0. ضبط هذا المعامل على TRUE أو 1 (المبدئي) يسمح "
-"لخط أفضل مطابقة بتقاطع المحور الرأسي بقيمة Y غير صفرية. "
+"لخط أفضل مطابقة بتقاطع المحور العمودي بقيمة Y غير صفرية. "
 
 #: functions/statistical.xml:1434
 #, kde-format
@@ -12944,7 +12944,7 @@ msgstr "وسّط أفقيًّا"
 #: part/dialogs/PageLayoutSheetPage.ui:163
 #, kde-format
 msgid "Center vertically"
-msgstr "وسّط رأسيًّا"
+msgstr "وسّط عموديًّا"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/PageLayoutSheetPage.ui:173
@@ -13002,7 +13002,7 @@ msgstr "أفقي"
 #: part/dialogs/PageLayoutSheetPage.ui:335 ui/dialogs/PositionWidget.ui:135
 #, kde-format
 msgid "Vertical"
-msgstr "رأسي"
+msgstr "عمودي"
 
 #: part/dialogs/PreferenceDialog.cpp:269
 #, kde-format
@@ -15052,9 +15052,9 @@ msgid ""
 "<b>Bottom</b> means the content of the cell will be displayed at the bottom "
 "of the cell.</qt>"
 msgstr ""
-"<qt>اضبط موضع المحتوى رأسياً في الخلية.\n"
+"<qt>اضبط موضع المحتوى عمودياً في الخلية.\n"
 "<b>أعلى</b> يعني أن المحتوى سيعرض في أعلى الخلية.\n"
-"<b>وسط</b> يعني أن المحتوى سيكون في الوسط رأسياً في الخلية.\n"
+"<b>وسط</b> يعني أن المحتوى سيكون في الوسط عمودياً في الخلية.\n"
 "<b>أسفل</b> يعني أن محتوى الخلية سيعرض في أسفل الخلية.</qt>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
@@ -15104,7 +15104,7 @@ msgstr ""
 "يكون هذا متاح فقط حين يكون الدوران 0°.\n"
 "لف النص يلف النص فيلائم حجم الخلية السابق. إن لم يكن ذلك معيناً، سيبقى النص "
 "في سطر واحد وسيعدل حجم الخلية لتحتوي النص.\n"
-"النص الرأسي يضع النص لديك عموديا."
+"النص العمودي يضع النص لديك عموديا."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #: ui/dialogs/PositionWidget.ui:180
@@ -15122,7 +15122,7 @@ msgstr "لف النص"
 #: ui/dialogs/PositionWidget.ui:193
 #, kde-format
 msgid "Vertical text"
-msgstr "نص رأسي"
+msgstr "نص عمودي"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, shrinkToFit)
 #: ui/dialogs/PositionWidget.ui:200
