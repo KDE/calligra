@@ -2,7 +2,7 @@
 # Copyright © 2007, 2008, 2010, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the calligra package.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007, 2008.
-# SPDX-FileCopyrightText: 2010, 2012, 2021, 2022, 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2010, 2012, 2021, 2022, 2024, 2026 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014, 2015.
 #
 # KDE Finnish translation sprint participants:
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-11-18 09:56+0200\n"
+"PO-Revision-Date: 2026-03-11 15:39+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -2715,7 +2715,7 @@ msgstr "Pienennä sisennystä"
 #: TextTool.cpp:304
 #, kde-format
 msgid "Toggle List or List Level Formatting"
-msgstr ""
+msgstr "Vaihda luetelman tai luetelmatason muotoilu"
 
 #: TextTool.cpp:305
 #, kde-format

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-02-06 11:40+0200\n"
+"PO-Revision-Date: 2026-03-11 15:46+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -1630,10 +1630,9 @@ msgid "Default"
 msgstr "Oletus"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Geometrinen keskiarvo"
+msgstr "Geometria"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
@@ -1643,7 +1642,7 @@ msgstr "Nuolet"
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Hauskat"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -2941,10 +2940,9 @@ msgid "Addition"
 msgstr "Lisää"
 
 #: pigment/compositeops/KoCompositeOps.h:136
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Inversed-Subtract"
-msgstr "Kylläisyys"
+msgstr "Käänteinen-erotus"
 
 #: pigment/compositeops/KoCompositeOps.h:138
 #: pigment/KoCompositeOpRegistry.cpp:31
@@ -3007,11 +3005,9 @@ msgid "Tangent Normalmap"
 msgstr "Liitoskulma:"
 
 #: pigment/compositeops/KoCompositeOps.h:179
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
+#, kde-format
 msgid "Combine Normal Maps"
-msgstr "Yhdistä polut"
+msgstr "Yhdistä tavalliset kartat"
 
 #: pigment/compositeops/KoCompositeOps.h:181 pigment/KoCompositeOp.cpp:18
 #: pigment/KoCompositeOpRegistry.cpp:81
@@ -3343,10 +3339,9 @@ msgid "Mix"
 msgstr "Sekoitus"
 
 #: pigment/KoCompositeOpRegistry.cpp:32
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgid "Inverse Subtract"
-msgstr "Kylläisyys"
+msgstr "Käänteinen erotus"
 
 #: pigment/KoCompositeOpRegistry.cpp:34
 #, kde-format
@@ -3369,10 +3364,9 @@ msgid "Bumpmap"
 msgstr "Kuhmutus"
 
 #: pigment/KoCompositeOpRegistry.cpp:73
-#, fuzzy, kde-format
-#| msgid "Combine angle:"
+#, kde-format
 msgid "Combine Normal Map"
-msgstr "Liitoskulma:"
+msgstr "Yhdistä tavallinen kartta"
 
 #: pigment/resources/KoStopGradient.cpp:417
 #, kde-format
@@ -3843,12 +3837,12 @@ msgstr ""
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Split sections startings"
-msgstr ""
+msgstr "Jaa osioiden alut"
 
 #: text/commands/SplitSectionsCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Split sections endings"
-msgstr ""
+msgstr "Jaa osioiden loput"
 
 #: text/commands/TextPasteCommand.cpp:53
 msgctxt "(qtundo-format)"
@@ -4868,7 +4862,7 @@ msgstr "Säteittäinen"
 #, kde-format
 msgctxt "Conical gradient type"
 msgid "Conical"
-msgstr ""
+msgstr "Kartiomainen"
 
 #: widgets/KoGradientEditWidget.cpp:162
 #, kde-format
@@ -5288,6 +5282,16 @@ msgid ""
 "icode>.</para>Pressing <interface>Enter</interface> or clicking the "
 "<interface>Save</interface> button will save the changes.</qt>"
 msgstr ""
+"<qt>Hakulauseiden kirjoittaminen tähän lisää tai poistaa nykyisestä "
+"luokitusnäkymästä resursseja.<para>Suodatus resurssin osittaisen nimen "
+"perusteella kirjainkoosta riippumatta:<br><icode>osittainennimi</icode> tai "
+"<icode>!osittainennimi</icode>.</para><para>Muiden luokitusjoukkojen "
+"ottaminen mukaan tai jättäminen pois:<br><icode>[LuokituksenNimi]</icode> "
+"tai <icode>[LuokituksenNimi]</icode>.</para><para>Kirjaintason huomioon "
+"ottava koko nimen vastaavuus:<br><icode>\"TarkkaOsuma\"</icode> tai <icode>!"
+"\"TarkkaOsuma\"</icode>.</para>Muutokset tallentuvat painamalla "
+"<interface>Enter</interface> tai napsauttamalla <interface>Tallenna</"
+"interface>.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
@@ -5301,6 +5305,7 @@ msgid ""
 "<qt>Save the currently filtered set as the new members of the current tag.</"
 "qt>"
 msgstr ""
+"<qt>Tallenna suodatettu joukko nykyisen luokituksen uusiksi jäseniksi.</qt>"
 
 #: widgets/KoTagToolButton.cpp:45
 #, kde-format

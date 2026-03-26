@@ -1,13 +1,13 @@
 # KDE Finnish translation sprint participants:
 # Author: Luksi
-# SPDX-FileCopyrightText: 2021, 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2021, 2024, 2026 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-11-18 09:57+0200\n"
+"PO-Revision-Date: 2026-03-11 15:38+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -47,7 +47,7 @@ msgstr ""
 #: AxesConfigWidget.cpp:81
 #, kde-format
 msgid "Other-side"
-msgstr ""
+msgstr "Toinen-puoli"
 
 #: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
 #: DataSetConfigWidget.cpp:345
@@ -1248,7 +1248,7 @@ msgstr "Poista valinta"
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
 #, kde-format
 msgid "Manual control of data sets"
-msgstr ""
+msgstr "Tietojoukkojen manuaalinen hallinnointi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1262,10 +1262,9 @@ msgstr ""
 #: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
 #: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
 #: TitlesConfigWidget.ui:153
-#, fuzzy, kde-format
-#| msgid "January"
+#, kde-format
 msgid "Manual"
-msgstr "Tammikuu"
+msgstr "Manuaalinen"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
@@ -1279,7 +1278,7 @@ msgstr "Poista tietojoukko"
 #: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
 #, kde-format
 msgid "Add data set after selected data set"
-msgstr ""
+msgstr "Lisää valitun tietojoukon perään toinen"
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
@@ -1607,23 +1606,15 @@ msgid "Row %1"
 msgstr "Rivi %1"
 
 #: dialogs/ScatterDataEditor.cpp:115
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Hide Dataset Category"
+#, kde-format
 msgid "Scatter Data Editor"
-msgstr ""
-"Piilota tietojoukon luokka\n"
-"tietojoukon luokan piilottaminen"
+msgstr "Hajontatietomuokkain"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Hide Dataset Category"
+#, kde-format
 msgid "Stock Data Editor"
-msgstr ""
-"Piilota tietojoukon luokka\n"
-"tietojoukon luokan piilottaminen"
+msgstr "Osaketietomuokkain"
 
 #: dialogs/StockDataEditor.cpp:100
 #, kde-format
@@ -1832,19 +1823,19 @@ msgstr "Tietopisteet"
 #: StockConfigWidget.ui:18
 #, kde-format
 msgid "Range line"
-msgstr ""
+msgstr "Alueviiva"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: StockConfigWidget.ui:47
 #, kde-format
 msgid "Gain marker"
-msgstr ""
+msgstr "Voiton merkki"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
 #: StockConfigWidget.ui:73
 #, kde-format
 msgid "Loss marker"
-msgstr ""
+msgstr "Tappion merkki"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
