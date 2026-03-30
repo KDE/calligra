@@ -1,17 +1,17 @@
 # Translation of calligra_semanticitem_event.po to Catalan (Valencian)
-# Copyright (C) 2014-2020 This_file_is_part_of_KDE
+# Copyright (C) 2014-2026 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# SPDX-FileCopyrightText: 2014, 2016 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2014, 2016, 2026 Josep M. Ferrer <txemaq@gmail.com>
 # SPDX-FileCopyrightText: 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2020-07-09 17:20+0200\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2026-03-29 13:55+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.07.70\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: KoEventSemanticItemFactory.cpp:31
 #, kde-format
@@ -94,7 +94,7 @@ msgstr "Hora i data"
 #: KoRdfCalendarEventEditWidget.ui:93
 #, kde-format
 msgid "Timezone"
-msgstr "Zona horària"
+msgstr "Fus horari"
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:29
 #, kde-format
