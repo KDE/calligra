@@ -6,6 +6,6 @@
 
 #include <OkularOdpGenerator.h>
 
-OKULAR_EXPORT_PLUGIN(OkularOdpGenerator, "libokularGenerator_pptx.json")
+K_PLUGIN_CLASS_WITH_JSON(OkularOdpGenerator, "libokularGenerator_pptx.json")
 
 #include "OkularPptxGeneratorPlugin.moc"
