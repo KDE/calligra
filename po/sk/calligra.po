@@ -19,8 +19,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -725,22 +725,19 @@ msgid "Create backup file:"
 msgstr "Vytvoriť záložný súbor:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
 msgstr "Zobraziť &mriežku:"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
 msgstr "Pripnúť k mriežke"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
 msgstr "Mriežka"
 
@@ -750,17 +747,13 @@ msgid "Grid color:"
 msgstr "Farba mriežky:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Horizontal grid spacing"
-#| msgid "&Horizontal:"
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
 msgstr "Horizontálne:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "Vertical grid spacing"
-#| msgid "&Vertical:"
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
 msgstr "Vertikálne:"
@@ -786,8 +779,7 @@ msgid "Paste offset:"
 msgstr "Vložiť posun:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
 msgstr "Vložiť na pozíciu kurzora:"
@@ -903,7 +895,7 @@ msgstr "Obnoviť súbory"
 #: main/KoAutoSaveRecoveryDialog.cpp:160
 #, kde-format
 msgid "Discard All"
-msgstr ""
+msgstr "Zahodiť všetko"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -922,6 +914,8 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Ak vyberiete Zrušiť, všetky obnoviteľné súbory budú zachované.\n"
+"Ak stlačíte OK, vybrané súbory budú obnovené, nevybrané súbory vyhodené."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1586,20 +1580,19 @@ msgid "Default"
 msgstr "Predvolené"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Geometrický priemer"
+msgstr "Geometrické"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Šípky"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Zábavné"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1763,11 +1756,10 @@ msgid "Date: %1"
 msgstr "Dátum: %1"
 
 #: main/KoView.cpp:347
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Tvar"
+msgstr "Pridať tvar"
 
 #: main/KoView.cpp:358
 #, kde-format
@@ -2230,10 +2222,9 @@ msgid "Add a new slide or layer"
 msgstr "Vytvoriť novú snímku alebo vrstvu"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:99
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Snímka"
+msgstr "Snímky"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
@@ -3402,6 +3393,15 @@ msgid ""
 "            select ?s ?p ?o\n"
 "            where { ?s ?p ?o }"
 msgstr ""
+"\n"
+"            prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+"            prefix foaf: <http://xmlns.com/foaf/0.1/>\n"
+"            prefix pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/"
+"pkg#>\n"
+"            prefix geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n"
+"\n"
+"            select ?s ?p ?o\n"
+"            where { ?s ?p ?o }"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
 #: rdf/KoDocumentRdfEditWidget.ui:181
@@ -3549,8 +3549,7 @@ msgstr ""
 "verifikované."
 
 #: store/KoEncryptedStore.cpp:245
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Upozornenie"
@@ -3566,8 +3565,7 @@ msgstr ""
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Upozornenie"
@@ -4496,13 +4494,13 @@ msgstr "Tento dokument nepodporuje šifrovanie"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Nie je nastavené"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -4758,10 +4756,9 @@ msgid "Icon only"
 msgstr "Iba ikona"
 
 #: widgets/KoModeBox.cpp:505
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Jednostranne"
+msgstr "Strana bočného panela"
 
 #: widgets/KoModeBox.cpp:514
 #, kde-format
@@ -4784,28 +4781,24 @@ msgid "Apply to document"
 msgstr "Použiť na dokument"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
 msgstr "Ľavý okraj"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
 msgstr "Pravý okraj"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
 msgstr "Zviazaný okraj:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
 msgstr "Okraj strany:"
 
@@ -4916,15 +4909,13 @@ msgstr "Sprava doľava"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
 msgstr "Horný okraj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
 msgstr "Spodný okraj"
 
@@ -5027,14 +5018,13 @@ msgstr "Vzdialenosť:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Vlastnosti tvaru"
 
 #: widgets/KoShapePropertyWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "Nie je dostupný žiadny obrázok."
+msgstr "Nie sú dostupné žiadne vlastnosti."
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5216,29 +5206,25 @@ msgid "Icon Size"
 msgstr "Veľkosť ikon"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "Vzhľad stránky"
+msgstr "Rozloženie"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automatické"
+msgstr "&Automaticky"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "Zľava doprava"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "Sprava doľava"

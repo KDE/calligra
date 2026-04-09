@@ -22,8 +22,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -3768,8 +3768,7 @@ msgstr ""
 "$1000 na úrok 10% za 1 rok vznikne CONTINUOUS(1000;0.1;1) čiže $1105.17."
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINOUS(kapitál;úrok;roky)"
 
@@ -12426,13 +12425,12 @@ msgstr "(c) 1998-%1, Tím Calligra Sheets"
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Údržbár"
+msgstr "Správca/Port na Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12445,10 +12443,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Údržbár"
+msgstr "Pôvodný správca"
 
 #: part/AboutData.h:42
 #, kde-format
@@ -12985,10 +12982,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "&Grid Color:"
-msgstr "Farba:"
+msgstr "&Farba mriežky:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_gridColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:97
@@ -12999,10 +12995,9 @@ msgstr "Kliknite sem na zmenu farby mriežky, teda farbu okraja každej bunky."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
-#, fuzzy, kde-format
-#| msgid "Page Out&line:"
+#, kde-format
 msgid "Page Out&line Color:"
-msgstr "Obrys strany:"
+msgstr "Farba obrysu &strany:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114
@@ -15825,7 +15820,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "&Použiť systémové regionálne nastavenia"
 
 #, fuzzy
-#~| msgid "Language: %1"
 #~ msgid "Language: %1 (%2)"
 #~ msgstr "Jazyk: %1"
 
@@ -19598,7 +19592,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "zmení štýl všetkých buniek na Rímske."
 
 #, fuzzy
-#~| msgid "Varying (No Change)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Varying (No Change)"
 #~ msgstr "Rôzne (bez zmeny)"
@@ -19689,7 +19682,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Operátor"
 
 #, fuzzy
-#~| msgid "And"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "And"
 #~ msgstr "a"
@@ -19703,25 +19695,21 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Pole"
 
 #, fuzzy
-#~| msgid "<"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<"
 #~ msgstr "<"
 
 #, fuzzy
-#~| msgid ">"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ">"
 #~ msgstr ">"
 
 #, fuzzy
-#~| msgid "=="
 #~ msgctxt "(qtundo-format)"
 #~ msgid "=="
 #~ msgstr "=="
 
 #, fuzzy
-#~| msgid "!="
 #~ msgctxt "(qtundo-format)"
 #~ msgid "!="
 #~ msgstr "!="
@@ -19731,7 +19719,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Pretiahnite zo štítkov a pustite v žiadanom poli"
 
 #, fuzzy
-#~| msgid "Labels"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Labels"
 #~ msgstr "Štítky"
@@ -19753,7 +19740,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "max"
 
 #, fuzzy
-#~| msgid "min"
 #~ msgctxt "(qtundo-format) minimum"
 #~ msgid "min"
 #~ msgstr "min"
@@ -19795,7 +19781,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Aktuálny výber"
 
 #, fuzzy
-#~| msgid "External Source"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "External Source"
 #~ msgstr "Externý zdroj"
@@ -19817,7 +19802,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "<b>Vpravo</b> znamená, že obsah bude zobrazený v pravej strane bunky.</qt>"
 
 #, fuzzy
-#~| msgid "Standard"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Standard"
 #~ msgstr "Štandardné"
@@ -19846,13 +19830,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "text v protismere."
 
 #, fuzzy
-#~| msgid "Rotation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Rotation"
 #~ msgstr "Rotácia"
 
 #, fuzzy
-#~| msgid "°"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "°"
 #~ msgstr "°"
@@ -19866,7 +19848,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Zväčšiť odsadenie alebo Zmenšiť odsadenie."
 
 #, fuzzy
-#~| msgid "Indent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Indent"
 #~ msgstr "Odsadenie"
@@ -19984,7 +19965,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "používateľskej príručke v kapitole Pokročilé."
 
 #, fuzzy
-#~| msgid "Printing"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Printing"
 #~ msgstr "Tlač"
@@ -20061,7 +20041,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Kopírovať formátovanie bunky (okraje, farby, štýl textu)"
 
 #, fuzzy
-#~| msgid "Move Up"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move Up"
 #~ msgstr "Posun hore"
@@ -20079,7 +20058,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Rozlišovanie veľkosť písmen"
 
 #, fuzzy
-#~| msgid "Move Down"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move Down"
 #~ msgstr "Posun dolu"
@@ -20157,31 +20135,26 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Operácia"
 
 #, fuzzy
-#~| msgid "Overwrite"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Overwrite"
 #~ msgstr "Prepísať"
 
 #, fuzzy
-#~| msgid "Addition"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Addition"
 #~ msgstr "Súčet"
 
 #, fuzzy
-#~| msgid "Subtraction"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Subtraction"
 #~ msgstr "Rozdiel"
 
 #, fuzzy
-#~| msgid "Multiplication"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Multiplication"
 #~ msgstr "Súčin"
 
 #, fuzzy
-#~| msgid "Division"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Division"
 #~ msgstr "Podiel"
@@ -20316,7 +20289,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Farby"
 
 #, fuzzy
-#~| msgid "&Grid:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Grid:"
 #~ msgstr "Mriežka:"
@@ -20329,7 +20301,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Kliknite sem na zmenu farby mriežky, teda farbu okraja každej bunky."
 
 #, fuzzy
-#~| msgid "Custom..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Custom..."
 #~ msgstr "Vlastné..."
@@ -20421,13 +20392,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Riadky od"
 
 #, fuzzy
-#~| msgid "to"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "to"
 #~ msgstr "Pre"
 
 #, fuzzy
-#~| msgid "Scaling"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scaling"
 #~ msgstr "Škálovanie"
@@ -20567,7 +20536,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "nastavenie. Ak ho zrušíte, mriežka bude skrytá."
 
 #, fuzzy
-#~| msgid "Show &grid"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Show &grid"
 #~ msgstr "Zobraziť &mriežku"
@@ -20675,13 +20643,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Presunúť zvolený list naspodok"
 
 #, fuzzy
-#~| msgid "&File"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&File"
 #~ msgstr "&Súbor"
 
 #, fuzzy
-#~| msgid "&Edit"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Edit"
 #~ msgstr "&Upraviť"
@@ -20691,19 +20657,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "&Vyplniť"
 
 #, fuzzy
-#~| msgid "Clear"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Clear"
 #~ msgstr "Vyčistiť"
 
 #, fuzzy
-#~| msgid "&View"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&View"
 #~ msgstr "&Zobraziť"
 
 #, fuzzy
-#~| msgid "&Go"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Go"
 #~ msgstr "&Choď"
@@ -20713,7 +20676,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "&Externé dáta"
 
 #, fuzzy
-#~| msgid "F&ormat"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "F&ormat"
 #~ msgstr "F&ormát"
@@ -20723,7 +20685,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "&Riadok"
 
 #, fuzzy
-#~| msgid "&Column"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Column"
 #~ msgstr "Stĺpec"
@@ -20741,7 +20702,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Manuálne zalomenia strany"
 
 #, fuzzy
-#~| msgid "&Data"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Data"
 #~ msgstr "Dáta"
@@ -20751,25 +20711,21 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Filter"
 
 #, fuzzy
-#~| msgid "&Tools"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Tools"
 #~ msgstr "&Nástroje"
 
 #, fuzzy
-#~| msgid "&Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Settings"
 #~ msgstr "&Nastavenia"
 
 #, fuzzy
-#~| msgid "Edit"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Edit"
 #~ msgstr "Upraviť"
 
 #, fuzzy
-#~| msgid "Navigation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Navigation"
 #~ msgstr "Navigácia"
@@ -20787,7 +20743,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zarovnanie"
 
 #, fuzzy
-#~| msgid "Borders"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Borders"
 #~ msgstr "Okraje"
@@ -20797,7 +20752,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Formát čísla"
 
 #, fuzzy
-#~| msgid "Merge"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Merge"
 #~ msgstr "Spojiť bunky"
@@ -20907,7 +20861,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Sep"
 
 #, fuzzy
-#~| msgid "Oct"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Oct"
 #~ msgstr "Okt"
@@ -20949,43 +20902,36 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Nedeľa"
 
 #, fuzzy
-#~| msgid "Mon"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mon"
 #~ msgstr "Pon"
 
 #, fuzzy
-#~| msgid "Tue"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tue"
 #~ msgstr "Ut"
 
 #, fuzzy
-#~| msgid "Wed"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Wed"
 #~ msgstr "Str"
 
 #, fuzzy
-#~| msgid "Thu"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Thu"
 #~ msgstr "Štv"
 
 #, fuzzy
-#~| msgid "Fri"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fri"
 #~ msgstr "Pia"
 
 #, fuzzy
-#~| msgid "Sat"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sat"
 #~ msgstr "Sob"
 
 #, fuzzy
-#~| msgid "Sun"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sun"
 #~ msgstr "Ned"
@@ -21011,7 +20957,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Kanada"
 
 #, fuzzy
-#~| msgid "Caribbean"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Caribbean"
 #~ msgstr "Karibik"
@@ -21057,7 +21002,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Grécko"
 
 #, fuzzy
-#~| msgid "Ireland"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ireland"
 #~ msgstr "Írsko"
@@ -21075,7 +21019,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Litva"
 
 #, fuzzy
-#~| msgid "Luxembourg"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Luxembourg"
 #~ msgstr "Luxembursko"
@@ -21097,7 +21040,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Portugalsko"
 
 #, fuzzy
-#~| msgid "San Marino"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "San Marino"
 #~ msgstr "San Maríno"
@@ -21119,7 +21061,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Libra"
 
 #, fuzzy
-#~| msgid "United Kingdom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "United Kingdom"
 #~ msgstr "Veľká Británia"
@@ -21177,7 +21118,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Americká Samoa"
 
 #, fuzzy
-#~| msgid "US Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "US Dollar"
 #~ msgstr "Americký dolár"
@@ -21219,7 +21159,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Anguilla"
 
 #, fuzzy
-#~| msgid "East Caribbean Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "East Caribbean Dollar"
 #~ msgstr "Východokaribský dolár"
@@ -21241,7 +21180,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Argentína"
 
 #, fuzzy
-#~| msgid "Argentine Peso"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Argentine Peso"
 #~ msgstr "Argentínske peso"
@@ -21267,7 +21205,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Aruba"
 
 #, fuzzy
-#~| msgid "Aruban Florin"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Aruban Florin"
 #~ msgstr "Arubský florin"
@@ -21281,7 +21218,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Austrálsky dolár"
 
 #, fuzzy
-#~| msgid "S"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "S"
 #~ msgstr "S"
@@ -21323,7 +21259,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Bahrajn"
 
 #, fuzzy
-#~| msgid "Bahraini Dinar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bahraini Dinar"
 #~ msgstr "Bahrajnský dinár"
@@ -21349,7 +21284,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Barbados"
 
 #, fuzzy
-#~| msgid "Barbados Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Barbados Dollar"
 #~ msgstr "Barbadoský dolár"
@@ -21383,7 +21317,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Belize"
 
 #, fuzzy
-#~| msgid "Belize Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Belize Dollar"
 #~ msgstr "Belizský dolár"
@@ -21501,7 +21434,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "R$"
 
 #, fuzzy
-#~| msgid "British Indian Ocean Territory"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "British Indian Ocean Territory"
 #~ msgstr "Britské teritórium Indického oceánu"
@@ -21515,7 +21447,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Brunej"
 
 #, fuzzy
-#~| msgid "Brunei Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Brunei Dollar"
 #~ msgstr "Brunejský dolár"
@@ -21537,7 +21468,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "BGN"
 
 #, fuzzy
-#~| msgid "Bulgarian Lev"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bulgarian Lev"
 #~ msgstr "Bulharský lev"
@@ -21599,13 +21529,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Kapverdy"
 
 #, fuzzy
-#~| msgid "Cape Verde Escudo"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cape Verde Escudo"
 #~ msgstr "Kapverdské escudo"
 
 #, fuzzy
-#~| msgid "Cayman Islands"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cayman Islands"
 #~ msgstr "Kajmanské ostrovy"
@@ -21619,7 +21547,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "KYD"
 
 #, fuzzy
-#~| msgid "Central African Republic"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Central African Republic"
 #~ msgstr "Stredoafrická republika"
@@ -21633,13 +21560,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Ch$"
 
 #, fuzzy
-#~| msgid "Chile"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Chile"
 #~ msgstr "Čile"
 
 #, fuzzy
-#~| msgid "Chilean Peso"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Chilean Peso"
 #~ msgstr "Čilské peso"
@@ -21665,19 +21590,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Yuan Renminbi"
 
 #, fuzzy
-#~| msgid "Christmas Island"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Christmas Island"
 #~ msgstr "Vianočný ostrov"
 
 #, fuzzy
-#~| msgid "Cocos (Keeling) Islands"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cocos (Keeling) Islands"
 #~ msgstr "Kokosové ostrovy"
 
 #, fuzzy
-#~| msgid "C$"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "C$"
 #~ msgstr "C"
@@ -21727,7 +21649,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "NZD"
 
 #, fuzzy
-#~| msgid "New Zealand Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "New Zealand Dollar"
 #~ msgstr "Novozélandský dolár"
@@ -21741,7 +21662,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Kostarika"
 
 #, fuzzy
-#~| msgid "Costa Rican Colon"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Costa Rican Colon"
 #~ msgstr "Kostarický colon"
@@ -21787,7 +21707,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Česká koruna"
 
 #, fuzzy
-#~| msgid "Czech Republic"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Czech Republic"
 #~ msgstr "Česká republika"
@@ -21817,13 +21736,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Džibutsko"
 
 #, fuzzy
-#~| msgid "Djibouti Franc"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Djibouti Franc"
 #~ msgstr "Džibutský frank"
 
 #, fuzzy
-#~| msgid "Dominica"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Dominica"
 #~ msgstr "Dominica"
@@ -21877,7 +21794,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Salvádor"
 
 #, fuzzy
-#~| msgid "El Salvador Colon"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "El Salvador Colon"
 #~ msgstr "Salvádorský colon"
@@ -21915,7 +21831,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Etiópia"
 
 #, fuzzy
-#~| msgid "Ethiopian Birr"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ethiopian Birr"
 #~ msgstr "Etiópsky birr"
@@ -21945,7 +21860,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Fidži"
 
 #, fuzzy
-#~| msgid "Fiji Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fiji Dollar"
 #~ msgstr "Fidžijský dolár"
@@ -21959,7 +21873,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "mk"
 
 #, fuzzy
-#~| msgid "F"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "F"
 #~ msgstr "F"
@@ -21969,13 +21882,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Francúzska Guyana"
 
 #, fuzzy
-#~| msgid "CFP Franc"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "CFP Franc"
 #~ msgstr "CFP frank"
 
 #, fuzzy
-#~| msgid "French Polynesia"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "French Polynesia"
 #~ msgstr "Francúzka Polynézia"
@@ -22009,7 +21920,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "GEL"
 
 #, fuzzy
-#~| msgid "Georgia"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Georgia"
 #~ msgstr "Gruzínsko"
@@ -22047,7 +21957,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Gibraltár"
 
 #, fuzzy
-#~| msgid "Gibraltar Pound"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Gibraltar Pound"
 #~ msgstr "Gibraltárska libra"
@@ -22113,7 +22022,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Guinea-Bissau"
 
 #, fuzzy
-#~| msgid "Guinea-Bissau Peso"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Guinea-Bissau Peso"
 #~ msgstr "Peso Guinea-Bissau"
@@ -22155,7 +22063,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Honduras"
 
 #, fuzzy
-#~| msgid "L"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "L"
 #~ msgstr "L"
@@ -22169,13 +22076,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "HKD"
 
 #, fuzzy
-#~| msgid "Hong Kong"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hong Kong"
 #~ msgstr "Hongkong"
 
 #, fuzzy
-#~| msgid "Hong Kong Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hong Kong Dollar"
 #~ msgstr "Hongkongský dolár"
@@ -22241,7 +22146,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Irak"
 
 #, fuzzy
-#~| msgid "Iraqi Dinar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Iraqi Dinar"
 #~ msgstr "Iracký dinár"
@@ -22303,13 +22207,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "JOD"
 
 #, fuzzy
-#~| msgid "Jordan"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Jordan"
 #~ msgstr "Jordánsko"
 
 #, fuzzy
-#~| msgid "Jordanian Dinar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Jordanian Dinar"
 #~ msgstr "Jordánsky dinár"
@@ -22335,7 +22237,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Keňa"
 
 #, fuzzy
-#~| msgid "Kenyan Shilling"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Kenyan Shilling"
 #~ msgstr "Kenský šiling"
@@ -22353,7 +22254,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Kórejská ľudovodemokratická republika"
 
 #, fuzzy
-#~| msgid "North Korean Won"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "North Korean Won"
 #~ msgstr "Severokórejský won"
@@ -22367,7 +22267,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Kórejská republika"
 
 #, fuzzy
-#~| msgid "Won"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Won"
 #~ msgstr "Won"
@@ -22381,7 +22280,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Kuvajt"
 
 #, fuzzy
-#~| msgid "Kuwaiti Dinar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Kuwaiti Dinar"
 #~ msgstr "Kuvajtský dinár"
@@ -22427,7 +22325,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Libanonská libra"
 
 #, fuzzy
-#~| msgid "Lebanon"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Lebanon"
 #~ msgstr "Libanon"
@@ -22473,7 +22370,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Líbya"
 
 #, fuzzy
-#~| msgid "Libyan Dinar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Libyan Dinar"
 #~ msgstr "Líbyjský dinár"
@@ -22527,13 +22423,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MGF"
 
 #, fuzzy
-#~| msgid "Madagascar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Madagascar"
 #~ msgstr "Magadaskar"
 
 #, fuzzy
-#~| msgid "Malagasy Franc"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Malagasy Franc"
 #~ msgstr "Malagaský frank"
@@ -22559,7 +22453,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Malajzia"
 
 #, fuzzy
-#~| msgid "Malaysian Ringgit"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Malaysian Ringgit"
 #~ msgstr "Malajský ringgit"
@@ -22569,7 +22462,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MVR"
 
 #, fuzzy
-#~| msgid "Maldives"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Maldives"
 #~ msgstr "Maldivy"
@@ -22591,19 +22483,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MTL"
 
 #, fuzzy
-#~| msgid "Maltese Lira"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Maltese Lira"
 #~ msgstr "Maltská líra"
 
 #, fuzzy
-#~| msgid "Marshall Islands"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Marshall Islands"
 #~ msgstr "Marshallove ostrovy"
 
 #, fuzzy
-#~| msgid "Martinique"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Martinique"
 #~ msgstr "Martinique"
@@ -22613,7 +22502,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MRO"
 
 #, fuzzy
-#~| msgid "Mauritania"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mauritania"
 #~ msgstr "Mauritánia"
@@ -22631,7 +22519,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Maurícius"
 
 #, fuzzy
-#~| msgid "Mauritius Rupee"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mauritius Rupee"
 #~ msgstr "Maurícijská rupia"
@@ -22673,7 +22560,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Moldavsko"
 
 #, fuzzy
-#~| msgid "Moldovan Leu"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Moldovan Leu"
 #~ msgstr "Moldavský leu"
@@ -22699,7 +22585,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MAD"
 
 #, fuzzy
-#~| msgid "Moroccan Dirham"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Moroccan Dirham"
 #~ msgstr "Marocký dirham"
@@ -22729,7 +22614,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MMK"
 
 #, fuzzy
-#~| msgid "Myanmar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Myanmar"
 #~ msgstr "Mjanmarsko"
@@ -22747,7 +22631,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Namíbijský dolár"
 
 #, fuzzy
-#~| msgid "Nauru"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Nauru"
 #~ msgstr "Nauru"
@@ -22777,7 +22660,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "ANG"
 
 #, fuzzy
-#~| msgid "Netherlands Antillean Guilder"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Netherlands Antillean Guilder"
 #~ msgstr "Holandskoantilský gulden"
@@ -22799,13 +22681,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "NIO"
 
 #, fuzzy
-#~| msgid "Nicaragua"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Nicaragua"
 #~ msgstr "Nikaragua"
 
 #, fuzzy
-#~| msgid "Niger"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Niger"
 #~ msgstr "Niger"
@@ -22859,7 +22739,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Pakistan"
 
 #, fuzzy
-#~| msgid "Pakistan Rupee"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pakistan Rupee"
 #~ msgstr "Pakistanská rupia"
@@ -22889,7 +22768,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "PGK"
 
 #, fuzzy
-#~| msgid "Papua New Guinea"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Papua New Guinea"
 #~ msgstr "Papua Nová Guinea"
@@ -22899,7 +22777,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "G"
 
 #, fuzzy
-#~| msgid "Guarani"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Guarani"
 #~ msgstr "Guarani"
@@ -22933,7 +22810,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Filipíny"
 
 #, fuzzy
-#~| msgid "Pitcairn"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pitcairn"
 #~ msgstr "Pitcairn"
@@ -23023,7 +22899,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Svätá Helena"
 
 #, fuzzy
-#~| msgid "Saint Helena Pound"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Saint Helena Pound"
 #~ msgstr "Svätohelenská libra"
@@ -23077,7 +22952,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Saudská Arábia"
 
 #, fuzzy
-#~| msgid "Saudi Riyal"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Saudi Riyal"
 #~ msgstr "Saudský rial"
@@ -23095,7 +22969,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Seychely"
 
 #, fuzzy
-#~| msgid "Seychelles Rupee"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Seychelles Rupee"
 #~ msgstr "Seychelská rupia"
@@ -23121,7 +22994,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Singapur"
 
 #, fuzzy
-#~| msgid "Singapore Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Singapore Dollar"
 #~ msgstr "Singapurský dolár"
@@ -23147,13 +23019,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "SBD"
 
 #, fuzzy
-#~| msgid "Solomon Islands"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Solomon Islands"
 #~ msgstr "Šalamúnove Ostrovy"
 
 #, fuzzy
-#~| msgid "Solomon Islands Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Solomon Islands Dollar"
 #~ msgstr "Dolár Šalamúnových ostrovov"
@@ -23171,7 +23041,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Somálsko"
 
 #, fuzzy
-#~| msgid "R"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "R"
 #~ msgstr "R"
@@ -23197,7 +23066,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Srí Lanka"
 
 #, fuzzy
-#~| msgid "Sri Lanka Rupee"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sri Lanka Rupee"
 #~ msgstr "Srílanská rupia"
@@ -23211,7 +23079,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Sudán"
 
 #, fuzzy
-#~| msgid "Sudanese Dinar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sudanese Dinar"
 #~ msgstr "Sudánsky dolár"
@@ -23273,7 +23140,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Sýrska libra"
 
 #, fuzzy
-#~| msgid "New Taiwan Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "New Taiwan Dollar"
 #~ msgstr "Nový Taiwanský dolár"
@@ -23307,7 +23173,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Tanzánia"
 
 #, fuzzy
-#~| msgid "Tanzanian Shilling"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tanzanian Shilling"
 #~ msgstr "Tanzánsky šiling"
@@ -23341,7 +23206,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "TOP"
 
 #, fuzzy
-#~| msgid "Tonga"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tonga"
 #~ msgstr "Tonga"
@@ -23355,7 +23219,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Trinidad a Tobago"
 
 #, fuzzy
-#~| msgid "Trinidad and Tobago Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Trinidad and Tobago Dollar"
 #~ msgstr "Dolár Trinidadu a Tobaga"
@@ -23369,7 +23232,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Tunisko"
 
 #, fuzzy
-#~| msgid "Tunisian Dinar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tunisian Dinar"
 #~ msgstr "Tuniský dinár"
@@ -23383,7 +23245,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Turecko"
 
 #, fuzzy
-#~| msgid "Turkish Lira"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Turkish Lira"
 #~ msgstr "Turecká líra"
@@ -23397,7 +23258,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "TMM"
 
 #, fuzzy
-#~| msgid "Turkmenistan"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Turkmenistan"
 #~ msgstr "Turkmenistan"
@@ -23443,7 +23303,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "UAE dirham"
 
 #, fuzzy
-#~| msgid "United Arab Emirates"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "United Arab Emirates"
 #~ msgstr "Spojené Arabské Emiráty"
@@ -23481,7 +23340,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Peso Uruguayo"
 
 #, fuzzy
-#~| msgid "Uruguay"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Uruguay"
 #~ msgstr "Uruguaj"
@@ -23511,7 +23369,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vatu"
 
 #, fuzzy
-#~| msgid "Bolivar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bolivar"
 #~ msgstr "Bolivar"
@@ -23541,7 +23398,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Wallis a Futuna"
 
 #, fuzzy
-#~| msgid "Western Sahara"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Western Sahara"
 #~ msgstr "Západna Sahara"
@@ -23563,7 +23419,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "YUM"
 
 #, fuzzy
-#~| msgid "Yugoslavia"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Yugoslavia"
 #~ msgstr "Juhoslávia"
@@ -23589,19 +23444,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zimbabwe"
 
 #, fuzzy
-#~| msgid "Zimbabwe Dollar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Zimbabwe Dollar"
 #~ msgstr "Zimbabwiansky dolár"
 
 #, fuzzy
-#~| msgid "All"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "All"
 #~ msgstr "Všetky"
 
 #, fuzzy
-#~| msgid "Empty"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Empty"
 #~ msgstr "Prázdne"
@@ -23655,7 +23507,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vybrať znak"
 
 #, fuzzy
-#~| msgid "&Insert"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Insert"
 #~ msgstr "&Vložiť"
@@ -23669,7 +23520,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Poznámka k bunke"
 
 #, fuzzy
-#~| msgid "<none>"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<none>"
 #~ msgstr "<nič>"
@@ -23683,7 +23533,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "väčšie ako"
 
 #, fuzzy
-#~| msgid "less than"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "less than"
 #~ msgstr "menšie ako"
@@ -23747,13 +23596,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Ak je prvá hodnota reťazec, druhá musí byť tiež reťazec."
 
 #, fuzzy
-#~| msgid "Sum"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sum"
 #~ msgstr "Suma"
 
 #, fuzzy
-#~| msgid "Average"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Average"
 #~ msgstr "Priemer"
@@ -23763,19 +23610,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Počet"
 
 #, fuzzy
-#~| msgid "Max"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Max"
 #~ msgstr "Maximum"
 
 #, fuzzy
-#~| msgid "Min"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Min"
 #~ msgstr "Minimum"
 
 #, fuzzy
-#~| msgid "Product"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Product"
 #~ msgstr "Súčin"
@@ -23865,7 +23709,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Nepodarilo sa otvoriť vstupný súbor."
 
 #, fuzzy
-#~| msgid "Type:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Type:"
 #~ msgstr "Typ:"
@@ -23923,7 +23766,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Tabuľka"
 
 #, fuzzy
-#~| msgid "Columns"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Columns"
 #~ msgstr "Stĺpce"
@@ -23937,7 +23779,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Platný je niektorý z údajov (OR)"
 
 #, fuzzy
-#~| msgid "equals"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "equals"
 #~ msgstr "rovná sa"
@@ -23947,7 +23788,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "nerovná sa"
 
 #, fuzzy
-#~| msgid "in"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "in"
 #~ msgstr "v"
@@ -23989,7 +23829,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zostupne"
 
 #, fuzzy
-#~| msgid "Distinct"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Distinct"
 #~ msgstr "Odlišný"
@@ -24071,7 +23910,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Musíte označiť najmenej jeden stĺpec."
 
 #, fuzzy
-#~| msgid "None"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "None"
 #~ msgstr "Žiadne"
@@ -24085,7 +23923,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Chcete ich nahradiť?"
 
 #, fuzzy
-#~| msgid "Document Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document Settings"
 #~ msgstr "Nastavenie dokumentu"
@@ -24099,7 +23936,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Lokalizácia"
 
 #, fuzzy
-#~| msgid "Case sensitive"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Case sensitive"
 #~ msgstr "Rozlišovať veľkosť písmen"
@@ -24177,7 +24013,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Hodnoty buniek"
 
 #, fuzzy
-#~| msgid "Comments"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Comments"
 #~ msgstr "Komentáre"
@@ -24203,13 +24038,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia"
 
 #, fuzzy
-#~| msgid "Insert function"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert function"
 #~ msgstr "Vložiť funkciu"
 
 #, fuzzy
-#~| msgid "Help"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Help"
 #~ msgstr "Pomoc"
@@ -24251,7 +24084,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Štartovanie..."
 
 #, fuzzy
-#~| msgid "Iteration:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Iteration:"
 #~ msgstr "Iterácia:"
@@ -24277,7 +24109,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zadajte bunku:"
 
 #, fuzzy
-#~| msgid "Insert"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert"
 #~ msgstr "Vložiť"
@@ -24323,8 +24154,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Štýl"
 
 #, fuzzy
-#~| msgctxt "Name of the style"
-#~| msgid "Name:"
 #~ msgctxt "(qtundo-format) Name of the style"
 #~ msgid "Name:"
 #~ msgstr "Názov:"
@@ -24334,7 +24163,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zdediť štýl:"
 
 #, fuzzy
-#~| msgid "Default"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Default"
 #~ msgstr "Predvolené"
@@ -24360,7 +24188,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Formát bunky"
 
 #, fuzzy
-#~| msgid "&General"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&General"
 #~ msgstr "&Všeobecné"
@@ -24382,7 +24209,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "&Okraj"
 
 #, fuzzy
-#~| msgid "Back&ground"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Back&ground"
 #~ msgstr "Pozadie"
@@ -24392,13 +24218,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "O&chrana bunky"
 
 #, fuzzy
-#~| msgid "Format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Format"
 #~ msgstr "Formát"
 
 #, fuzzy
-#~| msgid "Generic"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Generic"
 #~ msgstr "Všeobecné"
@@ -24429,7 +24253,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Krajina/región a jazyk -> Čísla. Čísla sú predvolene zarovnané vpravo."
 
 #, fuzzy
-#~| msgid "Percent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Percent"
 #~ msgstr "Percentá"
@@ -24451,7 +24274,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Môžete použiť ikonu percentá na lište Formát."
 
 #, fuzzy
-#~| msgid "Money"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Money"
 #~ msgstr "Mena"
@@ -24475,7 +24297,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "buniek aby vyzerali ako vaša súčasná mena."
 
 #, fuzzy
-#~| msgid "Scientific"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scientific"
 #~ msgstr "Vedecký"
@@ -24491,7 +24312,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "opäť ako 0.0012."
 
 #, fuzzy
-#~| msgid "Fraction"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fraction"
 #~ msgstr "Zlomok"
@@ -24518,7 +24338,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "najbližšia hodnota zlomku šestnástin."
 
 #, fuzzy
-#~| msgid "Date"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Date"
 #~ msgstr "Dátum"
@@ -24589,7 +24408,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "ktorý je v Systémových nastaveniach."
 
 #, fuzzy
-#~| msgid "Text"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text"
 #~ msgstr "Text"
@@ -24608,7 +24426,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "použiť vo výpočtoch alebo vzorcoch. Tiež to mení aj spôsob ich zarovnania."
 
 #, fuzzy
-#~| msgid "Custom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Custom"
 #~ msgstr "Vlastné"
@@ -24677,7 +24494,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Postfix:"
 
 #, fuzzy
-#~| msgid "Prefix:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Prefix:"
 #~ msgstr "Predpona:"
@@ -24695,7 +24511,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Mena:"
 
 #, fuzzy
-#~| msgid "Automatic"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Automatic"
 #~ msgstr "Automatické"
@@ -24737,7 +24552,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Tri číslice 153/652"
 
 #, fuzzy
-#~| msgid "System: "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "System: "
 #~ msgstr "Systém"
@@ -24759,7 +24573,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Dolor Ipse"
 
 #, fuzzy
-#~| msgid "Normal"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Normal"
 #~ msgstr "Normálne"
@@ -24773,7 +24586,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Rímske"
 
 #, fuzzy
-#~| msgid "Italic"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Italic"
 #~ msgstr "Kurzíva"
@@ -24787,7 +24599,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Štandardná výška (%1 %2)"
 
 #, fuzzy
-#~| msgid "Border"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Border"
 #~ msgstr "Okraj"
@@ -24797,19 +24608,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Predznačiť"
 
 #, fuzzy
-#~| msgid "Pattern"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pattern"
 #~ msgstr "Vzorka"
 
 #, fuzzy
-#~| msgid "Color:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Color:"
 #~ msgstr "Farba"
 
 #, fuzzy
-#~| msgid "Customize"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Customize"
 #~ msgstr "Upraviť"
@@ -24843,7 +24651,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Internetová adresa:"
 
 #, fuzzy
-#~| msgid "Email"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Email"
 #~ msgstr "E-mail"
@@ -24853,7 +24660,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Odkaz na e-mailovú adresu"
 
 #, fuzzy
-#~| msgid "Email address:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Email address:"
 #~ msgstr "E-mailová adresa:"
@@ -24879,7 +24685,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Nedávno použitý súbor:"
 
 #, fuzzy
-#~| msgid "No Entries"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "No Entries"
 #~ msgstr "Žiadné položky"
@@ -24917,13 +24722,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vlastné zoznamy"
 
 #, fuzzy
-#~| msgid "List:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "List:"
 #~ msgstr "Zoznam"
 
 #, fuzzy
-#~| msgid "Entry:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Entry:"
 #~ msgstr "Položka"
@@ -24937,19 +24740,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zrušiť"
 
 #, fuzzy
-#~| msgid "New"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "New"
 #~ msgstr "Nové"
 
 #, fuzzy
-#~| msgid "Modify"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Modify"
 #~ msgstr "Zmeniť"
 
 #, fuzzy
-#~| msgid "Copy"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Copy"
 #~ msgstr "Kopírovať"
@@ -24971,7 +24771,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Chcete pokračovať?"
 
 #, fuzzy
-#~| msgid "&Select"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Select"
 #~ msgstr "&Vybrať"
@@ -24985,19 +24784,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Oblasť: %1"
 
 #, fuzzy
-#~| msgid "&New..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&New..."
 #~ msgstr "&Nový..."
 
 #, fuzzy
-#~| msgid "&Edit..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Edit..."
 #~ msgstr "&Upraviť..."
 
 #, fuzzy
-#~| msgid "&Remove"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Remove"
 #~ msgstr "O&dstrániť"
@@ -25031,7 +24827,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vlepiť vložené bunky"
 
 #, fuzzy
-#~| msgid "Select Source"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select Source"
 #~ msgstr "Vyberte zdroj"
@@ -25065,7 +24860,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vložiť hodnoty"
 
 #, fuzzy
-#~| msgid "Vertical"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Vertical"
 #~ msgstr "Vertikálne"
@@ -25075,7 +24869,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vložiť sériu vertikálne pod seba"
 
 #, fuzzy
-#~| msgid "Horizontal"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Horizontal"
 #~ msgstr "Horizontálne"
@@ -25085,7 +24878,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vložiť sériu horizontálne vedľa seba zľava doprava"
 
 #, fuzzy
-#~| msgid "Type"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Type"
 #~ msgstr "Typ"
@@ -25213,7 +25005,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "&Prvý riadok obsahuje hlavičky stĺpcov"
 
 #, fuzzy
-#~| msgid "Sort"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sort"
 #~ msgstr "Triediť"
@@ -25223,7 +25014,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Nenozlišovať veľkosť písmen"
 
 #, fuzzy
-#~| msgid "Case Sensitive"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Case Sensitive"
 #~ msgstr "Rozlišovať veľkosť písmen"
@@ -25249,19 +25039,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Hierarchické"
 
 #, fuzzy
-#~| msgid "&Modify..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Modify..."
 #~ msgstr "Z&meniť..."
 
 #, fuzzy
-#~| msgid "&Delete..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Delete..."
 #~ msgstr "Odstrániť"
 
 #, fuzzy
-#~| msgid "style%1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "style%1"
 #~ msgstr "Štýl"
@@ -25271,7 +25058,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Medzisúčty"
 
 #, fuzzy
-#~| msgid "Remove All"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove All"
 #~ msgstr "Odstrániť všetko"
@@ -25285,7 +25071,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Celkový súčet"
 
 #, fuzzy
-#~| msgid "Column '%1' "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Column '%1' "
 #~ msgstr "Stĺpec"
@@ -25343,7 +25128,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Povoliť prázdne položky"
 
 #, fuzzy
-#~| msgid "Data:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Data:"
 #~ msgstr "Dáta"
@@ -25381,7 +25165,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Maximálny čas:"
 
 #, fuzzy
-#~| msgid "Number:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number:"
 #~ msgstr "Číslo"
@@ -25403,26 +25186,21 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Akcia:"
 
 #, fuzzy
-#~| msgid "Stop"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Stop"
 #~ msgstr "Zastaviť"
 
 #, fuzzy
-#~| msgid "Warning"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Warning"
 #~ msgstr "Upozornenie"
 
 #, fuzzy
-#~| msgid "Information"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Information"
 #~ msgstr "Informácia"
 
 #, fuzzy
-#~| msgctxt "Title of message"
-#~| msgid "Title:"
 #~ msgctxt "(qtundo-format) Title of message"
 #~ msgid "Title:"
 #~ msgstr "Titul:"
@@ -25518,7 +25296,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "<br><b>Typ:</b> %1"
 
 #, fuzzy
-#~| msgid "Examples"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Examples"
 #~ msgstr "Príklady"
@@ -25528,7 +25305,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Súvisiace funkcie"
 
 #, fuzzy
-#~| msgid "Manual"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Manual"
 #~ msgstr "Ručne"
@@ -25538,7 +25314,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Nemôžete zmeniť chránený list"
 
 #, fuzzy
-#~| msgid "page"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "page"
 #~ msgstr "strana"
@@ -25548,13 +25323,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "stránky"
 
 #, fuzzy
-#~| msgid "file"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "file"
 #~ msgstr "&Súbor"
 
 #, fuzzy
-#~| msgid "name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "name"
 #~ msgstr "meno"
@@ -25564,7 +25337,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "čas"
 
 #, fuzzy
-#~| msgid "date"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "date"
 #~ msgstr "Dátum"
@@ -25610,7 +25382,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "(c) 1998-%1, Tím Calligra Sheets"
 
 #, fuzzy
-#~| msgid "Original Author"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Original Author"
 #~ msgstr "Pôvodný autor"
@@ -25620,7 +25391,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Torben Weis"
 
 #, fuzzy
-#~| msgid "Maintainer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Maintainer"
 #~ msgstr "Správca"
@@ -25742,21 +25512,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Implementované, skontrolované a testované rôzne funkcie"
 
 #, fuzzy
-#~| msgctxt "NAME OF TRANSLATORS"
-#~| msgid "Your names"
 #~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
 #~ msgid "Your names"
 #~ msgstr "Roman Paholík"
 
 #, fuzzy
-#~| msgctxt "EMAIL OF TRANSLATORS"
-#~| msgid "Your emails"
 #~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
 #~ msgstr "wizzardsk@gmail.com"
 
 #, fuzzy
-#~| msgid "Comment:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Comment:"
 #~ msgstr "Poznámka:"
@@ -25770,13 +25535,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Formátovanie bunky"
 
 #, fuzzy
-#~| msgid "%1%"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "%1%"
 #~ msgstr "%1%"
 
 #, fuzzy
-#~| msgid "No Limit"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "No Limit"
 #~ msgstr "Bez obmedzenia"
@@ -25786,8 +25549,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "List"
 
 #, fuzzy
-#~| msgctxt "@title:window"
-#~| msgid "Configure"
 #~ msgctxt "(qtundo-format) @title:window"
 #~ msgid "Configure"
 #~ msgstr "Nastaviť"
@@ -25797,25 +25558,21 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Rozhranie"
 
 #, fuzzy
-#~| msgid "Down"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Down"
 #~ msgstr "Dolu"
 
 #, fuzzy
-#~| msgid "Up"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Up"
 #~ msgstr "Hore"
 
 #, fuzzy
-#~| msgid "Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Right"
 #~ msgstr "Vpravo"
 
 #, fuzzy
-#~| msgid "Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Left"
 #~ msgstr "Vľavo"
@@ -25837,13 +25594,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Nástroje"
 
 #, fuzzy
-#~| msgid "Plugins"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Plugins"
 #~ msgstr "Pluginy"
 
 #, fuzzy
-#~| msgid "Spelling"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Spelling"
 #~ msgstr "Pravopis"
@@ -25853,13 +25608,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Správanie kontroly pravopisu"
 
 #, fuzzy
-#~| msgid "Author"
 #~ msgctxt "(qtundo-format) @title:tab Author page"
 #~ msgid "Author"
 #~ msgstr "Autor"
 
 #, fuzzy
-#~| msgid "Author"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Author"
 #~ msgstr "Autor"
@@ -25877,7 +25630,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "rozbaľovacej ponuke."
 
 #, fuzzy
-#~| msgid "Popup"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Popup"
 #~ msgstr "Popup"
@@ -25895,13 +25647,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zľava doprava"
 
 #, fuzzy
-#~| msgid "Right to Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Right to Left"
 #~ msgstr "Zprava doľava"
 
 #, fuzzy
-#~| msgid "Sheets"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sheets"
 #~ msgstr "Zošity"
@@ -26015,7 +25765,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Skryť aktívny list"
 
 #, fuzzy
-#~| msgid "Page Layout..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Layout..."
 #~ msgstr "Vzhľad stránky..."
@@ -26077,13 +25826,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vytvoriť ša&blónu z dokumentu..."
 
 #, fuzzy
-#~| msgid "Anchor"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Anchor"
 #~ msgstr "Zakotviť"
 
 #, fuzzy
-#~| msgid "Page"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page"
 #~ msgstr "Strana"
@@ -26097,7 +25844,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Nasledujúci list"
 
 #, fuzzy
-#~| msgid "Next"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Next"
 #~ msgstr "Ďalší"
@@ -26111,7 +25857,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Predchádzajúci list"
 
 #, fuzzy
-#~| msgid "Previous"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Previous"
 #~ msgstr "Predchádzajúci"
@@ -26125,7 +25870,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Prvý list"
 
 #, fuzzy
-#~| msgid "First"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "First"
 #~ msgstr "Prvý"
@@ -26139,7 +25883,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Posledný list"
 
 #, fuzzy
-#~| msgid "Last"
 #~ msgctxt "(qtundo-format) Move to the last sheet"
 #~ msgid "Last"
 #~ msgstr "Posledný"
@@ -26189,13 +25932,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zobraziť stavový riadok"
 
 #, fuzzy
-#~| msgid "Tab Bar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tab Bar"
 #~ msgstr "Panel tabuliek"
 
 #, fuzzy
-#~| msgid "Show the tab bar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Show the tab bar"
 #~ msgstr "Zobraziť panel tabuliek"
@@ -26269,13 +26010,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Chcete pokračovať?"
 
 #, fuzzy
-#~| msgid "&Delete"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Delete"
 #~ msgstr "Vymazať"
 
 #, fuzzy
-#~| msgid "Enter name:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Enter name:"
 #~ msgstr "Zadajte meno:"
@@ -26289,7 +26028,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Meno listu nemôže byť prázdne."
 
 #, fuzzy
-#~| msgid "This name is already used."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "This name is already used."
 #~ msgstr "Toto meno je už použité."
@@ -26343,7 +26081,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Neplatný dokument. Prázdne meno listu."
 
 #, fuzzy
-#~| msgid "Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Header"
 #~ msgstr "Hlavička"
@@ -26397,7 +26134,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vytvoriť nový štýl podľa aktuálne označenej bunky"
 
 #, fuzzy
-#~| msgid "Underline"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Underline"
 #~ msgstr "Podčiarknuté"
@@ -26431,7 +26167,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zmenšiť veľkosť písma"
 
 #, fuzzy
-#~| msgid "Text Color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text Color"
 #~ msgstr "Farba textu"
@@ -26441,7 +26176,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Nastaviť farbu textu"
 
 #, fuzzy
-#~| msgid "Align Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Left"
 #~ msgstr "Zarovnať vľavo"
@@ -26451,13 +26185,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Obsah bunky zarovnať vľavo"
 
 #, fuzzy
-#~| msgid "Align Center"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Center"
 #~ msgstr "Zarovnať na stred"
 
 #, fuzzy
-#~| msgid "Center"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Center"
 #~ msgstr "Vycentrovať"
@@ -26467,7 +26199,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Obsah bunky zarovnať do stredu"
 
 #, fuzzy
-#~| msgid "Align Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Right"
 #~ msgstr "Zarovnať vpravo"
@@ -26481,7 +26212,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zarovnať hore"
 
 #, fuzzy
-#~| msgid "Top"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Top"
 #~ msgstr "Hore"
@@ -26495,7 +26225,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zarovnať na stred"
 
 #, fuzzy
-#~| msgid "Middle"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Middle"
 #~ msgstr "Do stredu"
@@ -26505,13 +26234,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zarovnať obsah bunky na stred"
 
 #, fuzzy
-#~| msgid "Align Bottom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Bottom"
 #~ msgstr "Zarovnať dole"
 
 #, fuzzy
-#~| msgid "Bottom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bottom"
 #~ msgstr "Dole"
@@ -26573,7 +26300,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Obrysy okraja"
 
 #, fuzzy
-#~| msgid "Outline"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Outline"
 #~ msgstr "Obrys"
@@ -26591,7 +26317,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Farba okraja"
 
 #, fuzzy
-#~| msgid "Wrap"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Wrap"
 #~ msgstr "Zalomiť"
@@ -26605,7 +26330,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vytlačiť obsah bunky vertikálne"
 
 #, fuzzy
-#~| msgid "Increase Indent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Increase Indent"
 #~ msgstr "Zväčšiť odsadenie"
@@ -26615,7 +26339,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zvýšiť odsadenie"
 
 #, fuzzy
-#~| msgid "Decrease Indent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Decrease Indent"
 #~ msgstr "Zmenšiť odsadenie"
@@ -26665,7 +26388,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Veľké písmená"
 
 #, fuzzy
-#~| msgid "Upper"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Upper"
 #~ msgstr "Veľké písmená"
@@ -26679,7 +26401,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Malé písmená"
 
 #, fuzzy
-#~| msgid "Lower"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Lower"
 #~ msgstr "Presunúť dozadu"
@@ -26773,7 +26494,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zmeniť výšku riadku"
 
 #, fuzzy
-#~| msgid "Rows"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Rows"
 #~ msgstr "Riadky"
@@ -26867,7 +26587,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Upraviť komentár pre túto bunku"
 
 #, fuzzy
-#~| msgid "Comment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Comment"
 #~ msgstr "Komentár"
@@ -26957,25 +26676,21 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Pridať automatický filter k rozsahu buniek"
 
 #, fuzzy
-#~| msgid "&Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Left"
 #~ msgstr "&Vľavo"
 
 #, fuzzy
-#~| msgid "&Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Right"
 #~ msgstr "V&pravo"
 
 #, fuzzy
-#~| msgid "&Up"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Up"
 #~ msgstr "&Hore"
 
 #, fuzzy
-#~| msgid "&Down"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Down"
 #~ msgstr "&Dolu"
@@ -26997,7 +26712,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vložiť série"
 
 #, fuzzy
-#~| msgid "&Function..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Function..."
 #~ msgstr "Funkcia"
@@ -27173,7 +26887,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Prejsť na bunku..."
 
 #, fuzzy
-#~| msgid "Goto"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Goto"
 #~ msgstr "Choď na"
@@ -27299,7 +27012,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Vyčistiť komentár"
 
 #, fuzzy
-#~| msgid "Apply"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Apply"
 #~ msgstr "Použiť"
@@ -27363,8 +27075,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "#N/A"
 
 #, fuzzy
-#~| msgctxt "Error: unknown function name"
-#~| msgid "#NAME?"
 #~ msgctxt "(qtundo-format) Error: unknown function name"
 #~ msgid "#NAME?"
 #~ msgstr "Názov:"
@@ -27386,32 +27096,26 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "#REF!"
 
 #, fuzzy
-#~| msgctxt "Error: wrong (number of) function argument(s)"
-#~| msgid "#VALUE!"
 #~ msgctxt "(qtundo-format) Error: wrong (number of) function argument(s)"
 #~ msgid "#VALUE!"
 #~ msgstr "Hodnota"
 
 #, fuzzy
-#~| msgid "True"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "True"
 #~ msgstr "Pravda"
 
 #, fuzzy
-#~| msgid "False"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "False"
 #~ msgstr "Nepravda"
 
 #, fuzzy
-#~| msgid "AM"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "AM"
 #~ msgstr "AM"
 
 #, fuzzy
-#~| msgid "PM"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "PM"
 #~ msgstr "PM"
@@ -27421,7 +27125,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "h"
 
 #, fuzzy
-#~| msgid "min"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "min"
 #~ msgstr "min"
@@ -27431,25 +27134,21 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "s"
 
 #, fuzzy
-#~| msgid "true"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "true"
 #~ msgstr "pravda"
 
 #, fuzzy
-#~| msgid "false"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "false"
 #~ msgstr "nepravda"
 
 #, fuzzy
-#~| msgid "pm"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "pm"
 #~ msgstr "pm"
 
 #, fuzzy
-#~| msgid "am"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "am"
 #~ msgstr "am"
@@ -27474,7 +27173,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Funkcia BITAND() vykoná bit-wise AND operáciu pre 2 celočíselné parametre."
 
 #, fuzzy
-#~| msgid "BITAND(value; value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "BITAND(value; value)"
 #~ msgstr "BITAND(hodnota; hodnota)"
@@ -27535,7 +27233,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Funkcia BITOR() vykoná bit-wise OR operáciu pre 2 celočíselné parametre."
 
 #, fuzzy
-#~| msgid "BITOR(value; value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "BITOR(value; value)"
 #~ msgstr "BITOR(hodnota; hodnota)"
@@ -27558,7 +27255,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Funkcia BITXOR() vykoná bit-wise XOR operáciu pre 2 celočíselné parametre."
 
 #, fuzzy
-#~| msgid "BITXOR(value; value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "BITXOR(value; value)"
 #~ msgstr "BITXOR(hodnota; hodnota)"
@@ -27841,13 +27537,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "DECSEX(7.8) vracia 7:47"
 
 #, fuzzy
-#~| msgid "Hours"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hours"
 #~ msgstr "Hodiny"
 
 #, fuzzy
-#~| msgid "Minutes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Minutes"
 #~ msgstr "Minúty"
@@ -27918,7 +27612,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "ROMAN(-55) vracia \"Err\""
 
 #, fuzzy
-#~| msgid "Numeral"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Numeral"
 #~ msgstr "Číslo"
@@ -28192,19 +27885,16 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "WEEKDAY(\"2002-02-22\"; 2) vracia 5"
 
 #, fuzzy
-#~| msgid "Date1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Date1"
 #~ msgstr "Dátum"
 
 #, fuzzy
-#~| msgid "Date2"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Date2"
 #~ msgstr "Dátum"
 
 #, fuzzy
-#~| msgid "Method"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Method"
 #~ msgstr "Metóda"
@@ -28547,7 +28237,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia DAYS() vracia rozdiel medzi dvoma dátumami v dňoch."
 
 #, fuzzy
-#~| msgid "DAYS(date2; date1)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "DAYS(date2; date1)"
 #~ msgstr "DAYS(dátum2; dátum1)"
@@ -28565,7 +28254,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Mesiac"
 
 #, fuzzy
-#~| msgid "Day"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Day"
 #~ msgstr "Deň"
@@ -28963,7 +28651,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Pracovné dni"
 
 #, fuzzy
-#~| msgid "Holidays"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Holidays"
 #~ msgstr "Prázdniny"
@@ -29055,13 +28742,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "UNIX2DATE(0) vracia 1970-01-01"
 
 #, fuzzy
-#~| msgid "Engineering"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Engineering"
 #~ msgstr "Strojárstvo"
 
 #, fuzzy
-#~| msgid "Base"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Base"
 #~ msgstr "Base"
@@ -29847,7 +29532,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "IMSQRT(\"1.2i\") vracia \"0.774597+0.774597i\" "
 
 #, fuzzy
-#~| msgid "Power"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Power"
 #~ msgstr "Exponent"
@@ -29874,7 +29558,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Funkcia IMSUM() vracia súčet niekoľkých komplexných čísel v tvare x+yi."
 
 #, fuzzy
-#~| msgid "IMSUM(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "IMSUM(value;value;...)"
 #~ msgstr "IMSUM(hodnota;hodnota;...)"
@@ -29894,7 +29577,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Funkcia IMDIV() vracia podiel niekoľkých komplexných čísel v tvare x+yi."
 
 #, fuzzy
-#~| msgid "IMDIV(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "IMDIV(value;value;...)"
 #~ msgstr "IMDIV(hodnota;hodnota;...)"
@@ -29915,7 +29597,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Funkcia IMSUB() vracia rozdiel niekoľkých komplexných čísel v tvare x+yi."
 
 #, fuzzy
-#~| msgid "IMSUB(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "IMSUB(value;value;...)"
 #~ msgstr "IMSUB(hodnota;hodnota;...)"
@@ -29937,7 +29618,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "+yi."
 
 #, fuzzy
-#~| msgid "IMPRODUCT(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "IMPRODUCT(value;value;...)"
 #~ msgstr "IMPRODUCT(hodnota;hodnota;...)"
@@ -30161,7 +29841,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "ACCRINTM(\"2/28/2001\"; \"8/31/2001\"; 0.1; 100) vracia 5.0278"
 
 #, fuzzy
-#~| msgid "Cost"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cost"
 #~ msgstr "Cena"
@@ -30199,7 +29878,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "228"
 
 #, fuzzy
-#~| msgid "P"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "P"
 #~ msgstr "P"
@@ -30325,7 +30003,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "hodnota"
 
 #, fuzzy
-#~| msgid "start"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "start"
 #~ msgstr "Štart"
@@ -30367,7 +30044,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Odpisy"
 
 #, fuzzy
-#~| msgid "Life"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Life"
 #~ msgstr "Životnosť"
@@ -30489,7 +30165,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "DOLLARFR(1.125; 16) vracia 1.02. (1 + 2/16)"
 
 #, fuzzy
-#~| msgid "Rate"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Rate"
 #~ msgstr "Úrok"
@@ -30522,7 +30197,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Poukážka"
 
 #, fuzzy
-#~| msgid "Yield"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Yield"
 #~ msgstr "Výnos"
@@ -30673,13 +30347,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Platba za obdobie"
 
 #, fuzzy
-#~| msgid ""
-#~| "The FV_ANNUITY() function returns the future value of a stream of "
-#~| "payments given the amount of the payment, the interest rate and the "
-#~| "number of periods. For example: If you receive $500 per year for 20 "
-#~| "years, and invest it at 8%, the total after 20 years will be "
-#~| "FV_annuity(500;0.08;20) or $22,880.98. This function assumes that "
-#~| "payments are made at the end of each period."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The FV_ANNUITY() function returns the future value of a stream of "
@@ -30999,7 +30666,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "NPV(100%;4;5;7) = 4.125"
 
 #, fuzzy
-#~| msgid "Last"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Last"
 #~ msgstr "Posledný"
@@ -31175,12 +30841,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "PV(1166.4;0.08;2) sa rovná 1000"
 
 #, fuzzy
-#~| msgid ""
-#~| "The PV_ANNUITY() function returns the present value of an annuity or "
-#~| "stream of payments. For example: a \"million dollar\" lottery ticket "
-#~| "that pays $50,000 a year for 20 years, with an interest rate of 5%, is "
-#~| "actually worth PV_ANNUITY(50000;0.05;20) or $623,111. This function "
-#~| "assumes that payments are made at the end of each period."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The PV_ANNUITY() function returns the present value of an annuity or "
@@ -31399,10 +31059,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "XIRR( Hodnoty; Dátumy[; Odhad = 0.1 ] )"
 
 #, fuzzy
-#~| msgid ""
-#~| "XIRR(B1:B4;C1:C4) Suppose B1:B4 contains -20000, 4000, 12000, 8000 while "
-#~| "C1:C4 contains \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", "
-#~| "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" returns 0.2115964"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "XIRR(B1:B4;C1:C4) Suppose B1:B4 contains -20000, 4000, 12000, 8000 while "
@@ -31514,7 +31170,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "ERRORTYPE(0) vracia chybu"
 
 #, fuzzy
-#~| msgid "Reference"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reference"
 #~ msgstr "Odkaz"
@@ -31960,7 +31615,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Ak je vstup chyba, vracia chybu."
 
 #, fuzzy
-#~| msgid "AND(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "AND(value;value;...)"
 #~ msgstr "AND(hodnota;hodnota;...)"
@@ -31983,7 +31637,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "False. Ak je vstup chyba, vracia chybu."
 
 #, fuzzy
-#~| msgid "OR(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "OR(value;value;...)"
 #~ msgstr "OR(hodnota;hodnota;...)"
@@ -32005,7 +31658,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "vracia False."
 
 #, fuzzy
-#~| msgid "NAND(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "NAND(value;value;...)"
 #~ msgstr "NAND(hodnota;hodnota;...)"
@@ -32027,7 +31679,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "bool a majú hodnotu False, inak vracia False."
 
 #, fuzzy
-#~| msgid "NOR(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "NOR(value;value;...)"
 #~ msgstr "NOR(hodnota;hodnota;...)"
@@ -32041,10 +31692,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "NOR(false;false) vracia True"
 
 #, fuzzy
-#~| msgid ""
-#~| "The XOR() function returns False if the number of True values is even. "
-#~| "Otherwise it returns True. It returns an error if any argument is an "
-#~| "error."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The XOR() function returns False if the number of True values is even. "
@@ -32055,7 +31702,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "False.  Ak je vstup chyba, vracia chybu."
 
 #, fuzzy
-#~| msgid "XOR(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "XOR(value;value;...)"
 #~ msgstr "XOR(hodnota;hodnota;...)"
@@ -32073,9 +31719,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Pravdivostná hodnota"
 
 #, fuzzy
-#~| msgid ""
-#~| "The NOT() function returns True if the value is False and returns False "
-#~| "if the value is True. It returns an error if the input in an error."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The NOT() function returns True if the value is False and returns False "
@@ -32122,7 +31765,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "IF(podmienka;ak_pravda;ak_nepravda)"
 
 #, fuzzy
-#~| msgid "A1=4;A2=6;IF(A1>A2;5;3) returns 3"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A1=4;A2=6;IF(A1>A2;5;3) returns 3"
 #~ msgstr "A1=4;A2=6;IF(A1>A2,5,3) vracia 3"
@@ -32171,7 +31813,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "vráti obsah A2."
 
 #, fuzzy
-#~| msgid "Math"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Math"
 #~ msgstr "Matematika"
@@ -32253,7 +31894,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "reálnych hodnôt"
 
 #, fuzzy
-#~| msgid "LCM(value; value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "LCM(value; value)"
 #~ msgstr "LCM(hodnota;hodnota)"
@@ -32283,7 +31923,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "celočíselných hodnôt."
 
 #, fuzzy
-#~| msgid "GCD(value; value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "GCD(value; value)"
 #~ msgstr "GCD(hodnota; hodnota)"
@@ -32348,7 +31987,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia POWER(x;y) vracia hodnotu x umocnenú na y."
 
 #, fuzzy
-#~| msgid "POWER(value;value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "POWER(value;value)"
 #~ msgstr "POWER(hodnota; hodnota)"
@@ -32370,7 +32008,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "ako POWER."
 
 #, fuzzy
-#~| msgid "POW(value;value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "POW(value;value)"
 #~ msgstr "POW(hodnota; hodnota)"
@@ -32472,7 +32109,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "funkcia vráti #DIV/0 (delenie nulou)."
 
 #, fuzzy
-#~| msgid "MOD(value;value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MOD(value;value)"
 #~ msgstr "MOD(hodnota;hodnota)"
@@ -32540,7 +32176,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "alebo zoznam hodnôt COUNT(12;5;12.5)."
 
 #, fuzzy
-#~| msgid "COUNT(value;value;value...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "COUNT(value;value;value...)"
 #~ msgstr "COUNT(hodnota;hodnota;hodnota...)"
@@ -32564,7 +32199,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "hodnôt COUNTA(12;5;12.5)."
 
 #, fuzzy
-#~| msgid "COUNTA(value;value;value...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "COUNTA(value;value;value...)"
 #~ msgstr "COUNTA(hodnota;hodnota;hodnota...)"
@@ -32598,7 +32232,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Rozsah"
 
 #, fuzzy
-#~| msgid "Criteria"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Criteria"
 #~ msgstr "Kritérium"
@@ -32674,7 +32307,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "SUM(12;5;12.5)."
 
 #, fuzzy
-#~| msgid "SUM(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "SUM(value;value;...)"
 #~ msgstr "SUM(hodnota;hodnota;...)"
@@ -32688,12 +32320,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "SUM(12.5,2) sa rovná 14.5"
 
 #, fuzzy
-#~| msgid ""
-#~| "The SUMA() function calculates the sum of all the values given as "
-#~| "parameters. You can calculate the sum of a range SUMA(A1:B5) or a list "
-#~| "of values like SUMA(12;5;12.5). If a parameter contains text or the "
-#~| "boolean value FALSE it is counted as 0, if a parameter evaluates to TRUE "
-#~| "it is counted as 1."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The SUMA() function calculates the sum of all the values given as "
@@ -32764,7 +32390,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "PRODUCT(12;5;12.5). Ak nie je nájdená žiadna číselná hodnota, vráti sa 0."
 
 #, fuzzy
-#~| msgid "PRODUCT(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "PRODUCT(value;value;...)"
 #~ msgstr "PRODUCT(hodnota;hodnota;...)"
@@ -32778,11 +32403,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "PRODUCT(12.5;2) sa rovná 25"
 
 #, fuzzy
-#~| msgid ""
-#~| "The KPRODUCT() function calculates the product of all the values given "
-#~| "as parameters. You can calculate the product of a range: KPRODUCT(A1:B5) "
-#~| "or a list of values like KPRODUCT(12;5;12.5). If no numeric values are "
-#~| "found 1 is returned."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The KPRODUCT() function calculates the product of all the values given as "
@@ -32795,7 +32415,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "KPRODUCT(12;5;12.5). Ak nie je nájdená žiadna číselná hodnota, vráti sa 1."
 
 #, fuzzy
-#~| msgid "KPRODUCT(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "KPRODUCT(value;value;...)"
 #~ msgstr "KPRODUCT(hodnota;hodnota;...)"
@@ -32817,7 +32436,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "kompatibility s Gnumeric."
 
 #, fuzzy
-#~| msgid "G_PRODUCT(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "G_PRODUCT(value;value;...)"
 #~ msgstr "G_PRODUCT(hodnota;hodnota;...)"
@@ -32828,7 +32446,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia DIV() delí prvú hodnotu ďaľšími hodnotami v poradí."
 
 #, fuzzy
-#~| msgid "DIV(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "DIV(value;value;...)"
 #~ msgstr "DIV(hodnota;hodnota;...)"
@@ -32852,7 +32469,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "napr. SUMSQ(12;5;12.5)."
 
 #, fuzzy
-#~| msgid "SUMSQ(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "SUMSQ(value;value;...)"
 #~ msgstr "SUMSQ(hodnota;hodnota;...)"
@@ -32874,7 +32490,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "logické hodnoty sa ignorujú."
 
 #, fuzzy
-#~| msgid "MAX(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MAX(value;value;...)"
 #~ msgstr "MAX(hodnota;hodnota;...)"
@@ -32900,7 +32515,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "nahradí 1, FALSE sa nahradí 0. Reťazce sa ignorujú."
 
 #, fuzzy
-#~| msgid "MAXA(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MAXA(value;value;...)"
 #~ msgstr "MAXA(hodnota;hodnota;...)"
@@ -32926,7 +32540,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "logické hodnoty sa ignorujú."
 
 #, fuzzy
-#~| msgid "MIN(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MIN(value;value;...)"
 #~ msgstr "MIN(hodnota;hodnota;...)"
@@ -32952,7 +32565,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "nahradí 1, FALSE sa nahradí 0. Reťazce sa ignorujú."
 
 #, fuzzy
-#~| msgid "MINA(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MINA(value;value;...)"
 #~ msgstr "MINA(hodnota;hodnota;...)"
@@ -32970,10 +32582,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MINA(0.4; 2; FALSE; 0.7) vracia 0."
 
 #, fuzzy
-#~| msgid ""
-#~| "The MULTIPLY() function multiplies all the values given in the "
-#~| "parameters. You can multiply values given by a range MULTIPLY(A1:B5) or "
-#~| "a list of values like MULTIPLY(12;5;12.5). It's equivalent to PRODUCT."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The MULTIPLY() function multiplies all the values given in the "
@@ -32985,7 +32593,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "MULTIPLY(12;5;12.5). Je to ekvivalent funkcie PRODUCT."
 
 #, fuzzy
-#~| msgid "MULTIPLY(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MULTIPLY(value;value;...)"
 #~ msgstr "MULTIPLY(hodnota;hodnota;...)"
@@ -33007,13 +32614,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "to tento vzorec pre MULTINOMIAL(a,b,c):"
 
 #, fuzzy
-#~| msgid "(a+b+c)! / a!b!c!"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "(a+b+c)! / a!b!c!"
 #~ msgstr "(a+b+c)! / a!b!c!"
 
 #, fuzzy
-#~| msgid "MULTINOMIAL(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MULTINOMIAL(value;value;...)"
 #~ msgstr "MULTINOMIAL(hodnota;hodnota;...)"
@@ -33709,7 +33314,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MMULT(A1:C3)"
 
 #, fuzzy
-#~| msgid "Matrix"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Matrix"
 #~ msgstr "Matica"
@@ -34287,7 +33891,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "dát od ich priemeru."
 
 #, fuzzy
-#~| msgid "AVEDEV(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "AVEDEV(value;value;...)"
 #~ msgstr "AVEDEV(hodnota;hodnota;...)"
@@ -34297,7 +33900,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "AVEDEV(11.4;17.3;21.3;25.9;40.1) vracia 7.84"
 
 #, fuzzy
-#~| msgid "AVEDEV(A1:A5) ..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "AVEDEV(A1:A5) ..."
 #~ msgstr "AVEDEV(A1:A5) ..."
@@ -34313,7 +33915,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "hodnôt, napr. AVERAGE(12;5;12.5)."
 
 #, fuzzy
-#~| msgid "AVERAGE(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "AVERAGE(value;value;...)"
 #~ msgstr "AVERAGE(hodnota;hodnota;...)"
@@ -34344,7 +33945,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "sa ako 1. Prázdne bunky sa nezapočítavajú."
 
 #, fuzzy
-#~| msgid "AVERAGEA(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "AVERAGEA(value;value;...)"
 #~ msgstr "AVERAGEA(hodnota;hodnota;...)"
@@ -34362,13 +33962,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Parameter Beta"
 
 #, fuzzy
-#~| msgid "Start"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Start"
 #~ msgstr "Štart"
 
 #, fuzzy
-#~| msgid "End"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "End"
 #~ msgstr "Koniec"
@@ -34600,13 +34198,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia DEVSQ počíta súčet druhých mocník odchýliek."
 
 #, fuzzy
-#~| msgid "DEVSQ(value; value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "DEVSQ(value; value;...)"
 #~ msgstr "DEVSQ(hodnota; hodnota;...)"
 
 #, fuzzy
-#~| msgid "DEVSQ(A1:A5)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "DEVSQ(A1:A5)"
 #~ msgstr "DEVSQ(A1:A5)"
@@ -34861,13 +34457,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "odmocnina súčinu argumentov."
 
 #, fuzzy
-#~| msgid "GEOMEAN(value; value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "GEOMEAN(value; value;...)"
 #~ msgstr "GEOMEAN(hodnota; hodnota;...)"
 
 #, fuzzy
-#~| msgid "GEOMEAN(A1:A5)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "GEOMEAN(A1:A5)"
 #~ msgstr "GEOMEAN(A1:A5)"
@@ -34885,13 +34479,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "súčtom opačných hodnôť dátových bodov)."
 
 #, fuzzy
-#~| msgid "HARMEAN(value; value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "HARMEAN(value; value;...)"
 #~ msgstr "HARMEAN(hodnota; hodnota;...)"
 
 #, fuzzy
-#~| msgid "HARMEAN(A1:A5)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "HARMEAN(A1:A5)"
 #~ msgstr "HARMEAN(A1:A5)"
@@ -34958,13 +34550,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "aspoň 4 hodnoty, inak vráti chybu."
 
 #, fuzzy
-#~| msgid "KURT(value; value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "KURT(value; value;...)"
 #~ msgstr "KURT(hodnota; hodnota;...)"
 
 #, fuzzy
-#~| msgid "KURT(A1:A5)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "KURT(A1:A5)"
 #~ msgstr "KURT(A1:A5)"
@@ -34982,13 +34572,11 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "inak vráti chybu."
 
 #, fuzzy
-#~| msgid "KURTP(value; value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "KURTP(value; value;...)"
 #~ msgstr "KURTP(hodnota; hodnota;...)"
 
 #, fuzzy
-#~| msgid "KURTP(A1:A5)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "KURTP(A1:A5)"
 #~ msgstr "KURTP(A1:A5)"
@@ -35097,7 +34685,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "textom budú ignorované."
 
 #, fuzzy
-#~| msgid "MEDIAN(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MEDIAN(value;value;...)"
 #~ msgstr "MEDIAN(hodnota;hodnota;...)"
@@ -35111,7 +34698,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "MEDIAN(12; 7; 8;2) sa rovná 7.5"
 
 #, fuzzy
-#~| msgid "Float"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Float"
 #~ msgstr "Reálne číslo"
@@ -35125,7 +34711,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "hodnotách."
 
 #, fuzzy
-#~| msgid "MODE(number; number2; ...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "MODE(number; number2; ...)"
 #~ msgstr "MODE(číslo; číslo2; ...)"
@@ -35469,7 +35054,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia SKEW() vracia odhad šikmosti rozdelenia"
 
 #, fuzzy
-#~| msgid "SKEW(number; number2; ...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "SKEW(number; number2; ...)"
 #~ msgstr "SKEW(číslo; číslo2; ...)"
@@ -35488,7 +35072,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia SKEWP() vracia šikmosť populácie rozdelenia"
 
 #, fuzzy
-#~| msgid "SKEWP(number; number2; ...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "SKEWP(number; number2; ...)"
 #~ msgstr "SKEWP(číslo; číslo2; ...)"
@@ -35537,7 +35120,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Priemer rozdelenia"
 
 #, fuzzy
-#~| msgid "Standard deviation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Standard deviation"
 #~ msgstr "Smerodajná odchýlka"
@@ -35565,7 +35147,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "hodnoty."
 
 #, fuzzy
-#~| msgid "STDEV(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "STDEV(value;value;...)"
 #~ msgstr "STDEV(hodnota;hodnota;...)"
@@ -35588,7 +35169,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "počíta sa ako 0, ak obsahuje hodnotu TRUE, počíta sa ako 1."
 
 #, fuzzy
-#~| msgid "STDEVA(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "STDEVA(value;value;...)"
 #~ msgstr "STDEVA(hodnota;hodnota;...)"
@@ -35609,7 +35189,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "Funkcia STDEVP()  počíta smerodajnú odchýlku založenú na celej populácii"
 
 #, fuzzy
-#~| msgid "STDEVP(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "STDEVP(value;value;...)"
 #~ msgstr "STDEVP(hodnota;hodnota;...)"
@@ -35630,7 +35209,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "počíta sa ako 0, ak obsahuje hodnotu TRUE, počíta sa ako 1."
 
 #, fuzzy
-#~| msgid "STDEVPA(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "STDEVPA(value;value;...)"
 #~ msgstr "STDEVPA(hodnota;hodnota;...)"
@@ -35899,7 +35477,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia VAR() počíta odchýlku založenú na vzorke."
 
 #, fuzzy
-#~| msgid "VAR(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "VAR(value;value;...)"
 #~ msgstr "VAR(hodnota;hodnota;...)"
@@ -35930,7 +35507,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "sa ako 1. Prázdne bunky sa nezapočítavajú."
 
 #, fuzzy
-#~| msgid "VARA(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "VARA(value;value;...)"
 #~ msgstr "VARA(hodnota;hodnota;...)"
@@ -35956,7 +35532,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "ako funkcia VAR."
 
 #, fuzzy
-#~| msgid "VARIANCE(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "VARIANCE(value;value;...)"
 #~ msgstr "VARIANCE(hodnota;hodnota;...)"
@@ -35979,7 +35554,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Funkcia VARP() počíta rozptyl založený na celej populácii."
 
 #, fuzzy
-#~| msgid "VARP(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "VARP(value;value;...)"
 #~ msgstr "VARP(hodnota;hodnota;...)"
@@ -36008,7 +35582,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "hodnotu TRUE, počíta sa ako 1. Prázdne bunky sa nepočítajú."
 
 #, fuzzy
-#~| msgid "VARPA(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "VARPA(value;value;...)"
 #~ msgstr "VARPA(hodnota;hodnota;...)"
@@ -36616,7 +36189,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "Zdrojový reťazec"
 
 #, fuzzy
-#~| msgid "Position"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Position"
 #~ msgstr "Pozícia"
@@ -36720,7 +36292,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "vložených ako parametre."
 
 #, fuzzy
-#~| msgid "CONCATENATE(value;value;...)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "CONCATENATE(value;value;...)"
 #~ msgstr "CONCATENATE(hodnota;hodnota;...)"
@@ -36958,7 +36529,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgstr "LOWER(\"AHOJ\") vracia \"ahoj\""
 
 #, fuzzy
-#~| msgid "Character code"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Character code"
 #~ msgstr "Kód znaku"
@@ -37420,7 +36990,6 @@ msgstr "Odkaz %1 aktivovaný"
 #~ "použité na určenie kvadrantu výsledku."
 
 #, fuzzy
-#~| msgid "ATAN2(value;value)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "ATAN2(value;value)"
 #~ msgstr "ATAN2(hodnota;hodnota)"
