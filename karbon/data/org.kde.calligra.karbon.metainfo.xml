@@ -609,6 +609,7 @@
       <caption xml:lang="pl">Główne okno Karbona</caption>
       <caption xml:lang="pt-BR">Janela principal do Karbon</caption>
       <caption xml:lang="sa">कार्बोनस्य मुख्य खिडकी</caption>
+      <caption xml:lang="sk">Hlavné okno Karbon</caption>
       <caption xml:lang="sl">Glavno okno Carbona</caption>
       <caption xml:lang="sv">Huvudfönstret i Karbon</caption>
       <caption xml:lang="tr">Karbon’un ana penceresi</caption>
@@ -652,6 +653,7 @@
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
+        <p xml:lang="sk">Toto vydanie pridáva podporu flatpak do kancelárskeho balíka Calligra.</p>
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
@@ -670,6 +672,7 @@
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
+        <p xml:lang="sk">Najvýznamnejšie zmeny sú, že Calligra bola úplne prevedená na Qt6 a KF6, spolu s výraznou prestavbou používateľského rozhrania.</p>
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
@@ -683,6 +686,7 @@
         <p xml:lang="ka">Karbon-ს არ მიუღია გარედან ისეთი ცვლილებები, რომლებიც მთელ პლატფორმას შეეხებოდა.</p>
         <p xml:lang="nl">Karbon kreeg niet veel wijzigingen buiten die het gehele platform beïnvloedden.</p>
         <p xml:lang="pt-BR">O Karbon não recebeu muitas alterações além daquela que afetou toda a plataforma.</p>
+        <p xml:lang="sk">Karbon nedostal veľa zmien mimo tých, ktoré ovplyvnili celú platformu.</p>
         <p xml:lang="sl">Karbon ni doživel veliko sprememb, razen tistih, ki so vplivale na celotno platformo.</p>
         <p xml:lang="tr">Karbon, diğer tüm paketi de etkileyen bir değişiklik dışında pek bir değişikliğe uğramadı.</p>
         <p xml:lang="uk">Karbon не зазнав значних змін, окрім тих, які стосуються усієї платформи.</p>
