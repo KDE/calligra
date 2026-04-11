@@ -44,7 +44,11 @@ public:
     void eoFill(GfxState *state) override;
 
     // text
+#if POPPLER_VERSION_MACRO >= QT_VERSION_CHECK(26, 4, 0)
+    void drawString(GfxState *state, const std::string &s) override;
+#else
     void drawString(GfxState *state, const GooString *s) override;
+#endif
 
     // images
     void drawImage(GfxState *state,
