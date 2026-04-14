@@ -2,25 +2,27 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the ArtisticTextShape package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/ArtisticTextShape.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2009-01-20 10:11-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Add text range"
-msgstr ""
+msgstr "Cuir raon téacs leis"
 
 #: ArtisticTextShapeFactory.cpp:17
 #, kde-format
@@ -50,12 +52,12 @@ msgstr "Tiontaigh go Conair"
 #: ArtisticTextTool.cpp:82
 #, kde-format
 msgid "Bold text"
-msgstr ""
+msgstr "Téacs trom"
 
 #: ArtisticTextTool.cpp:87
 #, kde-format
 msgid "Italic text"
-msgstr ""
+msgstr "Téacs iodálach"
 
 #: ArtisticTextTool.cpp:92
 #, kde-format
@@ -70,42 +72,42 @@ msgstr "Foscript"
 #: ArtisticTextTool.cpp:102
 #, kde-format
 msgid "Anchor at Start"
-msgstr ""
+msgstr "Ancaire ag an Tosach"
 
 #: ArtisticTextTool.cpp:107
 #, kde-format
 msgid "Anchor at Middle"
-msgstr ""
+msgstr "Ancaire ag an Lár"
 
 #: ArtisticTextTool.cpp:112
 #, kde-format
 msgid "Anchor at End"
-msgstr ""
+msgstr "Ancaire ag an Deireadh"
 
 #: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Click to change cursor position."
-msgstr ""
+msgstr "Cliceáil chun suíomh an chúrsóra a athrú."
 
 #: ArtisticTextTool.cpp:305
 #, kde-format
 msgid "Click to select text shape."
-msgstr ""
+msgstr "Cliceáil chun cruth téacs a roghnú."
 
 #: ArtisticTextTool.cpp:308
 #, kde-format
 msgid "Double click to put text on path."
-msgstr ""
+msgstr "Cliceáil faoi dhó chun téacs a chur ar an gcosán."
 
 #: ArtisticTextTool.cpp:311
 #, kde-format
 msgid "Drag handle to change start offset."
-msgstr ""
+msgstr "Tarraing an láimhseáil chun an fhritháireamh tosaigh a athrú."
 
 #: ArtisticTextTool.cpp:315
 #, kde-format
 msgid "Press escape to finish editing."
-msgstr ""
+msgstr "Brúigh éalú chun an eagarthóireacht a chríochnú."
 
 #: ArtisticTextTool.cpp:494
 #, kde-format
@@ -115,7 +117,7 @@ msgstr "Brúigh Return chun eagarthóireacht a chur i gcrích."
 #: ArtisticTextTool.cpp:588
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
-msgstr ""
+msgstr "Tiontaigh go Cosán"
 
 #: ArtisticTextTool.cpp:601
 #, kde-format
@@ -130,40 +132,40 @@ msgstr "Téacs Ar Chonair"
 #: ArtisticTextToolFactory.cpp:17
 #, kde-format
 msgid "Artistic text editing"
-msgstr ""
+msgstr "Eagarthóireacht téacs ealaíonta"
 
 #: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
-msgstr ""
+msgstr "Ceangail Cosán"
 
 #: ChangeTextAnchorCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
-msgstr ""
+msgstr "Athraigh ancaire téacs"
 
 #: ChangeTextFontCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change font"
-msgstr ""
+msgstr "Athraigh cló"
 
 #: ChangeTextOffsetCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
-msgstr ""
+msgstr "Athraigh Fritháireamh Téacs"
 
 #: DetachTextFromPathCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
-msgstr ""
+msgstr "Dícheangail an Cosán"
 
 #: RemoveTextRangeCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
-msgstr ""
+msgstr "Bain raon téacs"
 
 #: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
 #: ReplaceTextRangeCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
-msgstr ""
+msgstr "Raon téacs a athsholáthar"

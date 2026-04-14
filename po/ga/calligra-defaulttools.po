@@ -2,20 +2,22 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the koffice-defaulttools package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/koffice-defaulttools.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2009-01-20 10:11-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
 #: connectionTool/ConnectionPointWidget.ui:48
@@ -27,13 +29,13 @@ msgstr "Mód Eagarthóireachta"
 #: connectionTool/ConnectionPointWidget.ui:55
 #, kde-format
 msgid "Escape Direction"
-msgstr ""
+msgstr "Treo Éalaithe"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAlign)
 #: connectionTool/ConnectionPointWidget.ui:115
 #, kde-format
 msgid "Alignment"
-msgstr ""
+msgstr "Ailíniú"
 
 #. i18n: ectx: property (text), widget (QToolButton, alignPercent)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
@@ -48,92 +50,92 @@ msgstr "%"
 #: connectionTool/ConnectionTool.cpp:65
 #, kde-format
 msgid "Edit connection points"
-msgstr ""
+msgstr "Cuir pointí ceangail in eagar"
 
 #: connectionTool/ConnectionTool.cpp:72
 #, kde-format
 msgid "Align to left edge"
-msgstr ""
+msgstr "Ailínigh go dtí an imeall clé"
 
 #: connectionTool/ConnectionTool.cpp:75
 #, kde-format
 msgid "Align to horizontal center"
-msgstr ""
+msgstr "Ailínigh go dtí an lár cothrománach"
 
 #: connectionTool/ConnectionTool.cpp:78
 #, kde-format
 msgid "Align to right edge"
-msgstr ""
+msgstr "Ailínigh go dtí an imeall deas"
 
 #: connectionTool/ConnectionTool.cpp:81
 #, kde-format
 msgid "Align to top edge"
-msgstr ""
+msgstr "Ailínigh go dtí an imeall uachtarach"
 
 #: connectionTool/ConnectionTool.cpp:84
 #, kde-format
 msgid "Align to vertical center"
-msgstr ""
+msgstr "Ailínigh go dtí an lár ingearach"
 
 #: connectionTool/ConnectionTool.cpp:87
 #, kde-format
 msgid "Align to bottom edge"
-msgstr ""
+msgstr "Ailínigh go dtí an imeall bun"
 
 #: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
-msgstr ""
+msgstr "Éalaigh i ngach treo"
 
 #: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
-msgstr ""
+msgstr "Éalú i dtreonna cothrománacha"
 
 #: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
-msgstr ""
+msgstr "Éalaigh i dtreonna ingearacha"
 
 #: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
-msgstr ""
+msgstr "Éalaigh sa treo clé"
 
 #: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
-msgstr ""
+msgstr "Éalú sa treo ceart"
 
 #: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
-msgstr ""
+msgstr "Éalaigh i dtreo suas"
 
 #: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
-msgstr ""
+msgstr "Éalaigh i dtreo anuas"
 
 #: connectionTool/ConnectionTool.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
-msgstr ""
+msgstr "Cruthaigh Ceangal"
 
 #: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
 msgid "Drag to edit connection."
-msgstr ""
+msgstr "Tarraing chun an nasc a chur in eagar."
 
 #: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
 msgid "Double click connection or press delete to remove it."
-msgstr ""
+msgstr "Cliceáil faoi dhó ar an nasc nó brúigh scrios chun é a bhaint."
 
 #: connectionTool/ConnectionTool.cpp:772
 #, kde-format
 msgid "Click to edit connection points."
-msgstr ""
+msgstr "Cliceáil chun pointí nasctha a chur in eagar."
 
 #: connectionTool/ConnectionTool.cpp:786
 #, kde-format
@@ -141,36 +143,39 @@ msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr ""
+"Tarraing chun pointe nasctha a bhogadh. Cliceáil faoi dhó ar an nasc nó "
+"brúigh scrios chun é a bhaint."
 
 #: connectionTool/ConnectionTool.cpp:788
 #, kde-format
 msgid "Double click connection point or press delete to remove it."
 msgstr ""
+"Cliceáil faoi dhó ar an bpointe ceangail nó brúigh scrios chun é a bhaint."
 
 #: connectionTool/ConnectionTool.cpp:790
 #, kde-format
 msgid "Double click to add connection point."
-msgstr ""
+msgstr "Cliceáil faoi dhó chun pointe nasctha a chur leis."
 
 #: connectionTool/ConnectionTool.cpp:793
 #, kde-format
 msgid "Drag to create new connection."
-msgstr ""
+msgstr "Tarraing chun nasc nua a chruthú."
 
 #: connectionTool/ConnectionTool.cpp:821
 #, kde-format
 msgid "Connection"
-msgstr ""
+msgstr "Ceangal"
 
 #: connectionTool/ConnectionTool.cpp:826 defaulttool/DefaultTool.cpp:1175
 #, kde-format
 msgid "Line"
-msgstr ""
+msgstr "Líne"
 
 #: connectionTool/ConnectionTool.cpp:831
 #, kde-format
 msgid "Connection Point"
-msgstr ""
+msgstr "Pointe Ceangail"
 
 #: connectionTool/ConnectionToolFactory.cpp:18
 #, kde-format
@@ -195,7 +200,7 @@ msgstr "Í&sligh"
 #: defaulttool/DefaultTool.cpp:235
 #, kde-format
 msgid "Send to &Back"
-msgstr ""
+msgstr "Seol chuig &Ar Ais"
 
 #: defaulttool/DefaultTool.cpp:240
 #, kde-format
@@ -205,7 +210,7 @@ msgstr "Ailínigh Ar Chlé"
 #: defaulttool/DefaultTool.cpp:244
 #, kde-format
 msgid "Horizontally Center"
-msgstr ""
+msgstr "Lár go Cothrománach"
 
 #: defaulttool/DefaultTool.cpp:248
 #, kde-format
@@ -220,7 +225,7 @@ msgstr "Ailínigh leis an mBarr"
 #: defaulttool/DefaultTool.cpp:256
 #, kde-format
 msgid "Vertically Center"
-msgstr ""
+msgstr "Lár go hIngearach"
 
 #: defaulttool/DefaultTool.cpp:260
 #, kde-format
@@ -240,44 +245,48 @@ msgstr "Díghrúpáil"
 #: defaulttool/DefaultTool.cpp:462 defaulttool/DefaultTool.cpp:534
 #, kde-format
 msgid "Click and drag to move guide line."
-msgstr ""
+msgstr "Cliceáil agus tarraing chun an líne treoir a bhogadh."
 
 #: defaulttool/DefaultTool.cpp:468
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
+"Rothlaíonn cliceáil ar chlé timpeall an ionaid, cliceáil ar dheis timpeall "
+"an tsuímh aibhsithe."
 
 #: defaulttool/DefaultTool.cpp:470
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr ""
+msgstr "Cliceáil agus tarraing chun an rogha a lomadh."
 
 #: defaulttool/DefaultTool.cpp:472
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr ""
+msgstr "Cliceáil agus tarraing chun méid an roghnúcháin a athrú."
 
 #: defaulttool/DefaultTool.cpp:524
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr ""
+msgstr "Cliceáil agus tarraing chun an rogha a bhogadh."
 
 #: defaulttool/DefaultTool.cpp:529
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
+"Cliceáil agus tarraing chun méid an roghnúcháin a athrú. Cliceáil sa lár "
+"chun an suíomh aibhsithe a shocrú."
 
 #: defaulttool/DefaultTool.cpp:1044
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr ""
+msgstr "Cruthanna grúpa"
 
 #: defaulttool/DefaultTool.cpp:1076
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr ""
+msgstr "Díghrúpáil cruthanna"
 
 #: defaulttool/DefaultTool.cpp:1169
 #, kde-format
@@ -292,44 +301,44 @@ msgstr "Céimseata"
 #: defaulttool/DefaultTool.cpp:1180
 #, kde-format
 msgid "Fill"
-msgstr ""
+msgstr "Líon"
 
 #: defaulttool/DefaultTool.cpp:1185
 #, kde-format
 msgid "Shadow"
-msgstr ""
+msgstr "Scáth"
 
 #: defaulttool/DefaultToolFactory.cpp:17
 #, kde-format
 msgid "Shape handling"
-msgstr ""
+msgstr "Láimhseáil cruthanna"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:97
 #: defaulttool/ShapeRotateStrategy.cpp:140
 msgctxt "(qtundo-format)"
 msgid "Rotate"
-msgstr ""
+msgstr "Rothlaigh"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Shear X"
-msgstr ""
+msgstr "Lomadh X"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Shear Y"
-msgstr ""
+msgstr "Lomadh Y"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:215
 #: defaulttool/DefaultToolTransformWidget.cpp:252
 msgctxt "(qtundo-format)"
 msgid "Scale"
-msgstr ""
+msgstr "Scála"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
 msgid "Reset Transformations"
-msgstr ""
+msgstr "Athshocraigh Claochluithe"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, rotateSpinBox)
 #: defaulttool/DefaultToolTransformWidget.ui:25
@@ -347,13 +356,13 @@ msgstr "Rothlaigh"
 #: defaulttool/DefaultToolTransformWidget.ui:64
 #, kde-format
 msgid "Shear X"
-msgstr ""
+msgstr "Lomadh X"
 
 #. i18n: ectx: property (text), widget (QPushButton, shearYButton)
 #: defaulttool/DefaultToolTransformWidget.ui:90
 #, kde-format
 msgid "Shear Y"
-msgstr ""
+msgstr "Lomadh Y"
 
 #. i18n: ectx: property (text), widget (QPushButton, scaleXButton)
 #: defaulttool/DefaultToolTransformWidget.ui:122
@@ -377,13 +386,13 @@ msgstr "Caomhnaigh an cóimheas treoíochta"
 #: defaulttool/DefaultToolTransformWidget.ui:174
 #, kde-format
 msgid "Reset Transformations"
-msgstr ""
+msgstr "Athshocraigh Claochluithe"
 
 #: defaulttool/DefaultToolWidget.cpp:217
 #: defaulttool/ShapeResizeStrategy.cpp:332
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr ""
+msgstr "Athraigh méid"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: defaulttool/DefaultToolWidget.ui:35
@@ -400,42 +409,44 @@ msgstr "Y:"
 #: defaulttool/ShapeMoveStrategy.cpp:53
 #, kde-format
 msgid "Press ALT to hold x- or y-position."
-msgstr ""
+msgstr "Brúigh ALT chun an suíomh x nó y a choinneáil."
 
 #: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr ""
+msgstr "Brúigh CTRL chun an méid a athrú ón lár."
 
 #: defaulttool/ShapeRotateStrategy.cpp:49
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr ""
+msgstr "Brúigh ALT chun rothlú i gcéimeanna 45 céim."
 
 #: defaulttool/ShapeShearStrategy.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Shear"
-msgstr ""
+msgstr "Lomadh"
 
 #: guidestool/GuidesTool.cpp:131
 #, kde-format
 msgid "Double click to add guide line."
-msgstr ""
+msgstr "Cliceáil faoi dhó chun líne threorach a chur leis."
 
 #: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
+"Cliceáil agus tarraing chun an líne threorach a bhogadh. Cliceáil faoi dhó "
+"chun an líne threorach a bhaint."
 
 #: guidestool/GuidesTool.cpp:371
 #, kde-format
 msgid "Guides Editor"
-msgstr ""
+msgstr "Eagarthóir Treoracha"
 
 #: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
-msgstr ""
+msgstr "Treoracha Ionsáithe"
 
 #: guidestool/GuidesToolFactory.cpp:14
 #, kde-format
@@ -485,30 +496,33 @@ msgstr "Bain"
 #, kde-format
 msgid "Insert this number of horizontal equally spaced guides."
 msgstr ""
+"Cuir isteach an líon seo de threoracha cothrománacha atá spásáilte go "
+"cothrom."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_horizontalEdgesCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:51
 #, kde-format
 msgid "Insert guides at the horizontal edges."
-msgstr ""
+msgstr "Cuir treoracha isteach ag na himill chothrománacha."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_verticalSpinBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:78
 #, kde-format
 msgid "Insert this number of vertical equally spaced guides."
 msgstr ""
+"Cuir isteach an líon seo de threoracha ingearacha atá spásáilte go cothrom."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_verticalEdgesCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:91
 #, kde-format
 msgid "Insert guides at the vertical edges."
-msgstr ""
+msgstr "Cuir treoracha isteach ag na himill ingearacha."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_erasePreviousCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:105
 #, kde-format
 msgid "Erase previous guides"
-msgstr ""
+msgstr "Scrios treoracha roimhe seo"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_createButton)
 #: guidestool/InsertGuidesToolOptionWidget.ui:112

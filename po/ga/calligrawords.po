@@ -2,20 +2,22 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kword package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kword.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2004-12-03 14:52-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -46,13 +48,13 @@ msgstr "Mó&d Taispeána"
 #: part/calligrawords.rc:62
 #, kde-format
 msgid "Semantics"
-msgstr ""
+msgstr "Seimeantacht"
 
 #. i18n: ectx: Menu (format)
 #: part/calligrawords.rc:74
 #, kde-format
 msgid "S&tyles"
-msgstr ""
+msgstr "S&tíleanna"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrawords.rc:78
@@ -70,7 +72,7 @@ msgstr "Seiceáil an litriú"
 #: part/calligrawords.rc:83
 #, kde-format
 msgid "AutoCorrection"
-msgstr ""
+msgstr "CeartúUathoibríoch"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
@@ -99,33 +101,33 @@ msgstr "&Uirlisí"
 #: part/commands/KWChangePageStyleCommand.cpp:11
 msgctxt "(qtundo-format)"
 msgid "Set Page Style"
-msgstr ""
+msgstr "Socraigh Stíl Leathanaigh"
 
 #: part/commands/KWNewPageStyleCommand.cpp:12
 msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
-msgstr ""
+msgstr "Cuir Stíl Leathanaigh isteach"
 
 #: part/commands/KWPageStylePropertiesCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Page Properties"
-msgstr ""
+msgstr "Airíonna Leathanaigh"
 
 #: part/commands/KWShapeCreateCommand.cpp:42
 msgctxt "(qtundo-format)"
 msgid "Create shape"
-msgstr ""
+msgstr "Cruthaigh cruth"
 
 #: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
 msgid "Baseline"
-msgstr ""
+msgstr "Bonnlíne"
 
 #: part/dialogs/KWAnchoringProperties.cpp:413
 #: part/dialogs/KWAnchoringProperties.cpp:424
 #, kde-format
 msgid "Character"
-msgstr ""
+msgstr "Carachtar"
 
 #: part/dialogs/KWAnchoringProperties.cpp:416
 #, kde-format
@@ -136,35 +138,35 @@ msgstr "Ró"
 #: part/dialogs/KWAnchoringProperties.cpp:425
 #, kde-format
 msgid "Page (entire) area"
-msgstr ""
+msgstr "Limistéar leathanaigh (iomlán)"
 
 #: part/dialogs/KWAnchoringProperties.cpp:418
 #: part/dialogs/KWAnchoringProperties.cpp:426
 #, kde-format
 msgid "Page text area"
-msgstr ""
+msgstr "Limistéar téacs an leathanaigh"
 
 #: part/dialogs/KWAnchoringProperties.cpp:419
 #: part/dialogs/KWAnchoringProperties.cpp:433
 #, kde-format
 msgid "Paragraph area"
-msgstr ""
+msgstr "Limistéar mír"
 
 #: part/dialogs/KWAnchoringProperties.cpp:420
 #: part/dialogs/KWAnchoringProperties.cpp:434
 #, kde-format
 msgid "Paragraph text area"
-msgstr ""
+msgstr "Limistéar téacs na míre"
 
 #: part/dialogs/KWAnchoringProperties.cpp:427
 #, kde-format
 msgid "Left page border"
-msgstr ""
+msgstr "Imeall clé an leathanaigh"
 
 #: part/dialogs/KWAnchoringProperties.cpp:428
 #, kde-format
 msgid "Right page border"
-msgstr ""
+msgstr "Imeall deas an leathanaigh"
 
 #: part/dialogs/KWAnchoringProperties.cpp:435
 #, kde-format
@@ -180,43 +182,43 @@ msgstr "Imlíne ailt ar chlé"
 #: part/dialogs/KWAnchoringProperties.ui:17
 #, kde-format
 msgid "Shape relation to text is:"
-msgstr ""
+msgstr "Is é seo an gaol crutha leis an téacs:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:23
 #, kde-format
 msgid "Inline with text (behaves as a character)"
-msgstr ""
+msgstr "Inlíne leis an téacs (iompraíonn sé mar charachtar)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:30
 #, kde-format
 msgid "Floating, but anchored to a character position"
-msgstr ""
+msgstr "Ar snámh, ach ancaireáilte le suíomh carachtair"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWAnchoringProperties.ui:37
 #, kde-format
 msgid "Floating, but anchored to a paragraph"
-msgstr ""
+msgstr "Ar snámh, ach ancaire le mír"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWAnchoringProperties.ui:44
 #, kde-format
 msgid "Floating free (not anchored to text)"
-msgstr ""
+msgstr "Snámh saor in aisce (gan a bheith ancaireach le téacs)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
 #, kde-format
 msgid "Vertical Positioning"
-msgstr ""
+msgstr "Suíomh Ingearach"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rTop)
 #: part/dialogs/KWAnchoringProperties.ui:60
 #, kde-format
 msgid "Top align with:"
-msgstr ""
+msgstr "Ailínigh barr le:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
 #. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
@@ -224,13 +226,13 @@ msgstr ""
 #: part/dialogs/KWAnchoringProperties.ui:186
 #, kde-format
 msgid "Center align with:"
-msgstr ""
+msgstr "Lár-ailíniú le:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rBottom)
 #: part/dialogs/KWAnchoringProperties.ui:87
 #, kde-format
 msgid "Bottom align with:"
-msgstr ""
+msgstr "Ailínigh bun le:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
 #. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
@@ -246,30 +248,30 @@ msgstr "Fritháireamh"
 #: part/dialogs/KWAnchoringProperties.ui:228
 #, kde-format
 msgid "from:"
-msgstr ""
+msgstr "ó:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
 #: part/dialogs/KWAnchoringProperties.ui:163
 #, kde-format
 msgid "Horizontal Positioning"
-msgstr ""
+msgstr "Suíomh Cothrománach"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rLeft)
 #: part/dialogs/KWAnchoringProperties.ui:169
 #, kde-format
 msgid "Left align with:"
-msgstr ""
+msgstr "Ailínigh ar chlé le:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rRight)
 #: part/dialogs/KWAnchoringProperties.ui:196
 #, kde-format
 msgid "Right align with:"
-msgstr ""
+msgstr "Ailínigh ar dheis le:"
 
 #: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
 msgid "Configure"
-msgstr ""
+msgstr "Cumraigh"
 
 #: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
 #, kde-format
@@ -279,13 +281,13 @@ msgstr "Éagsúil"
 #: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
 #, kde-format
 msgid "Grid"
-msgstr ""
+msgstr "Eangach"
 
 #: part/dialogs/KWConfigureDialog.cpp:45
 #, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
-msgstr ""
+msgstr "Doiciméad"
 
 #: part/dialogs/KWConfigureDialog.cpp:46
 #, kde-format
@@ -296,7 +298,7 @@ msgstr "Socruithe Cáipéise"
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
-msgstr ""
+msgstr "Údar"
 
 #: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
@@ -317,6 +319,8 @@ msgid ""
 "Bookmarks allow you to jump between parts of your document.\n"
 "Please provide the name of your bookmark."
 msgstr ""
+"Ligeann leabharmharcanna duit léim idir codanna de do dhoiciméad.\n"
+"Cuir ainm do leabharmharcanna ar fáil le do thoil."
 
 #. i18n: ectx: property (text), widget (QLabel, lName)
 #: part/dialogs/KWCreateBookmark.ui:38
@@ -373,12 +377,12 @@ msgstr "Ainm an Fhrámadáin"
 #: part/dialogs/KWFrameDialog.cpp:29
 #, kde-format
 msgid "Smart Positioning"
-msgstr ""
+msgstr "Suíomh Cliste"
 
 #: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
 msgid "Text Run Around"
-msgstr ""
+msgstr "Rith Téacs Timpeall"
 
 #: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
 #, kde-format
@@ -388,67 +392,67 @@ msgstr "Ceangail Frámaí Téacs"
 #: part/dialogs/KWFrameDialog.cpp:64
 msgctxt "(qtundo-format)"
 msgid "Change Shape Properties"
-msgstr ""
+msgstr "Athraigh Airíonna Crutha"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
 #: part/dialogs/KWInsertImage.ui:17
 #, kde-format
 msgid "Anchor to..."
-msgstr ""
+msgstr "Ancaire chuig..."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
 #, kde-format
 msgid "&Page"
-msgstr ""
+msgstr "&Leathanach"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWInsertImage.ui:30
 #, kde-format
 msgid "Para&graph"
-msgstr ""
+msgstr "Para&graf"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWInsertImage.ui:40
 #, kde-format
 msgid "&To Character"
-msgstr ""
+msgstr "&Chun Carachtar"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWInsertImage.ui:47
 #, kde-format
 msgid "&As Character"
-msgstr ""
+msgstr "&Mar Charachtar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
 #: part/dialogs/KWInsertImage.ui:59
 #, kde-format
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "Ailíniú Cothrománach"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
 #: part/dialogs/KWInsertImage.ui:65
 #, kde-format
 msgid "&Left"
-msgstr ""
+msgstr "&Ar Chlé"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
 #: part/dialogs/KWInsertImage.ui:75
 #, kde-format
 msgid "&Center"
-msgstr ""
+msgstr "&Lár"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
 #: part/dialogs/KWInsertImage.ui:82
 #, kde-format
 msgid "&Right"
-msgstr ""
+msgstr "&Ar dheis"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
 #: part/dialogs/KWInsertImage.ui:92
 #, kde-format
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "Ailíniú Ingearach"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
 #: part/dialogs/KWInsertImage.ui:98
@@ -460,67 +464,67 @@ msgstr "&Barr"
 #: part/dialogs/KWInsertImage.ui:105
 #, kde-format
 msgid "&Middle"
-msgstr ""
+msgstr "&Lár"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
 #: part/dialogs/KWInsertImage.ui:115
 #, kde-format
 msgid "&Bottom"
-msgstr ""
+msgstr "&Bun"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
 #: part/dialogs/KWInsertImage.ui:127
 #, kde-format
 msgid "Text Wrap-around"
-msgstr ""
+msgstr "Timfhilleadh Téacs"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runThrough)
 #: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
 #, kde-format
 msgid "Run through this shape"
-msgstr ""
+msgstr "Rith tríd an gcruth seo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
 #: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
 #, kde-format
 msgid "Skip below this shape"
-msgstr ""
+msgstr "Léim faoi bhun an chruth seo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
 #, kde-format
 msgid "Run on left side of this shape"
-msgstr ""
+msgstr "Rith ar thaobh na láimhe clé den chruth seo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
 #, kde-format
 msgid "Run on right side of this shape"
-msgstr ""
+msgstr "Rith ar thaobh na láimhe deise den chruth seo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, longest)
 #: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
 #, kde-format
 msgid "Run on longest side of this shape"
-msgstr ""
+msgstr "Rith ar an taobh is faide den chruth seo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, both)
 #: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
 #, kde-format
 msgid "Run on both sides of this shape"
-msgstr ""
+msgstr "Rith ar an dá thaobh den chruth seo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enough)
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr ""
+msgstr "Rith ar thaobhanna atá níos leithne ná:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
 #, kde-format
 msgid "Distance Between Shape and Text:"
-msgstr ""
+msgstr "Fad idir Cruth agus Téacs:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
 #: part/dialogs/KWPageSettingsDialog.cpp:38 part/dialogs/KWStartupWidget.ui:37
@@ -531,12 +535,12 @@ msgstr "Colúin"
 #: part/dialogs/KWPageSettingsDialog.cpp:44
 #, kde-format
 msgid "Style"
-msgstr ""
+msgstr "Stíl"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:60
 #, kde-format
 msgid "Clone"
-msgstr ""
+msgstr "Clónáil"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:65 part/KWView.cpp:304
 #, kde-format
@@ -546,35 +550,35 @@ msgstr "Scrios"
 #: part/dialogs/KWPageSettingsDialog.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
-msgstr ""
+msgstr "Athraigh Stíl Leathanaigh"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:235
 #, kde-format
 msgid "Clone Page Style"
-msgstr ""
+msgstr "Stíl Leathanach Clónála"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:236
 #, kde-format
 msgid "Add a new page style with the name:"
-msgstr ""
+msgstr "Cuir stíl leathanaigh nua leis an ainm seo a leanas:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:19
 #, kde-format
 msgid "Text elsewhere will:"
-msgstr ""
+msgstr "Déanfaidh téacs in áit eile:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:92
 #, kde-format
 msgid "The shape affects the text by its:"
-msgstr ""
+msgstr "Bíonn tionchar ag an gcruth ar an téacs trí:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
 #: part/dialogs/KWRunAroundProperties.ui:99
 #, kde-format
 msgid "Bounding box"
-msgstr ""
+msgstr "Bosca teorannaithe"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
 #: part/dialogs/KWRunAroundProperties.ui:106
@@ -586,25 +590,25 @@ msgstr "Comhrian"
 #: part/dialogs/KWRunAroundProperties.ui:116
 #, kde-format
 msgid "Shape and text are separated left by:"
-msgstr ""
+msgstr "Tá cruth agus téacs scartha ar chlé le:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
 #, kde-format
 msgid "Right by:"
-msgstr ""
+msgstr "Díreach ag:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:142
 #, kde-format
 msgid "Above by:"
-msgstr ""
+msgstr "Thuas ag:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:155
 #, kde-format
 msgid "Below by:"
-msgstr ""
+msgstr "Thíos ag:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
@@ -631,7 +635,7 @@ msgstr "Athainmnigh an Leabharmharc"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr "Tá leabharmharc darb ainm \"%1\" ann cheana."
+msgstr "Tá leabharmharc leis an ainm \"%1\" ann cheana féin."
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
@@ -658,22 +662,22 @@ msgstr "Cruthaigh"
 #: part/dockers/KWDebugDocker.cpp:18
 #, kde-format
 msgid "Debug"
-msgstr ""
+msgstr "Dífhabhtú"
 
 #: part/dockers/KWNavigationDocker.cpp:20
 #, kde-format
 msgid "Navigation"
-msgstr ""
+msgstr "Loingseoireacht"
 
 #: part/dockers/KWNavigationWidget.cpp:92
 #, kde-format
 msgid "Page #"
-msgstr ""
+msgstr "Leathanach #"
 
 #: part/dockers/KWNavigationWidget.cpp:92
 #, kde-format
 msgid "Section"
-msgstr ""
+msgstr "Roinn"
 
 #: part/dockers/KWRdfDocker.cpp:38
 #, kde-format
@@ -703,12 +707,12 @@ msgstr "Siollaí:"
 #: part/dockers/KWStatisticsWidget.cpp:134
 #, kde-format
 msgid "Characters (spaces):"
-msgstr ""
+msgstr "Carachtair (spásanna):"
 
 #: part/dockers/KWStatisticsWidget.cpp:137
 #, kde-format
 msgid "Characters (no spaces):"
-msgstr ""
+msgstr "Carachtair (gan spásanna):"
 
 #: part/dockers/KWStatisticsWidget.cpp:140
 #, kde-format
@@ -718,23 +722,23 @@ msgstr "Línte:"
 #: part/dockers/KWStatisticsWidget.cpp:143
 #, kde-format
 msgid "Readability:"
-msgstr ""
+msgstr "Inléiteacht:"
 
 #: part/dockers/KWStatisticsWidget.cpp:145
 #, kde-format
 msgid "Flesch reading ease"
-msgstr ""
+msgstr "Éascaíocht léitheoireachta Flesch"
 
 #: part/dockers/KWStatisticsWidget.cpp:147
 #, kde-format
 msgid "East asian characters:"
-msgstr ""
+msgstr "Carachtair Oirthear na hÁise:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_words)
 #: part/dockers/StatisticsPreferencesPopup.ui:17
 #, kde-format
 msgid "Words"
-msgstr ""
+msgstr "Focail"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
 #: part/dockers/StatisticsPreferencesPopup.ui:24
@@ -758,7 +762,7 @@ msgstr "Línte"
 #: part/dockers/StatisticsPreferencesPopup.ui:45
 #, kde-format
 msgid "Characters With Spaces"
-msgstr ""
+msgstr "Carachtair le Spásanna"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
 #: part/dockers/StatisticsPreferencesPopup.ui:52
@@ -770,13 +774,13 @@ msgstr "Líon na gcarachtar, gan spásanna"
 #: part/dockers/StatisticsPreferencesPopup.ui:59
 #, kde-format
 msgid "East Asian characters"
-msgstr ""
+msgstr "Carachtair Oirthear na hÁise"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
 #: part/dockers/StatisticsPreferencesPopup.ui:66
 #, kde-format
 msgid "Flesch Reading Ease"
-msgstr ""
+msgstr "Éasca Léitheoireachta Flesch"
 
 #: part/i18n/stylenames.cpp:8
 #, kde-format
@@ -1064,32 +1068,32 @@ msgstr "Liath Bun agus Barr"
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
-msgstr ""
+msgstr "Focail Calligra"
 
 #: part/KWAboutData.h:20
 #, kde-format
 msgid "Word processor"
-msgstr ""
+msgstr "Próiseálaí focal"
 
 #: part/KWAboutData.h:22
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr ""
+msgstr "Cóipcheart 1998-%1, Foireann na bhFocal"
 
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
 #, kde-format
 msgid "Co Maintainer/Port to Qt6"
-msgstr ""
+msgstr "Comhchothaitheoir/Port chuig Qt6"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34 part/KWAboutData.h:35
 #, kde-format
 msgid "Co maintainer"
-msgstr ""
+msgstr "Comhchothaitheoir"
 
 #: part/KWAboutData.h:33 part/KWAboutData.h:34
 #, kde-format
@@ -1099,7 +1103,7 @@ msgstr "Pierre Ducroquet"
 #: part/KWAboutData.h:35
 #, kde-format
 msgid "C. Boemann"
-msgstr ""
+msgstr "C. Boemann"
 
 #: part/KWAboutData.h:36 part/KWAboutData.h:37 part/KWAboutData.h:38
 #: part/KWAboutData.h:40
@@ -1125,7 +1129,7 @@ msgstr "Pierre Stirnweiss"
 #: part/KWAboutData.h:39
 #, kde-format
 msgid "Formatting stuff"
-msgstr ""
+msgstr "Rudaí a fhormáidiú"
 
 #: part/KWAboutData.h:39
 #, kde-format
@@ -1144,42 +1148,42 @@ msgstr "Thorsten Zachmann"
 #: part/KWAboutData.h:69 part/KWAboutData.h:70
 #, kde-format
 msgid "Filter"
-msgstr ""
+msgstr "Scagaire"
 
 #: part/KWAboutData.h:41
 #, kde-format
 msgid "Matus Uzak"
-msgstr ""
+msgstr "Matus Uzak"
 
 #: part/KWAboutData.h:42
 #, kde-format
 msgid "Layout and Painting"
-msgstr ""
+msgstr "Leagan Amach agus Péinteáil"
 
 #: part/KWAboutData.h:42
 #, kde-format
 msgid "Pavol Korinek"
-msgstr ""
+msgstr "Pavol Korinek"
 
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Shreya Pandit"
-msgstr ""
+msgstr "Shreya Pandit"
 
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Statistics docker"
-msgstr ""
+msgstr "Dugaire staitisticí"
 
 #: part/KWAboutData.h:44
 #, kde-format
 msgid "Brijesh Patel"
-msgstr ""
+msgstr "Brijesh Patel"
 
 #: part/KWAboutData.h:44
 #, kde-format
 msgid "Foot and endnotes"
-msgstr ""
+msgstr "Nótaí bun agus nótaí deiridh"
 
 #: part/KWAboutData.h:45
 #, kde-format
@@ -1189,27 +1193,27 @@ msgstr "Leabharliosta"
 #: part/KWAboutData.h:45
 #, kde-format
 msgid "Smit Patel"
-msgstr ""
+msgstr "Smit Patel"
 
 #: part/KWAboutData.h:46
 #, kde-format
 msgid "Mojtaba Shahi"
-msgstr ""
+msgstr "Mojtaba Shahi"
 
 #: part/KWAboutData.h:46
 #, kde-format
 msgid "Style Manager"
-msgstr ""
+msgstr "Bainisteoir Stíle"
 
 #: part/KWAboutData.h:47
 #, kde-format
 msgid "Lassi Nieminen"
-msgstr ""
+msgstr "Lassi Nieminen"
 
 #: part/KWAboutData.h:48
 #, kde-format
 msgid "Hanzes Matus"
-msgstr ""
+msgstr "Hanzes Matus"
 
 #: part/KWAboutData.h:49
 #, kde-format
@@ -1234,7 +1238,7 @@ msgstr "Tacaíocht ODF"
 #: part/KWAboutData.h:52
 #, kde-format
 msgid "Robert Mathias Marmorstein"
-msgstr ""
+msgstr "Robert Mathias Marmorstein"
 
 #: part/KWAboutData.h:53
 #, kde-format
@@ -1334,40 +1338,40 @@ msgstr "Michael Johnson"
 #: part/KWAboutData.h:71
 #, kde-format
 msgid "Fatcow Web Hosting"
-msgstr ""
+msgstr "Óstáil Gréasáin Fatcow"
 
 #: part/KWAboutData.h:71
 #, kde-format
 msgid "Page break icon"
-msgstr ""
+msgstr "Deilbhín briseadh leathanaigh"
 
 #: part/KWAboutData.h:73
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "seoc@iolfree.ie,kscanne@gmail.com"
+msgstr "seoc@iolfree.ie,kscanne@gmail.com,aindriu80@yahoo.com"
 
 #. i18n translator strings
 #: part/KWAboutData.h:73
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell,Aindriú Mac Giolla Eoin"
 
 #: part/KWDocument.cpp:492
 #, kde-format
 msgid "Copy"
-msgstr "Cóip"
+msgstr "Cóipeáil"
 
 #: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
-msgstr ""
+msgstr "Caighdeánach"
 
 #: part/KWDocument.cpp:544
 #, kde-format
 msgid "Document Title"
-msgstr ""
+msgstr "Teideal an Doiciméid"
 
 #: part/KWDocument.cpp:551
 #, kde-format
@@ -1420,12 +1424,14 @@ msgstr ""
 #, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
-msgstr ""
+msgstr "Caighdeánach"
 
 #: part/KWPart.cpp:139
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr ""
+"Ní féidir an chomhpháirt téacs atá ag teastáil a aimsiú, scoirfidh Words "
+"anois"
 
 #: part/KWPart.cpp:139
 #, kde-format
@@ -1450,77 +1456,77 @@ msgstr "Leathanach %1 as %2"
 #: part/KWStatusBar.cpp:38
 #, kde-format
 msgid "Page %1-%2 of %3"
-msgstr ""
+msgstr "Leathanach %1-%2 de %3"
 
 #: part/KWStatusBar.cpp:39
 #, kde-format
 msgid "Line %1"
-msgstr ""
+msgstr "Líne %1"
 
 #: part/KWStatusBar.cpp:132
 #, kde-format
 msgid "Page Number"
-msgstr ""
+msgstr "Uimhir Leathanaigh"
 
 #: part/KWStatusBar.cpp:145
 #, kde-format
 msgid "Line Number"
-msgstr ""
+msgstr "Uimhir Líne"
 
 #: part/KWStatusBar.cpp:157
 #, kde-format
 msgid "Change the page style"
-msgstr ""
+msgstr "Athraigh stíl an leathanaigh"
 
 #: part/KWStatusBar.cpp:165
 #, kde-format
 msgid "Page Style"
-msgstr ""
+msgstr "Stíl Leathanaigh"
 
 #: part/KWStatusBar.cpp:179
 #, kde-format
 msgid "Page Size"
-msgstr ""
+msgstr "Méid an Leathanaigh"
 
 #: part/KWStatusBar.cpp:194
 #, kde-format
 msgid "Saved/Modified"
-msgstr ""
+msgstr "Sábháilte/Athraithe"
 
 #: part/KWStatusBar.cpp:207
 #, kde-format
 msgid "Mouse Cursor X:Y"
-msgstr ""
+msgstr "Cúrsóir Luiche X:Y"
 
 #: part/KWStatusBar.cpp:220
 #, kde-format
 msgid "Zoom Controller"
-msgstr ""
+msgstr "Rialaitheoir Súmáil"
 
 #: part/KWView.cpp:186
 #, kde-format
 msgid "Exit Fullscreen Mode"
-msgstr ""
+msgstr "Scoir Mód Lánscáileáin"
 
 #: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
-msgstr ""
+msgstr "Airíonna Crutha..."
 
 #: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
-msgstr ""
+msgstr "Athraigh an chaoi a n-iompraíonn an cruth"
 
 #: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
-msgstr ""
+msgstr "Cruthaigh Teimpléad Ó Dhoiciméad..."
 
 #: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
-msgstr ""
+msgstr "Sábháil an doiciméad seo agus bain úsáid as níos déanaí mar theimpléad"
 
 #: part/KWView.cpp:292
 #, kde-format
@@ -1528,16 +1534,18 @@ msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
+"Is féidir leat an doiciméad seo a shábháil mar theimpléad.<br><br>Is féidir "
+"leat an teimpléad nua seo a úsáid mar phointe tosaigh do dhoiciméad eile."
 
 #: part/KWView.cpp:311
 #, kde-format
 msgid "Show Formatting Characters"
-msgstr ""
+msgstr "Taispeáin Carachtair Formáidithe"
 
 #: part/KWView.cpp:317
 #, kde-format
 msgid "Toggle the display of non-printing characters"
-msgstr ""
+msgstr "Taispeáin carachtair neamhphriontála a athrú"
 
 #: part/KWView.cpp:319
 #, kde-format
@@ -1546,16 +1554,19 @@ msgid ""
 "enabled, Words shows you tabs, spaces, carriage returns and other non-"
 "printing characters."
 msgstr ""
+"Athraigh taispeáint carachtair neamhphriontála.<br/><br/>Nuair a bhíonn sé "
+"seo cumasaithe, taispeánann Words tabanna, spásanna, fillteáin iompair agus "
+"carachtair neamhphriontála eile duit."
 
 #: part/KWView.cpp:322
 #, kde-format
 msgid "Show Field Shadings"
-msgstr ""
+msgstr "Taispeáin Scáthúcháin Réimse"
 
 #: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr ""
+msgstr "Scoránaigh an cúlra scáthaithe de réimsí"
 
 #: part/KWView.cpp:329
 #, kde-format
@@ -1563,16 +1574,18 @@ msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
+"Athraigh léirshamhlú réimsí (athróga srl.) trína gcúlra a tharraingt i ndath "
+"codarsnachta."
 
 #: part/KWView.cpp:331
 #, kde-format
 msgid "Show Text Shape Borders"
-msgstr ""
+msgstr "Taispeáin Teorainneacha Cruth Téacs"
 
 #: part/KWView.cpp:332
 #, kde-format
 msgid "Turns the border display on and off"
-msgstr ""
+msgstr "Casann sé an taispeáint teorann air agus as"
 
 #: part/KWView.cpp:339
 #, kde-format
@@ -1581,16 +1594,19 @@ msgid ""
 "This option is useful to see how the document will appear on the printed "
 "page."
 msgstr ""
+"Casann sé seo an taispeáint imeallach air agus as.<br/><br/>Ní "
+"phriontáiltear na himill choíche. Tá an rogha seo úsáideach chun a fheiceáil "
+"conas a bheidh an doiciméad le feiceáil ar an leathanach priontáilte."
 
 #: part/KWView.cpp:342
 #, kde-format
 msgid "Show Table Borders"
-msgstr ""
+msgstr "Taispeáin Teorainneacha an Tábla"
 
 #: part/KWView.cpp:348
 #, kde-format
 msgid "Toggle the display of table borders"
-msgstr ""
+msgstr "Scoránaigh taispeáint teorainneacha tábla"
 
 #: part/KWView.cpp:350
 #, kde-format
@@ -1598,16 +1614,19 @@ msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
+"Athraigh taispeáint teorainneacha tábla.<br/><br/>Nuair a bhíonn sé seo "
+"cumasaithe, taispeánann Words aon teorainneacha tábla dofheicthe le líne "
+"liath tanaí."
 
 #: part/KWView.cpp:352
 #, kde-format
 msgid "Show Section Bounds"
-msgstr ""
+msgstr "Taispeáin Teorainneacha na Rannóige"
 
 #: part/KWView.cpp:358
 #, kde-format
 msgid "Toggle the display of section bounds"
-msgstr ""
+msgstr "Scoránaigh taispeáint theorainneacha na rannóige"
 
 #: part/KWView.cpp:360
 #, kde-format
@@ -1615,6 +1634,9 @@ msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
+"Athraigh taispeáint theorainneacha na rannóige.<br/><br/>Nuair a bheidh sé "
+"seo cumasaithe, léireofar aon teorainneacha rannóige le lúibíní "
+"cothrománacha tanaí liatha."
 
 #: part/KWView.cpp:362
 #, kde-format
@@ -1634,6 +1656,11 @@ msgid ""
 "position tabulators among others.<p>Uncheck this to disable the rulers from "
 "being displayed.</p>"
 msgstr ""
+"Is iad na rialóirí na spásanna tomhais bána ag barr agus ar chlé an "
+"doiciméid. Taispeánann na rialóirí suíomh agus leithead leathanach agus "
+"frámaí agus is féidir iad a úsáid chun táibléid a shuíomh i measc rudaí eile."
+"<p>Díthiceáil an rogha seo chun na rialóirí a dhíchumasú ó bheith á "
+"thaispeáint.</p>"
 
 #: part/KWView.cpp:377
 #, kde-format
@@ -1643,32 +1670,32 @@ msgstr "Léim go Greille"
 #: part/KWView.cpp:385
 #, kde-format
 msgid "Show Status Bar"
-msgstr "Taispeáin an Barra Stádais"
+msgstr "Taispeáin Barra Stádais"
 
 #: part/KWView.cpp:386
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr "Taispeáin nó folaigh an barra stádais"
+msgstr "Taispeánann nó folaíonn sé an barra stádais"
 
 #: part/KWView.cpp:392
 #, kde-format
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Mód Lánscáileáin"
 
 #: part/KWView.cpp:393
 #, kde-format
 msgid "Set view in fullscreen mode"
-msgstr ""
+msgstr "Socraigh an radharc i mód lánscáileáin"
 
 #: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr ""
+msgstr "Bileoga Stíl Seimeantacha..."
 
 #: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
-msgstr ""
+msgstr "Bileoga stíle séimeantacha a mhodhnú agus a chur leis"
 
 #: part/KWView.cpp:403
 #, kde-format
@@ -1676,21 +1703,23 @@ msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
+"Úsáidtear bileoga stíle chun taispeáint faisnéise atá stóráilte in RDF a "
+"fhormáidiú."
 
 #: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
-msgstr ""
+msgstr "Cumraigh..."
 
 #: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
-msgstr "Leagan Amach an Leathanaigh..."
+msgstr "Leagan Amach Leathanaigh..."
 
 #: part/KWView.cpp:429
 #, kde-format
 msgid "Change properties of entire page"
-msgstr ""
+msgstr "Athraigh airíonna an leathanaigh iomláin"
 
 #: part/KWView.cpp:431
 #, kde-format
@@ -1698,51 +1727,54 @@ msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
 "paper orientation, header and footer sizes, and column settings.</p>"
 msgstr ""
+"Athraigh airíonna an leathanaigh iomláin.<p>Faoi láthair is féidir leat méid "
+"an pháipéir, treoshuíomh an pháipéir, méideanna an cheanntásca agus an "
+"bhuntásca, agus socruithe na gcolún a athrú.</p>"
 
 #: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
-msgstr ""
+msgstr "Cruthaigh Ceanntásc"
 
 #: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
-msgstr ""
+msgstr "Cruthaigh Buntásc"
 
 #: part/KWView.cpp:447
 #, kde-format
 msgid "Show Comments"
-msgstr ""
+msgstr "Taispeáin Tráchtanna"
 
 #: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
-msgstr ""
+msgstr "Taispeánann sé tuairimí sa cháipéis"
 
 #: part/KWView.cpp:454
 #, kde-format
 msgid "Word Count"
-msgstr ""
+msgstr "Líon na bhFocal"
 
 #: part/KWView.cpp:455
 #, kde-format
 msgid "Shows or hides word counting in status bar"
-msgstr ""
+msgstr "Taispeánann nó folaíonn sé comhaireamh focal sa bharra stádais"
 
 #: part/pagetool/KWPageTool.cpp:83
 #, kde-format
 msgid "Page Setup"
-msgstr ""
+msgstr "Socrú Leathanaigh"
 
 #: part/pagetool/KWPageTool.cpp:87
 #, kde-format
 msgid "Header & Footer"
-msgstr ""
+msgstr "Ceanntásc & Buntásc"
 
 #: part/pagetool/KWPageToolFactory.cpp:17
 #, kde-format
 msgid "Page layout"
-msgstr ""
+msgstr "Leagan amach leathanaigh"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
 #: part/pagetool/SimpleSetupWidget.ui:32
@@ -1754,71 +1786,75 @@ msgstr "..."
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
-msgstr ""
+msgstr "Aimsigh:"
 
 #: part/widgets/KoFindToolbar.cpp:81
 #, kde-format
 msgctxt "Next search result"
 msgid "Next"
-msgstr ""
+msgstr "Ar Aghaidh"
 
 #: part/widgets/KoFindToolbar.cpp:93
 #, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
-msgstr ""
+msgstr "Roimhe Seo"
 
 #: part/widgets/KoFindToolbar.cpp:104
 #, kde-format
 msgctxt "Search options"
 msgid "Options"
-msgstr ""
+msgstr "Roghanna"
 
 #: part/widgets/KoFindToolbar.cpp:134
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
-msgstr ""
+msgstr "Athsholáthair:"
 
 #: part/widgets/KoFindToolbar.cpp:146
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
-msgstr ""
+msgstr "Athsholáthair"
 
 #: part/widgets/KoFindToolbar.cpp:154
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
-msgstr ""
+msgstr "Ionadaigh Gach Rud"
 
 #: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
 msgid "Replace"
-msgstr ""
+msgstr "Athsholáthair"
 
 #: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 mheaitseáil aimsithe"
+msgstr[1] "%1 meaitseáil aimsithe"
+msgstr[2] "%1 meaitseáil aimsithe"
+msgstr[3] "%1 meaitseáil aimsithe"
+msgstr[4] "%1 meaitseáil aimsithe"
 
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
 msgid "No matches found"
-msgstr ""
+msgstr "Níor aimsíodh aon mheaitseálacha"
 
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
 msgstr ""
+"Bhuail an cuardach bun an leathanaigh, ag leanúint ar aghaidh ón mbarr."
 
 #: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
-msgstr ""
+msgstr "Buail an cuardach ag an mbarr, ag leanúint ar aghaidh ón mbun."
 
 #: part/Words.cpp:41
 #, kde-format
@@ -1848,4 +1884,4 @@ msgstr "Príomhthéacs"
 #: part/Words.cpp:51
 #, kde-format
 msgid "Other text"
-msgstr ""
+msgstr "Téacs eile"

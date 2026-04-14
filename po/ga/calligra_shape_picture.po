@@ -2,35 +2,37 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PictureShape package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/PictureShape.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2007-07-22 14:30-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: ChangeImageCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change image"
-msgstr ""
+msgstr "Athraigh íomhá"
 
 #: ChangeImageCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Crop image"
-msgstr ""
+msgstr "Bearr íomhá"
 
 #: ChangeImageCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Change image color mode"
-msgstr ""
+msgstr "Athraigh mód datha íomhá"
 
 #: ClipCommand.cpp:18
 msgctxt "(qtundo-format)"
@@ -40,67 +42,67 @@ msgstr "Íomhá chomhlíne (trí anailís íomhá)"
 #: ClipCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Remove image contour"
-msgstr ""
+msgstr "Bain imlíne na híomhá"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnImageFile)
 #: forms/wdgPictureTool.ui:20
 #, kde-format
 msgid "Replace image..."
-msgstr ""
+msgstr "Athsholáthair íomhá..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAspect)
 #: forms/wdgPictureTool.ui:32
 #, kde-format
 msgid "Keep proportions"
-msgstr ""
+msgstr "Coinnigh comhréireanna"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: forms/wdgPictureTool.ui:58
 #, kde-format
 msgid "Left:"
-msgstr ""
+msgstr "Ar chlé:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: forms/wdgPictureTool.ui:68
 #, kde-format
 msgid "Right:"
-msgstr ""
+msgstr "Ar dheis:"
 
 #. i18n: ectx: property (text), widget (QLabel, bottomLabel)
 #: forms/wdgPictureTool.ui:91
 #, kde-format
 msgid "Bottom:"
-msgstr ""
+msgstr "Bun:"
 
 #. i18n: ectx: property (text), widget (QLabel, topLabel)
 #: forms/wdgPictureTool.ui:111
 #, kde-format
 msgid "Top:"
-msgstr ""
+msgstr "Barr:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnFill)
 #: forms/wdgPictureTool.ui:131
 #, kde-format
 msgid "Reset"
-msgstr ""
+msgstr "Athshocraigh"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbContour)
 #: forms/wdgPictureTool.ui:148
 #, kde-format
 msgid "Contour (by image analysis)"
-msgstr ""
+msgstr "Imlíne (trí anailís íomhá)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: forms/wdgPictureTool.ui:178
 #, kde-format
 msgid "Color mode:"
-msgstr ""
+msgstr "Mód datha:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: forms/wdgPictureTool.ui:193
 #, kde-format
 msgid "Crop"
-msgstr ""
+msgstr "Bearr"
 
 #: PictureShapeFactory.cpp:31
 #, kde-format
@@ -135,4 +137,4 @@ msgstr "Comhartha Uisce"
 #: PictureToolFactory.cpp:18
 #, kde-format
 msgid "Picture editing"
-msgstr ""
+msgstr "Eagarthóireacht pictiúr"

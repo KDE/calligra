@@ -2,20 +2,22 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kpresenter package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kpresenter.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2004-12-03 14:52-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -62,110 +64,113 @@ msgstr "&Socruithe"
 #: part/commands/KPrAddCustomSlideShowCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Add custom slide show"
-msgstr ""
+msgstr "Cuir taispeántas sleamhnán saincheaptha leis"
 
 #: part/commands/KPrAnimationCreateCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Create shape animation"
-msgstr ""
+msgstr "Cruthaigh beochan cruth"
 
 #: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
-msgstr ""
+msgstr "Cuir imeacht spreagtha beochana in eagar"
 
 #: part/commands/KPrAnimationRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove shape animation"
-msgstr ""
+msgstr "Bain beochan cruth"
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Delete custom slide show"
-msgstr ""
+msgstr "Scrios taispeántas sleamhnán saincheaptha"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr ""
+msgstr "Scrios sleamhnán"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Scrios sleamhnán"
+msgstr[1] "Scrios sleamhnáin"
+msgstr[2] "Scrios sleamhnáin"
+msgstr[3] "Scrios sleamhnáin"
+msgstr[4] "Scrios sleamhnáin"
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
-msgstr ""
+msgstr "Moill/fad beochana a chur in eagar"
 
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
-msgstr ""
+msgstr "Cuir taispeántas sleamhnán saincheaptha in eagar"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
-msgstr ""
+msgstr "Cruthaigh Éifeacht Sleamhnáin"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
-msgstr ""
+msgstr "Modhnaigh Éifeacht Sleamhnáin"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
-msgstr ""
+msgstr "Scrios Éifeacht Sleamhnáin"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
-msgstr ""
+msgstr "Athraigh an tAistriú Sleamhnáin"
 
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
-msgstr ""
+msgstr "Athainmnigh taispeántas sleamhnán saincheaptha"
 
 #: part/commands/KPrReorderAnimationCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Reorder animations"
-msgstr ""
+msgstr "Athordaigh beochana"
 
 #: part/KPrAboutData.h:19
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
-msgstr ""
+msgstr "Céim Calligra"
 
 #: part/KPrAboutData.h:21
 #, kde-format
 msgid "Presentation Tool"
-msgstr ""
+msgstr "Uirlis Cur i Láthair"
 
 #: part/KPrAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr ""
+msgstr "Cóipcheart 1998-%1, An Fhoireann Stáitse"
 
 #: part/KPrAboutData.h:29
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KPrAboutData.h:30
 #, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr ""
+msgstr "Cothabhálaí/Port chuig Qt6"
 
 #: part/KPrAboutData.h:34 part/KPrAboutData.h:35
 #, kde-format
 msgid "Former maintainer"
-msgstr "Iarchothaitheoir"
+msgstr "Iar-chothaitheoir"
 
 #: part/KPrAboutData.h:34
 #, kde-format
@@ -240,7 +245,7 @@ msgstr "Carlos Licea "
 #: part/KPrAboutData.h:47
 #, kde-format
 msgid "C. Boemann "
-msgstr ""
+msgstr "C. Boemann "
 
 #: part/KPrAboutData.h:48
 #, kde-format
@@ -276,20 +281,20 @@ msgstr "Timothée Lacroix "
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "seoc@iolfree.ie,kscanne@gmail.com"
+msgstr "seoc@iolfree.ie,kscanne@gmail.com,aindriu80@yahoo.com"
 
 #. i18n translator strings
 #: part/KPrAboutData.h:55
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell,Aindriú Mac Giolla Eoin"
 
 #: part/KPrCustomSlideShowsModel.cpp:52
 #: part/KPrSlidesSorterDocumentModel.cpp:83
 #, kde-format
 msgid "Unknown"
-msgstr ""
+msgstr "Anaithnid"
 
 #: part/KPrCustomSlideShowsModel.cpp:57
 #: part/KPrSlidesSorterDocumentModel.cpp:88 part/ui/KPrHtmlExportDialog.cpp:114
@@ -300,22 +305,26 @@ msgstr "Sleamhnán %1"
 #: part/KPrEndOfSlideShowPage.cpp:69
 #, kde-format
 msgid "End of presentation. Click to exit."
-msgstr ""
+msgstr "Deireadh an chur i láthair. Cliceáil chun imeacht."
 
 #: part/KPrPageLayoutWidget.cpp:45 part/tools/KPrPlaceholderToolFactory.cpp:15
 #, kde-format
 msgid "Layout"
-msgstr ""
+msgstr "Leagan Amach"
 
 #: part/KPrPart.cpp:69
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
+"Ní féidir an comhpháirt téacs atá ag teastáil a aimsiú, scoirfidh Calligra "
+"Stage anois."
 
 #: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
+"Ní féidir an chomhpháirt pictiúr atá uait a aimsiú, scoirfidh Calligra Stage "
+"anois."
 
 #: part/KPrPart.cpp:87
 #, kde-format
@@ -325,40 +334,40 @@ msgstr "Earráid Suiteála"
 #: part/KPrPicturesImport.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Insert Pictures"
-msgstr ""
+msgstr "Cuir Pictiúir isteach"
 
 #: part/KPrPlaceholderShapeFactory.cpp:32
 #, kde-format
 msgid "Placeholder shape"
-msgstr ""
+msgstr "Cruth áitchoinneálaí"
 
 #: part/KPrPlaceholderStrategy.cpp:34
 msgid "Double click to add a title"
-msgstr ""
+msgstr "Cliceáil faoi dhó chun teideal a chur leis"
 
 #: part/KPrPlaceholderStrategy.cpp:35
 msgid "Double click to add an outline"
-msgstr ""
+msgstr "Cliceáil faoi dhó chun imlíne a chur leis"
 
 #: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
 msgid "Double click to add a text"
-msgstr ""
+msgstr "Cliceáil faoi dhó chun téacs a chur leis"
 
 #: part/KPrPlaceholderStrategy.cpp:38
 msgid "Double click to add notes"
-msgstr ""
+msgstr "Cliceáil faoi dhó chun nótaí a chur leis"
 
 #: part/KPrPlaceholderStrategy.cpp:48
 msgid "Double click to add a picture"
-msgstr ""
+msgstr "Cliceáil faoi dhó chun pictiúr a chur leis"
 
 #: part/KPrPlaceholderStrategy.cpp:52
 msgid "Double click to add a chart"
-msgstr ""
+msgstr "Cliceáil faoi dhó chun cairt a chur leis"
 
 #: part/KPrPlaceholderStrategy.cpp:56
 msgid "Double click to add an object"
-msgstr ""
+msgstr "Cliceáil faoi dhó chun réad a chur leis"
 
 #: part/KPrPresentationDrawWidget.cpp:86
 #, kde-format
@@ -408,7 +417,7 @@ msgstr "An Chéad Sleamhnán Eile"
 #: part/KPrPresenterViewInterface.cpp:59
 #, kde-format
 msgid "Speaker Notes"
-msgstr ""
+msgstr "Nótaí an Chainteora"
 
 #: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
@@ -425,32 +434,32 @@ msgstr "Deireadh an Taispeántais Sleamhnán"
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
-msgstr ""
+msgstr "tosú ar chliceáil luiche"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
-msgstr ""
+msgstr "tosú i ndiaidh an bheochana roimhe seo"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
-msgstr ""
+msgstr "tosú leis an mbeochan roimhe seo"
 
 #: part/KPrShapeAnimations.cpp:206
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
-msgstr ""
+msgstr "Tosaigh tar éis %1 soicind. Fad %2 soicind."
 
 #: part/KPrShapeAnimations.cpp:225
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, kde-format
 msgid "Animation"
-msgstr ""
+msgstr "Beochan"
 
 #: part/KPrShapeAnimations.cpp:229
 #, kde-format
@@ -460,17 +469,17 @@ msgstr "Giuirléid"
 #: part/KPrSlidesSorterDocumentModel.cpp:279
 #, kde-format
 msgid "&Move Here"
-msgstr ""
+msgstr "&Bog Anseo"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:283
 #, kde-format
 msgid "&Copy Here"
-msgstr ""
+msgstr "&Cóipeáil Anseo"
 
 #: part/KPrSlidesSorterDocumentModel.cpp:287
 #, kde-format
 msgid "C&ancel"
-msgstr ""
+msgstr "Ce&alaigh"
 
 #: part/KPrView.cpp:74
 #, kde-format
@@ -485,7 +494,7 @@ msgstr "Taispeáin Máistirshleamhnáin"
 #: part/KPrView.cpp:80
 #, kde-format
 msgid "Import Slideshow..."
-msgstr ""
+msgstr "Iompórtáil Sleamhnán..."
 
 #: part/KPrView.cpp:81
 #, kde-format
@@ -495,7 +504,7 @@ msgstr "Ionsáigh Sleamhnán"
 #: part/KPrView.cpp:82 part/KPrView.cpp:83
 #, kde-format
 msgid "Insert a new slide after the current one"
-msgstr ""
+msgstr "Cuir sleamhnán nua isteach i ndiaidh an chinn reatha"
 
 #: part/KPrView.cpp:84
 #, kde-format
@@ -520,7 +529,7 @@ msgstr "Scrios an sleamhnán reatha"
 #: part/KPrView.cpp:90
 #, kde-format
 msgid "Master Slide..."
-msgstr ""
+msgstr "Máistir-Sleamhnán..."
 
 #: part/KPrView.cpp:91
 #, kde-format
@@ -530,12 +539,12 @@ msgstr "An Sleamhnán Roimhe Seo"
 #: part/KPrView.cpp:92 part/KPrView.cpp:93
 #, kde-format
 msgid "Go to previous slide"
-msgstr ""
+msgstr "Téigh go dtí an sleamhnán roimhe seo"
 
 #: part/KPrView.cpp:95 part/KPrView.cpp:96
 #, kde-format
 msgid "Go to next slide"
-msgstr ""
+msgstr "Téigh go dtí an chéad sleamhnán eile"
 
 #: part/KPrView.cpp:97
 #, kde-format
@@ -545,7 +554,7 @@ msgstr "An Chéad Sleamhnán"
 #: part/KPrView.cpp:98 part/KPrView.cpp:99
 #, kde-format
 msgid "Go to first slide"
-msgstr ""
+msgstr "Téigh go dtí an chéad sleamhnán"
 
 #: part/KPrView.cpp:100
 #, kde-format
@@ -555,12 +564,12 @@ msgstr "An Sleamhnán Deiridh"
 #: part/KPrView.cpp:101 part/KPrView.cpp:102
 #, kde-format
 msgid "Go to last slide"
-msgstr ""
+msgstr "Téigh go dtí an sleamhnán deireanach"
 
 #: part/KPrView.cpp:103
 #, kde-format
 msgid "Configure Stage..."
-msgstr ""
+msgstr "Cumraigh Céim..."
 
 #: part/KPrView.cpp:238
 #, kde-format
@@ -570,12 +579,12 @@ msgstr "Easpórtáil mar HTML..."
 #: part/KPrView.cpp:264
 #, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr ""
+msgstr "Cuir Pictiúir isteach mar Sleamhnáin..."
 
 #: part/KPrView.cpp:273
 #, kde-format
 msgid "Create Appear Animation"
-msgstr ""
+msgstr "Cruthaigh Beochan Dealraitheach"
 
 #: part/KPrView.cpp:277
 #, kde-format
@@ -600,22 +609,22 @@ msgstr "Ón Chéad Sleamhnán"
 #: part/KPrView.cpp:293
 #, kde-format
 msgid "Stop presentation"
-msgstr ""
+msgstr "Stop an cur i láthair"
 
 #: part/KPrView.cpp:299
 #, kde-format
 msgid "Show Status Bar"
-msgstr ""
+msgstr "Taispeáin Barra Stádais"
 
 #: part/KPrView.cpp:300
 #, kde-format
 msgid "Hide Status Bar"
-msgstr ""
+msgstr "Folaigh an Barra Stádais"
 
 #: part/KPrView.cpp:301
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr ""
+msgstr "Taispeánann nó folaíonn sé an barra stádais"
 
 #: part/KPrView.cpp:310
 #, kde-format
@@ -625,22 +634,22 @@ msgstr "Cumraigh Taispeántas Sleamhnán..."
 #: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
-msgstr "Cumraigh Amharc KPresenter..."
+msgstr "Cumraigh Radharc Láithreora..."
 
 #: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
-msgstr ""
+msgstr "Tarraing ar an gcur i láthair..."
 
 #: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
-msgstr ""
+msgstr "Aibhsigh an cur i láthair..."
 
 #: part/KPrView.cpp:332
 #, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr ""
+msgstr "Scáileán dubh ar an gcur i láthair..."
 
 #: part/KPrViewModeNotes.cpp:36
 #, kde-format
@@ -650,77 +659,77 @@ msgstr "Nótaí"
 #: part/KPrViewModeSlidesSorter.cpp:64
 #, kde-format
 msgid "Slides Sorter"
-msgstr ""
+msgstr "Sórtálaí Sleamhnán"
 
 #: part/KPrViewModeSlidesSorter.cpp:74
 #, kde-format
 msgid "Slide Show: "
-msgstr ""
+msgstr "Taispeántas Sleamhnán: "
 
 #: part/KPrViewModeSlidesSorter.cpp:83
 #, kde-format
 msgid "Add a new custom slide show"
-msgstr ""
+msgstr "Cuir taispeántas sleamhnán saincheaptha nua leis"
 
 #: part/KPrViewModeSlidesSorter.cpp:88
 #, kde-format
 msgid "Delete current custom slide show"
-msgstr ""
+msgstr "Scrios an taispeántas sleamhnán saincheaptha reatha"
 
 #: part/KPrViewModeSlidesSorter.cpp:92
 #, kde-format
 msgid "Add slides to current custom slide show"
-msgstr ""
+msgstr "Cuir sleamhnáin leis an taispeántas sleamhnán saincheaptha reatha"
 
 #: part/KPrViewModeSlidesSorter.cpp:97
 #, kde-format
 msgid "Remove slides from current custom slide show"
-msgstr ""
+msgstr "Bain sleamhnáin as an taispeántas sleamhnán saincheaptha reatha"
 
 #: part/KPrViewModeSlidesSorter.cpp:173
 #, kde-format
 msgid "Duplicate Slide"
-msgstr ""
+msgstr "Sleamhnán Dúblach"
 
 #: part/KPrViewModeSlidesSorter.cpp:175
 #, kde-format
 msgid "Start Slideshow"
-msgstr ""
+msgstr "Tosaigh Sleamhnán"
 
 #: part/KPrViewModeSlidesSorter.cpp:532
 #, kde-format
 msgid "Add a new slide"
-msgstr ""
+msgstr "Cuir sleamhnán nua leis"
 
 #: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
 #, kde-format
 msgid "Delete selected slides"
-msgstr ""
+msgstr "Scrios na sleamhnáin roghnaithe"
 
 #: part/KPrViewModeSlidesSorter.cpp:537
 #, kde-format
 msgid "Rename"
-msgstr ""
+msgstr "Athainmnigh"
 
 #: part/KPrViewModeSlidesSorter.cpp:541
 #, kde-format
 msgid "Cut"
-msgstr ""
+msgstr "Gearr"
 
 #: part/KPrViewModeSlidesSorter.cpp:542
 #, kde-format
 msgid "Copy"
-msgstr ""
+msgstr "Cóipeáil"
 
 #: part/KPrViewModeSlidesSorter.cpp:543
 #, kde-format
 msgid "Paste"
-msgstr ""
+msgstr "Greamaigh"
 
 #: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, kde-format
 msgid "Slide Show %1"
-msgstr ""
+msgstr "Taispeántas Sleamhnán %1"
 
 #: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
@@ -743,63 +752,63 @@ msgstr "Ní cheadaítear dhá taispeántas sleamhnán leis an ainm céanna."
 #: part/pagelayout/KPrPlaceholders.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
-msgstr ""
+msgstr "Socraigh Leagan Amach"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, kde-format
 msgid "Automatic animation preview"
-msgstr ""
+msgstr "Réamhamharc uathoibríoch beochan"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:301
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:309
 #, kde-format
 msgid "Preview animation"
-msgstr ""
+msgstr "Réamhamharc ar bheochan"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:215
 #, kde-format
 msgid "Slide Transitions"
-msgstr ""
+msgstr "Aistrithe Sleamhnán"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, kde-format
 msgid "Shape Click Actions"
-msgstr ""
+msgstr "Gníomhartha Cliceáil Cruth"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, kde-format
 msgid "Shape Animations"
-msgstr ""
+msgstr "Beochana Cruthanna"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
 #, kde-format
 msgid "Manage animation delay and duration: "
-msgstr ""
+msgstr "Bainistigh moill agus fad beochana: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
 #, kde-format
 msgid "Start: "
-msgstr ""
+msgstr "Tosaigh: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
 #, kde-format
 msgid "on mouse click"
-msgstr ""
+msgstr "ar chliceáil luiche"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
 #, kde-format
 msgid "after previous animation"
-msgstr ""
+msgstr "i ndiaidh an bheochana roimhe seo"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
 #, kde-format
 msgid "with previous animation"
-msgstr ""
+msgstr "le beochan roimhe seo"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
 #, kde-format
 msgid "Delay: "
-msgstr ""
+msgstr "Moill: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
 #, kde-format
@@ -810,7 +819,7 @@ msgstr "Aga: "
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, kde-format
 msgid "Preview Shape Animation"
-msgstr ""
+msgstr "Réamhamharc ar Bheochan Cruthanna"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:50
 #, kde-format
@@ -825,32 +834,32 @@ msgstr " s"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:80
 #, kde-format
 msgid "Manual"
-msgstr ""
+msgstr "Lámhleabhar"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:81
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "Uathoibríoch"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:89
 #, kde-format
 msgid "Slide Transition:"
-msgstr ""
+msgstr "Aistriú Sleamhnáin:"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:98
 #, kde-format
 msgid "Apply To All Slides"
-msgstr ""
+msgstr "Cuir i bhFeidhm ar Gach Sleamhnán"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
-msgstr ""
+msgstr "Cuir Éifeacht Sleamhnáin i bhFeidhm ar na Sleamhnáin go léir"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
-msgstr ""
+msgstr "Bealach isteach"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
@@ -865,64 +874,64 @@ msgstr "Béim"
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:174
 #, kde-format
 msgid "Custom"
-msgstr ""
+msgstr "Saincheaptha"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
-msgstr ""
+msgstr "Cosán gluaiseachta"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, kde-format
 msgid "Ole Action"
-msgstr ""
+msgstr "Gníomh Ole"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
-msgstr ""
+msgstr "Glao Meán"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:505
 #, kde-format
 msgid "Edit animation"
-msgstr ""
+msgstr "Cuir beochan in eagar"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
 #, kde-format
 msgid "Add new animation"
-msgstr ""
+msgstr "Cuir beochan nua leis"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:107
 #, kde-format
 msgid "Remove animation"
-msgstr ""
+msgstr "Bain beochan"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:111
 #, kde-format
 msgid "Order: "
-msgstr ""
+msgstr "Ordú: "
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:114
 #, kde-format
 msgid "Move animation up"
-msgstr ""
+msgstr "Bog beochan suas"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:119
 #, kde-format
 msgid "Move animation down"
-msgstr ""
+msgstr "Bog beochan síos"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:503
 #, kde-format
 msgid "Add a new animation"
-msgstr ""
+msgstr "Cuir beochan nua leis"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:504
 #, kde-format
 msgid "Delete current animation"
-msgstr ""
+msgstr "Scrios an beochan reatha"
 
 #: part/tools/animationtool/KPrTimeLineHeader.cpp:71
 #, kde-format
@@ -951,7 +960,7 @@ msgstr "L&eithead:"
 #: part/tools/animationtool/wdg_tool_crop.ui:63
 #, kde-format
 msgid "Will keep the width of the crop constant"
-msgstr ""
+msgstr "Coinneoidh sé leithead an bhairr tairiseach"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
 #: part/tools/animationtool/wdg_tool_crop.ui:84
@@ -963,7 +972,7 @@ msgstr "&Airde:"
 #: part/tools/animationtool/wdg_tool_crop.ui:87
 #, kde-format
 msgid "Will keep the height of the crop constant"
-msgstr ""
+msgstr "Coinneoidh sé airde an bhairr tairiseach"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: part/tools/animationtool/wdg_tool_crop.ui:94
@@ -981,7 +990,7 @@ msgstr "&Cóimheas:"
 #: part/tools/animationtool/wdg_tool_crop.ui:114
 #, kde-format
 msgid "Will keep the ratio constant"
-msgstr ""
+msgstr "Coinneoidh sé an cóimheas tairiseach"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: part/tools/animationtool/wdg_tool_crop.ui:132
@@ -1004,40 +1013,40 @@ msgstr "&Bearr"
 #: part/tools/KPrPlaceholderTool.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Edit Shape"
-msgstr ""
+msgstr "Cuir Cruth in Eagar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/ui/KPrConfigurePresenterView.ui:16
 #, kde-format
 msgid "Multiple monitors"
-msgstr ""
+msgstr "Il-mhonatóirí"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/ui/KPrConfigurePresenterView.ui:24
 #, kde-format
 msgid "Presentation monitor:"
-msgstr ""
+msgstr "Monatóir cur i láthair:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
 #: part/ui/KPrConfigurePresenterView.ui:39
 #, kde-format
 msgid "Enable presenter view"
-msgstr ""
+msgstr "Cumasaigh radharc an láithreora"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:27
 #, kde-format
 msgid "Monitor %1 (primary)"
-msgstr ""
+msgstr "Monatóir %1 (príomhúil)"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:29
 #, kde-format
 msgid "Monitor %1"
-msgstr ""
+msgstr "Monatóir %1"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:38
 #, kde-format
 msgid "Configure Presenter View"
-msgstr "Cumraigh Amharc KPresenter"
+msgstr "Cumraigh Radharc Láithreora"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
 #: part/ui/KPrConfigureSlideShow.ui:13
@@ -1074,7 +1083,7 @@ msgstr "Easpórtáil HTML"
 #: part/ui/KPrHtmlExport.ui:29
 #, kde-format
 msgid "Tick the slide should be exported :"
-msgstr ""
+msgstr "Ticeáil an sleamhnán ba chóir a easpórtáil:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
 #: part/ui/KPrHtmlExport.ui:55
@@ -1140,7 +1149,7 @@ msgstr "Oscail i mbrabhsálaí"
 #: part/ui/KPrHtmlExportDialog.cpp:34
 #, kde-format
 msgid "Html Export"
-msgstr ""
+msgstr "Easpórtáil Html"
 
 #: part/ui/KPrHtmlExportDialog.cpp:35
 #, kde-format
@@ -1150,17 +1159,17 @@ msgstr "Easpórtáil"
 #: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
-msgstr ""
+msgstr "Tá comhad is fearr leat ann cheana féin leis an ainm seo"
 
 #: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
-msgstr ""
+msgstr "Comhad mícheart, .zip amháin nó zip truaillithe"
 
 #: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
-msgstr ""
+msgstr "Ní mór style.css a bheith sa chomhad zip"
 
 #: part/ui/KPrHtmlExportDialog.cpp:306
 #, kde-format
@@ -1171,6 +1180,8 @@ msgstr "Scrios Teimpléad"
 #, kde-format
 msgid "You may not remove the templates provided with the application"
 msgstr ""
+"Ní féidir leat na teimpléid a chuirtear ar fáil leis an bhfeidhmchlár a "
+"bhaint"
 
 #: part/ui/KPrHtmlExportDialog.cpp:315
 #, kde-format
@@ -1180,17 +1191,17 @@ msgstr "Cuir Teimpléad Leis"
 #: part/ui/KPrHtmlExportDialog.cpp:325
 #, kde-format
 msgid "Confirm remove"
-msgstr ""
+msgstr "Deimhnigh an bhaint"
 
 #: part/ui/KPrHtmlExportDialog.cpp:326
 #, kde-format
 msgid "Are you sure you want to remove \"%1\"?"
-msgstr ""
+msgstr "An bhfuil tú cinnte gur mian leat \"%1\" a bhaint?"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Change sound action"
-msgstr ""
+msgstr "Athraigh gníomh fuaime"
 
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:101
 #, kde-format
@@ -1299,208 +1310,208 @@ msgstr "Clog"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:31
 msgid "From Twelve Clockwise"
-msgstr ""
+msgstr "Ó Dhéag Deiseal"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:32
 msgid "From Three Clockwise"
-msgstr ""
+msgstr "Ó Thrí Deiseal"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
 msgid "From Six Clockwise"
-msgstr ""
+msgstr "Ó Sé Deiseal"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
 msgid "From Nine Clockwise"
-msgstr ""
+msgstr "Ó Naoi Deiseal"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
 msgid "From Twelve Counterclockwise"
-msgstr ""
+msgstr "Ó Dhéag Tuathalach"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
 msgid "From Three Counterclockwise"
-msgstr ""
+msgstr "Ó Thrí Thuathalach"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
 msgid "From Six Counterclockwise"
-msgstr ""
+msgstr "Ó Sé Tuathalach"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
 msgid "From Nine Counterclockwise"
-msgstr ""
+msgstr "Ó Naoi Tuathalach"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Double Fan"
-msgstr ""
+msgstr "Fean Dúbailte"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:29
 msgid "Fan Out Vertical"
-msgstr ""
+msgstr "Fean amach Ingearach"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:30
 msgid "Fan Out Horizontal"
-msgstr ""
+msgstr "Fean amach Cothrománach"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
 msgid "Fan In Vertical"
-msgstr ""
+msgstr "Fean isteach Ingearach"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 msgid "Fan In Horizontal"
-msgstr ""
+msgstr "Fean isteach Cothrománach"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
 msgid "Fan In Vertical Reverse"
-msgstr ""
+msgstr "Fean isteach Cúl Ingearach"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 msgid "Fan In Horizontal Reverse"
-msgstr ""
+msgstr "Fean isteach Cúl Cothrománach"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Double Sweep"
-msgstr ""
+msgstr "Scuab Dúbailte"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:34
 msgid "Parallel Vertical"
-msgstr ""
+msgstr "Ingearach Comhthreomhar"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:35
 msgid "Parallel Diagonal"
-msgstr ""
+msgstr "Trasnán Comhthreomhar"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
 msgid "Opposite Vertical"
-msgstr ""
+msgstr "Ingearach Os Coinne"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
 msgid "Opposite Horizontal"
-msgstr ""
+msgstr "Cothrománach Os Coinne"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
 msgid "Parallel Diagonal Top Left"
-msgstr ""
+msgstr "Trasnán Comhthreomhar Barr ar Chlé"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
 msgid "Parallel Diagonal Bottom Left"
-msgstr ""
+msgstr "Trasnán Comhthreomhar Bun Ar Chlé"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
 msgid "Parallel Vertical Reverse"
-msgstr ""
+msgstr "Droim ar ais Ingearach Comhthreomhar"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
 msgid "Parallel Diagonal Reverse"
-msgstr ""
+msgstr "Trasnán Comhthreomhar Droim ar Ais"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
 msgid "Opposite Vertical Reverse"
-msgstr ""
+msgstr "Droim ar ais Ingearach Os Coinne"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
 msgid "Opposite Horizontal Reverse"
-msgstr ""
+msgstr "Droim ar ais Cothrománach Os Coinne"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
 msgid "Parallel Diagonal Top Left Reverse"
-msgstr ""
+msgstr "Trasnán Comhthreomhar Barr ar Chlé Droim ar Ais"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
 msgid "Parallel Diagonal Bottom Left Reverse"
-msgstr ""
+msgstr "Trasnán Comhthreomhar Bun Clé Droim Ar Ais"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Fan"
-msgstr "Gaothrán"
+msgstr "Fean"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:37
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
 msgid "Center Right"
-msgstr ""
+msgstr "Lár ar Dheis"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:38
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
 msgid "Center Top"
-msgstr ""
+msgstr "Lár Barr"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
 msgid "Center Left"
-msgstr ""
+msgstr "Lár Chlé"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
 msgid "Center Bottom"
-msgstr ""
+msgstr "Bun an Láir"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
 msgid "Fan Out Top"
-msgstr ""
+msgstr "Fean amach Barr"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
 msgid "Fan Out Right"
-msgstr ""
+msgstr "Fean amach ar Dheis"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
 msgid "Fan Out Bottom"
-msgstr ""
+msgstr "Fean amach Bun"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
 msgid "Fan Out Left"
-msgstr ""
+msgstr "Fean amach ar Chlé"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
 msgid "Fan In Top"
-msgstr ""
+msgstr "Fean isteach Bharr"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
 msgid "Fan In Right"
-msgstr ""
+msgstr "Fean isteach ar Dheis"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
 msgid "Fan In Bottom"
-msgstr ""
+msgstr "Fean isteach Bhun"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
 msgid "Fan In Left"
-msgstr ""
+msgstr "Fean isteach ar Chlé"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Pin Wheel"
-msgstr ""
+msgstr "Roth bioráin"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:28
 msgid "Two Blades Vertical Clockwise"
-msgstr ""
+msgstr "Dhá Lanna Ingearach Deiseal"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:29
 msgid "Two Blades Horizontal Clockwise"
-msgstr ""
+msgstr "Dhá Lanna Cothrománach Deiseal"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
 msgid "Four Blades Horizontal Clockwise"
-msgstr ""
+msgstr "Ceithre Lanna Cothrománach Deiseal"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
 msgid "Two Blades Vertical Counterclockwise"
-msgstr ""
+msgstr "Dhá Lanna Ingearach Tuathalach"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
 msgid "Two Blades Horizontal Counterclockwise"
-msgstr ""
+msgstr "Dhá Lanna Cothrománach Tuathalach"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
 msgid "Four Blades Horizontal Counterclockwise"
-msgstr ""
+msgstr "Ceithre Lanna Cothrománach Tuathalach"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Saloon Door"
-msgstr ""
+msgstr "Doras an tSalúin"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
@@ -1525,76 +1536,76 @@ msgstr "Faoi Dheis"
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Single Sweep"
-msgstr ""
+msgstr "Scuab Aonair"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:39
 msgid "Clockwise Top"
-msgstr ""
+msgstr "Barr deiseal"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:40
 msgid "Clockwise Right"
-msgstr ""
+msgstr "Deiseal ar Dheis"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
 msgid "Clockwise Bottom"
-msgstr ""
+msgstr "Bun deiseal"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
 msgid "Clockwise Left"
-msgstr ""
+msgstr "Deiseal ar Chlé"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
 msgid "Clockwise Top Left"
-msgstr ""
+msgstr "Deiseal Barr Ar Chlé"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
 msgid "Counterclockwise Bottom Left"
-msgstr ""
+msgstr "Tuathalach Bun Ar Chlé"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
 msgid "Clockwise Bottom Right"
-msgstr ""
+msgstr "Deiseal Bun Ar Dheis"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
 msgid "Counterclockwise Top Right"
-msgstr ""
+msgstr "Tuathalach Barr ar Dheis"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
 msgid "Counterclockwise Top"
-msgstr ""
+msgstr "Barr tuathalach"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
 msgid "Counterclockwise Right"
-msgstr ""
+msgstr "Tuathalach ar Dheis"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
 msgid "Counterclockwise Bottom"
-msgstr ""
+msgstr "Bun tuathalach"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
 msgid "Counterclockwise Left"
-msgstr ""
+msgstr "Tuathalach ar Chlé"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
 msgid "Counterclockwise Top Left"
-msgstr ""
+msgstr "Tuathalach Barr Ar Chlé"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
 msgid "Clockwise Bottom Left"
-msgstr ""
+msgstr "Deiseal Bun Ar Chlé"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
 msgid "Counterclockwise Bottom Right"
-msgstr ""
+msgstr "Tuathalach Bun Ar Dheis"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
 msgid "Clockwise Top Right"
-msgstr ""
+msgstr "Deiseal Barr ar Dheis"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Windshield"
-msgstr ""
+msgstr "Gaothscáth"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:31
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
@@ -1634,14 +1645,14 @@ msgstr "Cothrománach"
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
 msgid "Right Reverse"
-msgstr ""
+msgstr "Droim ar ais ar dheis"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:73
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:69
 msgid "Up Reverse"
-msgstr ""
+msgstr "Suas Ar Ais"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:31
@@ -1650,7 +1661,7 @@ msgstr ""
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
 msgid "Vertical Reverse"
-msgstr ""
+msgstr "Droim ar ais Ingearach"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
@@ -1659,46 +1670,46 @@ msgstr ""
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
 msgid "Horizontal Reverse"
-msgstr ""
+msgstr "Droim ar ais Cothrománach"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Barn Door"
-msgstr ""
+msgstr "Doras Sciatháin"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
 msgid "Diagonal Bottom Left"
-msgstr ""
+msgstr "Trasnánach Bun Ar Chlé"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
 msgid "Diagonal Bottom Left Reverse"
-msgstr ""
+msgstr "Trasnánach Bun Clé Droim Ar Ais"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
 msgid "Diagonal Top Left"
-msgstr ""
+msgstr "Trasnánach Barr ar Chlé"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
 msgid "Diagonal Top Left Reverse"
-msgstr ""
+msgstr "Trasnánach Barr ar Chlé ar Ais"
 
 #: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Barn Vee"
-msgstr ""
+msgstr "Vee na Sceallóige"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
 #, kde-format
 msgid "Barn Zig Zag"
-msgstr ""
+msgstr "Sciathán Fiarlán"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:25
 msgid "Horizontal Reversed"
-msgstr ""
+msgstr "Cothrománach Droim ar Ais"
 
 #: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:25
 msgid "Vertical Reversed"
-msgstr ""
+msgstr "Ingearach Droim ar Ais"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
@@ -1709,25 +1720,25 @@ msgstr "Bosca"
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
 msgid "From Top Left"
-msgstr ""
+msgstr "Ón mBarr ar Chlé"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:31
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
 msgid "From Top Right"
-msgstr ""
+msgstr "Ón mBarr ar Dheis"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:32
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
 msgid "From Bottom Left"
-msgstr ""
+msgstr "Ón mBun Ar Chlé"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
 msgid "From Bottom Right"
-msgstr ""
+msgstr "Ón mBun Ar Dheis"
 
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
 #, kde-format
@@ -1737,7 +1748,7 @@ msgstr "Trasnánach"
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Four Box"
-msgstr ""
+msgstr "Ceithre Bhosca"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 msgid "Corners In"
@@ -1745,7 +1756,7 @@ msgstr "Cúinní Isteach"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 msgid "Corners In Reverse"
-msgstr ""
+msgstr "Coirnéil ar ais"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 msgid "Corners Out"
@@ -1753,25 +1764,25 @@ msgstr "Cúinní Amach"
 
 #: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:27
 msgid "Corners Out Reverse"
-msgstr ""
+msgstr "Coirnéil Amach Droim Ar Ais"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Misc Diagonal"
-msgstr ""
+msgstr "Trasnán Ilghnéitheach"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:26
 msgid "Double Barn Door"
-msgstr ""
+msgstr "Doras Dúbailte Sciatháin"
 
 #: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:27
 msgid "Double Diamond"
-msgstr ""
+msgstr "Diamaint Dúbailte"
 
 #: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Vee"
-msgstr ""
+msgstr "Vé"
 
 #: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
 #, kde-format
@@ -1785,16 +1796,16 @@ msgstr "Céimnigh"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:26
 msgid "Crossfade"
-msgstr ""
+msgstr "Traschéimniú"
 
 #: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:26
 msgid "Fade over Color"
-msgstr ""
+msgstr "Céimniú thar Dath"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
 #, kde-format
 msgid "ArrowHead"
-msgstr ""
+msgstr "Ceann Saighead"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
@@ -1806,7 +1817,7 @@ msgstr "Síos"
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
 msgid "Down Reverse"
-msgstr ""
+msgstr "Síos Ar Ais"
 
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
@@ -1816,7 +1827,7 @@ msgstr "Ar Chlé"
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
 msgid "Left Reverse"
-msgstr ""
+msgstr "Ar ais ar chlé"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:14
 #, kde-format
@@ -1829,12 +1840,12 @@ msgstr "Ciorcal"
 
 #: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:45
 msgid "Circle Reverse"
-msgstr ""
+msgstr "Ciorcal Droim ar Ais"
 
 #: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Eye"
-msgstr ""
+msgstr "Súil"
 
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
 #, kde-format
@@ -1852,7 +1863,7 @@ msgstr "Muileata"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 msgid "Diamond Reverse"
-msgstr ""
+msgstr "Droim ar ais diamant"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 msgid "Rectangular"
@@ -1860,7 +1871,7 @@ msgstr "Dronuilleogach"
 
 #: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:43
 msgid "Rectangular Reverse"
-msgstr ""
+msgstr "Droim ar ais Dronuilleogach"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
 #, kde-format
@@ -1873,15 +1884,15 @@ msgstr "Croí"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
 msgid "Heart Reverse"
-msgstr ""
+msgstr "Droim ar ais an Chroí"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
 msgid "Keyhole"
-msgstr ""
+msgstr "Poll Eochrach"
 
 #: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:43
 msgid "Keyhole Reverse"
-msgstr ""
+msgstr "Droim ar ais ar an bpoll eochrach"
 
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
 #, kde-format
@@ -1891,36 +1902,36 @@ msgstr "Peinteagán"
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:14
 #, kde-format
 msgid "RoundRect"
-msgstr ""
+msgstr "Dronuilleog Babhta"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
 #, kde-format
 msgid "Star"
-msgstr "Réiltín"
+msgstr "Réalta"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:83
 msgid "Four Point Star"
-msgstr ""
+msgstr "Réalta Ceithre Phointe"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:84
 msgid "Four Point Star Reverse"
-msgstr ""
+msgstr "Aisiompú Réalta Ceithre Phointe"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:85
 msgid "Five Point Star"
-msgstr ""
+msgstr "Réalta Cúig Phointe"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:86
 msgid "Five Point Star Reverse"
-msgstr ""
+msgstr "Aisiompú Réalta Cúig Phointe"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
 msgid "Six Point Star"
-msgstr ""
+msgstr "Réalta Sé Phointe"
 
 #: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
 msgid "Six Point Star Reverse"
-msgstr ""
+msgstr "Aisiompú Réalta Sé Phointe"
 
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
 #, kde-format
@@ -1930,140 +1941,140 @@ msgstr "Triantán"
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box Snakes"
-msgstr ""
+msgstr "Nathracha Bosca"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:34
 msgid "Two Box Top In"
-msgstr ""
+msgstr "Barr Dhá Bhosca Isteach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:35
 msgid "Two Box Bottom In"
-msgstr ""
+msgstr "Bun Dhá Bhosca Isteach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:36
 msgid "Two Box Left In"
-msgstr ""
+msgstr "Dhá Bhosca Fágtha Isteach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
 msgid "Two Box Right In"
-msgstr ""
+msgstr "Dhá Bhosca Díreach Isteach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
 msgid "Four Box Vertical In"
-msgstr ""
+msgstr "Ceithre Bhosca Ingearach Isteach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
 msgid "Four Box Horizontal In"
-msgstr ""
+msgstr "Ceithre Bhosca Cothrománach Isteach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
 msgid "Two Box Top Out"
-msgstr ""
+msgstr "Barr Dhá Bhosca Amach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
 msgid "Two Box Bottom Out"
-msgstr ""
+msgstr "Bun Dhá Bhosca Amach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
 msgid "Two Box Left Out"
-msgstr ""
+msgstr "Dhá Bhosca Fágtha Amach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
 msgid "Two Box Right Out"
-msgstr ""
+msgstr "Dhá Bhosca Díreach Amach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
 msgid "Four Box Vertical Out"
-msgstr ""
+msgstr "Ceithre Bhosca Ingearach Amach"
 
 #: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
 msgid "Four Box Horizontal Out"
-msgstr ""
+msgstr "Ceithre Bhosca Cothrománach Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Parallel Snakes"
-msgstr ""
+msgstr "Nathracha Comhthreomhara"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:44
 msgid "Vertical Top Same In"
-msgstr ""
+msgstr "Barr Ingearach Céanna Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:45
 msgid "Vertical Top Same Out"
-msgstr ""
+msgstr "Barr Ingearach Céanna Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:46
 msgid "Vertical Bottom Same In"
-msgstr ""
+msgstr "Bun Ingearach Mar an gcéanna Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
 msgid "Vertical Bottom Same Out"
-msgstr ""
+msgstr "Bun Ingearach Céanna Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
 msgid "Vertical Top Left Opposite In"
-msgstr ""
+msgstr "Ingearach Barr ar Chlé Os Coinne Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
 msgid "Vertical Top Left Opposite Out"
-msgstr ""
+msgstr "Ingearach Barr Ar Chlé Os Coinne Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
 msgid "Vertical Bottom Left Opposite In"
-msgstr ""
+msgstr "Ingearach Bun Ar Chlé Os Coinne Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
 msgid "Vertical Bottom Left Opposite Out"
-msgstr ""
+msgstr "Ingearach Bun Ar Chlé Os Coinne Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
 msgid "Horizontal Left Same In"
-msgstr ""
+msgstr "Cothrománach Ar Chlé Mar a Chéanna Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
 msgid "Horizontal Left Same Out"
-msgstr ""
+msgstr "Cothrománach Ar Chlé Mar a Chéanna Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
 msgid "Horizontal Right Same In"
-msgstr ""
+msgstr "Cothrománach Ar Dheis Mar an gcéanna Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
 msgid "Horizontal Right Same Out"
-msgstr ""
+msgstr "Cothrománach Ar Dheis Mar a Cheann Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
 msgid "Horizontal Top Left Opposite In"
-msgstr ""
+msgstr "Barr ar Chlé Os Coinne Cothrománach Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
 msgid "Horizontal Top Left Opposite Out"
-msgstr ""
+msgstr "Barr ar Chlé Os Coinne Cothrománach Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
 msgid "Horizontal Top Right Opposite In"
-msgstr ""
+msgstr "Barr ar Dheis Cothrománach Os Coinne Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
 msgid "Horizontal Top Right Opposite Out"
-msgstr ""
+msgstr "Barr ar Dheis Cothrománach Os Coinne Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
 msgid "Diagonal Bottom Left Opposite In"
-msgstr ""
+msgstr "Trasnánach Bun Ar Chlé Os Coinne Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
 msgid "Diagonal Bottom Left Opposite Out"
-msgstr ""
+msgstr "Trasnánach Bun Ar Chlé Os Coinne Amach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
 msgid "Diagonal Top Left Opposite In"
-msgstr ""
+msgstr "Trasnánach Barr ar Chlé Os Coinne Isteach"
 
 #: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
 msgid "Diagonal Top Left Opposite Out"
-msgstr ""
+msgstr "Trasnánach Barr ar Chlé Os Coinne Amach"
 
 #: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
 #, kde-format
@@ -2077,67 +2088,67 @@ msgstr "Bís"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:38
 msgid "Clockwise Top Left In"
-msgstr ""
+msgstr "Barr ar Chlé Isteach Deiseal"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:39
 msgid "Clockwise Top Left Out"
-msgstr ""
+msgstr "Barr ar Chlé Amach Deiseal"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:40
 msgid "Clockwise Top Right In"
-msgstr ""
+msgstr "Barr ar Dheis Isteach Deiseal"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
 msgid "Clockwise Top Right Out"
-msgstr ""
+msgstr "Deiseal Barr Ar Dheis Amach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
 msgid "Clockwise Bottom Left In"
-msgstr ""
+msgstr "Deiseal Bun Ar Chlé Isteach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
 msgid "Clockwise Bottom Left Out"
-msgstr ""
+msgstr "Deiseal Bun Ar Chlé Amach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
 msgid "Clockwise Bottom Right In"
-msgstr ""
+msgstr "Deiseal Bun Ar Dheis Isteach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
 msgid "Clockwise Bottom Right Out"
-msgstr ""
+msgstr "Deiseal Bun Ar Dheis Amach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
 msgid "Counterclockwise Top Left In"
-msgstr ""
+msgstr "Tuathalach Barr Ar Chlé Isteach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
 msgid "Counterclockwise Top Left Out"
-msgstr ""
+msgstr "Tuathalach Barr Ar Chlé Amach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
 msgid "Counterclockwise Top Right In"
-msgstr ""
+msgstr "Tuathalach Barr Ar Dheis Isteach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
 msgid "Counterclockwise Top Right Out"
-msgstr ""
+msgstr "Tuathalach Barr Ar Dheis Amach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
 msgid "Counterclockwise Bottom Left In"
-msgstr ""
+msgstr "Tuathalach Bun Ar Chlé Isteach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
 msgid "Counterclockwise Bottom Left Out"
-msgstr ""
+msgstr "Tuathalach Bun Ar Chlé Amach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
 msgid "Counterclockwise Bottom Right In"
-msgstr ""
+msgstr "Tuathalach Bun Ar Dheis Isteach"
 
 #: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
 msgid "Counterclockwise Bottom Right Out"
-msgstr ""
+msgstr "Tuathalach Bun Ar Dheis Amach"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
 #, kde-format
@@ -2146,35 +2157,35 @@ msgstr "Eas"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:33
 msgid "Top Left Vertical"
-msgstr ""
+msgstr "Barr Clé Ingearach"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:34
 msgid "Top Left Horizontal"
-msgstr ""
+msgstr "Barr ar Chlé Cothrománach"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:35
 msgid "Top Right Vertical"
-msgstr ""
+msgstr "Barr ar Dheis Ingearach"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
 msgid "Top Right Horizontal"
-msgstr ""
+msgstr "Barr ar Dheis Cothrománach"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
 msgid "Bottom Left Vertical"
-msgstr ""
+msgstr "Bun Clé Ingearach"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
 msgid "Bottom Left Horizontal"
-msgstr ""
+msgstr "Bun ar Chlé Cothrománach"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
 msgid "Bottom Right Vertical"
-msgstr ""
+msgstr "Bun ar Dheis Ingearach"
 
 #: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
 msgid "Bottom Right Horizontal"
-msgstr ""
+msgstr "Bun ar Dheis Cothrománach"
 
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
 #, kde-format
@@ -2184,12 +2195,12 @@ msgstr "Sleamhnán"
 #: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
 #, kde-format
 msgid "Space Rotation"
-msgstr ""
+msgstr "Rothlú Spáis"
 
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
 #, kde-format
 msgid "Swap effect"
-msgstr ""
+msgstr "Éifeacht malartaithe"
 
 #: plugins/variable/PresentationVariableFactory.cpp:25
 #, kde-format

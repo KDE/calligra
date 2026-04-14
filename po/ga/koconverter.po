@@ -2,45 +2,47 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the koconverter package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/koconverter.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2004-12-03 14:52-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell,Aindriú Mac Giolla Eoin"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "seoc@iolfree.ie,kscanne@gmail.com"
+msgstr "seoc@iolfree.ie,kscanne@gmail.com,aindriu80@yahoo.com"
 
 #: calligraconverter.cpp:179
 #, kde-format
 msgid "CalligraConverter"
-msgstr ""
+msgstr "Tiontaire Calligra"
 
 #: calligraconverter.cpp:181
 #, kde-format
 msgid "Calligra Document Converter"
-msgstr ""
+msgstr "Tiontaire Doiciméad Calligra"
 
 #: calligraconverter.cpp:183
 #, kde-format
 msgid "Copyright 2001-%1 Calligra developers"
-msgstr ""
+msgstr "Cóipcheart 2001-%1 Forbróirí Calligra"
 
 #: calligraconverter.cpp:184
 #, kde-format
@@ -100,7 +102,7 @@ msgstr "Páipéarmhéid. A4, Dlí, Litir, ..."
 #: calligraconverter.cpp:207
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
-msgstr ""
+msgstr "Méid imeall an pháipéir. De réir réamhshocraithe is é seo 0.2."
 
 #: calligraconverter.cpp:215
 #, kde-format
@@ -120,7 +122,7 @@ msgstr "Cineál MIME gan aimsiú %1"
 #: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr "Níor aimsíodh cineál MIME; bain triail as an rogha -mimetype"
+msgstr "Cineál MIME gan aimsiú, bain triail as an rogha -mimetype"
 
 #: calligraconverter.cpp:282
 #, kde-format

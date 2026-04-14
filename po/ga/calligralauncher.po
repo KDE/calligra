@@ -1,84 +1,84 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Irish Gaelic <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: main.cpp:51
 #, kde-format
 msgctxt "@title"
 msgid "Calligra Launcher"
-msgstr ""
+msgstr "Lainseálaí Calligra"
 
 #: main.cpp:53
 #, kde-format
 msgid "Calligra Launcher"
-msgstr ""
+msgstr "Lainseálaí Calligra"
 
 #: main.cpp:55
 #, kde-format
 msgid "(c) 2024"
-msgstr ""
+msgstr "(c) 2024"
 
 #: main.cpp:56
 #, kde-format
 msgctxt "@info:credit"
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: main.cpp:56
 #, kde-format
 msgctxt "@info:credit"
 msgid "Maintainer"
-msgstr ""
+msgstr "Cothabhálaí"
 
 #: main.cpp:57
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell,Aindriú Mac Giolla Eoin"
 
 #: main.cpp:57
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "seoc@iolfree.ie,kscanne@gmail.com,aindriu80@yahoo.com"
 
 #: Main.qml:48
 #, kde-format
 msgid "Calligra Words"
-msgstr ""
+msgstr "Focail Calligra"
 
 #: Main.qml:53
 #, kde-format
 msgid "Calligra Stage"
-msgstr ""
+msgstr "Calligra Stage"
 
 #: Main.qml:58
 #, kde-format
 msgid "Calligra Sheets"
-msgstr ""
+msgstr "Bileoga Calligra"
 
 #: Main.qml:63
 #, kde-format
 msgid "Karbon"
-msgstr ""
+msgstr "Carbón"
 
 #: Main.qml:68
 #, kde-format
 msgid "Quit"
-msgstr ""
+msgstr "Scoir"

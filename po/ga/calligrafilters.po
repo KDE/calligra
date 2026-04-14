@@ -2,25 +2,27 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kofficefilters package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kofficefilters.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-19 00:46+0000\n"
-"PO-Revision-Date: 2004-12-03 14:52-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: karbon/image/ImageExport.cpp:88
 #, kde-format
 msgid "%1 Export Options"
-msgstr ""
+msgstr "Roghanna Easpórtála %1"
 
 #: karbon/image/ImageExportOptionsWidget.cpp:48
 #, kde-format
@@ -59,7 +61,7 @@ msgstr "Airde na híomhá:"
 #: karbon/image/ImageExportOptionsWidget.ui:69
 #, kde-format
 msgid "Size in Units"
-msgstr ""
+msgstr "Méid in Aonaid"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: karbon/image/ImageExportOptionsWidget.ui:98
@@ -112,7 +114,7 @@ msgstr "Teimhneacht"
 #: words/docx/import/DocxXmlSettingsReader.cpp:75
 #, kde-format
 msgid "Namespace \"%1\" not found"
-msgstr ""
+msgstr "Níor aimsíodh ainmspás \"%1\""
 
 #: libmsooxml/MsooXmlImport.cpp:94
 #, kde-format
@@ -122,27 +124,31 @@ msgstr "Níorbh fhéidir comhad %1 a oscailt"
 #: libmsooxml/MsooXmlImport.cpp:117
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
-msgstr ""
+msgstr "Níorbh fhéidir eolaire ZIP an chomhaid iarrtha %1 a léamh"
 
 #: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
 #, kde-format
 msgid "Enter password"
-msgstr ""
+msgstr "Cuir isteach focal faire"
 
 #: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr ""
+"Tá an doiciméad seo criptithe, cuir isteach an focal faire le do thoil chun "
+"é a dhíchriptiú:"
 
 #: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr ""
+"Pasfhocal mícheart, cuir isteach an pasfhocal le do thoil chun an doiciméad "
+"seo a dhíchriptiú:"
 
 #: libmsooxml/MsooXmlImport.cpp:624
 #, kde-format
 msgid "Could not find path for type %1"
-msgstr ""
+msgstr "Níorbh fhéidir cosán a aimsiú don chineál %1"
 
 #: libmsooxml/MsooXmlReader.cpp:130
 #, kde-format
@@ -157,48 +163,48 @@ msgstr "%1 (%2, líne %3, colún %4)"
 #: libmsooxml/MsooXmlReader.cpp:153
 #, kde-format
 msgid "Element \"%1\" not found"
-msgstr ""
+msgstr "Níor aimsíodh eilimint \"%1\""
 
 #: libmsooxml/MsooXmlReader.cpp:158
 #, kde-format
 msgid "Attribute \"%1\" not found"
-msgstr ""
+msgstr "Ní bhfuarthas an tréith \"%1\""
 
 #: libmsooxml/MsooXmlReader.cpp:168
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
-msgstr ""
+msgstr "Luach gan choinne \"%1\" den tréith \"%2\""
 
 #: libmsooxml/MsooXmlReader.cpp:173
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
-msgstr ""
+msgstr "Dara tarlú gan choinne den eilimint \"%1\""
 
 #: libmsooxml/MsooXmlReader.cpp:190 libmsooxml/MsooXmlReader.cpp:241
 #, kde-format
 msgid "Expected closing of element \"%1\""
-msgstr ""
+msgstr "Dúnadh ionchais ar eilimint \"%1\""
 
 #: libmsooxml/MsooXmlReader.cpp:232
 #, kde-format
 msgid "None of expected elements found: %1"
-msgstr ""
+msgstr "Ní bhfuarthas aon cheann de na heilimintí a raibh súil leo: %1"
 
 #: libmsooxml/MsooXmlRelationships.cpp:85
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
-msgstr ""
+msgstr "Níorbh fhéidir sprioc a aimsiú don aitheantas \"%1\" sa chomhad \"%2\""
 
 #: libmsooxml/MsooXmlRelationships.cpp:89
 #: libmsooxml/MsooXmlRelationships.cpp:108
 #, kde-format
 msgid "Could not find relationships file \"%1\""
-msgstr ""
+msgstr "Níorbh fhéidir comhad caidrimh \"%1\" a aimsiú"
 
 #: libmsooxml/MsooXmlRelationships.cpp:104
 #, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
-msgstr ""
+msgstr "Níorbh fhéidir sprioc a aimsiú don ghaol \"%1\" sa chomhad \"%2\""
 
 #: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
@@ -212,47 +218,50 @@ msgstr ""
 #: libmsooxml/MsooXmlUtils.cpp:213
 #, kde-format
 msgid "Entry '%1' not found."
-msgstr ""
+msgstr "Níor aimsíodh iontráil '%1'."
 
 #: libmsooxml/MsooXmlUtils.cpp:219
 #, kde-format
 msgid "Entry '%1' is not a file."
-msgstr ""
+msgstr "Ní comhad é iontráil '%1'."
 
 #: libmsooxml/MsooXmlUtils.cpp:295 libmsooxml/MsooXmlUtils.cpp:337
 #: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
 msgstr ""
+"Níorbh fhéidir iontráil \"%1\" a oscailt le haghaidh scríbhneoireachta."
 
 #: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
 #: libmsooxml/MsooXmlUtils.cpp:390
 #, kde-format
 msgid "Could not write block"
-msgstr ""
+msgstr "Níorbh fhéidir bloc a scríobh"
 
 #: sheets/csv/csvexport.cc:253
 #, kde-format
 msgid "<SHEETNAME>"
-msgstr ""
+msgstr "<AINM NA BILEOG>"
 
 #: sheets/csv/csvexportdialog.cpp:37
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr ""
+msgstr "Easpórtáil go CSV"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
 #, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr ""
+msgstr "Easpórtáil"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
 msgid "CSV filter cannot open input file - please report."
 msgstr ""
+"Ní féidir leis an scagaire CSV comhad ionchuir a oscailt - tuairiscigh é le "
+"do thoil."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
 #: sheets/csv/exportdialogui.ui:48
@@ -264,7 +273,7 @@ msgstr "Deireadh na Líne"
 #: sheets/csv/exportdialogui.ui:56
 #, kde-format
 msgid "End of Line:"
-msgstr ""
+msgstr "Deireadh na Líne:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -318,7 +327,7 @@ msgstr "Cuirfear ainm an chéad bileoige eile in ionad <SHEETNAME>."
 #: sheets/csv/exportdialogui.ui:163
 #, kde-format
 msgid "Print delimiter line above every sheet"
-msgstr ""
+msgstr "Priontáil líne deighilteora os cionn gach bileoige"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: sheets/csv/exportdialogui.ui:174
@@ -330,7 +339,7 @@ msgstr "Cealla"
 #: sheets/csv/exportdialogui.ui:182
 #, kde-format
 msgid "Delimiter:"
-msgstr ""
+msgstr "Deighilteoir:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -354,7 +363,7 @@ msgstr "Táblóir"
 #: sheets/csv/exportdialogui.ui:213
 #, kde-format
 msgid "Space"
-msgstr "Achar"
+msgstr "Spás"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
 #: sheets/csv/exportdialogui.ui:222
@@ -389,7 +398,7 @@ msgstr "Easpórtáil an roghnúchán amháin"
 #: sheets/dbase/dbaseimport.cc:44
 #, kde-format
 msgid "File format is not supported."
-msgstr ""
+msgstr "Ní thacaítear leis an bhformáid comhaid."
 
 #: sheets/dbase/dbaseimport.cc:49
 #, kde-format
@@ -405,14 +414,14 @@ msgstr "Easpórtáil Bileog go HTML"
 #: sheets/html/exportwidget.ui:17
 #, kde-format
 msgid "Sheet Selection"
-msgstr ""
+msgstr "Roghnú Bileog"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
 #: sheets/html/exportwidget.ui:32 sheets/html/exportwidget.ui:42
 #, kde-format
 msgid "Click here to select all sheets in the list."
-msgstr ""
+msgstr "Cliceáil anseo chun na bileoga go léir sa liosta a roghnú."
 
 #. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
 #: sheets/html/exportwidget.ui:35
@@ -433,12 +442,15 @@ msgid ""
 "This option will make the HTML export filter generate a new page for each "
 "sheet. If you disable this option, all sheets are written on one page."
 msgstr ""
+"Leis an rogha seo, ginfidh an scagaire easpórtála HTML leathanach nua do "
+"gach bileog. Má dhíchumasaíonn tú an rogha seo, scríobhfar na bileoga go "
+"léir ar leathanach amháin."
 
 #. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
 #: sheets/html/exportwidget.ui:73
 #, kde-format
 msgid "Use &separate files for each table"
-msgstr ""
+msgstr "Úsáid comhaid ar leithligh do gach tábla"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
 #: sheets/html/exportwidget.ui:83
@@ -452,6 +464,8 @@ msgstr "Stíl"
 msgid ""
 "Select this option to use the default fonts and colors for the HTML page."
 msgstr ""
+"Roghnaigh an rogha seo chun na clónna agus na dathanna réamhshocraithe a "
+"úsáid don leathanach HTML."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
 #: sheets/html/exportwidget.ui:92
@@ -466,6 +480,8 @@ msgid ""
 "Select this option to specify a separate stylesheet for the HTML page. You "
 "can select or type on in the field below."
 msgstr ""
+"Roghnaigh an rogha seo chun stílbileog ar leith a shonrú don leathanach "
+"HTML. Is féidir leat rogha a dhéanamh nó clóscríobh sa réimse thíos."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:105
@@ -480,6 +496,9 @@ msgid ""
 "In this field you can enter an URL for your stylesheet. It is possible to "
 "point to a stylesheet on disk, or to somewhere on the Internet."
 msgstr ""
+"Sa réimse seo is féidir leat URL a iontráil chun do bhileog stíle. Is féidir "
+"leat tagairt a dhéanamh do bhileog stíle ar dhiosca, nó d'áit éigin ar an "
+"Idirlíon."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: sheets/html/exportwidget.ui:125
@@ -492,6 +511,8 @@ msgstr "Leagan Amach"
 #, kde-format
 msgid "Use this option to enable or disable borders around the cells."
 msgstr ""
+"Úsáid an rogha seo chun teorainneacha timpeall na gcealla a chumasú nó a "
+"dhíchumasú."
 
 #. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
 #: sheets/html/exportwidget.ui:134
@@ -507,12 +528,15 @@ msgid ""
 "Use this option to define how many pixels there should be between the cells. "
 "This effect is better visible if you check <b>Use borders</b> too."
 msgstr ""
+"Úsáid an rogha seo chun líon na bpicteilíní ba chóir a bheith idir na cealla "
+"a shainiú. Is fearr a fheictear an éifeacht seo má roghnaíonn tú <b>Úsáid "
+"teorainneacha</b> freisin."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: sheets/html/exportwidget.ui:149
 #, kde-format
 msgid "Pi&xels between cells:"
-msgstr ""
+msgstr "Picteilíní idir cealla:"
 
 #: sheets/html/htmlexport.cc:191 sheets/html/htmlexport.cc:366
 #, kde-format
@@ -522,7 +546,7 @@ msgstr "Barr"
 #: sheets/latex/export/latexexportdialog.cc:155
 #, kde-format
 msgid "Latex Export Filter Configuration"
-msgstr ""
+msgstr "Cumraíocht Scagaire Easpórtála Laitéis"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget2)
 #: sheets/latex/export/latexexportwidget.ui:36
@@ -534,7 +558,7 @@ msgstr "Cáipéis"
 #: sheets/latex/export/latexexportwidget.ui:44
 #, kde-format
 msgid "Document style:"
-msgstr ""
+msgstr "Stíl an doiciméid:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -546,19 +570,19 @@ msgstr "Stíl LaTeX"
 #: sheets/latex/export/latexexportwidget.ui:58
 #, kde-format
 msgid "Words style"
-msgstr ""
+msgstr "Stíl focal"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
 #, kde-format
 msgid "Document type:"
-msgstr ""
+msgstr "Cineál doiciméid:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
 #, kde-format
 msgid "The document will be able to be compiled alone"
-msgstr ""
+msgstr "Beidh an doiciméad indéanta a thiomsú ina aonar"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:78
@@ -568,6 +592,8 @@ msgid ""
 "include will be generated before the \\begin{document} and \\end{document} "
 "commands."
 msgstr ""
+"Ginfear an doiciméad mar dhoiciméad iomlán laitéis ós rud é go nginfear an t-"
+"include go léir roimh na horduithe \\begin{document} agus \\end{document}."
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:81
@@ -579,7 +605,7 @@ msgstr "Cáipéis neamhspleách"
 #: sheets/latex/export/latexexportwidget.ui:91
 #, kde-format
 msgid "Do not generate either the latex header or the document environment"
-msgstr ""
+msgstr "Ná gin an ceanntásc laitéis ná an timpeallacht doiciméad"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:94
@@ -589,6 +615,9 @@ msgid ""
 "included in a main latex document. It will allow you to generate several "
 "little files for each chapter of your document."
 msgstr ""
+"Ginfear an doiciméad mar dhoiciméad laitéis a chaithfear a chur san áireamh "
+"i bpríomhdhoiciméad laitéis. Ligfidh sé duit roinnt comhad beag a ghiniúint "
+"do gach caibidil de do dhoiciméad."
 
 #. i18n: ectx: property (text), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:97
@@ -636,7 +665,7 @@ msgstr "Pictiúir"
 #: sheets/latex/export/latexexportwidget.ui:192
 #, kde-format
 msgid "Convert the pictures:"
-msgstr ""
+msgstr "Tiontaigh na pictiúir:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
 #: sheets/latex/export/latexexportwidget.ui:209
@@ -656,7 +685,7 @@ msgstr "Teanga"
 #: sheets/latex/export/latexexportwidget.ui:244
 #, kde-format
 msgid "Encoding:"
-msgstr ""
+msgstr "Ionchódú:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289
@@ -674,19 +703,19 @@ msgstr "Bain"
 #: sheets/latex/export/latexexportwidget.ui:321
 #, kde-format
 msgid "Contents"
-msgstr "Inneachar"
+msgstr "Ábhar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: sheets/latex/export/latexexportwidget.ui:329
 #, kde-format
 msgid "Export information about author:"
-msgstr ""
+msgstr "Easpórtáil faisnéis faoin údar:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: sheets/latex/export/latexexportwidget.ui:349
 #, kde-format
 msgid "Add a table of content:"
-msgstr ""
+msgstr "Cuir clár ábhair leis:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: sheets/latex/export/latexexportwidget.ui:368
@@ -704,13 +733,13 @@ msgstr "Ná heaspórtáil"
 #: sheets/latex/export/latexexportwidget.ui:381
 #, kde-format
 msgid "Export notes in margin notes"
-msgstr ""
+msgstr "Nótaí a onnmhairiú i nótaí imeallacha"
 
 #. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
 #: sheets/latex/export/latexexportwidget.ui:388
 #, kde-format
 msgid "Export notes in comments"
-msgstr ""
+msgstr "Nótaí a onnmhairiú i dtuairimí"
 
 #: sheets/opencalc/opencalcexport.cc:889
 #, kde-format
@@ -720,12 +749,12 @@ msgstr "Leathanach "
 #: sheets/opencalc/opencalcimport.cc:1198
 #, kde-format
 msgid "The file seems to be corrupt. Skipping a table."
-msgstr ""
+msgstr "Is cosúil go bhfuil an comhad truaillithe. Ag scipeáil tábla."
 
 #: sheets/opencalc/opencalcimport.cc:1210
 #, kde-format
 msgid "Skipping a table."
-msgstr ""
+msgstr "Ag scipeáil boird."
 
 #: sheets/opencalc/opencalcimport.cc:1909
 #, kde-format
@@ -735,6 +764,10 @@ msgid ""
 "crashes or incorrect display of the data. Do you want to continue converting "
 "the document?"
 msgstr ""
+"Cruthaíodh an doiciméad seo le leagan '%1' de OpenOffice.org. Scríobhadh an "
+"scagaire seo do leagan 1.0. D’fhéadfadh iompar aisteach, tuairteanna nó "
+"taispeáint mhícheart na sonraí a bheith mar thoradh ar an gcomhad seo a "
+"léamh. Ar mhaith leat leanúint ar aghaidh ag comhshó an doiciméid?"
 
 #: sheets/opencalc/opencalcimport.cc:1910
 #, kde-format
@@ -745,6 +778,8 @@ msgstr "Leagan cáipéise gan tacaíocht"
 #, kde-format
 msgid "QPRO filter cannot open input file - please report."
 msgstr ""
+"Ní féidir le scagaire QPRO comhad ionchuir a oscailt - tuairiscigh é le do "
+"thoil."
 
 #: sheets/qpro/qproimport.cc:219
 #, kde-format
@@ -752,33 +787,35 @@ msgid ""
 "Unable to open password protected files.\n"
 "The password algorithm has not been published"
 msgstr ""
+"Ní féidir comhaid atá cosanta ag pasfhocal a oscailt.\n"
+"Níl an algartam pasfhocail foilsithe fós"
 
 #: sheets/xlsx/XlsxImport.cpp:577 stage/pptx/PptxImport.cpp:1314
 #: words/docx/import/DocxImport.cpp:146
 #, kde-format
 msgid "Unable to find part for type %1"
-msgstr ""
+msgstr "Ní féidir cuid a aimsiú don chineál %1"
 
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:171
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
-msgstr ""
+msgstr "Líon dearbhaithe na dteaghrán comhroinnte róbheag (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:564
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
-msgstr ""
+msgstr "Líon na stíleanna cló dearbhaithe róbheag (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:920
 #, kde-format
 msgid "Declared number of cell formats too small (%1)"
-msgstr ""
+msgstr "Líon dearbhaithe formáidí cealla róbheag (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:1047
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:1368
 #, kde-format
 msgid "Declared number of fill styles too small (%1)"
-msgstr ""
+msgstr "Líon na stíleanna líonta dearbhaithe róbheag (%1)"
 
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:341
 #, kde-format
@@ -786,11 +823,13 @@ msgid ""
 "The data could not be loaded completely because the maximum size of sheet "
 "was exceeded."
 msgstr ""
+"Níorbh fhéidir na sonraí a luchtú go hiomlán mar gur sáraíodh uasmhéid na "
+"bileoige."
 
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1403
 #, kde-format
 msgid "Expected integer or floating point number"
-msgstr ""
+msgstr "Uimhir shlán nó snámhphointe a bhíothas ag súil leis"
 
 #: stage/pptx/PptxXmlDocumentReader.cpp:289
 #, kde-format
@@ -805,7 +844,7 @@ msgstr "Sleamhnán %1"
 #: words/ascii/ImportDialog.cc:30
 #, kde-format
 msgid "Words's Plain Text Import Filter"
-msgstr ""
+msgstr "Scagaire Iompórtála Téacs Simplí Words"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
 #: words/ascii/ImportDialogUI.ui:16
@@ -823,24 +862,24 @@ msgstr "Deireadh an Ailt"
 #: words/ascii/ImportDialogUI.ui:28
 #, kde-format
 msgid "&As is: At the end of line"
-msgstr ""
+msgstr "&Mar atá: Ag deireadh na líne"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
 #: words/ascii/ImportDialogUI.ui:38
 #, kde-format
 msgid "&Sentence: If the end of line is the end of a sentence"
-msgstr ""
+msgstr "&Abairt: Más é deireadh líne deireadh abairte"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
 #: words/ascii/ImportDialogUI.ui:45
 #, kde-format
 msgid "&Empty Line: If the line is empty"
-msgstr ""
+msgstr "&Líne Fholamh: Má tá an líne folamh"
 
 #: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, kde-format
 msgid "End notes"
-msgstr ""
+msgstr "Nótaí deiridh"
 
 #: words/msword-odf/conversion.cpp:787
 #, kde-format
@@ -888,9 +927,9 @@ msgstr ""
 #: words/rtf/import/rtfimport.cpp:76
 #, kde-format
 msgid "Words's RTF Import Filter"
-msgstr ""
+msgstr "Scagaire Iompórtála RTF Words"
 
 #: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
 #, kde-format
 msgid "The file cannot be loaded."
-msgstr ""
+msgstr "Ní féidir an comhad a luchtú."

@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-03-20 08:13+0200\n"
+"PO-Revision-Date: 2026-04-13 21:19+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2447,7 +2447,7 @@ msgstr "עמוד הורה…"
 #: pageapp/KoPAView.cpp:408
 #, kde-format
 msgid "Page Layout..."
-msgstr "הגדרות עמוד..."
+msgstr "פריסת עמוד…"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57

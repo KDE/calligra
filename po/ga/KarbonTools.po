@@ -2,20 +2,22 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the KarbonTools package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/KarbonTools.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2007-11-01 08:24-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -35,17 +37,17 @@ msgstr "Sábháil an phróifíl mar..."
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
 #, kde-format
 msgid "Remove profile"
-msgstr ""
+msgstr "Bain próifíl"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
 #, kde-format
 msgid "&Follow selected path"
-msgstr ""
+msgstr "Lean an cosán roghnaithe"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr ""
+msgstr "Úsáid táibléad agus brú"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
 #, kde-format
@@ -55,12 +57,12 @@ msgstr "Leithead:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
 #, kde-format
 msgid "Thinning:"
-msgstr ""
+msgstr "Tanú:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
 #, kde-format
 msgid "Use tablet &angle"
-msgstr ""
+msgstr "Úsáid táibléad &uillinn"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
 #, kde-format
@@ -70,12 +72,12 @@ msgstr "Uillinn:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
 #, kde-format
 msgid "Fixation:"
-msgstr ""
+msgstr "Socrú:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
 #, kde-format
 msgid "Caps:"
-msgstr ""
+msgstr "Caipíní:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
 #, kde-format
@@ -85,7 +87,7 @@ msgstr "Mais:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
 #, kde-format
 msgid "Drag:"
-msgstr ""
+msgstr "Tarraing:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
@@ -102,18 +104,18 @@ msgstr "Ainm na próifíle"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
-msgstr ""
+msgstr "Cuir isteach an t-ainm ar mhaith leat an phróifíl seo a shábháil leis:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
 msgctxt "invalid profile name"
 msgid "Invalid name."
-msgstr ""
+msgstr "Ainm neamhbhailí."
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
 msgid "Sorry, the name you entered is invalid."
-msgstr ""
+msgstr "Ár leithscéal, ach tá an t-ainm a chuir tú isteach neamhbhailí."
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:225
 #, kde-format
@@ -121,6 +123,8 @@ msgid ""
 "A profile with that name already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
+"Tá próifíl leis an ainm sin ann cheana féin.\n"
+"Ar mhaith leat é a athscríobh?"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:340
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:365
@@ -131,7 +135,7 @@ msgstr "Luch"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:353
 #, kde-format
 msgid "Graphics Pen"
-msgstr ""
+msgstr "Peann Grafaicí"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
@@ -141,72 +145,72 @@ msgstr "Líon"
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, kde-format
 msgid "Calligraphy: increase width"
-msgstr ""
+msgstr "Callagrafaíocht: leithead a mhéadú"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, kde-format
 msgid "Calligraphy: decrease width"
-msgstr ""
+msgstr "Callagrafaíocht: leithead a laghdú"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, kde-format
 msgid "Calligraphy: increase angle"
-msgstr ""
+msgstr "Callagrafaíocht: uillinn a mhéadú"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, kde-format
 msgid "Calligraphy: decrease angle"
-msgstr ""
+msgstr "Callagrafaíocht: uillinn laghdaithe"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:380
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:381
 #: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
 #, kde-format
 msgid "Calligraphy"
-msgstr ""
+msgstr "Callagrafaíocht"
 
 #: filterEffectTool/FilterAddCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add filter effect"
-msgstr ""
+msgstr "Cuir éifeacht scagaire leis"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, kde-format
 msgid "Add effect to current filter stack"
-msgstr ""
+msgstr "Cuir éifeacht leis an stac scagaire reatha"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, kde-format
 msgid "Add to filter presets"
-msgstr ""
+msgstr "Cuir le réamhshocruithe scagaire"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:74
 #, kde-format
 msgid "Remove filter preset"
-msgstr ""
+msgstr "Bain réamhshocrú scagaire"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
 msgid "Effect name"
-msgstr ""
+msgstr "Ainm na héifeachta"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
 msgid "Please enter a name for the filter effect"
-msgstr ""
+msgstr "Cuir isteach ainm don éifeacht scagaire le do thoil"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
 #: filterEffectTool/FilterEffectEditWidget.ui:32
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:320
 #, kde-format
 msgid "Filter Effect Editor"
-msgstr ""
+msgstr "Eagarthóir Éifeachtaí Scagaire"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: filterEffectTool/FilterEffectEditWidget.ui:40
 #, kde-format
 msgid "Effects and Connections"
-msgstr ""
+msgstr "Éifeachtaí agus Naisc"
 
 #. i18n: ectx: property (text), widget (QToolButton, removeEffect)
 #. i18n: ectx: property (text), widget (QToolButton, addEffect)
@@ -228,39 +232,39 @@ msgstr "..."
 #: filterEffectTool/FilterEffectEditWidget.ui:92
 #, kde-format
 msgid "Filter Presets"
-msgstr ""
+msgstr "Réamhshocruithe Scagaire"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: filterEffectTool/FilterEffectEditWidget.ui:116
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:474
 #, kde-format
 msgid "Effect Properties"
-msgstr ""
+msgstr "Airíonna Éifeachta"
 
 #: filterEffectTool/FilterRemoveCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Remove filter effect"
-msgstr ""
+msgstr "Bain éifeacht scagaire"
 
 #: filterEffectTool/FilterStackSetCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
-msgstr ""
+msgstr "Socraigh carn scagaire"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:439
 #, kde-format
 msgid "Effects"
-msgstr "Maisíochtaí"
+msgstr "Éifeachtaí"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:447
 #, kde-format
 msgid "View and edit filter"
-msgstr ""
+msgstr "Féach ar an scagaire agus cuir in eagar é"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:453
 #, kde-format
 msgid "Remove filter from object"
-msgstr ""
+msgstr "Bain an scagaire ón réad"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:457
 #, kde-format
@@ -290,32 +294,36 @@ msgstr "A:"
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:509
 #, kde-format
 msgid "Effect Region"
-msgstr ""
+msgstr "Réigiún Éifeachta"
 
 #: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
 #, kde-format
 msgid "Filter effects editing"
-msgstr ""
+msgstr "Eagarthóireacht éifeachtaí scagaire"
 
 #: KarbonGradientTool.cpp:199
 #, kde-format
 msgid "Drag to move gradient position."
-msgstr ""
+msgstr "Tarraing chun suíomh an ghrádáin a bhogadh."
 
 #: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
 msgstr ""
+"Tarraing chun stad datha a bhogadh. Cliceáil faoi dhó chun stad datha a "
+"bhaint."
 
 #: KarbonGradientTool.cpp:210
 #, kde-format
 msgid "Drag to move color stop."
-msgstr ""
+msgstr "Tarraing chun stad datha a bhogadh."
 
 #: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
 msgstr ""
+"Tarraing chun suíomh an ghrádáin a bhogadh. Cliceáil faoi dhó chun stad "
+"datha a chur isteach."
 
 #: KarbonGradientTool.cpp:493
 #, kde-format
@@ -330,7 +338,7 @@ msgstr "Grádáin Réamhshainithe"
 #: KarbonGradientToolFactory.cpp:17
 #, kde-format
 msgid "Gradient editing"
-msgstr ""
+msgstr "Eagarthóireacht grádáin"
 
 #: KarbonPatternOptionsWidget.cpp:22
 #, kde-format
@@ -390,7 +398,7 @@ msgstr "Bun"
 #: KarbonPatternOptionsWidget.cpp:34
 #, kde-format
 msgid "Bottom Right"
-msgstr "Bun ar dheis"
+msgstr "Bun ar Dheis"
 
 #: KarbonPatternTool.cpp:270
 #, kde-format
@@ -405,4 +413,4 @@ msgstr "Patrúin"
 #: KarbonPatternToolFactory.cpp:17
 #, kde-format
 msgid "Pattern editing"
-msgstr ""
+msgstr "Eagarthóireacht patrún"

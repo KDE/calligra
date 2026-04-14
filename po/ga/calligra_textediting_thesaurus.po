@@ -2,20 +2,22 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the thesaurus_tool package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/thesaurus_tool.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2004-12-03 14:52-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: Thesaurus.cpp:81
 #, kde-format
@@ -126,17 +128,17 @@ msgstr "Frithchiallaigh - Focail le Bríonna Codarsnacha"
 #: Thesaurus.cpp:581
 #, kde-format
 msgid "Hyponyms - ... is a (kind of) %1"
-msgstr "Hiopainmneacha - is (cineál de) %1 é ... "
+msgstr "Hipinimí - ... is (cineál) %1 é"
 
 #: Thesaurus.cpp:582
 #, kde-format
 msgid "Meronyms - %1 has a ..."
-msgstr "Míorainmneacha - tá ... ag %1"
+msgstr "Meatonaime - tá ... ag %1"
 
 #: Thesaurus.cpp:584
 #, kde-format
 msgid "Holonyms - ... has a %1"
-msgstr "Holainmneacha - tá %1 ag ..."
+msgstr "Comhainm - ... tá %1 aige"
 
 #: Thesaurus.cpp:585
 #, kde-format
@@ -182,7 +184,7 @@ msgid ""
 "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
 "English language."
 msgstr ""
-"<b>Earráid:</b> Theip ar an gclár WordNet 'wn' a rith.  Caithfidh WordNet a "
+"<b>Earráid:</b> Theip ar an gclár WordNet 'wn' a rith. Caithfidh WordNet a "
 "bheith suiteáilte ar do ríomhaire más mian leat é a úsáid, agus caithfidh an "
 "clár inrite 'wn' a bheith i do PATH. Is féidir leat WordNet a fháil ó <a "
 "href=\"http://wordnet.princeton.edu/\">http://wordnet.princeton.edu/</a>. "
