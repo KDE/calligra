@@ -2,20 +2,22 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread_plugin_tool_calendar package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread_plugin_tool_calendar.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2008-07-21 09:38-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: CalendarTool.cpp:62
 #, kde-format
@@ -79,7 +81,7 @@ msgstr ""
 #: CalendarTool.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
-msgstr ""
+msgstr "Ionsáigh Féilire"
 
 #: CalendarTool.cpp:126
 #, kde-format
@@ -94,7 +96,7 @@ msgstr "seachtain"
 #: CalendarToolFactory.cpp:22
 #, kde-format
 msgid "Calendar"
-msgstr ""
+msgstr "Féilire"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
 #: CalendarToolWidget.ui:14

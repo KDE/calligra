@@ -2,20 +2,22 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the MusicShape package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/MusicShape.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2007-07-22 14:30-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: actions/AccidentalAction.cpp:52
 #, kde-format
@@ -67,7 +69,7 @@ msgstr "Léirscriosán"
 #: actions/KeySignatureAction.cpp:29
 #, kde-format
 msgid "Ab Major"
-msgstr "Mórghléas A♭ "
+msgstr "Ab Mór"
 
 #: actions/KeySignatureAction.cpp:31
 #, kde-format
@@ -123,7 +125,7 @@ msgstr "nóta"
 #: actions/NoteEntryAction.cpp:54
 #, kde-format
 msgid "rest"
-msgstr "sos"
+msgstr "scíth"
 
 #: actions/NoteEntryAction.cpp:57
 #, kde-format
@@ -238,113 +240,113 @@ msgstr "Nótaí ceangailte"
 #: commands/AddBarsCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Add measures"
-msgstr ""
+msgstr "Cuir bearta leis"
 
 #: commands/AddDotCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Add dot"
-msgstr ""
+msgstr "Cuir ponc leis"
 
 #: commands/AddNoteCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
-msgstr ""
+msgstr "Socraigh fad an chorda"
 
 #: commands/AddNoteCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Add note"
-msgstr ""
+msgstr "Cuir nóta leis"
 
 #: commands/AddPartCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Add part"
-msgstr ""
+msgstr "Cuir cuid leis"
 
 #: commands/AddPartCommand.cpp:26
 #, kde-format
 msgid "Part %1"
-msgstr ""
+msgstr "Cuid %1"
 
 #: commands/ChangePartDetailsCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Change part details"
-msgstr ""
+msgstr "Athraigh sonraí na coda"
 
 #: commands/CreateChordCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add chord"
-msgstr ""
+msgstr "Cuir corda leis"
 
 #: commands/CreateChordCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Add rest"
-msgstr ""
+msgstr "Cuir scíth leis"
 
 #: commands/MakeRestCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Convert chord to rest"
-msgstr ""
+msgstr "Tiontaigh corda go sos"
 
 #: commands/RemoveBarCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
-msgstr ""
+msgstr "Bain an barra"
 
 #: commands/RemoveChordCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
-msgstr ""
+msgstr "Bain an chuid eile"
 
 #: commands/RemoveChordCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
-msgstr ""
+msgstr "Bain an corda"
 
 #: commands/RemoveNoteCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove note"
-msgstr ""
+msgstr "Bain nóta"
 
 #: commands/RemovePartCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove part"
-msgstr ""
+msgstr "Bain cuid"
 
 #: commands/RemoveStaffElementCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
-msgstr ""
+msgstr "Bain clef"
 
 #: commands/RemoveStaffElementCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Remove staff element"
-msgstr ""
+msgstr "Bain an eilimint foirne"
 
 #: commands/SetAccidentalsCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
-msgstr ""
+msgstr "Socraigh de thaisme"
 
 #: commands/SetClefCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change clef"
-msgstr ""
+msgstr "Athraigh clef"
 
 #: commands/SetKeySignatureCommand.cpp:26
 #: commands/SetKeySignatureCommand.cpp:76
 msgctxt "(qtundo-format)"
 msgid "Change key signature"
-msgstr ""
+msgstr "Athraigh an síniú eochair"
 
 #: commands/SetTimeSignatureCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Change time signature"
-msgstr ""
+msgstr "Athraigh an síniú ama"
 
 #: commands/ToggleTiedNoteCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Toggle Note Tie"
-msgstr ""
+msgstr "Ceangail Nóta a Athrú"
 
 #: dialogs/KeySignatureDialog.cpp:15
 #, kde-format
@@ -480,7 +482,7 @@ msgstr "Easpórtáil"
 #: MusicShape.cpp:71
 #, kde-format
 msgid "Part 1"
-msgstr ""
+msgstr "Cuid 1"
 
 #: MusicShapeFactory.cpp:34
 #, kde-format
@@ -500,7 +502,7 @@ msgstr "Comhpháirteanna"
 #: MusicToolFactory.cpp:18
 #, kde-format
 msgid "Music editing, parts"
-msgstr ""
+msgstr "Eagarthóireacht cheoil, páirteanna"
 
 #: SimpleEntryTool.cpp:227
 #, kde-format
@@ -520,26 +522,26 @@ msgstr "Gléaschomhartha"
 #: SimpleEntryTool.cpp:681
 #, kde-format
 msgid "Add how many measures?"
-msgstr ""
+msgstr "Cé mhéad beart a chuirtear leis?"
 
 #: SimpleEntryTool.cpp:743
 #, kde-format
 msgctxt "@title:window"
 msgid "Import"
-msgstr ""
+msgstr "Iompórtáil"
 
 #: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
 #, kde-format
 msgid "MusicXML files (*.xml)"
-msgstr ""
+msgstr "Comhaid MusicXML (*.xml)"
 
 #: SimpleEntryTool.cpp:761
 #, kde-format
 msgctxt "@title:window"
 msgid "Export"
-msgstr ""
+msgstr "Easpórtáil"
 
 #: SimpleEntryToolFactory.cpp:17
 #, kde-format
 msgid "Music editing"
-msgstr ""
+msgstr "Eagarthóireacht cheoil"

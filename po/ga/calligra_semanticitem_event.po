@@ -2,43 +2,43 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the calligra package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Irish Gaelic <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: KoEventSemanticItemFactory.cpp:31
 #, kde-format
 msgctxt "displayname of the semantic item type Event"
 msgid "Event"
-msgstr ""
+msgstr "Imeacht"
 
 #: KoRdfCalendarEvent.cpp:152
 #, kde-format
 msgid "Area"
-msgstr ""
+msgstr "Limistéar"
 
 #: KoRdfCalendarEvent.cpp:153
 #, kde-format
 msgid "Region"
-msgstr ""
+msgstr "Réigiún"
 
 #: KoRdfCalendarEvent.cpp:364
 #, kde-format
 msgid "Select a calendar for saving:"
-msgstr ""
+msgstr "Roghnaigh féilire le sábháil:"
 
 #: KoRdfCalendarEvent.cpp:384
 #, kde-format
@@ -46,6 +46,8 @@ msgid ""
 "Could not add entry\n"
 "%1"
 msgstr ""
+"Níorbh fhéidir iontráil a chur leis\n"
+"%1"
 
 #: KoRdfCalendarEvent.cpp:407
 #, kde-format
@@ -53,59 +55,61 @@ msgid ""
 "Could not save iCal file\n"
 "%1"
 msgstr ""
+"Níorbh fhéidir comhad iCal a shábháil\n"
+"%1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: KoRdfCalendarEventEditWidget.ui:20
 #, kde-format
 msgid "&Summary:"
-msgstr ""
+msgstr "Achoimre:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: KoRdfCalendarEventEditWidget.ui:30
 #, kde-format
 msgid "&Location:"
-msgstr ""
+msgstr "&Suíomh:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: KoRdfCalendarEventEditWidget.ui:43
 #, kde-format
 msgid "&Start:"
-msgstr ""
+msgstr "&Tosaigh:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: KoRdfCalendarEventEditWidget.ui:56
 #, kde-format
 msgid "&End:"
-msgstr ""
+msgstr "&Deireadh:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tadtab)
 #: KoRdfCalendarEventEditWidget.ui:80
 #, kde-format
 msgid "Time and Date"
-msgstr ""
+msgstr "Am agus Dáta"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tztab)
 #: KoRdfCalendarEventEditWidget.ui:93
 #, kde-format
 msgid "Timezone"
-msgstr ""
+msgstr "Crios ama"
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:29
 #, kde-format
 msgid "Calendar Event"
-msgstr ""
+msgstr "Imeacht Féilire"
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:36
 #, kde-format
 msgid "Edit..."
-msgstr ""
+msgstr "Cuir in eagar..."
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:39
 #, kde-format
 msgid "Import event to Calendar"
-msgstr ""
+msgstr "Iompórtáil imeacht chuig Féilire"
 
 #: KoRdfCalendarEventTreeWidgetItem.cpp:42
 #, kde-format
 msgid "Export event to iCal file..."
-msgstr ""
+msgstr "Easpórtáil imeacht chuig comhad iCal..."

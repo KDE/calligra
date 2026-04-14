@@ -2,20 +2,22 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kocolorspaces package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kocolorspaces.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2009-01-20 10:11-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
@@ -73,7 +75,7 @@ msgstr "Alfa"
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.h:77
 #, kde-format
 msgid "CMYK (32 bits floating/channel)"
-msgstr ""
+msgstr "CMYK (32 giotán snámh/cainéal)"
 
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.h:72
 #, kde-format
@@ -96,12 +98,12 @@ msgstr "Liath"
 #: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.h:74
 #, kde-format
 msgid "Grayscale/Alpha (16-bit float/channel)"
-msgstr ""
+msgstr "Liathscála/Alfa (snámhphointe/cainéal 16-giotán)"
 
 #: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.h:74
 #, kde-format
 msgid "Grayscale/Alpha (32-bit float/channel)"
-msgstr ""
+msgstr "Liathscála/Alfa (snámhphointe/cainéal 32-giotán)"
 
 #: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.h:68
 #, kde-format
@@ -137,7 +139,7 @@ msgstr "b*"
 #: lcms2/colorspaces/lab_f32/LabF32ColorSpace.h:75
 #, kde-format
 msgid "L*a*b* (32-bit float/channel)"
-msgstr ""
+msgstr "L*a*b* (snámhphointe/cainéal 32-giotán)"
 
 #: lcms2/colorspaces/lab_u16/LabColorSpace.h:77
 #, kde-format
@@ -147,7 +149,7 @@ msgstr "L*a*b* (slánuimhir 16-giotán/cainéal)"
 #: lcms2/colorspaces/lab_u8/LabU8ColorSpace.h:73
 #, kde-format
 msgid "L*a*b* (8-bit integer/channel)"
-msgstr ""
+msgstr "L*a*b* (slánuimhir/cainéal 8-giotán)"
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:23
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:26
@@ -176,12 +178,12 @@ msgstr "Gorm"
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.h:68
 #, kde-format
 msgid "RGBA (16-bit floating/channel)"
-msgstr ""
+msgstr "RGBA (snámh/cainéal 16-giotán)"
 
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.h:68
 #, kde-format
 msgid "RGBA (32-bit floating/channel)"
-msgstr ""
+msgstr "RGBA (snámh/cainéal 32-giotán)"
 
 #: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.h:61
 #, kde-format
@@ -224,7 +226,7 @@ msgstr "Z"
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.h:71
 #, kde-format
 msgid "XYZ (32-bit float/channel)"
-msgstr ""
+msgstr "XYZ (snámhphointe/cainéal 32-giotán)"
 
 #: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.h:63
 #, kde-format
@@ -234,7 +236,7 @@ msgstr "XYZ (slánuimhir 16-giotán/cainéal)"
 #: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.h:66
 #, kde-format
 msgid "XYZ (8-bit integer/channel)"
-msgstr ""
+msgstr "XYZ (slánuimhir/cainéal 8-giotán)"
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:33
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:27
@@ -253,17 +255,17 @@ msgstr "Cr"
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h:71
 #, kde-format
 msgid "YCBCR (32-bit float/channel)"
-msgstr ""
+msgstr "YCBCR (snámhphointe/cainéal 32-giotán)"
 
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h:66
 #, kde-format
 msgid "YCBCR (16-bit integer/channel)"
-msgstr ""
+msgstr "YCBCR (slánuimhir/cainéal 16-giotán)"
 
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.h:66
 #, kde-format
 msgid "YCBCR (8-bit integer/channel)"
-msgstr ""
+msgstr "YCBCR (slánuimhir/cainéal 8-giotán)"
 
 #: lcms2/compositeops/RgbCompositeOpBumpmap.h:20
 #, kde-format
@@ -298,7 +300,7 @@ msgstr "Díscaoil"
 #: lcms2/compositeops/RgbCompositeOpHue.h:24
 #, kde-format
 msgid "Hue"
-msgstr "Lí"
+msgstr "Fordhath"
 
 #: lcms2/compositeops/RgbCompositeOpIn.h:23
 #, kde-format
@@ -344,17 +346,17 @@ msgstr "Histeagram RGB8"
 #: lcms2/LcmsEnginePlugin.cpp:148
 #, kde-format
 msgid "RGB16 Histogram"
-msgstr ""
+msgstr "Histeagram RGB16"
 
 #: lcms2/LcmsEnginePlugin.cpp:154
 #, kde-format
 msgid "RGBF16 Histogram"
-msgstr ""
+msgstr "Histeagram RGBF16"
 
 #: lcms2/LcmsEnginePlugin.cpp:160
 #, kde-format
 msgid "RGBF32 Histogram"
-msgstr ""
+msgstr "Histeagram RGBF32"
 
 #: lcms2/LcmsEnginePlugin.cpp:180
 #, kde-format
@@ -369,12 +371,12 @@ msgstr "Histeagram LIATH/Alfa16"
 #: lcms2/LcmsEnginePlugin.cpp:190
 #, kde-format
 msgid "GRAYF16 Histogram"
-msgstr ""
+msgstr "Histeagram GRAYF16"
 
 #: lcms2/LcmsEnginePlugin.cpp:196
 #, kde-format
 msgid "GRAY/Alpha 32 float Histogram"
-msgstr ""
+msgstr "Histeagram snámhphointe LIATH/Alfa 32"
 
 #: lcms2/LcmsEnginePlugin.cpp:207
 #, kde-format
@@ -389,12 +391,12 @@ msgstr "Histeagram CMYK16"
 #: lcms2/LcmsEnginePlugin.cpp:217
 #, kde-format
 msgid "CMYK F32 Histogram"
-msgstr ""
+msgstr "Histeagram CMYK F32"
 
 #: lcms2/LcmsEnginePlugin.cpp:234
 #, kde-format
 msgid "XYZ8 Histogram"
-msgstr ""
+msgstr "Histeagram XYZ8"
 
 #: lcms2/LcmsEnginePlugin.cpp:239
 #, kde-format
@@ -404,24 +406,24 @@ msgstr "Histeagram XYZ16"
 #: lcms2/LcmsEnginePlugin.cpp:245
 #, kde-format
 msgid "XYZF16 Histogram"
-msgstr ""
+msgstr "Histeagram XYZF16"
 
 #: lcms2/LcmsEnginePlugin.cpp:251
 #, kde-format
 msgid "XYZF32 Histogram"
-msgstr ""
+msgstr "Histeagram XYZF32"
 
 #: lcms2/LcmsEnginePlugin.cpp:265
 #, kde-format
 msgid "YCBCR8 Histogram"
-msgstr ""
+msgstr "Histeagram YCBCR8"
 
 #: lcms2/LcmsEnginePlugin.cpp:270
 #, kde-format
 msgid "YCBCR16 Histogram"
-msgstr ""
+msgstr "Histeagram YCBCR16"
 
 #: lcms2/LcmsEnginePlugin.cpp:275
 #, kde-format
 msgid "YCBCRF32 Histogram"
-msgstr ""
+msgstr "Histeagram YCBCRF32"

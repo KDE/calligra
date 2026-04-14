@@ -2,42 +2,44 @@
 # Copyright (C) 2011 This_file_is_part_of_KDE
 # This file is distributed under the same license as the calligra-opener package.
 # Kevin Scannell <kscanne@gmail.com>, 2011.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-opener\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2011-12-28 12:28-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Kevin Scannell"
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell,Aindriú Mac Giolla Eoin"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "kscanne@gmail.com"
+msgstr "seoc@iolfree.ie,kscanne@gmail.com,aindriu80@yahoo.com"
 
 #: main.cpp:62
 #, kde-format
 msgctxt "@info"
 msgid "Mimetype for <filename>%1</filename> not found!"
-msgstr ""
+msgstr "Cineál MIME do <filename>%1</filename> gan aimsiú!"
 
 #: main.cpp:118
 #, kde-format
 msgctxt "@action:button"
 msgid "Open with <application>%1</application>"
-msgstr ""
+msgstr "Oscail le <application>%1</application>"
 
 #: main.cpp:122
 #, kde-format
@@ -47,27 +49,30 @@ msgid ""
 "filename>.<nl/>Do you want to open the file using default application "
 "<application>%2</application>?"
 msgstr ""
+"Níorbh fhéidir feidhmchlár Calligra a aimsiú atá oiriúnach chun <filename>"
+"%1</filename> a oscailt.<nl/>Ar mhaith leat an comhad a oscailt ag baint "
+"úsáide as an bhfeidhmchlár réamhshocraithe <application>%2</application>?"
 
 #: main.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Calligra Application Not Found"
-msgstr ""
+msgstr "Níor aimsíodh Feidhmchlár Calligra"
 
 #: main.cpp:156
 #, kde-format
 msgid "Calligra Opener"
-msgstr ""
+msgstr "Oscailteoir Calligra"
 
 #: main.cpp:158
 #, kde-format
 msgid "Calligra Document Opener"
-msgstr ""
+msgstr "Oscailteoir Doiciméad Calligra"
 
 #: main.cpp:160
 #, kde-format
 msgid "Copyright 2010-%1 Calligra developers"
-msgstr ""
+msgstr "Cóipcheart 2010-%1 Forbróirí Calligra"
 
 #: main.cpp:161
 #, kde-format
@@ -77,7 +82,7 @@ msgstr "Jarosław Staniek"
 #: main.cpp:168
 #, kde-format
 msgid "Lists names of all available Calligra applications"
-msgstr ""
+msgstr "Liostaíonn sé ainmneacha na bhfeidhmchlár Calligra uile atá ar fáil"
 
 #: main.cpp:169
 #, kde-format

@@ -2,20 +2,22 @@
 # Copyright (C) 2010 This_file_is_part_of_KDE
 # This file is distributed under the same license as the VideoShape package.
 # Kevin Scannell <kscanne@gmail.com>, 2010.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: VideoShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2010-03-18 00:57-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: ChangeVideoCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -26,13 +28,13 @@ msgstr "Athraigh an físeán"
 #: forms/VideoToolWidget.ui:33
 #, kde-format
 msgid "Replace video..."
-msgstr ""
+msgstr "Físeán a athsholáthar..."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnPlay)
 #: forms/VideoToolWidget.ui:40
 #, kde-format
 msgid "Play Video"
-msgstr ""
+msgstr "Seinn Físeán"
 
 #: FullScreenPlayer.cpp:54 VideoTool.cpp:34
 #, kde-format
@@ -77,4 +79,4 @@ msgstr "Físeán, leabaithe nó lánscáileáin"
 #: VideoToolFactory.cpp:18
 #, kde-format
 msgid "Video handling"
-msgstr ""
+msgstr "Láimhseáil físe"

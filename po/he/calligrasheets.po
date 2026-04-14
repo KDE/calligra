@@ -10,20 +10,20 @@
 #
 # Diego Iastrubni <elcuco@kde.org>, 2012.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-11-11 09:01+0200\n"
+"PO-Revision-Date: 2026-04-11 22:15+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.3\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -13053,7 +13053,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:143
 #, kde-format
 msgid "&Convert first letter to uppercase"
-msgstr "המר או&ת ראשונה לאות רישית"
+msgstr "המרת או&ת ראשונה לאות רישית"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, hideZeroCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:150
@@ -13066,7 +13066,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:153
 #, kde-format
 msgid "&Hide zero"
-msgstr "&הסתר אפס"
+msgstr "ה&סתרת אפס"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showFormulaCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:160
@@ -13080,7 +13080,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:163
 #, kde-format
 msgid "Show &formula"
-msgstr "הצג &נוסחאות"
+msgstr "הצגת &נוסחאות"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showColumnAsNumbersCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:170
@@ -13094,7 +13094,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:173
 #, kde-format
 msgid "Show column as &numbers"
-msgstr "הצג &מספרי טורים"
+msgstr "הצגת &מספרי עמודות"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showFormulaIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:180
@@ -13109,7 +13109,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:183
 #, kde-format
 msgid "Show formula &indicator"
-msgstr "הצג &סימון נוסחאות"
+msgstr "הצגת מ&חוון נוסחאות"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:190
@@ -13123,7 +13123,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:193
 #, kde-format
 msgid "Show &grid"
-msgstr "הצג ר&שת"
+msgstr "הצגת ר&שת"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, autoCalcCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:200
@@ -13290,7 +13290,7 @@ msgstr "הסתר טור"
 #: part/Headers.cpp:231 part/Headers.cpp:721
 #, kde-format
 msgid "Area is too large."
-msgstr "התחום גדול מדיי."
+msgstr "התחום גדול מדי."
 
 #: part/PrintJob.cpp:88
 #, kde-format
@@ -13315,7 +13315,7 @@ msgstr "שינוי מאפייני הגיליון הנוכחי"
 #: part/View.cpp:233 part/View.cpp:2020
 #, kde-format
 msgid "Insert Sheet"
-msgstr "הוסף גיליון"
+msgstr "הוספת גיליון"
 
 #: part/View.cpp:234
 #, kde-format
@@ -13335,7 +13335,7 @@ msgstr "הסתרת הגיליון הפעיל"
 #: part/View.cpp:244 part/View.cpp:1828 part/View.cpp:1833 part/View.cpp:2025
 #, kde-format
 msgid "Remove Sheet"
-msgstr "הסר גיליון"
+msgstr "הסרת גיליון"
 
 #: part/View.cpp:245 part/View.cpp:2021 part/View.cpp:2026
 #, kde-format
@@ -13345,7 +13345,7 @@ msgstr "הסרת הגיליון הפעיל"
 #: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
-msgstr "שינוי שם הגיליון..."
+msgstr "שינוי שם הגיליון…"
 
 #: part/View.cpp:252
 #, kde-format
@@ -13355,7 +13355,7 @@ msgstr "שינוי שם הגיליון הפעיל"
 #: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
-msgstr "הצגת גיליון..."
+msgstr "הצגת גיליון…"
 
 #: part/View.cpp:257
 #, kde-format
@@ -13365,7 +13365,7 @@ msgstr "הצגת גיליון מוסתר"
 #: part/View.cpp:259
 #, kde-format
 msgid "Hide Sheet"
-msgstr "הסתר גיליון"
+msgstr "הסתרת גיליון"
 
 #: part/View.cpp:262
 #, kde-format
@@ -13375,7 +13375,7 @@ msgstr "הסתרת הגיליון הפעיל"
 #: part/View.cpp:264
 #, kde-format
 msgid "Page Layout..."
-msgstr "הגדרות עמוד..."
+msgstr "הגדרות עמוד…"
 
 #: part/View.cpp:267
 #, kde-format
@@ -13385,7 +13385,7 @@ msgstr "ציון פריסת הגיליון האלקטרוני לשם הדפסה"
 #: part/View.cpp:269
 #, kde-format
 msgid "Reset Print Range"
-msgstr "אפס טווח הדפסה"
+msgstr "איפוס טווח הדפסה"
 
 #: part/View.cpp:272
 #, kde-format
@@ -13400,12 +13400,12 @@ msgstr "מתאר עמוד"
 #: part/View.cpp:275
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
-msgstr "הצג על גבי הגיליון האלקטרוני היכן יהיו גבולות העמודים"
+msgstr "הצגה על גבי הגיליון האלקטרוני היכן יהיו גבולות העמודים"
 
 #: part/View.cpp:279
 #, kde-format
 msgid "Recalculate Sheet"
-msgstr "חשב גיליון מחדש"
+msgstr "חישוב גיליון מחדש"
 
 #: part/View.cpp:281 part/View.cpp:289
 #, kde-format
@@ -13415,7 +13415,7 @@ msgstr "חישוב מחדש"
 #: part/View.cpp:285
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
-msgstr "חישוב מחדש של הערכים של כל התאים בגיליון העבודה הנוכחי"
+msgstr "חישוב הערכים של כל התאים בגיליון העבודה הנוכחי מחדש"
 
 #: part/View.cpp:287
 #, kde-format
@@ -13430,7 +13430,7 @@ msgstr "חישוב מחדש של הערכים של כל התאים בכל גיל
 #: part/View.cpp:295
 #, kde-format
 msgid "Protect &Sheet..."
-msgstr "&הגנה על הגיליון..."
+msgstr "ה&גנה על הגיליון…"
 
 #: part/View.cpp:297
 #, kde-format
@@ -13450,7 +13450,7 @@ msgstr "הגנה על המסמך מפני שינויים"
 #: part/View.cpp:307
 #, kde-format
 msgid "&Create Template From Document..."
-msgstr "יצירת &תבנית מתוך המסמך..."
+msgstr "יצירת &תבנית מהמסמך…"
 
 #: part/View.cpp:311
 #, kde-format
@@ -13700,7 +13700,7 @@ msgstr ""
 #: part/View.cpp:1856
 #, kde-format
 msgid "Enter name:"
-msgstr "הזן שם:"
+msgstr "נא למלא שם:"
 
 #: part/View.cpp:1856
 #, kde-format
@@ -13720,7 +13720,7 @@ msgstr "שם הגיליון לא יכול להיות ריק."
 #: part/View.cpp:1868
 #, kde-format
 msgid "This name is already used."
-msgstr "שם זה כבר בשימוש."
+msgstr "השם הזה כבר בשימוש."
 
 #: part/View.cpp:1936
 #, kde-format
@@ -13735,12 +13735,12 @@ msgstr "ממוצע: "
 #: part/View.cpp:1944
 #, kde-format
 msgid "Min: "
-msgstr "מינימום: "
+msgstr "מזערי: "
 
 #: part/View.cpp:1948
 #, kde-format
 msgid "Max: "
-msgstr "מקסימום: "
+msgstr "מרבי: "
 
 #: part/View.cpp:1952
 #, kde-format
@@ -13870,12 +13870,12 @@ msgstr "דצמבר"
 #: ui/commands/AutoFillCommand.cpp:137
 #, kde-format
 msgid "Jan"
-msgstr "ינו'"
+msgstr "ינו׳"
 
 #: ui/commands/AutoFillCommand.cpp:138
 #, kde-format
 msgid "Feb"
-msgstr "פבר'"
+msgstr "פבר׳"
 
 #: ui/commands/AutoFillCommand.cpp:139
 #, kde-format
@@ -13885,7 +13885,7 @@ msgstr "מרץ"
 #: ui/commands/AutoFillCommand.cpp:140
 #, kde-format
 msgid "Apr"
-msgstr "אפר'"
+msgstr "אפר׳"
 
 #: ui/commands/AutoFillCommand.cpp:141
 #, kde-format
@@ -13896,37 +13896,37 @@ msgstr "מאי"
 #: ui/commands/AutoFillCommand.cpp:142
 #, kde-format
 msgid "Jun"
-msgstr "יונ'"
+msgstr "יונ׳"
 
 #: ui/commands/AutoFillCommand.cpp:143
 #, kde-format
 msgid "Jul"
-msgstr "יול'"
+msgstr "יול׳"
 
 #: ui/commands/AutoFillCommand.cpp:144
 #, kde-format
 msgid "Aug"
-msgstr "אוג'"
+msgstr "אוג׳"
 
 #: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Sep"
-msgstr "ספט'"
+msgstr "ספט׳"
 
 #: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Oct"
-msgstr "אוק'"
+msgstr "אוק׳"
 
 #: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Nov"
-msgstr "נוב'"
+msgstr "נוב׳"
 
 #: ui/commands/AutoFillCommand.cpp:148
 #, kde-format
 msgid "Dec"
-msgstr "דצמ'"
+msgstr "דצמ׳"
 
 #: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
@@ -13966,37 +13966,37 @@ msgstr "יום ראשון"
 #: ui/commands/AutoFillCommand.cpp:164
 #, kde-format
 msgid "Mon"
-msgstr "ב'"
+msgstr "ב׳"
 
 #: ui/commands/AutoFillCommand.cpp:165
 #, kde-format
 msgid "Tue"
-msgstr "ג'"
+msgstr "ג׳"
 
 #: ui/commands/AutoFillCommand.cpp:166
 #, kde-format
 msgid "Wed"
-msgstr "ד'"
+msgstr "ד׳"
 
 #: ui/commands/AutoFillCommand.cpp:167
 #, kde-format
 msgid "Thu"
-msgstr "ה'"
+msgstr "ה"
 
 #: ui/commands/AutoFillCommand.cpp:168
 #, kde-format
 msgid "Fri"
-msgstr "ו'"
+msgstr "ו׳"
 
 #: ui/commands/AutoFillCommand.cpp:169
 #, kde-format
 msgid "Sat"
-msgstr "שבת"
+msgstr "ש׳"
 
 #: ui/commands/AutoFillCommand.cpp:170
 #, kde-format
 msgid "Sun"
-msgstr "א'"
+msgstr "א׳"
 
 #: ui/commands/AutoFillCommand.cpp:677
 msgctxt "(qtundo-format)"
@@ -14560,7 +14560,7 @@ msgstr ""
 #: ui/dialogs/LayoutPage_Float.cpp:159
 #, kde-format
 msgid "variable"
-msgstr "מישתנה"
+msgstr "משתנה"
 
 #: ui/dialogs/LayoutPage_Float.cpp:163
 #, kde-format
@@ -14693,7 +14693,7 @@ msgstr "סגנון לא יכול לרשת את עצמו."
 #: ui/dialogs/LayoutPage_General.cpp:106
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
-msgstr "הסגנון לא יכול לרשת מ־\"%1\" עקב התייחסויות רקורסיביות."
+msgstr "הסגנון לא יכול לרשת מ־„%1” עקב הפניות נסוגות."
 
 #: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format

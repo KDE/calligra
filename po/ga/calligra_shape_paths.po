@@ -2,31 +2,33 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PathShapes package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/PathShapes.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2007-07-22 14:30-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: ellipse/EllipseShapeConfigCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
-msgstr ""
+msgstr "Athraigh an eilips"
 
 # ok
 #: ellipse/EllipseShapeConfigWidget.cpp:16
 #, kde-format
 msgid "Arc"
-msgstr "Arc"
+msgstr "Stua"
 
 #: ellipse/EllipseShapeConfigWidget.cpp:17
 #, kde-format
@@ -91,32 +93,32 @@ msgstr "Éilips"
 #: enhancedpath/CalloutShapeFactory.cpp:33
 #, kde-format
 msgid "A callout shape"
-msgstr ""
+msgstr "Cruth glao amach"
 
 #: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
 msgid "Rectangular Callout"
-msgstr ""
+msgstr "Glao Dronuilleogach"
 
 #: enhancedpath/CalloutShapeFactory.cpp:150
 #, kde-format
 msgid "A rectangular callout"
-msgstr ""
+msgstr "Glao dronuilleogach"
 
 #: enhancedpath/CalloutShapeFactory.cpp:229
 #, kde-format
 msgid "Rounded Callout"
-msgstr ""
+msgstr "Glaoite Babhta"
 
 #: enhancedpath/CalloutShapeFactory.cpp:231
 #, kde-format
 msgid "A rounded rectangular callout"
-msgstr ""
+msgstr "Glao amach dronuilleogach cruinn"
 
 #: enhancedpath/CalloutToolFactory.cpp:23
 #, kde-format
 msgid "Callout editing"
-msgstr ""
+msgstr "Eagarthóireacht glaonna amach"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:26
 #, kde-format
@@ -183,7 +185,7 @@ msgstr "Giarcheann"
 #: rectangle/RectangleShapeConfigCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Change rectangle"
-msgstr ""
+msgstr "Athraigh dronuilleog"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
 #: rectangle/RectangleShapeConfigWidget.ui:5
@@ -216,7 +218,7 @@ msgstr "Dronuilleog"
 #: spiral/SpiralShapeConfigCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Change spiral"
-msgstr ""
+msgstr "Sprial athraithe"
 
 #: spiral/SpiralShapeConfigWidget.cpp:16
 #, kde-format
@@ -231,12 +233,12 @@ msgstr "Líne"
 #: spiral/SpiralShapeConfigWidget.cpp:23
 #, kde-format
 msgid "Clockwise"
-msgstr ""
+msgstr "Deiseal"
 
 #: spiral/SpiralShapeConfigWidget.cpp:24
 #, kde-format
 msgid "Anticlockwise"
-msgstr ""
+msgstr "Tuathalach"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: spiral/SpiralShapeConfigWidget.ui:13
@@ -269,13 +271,13 @@ msgstr "Giuirléid bhíseach"
 #: star/StarShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change star"
-msgstr ""
+msgstr "Athraigh réalta"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
 #: star/StarShapeConfigWidget.ui:13
 #, kde-format
 msgid "Star shape"
-msgstr "Giuirléid réiltín"
+msgstr "Cruth réalta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: star/StarShapeConfigWidget.ui:19
@@ -309,12 +311,12 @@ msgstr "Giuirléid réiltín"
 #: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:39
 #, kde-format
 msgid "A star"
-msgstr "Réiltín"
+msgstr "Réalta"
 
 #: star/StarShapeFactory.cpp:37
 #, kde-format
 msgid "Star"
-msgstr "Réiltín"
+msgstr "Réalta"
 
 #: star/StarShapeFactory.cpp:51
 #, kde-format

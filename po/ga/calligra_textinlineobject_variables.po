@@ -2,40 +2,42 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the VariablesPlugin package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2007-04-15 19:05-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
 #, kde-format
 msgid "Format:"
-msgstr ""
+msgstr "Formáid:"
 
 #: ChapterVariable.cpp:206
 #, kde-format
 msgid "Number"
-msgstr ""
+msgstr "Uimhir"
 
 #: ChapterVariable.cpp:206
 #, kde-format
 msgid "Name"
-msgstr ""
+msgstr "Ainm"
 
 #: ChapterVariable.cpp:206
 #, kde-format
 msgid "Number and name"
-msgstr ""
+msgstr "Uimhir agus ainm"
 
 #: ChapterVariable.cpp:206
 #, kde-format
@@ -45,7 +47,7 @@ msgstr "Uimhir gan deighilteoir"
 #: ChapterVariable.cpp:207
 #, kde-format
 msgid "Number and name without separator"
-msgstr ""
+msgstr "Uimhir agus ainm gan deighilteoir"
 
 #: ChapterVariable.cpp:211
 #, kde-format
@@ -226,7 +228,7 @@ msgstr "..."
 #: InfoVariableFactory.cpp:24
 #, kde-format
 msgid "Author Name"
-msgstr ""
+msgstr "Ainm an Údair"
 
 #: InfoVariableFactory.cpp:32
 #, kde-format
@@ -241,7 +243,7 @@ msgstr "Ábhar"
 #: InfoVariableFactory.cpp:48
 #, kde-format
 msgid "File Name"
-msgstr ""
+msgstr "Ainm Comhaid"
 
 #: InfoVariableFactory.cpp:56
 #, kde-format
@@ -266,12 +268,12 @@ msgstr "Uimhir Leathanaigh"
 #: UserVariableFactory.cpp:22
 #, kde-format
 msgid "Custom"
-msgstr ""
+msgstr "Saincheaptha"
 
 #: UserVariableOptionsWidget.cpp:34
 #, kde-format
 msgid "Name:"
-msgstr ""
+msgstr "Ainm:"
 
 #: UserVariableOptionsWidget.cpp:45
 #, kde-format
@@ -296,7 +298,7 @@ msgstr "Boole"
 #: UserVariableOptionsWidget.cpp:64
 #, kde-format
 msgid "Float"
-msgstr ""
+msgstr "Snámh"
 
 #: UserVariableOptionsWidget.cpp:65
 #, kde-format
@@ -321,12 +323,12 @@ msgstr "Am"
 #: UserVariableOptionsWidget.cpp:69
 #, kde-format
 msgid "Formula"
-msgstr ""
+msgstr "Foirmle"
 
 #: UserVariableOptionsWidget.cpp:70
 #, kde-format
 msgid "Void"
-msgstr ""
+msgstr "Folús"
 
 #: UserVariableOptionsWidget.cpp:75
 #, kde-format
@@ -341,14 +343,14 @@ msgstr "Athróg Nua"
 #: UserVariableOptionsWidget.cpp:150
 #, kde-format
 msgid "Name for new variable:"
-msgstr ""
+msgstr "Ainm don athróg nua:"
 
 #: UserVariableOptionsWidget.cpp:166
 #, kde-format
 msgid "Delete variable <b>%1</b>?"
-msgstr ""
+msgstr "Scrios an athróg <b>%1</b>?"
 
 #: UserVariableOptionsWidget.cpp:167
 #, kde-format
 msgid "Delete Variable"
-msgstr ""
+msgstr "Scrios Athróg"

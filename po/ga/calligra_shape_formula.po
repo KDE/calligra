@@ -2,81 +2,83 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the FormulaShape package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice/FormulaShape.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2009-01-20 10:11-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:27+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell,Aindriú Mac Giolla Eoin"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "seoc@iolfree.ie,kscanne@gmail.com,aindriu80@yahoo.com"
 
 #: FormulaCommand.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Add text to formula"
-msgstr ""
+msgstr "Cuir téacs leis an bhfoirmle"
 
 #: FormulaCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Change rows"
-msgstr ""
+msgstr "Athraigh sraitheanna"
 
 #: FormulaEditor.cpp:71
 msgctxt "(qtundo-format)"
 msgid "Add text"
-msgstr ""
+msgstr "Cuir téacs leis"
 
 #: FormulaEditor.cpp:104
 msgctxt "(qtundo-format)"
 msgid "Insert row"
-msgstr ""
+msgstr "Cuir isteach sraith"
 
 #: FormulaEditor.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Remove row"
-msgstr ""
+msgstr "Bain an tsraith"
 
 #: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Insert column"
-msgstr ""
+msgstr "Cuir colún isteach"
 
 #: FormulaEditor.cpp:122
 msgctxt "(qtundo-format)"
 msgid "Remove column"
-msgstr ""
+msgstr "Bain colún"
 
 #: FormulaEditor.cpp:148
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
-msgstr ""
+msgstr "Cuir eilimintí foirmle isteach."
 
 #: FormulaEditor.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
-msgstr ""
+msgstr "Bain eilimintí foirmle"
 
 #: FormulaToolEditWidget.cpp:28
 #, kde-format
 msgctxt "@title:group"
 msgid "Edit"
-msgstr ""
+msgstr "Cuir in Eagar"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: FormulaToolEditWidget.ui:17
@@ -88,7 +90,7 @@ msgstr "Cló:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Insert"
-msgstr ""
+msgstr "Ionsáigh"
 
 #: FormulaToolWidget.cpp:70
 #, kde-format
@@ -119,19 +121,19 @@ msgstr "Rudaí éagsúla"
 #: FormulaToolWidget.ui:17
 #, kde-format
 msgid "Elements:"
-msgstr ""
+msgstr "Eilimintí:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:106
 #, kde-format
 msgid "Symbols:"
-msgstr ""
+msgstr "Siombailí:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: FormulaToolWidget.ui:195
 #, kde-format
 msgid "Actions:"
-msgstr ""
+msgstr "Gníomhartha:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonLoad)
 #: FormulaToolWidget.ui:245
@@ -152,23 +154,23 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
-"Tá nasc seachtrach le cáipéis chianda sa cháipéis seo\n"
+"Tá nasc seachtrach chuig doiciméad iargúlta sa cháipéis seo\n"
 "%1"
 
 #: KoFormulaShape.cpp:201
 #, kde-format
 msgid "Confirmation Required"
-msgstr "Ní mór cinntiú"
+msgstr "Deimhniú Riachtanach"
 
 #: KoFormulaShape.cpp:202
 #, kde-format
 msgid "Download"
-msgstr "Íosluchtaigh"
+msgstr "Íoslódáil"
 
 #: KoFormulaShape.cpp:203
 #, kde-format
 msgid "Skip"
-msgstr "Ná bac leis"
+msgstr "Léim"
 
 #: KoFormulaShapeFactory.cpp:20
 #, kde-format
@@ -273,34 +275,34 @@ msgstr "Bain colún"
 #: KoFormulaToolFactory.cpp:17
 #, kde-format
 msgid "Formula editing"
-msgstr ""
+msgstr "Eagarthóireacht foirmle"
 
 #: KoM2MMLForumulaTool.cpp:98
 #, kde-format
 msgid "Mode: "
-msgstr ""
+msgstr "Mód: "
 
 #: KoM2MMLForumulaTool.cpp:101
 #, kde-format
 msgid "LaTeX"
-msgstr ""
+msgstr "LaTeX"
 
 #: KoM2MMLForumulaTool.cpp:103
 #, kde-format
 msgid "Matlab"
-msgstr ""
+msgstr "Matlab"
 
 #: KoM2MMLForumulaTool.cpp:175
 #, kde-format
 msgid "Parse error."
-msgstr ""
+msgstr "Earráid pharsála."
 
 #: KoM2MMLForumulaTool.cpp:204
 #, kde-format
 msgid "Edit formula with LaTeX/Matlab syntax"
-msgstr ""
+msgstr "Cuir an fhoirmle in eagar le comhréir LaTeX/Matlab"
 
 #: KoM2MMLForumulaTool.cpp:206
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
-msgstr ""
+msgstr "Cuir an fhoirmle in eagar le comhréir LaTeX"

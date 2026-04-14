@@ -2,30 +2,32 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the TableShape package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: TableShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2009-12-24 06:59-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-03-06 13:28+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
+"Language-Team: Irish \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
-"3 : 4\n"
+"3 : 4;\n"
+"X-Generator: Weblate 5.16\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell,Aindriú Mac Giolla Eoin"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "seoc@iolfree.ie,kscanne@gmail.com,aindriu80@yahoo.com"
 
 #: SheetsEditor.cpp:57 SheetsEditor.cpp:124
 #, kde-format
@@ -53,21 +55,23 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"Tá nasc seachtrach chuig doiciméad iargúlta sa cháipéis seo\n"
+"%1"
 
 #: TableShape.cpp:301
 #, kde-format
 msgid "Confirmation Required"
-msgstr ""
+msgstr "Deimhniú Riachtanach"
 
 #: TableShape.cpp:302
 #, kde-format
 msgid "Download"
-msgstr ""
+msgstr "Íoslódáil"
 
 #: TableShape.cpp:303
 #, kde-format
 msgid "Skip"
-msgstr ""
+msgstr "Léim"
 
 #: TableShapeFactory.cpp:35
 #, kde-format
@@ -117,34 +121,34 @@ msgstr "Bileog Roghnaithe"
 #: TableTool.cpp:754
 #, kde-format
 msgid "View Options"
-msgstr ""
+msgstr "Roghanna Amhairc"
 
 #: TableToolFactory.cpp:21
 #, kde-format
 msgid "Table editing"
-msgstr ""
+msgstr "Eagarthóireacht tábla"
 
 #: ToolHeaders.cpp:279 ToolHeaders.cpp:863
 #, kde-format
 msgid "Area is too large."
-msgstr ""
+msgstr "Tá an limistéar ró-mhór."
 
 #: ToolHeaders.cpp:418
 #, kde-format
 msgid "Hide Row"
-msgstr ""
+msgstr "Folaigh an Ró"
 
 #: ToolHeaders.cpp:420
 #, kde-format
 msgid "Height: %1 %2"
-msgstr ""
+msgstr "Airde: %1 %2"
 
 #: ToolHeaders.cpp:1031
 #, kde-format
 msgid "Hide Column"
-msgstr ""
+msgstr "Folaigh Colún"
 
 #: ToolHeaders.cpp:1033
 #, kde-format
 msgid "Width: %1 %2"
-msgstr ""
+msgstr "Leithead: %1 %2"
