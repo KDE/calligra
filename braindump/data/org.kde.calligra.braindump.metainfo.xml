@@ -24,6 +24,7 @@
   <name xml:lang="eu">Braindump</name>
   <name xml:lang="fi">Braindump</name>
   <name xml:lang="fr">Braindump</name>
+  <name xml:lang="ga">Braindump</name>
   <name xml:lang="gl">Braindump</name>
   <name xml:lang="he">סיעור מוחין</name>
   <name xml:lang="hu">Braindump</name>
@@ -61,6 +62,7 @@
   <summary xml:lang="eu">Oharrak eta ideiak biltzea</summary>
   <summary xml:lang="fi">Muistiinpanot ja ideointi</summary>
   <summary xml:lang="fr">Notes et ensemble d'idées</summary>
+  <summary xml:lang="ga">Nótaí agus bailiú smaointe</summary>
   <summary xml:lang="gl">Recolección de notas e ideas</summary>
   <summary xml:lang="he">איסוף הערות ורעיונות</summary>
   <summary xml:lang="hu">Jegyzetek és ötletek gyűjtése</summary>
@@ -99,6 +101,7 @@
     <p xml:lang="eu">Braindump, zure buruan darabilzuna (ideiak, marrazkiak, irudiak, testuak…) zure ordenagailura eraman eta antolatzeko tresna bat da. Arbel zuriak sortu eta editatzeko aukera ematen du, testuak, irudiak, diagramak, eta abar gehitu ditzakezun oihal infinituak.</p>
     <p xml:lang="fi">Braindump on työkalu aivojesi sisällön (ajatusten, piirrosten, kuvien, tekstin…) purkamiseksi ja järjestämiseksi. Se toimii antamalla sinun luoda ja muokata valkotauluja, jotka ovat rajaton kangas tekstillesi, kuvillesi, kaavioillesi, piirroksillesi jne.</p>
     <p xml:lang="fr">Braindump est un outil pour mettre en ordre le contenu de votre cerveau (idées, dessins, images, textes…) sur votre ordinateur. Il vous permet de créer et d'éditer des tableaux blancs illimités sur lesquels vous pouvez ajouter des textes, des images, des graphiques, des dessins, etc.</p>
+    <p xml:lang="ga">Is uirlis é Braindump chun ábhar d’inchinne (smaointe, líníochtaí, íomhánna, téacsanna…) a dhumpáil agus a eagrú chuig do ríomhaire. Oibríonn sé trí ligean duit cláir bhána a chruthú agus a chur in eagar, ar chanbhás gan teorainn iad ar féidir leat téacsanna, íomhánna, cairteacha, líníochtaí, srl. a chur leis.</p>
     <p xml:lang="gl">Braindump é unha ferramenta para envorcar e organizar o que pasa pola súa cabeza (ideas, debuxos, imaxes, textos…) no seu computador. Permítelle crear e editar encerados, que son lenzos infinitos nos que pode engadir textos, imaxes, gráficos, debuxos…</p>
     <p xml:lang="he">סיעור מוחין הוא כלי לתיעוד וסידור תוכן המוח שלך (רעיונות, ציורים, תמונות, טקסטים…) למחשב שלך. הוא עובד דרך הרשאה ליצירת ועריכת לוחות תכנון, שהן משטחי ציור אינסופיים שאפשר להוסיף להם טקסטים, תמונות, תרשימים, ציורים ועוד.</p>
     <p xml:lang="hu">A Braindump egy eszköz, amellyel az ötleteit, rajzait, képeit, szövegeit és egyéb gondolatait „kiöntheti” és rendszerezheti a számítógépén. Úgy működik, hogy lehetővé teszi digitális rajztáblák létrehozását és szerkesztését, amelyekre szövegeket, képeket, diagramokat, rajzokat és sok egyebet helyezhet el.</p>
@@ -136,6 +139,7 @@
       <caption xml:lang="eu">Braindump-en leiho nagusia musika partizio bat eta beste forma asko erakusten duena</caption>
       <caption xml:lang="fi">Braindumpin pääikkuna, jossa näkyy musiikkiosio ja muita kuvioita</caption>
       <caption xml:lang="fr">Fenêtre principale de Braindump affichant une partition musicale et de nombreuses autres formes</caption>
+      <caption xml:lang="ga">Príomhfhuinneog Braindump ina bhfuil críochdheighilt cheoil agus go leor cruthanna eile</caption>
       <caption xml:lang="gl">Xanela principal de Braindump amosando unha división musical e moitas outras formas.</caption>
       <caption xml:lang="he">החלון הראשי של סיעור מוחין שמציג חלק מוזיקלי ושלל צורות נוספות</caption>
       <caption xml:lang="hu">A Braindump főablaka, amely egy kottát és számos egyéb alakzatot jelenít meg</caption>
@@ -195,6 +199,7 @@
         <p xml:lang="es">Esta versión añade compatibilidad con flatpak al paquete Calligra Office.</p>
         <p xml:lang="fi">Tämä julkaisu lisää Calligra-toimisto-ohjelmistoon Flatpak-tuen.</p>
         <p xml:lang="fr">Cette version ajoute la prise en charge de FlatPak à la suite Calligra Office.</p>
+        <p xml:lang="ga">Cuireann an eisiúint seo tacaíocht flatpak leis an tsraith Calligra Office.</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office.</p>
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
@@ -203,6 +208,7 @@
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
+        <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -215,6 +221,7 @@
         <p xml:lang="es">Los cambios más significativos son que Calligra ha realizado la transición completa a Qt6 y KF6, y que se ha llevado a cabo una gran reorganización de la interfaz de usuario.</p>
         <p xml:lang="fi">Merkittävimpiä muutoksia on Calligran siirros kokonaisuudessaan Qt6:een ja KF6:een sekä käyttöliittymän iso uudistus.</p>
         <p xml:lang="fr">Les modifications les plus significatives sont que Calligra a été entièrement migré vers Qt6 et KF6 et une refonte majeure de son interface utilisateur.</p>
+        <p xml:lang="ga">Is iad na hathruithe is suntasaí ná gur aistríodh Calligra go hiomlán go Qt6 agus KF6, mar aon le hathchóiriú mór ar a chomhéadan úsáideora.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
@@ -223,6 +230,7 @@
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
+        <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
       </description>
     </release>
   </releases>

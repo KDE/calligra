@@ -17,6 +17,7 @@
   <name xml:lang="eu">Calligra Words</name>
   <name xml:lang="fi">Calligra Words</name>
   <name xml:lang="fr">Calligra Words</name>
+  <name xml:lang="ga">Focail Calligra</name>
   <name xml:lang="gl">Calligra Words</name>
   <name xml:lang="he">Calligra מילים</name>
   <name xml:lang="hu">Calligra Words</name>
@@ -54,6 +55,7 @@
   <summary xml:lang="eu">Testu-prozesatzailea</summary>
   <summary xml:lang="fi">Tekstinkäsittely</summary>
   <summary xml:lang="fr">Traitement de texte</summary>
+  <summary xml:lang="ga">Próiseálaí Focal</summary>
   <summary xml:lang="gl">Procesador de texto</summary>
   <summary xml:lang="he">מעבד תמלילים</summary>
   <summary xml:lang="hsb">Wobdźěłar tekstow</summary>
@@ -97,6 +99,7 @@
     <p xml:lang="eu">Words, testu-prozesatzaile eta argitaratzeko mahaigaineko aplikazio intuitibo bat da. Hori erabiliz, dokumentu informatibo eta erakargarriak sor ditzakezu, erraz eta aise.</p>
     <p xml:lang="fi">Words on intuitiivinen tekstinkäsittely- ja taitto-ohjelma. Sen avulla voit luoda informatiivisia ja vaikuttavia tekstitiedostoja mukavasti ja helposti.</p>
     <p xml:lang="fr">Words est un traitement de texte intuitif et une application bureautique de publication. Avec lui, vous pouvez facilement créer des documents informatifs et attractifs.</p>
+    <p xml:lang="ga">Is feidhmchlár próiseála focal agus foilsitheoireachta deisce iomasach é Words. Leis, is féidir leat doiciméid faisnéiseacha agus tarraingteacha a chruthú le pléisiúr agus go héasca.</p>
     <p xml:lang="gl">Words é unha aplicación intuitiva de procesamento de texto e publicación de escritorio. Con ela pode crear documentos informativos e atractivos plácida e facilmente.</p>
     <p xml:lang="he">„מילים” הוא יישום נהיר למחשב לעיבוד תמלילים והפקת תוכן. באמצעותו, אפשר ליצור מסמכים רבי משמעות ומושכי עין בצורה מהנה ופשוטה.</p>
     <p xml:lang="hsb">Words je intuitiwny wobdźěłar tekstow a dtp aplikacija. Z nim móžeće jednorje a přihódnje informatiwne a atraktiwne dokumenty wutworić.</p>
@@ -136,6 +139,7 @@
     <p xml:lang="eu">Ezaugarriak:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="ga">Gnéithe:</p>
     <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="he">יכולות:</p>
     <p xml:lang="hsb">Wosebitosće:</p>
@@ -176,6 +180,7 @@
       <li xml:lang="eu">Markoetan oinarritutako edizioa</li>
       <li xml:lang="fi">Kehyksiin perustuva muokkaus</li>
       <li xml:lang="fr">Édition à base de cadres</li>
+      <li xml:lang="ga">Eagarthóireacht bunaithe ar fhráma</li>
       <li xml:lang="gl">Edición baseada en marcos.</li>
       <li xml:lang="he">עריכת מבוססת מסגרות</li>
       <li xml:lang="hsb">Na ramikach bazowane wobdźěłanje</li>
@@ -215,6 +220,7 @@
       <li xml:lang="eu">Dokumentuak txertatzeko aukera ematen du</li>
       <li xml:lang="fi">Tiedostojen upottamisen tuki</li>
       <li xml:lang="fr">Permet les documents intégrés</li>
+      <li xml:lang="ga">Ceadaíonn leabú Doiciméad</li>
       <li xml:lang="gl">Permite incrustar documentos.</li>
       <li xml:lang="he">מאפשר הטמעה של מסמכים</li>
       <li xml:lang="hsb">Integrowanje dokumentow móžne</li>
@@ -254,6 +260,7 @@
       <li xml:lang="eu">Erabiltzaile-interfazea norbere gustura egokitzea</li>
       <li xml:lang="fi">Käyttöliittymä mukautettavissa</li>
       <li xml:lang="fr">Personnalisation de l'interface</li>
+      <li xml:lang="ga">Saincheapadh comhéadan úsáideora</li>
       <li xml:lang="gl">Personalización da interface.</li>
       <li xml:lang="he">התאמה של ממשק המשתמש</li>
       <li xml:lang="hsb">Připrawjenje napohlada a nastrojow</li>
@@ -293,6 +300,7 @@
       <li xml:lang="eu">Testu-prozesatzaile moderno batetik espero diren ezaugarri guztiak ditu</li>
       <li xml:lang="fi">Kaikki nykyaikaiselta tekstinkäsittelyohjelmalta odotetut ominaisuudet</li>
       <li xml:lang="fr">Inclut toutes les fonctionnalités que l'on peut attendre d'un traitement de texte moderne</li>
+      <li xml:lang="ga">Áirítear leis na gnéithe uile a bhfuiltear ag súil leo ó phróiseálaí focal nua-aimseartha</li>
       <li xml:lang="gl">Inclúe todas as funcionalidades que pode esperar dun procesador de textos moderno.</li>
       <li xml:lang="he">כולל את כל היכולות כמצופה ממעבד תמלילים חדיש</li>
       <li xml:lang="hsb">Wobsahuje wšo, štož sej wot moderneho wobdźěłarja tekstow wočakujeće</li>
@@ -332,6 +340,7 @@
       <li xml:lang="eu">ODT (Open Document Text) onartzen du</li>
       <li xml:lang="fi">ODT- eli OpenDocument-tekstitiedostojen tuki</li>
       <li xml:lang="fr">Prise en charge du format « ODT » (Open Document Text)</li>
+      <li xml:lang="ga">Tacaíocht ODT (Téacs Doiciméid Oscailte)</li>
       <li xml:lang="gl">Compatíbel co formato ODT (Open Document Text).</li>
       <li xml:lang="he">תמיכה ב־ODT (טקסט מסמך פתוח)</li>
       <li xml:lang="hsb">ODT (Open Document Text) so podpěruje</li>
@@ -377,6 +386,7 @@
       <caption xml:lang="eu">Calligra Words leiho nagusia</caption>
       <caption xml:lang="fi">Calligra Wordsin pääikkuna</caption>
       <caption xml:lang="fr">Fenêtre principale de Calligra Stage</caption>
+      <caption xml:lang="ga">Príomhfhuinneog Calligra Words</caption>
       <caption xml:lang="gl">Xanela principal de Calligra Words.</caption>
       <caption xml:lang="he">החלון הראשי של Calligra מילים</caption>
       <caption xml:lang="hu">A Calligra Words főablaka</caption>
@@ -438,6 +448,7 @@
         <p xml:lang="es">Esta versión añade compatibilidad con flatpak al paquete Calligra Office.</p>
         <p xml:lang="fi">Tämä julkaisu lisää Calligra-toimisto-ohjelmistoon Flatpak-tuen.</p>
         <p xml:lang="fr">Cette version ajoute la prise en charge de FlatPak à la suite Calligra Office.</p>
+        <p xml:lang="ga">Cuireann an eisiúint seo tacaíocht flatpak leis an tsraith Calligra Office.</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office.</p>
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
@@ -446,6 +457,7 @@
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
+        <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -458,6 +470,7 @@
         <p xml:lang="es">Los cambios más significativos son que Calligra ha realizado la transición completa a Qt6 y KF6, y que se ha llevado a cabo una gran reorganización de la interfaz de usuario.</p>
         <p xml:lang="fi">Merkittävimpiä muutoksia on Calligran siirros kokonaisuudessaan Qt6:een ja KF6:een sekä käyttöliittymän iso uudistus.</p>
         <p xml:lang="fr">Les modifications les plus significatives sont que Calligra a été entièrement migré vers Qt6 et KF6 et une refonte majeure de son interface utilisateur.</p>
+        <p xml:lang="ga">Is iad na hathruithe is suntasaí ná gur aistríodh Calligra go hiomlán go Qt6 agus KF6, mar aon le hathchóiriú mór ar a chomhéadan úsáideora.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
@@ -466,6 +479,7 @@
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
+        <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
         <p>Word now features the new sidebar design, and the main view uses a shadow to define the document borders. The Style Manager and Page Layout dialog were also updated with a new design.</p>
         <p xml:lang="ar">يتميز وورد الآن بتصميم جديد للشريط الجانبي، ويستخدم العرض الرئيسي ظلًا لتحديد حدود المستند. كما حُدث مربع حوار ”مدير الأنماط“ و”تخطيط الصفحة“ بتصميم جديد.</p>
         <p xml:lang="ca">El Word ara presenta el disseny nou de la barra lateral, i la vista principal utilitza una ombra per a definir les vores del document. El diàleg del gestor d'estils i la disposició de pàgines també s'han actualitzat amb un disseny nou.</p>
@@ -473,6 +487,7 @@
         <p xml:lang="es">Word muestra ahora el nuevo diseño de la barra lateral. La vista principal usa una sombra para definir los bordes del documento. El gestor de estilos y el diálogo del diseño de la página también se han actualizado con un nuevo diseño.</p>
         <p xml:lang="fi">Wordsin sivupaneeli on muotoiltu uudelleen, ja päänäkymä varjostaa tiedostojen reunat. Tyylinhallinta ja sivuasetteluikkuna päivitettiin myös uuteen uskoon.</p>
         <p xml:lang="fr">Word présente désormais la nouvelle conception graphique de la barre latérale. La vue principale utilise une ombre pour définir les bordures du document. Le gestionnaire de styles et la boîte de dialogue de mise en page ont également été mis à jour avec une nouvelle conception graphique.</p>
+        <p xml:lang="ga">Tá dearadh nua barra taoibh i Word anois, agus úsáideann an príomhradharc scáth chun teorainneacha an doiciméid a shainiú. Rinneadh an Bainisteoir Stíle agus an dialóg Leagan Amach Leathanaigh a nuashonrú le dearadh nua freisin.</p>
         <p xml:lang="it">Word ora presenta il nuovo aspetto della barra laterale e la vista principale utilizza un'ombra per definire i bordi del documento. Anche la finestra Gestione stili e Impaginazione sono state aggiornate con un nuovo aspetto.</p>
         <p xml:lang="ka">Word-ს ახლა გვერდითი პანელის ახალი დიზაინი აქვს და მთავარი ხედი დოკუმენტის საზღვრებისთვის ჩრდილებს იყენებს. ასევე განახლდა დიზაინი სტილების მენეჯერისა და გვერდის განლაგების დიალოგებისთვის.</p>
         <p xml:lang="nl">Word heeft nu een nieuw ontwerp voor de zijbalk en de hoofdweergave gebruikt een schaduw om de documentranden te definiëren. Het dialoogvenster Stijlbeheer en Pagina-indeling zijn ook bijgewerkt met een nieuw ontwerp.</p>
@@ -481,6 +496,7 @@
         <p xml:lang="sl">Word zdaj uporablja novo zasnovo stranske vrstice, glavni pogled pa uporablja senco za določanje robov dokumenta. Pogovorno okno Upravitelj slogov in Postavitev strani sta bila prav tako posodobljena z novo zasnovo.</p>
         <p xml:lang="tr">Sözcükler artık yeni bir kenar çubuğu tasarımı kullanıyor ve ana görünüm belge kenarlıklarını göstermek için gölge yapıyor. Biçem Yöneticisi ve Sayfa Yerleşimi iletişim kutuları da yeni bir tasarıma geçtiler.</p>
         <p xml:lang="uk">У Word оновлено дизайн бічної панелі, а на головній панелі перегляду використано тінь для визначення меж документа. Диспетчер стилів і діалогове вікно «Компонування сторінки» також отримали новий дизайн.</p>
+        <p xml:lang="zh-CN">单词现在具有新的侧边栏设计，主视图使用阴影来定义文件边界。样式管理器和页面布局对话框也更新了，设计改了。</p>
       </description>
     </release>
   </releases>
