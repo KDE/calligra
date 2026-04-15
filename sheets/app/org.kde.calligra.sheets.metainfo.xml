@@ -17,6 +17,7 @@
   <name xml:lang="eu">Calligra Sheets</name>
   <name xml:lang="fi">Calligra Sheets</name>
   <name xml:lang="fr">Calligra Sheets</name>
+  <name xml:lang="ga">Bileoga Calligra</name>
   <name xml:lang="gl">Calligra Sheets</name>
   <name xml:lang="he">גיליונות של Calligra</name>
   <name xml:lang="hu">Calligra Sheets</name>
@@ -53,6 +54,7 @@
   <summary xml:lang="eu">Kalkulu-orria</summary>
   <summary xml:lang="fi">Taulukkolaskenta</summary>
   <summary xml:lang="fr">Tableur</summary>
+  <summary xml:lang="ga">Scarbhileog</summary>
   <summary xml:lang="gl">Follas de cálculo</summary>
   <summary xml:lang="he">גיליון נתונים</summary>
   <summary xml:lang="hu">Munkafüzet</summary>
@@ -94,6 +96,7 @@
     <p xml:lang="eu">Calligra Sheets, kalkulatzeko tresna eta kalkulu-orri tresna guztiz funtzional bat da. Erabil ezazu negozioarekin lotutako hainbat kalkulu-orri azkar sortzeko eta kalkulatzeko, hala nola, diru-sarrerak eta gastuak, enplegatuen lanorduak, etab.</p>
     <p xml:lang="fi">Calligra Sheets on täysominaisuuksinen taulukkolaskentasovellus. Luot sillä nopeasti erilaisia talouslaskentaan liittyviä taulukoita kuten tulo- ja menotaulukoita, työntekijöiden työtuntitaulukoita jne.</p>
     <p xml:lang="fr">Calligra Sheets est un tableur complet. Utilisez-le pour créer rapidement différents tableaux et calculs, comme les revenus, les dépenses, les heures de travail de vos employés, etc.</p>
+    <p xml:lang="ga">Is uirlis ríofa agus scarbhileog lánfheistithe í Calligra Sheets. Bain úsáid as chun scarbhileoga éagsúla a bhaineann le gnó a chruthú agus a ríomh go tapa, amhail ioncam agus caiteachas, uaireanta oibre fostaithe, srl.</p>
     <p xml:lang="gl">Calligra Sheets é unha ferramenta completa de follas de cálculo. Úsea para crear rapidamente follas de cálculo de negocios, como por exemplo follas de gastos e ingresos, de horas de traballo…</p>
     <p xml:lang="he">גיליונות של Calligra הוא כלי חישוב וגיליון נתונים עתיר יכולות. אפשר להשתמש בו כדי ליצור ולחשב גיליונות נתונים עסקיים במהירות, כגון הכנסות והוצאות, שעות עבודה של עובדים ועוד.</p>
     <p xml:lang="hu">A Calligra Sheets egy teljes funkcionalitású táblázatkezelő és számítási eszköz. Használhatja különféle üzleti táblázatok — például bevétel- és kiadáskimutatások, munkavállalói munkaidő-nyilvántartások, stb. — gyors létrehozására és számítására.</p>
@@ -131,6 +134,7 @@
     <p xml:lang="eu">Ezaugarriak:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="ga">Gnéithe:</p>
     <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="he">יכולות:</p>
     <p xml:lang="hu">Funkciók:</p>
@@ -169,6 +173,7 @@
       <li xml:lang="eu">Erabili formak, oharrak edo gogoeta-mapak egiteko</li>
       <li xml:lang="fi">Muotojen käyttö muistiinpanojen tai miellekarttojen tallentamiseen</li>
       <li xml:lang="fr">Utilisez des formes pour prendre des notes ou des cartes heuristiques</li>
+      <li xml:lang="ga">Úsáid cruthanna chun nótaí nó léarscáileanna intinne a ghlacadh</li>
       <li xml:lang="gl">Use formas para tomar notas ou mapas mentais.</li>
       <li xml:lang="he">להשתמש בצורות כדי לתעד בפתקיות או למפות את המחשבות שלך</li>
       <li xml:lang="hu">Használjon alakzatokat jegyzeteléshez vagy gondolattérképek készítéséhez</li>
@@ -206,6 +211,7 @@
       <li xml:lang="eu">Aurrez definitutako txantiloien aukera zabala</li>
       <li xml:lang="fi">Laajalti erilaisia esimääritettyjä mallipohjia</li>
       <li xml:lang="fr">Large éventail de modèles prédéfinis</li>
+      <li xml:lang="ga">Raon mór teimpléid réamhshainithe</li>
       <li xml:lang="gl">Gran variedade de modelos predefinidos.</li>
       <li xml:lang="he">מגוון רחב של תבניות שסופקו מראש</li>
       <li xml:lang="hu">Széles választék előre definiált sablonokból</li>
@@ -242,6 +248,7 @@
       <li xml:lang="eu">Formula-zerrenda ahaltsu eta zehatza</li>
       <li xml:lang="fi">Tehokas ja kattava kaavaluettelo</li>
       <li xml:lang="fr">Liste de formules complète et variée</li>
+      <li xml:lang="ga">Liosta foirmlí cumhachtach agus cuimsitheach</li>
       <li xml:lang="gl">Lista de fórmulas potentes e fáciles de entender.</li>
       <li xml:lang="he">רשימת נוסחאות מקיפה ועוצמתית</li>
       <li xml:lang="hu">Hatékony és átfogó képletlista</li>
@@ -278,6 +285,7 @@
       <li xml:lang="eu">Ingurune ezagun batean lan egitea</li>
       <li xml:lang="fi">Työskentely tutussa ympäristössä</li>
       <li xml:lang="fr">Travaillez dans un environnement familier</li>
+      <li xml:lang="ga">Obair i dtimpeallacht eolach</li>
       <li xml:lang="gl">Traballe nun ambiente familiar.</li>
       <li xml:lang="he">עבודה בסביבה מוכרת</li>
       <li xml:lang="hu">Dolgozzon ismerős környezetben</li>
@@ -350,6 +358,7 @@
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
         <p xml:lang="es">Esta versión añade compatibilidad con flatpak al paquete Calligra Office.</p>
         <p xml:lang="fr">Cette version ajoute la prise en charge de FlatPak à la suite Calligra Office.</p>
+        <p xml:lang="ga">Cuireann an eisiúint seo tacaíocht flatpak leis an tsraith Calligra Office.</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office.</p>
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
@@ -358,6 +367,7 @@
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
+        <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -369,6 +379,7 @@
         <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
         <p xml:lang="es">Los cambios más significativos son que Calligra ha realizado la transición completa a Qt6 y KF6, y que se ha llevado a cabo una gran reorganización de la interfaz de usuario.</p>
         <p xml:lang="fr">Les modifications les plus significatives sont que Calligra a été entièrement migré vers Qt6 et KF6 et une refonte majeure de son interface utilisateur.</p>
+        <p xml:lang="ga">Is iad na hathruithe is suntasaí ná gur aistríodh Calligra go hiomlán go Qt6 agus KF6, mar aon le hathchóiriú mór ar a chomhéadan úsáideora.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
@@ -377,12 +388,14 @@
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
+        <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
         <p>As part of the Qt6 port, Sheets lost its scripting system based on the unmaintained Kross framework. Visually a noticable change is that the cell editor moved from a docker positioned on the left of the spreadsheet view by default to a normal widget on the top. This takes a lot less space which can be used by the spreadsheet.</p>
         <p xml:lang="ar">كجزء من منفذ Qt6، فقد شيت نظام البرمجة النصية الخاص به القائم على إطار عمل Kross غير المدعوم. ومن التغييرات الملحوظة بصريًا أن محرر الخلايا انتقل من موضعه الافتراضي على يسار عرض جدول البيانات إلى عنصر واجهة مستخدم عادي في الأعلى. وهذا يستهلك مساحة أقل بكثير يمكن استخدامها في جدول البيانات.</p>
         <p xml:lang="ca">Com a part de l'adaptació a les Qt6, el Sheets ha perdut el seu sistema de creació de scripts basat en l'entorn de treball Kross que no tenia manteniment. Visualment un canvi notable és que l'editor de cel·les s'ha mogut des d'un acoblador situat a l'esquerra de la vista del full de càlcul de manera predeterminada a un giny normal a la part superior. Això necessita molt menys espai que pot ser utilitzat pel full de càlcul.</p>
         <p xml:lang="ca-valencia">Com a part de l'adaptació a les Qt6, Sheets ha perdut el seu sistema de creació de scripts basat en l'entorn de treball Kross que no tenia manteniment. Visualment un canvi notable és que l'editor de cel·les s'ha mogut des d'un acoblador situat a l'esquerra de la vista del full de càlcul de manera predeterminada a un giny normal a la part superior. Açò necessita molt menys espai que pot ser utilitzat pel full de càlcul.</p>
         <p xml:lang="es">Como parte de la adaptación a Qt6, Sheets ha perdido su sistema de guiones basado en la infraestructura Kross, que carecía de mantenimiento. Un notable cambio visual es que el editor de celdas se ha movido de un panel situado a la izquierda de la vista de la hoja de cálculo (de forma predeterminada) a un widget normal en la parte superior, que ocupa mucho menos espacio que puede usar la hoja de cálculo.</p>
         <p xml:lang="fr">Dans le cadre du portage vers Qt6, Sheets a perdu son système de langage de scripts reposant sur l'environnement de développement Kross, qui n'est plus maintenu. Un changement visuel notable est que l'éditeur de cellules est passé d'un panneau positionné par défaut à gauche de la vue de la feuille de calcul à un composant graphique normal en haut. Cela prend beaucoup moins de place, qui peut être utilisée par la feuille de calcul.</p>
+        <p xml:lang="ga">Mar chuid den phort Qt6, chaill Sheets a chóras scriptithe bunaithe ar chreatlach Kross neamhchothabháilte. Athrú suntasach ó thaobh amhairc de ná gur bhog an t-eagarthóir cealla ó dhocálaí suite ar thaobh na láimhe clé den radharc scarbhileog de réir réamhshocraithe go giuirléid gnáth ar an mbarr. Tógann sé seo i bhfad níos lú spáis is féidir leis an scarbhileog a úsáid.</p>
         <p xml:lang="it">Con parte della conversione a Qt6, Sheets ha perso il suo sistema di scripting basato sul framework Kross, ormai non più supportato. Visivamente, un cambiamento notevole è che l'editor di celle è passato da un'area di aggancio posizionata in modo predefinito a sinistra della vista del foglio di calcolo a un normale oggetto nella parte alta. Questo occupa molto meno spazio, che può essere utilizzato dal foglio di calcolo.</p>
         <p xml:lang="ka">როგორც Qt6-ზე გადატანის ნაწილი, Sheets-მა დაკარგა თავისი სკრიტინგის სისტემა, რომელიც ყურადღებამიუქცეველ Kross ბიბლიოთეკაზე იყო დაფუძნებული. ვიზუალურად შესამჩნევი თვისება ისაა, რომ უჯრედის რედაქტორი გადატანილია ელცხრილის მარცხენა მხარეს არსებული პანელიდან ზედა მხარეს ნორმალურ ვიჯეტში. ამას ნაკლები ადგილი მიაქვს, რომელიც, შეგიძლიათ, ელცხრილისთვის გამოიყენოთ.</p>
         <p xml:lang="nl">Als onderdeel van de overzetting naar Qt6 verloor Sheets zijn scriptingsysteem, gebaseerd op het niet langer onderhouden Kross-framework. Visueel is een opvallende verandering dat de celbewerker is verplaatst van een vastzetter aan de linkerkant van de rekenbladweergave naar een normaal widget bovenaan. Dit neemt veel minder ruimte in beslag, die nu door het rekenblad zelf kan worden gebruikt.</p>
@@ -391,6 +404,7 @@
         <p xml:lang="sl">Kot del prenosa na Qt6 je Sheets izgubil svoj skriptni sistem, ki je temeljil na nevzdrževanem ogrodju Kross. Vizualno opazna sprememba je, da se je urejevalnik celic premaknil iz priklopnega okna, ki je bilo privzeto nameščeno na levi strani pogleda preglednice, v običajen pripomoček na vrhu. To zavzame veliko manj prostora, ki ga lahko uporabi preglednica.</p>
         <p xml:lang="tr">Qt6 aktarımının bir parçası olarak Tablolar, artık bakımı yapılmayan Kross çatısının sağladığı betik yazımı desteğini kaybetti. Görsel bir değişiklik olarak, hücre düzenleyicisi soldaki panel konumundan üstteki normal bir konuma taşındı. Bu, hesap sayfasının kullanabileceği bayağı bir alan açtı.</p>
         <p xml:lang="uk">У рамках портування Qt6, Таблиці втратили свою систему скриптів, засновану на непідтримуваних бібліотеках Kross. Візуально помітною зміною є те, що редактор комірок перемістився з бічної панелі, типово розташованої ліворуч від панелі перегляду електронної таблиці, до звичайного віджета згори. Це набагато зменшує займане місце, яке може використати для електронної таблиці.</p>
+        <p xml:lang="zh-CN">作为 Qt6 移植工作的一部分，Sheets 失去了基于失去维护的 Kross 框架的脚本系统。视觉上可注意的更改是单元格编辑器默认从位于电子表格视图左侧的停靠处移至顶部的普通部件。这花费的空间要少得多，这样电子表格就能使用空出的。</p>
       </description>
     </release>
   </releases>

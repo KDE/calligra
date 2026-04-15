@@ -24,6 +24,7 @@
   <name xml:lang="eu">Karbon</name>
   <name xml:lang="fi">Karbon</name>
   <name xml:lang="fr">Karbon</name>
+  <name xml:lang="ga">Carbón</name>
   <name xml:lang="gl">Karbon</name>
   <name xml:lang="hu">Karbon</name>
   <name xml:lang="ia">Karbon</name>
@@ -61,6 +62,7 @@
   <summary xml:lang="eu">Grafiko eskalagarriak</summary>
   <summary xml:lang="fi">Skaalautuva grafiikka</summary>
   <summary xml:lang="fr">Graphisme vectoriel</summary>
+  <summary xml:lang="ga">Grafaicí Inscálaithe</summary>
   <summary xml:lang="gl">Gráficos de tamaño variábel</summary>
   <summary xml:lang="hu">Vektoros rajzoló</summary>
   <summary xml:lang="ia">Graphicos scalabile</summary>
@@ -102,6 +104,7 @@
     <p xml:lang="eu">Karbon, marrazketa bektorialeko aplikazio bat da, erabiltzen erraza den erabiltzaile-interfaze bat, norbere gustura oso egokigarria, duena. Hori dela eta, Karbon bikaina da grafiko bektorialen mundua esploratzen hasitako erabiltzaileentzat, baita arte bektorial txundigarriak sortu nahi dituzten artistentzat ere.</p>
     <p xml:lang="fi">Karbon on vektorigrafiikkasovellus, jonka käyttöliittymä on helppo ja laajasti mukautettavissa ja laajennettavissa. Karbon on näin loistava sovellus vektorigrafiikan maailmaan vasta tutustuville käyttäjille samoin kuin henkeäsalpaavaa vektoritaidetta luoville taiteilijoille.</p>
     <p xml:lang="fr">Karbon est une application de dessin vectoriel avec une interface facile à utiliser, personnalisable et extensible. Cela fait de Karbon une application majeure pour les utilisateurs s'initiant au dessin vectoriel et pour les artistes voulant créer des œuvres à couper le souffle.</p>
+    <p xml:lang="ga">Is feidhmchlár líníochta veicteoir é Karbon le comhéadan úsáideora atá éasca le húsáid, atá an-shaincheaptha agus inleathnaithe. Fágann sin gur feidhmchlár iontach é Karbon d'úsáideoirí atá ag tosú ag iniúchadh shaol na ngrafaicí veicteoir chomh maith le healaíontóirí ar mian leo ealaín veicteoir iontach a chruthú.</p>
     <p xml:lang="gl">Karbon é unha aplicación de debuxo vectorial cunha interface de usuario fácil de usar, personalizar e ampliar. Iso fai de Karbon unha grande aplicación para usuarios que comezan a explorar o mundo das imaxes vectoriais, pero tamén para artistas que queren crear impresionantes obras de arte vectoriais.</p>
     <p xml:lang="hu">A Karbon egy vektorgrafikus rajzolóalkalmazás, amely könnyen használható, rendkívül testre szabható és bővíthető felhasználói felülettel rendelkezik. Ezáltal ideális választás mindazok számára, akik most ismerkednek a vektorgrafika világával, valamint azoknak a művészeknek, akik lenyűgöző vektorgrafikákat szeretnének alkotni.</p>
     <p xml:lang="id">Karbon adalah aplikasi menggambar vektor dengan antarmuka pengguna yang mudah digunakan, sangat dapat disesuaikan, dan dapat diekstensi. Itu membuat Karbon adalah aplikasi yang bagus untuk pengguna yang mulai menjelajahi dunia grafis vektor dan juga bagi para seniman yang ingin membuat seni vektor yang menakjubkan.</p>
@@ -136,6 +139,7 @@
     <p xml:lang="eu">Ezaugarriak:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="ga">Gnéithe:</p>
     <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="hu">Funkciók:</p>
     <p xml:lang="ia">Characteristicas</p>
@@ -175,6 +179,7 @@
       <li xml:lang="eu">ODG, SVG, WPG, WMF, EPS/PS zamatzeko euskarria</li>
       <li xml:lang="fi">Lukutuki ODG-, SVG-, WPG-, WMF- ja EPS/PS-muodoista</li>
       <li xml:lang="fr">Lecture des formats ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="ga">Tacaíocht lódála do ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="gl">Posibilidade de cargar ODG, SVG, WPG, WMF e EPS/PS.</li>
       <li xml:lang="hu">ODG, SVG, WPG, WMF, EPS/PS formátumok betöltésének támogatása</li>
       <li xml:lang="ia">Cargante supporto pro ODG, SVG, WPG, WMF, EPS/PS</li>
@@ -212,6 +217,7 @@
       <li xml:lang="eu">ODG, SVG, PNG, PDF, WMF idazteko euskarria</li>
       <li xml:lang="fi">Kirjoitustuki ODG-, SVG-, PNG-, PDF- ja WMF-muotoihin</li>
       <li xml:lang="fr">Écriture des formats ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="ga">Tacaíocht scríbhneoireachta do ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="gl">Posibilidade de xerar ODG, SVG, PNG, PDF e WMF.</li>
       <li xml:lang="hu">ODG, SVG, PNG, PDF, WMF formátumokba mentés támogatása</li>
       <li xml:lang="ia">Supporto de scriber pro ODG, SVG, PNG, PDF, WMF</li>
@@ -249,6 +255,7 @@
       <li xml:lang="eu">Norbere gustura egokigarria den erabiltzaile-interfazea, askatasunez koka daitezkeen tresna-barra eta zamaketariekin</li>
       <li xml:lang="fi">Mukautettava käyttöliittymä, jonka työkalurivit ja telakat ovat vapaasti sijoitettavissa</li>
       <li xml:lang="fr">Interface utilisateur personnalisable avec des barres d'outil librement déplaçables.</li>
+      <li xml:lang="ga">Comhéadan úsáideora saincheaptha le barraí uirlisí agus dugairí is féidir a chur in áit go saor</li>
       <li xml:lang="gl">Interface de usuario personalizábel con barras de ferramentas e docas que poden recolocarse libremente.</li>
       <li xml:lang="hu">Testreszabható felhasználói felület, szabadon elhelyezhető eszköztárakkal és dokkokkal</li>
       <li xml:lang="ia">Interfacie de usator personalisabile con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
@@ -285,6 +292,7 @@
       <li xml:lang="eu">Geruza zamaketaria dokumentu konplexuak erraz maneiatzeko, koadro txikien aurreikuspegia, arrastatu eta jareginez formak taldekatzeko euskarria, eta formen ikusgaitasuna kontrolatzea edo giltzatzea barne</li>
       <li xml:lang="fi">Monimutkaisten tiedostojen helppoon hallintaan tasotelakka, joka sisältää esikatselukuvat, muotojen ryhmittelyn tuen vetämällä ja pudottamalla sekä muotojen näkyvyyden ja lukitsemisen hallinnan</li>
       <li xml:lang="fr">Conteneurs de calques pour la manipulation facile de documents complexes incluant les vignettes d'aperçu, la prise en charge du groupement de formes par glisser-déposer, contrôle de la visibilité des formes et verrouillage</li>
+      <li xml:lang="ga">Dugaire sraitheanna le haghaidh láimhseáil éasca ar dhoiciméid chasta lena n-áirítear mionsamhlacha réamhamhairc, tacaíocht do chruthanna a ghrúpáil trí tharraingt agus scaoil, infheictheacht cruthanna a rialú nó glasáil</li>
       <li xml:lang="gl">Doca de capas para xestionar facilmente documentos complexos. Inclúe miniaturas de vista previa, permite agrupar formas arrastrando e soltando, controlar a visibilidade das formas ou bloquealas.</li>
       <li xml:lang="hu">Rétegdokkoló az összetett dokumentumok egyszerű kezeléséhez, előnézeti miniatűrökkel, az alakzatok csoportosításának támogatásával (fogd-és-vidd módszerrel), valamint az alakzatok láthatóságának és zárolásának vezérlésével</li>
       <li xml:lang="id">Docker layer untuk memudahkan penanganan dokumen rumit termasuk gambar-mini pratinjau, dukungan untuk pengelompokan bentuk melalui seret dan taruh, mengontrol visibilitas bentuk atau penguncian</li>
@@ -318,6 +326,7 @@
       <li xml:lang="eu">ibilbideak editatzeko tresna aurreratua, mihisean editatzeko gaitasun itzelekin</li>
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
       <li xml:lang="fr">Outil avancé d'édition d'emplacement avec des capacités d'édition dans les canevas performantes</li>
+      <li xml:lang="ga">Uirlis eagarthóireachta cosáin chun cinn le cumais eagarthóireachta iontacha ar an chanbhás</li>
       <li xml:lang="gl">Ferramenta avanzada de edición de rutas cunha gran funcionalidade de edición sobre o lenzo.</li>
       <li xml:lang="hu">Fejlett útvonalszerkesztő eszköz, kiváló közvetlen a vásznon történő szerkesztési lehetőségekkel</li>
       <li xml:lang="id">Alat pengeditan alur tingkat-lanjut dengan kemampuan pengeditan di kanvas yang bagus</li>
@@ -351,6 +360,7 @@
       <li xml:lang="eu">Ibilbide-formak sortzeko marrazteko tresna batzuk, ibilbidea marrazteko tresna bat, arkatz tresna bat barne baita kaligrafia marrazteko tresna bat ere barne</li>
       <li xml:lang="fi">Eri piirrostyökalut polkumuotojen luontiin: polunpiirto-, kynä- ja kalligrafinen piirrostyökalu</li>
       <li xml:lang="fr">Outils de dessin variés incluant un outil de création d'emplacement, un crayon ainsi qu'un outil pour la calligraphie</li>
+      <li xml:lang="ga">Uirlisí líníochta éagsúla chun cruthanna cosáin a chruthú, lena n-áirítear uirlis tarraingthe cosáin, uirlis peann luaidhe chomh maith le huirlis líníochta callagrafaíochta</li>
       <li xml:lang="gl">Varias ferramentas de debuxo para crear formas de rutas, incluíndo unha ferramenta de debuxo de rutas, unha ferramenta de lapis, e unha ferramenta de debuxo caligráfico.</li>
       <li xml:lang="hu">Különféle rajzeszközök útvonalalakzatok létrehozásához, beleértve az útvonalrajzoló eszközt, a ceruzaeszközt, valamint a kalligráfiai rajzeszközt</li>
       <li xml:lang="id">Berbagai alat menggambar untuk membuat bentuk alur termasuk alat alur gambar, alat pensil serta alat menggambar kaligrafi</li>
@@ -384,6 +394,7 @@
       <li xml:lang="eu">Gradiente eta eredu tresnak, mihisean gradienteen eta ereduen estiloak editatzeko</li>
       <li xml:lang="fi">Työkalut liukuvärien ja täyttökuvioiden helppoon muokkaukseen</li>
       <li xml:lang="fr">Outils de gradient et de tramage pour l'édition facile de styles de gradients et de trames</li>
+      <li xml:lang="ga">Uirlisí grádáin agus patrún le haghaidh eagarthóireacht éasca ar stíleanna grádáin agus patrún ar chanbhás</li>
       <li xml:lang="gl">Ferramentas de gradacións e padróns para editar degradados e estilos de padróns facilmente sobre o lenzo.</li>
       <li xml:lang="hu">Színátmenet- és mintázateszközök a színátmenetek és minták vásznon történő egyszerű szerkesztéséhez</li>
       <li xml:lang="id">Alat gradien dan pola untuk pengeditan gradien dan pola yang mudah di kanvas</li>
@@ -418,6 +429,7 @@
       <li xml:lang="eu">Marrazketa gidaturako eta editatzeko, maila goreneko atxikitze erraztasunak (adib. sareta, gida-lerro, ibilbideko nodo, kaxa edukitzaile, posizio ortogonal, ibilbide-formen edo lerroen luzapen ebakidura edo ibilbideetara atxikitzea)</li>
       <li xml:lang="fi">Huippulaatuinen kiinnitysominaisuus ohjattuun piirtämiseen ja muokkaukseen (esim. kiinnitys ruudukkoon, apuviivoihin, rajauslaatikkoon, kohtisuoraan asemaan, leikkaukseen, polkumuotoon tai viivojen ja polkujen jatkeisiin)</li>
       <li xml:lang="fr">Fonctionnalités d'alignement top-niveau pour guider le dessin et l'édition (p.ex. alignement sur la grille, lignes de guidage, nœuds d'emplacement, boites, positions orthogonales, intersections de formes ou extensions de lignes ou de formes)</li>
+      <li xml:lang="ga">Áiseanna snapála den scoth le haghaidh líníochta agus eagarthóireachta treoraithe (e.g. snapáil chuig eangach, línte treorach, nóid chosáin, boscaí teorann, suíomhanna ortagónacha, trasnaíochtaí cruthanna cosáin nó síntí línte agus cosán)</li>
       <li xml:lang="gl">Funcionalidades de axuste de última xeración para editar e debuxar de maneira guiada (por exemplo, axustar á grade, liñas de guía, nodos de rutas, caixas de límites, posicións ortogonais, cruzamento de formas de rutas ou extensións de liñas e rutas).</li>
       <li xml:lang="hu">Kiváló illesztési funkciók az irányított rajzoláshoz és szerkesztéshez (pl. illesztés rácshoz, segédvonalakhoz, útvonalcsomópontokhoz, határolókeretekhez, derékszögű pozíciókhoz, útvonalak metszéspontjaihoz vagy vonalak és útvonalak meghosszabbításaihoz)</li>
       <li xml:lang="id">Fasilitas snapping yang berada di atas untuk menggambar dan mengedit yang dipandu (mis. Snapping ke kisi, garis pandu, simpul alur, kotak pembatas, posisi ortogonal, persimpangan bentuk lintasan atau ekstensi garis dan alur)</li>
@@ -452,6 +464,7 @@
       <li xml:lang="eu">Aurrez definitutako forma ugari biltzen ditu, izarra, zirkulua/elipsea, laukizuzena, irudia, gisako oinarrizko formak barne</li>
       <li xml:lang="fi">Lukuisia esimääritettyjä muotoja (perusmuodot kuten tähdet, ympyrä ja soikio, nelikulmio, kuva)</li>
       <li xml:lang="fr">Inclut de nombreuses formes prédéfinies, telles que les étoiles, cercles/ellipses, rectangles, images</li>
+      <li xml:lang="ga">Áirítear go leor cruthanna réamhshainithe lena n-áirítear cruthanna bunúsacha cosúil le réaltaí, ciorcal/éilips, dronuilleog, íomhá</li>
       <li xml:lang="gl">Inclúe moitas formas predefinidas, entre elas formas básicas como estrelas, círculos, elipses, rectángulos e imaxes.</li>
       <li xml:lang="hu">Számos előre definiált alakzatot tartalmaz, beleértve az alapformákat, például csillagokat, köröket/ellipsziseket, téglalapokat és képeket</li>
       <li xml:lang="id">Memasukkan banyak bentuk standar termasuk bentuk dasar seperti bintang, lingkaran/bulatan, persegi panjang, gambar</li>
@@ -486,6 +499,7 @@
       <li xml:lang="eu">Testu forma artistikoa, ibilbide ingeradak jarraitzeko (adib. testua ibilbidean)</li>
       <li xml:lang="fi">Taiteelliset tekstimuodot polunseurantatuella</li>
       <li xml:lang="fr">Formes de texte artistiques prenant par exemple en charge la création de texte le long d'une courbe</li>
+      <li xml:lang="ga">Cruth téacs ealaíonta le tacaíocht chun imlínte cosáin a leanúint (i.e. téacs ar an gcosán)</li>
       <li xml:lang="gl">Forma de texto artístico que permite seguir o contorno de rutas (é dicir, texto sobre rutas).</li>
       <li xml:lang="hu">Művészi szöveg alakzat, amely támogatja az útvonal mentén történő elhelyezést (azaz szöveg útvonalon).</li>
       <li xml:lang="id">Bentuk teks artistik dengan dukungan untuk kerangka alur berikut (yaitu teks di alur)</li>
@@ -520,6 +534,7 @@
       <li xml:lang="eu">Ibilbide-eragiketa konplexuak eta efektuak, hala nola multzo boolearren eragiketak, ibilbidea lautzea, biribiltzea eta birfintzea baita zurrunbilo/atximur efektuak ere</li>
       <li xml:lang="fi">Monimutkaiset polku-operaatiot ja -tehosteet kuten totuusarvo-operaatiot, polun tasoitus, pyöristys ja hienosäätö sekä pyörre- ja nipistystehosteet</li>
       <li xml:lang="fr">Opérations d'emplacements complexes et effets tels que les opérateurs booléens, mise à plat et ajustements, de même que les effets de spirale et de pincement.</li>
+      <li xml:lang="ga">Oibríochtaí agus éifeachtaí casta cosáin ar nós oibríochtaí tacair Booleánacha, cothromú cosáin, babhtú agus scagadh chomh maith le héifeachtaí cuaráin/pinch</li>
       <li xml:lang="gl">Operacións de rutas complexas e efectos como operacións de grupos de valores booleanos; aplanamento, arredondamento e refinamento de rutas; así como efectos de xiro e picada.</li>
       <li xml:lang="hu">Összetett útvonalműveletek és -effektusok, például logikai halmazműveletek, útvonal-simítás, lekerekítés és finomítás, valamint örvénylő és csípő effektusok</li>
       <li xml:lang="id">Operasi dan efek alur yang rumit seperti operasi set boolean, perataan alur, pembulatan dan pemurnian serta efek pusaran/cubitan</li>
@@ -555,6 +570,7 @@
       <li xml:lang="eu">Hedagarria, tresna berri, forma eta zamaketarietarako pluginak idatziz</li>
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
       <li xml:lang="fr">Extensible par l'écriture de modules pour de nouveaux outils, formes et conteneurs</li>
+      <li xml:lang="ga">Inleathnaithe trí bhreiseáin a scríobh le haghaidh uirlisí, cruthanna agus dugairí nua</li>
       <li xml:lang="gl">Permite ampliar as súas funcionalidades mediante complementos de ferramentas novas, de formas e de docas.</li>
       <li xml:lang="hu">Bővíthető új eszközökhöz, alakzatokhoz és dokkolókhoz írt beépülő modulokkal</li>
       <li xml:lang="id">Dapat diekstensi dengan plugin penulisan untuk alat, shape, dan docker baru</li>
@@ -600,6 +616,7 @@
       <caption xml:lang="eu">Karbon-en leiho nagusia</caption>
       <caption xml:lang="fi">Karbonin pääikkuna</caption>
       <caption xml:lang="fr">Fenêtre principale de Karbon</caption>
+      <caption xml:lang="ga">Príomhfhuinneog Karbon</caption>
       <caption xml:lang="gl">Xanela principal de Karbon.</caption>
       <caption xml:lang="hu">A Karbon főablaka</caption>
       <caption xml:lang="it">Finestra principale di Karbon</caption>
@@ -649,6 +666,7 @@
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
         <p xml:lang="es">Esta versión añade compatibilidad con flatpak al paquete Calligra Office.</p>
         <p xml:lang="fr">Cette version ajoute la prise en charge de FlatPak à la suite Calligra Office.</p>
+        <p xml:lang="ga">Cuireann an eisiúint seo tacaíocht flatpak leis an tsraith Calligra Office.</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office.</p>
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
@@ -657,6 +675,7 @@
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
+        <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -668,6 +687,7 @@
         <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
         <p xml:lang="es">Los cambios más significativos son que Calligra ha realizado la transición completa a Qt6 y KF6, y que se ha llevado a cabo una gran reorganización de la interfaz de usuario.</p>
         <p xml:lang="fr">Les modifications les plus significatives sont que Calligra a été entièrement migré vers Qt6 et KF6 et une refonte majeure de son interface utilisateur.</p>
+        <p xml:lang="ga">Is iad na hathruithe is suntasaí ná gur aistríodh Calligra go hiomlán go Qt6 agus KF6, mar aon le hathchóiriú mór ar a chomhéadan úsáideora.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
@@ -676,12 +696,14 @@
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
+        <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
         <p>Karbon didn’t received much change outside of the one affecting the whole platform.</p>
         <p xml:lang="ar">لم تشهد كربون تغييرات كبيرة باستثناء التغيير الذي أثر على المنصة بأكملها.</p>
         <p xml:lang="ca">El Karbon no rebut gaires canvis fora del que afectava tota la plataforma.</p>
         <p xml:lang="ca-valencia">Karbon no rebut gaires canvis fora del que afectava tota la plataforma.</p>
         <p xml:lang="es">Karbon no ha recibido muchos cambios aparte del que afecta a toda la plataforma.</p>
         <p xml:lang="fr">Karbon n’a pas subi beaucoup de modifications en dehors de celle affectant la totalité de la plateforme.</p>
+        <p xml:lang="ga">Ní bhfuair Karbon mórán athraithe seachas an ceann a raibh tionchar aige ar an ardán ar fad.</p>
         <p xml:lang="it">Karbon non ha subito grandi cambiamenti, a parte quelli che hanno interessato l'intera piattaforma.</p>
         <p xml:lang="ka">Karbon-ს არ მიუღია გარედან ისეთი ცვლილებები, რომლებიც მთელ პლატფორმას შეეხებოდა.</p>
         <p xml:lang="nl">Karbon kreeg niet veel wijzigingen buiten die het gehele platform beïnvloedden.</p>
@@ -690,6 +712,7 @@
         <p xml:lang="sl">Karbon ni doživel veliko sprememb, razen tistih, ki so vplivale na celotno platformo.</p>
         <p xml:lang="tr">Karbon, diğer tüm paketi de etkileyen bir değişiklik dışında pek bir değişikliğe uğramadı.</p>
         <p xml:lang="uk">Karbon не зазнав значних змін, окрім тих, які стосуються усієї платформи.</p>
+        <p xml:lang="zh-CN">除了那个影响整个平台的变化以外，Karbon 没有受到太多的改变。</p>
       </description>
     </release>
   </releases>
