@@ -78,7 +78,7 @@ msgstr "ჭდეების ჩვენება"
 #: AxesConfigWidget.ui:72
 #, kde-format
 msgid "Font"
-msgstr "შრიფტი"
+msgstr "ფონტი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81

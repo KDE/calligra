@@ -12328,7 +12328,7 @@ msgstr "აქტივაცია"
 #: ui/dialogs/LayoutDialog.cpp:139
 #, kde-format
 msgid "Font"
-msgstr "შრიფტი"
+msgstr "ფონტი"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
 #: part/calligrasheets.rc:246

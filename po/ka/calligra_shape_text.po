@@ -484,7 +484,7 @@ msgstr "ცვლილებების ჩვენება"
 #: dialogs/CharacterGeneral.cpp:60 dialogs/FormattingPreview.cpp:38
 #, kde-format
 msgid "Font"
-msgstr "შრიფტი"
+msgstr "ფონტი"
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalTab)
 #: dialogs/CharacterGeneral.ui:33
@@ -1039,7 +1039,7 @@ msgstr "აირჩიეთ ფონტი"
 #: dialogs/FontDia.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Font"
-msgstr "შრიფტი"
+msgstr "ფონტი"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
