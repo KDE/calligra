@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2024 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <filipek.libor@protonmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-08-23 15:31+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-04-21 21:07+0200\n"
+"Last-Translator: Libor Filípek <filipek.libor@protonmail.com>\n"
+"Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:63 ui/KarbonView.cpp:762
 msgctxt "(qtundo-format)"
@@ -156,17 +157,17 @@ msgstr "Zploštit cestu"
 #: plugins/refinepath/KarbonPathRefineCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Refine path"
-msgstr ""
+msgstr "Upřesnit cestu"
 
 #: plugins/refinepath/RefinePathPlugin.cpp:49
 #, kde-format
 msgid "&Refine Path..."
-msgstr ""
+msgstr "&Upřesnit cestu..."
 
 #: plugins/refinepath/RefinePathPlugin.cpp:85
 #, kde-format
 msgid "Refine Path"
-msgstr ""
+msgstr "Upřesnit cestu"
 
 #: plugins/refinepath/RefinePathPlugin.cpp:97
 #, kde-format
@@ -198,17 +199,17 @@ msgstr "Poloměr:"
 #: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:98
 msgctxt "(qtundo-format)"
 msgid "Whirl & pinch"
-msgstr ""
+msgstr "Dostředný vír"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:53
 #, kde-format
 msgid "&Whirl/Pinch..."
-msgstr ""
+msgstr "&Dostředný vír"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:94
 #, kde-format
 msgid "Whirl Pinch"
-msgstr ""
+msgstr "Dostředný vír"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:102
 #, kde-format
@@ -221,6 +222,7 @@ msgid ""
 "The result of the Whirlpinch effect can be improved by refining the path "
 "shape beforehand."
 msgstr ""
+"Účinek dostředného víru lze vylepšit tím, že se předem upraví tvar cesty."
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:118
 #, kde-format
@@ -230,7 +232,7 @@ msgstr "Úhel:"
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:122
 #, kde-format
 msgid "Pinch:"
-msgstr ""
+msgstr "Dostřednost:"
 
 #: ui/commands/KarbonLayerReorderCommand.cpp:26
 #: ui/commands/KarbonLayerReorderCommand.cpp:38
@@ -427,7 +429,7 @@ msgstr "Importovat grafiku"
 #: ui/KarbonView.cpp:410 ui/KarbonView.cpp:417
 #, kde-format
 msgid "Could not create image shape."
-msgstr ""
+msgstr "Nepodařilo se vytvořit tvar obrázku."
 
 #: ui/KarbonView.cpp:636
 msgctxt "(qtundo-format)"
@@ -442,7 +444,7 @@ msgstr "Zrcadlit svisle"
 #: ui/KarbonView.cpp:640
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
-msgstr ""
+msgstr "Zrcadlit vodorovně a svisle"
 
 #: ui/KarbonView.cpp:695
 msgctxt "(qtundo-format)"
@@ -452,7 +454,7 @@ msgstr "Oddělit cesty"
 #: ui/KarbonView.cpp:876
 #, kde-format
 msgid "Outline &Mode"
-msgstr ""
+msgstr "Režim náčrtu"
 
 #: ui/KarbonView.cpp:884
 #, kde-format
@@ -473,62 +475,62 @@ msgstr "&Duplikovat"
 #: ui/KarbonView.cpp:899
 #, kde-format
 msgid "Distribute Center (Horizontal)"
-msgstr "Zarovnat na střed (Vodorovně)"
+msgstr "Zarovnat na střed (vodorovně)"
 
 #: ui/KarbonView.cpp:903
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
-msgstr ""
+msgstr "Zarovnat mezery (vodorovně)"
 
 #: ui/KarbonView.cpp:907
 #, kde-format
 msgid "Distribute Left Borders"
-msgstr ""
+msgstr "Zarovnat levé okraje"
 
 #: ui/KarbonView.cpp:911
 #, kde-format
 msgid "Distribute Right Borders"
-msgstr ""
+msgstr "Zarovnat pravé okraje"
 
 #: ui/KarbonView.cpp:915
 #, kde-format
 msgid "Distribute Center (Vertical)"
-msgstr "Zarovnat na střed (Svisle)"
+msgstr "Zarovnat na střed (svisle)"
 
 #: ui/KarbonView.cpp:919
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
-msgstr ""
+msgstr "Zarovnat mezery (svisle)"
 
 #: ui/KarbonView.cpp:923
 #, kde-format
 msgid "Distribute Bottom Borders"
-msgstr ""
+msgstr "Zarovnat spodní okraje"
 
 #: ui/KarbonView.cpp:927
 #, kde-format
 msgid "Distribute Top Borders"
-msgstr ""
+msgstr "Zarovnat horní okraje"
 
 #: ui/KarbonView.cpp:931
 #, kde-format
 msgid "Show Color Palette"
-msgstr ""
+msgstr "Zobrazit barevnou paletu"
 
 #: ui/KarbonView.cpp:933
 #, kde-format
 msgid "Show or hide color palette"
-msgstr ""
+msgstr "Zobrazit nebo skrýt barevnou paletu"
 
 #: ui/KarbonView.cpp:937
 #, kde-format
 msgid "&Clip Object"
-msgstr ""
+msgstr "&Připnout objekt"
 
 #: ui/KarbonView.cpp:941
 #, kde-format
 msgid "&Unclip Objects"
-msgstr ""
+msgstr "&Odepnout objekt"
 
 #: ui/KarbonView.cpp:945
 #, kde-format
@@ -558,22 +560,22 @@ msgstr "Oddělit c&estu"
 #: ui/KarbonView.cpp:974
 #, kde-format
 msgid "Re&verse Path"
-msgstr ""
+msgstr "&Zpětná cesta"
 
 #: ui/KarbonView.cpp:980
 #, kde-format
 msgid "Intersect Paths"
-msgstr ""
+msgstr "Protínající se cesty"
 
 #: ui/KarbonView.cpp:986
 #, kde-format
 msgid "Subtract Paths"
-msgstr ""
+msgstr "Rozdělit cesty"
 
 #: ui/KarbonView.cpp:992
 #, kde-format
 msgid "Unite Paths"
-msgstr ""
+msgstr "Spojit cesty"
 
 #: ui/KarbonView.cpp:998
 #, kde-format
@@ -583,7 +585,7 @@ msgstr "Vyřadit cesty"
 #: ui/KarbonView.cpp:1004
 #, kde-format
 msgid "Snap Path to Grid"
-msgstr ""
+msgstr "Přichytit cestu k mřížce"
 
 #: ui/KarbonView.cpp:1012
 #, kde-format
@@ -623,7 +625,7 @@ msgstr "Vyberte paletu"
 #: ui/widgets/KarbonSmallStylePreview.cpp:46
 #, kde-format
 msgid "Press to apply fill to selection"
-msgstr ""
+msgstr "Stiskněte pro vyplnění výběru"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:88
 #, kde-format
@@ -634,7 +636,7 @@ msgstr "Žádný"
 #: ui/widgets/KarbonSmallStylePreview.cpp:110
 #, kde-format
 msgid "Press to apply stroke to selection"
-msgstr ""
+msgstr "Stiskněte pro obtáhnutí výběru"
 
 #: ui/widgets/KarbonSmallStylePreview.cpp:159
 #, kde-format

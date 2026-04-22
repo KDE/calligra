@@ -2,31 +2,32 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2014, 2017, 2018, 2019.
 # Tomas Chvatal <tomas.chvatal@gmail.com>, 2011, 2012.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <filipek.libor@protonmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2019-11-15 09:14+0100\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-04-20 22:16+0200\n"
+"Last-Translator: Libor Filípek <filipek.libor@protonmail.com>\n"
+"Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 19.08.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Vít Pelčák"
+msgstr "Vít Pelčák,Libor Filípek"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "vit@pelcak.org"
+msgstr "vit@pelcak.org,libor.filipek@gmail.com"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:77 AxesConfigWidget.cpp:83 LegendConfigWidget.ui:33
@@ -43,18 +44,18 @@ msgstr "Konec"
 #: AxesConfigWidget.cpp:80
 #, kde-format
 msgid "Near-axis"
-msgstr ""
+msgstr "Blízko osy"
 
 #: AxesConfigWidget.cpp:81
 #, kde-format
 msgid "Other-side"
-msgstr ""
+msgstr "Druhá strana"
 
 #: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
 #: DataSetConfigWidget.cpp:345
 #, kde-format
 msgid "Axistitle"
-msgstr ""
+msgstr "Název osy"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
@@ -180,7 +181,7 @@ msgstr "Chybějící modul"
 #, kde-format
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
-msgstr "Modul nutný pro zobrazení textových popisek v grafu není dostupný."
+msgstr "Modul nutný pro zobrazení textových popisků v grafu není dostupný."
 
 #: ChartShape.cpp:303
 #, kde-format
@@ -188,6 +189,8 @@ msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
 "current version of the chart Flake shape."
 msgstr ""
+"Modul potřebný pro zobrazení textových popisků není kompatibilní s aktuální "
+"verzí grafu."
 
 #: ChartShape.cpp:304
 #, kde-format
@@ -261,84 +264,84 @@ msgstr "Normální sloupcový graf"
 #: ChartShapeFactory.cpp:88
 #, kde-format
 msgid "Stacked Bar Chart"
-msgstr ""
+msgstr "Vrstvený sloupcový graf"
 
 #: ChartShapeFactory.cpp:89
 #, kde-format
 msgid "Stacked bar chart"
-msgstr ""
+msgstr "Vrstvený sloupcový graf"
 
 #: ChartShapeFactory.cpp:99
 #, kde-format
 msgid "Percent Bar Chart"
-msgstr ""
+msgstr "Sloupcový graf s procenty"
 
 #: ChartShapeFactory.cpp:100
 #, kde-format
 msgid "Percent bar chart"
-msgstr ""
+msgstr "Sloupcový graf s procenty"
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
 #: PlotAreaConfigWidget.cpp:236
 #, kde-format
 msgid "Line Chart"
-msgstr "Čarový graf"
+msgstr "Čárový graf"
 
 #: ChartShapeFactory.cpp:111
 #, kde-format
 msgid "Normal line chart"
-msgstr "Normální čarový graf"
+msgstr "Normální čárový graf"
 
 #: ChartShapeFactory.cpp:121
 #, kde-format
 msgid "Stacked Line Chart"
-msgstr ""
+msgstr "Vrstvený čárový graf"
 
 #: ChartShapeFactory.cpp:122
 #, kde-format
 msgid "Stacked line chart"
-msgstr ""
+msgstr "Vrstvený čárový graf"
 
 #: ChartShapeFactory.cpp:132
 #, kde-format
 msgid "Percent Line Chart"
-msgstr ""
+msgstr "Čárový graf s procenty"
 
 #: ChartShapeFactory.cpp:133
 #, kde-format
 msgid "Percent line chart"
-msgstr ""
+msgstr "Čárový graf s procenty"
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
 #: PlotAreaConfigWidget.cpp:242
 #, kde-format
 msgid "Area Chart"
-msgstr ""
+msgstr "Plošný graf"
 
 #: ChartShapeFactory.cpp:144
 #, kde-format
 msgid "Normal area chart"
-msgstr ""
+msgstr "Normální plošný graf"
 
 #: ChartShapeFactory.cpp:154
 #, kde-format
 msgid "Stacked Area Chart"
-msgstr ""
+msgstr "Vrstvený plošný graf"
 
 #: ChartShapeFactory.cpp:155
 #, kde-format
 msgid "Stacked area chart"
-msgstr ""
+msgstr "Vrstvený plošný graf"
 
 #: ChartShapeFactory.cpp:165
 #, kde-format
 msgid "Percent Area Chart"
-msgstr ""
+msgstr "Plošný graf s procenty"
 
 #: ChartShapeFactory.cpp:166
 #, kde-format
 msgid "Percent area chart"
-msgstr ""
+msgstr "Plošný graf s procenty"
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
 #: PlotAreaConfigWidget.cpp:250
@@ -377,62 +380,62 @@ msgstr "Bublinový graf"
 #: PlotAreaConfigWidget.cpp:263
 #, kde-format
 msgid "Scatter Chart"
-msgstr ""
+msgstr "Bodový graf"
 
 #: ChartShapeFactory.cpp:210
 #, kde-format
 msgid "Scatter chart"
-msgstr ""
+msgstr "Bodový graf"
 
 #: ChartShapeFactory.cpp:220
 #, kde-format
 msgid "Radar Chart"
-msgstr ""
+msgstr "Radarový graf"
 
 #: ChartShapeFactory.cpp:221
 #, kde-format
 msgid "Radar chart"
-msgstr ""
+msgstr "Radarový graf"
 
 #: ChartShapeFactory.cpp:231
 #, kde-format
 msgid "Filled Radar Chart"
-msgstr ""
+msgstr "Vyplněný radarový graf"
 
 #: ChartShapeFactory.cpp:232
 #, kde-format
 msgid "Filled radar chart"
-msgstr ""
+msgstr "Vyplněný radarový graf"
 
 #: ChartShapeFactory.cpp:242
 #, kde-format
 msgid "Candle Stick Stock Chart"
-msgstr ""
+msgstr "Svíčkový graf akcií"
 
 #: ChartShapeFactory.cpp:243
 #, kde-format
 msgid "Japanese candle stick stock chart"
-msgstr ""
+msgstr "Japonský svíčkový graf akcií"
 
 #: ChartShapeFactory.cpp:253
 #, kde-format
 msgid "OHLC Stock Chart"
-msgstr ""
+msgstr "Graf akcií OHLC"
 
 #: ChartShapeFactory.cpp:254
 #, kde-format
 msgid "Open High Low Close stock chart"
-msgstr ""
+msgstr "Graf akcií - Otevření, Maximum, Minimum, Zavření"
 
 #: ChartShapeFactory.cpp:264
 #, kde-format
 msgid "HLC Stock Chart"
-msgstr ""
+msgstr "Graf akcií HLC"
 
 #: ChartShapeFactory.cpp:265
 #, kde-format
 msgid "High Low Close stock chart"
-msgstr ""
+msgstr "Graf akcií - Maximum, Minimum, Zavření"
 
 #: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
 #: ChartShapeFactory.cpp:631
@@ -475,17 +478,17 @@ msgstr "Nárůst v %"
 #: ChartShapeFactory.cpp:454
 #, kde-format
 msgid "Share A"
-msgstr ""
+msgstr "Sdílet A"
 
 #: ChartShapeFactory.cpp:455
 #, kde-format
 msgid "Share B"
-msgstr ""
+msgstr "Sdílet B"
 
 #: ChartShapeFactory.cpp:456
 #, kde-format
 msgid "Share C"
-msgstr ""
+msgstr "Sdílet C"
 
 #: ChartShapeFactory.cpp:459
 #, kde-format
@@ -510,17 +513,17 @@ msgstr "Zavřít"
 #: ChartShapeFactory.cpp:581
 #, kde-format
 msgid "Growth"
-msgstr ""
+msgstr "Nárůst"
 
 #: ChartTool.cpp:97
 #, kde-format
 msgid "Do something"
-msgstr ""
+msgstr "Udělejte něco"
 
 #: ChartTool.cpp:102
 #, kde-format
 msgid "Do something else"
-msgstr ""
+msgstr "Udělejte něco jiného"
 
 #: ChartTool.cpp:269
 #, kde-format
@@ -570,7 +573,7 @@ msgstr "Zobrazit název osy"
 #: commands/AxisCommand.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
-msgstr ""
+msgstr "Skrýt název osy"
 
 #: commands/AxisCommand.cpp:138
 msgctxt "(qtundo-format)"
@@ -590,27 +593,27 @@ msgstr "Zobrazit popisky os"
 #: commands/AxisCommand.cpp:151
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
-msgstr ""
+msgstr "Skrýt popisky os"
 
 #: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr ""
+msgstr "Zobrazit hlavní mřížku os"
 
 #: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
-msgstr ""
+msgstr "Skrýt hlavní mřížku os"
 
 #: commands/AxisCommand.cpp:171
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr ""
+msgstr "Zobrazit vedlejší mřížku os"
 
 #: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
-msgstr ""
+msgstr "Skrýt vedlejší mřížku os"
 
 #: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
@@ -630,52 +633,52 @@ msgstr "Nastavit šířku kroku osy:"
 #: commands/AxisCommand.cpp:199
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
-msgstr ""
+msgstr "Nastavit šířku podkroku osy:"
 
 #: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
-msgstr ""
+msgstr "Nastavit automatickou šířku kroku"
 
 #: commands/AxisCommand.cpp:209
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
-msgstr ""
+msgstr "Nastavit ruční šířku kroku"
 
 #: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
-msgstr ""
+msgstr "Automatická šířka podkroku"
 
 #: commands/AxisCommand.cpp:220
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
-msgstr ""
+msgstr "Ruční šířka podkroku"
 
 #: commands/AxisCommand.cpp:228
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr ""
+msgstr "Nastavit písmo popisků os"
 
 #: commands/AxisCommand.cpp:234
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
-msgstr ""
+msgstr "Nastavit polohu os"
 
 #: commands/AxisCommand.cpp:255
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
-msgstr ""
+msgstr "Nastavit polohu popisků os"
 
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Show Text Shape"
-msgstr ""
+msgstr "Zobrazit tvar textu"
 
 #: commands/ChartTextShapeCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
-msgstr ""
+msgstr "Skrýt tvar textu"
 
 #: commands/ChartTypeCommand.cpp:75
 msgctxt "(qtundo-format)"
@@ -685,42 +688,42 @@ msgstr "Normální sloupcový graf"
 #: commands/ChartTypeCommand.cpp:78
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr ""
+msgstr "Vrstvený sloupcový graf"
 
 #: commands/ChartTypeCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
-msgstr ""
+msgstr "Sloupcový graf s procenty"
 
 #: commands/ChartTypeCommand.cpp:90
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
-msgstr "Normální čarový graf"
+msgstr "Normální čárový graf"
 
 #: commands/ChartTypeCommand.cpp:93
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
-msgstr ""
+msgstr "Vrstvený čárový graf"
 
 #: commands/ChartTypeCommand.cpp:96
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
-msgstr ""
+msgstr "Čárový graf s procenty"
 
 #: commands/ChartTypeCommand.cpp:105
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
-msgstr ""
+msgstr "Normální plošný graf"
 
 #: commands/ChartTypeCommand.cpp:108
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
-msgstr ""
+msgstr "Vrstvený plošný graf"
 
 #: commands/ChartTypeCommand.cpp:111
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
-msgstr ""
+msgstr "Plošný graf s procenty"
 
 #: commands/ChartTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
@@ -735,22 +738,22 @@ msgstr "Prstencový graf"
 #: commands/ChartTypeCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
-msgstr ""
+msgstr "Bodový graf"
 
 #: commands/ChartTypeCommand.cpp:127
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
-msgstr ""
+msgstr "Radarový graf"
 
 #: commands/ChartTypeCommand.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
-msgstr ""
+msgstr "Vyplněný radarový graf"
 
 #: commands/ChartTypeCommand.cpp:133
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
-msgstr ""
+msgstr "Graf akcií"
 
 #: commands/ChartTypeCommand.cpp:136
 msgctxt "(qtundo-format)"
@@ -760,7 +763,7 @@ msgstr "Bublinový graf"
 #: commands/ChartTypeCommand.cpp:139
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
-msgstr ""
+msgstr "Povrchový graf"
 
 #: commands/ChartTypeCommand.cpp:142
 msgctxt "(qtundo-format)"
@@ -770,72 +773,72 @@ msgstr "Gantův graf"
 #: commands/DatasetCommand.cpp:135
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
-msgstr ""
+msgstr "Nastavit typ grafu souboru dat"
 
 #: commands/DatasetCommand.cpp:143
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr ""
+msgstr "Zobrazit kategorii souboru dat"
 
 #: commands/DatasetCommand.cpp:145
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
-msgstr ""
+msgstr "Skrýt kategorii souboru dat"
 
 #: commands/DatasetCommand.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr ""
+msgstr "Zobrazit číslo souboru dat"
 
 #: commands/DatasetCommand.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
-msgstr ""
+msgstr "Skrýt číslo souboru dat"
 
 #: commands/DatasetCommand.cpp:165
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr ""
+msgstr "Zobrazit procenta souboru dat"
 
 #: commands/DatasetCommand.cpp:167
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
-msgstr ""
+msgstr "Skrýt procenta souboru dat"
 
 #: commands/DatasetCommand.cpp:176
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr ""
+msgstr "Zobrazit symbol souboru dat"
 
 #: commands/DatasetCommand.cpp:178
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
-msgstr ""
+msgstr "Skrýt symbol souboru dat"
 
 #: commands/DatasetCommand.cpp:186
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
-msgstr ""
+msgstr "Nastavit barvu štětce souboru dat"
 
 #: commands/DatasetCommand.cpp:193
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
-msgstr ""
+msgstr "Nastavit barvu pera souboru dat"
 
 #: commands/DatasetCommand.cpp:202
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
-msgstr ""
+msgstr "Skrýt značku souboru dat"
 
 #: commands/DatasetCommand.cpp:204
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr ""
+msgstr "Zobrazit symbol značky souboru dat"
 
 #: commands/DatasetCommand.cpp:212
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
-msgstr ""
+msgstr "Nastavit osy souboru dat"
 
 #: commands/GapCommand.cpp:58
 msgctxt "(qtundo-format)"
@@ -850,32 +853,32 @@ msgstr "Nastavit mezeru mezi skupinami"
 #: commands/LegendCommand.cpp:73
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
-msgstr ""
+msgstr "Nastavit název legendy"
 
 #: commands/LegendCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr ""
+msgstr "Nastavit písmo legendy"
 
 #: commands/LegendCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr ""
+msgstr "Nastavit velikost písma legendy"
 
 #: commands/LegendCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
-msgstr ""
+msgstr "Nastavit orientaci legendy"
 
 #: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
-msgstr ""
+msgstr "Nastavit vodorovné sloupce"
 
 #: commands/PlotAreaCommand.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
-msgstr ""
+msgstr "Nastavit svislé sloupce"
 
 #: DataSet.cpp:272
 #, kde-format
@@ -900,7 +903,7 @@ msgstr "Normální"
 #: PlotAreaConfigWidget.cpp:238 PlotAreaConfigWidget.cpp:244
 #, kde-format
 msgid "Stacked"
-msgstr "Skládaný"
+msgstr "Vrstvený"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowPercent)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowPercent)
@@ -927,22 +930,22 @@ msgstr "Vyplněno"
 #: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
 #, kde-format
 msgid "Stock Chart"
-msgstr ""
+msgstr "Graf akcií"
 
 #: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
 msgid "Candlestick"
-msgstr ""
+msgstr "Svíčka"
 
 #: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
-msgstr ""
+msgstr "OHLC"
 
 #: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
-msgstr ""
+msgstr "HLC"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
@@ -996,13 +999,13 @@ msgstr "Vyberte skupinu dat"
 #: DataSetConfigWidget.ui:33
 #, kde-format
 msgid "Use Plot Type"
-msgstr ""
+msgstr "Použít typ grafu"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
 #, kde-format
 msgid "Attach To Axis"
-msgstr ""
+msgstr "Připojit k ose"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
@@ -1047,7 +1050,7 @@ msgstr "Číslo"
 #: DataSetConfigWidget.ui:287
 #, kde-format
 msgid "Error Bars"
-msgstr ""
+msgstr "Chybové sloupce"
 
 #. i18n: ectx: property (text), widget (QPushButton, insertRow)
 #. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
@@ -1074,13 +1077,13 @@ msgstr "Logaritmické škálování"
 #: dialogs/AxisScalingDialog.ui:32
 #, kde-format
 msgid "Step Width:"
-msgstr "Nastavit šířku:"
+msgstr "Šířka kroku:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AxisScalingDialog.ui:65
 #, kde-format
 msgid "Substep Width:"
-msgstr ""
+msgstr "Šířka podkroku"
 
 #: dialogs/BubbleDataEditor.cpp:108
 #, kde-format
@@ -1188,7 +1191,7 @@ msgstr "Smazat výběr"
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
 #, kde-format
 msgid "Manual control of data sets"
-msgstr ""
+msgstr "Ruční správa souboru dat"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1210,7 +1213,7 @@ msgstr "Ručně"
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
 #, kde-format
 msgid "Remove data set"
-msgstr "Odstranit sadu dat"
+msgstr "Odstranit soubor dat"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1218,7 +1221,7 @@ msgstr "Odstranit sadu dat"
 #: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
 #, kde-format
 msgid "Add data set after selected data set"
-msgstr "Přidat sadu dat po vybrané sadě dat"
+msgstr "Přidat soubor dat po vybraném souboru dat"
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
@@ -1255,14 +1258,14 @@ msgstr "Štítek: %1"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default label: %1"
-msgstr ""
+msgstr "Výchozí štítek: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:156
 #: dialogs/ScatterDataSetTableModel.cpp:151
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "X-Values cell region: %1"
-msgstr ""
+msgstr "Oblast buněk X-hodnot: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:158
 #: dialogs/BubbleDataSetTableModel.cpp:165
@@ -1272,20 +1275,20 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr ""
+msgstr "Použité výchozí hodnoty"
 
 #: dialogs/BubbleDataSetTableModel.cpp:163
 #: dialogs/ScatterDataSetTableModel.cpp:158
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Y-Values cell region: %1"
-msgstr ""
+msgstr "Oblast buněk Y-hodnot: %1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Bubble size cell region: %1"
-msgstr ""
+msgstr "Velikost bubliny oblasti buněk: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
@@ -1341,7 +1344,7 @@ msgstr ""
 #: dialogs/ChartTableEditor.ui:14
 #, kde-format
 msgid "Data Editor"
-msgstr ""
+msgstr "Editor dat"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
@@ -1364,7 +1367,7 @@ msgstr "Vybrat písmo"
 #: dialogs/FormatErrorBarDialog.ui:29
 #, kde-format
 msgid "Format Error Bars"
-msgstr ""
+msgstr "Formátování chybových sloupců"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/FormatErrorBarDialog.ui:69
@@ -1414,7 +1417,7 @@ msgstr "Procent"
 #: dialogs/FormatErrorBarDialog.ui:104
 #, kde-format
 msgid "Error Margin"
-msgstr ""
+msgstr "Tolerance chyby"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:109
@@ -1532,7 +1535,7 @@ msgstr "Název:"
 #: dialogs/PieDataEditor.cpp:58
 #, kde-format
 msgid "Pie Data Editor"
-msgstr ""
+msgstr "Editor dat Pie"
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
 #: dialogs/PieDataEditor.ui:52
@@ -1548,13 +1551,13 @@ msgstr "Řádek %1"
 #: dialogs/ScatterDataEditor.cpp:115
 #, kde-format
 msgid "Scatter Data Editor"
-msgstr ""
+msgstr "Editor dat bodů"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
 #, kde-format
 msgid "Stock Data Editor"
-msgstr ""
+msgstr "Editor dat akcií"
 
 #: dialogs/StockDataEditor.cpp:100
 #, kde-format
@@ -1695,18 +1698,18 @@ msgstr "Písma..."
 #: PieConfigWidget.cpp:98
 #, kde-format
 msgid "Data Point %1"
-msgstr ""
+msgstr "Datový bod %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
 #, kde-format
 msgid "E&xplode Factor"
-msgstr ""
+msgstr "Faktor e&xplozivity"
 
 #: PlotAreaConfigWidget.cpp:275
 #, kde-format
 msgid "Surface Chart"
-msgstr ""
+msgstr "Povrchový graf"
 
 #: PlotAreaConfigWidget.cpp:277
 #, kde-format
@@ -1723,13 +1726,13 @@ msgstr "3D"
 #: PlotAreaConfigWidget.ui:69
 #, kde-format
 msgid "Vertical Bars"
-msgstr ""
+msgstr "Svislé sloupce"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
 #: PlotAreaConfigWidget.ui:74
 #, kde-format
 msgid "Horizontal Bars"
-msgstr ""
+msgstr "Vodorovné sloupce"
 
 #. i18n: ectx: property (text), widget (QPushButton, editData)
 #: PlotAreaConfigWidget.ui:82
@@ -1757,25 +1760,25 @@ msgstr "Skupiny dat"
 #: PlotAreaConfigWidget.ui:131
 #, kde-format
 msgid "Data Points"
-msgstr ""
+msgstr "Datové body"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
 #, kde-format
 msgid "Range line"
-msgstr ""
+msgstr "Čára rozsahu"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: StockConfigWidget.ui:47
 #, kde-format
 msgid "Gain marker"
-msgstr ""
+msgstr "Indikátor zisku"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
 #: StockConfigWidget.ui:73
 #, kde-format
 msgid "Loss marker"
-msgstr ""
+msgstr "Indikátor ztráty"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
@@ -1798,7 +1801,7 @@ msgstr "Kategorie"
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "Terčový závěr"
 
 #: widgets/StrokeConfigWidget.cpp:98
 #, kde-format
@@ -1828,14 +1831,14 @@ msgstr "Kosý spoj"
 #: widgets/StrokeConfigWidget.cpp:140
 #, kde-format
 msgid "Miter limit"
-msgstr ""
+msgstr "Omezení úhlu"
 
 #: widgets/StrokeConfigWidget.cpp:196
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr ""
+msgstr "Nastavit šířku čáry aktuálního výběru"
 
 #: widgets/StrokeConfigWidget.cpp:210
 #, kde-format
 msgid "Change the color of the line"
-msgstr ""
+msgstr "Změnit barvu čáry"
