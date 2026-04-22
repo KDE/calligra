@@ -3,21 +3,22 @@
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2017, 2019, 2024 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
 # Vit Pelcak <vit@pelcak.org>, 2022.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <filipek.libor@protonmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-19 00:46+0000\n"
-"PO-Revision-Date: 2024-08-23 15:31+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-04-21 19:12+0200\n"
+"Last-Translator: Libor Filípek <filipek.libor@protonmail.com>\n"
+"Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: karbon/image/ImageExport.cpp:88
 #, kde-format
@@ -191,18 +192,18 @@ msgstr "Nebyl nalezen žádný s očekávaných prvků: %1"
 #: libmsooxml/MsooXmlRelationships.cpp:85
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
-msgstr ""
+msgstr "V souboru \"%2\" nebylo nalezeno cílové místo s identifikátorem \"%1\""
 
 #: libmsooxml/MsooXmlRelationships.cpp:89
 #: libmsooxml/MsooXmlRelationships.cpp:108
 #, kde-format
 msgid "Could not find relationships file \"%1\""
-msgstr ""
+msgstr "Nelze najít soubor se vztahy \"%1\""
 
 #: libmsooxml/MsooXmlRelationships.cpp:104
 #, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
-msgstr ""
+msgstr "V souboru \"%2\" nebylo nalezeno cílové místo pro vztah \"%1\""
 
 #: libmsooxml/MsooXmlUtils.cpp:166
 #, kde-format
@@ -227,7 +228,7 @@ msgstr "Položka \"%1\" není soubor."
 #: libmsooxml/MsooXmlUtils.cpp:379
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
-msgstr ""
+msgstr "Nelze otevřít záznam \"%1\" pro zápis."
 
 #: libmsooxml/MsooXmlUtils.cpp:309 libmsooxml/MsooXmlUtils.cpp:347
 #: libmsooxml/MsooXmlUtils.cpp:390
@@ -780,28 +781,28 @@ msgstr ""
 #: words/docx/import/DocxImport.cpp:146
 #, kde-format
 msgid "Unable to find part for type %1"
-msgstr ""
+msgstr "Nelze najít díl pro typ %1"
 
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:171
 #, kde-format
 msgid "Declared number of shared strings too small (%1)"
-msgstr ""
+msgstr "Zadaný počet sdílených řetězců je příliš malý (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:564
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
-msgstr ""
+msgstr "Zadaný počet stylů písma je příliš malý (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:920
 #, kde-format
 msgid "Declared number of cell formats too small (%1)"
-msgstr ""
+msgstr "Zadaný počet formátů buněk je příliš malý (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:1047
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:1368
 #, kde-format
 msgid "Declared number of fill styles too small (%1)"
-msgstr ""
+msgstr "Zadaný počet stylů výplně je příliš malý (%1)"
 
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:341
 #, kde-format
@@ -860,12 +861,12 @@ msgstr "Věta: pokud je konec řádky koncem od&stavce"
 #: words/ascii/ImportDialogUI.ui:45
 #, kde-format
 msgid "&Empty Line: If the line is empty"
-msgstr ""
+msgstr "&Prázdný řádek: Pokud je řádek prázdný"
 
 #: words/epub/OdtHtmlConverter.cpp:259 words/mobi/OdtMobiHtmlConverter.cpp:284
 #, kde-format
 msgid "End notes"
-msgstr ""
+msgstr "Poznámky na konci"
 
 #: words/msword-odf/conversion.cpp:787
 #, kde-format

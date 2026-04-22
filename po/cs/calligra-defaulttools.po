@@ -1,21 +1,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2019.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <filipek.libor@protonmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2019-09-06 17:57+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-04-21 15:57+0200\n"
+"Last-Translator: Libor Filípek <filipek.libor@protonmail.com>\n"
+"Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 19.08.0\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
 #: connectionTool/ConnectionPointWidget.ui:48
@@ -27,7 +28,7 @@ msgstr "Upravit režim"
 #: connectionTool/ConnectionPointWidget.ui:55
 #, kde-format
 msgid "Escape Direction"
-msgstr ""
+msgstr "Směr úniku"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAlign)
 #: connectionTool/ConnectionPointWidget.ui:115
@@ -83,37 +84,37 @@ msgstr "Zarovnat k dolní hraně"
 #: connectionTool/ConnectionTool.cpp:91
 #, kde-format
 msgid "Escape in all directions"
-msgstr ""
+msgstr "Únik do všech směrů"
 
 #: connectionTool/ConnectionTool.cpp:94
 #, kde-format
 msgid "Escape in horizontal directions"
-msgstr ""
+msgstr "Únik ve vodorovných směrech"
 
 #: connectionTool/ConnectionTool.cpp:97
 #, kde-format
 msgid "Escape in vertical directions"
-msgstr ""
+msgstr "Únik ve svislých směrech"
 
 #: connectionTool/ConnectionTool.cpp:100
 #, kde-format
 msgid "Escape in left direction"
-msgstr ""
+msgstr "Únik doleva"
 
 #: connectionTool/ConnectionTool.cpp:103
 #, kde-format
 msgid "Escape in right direction"
-msgstr ""
+msgstr "Únik doprava"
 
 #: connectionTool/ConnectionTool.cpp:106
 #, kde-format
 msgid "Escape in up direction"
-msgstr ""
+msgstr "Únik nahoru"
 
 #: connectionTool/ConnectionTool.cpp:109
 #, kde-format
 msgid "Escape in down direction"
-msgstr ""
+msgstr "Únik dolů"
 
 #: connectionTool/ConnectionTool.cpp:427
 msgctxt "(qtundo-format)"
@@ -123,7 +124,7 @@ msgstr "Vytvořit spojení"
 #: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
 msgid "Drag to edit connection."
-msgstr ""
+msgstr "Přetažením upravíte připojení."
 
 #: connectionTool/ConnectionTool.cpp:770 connectionTool/ConnectionTool.cpp:782
 #, kde-format
@@ -141,6 +142,8 @@ msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr ""
+"Přetažením přesuňte bod připojení. Dvojitým kliknutím na připojení nebo "
+"stisknutím klávesy Delete jej odstraníte."
 
 #: connectionTool/ConnectionTool.cpp:788
 #, kde-format
@@ -240,34 +243,38 @@ msgstr "Zrušit seskupení"
 #: defaulttool/DefaultTool.cpp:462 defaulttool/DefaultTool.cpp:534
 #, kde-format
 msgid "Click and drag to move guide line."
-msgstr ""
+msgstr "Kliknutím a tažením přesuňte vodicí čáru."
 
 #: defaulttool/DefaultTool.cpp:468
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
+"Kliknutím levým tlačítkem se otáčí kolem středu, kliknutím pravým tlačítkem "
+"kolem zvýrazněné pozice."
 
 #: defaulttool/DefaultTool.cpp:470
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr "Klikněte a  táhněte pro výběr zkosení"
+msgstr "Kliknutím a tažením můžete výběr zkosit."
 
 #: defaulttool/DefaultTool.cpp:472
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr ""
+msgstr "Kliknutím a tažením změňte velikost výběru."
 
 #: defaulttool/DefaultTool.cpp:524
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr ""
+msgstr "Kliknutím a tažením přesuňte výběr."
 
 #: defaulttool/DefaultTool.cpp:529
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
+"Kliknutím a tažením změňte velikost výběru. Kliknutím prostředním tlačítkem "
+"myši nastavte umístění zvýraznění."
 
 #: defaulttool/DefaultTool.cpp:1044
 msgctxt "(qtundo-format)"
@@ -401,16 +408,17 @@ msgstr "Y:"
 #, kde-format
 msgid "Press ALT to hold x- or y-position."
 msgstr ""
+"Stiskněte klávesu ALT a podržte ji, abyste zafixovali polohu na ose x nebo y."
 
 #: defaulttool/ShapeResizeStrategy.cpp:123
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr ""
+msgstr "Stiskněte klávesu CTRL a změňte velikost od středu."
 
 #: defaulttool/ShapeRotateStrategy.cpp:49
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr ""
+msgstr "Stiskněte klávesu ALT pro otáčení v krocích po 45 stupních."
 
 #: defaulttool/ShapeShearStrategy.cpp:193
 msgctxt "(qtundo-format)"
@@ -420,12 +428,14 @@ msgstr "Zkosit"
 #: guidestool/GuidesTool.cpp:131
 #, kde-format
 msgid "Double click to add guide line."
-msgstr ""
+msgstr "Dvojitým kliknutím přidejte vodicí čáru."
 
 #: guidestool/GuidesTool.cpp:134
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
+"Kliknutím a tažením přesuňte vodicí čáru. Dvojitým kliknutím vodicí čáru "
+"smažte."
 
 #: guidestool/GuidesTool.cpp:371
 #, kde-format
@@ -435,7 +445,7 @@ msgstr "Editor vodítek"
 #: guidestool/GuidesTool.cpp:377
 #, kde-format
 msgid "Guides Insertor"
-msgstr ""
+msgstr "Vkládání vodítek"
 
 #: guidestool/GuidesToolFactory.cpp:14
 #, kde-format

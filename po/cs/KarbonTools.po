@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2014, 2015, 2017.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <filipek.libor@protonmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2015-06-02 12:51+0100\n"
-"Last-Translator: Vít Pelčák <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-04-21 19:52+0200\n"
+"Last-Translator: Libor Filípek <filipek.libor@protonmail.com>\n"
+"Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -41,12 +42,12 @@ msgstr "Odstranit profil"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
 #, kde-format
 msgid "&Follow selected path"
-msgstr ""
+msgstr "&Sledovat vybranou cestu"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr ""
+msgstr "Využít tlak na dis&plej tabletu"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
 #, kde-format
@@ -56,12 +57,12 @@ msgstr "Šířka:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
 #, kde-format
 msgid "Thinning:"
-msgstr ""
+msgstr "Ztenčení:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
 #, kde-format
 msgid "Use tablet &angle"
-msgstr ""
+msgstr "Použít sklon t&abletu"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
 #, kde-format
@@ -71,17 +72,17 @@ msgstr "Úhel:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
 #, kde-format
 msgid "Fixation:"
-msgstr ""
+msgstr "Upevnění:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
 #, kde-format
 msgid "Caps:"
-msgstr ""
+msgstr "Velká písmena:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
 #, kde-format
 msgid "Mass:"
-msgstr "Hmotnost:"
+msgstr "Hmota:"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
 #, kde-format
@@ -134,7 +135,7 @@ msgstr "Myš"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:353
 #, kde-format
 msgid "Graphics Pen"
-msgstr ""
+msgstr "Grafické pero"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:330
 #, kde-format
@@ -144,22 +145,22 @@ msgstr "Vyplnit"
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:358
 #, kde-format
 msgid "Calligraphy: increase width"
-msgstr ""
+msgstr "Kaligrafie: zvětšit šířku"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:363
 #, kde-format
 msgid "Calligraphy: decrease width"
-msgstr ""
+msgstr "Kaligrafie: zmenšit šířku"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:368
 #, kde-format
 msgid "Calligraphy: increase angle"
-msgstr ""
+msgstr "Kaligrafie: zvětšit úhel"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:373
 #, kde-format
 msgid "Calligraphy: decrease angle"
-msgstr ""
+msgstr "Kaligrafie: zmenšit úhel"
 
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:380
 #: CalligraphyTool/KarbonCalligraphyTool.cpp:381
@@ -231,7 +232,7 @@ msgstr "..."
 #: filterEffectTool/FilterEffectEditWidget.ui:92
 #, kde-format
 msgid "Filter Presets"
-msgstr ""
+msgstr "Předvolby filtrů"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: filterEffectTool/FilterEffectEditWidget.ui:116
@@ -248,7 +249,7 @@ msgstr "Odstranit efekt filtru"
 #: filterEffectTool/FilterStackSetCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
-msgstr ""
+msgstr "Nastavit sadu filtrů"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:439
 #, kde-format
@@ -258,7 +259,7 @@ msgstr "Efekty"
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:447
 #, kde-format
 msgid "View and edit filter"
-msgstr ""
+msgstr "Zobrazit a upravit filtr"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:453
 #, kde-format
@@ -303,22 +304,24 @@ msgstr "Úprava efektů filtru"
 #: KarbonGradientTool.cpp:199
 #, kde-format
 msgid "Drag to move gradient position."
-msgstr ""
+msgstr "Přetažením posuňte polohu přechodu."
 
 #: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
 msgstr ""
+"Přetažením přesuňte barevný mezník. Dvojitým kliknutím barevný mezník smažte."
 
 #: KarbonGradientTool.cpp:210
 #, kde-format
 msgid "Drag to move color stop."
-msgstr ""
+msgstr "Přetažením přesuňte barevný mezník."
 
 #: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
 msgstr ""
+"Přetažením posuňte polohu přechodu. Dvojitým kliknutím vložte barevný mezník."
 
 #: KarbonGradientTool.cpp:493
 #, kde-format
@@ -343,12 +346,12 @@ msgstr "Originál"
 #: KarbonPatternOptionsWidget.cpp:23
 #, kde-format
 msgid "Tiled"
-msgstr "Vydlážděná"
+msgstr "Vydlážděný"
 
 #: KarbonPatternOptionsWidget.cpp:24
 #, kde-format
 msgid "Stretched"
-msgstr ""
+msgstr "Natažený"
 
 #: KarbonPatternOptionsWidget.cpp:26
 #, kde-format

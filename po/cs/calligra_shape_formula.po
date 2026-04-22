@@ -1,31 +1,32 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # SPDX-FileCopyrightText: 2010, 2011, 2013, 2014, 2024 Vít Pelčák <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2026 Libor Filípek <filipek.libor@protonmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-08-23 15:30+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-04-20 21:17+0200\n"
+"Last-Translator: Libor Filípek <filipek.libor@protonmail.com>\n"
+"Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Vít Pelčák,Libor Filípek"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "vit@pelcak.org,libor.filipek@gmail.com"
 
 #: FormulaCommand.cpp:59
 msgctxt "(qtundo-format)"
@@ -183,12 +184,12 @@ msgstr "Vzorec"
 #: KoFormulaTool.cpp:404
 #, kde-format
 msgid "Insert fenced element"
-msgstr ""
+msgstr "Vložit ohraničený prvek"
 
 #: KoFormulaTool.cpp:405
 #, kde-format
 msgid "Insert enclosed element"
-msgstr ""
+msgstr "Vložit uzavřený prvek"
 
 #: KoFormulaTool.cpp:407
 #, kde-format
@@ -208,7 +209,7 @@ msgstr "Vložit zlomek"
 #: KoFormulaTool.cpp:411
 #, kde-format
 msgid "Insert bevelled fraction"
-msgstr ""
+msgstr "Vložit zlomek s lomítkem"
 
 #: KoFormulaTool.cpp:416
 #, kde-format
@@ -218,7 +219,7 @@ msgstr "Vložit tabulku 3x3"
 #: KoFormulaTool.cpp:422
 #, kde-format
 msgid "Insert 2 dimensional vector"
-msgstr ""
+msgstr "Vložit dvourozměrný vektor"
 
 #: KoFormulaTool.cpp:427
 #, kde-format
@@ -238,17 +239,17 @@ msgstr "Vložit horní i dolní index"
 #: KoFormulaTool.cpp:433
 #, kde-format
 msgid "Insert overscript"
-msgstr ""
+msgstr "Vložit symbol nad textem"
 
 #: KoFormulaTool.cpp:434
 #, kde-format
 msgid "Insert underscript"
-msgstr ""
+msgstr "Vložit symbol pod textem"
 
 #: KoFormulaTool.cpp:435
 #, kde-format
 msgid "Insert under- and overscript"
-msgstr ""
+msgstr "Vložit symbol nad i pod textem"
 
 #: KoFormulaTool.cpp:446
 #, kde-format
