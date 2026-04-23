@@ -89,6 +89,7 @@
     <p xml:lang="bs">Calligra Stage je lagana ali fleksibilna prezentacijska aplikacija. Možete lako kreirati prezentacije s dosta elemenata, iz grafike i teksta, dijagrama i slika. Calligra Stage se može proširivati kroz sistem dodataka, tako da je lako dodati nove efekte, nove sadržajne elemente ili čak nove načine upravljanja prezentacijom. Zbog integracije sa Calligra, sva moć i fleksibilnost od Calligra sadržaja elemenata su dostupni u Stage.</p>
     <p xml:lang="ca">L'Stage del Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear presentacions fàcilment que continguin una gran varietat d'elements, des de gràfics a text, des de diagrames a imatges. L'Stage del Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb el Calligra, tota la potència i la flexibilitat dels elements de contingut del Calligra estan disponibles per a l'Stage.</p>
     <p xml:lang="ca-valencia">Stage de Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear presentacions amb facilitat que continguen una gran varietat d'elements, des de gràfics fins a text, des de diagrames fins a imatges. Stage de Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb Calligra, tota la potència i la flexibilitat dels elements de contingut de Calligra estan disponibles per a Stage.</p>
+    <p xml:lang="cs">Calligra Stage je snadno ovladatelná a zároveň flexibilní aplikace pro tvorbu prezentací. Můžete v ní snadno vytvářet prezentace obsahující širokou škálu prvků, od grafiky po text, od grafů po obrázky. Calligra Stage je rozšiřitelná díky systému pluginů, takže je snadné přidávat nové efekty, nové obsahové prvky nebo dokonce nové způsoby správy prezentace. Díky integraci s aplikací Calligra má Stage k dispozici veškerý výkon a flexibilitu obsahových prvků aplikace Calligra.</p>
     <p xml:lang="el">Το Calligra Stage είναι μια ευκολόχρηστη αλλά και ευέλικτη εφαρμογή παρουσιάσεων. Μπορείτε εύκολα να δημιουργήσετε παρουσιάσεις που να περιέχουν μια πλούσια ποικιλία αντικειμένων, από γραφικά σε κείμενο,, από διαγράμματα σε εικόνες. Το Calligra Stage είναι επεκτάσιμο μέσα από ένα σύστημα προσθέτων, έτσι είναι εύκολο να προστεθούν νέα εφέ, νέα αντικείμενα περιεχομένου ή ακόμη και νέοι τρόποι διαχείρισης παρουσιάσεων. Λόγω της ενσωμάτωσης στο Calligra, όλη η ισχύς και η ευελιξία των αντικειμένων περιεχομένου του Calligra είναι διαθέσιμη στο Stage.</p>
     <p xml:lang="en-GB">Calligra Stage is an easy to use yet still flexible presentation application. You can easily create presentations containing a rich variety of elements, from graphics to text, from charts to images. Calligra Stage is extensible through a plugin system, so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility of the Calligra content elements are available to Stage.</p>
     <p xml:lang="eo">Calligra Stage estas facile uzebla sed tamen fleksebla prezenta aplikaĵo. Vi povas facile krei prezentaĵojn enhavantajn riĉan gamon da elementoj, de grafikaĵoj ĝis teksto, de diagramoj ĝis bildoj. Calligra Stage estas etendebla per kromprogramo, do estas facile aldoni novajn efikojn, novajn enhavajn elementojn aŭ eĉ novajn manierojn administri vian prezenton. Pro la integriĝo kun Calligra, la tuta potenco kaj fleksebleco de la Calligra enhavelementoj estas haveblaj al Stage.</p>
@@ -163,6 +164,7 @@
       <li xml:lang="bs">Više master slajdova</li>
       <li xml:lang="ca">Múltiples diapositives mestres</li>
       <li xml:lang="ca-valencia">Múltiples diapositives mestres</li>
+      <li xml:lang="cs">Více hlavních snímků</li>
       <li xml:lang="de">Mehrere Folienmaster</li>
       <li xml:lang="el">Πολλαπλές κύριες διαφάνειες</li>
       <li xml:lang="en-GB">Multiple master slides</li>
@@ -200,6 +202,7 @@
       <li xml:lang="bs">Lako prebacujte između slajdova tokom prezentacije</li>
       <li xml:lang="ca">Canvi senzill entre diapositives durant una presentació</li>
       <li xml:lang="ca-valencia">Canvi senzill entre diapositives durant una presentació</li>
+      <li xml:lang="cs">Během prezentace můžete snadno přepínat mezi snímky</li>
       <li xml:lang="de">Einfacher Wechsel zwischen Folien während einer Präsentation</li>
       <li xml:lang="el">Εύκολη εναλλαγή ανάμεσα σε διαφάνειες κατά τη διάρκεια μιας παρουσίασης</li>
       <li xml:lang="en-GB">Easily switch between slides during a presentation</li>
@@ -275,6 +278,7 @@
       <li xml:lang="bs">Podržava većinu tranzicija ODF datoteka</li>
       <li xml:lang="ca">Accepta la majoria de les transicions de fitxer ODF</li>
       <li xml:lang="ca-valencia">Accepta la majoria de les transicions de fitxer ODF</li>
+      <li xml:lang="cs">Podporuje většinu formátů souborů ODF</li>
       <li xml:lang="de">Unterstützt die meisten ODF-Dateiübergänge</li>
       <li xml:lang="el">Υποστηρίζει τις περισσότερες μεταβάσεις αρχείων ODF</li>
       <li xml:lang="en-GB">Supports most ODF file transitions</li>
@@ -390,6 +394,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار دعم ”فلاتباك“ إلى مجموعة برامج ”كاليغرا أوفيس“. كما يتضمن بعض التغييرات الرسومية الصغيرة على قائمة الشرائح ويصلح المعاينة التلقائية للرسوم المتحركة.</p>
         <p xml:lang="ca">Aquesta versió afegeix el suport per a flatpak a la suite Calligra Office. Això també conté alguns canvis petits gràfics a la llista de diapositives i corregeix la vista prèvia automàtica de les animacions.</p>
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office. Açò també conté alguns canvis petits gràfics a la llista de diapositives i corregix la vista prèvia automàtica de les animacions.</p>
+        <p xml:lang="cs">Tato verze přidává podporu Flatpaku do kancelářského balíku Calligra Office. Obsahuje také několik drobných grafických úprav v seznamu snímků a opravuje automatický náhled animací.</p>
         <p xml:lang="es">Esta versión añade compatibilidad con flatpak al paquete Calligra Office. También contiene algunos pequeños cambios gráficos en la lista de diapositivas y se ha corregido la vista previa automática de las animaciones.</p>
         <p xml:lang="fr">Cette version ajoute la prise en charge de FlatPak à la suite Calligra Office. Elle contient également quelques petites modifications graphiques dans la liste des diapositives et corrige l'aperçu automatique des animations.</p>
         <p xml:lang="ga">Cuireann an leagan seo tacaíocht flatpak leis an tsraith Calligra Office. Tá roinnt athruithe beaga grafacha ar an liosta sleamhnán ann freisin agus socraíonn sé réamhamharc uathoibríoch na mbeochana.</p>
@@ -411,6 +416,7 @@
         <p xml:lang="ar">التغييرات الأكثر أهمية هي أن كالغرا قد انتقلت بالكامل إلى Qt6 و KF6، إلى جانب إجراء تعديل جذري على واجهة المستخدم الخاصة بها.</p>
         <p xml:lang="ca">Els canvis més significatius són que el Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seva interfície d'usuari.</p>
         <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
+        <p xml:lang="cs">Nejvýznamnějšími změnami jsou úplný přechod Calligry na Qt6 a KF6 a zásadní přepracování uživatelského rozhraní.</p>
         <p xml:lang="es">Los cambios más significativos son que Calligra ha realizado la transición completa a Qt6 y KF6, y que se ha llevado a cabo una gran reorganización de la interfaz de usuario.</p>
         <p xml:lang="fr">Les modifications les plus significatives sont que Calligra a été entièrement migré vers Qt6 et KF6 et une refonte majeure de son interface utilisateur.</p>
         <p xml:lang="ga">Is iad na hathruithe is suntasaí ná gur aistríodh Calligra go hiomlán go Qt6 agus KF6, mar aon le hathchóiriú mór ar a chomhéadan úsáideora.</p>
@@ -427,6 +433,7 @@
         <p xml:lang="ar">لم يتغير المسرح كثيرًا باستثناء إعادة تصميم الشريط الجانبي. أصبحت تلميحات الأدوات الخاصة بالشرائح متوافقة الآن مع ويلاند.</p>
         <p xml:lang="ca">L'Stage no ha canviat realment a part del redisseny de la barra lateral. El consell d'eina per a les diapositives ara també és compatible amb el Wayland.</p>
         <p xml:lang="ca-valencia">Stage no ha canviat realment a part del redisseny de la barra lateral. El consell d'eina per a les diapositives ara també és compatible amb Wayland.</p>
+        <p xml:lang="cs">Aplikace Stage se kromě přepracování postranního panelu nijak výrazně nezměnila. Popisky u snímků jsou nyní také kompatibilní s Waylandem.</p>
         <p xml:lang="es">Stage no ha cambiado prácticamente nada aparte del rediseño de la barra lateral. Las ayudas emergentes de las diapositivas también son compatibles ahora con Wayland.</p>
         <p xml:lang="fr">Stage n'a pas vraiment changé à part la refonte de la barre latérale. Les infobulles pour les diapositives sont également maintenant compatibles avec Wayland.</p>
         <p xml:lang="ga">Níor athraigh Stage i ndáiríre seachas athdhearadh an bharra taoibh. Tá an leid uirlisí do na sleamhnáin comhoiriúnach le Wayland anois freisin.</p>
