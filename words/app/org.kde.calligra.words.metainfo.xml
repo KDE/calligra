@@ -90,6 +90,7 @@
     <p xml:lang="bs">Words je intuitivan program za obradu teksta i desktop aplikacija stonog izdavaštva. Uz to, možete kreirati informativne i atraktivne dokumente sa zadovoljstvom i lakoćom.</p>
     <p xml:lang="ca">El Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
     <p xml:lang="ca-valencia">Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
+    <p xml:lang="cs">Words je intuitivní textový editor a aplikace pro tvorbu textu. Díky němu můžete s radostí a snadností vytvářet informativní a atraktivní dokumenty.</p>
     <p xml:lang="de">Words ist eine intuitives Programm zur Textverarbeitung und Veröffentlichung. Damit  können damit leicht informative und attraktive Dokumente erstellen.</p>
     <p xml:lang="el">Το Words είναι ένας διαισθητικός επεξεργαστής κειμένου και εφαρμογή παραγωγής ηλεκτρονικών εκδόσεων. Με αυτό μπορείτε να δημιουργήσετε ενημερωτικά και ελκυστικά έγγραφα με απόλαυση και ευκολία.</p>
     <p xml:lang="en-GB">Words is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.</p>
@@ -171,6 +172,7 @@
       <li xml:lang="bs">Uređivanje bazirano na okvirima</li>
       <li xml:lang="ca">Edició basada en marcs</li>
       <li xml:lang="ca-valencia">Edició basada en marcs</li>
+      <li xml:lang="cs">Úpravy založené na snímcích</li>
       <li xml:lang="de">Editor auf der Grundlage von Rahmen</li>
       <li xml:lang="el">Επεξεργασία με βάση πλαίσιο</li>
       <li xml:lang="en-GB">Frame-based editing</li>
@@ -211,6 +213,7 @@
       <li xml:lang="bs">Dopušta ugradnju dokumenata</li>
       <li xml:lang="ca">Permet incrustar documents</li>
       <li xml:lang="ca-valencia">Permet incrustar documents</li>
+      <li xml:lang="cs">Umožňuje vkládání dokumentů</li>
       <li xml:lang="de">Ermöglicht das Einbetten von Dokumenten</li>
       <li xml:lang="el">Επιτρέπει την ενσωμάτωση εγγράφων</li>
       <li xml:lang="en-GB">Allows embedding of Documents</li>
@@ -251,6 +254,7 @@
       <li xml:lang="bs">Prilagođenje korisničkog interfejsa</li>
       <li xml:lang="ca">Personalització de la interfície d'usuari</li>
       <li xml:lang="ca-valencia">Personalització de la interfície d'usuari</li>
+      <li xml:lang="cs">Přizpůsobení uživatelského rozhraní</li>
       <li xml:lang="de">Anpassung der Benutzeroberfläche</li>
       <li xml:lang="el">Προσαρμογή του περιβάλλοντος χρήστη</li>
       <li xml:lang="en-GB">Customisation of user interface</li>
@@ -291,6 +295,7 @@
       <li xml:lang="bs">Uključuje sve osobine koje se očekuju od modernog programa za obradu teksta</li>
       <li xml:lang="ca">Inclou totes les funcionalitats esperades d'un processador de textos modern</li>
       <li xml:lang="ca-valencia">Inclou totes les característiques esperades d'un processador de textos modern</li>
+      <li xml:lang="cs">Obsahuje všechny funkce, které lze od moderního textového editoru očekávat</li>
       <li xml:lang="de">Enthält alle Funktionen einer modernen Textverarbeitung</li>
       <li xml:lang="el">Περιλαμβάνει όλες τις αναμενόμενες λειτουργίες από έναν μοντέρνο επεξεργαστή κειμένου</li>
       <li xml:lang="en-GB">Includes all features expected from a modern word processor</li>
@@ -331,6 +336,7 @@
       <li xml:lang="bs">ODT (Open Document Text) podrška</li>
       <li xml:lang="ca">Admet ODT (Open Document Text)</li>
       <li xml:lang="ca-valencia">Admet ODT (Open Document Text)</li>
+      <li xml:lang="cs">Podpora formátu ODT (Open Document Text)</li>
       <li xml:lang="de">Unterstützung für ODT (Open Document Text)</li>
       <li xml:lang="el">Υποστήριξη ODT (Open Document Text)</li>
       <li xml:lang="en-GB">ODT (Open Document Text) support</li>
@@ -445,6 +451,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار دعم ”فلاتباك“ إلى مجموعة برامج كاليغرا أوفيس.</p>
         <p xml:lang="ca">Aquesta versió afegeix el suport per a flatpak a la suite Calligra Office.</p>
         <p xml:lang="ca-valencia">Esta versió afig el suport per a flatpak a la suite Calligra Office.</p>
+        <p xml:lang="cs">Tato verze přidává podporu pro Flatpak do kancelářského balíku Calligra Office.</p>
         <p xml:lang="es">Esta versión añade compatibilidad con flatpak al paquete Calligra Office.</p>
         <p xml:lang="fi">Tämä julkaisu lisää Calligra-toimisto-ohjelmistoon Flatpak-tuen.</p>
         <p xml:lang="fr">Cette version ajoute la prise en charge de FlatPak à la suite Calligra Office.</p>
@@ -467,6 +474,7 @@
         <p xml:lang="ar">التغييرات الأكثر أهمية هي أن كالغرا قد انتقلت بالكامل إلى Qt6 و KF6، إلى جانب إجراء تعديل جذري على واجهة المستخدم الخاصة بها.</p>
         <p xml:lang="ca">Els canvis més significatius són que el Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seva interfície d'usuari.</p>
         <p xml:lang="ca-valencia">Els canvis més significatius són que Calligra s'ha transformat completament a les Qt6 i els KF6, juntament amb una revisió important de la seua interfície d'usuari.</p>
+        <p xml:lang="cs">Nejvýznamnějšími změnami jsou úplný přechod Calligry na Qt6 a KF6 a zásadní přepracování uživatelského rozhraní.</p>
         <p xml:lang="es">Los cambios más significativos son que Calligra ha realizado la transición completa a Qt6 y KF6, y que se ha llevado a cabo una gran reorganización de la interfaz de usuario.</p>
         <p xml:lang="fi">Merkittävimpiä muutoksia on Calligran siirros kokonaisuudessaan Qt6:een ja KF6:een sekä käyttöliittymän iso uudistus.</p>
         <p xml:lang="fr">Les modifications les plus significatives sont que Calligra a été entièrement migré vers Qt6 et KF6 et une refonte majeure de son interface utilisateur.</p>
@@ -484,6 +492,7 @@
         <p xml:lang="ar">يتميز وورد الآن بتصميم جديد للشريط الجانبي، ويستخدم العرض الرئيسي ظلًا لتحديد حدود المستند. كما حُدث مربع حوار ”مدير الأنماط“ و”تخطيط الصفحة“ بتصميم جديد.</p>
         <p xml:lang="ca">El Word ara presenta el disseny nou de la barra lateral, i la vista principal utilitza una ombra per a definir les vores del document. El diàleg del gestor d'estils i la disposició de pàgines també s'han actualitzat amb un disseny nou.</p>
         <p xml:lang="ca-valencia">Word ara presenta el disseny nou de la barra lateral, i la vista principal utilitza una ombra per a definir les vores del document. El diàleg del gestor d'estils i la disposició de pàgines també s'han actualitzat amb un disseny nou.</p>
+        <p xml:lang="cs">Aplikace Word nyní nabízí nový design postranního panelu a v hlavním zobrazení jsou okraje dokumentu vyznačeny stínem. Správce stylů a dialogové okno Rozvržení stránky byly také aktualizovány a dostaly nový design.</p>
         <p xml:lang="es">Word muestra ahora el nuevo diseño de la barra lateral. La vista principal usa una sombra para definir los bordes del documento. El gestor de estilos y el diálogo del diseño de la página también se han actualizado con un nuevo diseño.</p>
         <p xml:lang="fi">Wordsin sivupaneeli on muotoiltu uudelleen, ja päänäkymä varjostaa tiedostojen reunat. Tyylinhallinta ja sivuasetteluikkuna päivitettiin myös uuteen uskoon.</p>
         <p xml:lang="fr">Word présente désormais la nouvelle conception graphique de la barre latérale. La vue principale utilise une ombre pour définir les bordures du document. Le gestionnaire de styles et la boîte de dialogue de mise en page ont également été mis à jour avec une nouvelle conception graphique.</p>
