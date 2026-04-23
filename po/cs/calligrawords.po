@@ -3,21 +3,22 @@
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2024 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
 # Vit Pelcak <vit@pelcak.org>, 2021, 2023.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <filipek.libor@protonmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-08-23 15:41+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-04-22 18:09+0200\n"
+"Last-Translator: Libor Filípek <filipek.libor@protonmail.com>\n"
+"Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -138,25 +139,25 @@ msgstr "Řádek"
 #: part/dialogs/KWAnchoringProperties.cpp:425
 #, kde-format
 msgid "Page (entire) area"
-msgstr ""
+msgstr "Plocha celé stránky"
 
 #: part/dialogs/KWAnchoringProperties.cpp:418
 #: part/dialogs/KWAnchoringProperties.cpp:426
 #, kde-format
 msgid "Page text area"
-msgstr ""
+msgstr "Oblast textu stránky"
 
 #: part/dialogs/KWAnchoringProperties.cpp:419
 #: part/dialogs/KWAnchoringProperties.cpp:433
 #, kde-format
 msgid "Paragraph area"
-msgstr ""
+msgstr "Oblast odstavce"
 
 #: part/dialogs/KWAnchoringProperties.cpp:420
 #: part/dialogs/KWAnchoringProperties.cpp:434
 #, kde-format
 msgid "Paragraph text area"
-msgstr ""
+msgstr "Oblast textu odstavce"
 
 #: part/dialogs/KWAnchoringProperties.cpp:427
 #, kde-format
@@ -182,31 +183,31 @@ msgstr "Levý okraj odstavce"
 #: part/dialogs/KWAnchoringProperties.ui:17
 #, kde-format
 msgid "Shape relation to text is:"
-msgstr ""
+msgstr "Vztah tvaru k textu je:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:23
 #, kde-format
 msgid "Inline with text (behaves as a character)"
-msgstr ""
+msgstr "Vložený do textu (chová se jako znak)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:30
 #, kde-format
 msgid "Floating, but anchored to a character position"
-msgstr ""
+msgstr "Plovoucí, ale ukotvený na pozici znaku"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWAnchoringProperties.ui:37
 #, kde-format
 msgid "Floating, but anchored to a paragraph"
-msgstr ""
+msgstr "Plovoucí, ale ukotvený k odstavci"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWAnchoringProperties.ui:44
 #, kde-format
 msgid "Floating free (not anchored to text)"
-msgstr ""
+msgstr "Volně plovoucí (nezávislý na textu)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
@@ -218,7 +219,7 @@ msgstr "Umístění svisle"
 #: part/dialogs/KWAnchoringProperties.ui:60
 #, kde-format
 msgid "Top align with:"
-msgstr ""
+msgstr "Zarovnat nahoru s:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
 #. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
@@ -226,13 +227,13 @@ msgstr ""
 #: part/dialogs/KWAnchoringProperties.ui:186
 #, kde-format
 msgid "Center align with:"
-msgstr ""
+msgstr "Zarovnat na střed s:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rBottom)
 #: part/dialogs/KWAnchoringProperties.ui:87
 #, kde-format
 msgid "Bottom align with:"
-msgstr ""
+msgstr "Zarovnat dolů s:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
 #. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
@@ -260,13 +261,13 @@ msgstr "Umístění vodorovně"
 #: part/dialogs/KWAnchoringProperties.ui:169
 #, kde-format
 msgid "Left align with:"
-msgstr ""
+msgstr "Zarovnat vlevo s:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rRight)
 #: part/dialogs/KWAnchoringProperties.ui:196
 #, kde-format
 msgid "Right align with:"
-msgstr ""
+msgstr "Zarovnat vpravo s:"
 
 #: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
@@ -348,7 +349,7 @@ msgstr "sada rámců"
 #: part/dialogs/KWFrameConnectSelector.cpp:123
 #, kde-format
 msgid "No framesets in document"
-msgstr ""
+msgstr "V dokumentu nejsou žádné sady rámců"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/KWFrameConnectSelector.ui:67
@@ -476,55 +477,55 @@ msgstr "&Dole"
 #: part/dialogs/KWInsertImage.ui:127
 #, kde-format
 msgid "Text Wrap-around"
-msgstr ""
+msgstr "Zalomení textu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runThrough)
 #: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
 #, kde-format
 msgid "Run through this shape"
-msgstr ""
+msgstr "Projít tímto tvarem"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
 #: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
 #, kde-format
 msgid "Skip below this shape"
-msgstr ""
+msgstr "Přeskočit pod tento tvar"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
 #, kde-format
 msgid "Run on left side of this shape"
-msgstr ""
+msgstr "Obtékání po levé straně tohoto tvaru"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
 #, kde-format
 msgid "Run on right side of this shape"
-msgstr ""
+msgstr "Obtékání po pravé straně tohoto tvaru"
 
 #. i18n: ectx: property (text), widget (QRadioButton, longest)
 #: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
 #, kde-format
 msgid "Run on longest side of this shape"
-msgstr ""
+msgstr "Obtékání podél nejdelší strany tohoto tvaru"
 
 #. i18n: ectx: property (text), widget (QRadioButton, both)
 #: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
 #, kde-format
 msgid "Run on both sides of this shape"
-msgstr ""
+msgstr "Obtékání podél obou stran tohoto tvaru"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enough)
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr ""
+msgstr "Obtékání po stranách, které jsou širší než:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
 #, kde-format
 msgid "Distance Between Shape and Text:"
-msgstr ""
+msgstr "Vzdálenost mezi tvarem a textem:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
 #: part/dialogs/KWPageSettingsDialog.cpp:38 part/dialogs/KWStartupWidget.ui:37
@@ -550,29 +551,29 @@ msgstr "Smazat"
 #: part/dialogs/KWPageSettingsDialog.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
-msgstr ""
+msgstr "Změnit styl stránky"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:235
 #, kde-format
 msgid "Clone Page Style"
-msgstr ""
+msgstr "Klonovat styl stránky"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:236
 #, kde-format
 msgid "Add a new page style with the name:"
-msgstr ""
+msgstr "Přidat nový styl stránky s názvem:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:19
 #, kde-format
 msgid "Text elsewhere will:"
-msgstr ""
+msgstr "Text v dalších částech bude:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:92
 #, kde-format
 msgid "The shape affects the text by its:"
-msgstr ""
+msgstr "Tvar ovlivňuje text tím, že:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
 #: part/dialogs/KWRunAroundProperties.ui:99
@@ -590,7 +591,7 @@ msgstr "Obrys"
 #: part/dialogs/KWRunAroundProperties.ui:116
 #, kde-format
 msgid "Shape and text are separated left by:"
-msgstr ""
+msgstr "Tvar a text jsou odděleny zleva:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
@@ -1129,7 +1130,7 @@ msgstr "Pierre Stirnweiss"
 #: part/KWAboutData.h:39
 #, kde-format
 msgid "Formatting stuff"
-msgstr ""
+msgstr "Formátování"
 
 #: part/KWAboutData.h:39
 #, kde-format
@@ -1158,7 +1159,7 @@ msgstr "Matus Uzak"
 #: part/KWAboutData.h:42
 #, kde-format
 msgid "Layout and Painting"
-msgstr ""
+msgstr "Rozvržení a malování"
 
 #: part/KWAboutData.h:42
 #, kde-format
@@ -1173,7 +1174,7 @@ msgstr "Shreya Pandit"
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Statistics docker"
-msgstr ""
+msgstr "Statistický dok"
 
 #: part/KWAboutData.h:44
 #, kde-format
@@ -1183,7 +1184,7 @@ msgstr "Brijesh Patel"
 #: part/KWAboutData.h:44
 #, kde-format
 msgid "Foot and endnotes"
-msgstr ""
+msgstr "Poznámky pod čarou a na konci"
 
 #: part/KWAboutData.h:45
 #, kde-format
@@ -1338,7 +1339,7 @@ msgstr "Michael Johnson"
 #: part/KWAboutData.h:71
 #, kde-format
 msgid "Fatcow Web Hosting"
-msgstr ""
+msgstr "Webhosting Fatcow"
 
 #: part/KWAboutData.h:71
 #, kde-format
@@ -1349,14 +1350,16 @@ msgstr "Ikona zalomení stránky"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "lukas@kde.org,Ladislav.Strojil@seznam.cz,koty@seznam.cz,vit@pelcak.org"
+msgstr ""
+"lukas@kde.org,Ladislav.Strojil@seznam.cz,koty@seznam.cz,vit@pelcak.org,libor."
+"filipek@gmail.com"
 
 #. i18n translator strings
 #: part/KWAboutData.h:73
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Lukáš Tinkl,Ladislav Strojil,Klára Cihlářová,Vít Pelčák"
+msgstr "Lukáš Tinkl,Ladislav Strojil,Klára Cihlářová,Vít Pelčák,Libor Filípek"
 
 #: part/KWDocument.cpp:492
 #, kde-format
@@ -1427,6 +1430,7 @@ msgstr "Standardní"
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
 msgstr ""
+"Nelze najít požadovanou textovou komponentu, aplikace Words se nyní ukončí"
 
 #: part/KWPart.cpp:139
 #, kde-format
@@ -1491,12 +1495,12 @@ msgstr "Uloženo/Změněno"
 #: part/KWStatusBar.cpp:207
 #, kde-format
 msgid "Mouse Cursor X:Y"
-msgstr ""
+msgstr "Souřadnice kurzoru myši X:Y"
 
 #: part/KWStatusBar.cpp:220
 #, kde-format
 msgid "Zoom Controller"
-msgstr ""
+msgstr "Ovládání přiblížení"
 
 #: part/KWView.cpp:186
 #, kde-format
@@ -1511,7 +1515,7 @@ msgstr "Vlastnosti tvaru..."
 #: part/KWView.cpp:280
 #, kde-format
 msgid "Change how the shape behave"
-msgstr ""
+msgstr "Změnit chování tvaru"
 
 #: part/KWView.cpp:289
 #, kde-format
@@ -1521,7 +1525,7 @@ msgstr "Vytvořit šablonu z dokumentu..."
 #: part/KWView.cpp:290
 #, kde-format
 msgid "Save this document and use it later as a template"
-msgstr ""
+msgstr "Uložit tento dokument a použít jej později jako šablonu"
 
 #: part/KWView.cpp:292
 #, kde-format
@@ -1529,6 +1533,8 @@ msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
+"Tento dokument můžete uložit jako šablonu.<br><br>Tuto novou šablonu můžete "
+"použít jako výchozí bod pro vytvoření dalšího dokumentu."
 
 #: part/KWView.cpp:311
 #, kde-format
@@ -1558,7 +1564,7 @@ msgstr "Zobrazit stíny polí"
 #: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr ""
+msgstr "Přepnout stínované pozadí polí"
 
 #: part/KWView.cpp:329
 #, kde-format
@@ -1566,6 +1572,8 @@ msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
+"Zapněte nebo vypněte zobrazení polí (proměnných atd.) tak, že se jejich "
+"pozadí vybarví kontrastní barvou."
 
 #: part/KWView.cpp:331
 #, kde-format
@@ -1676,12 +1684,12 @@ msgstr "Nastavit pohled v celoobrazovkovém režimu"
 #: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr ""
+msgstr "Sémantické stylové soubory..."
 
 #: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
-msgstr ""
+msgstr "Upravit a přidat sémantické stylové soubory"
 
 #: part/KWView.cpp:403
 #, kde-format
@@ -1689,6 +1697,8 @@ msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
+"Stylové soubory se používají k formátování zobrazení informací uložených v "
+"RDF."
 
 #: part/KWView.cpp:418
 #, kde-format
@@ -1732,7 +1742,7 @@ msgstr "Zobrazit komentáře"
 #: part/KWView.cpp:448
 #, kde-format
 msgid "Shows comments in the document"
-msgstr ""
+msgstr "Zobrazí komentáře v dokumentu"
 
 #: part/KWView.cpp:454
 #, kde-format
@@ -1829,12 +1839,12 @@ msgstr "Nenalezena žádná shoda"
 #: part/widgets/KoFindToolbar.cpp:241
 #, kde-format
 msgid "Search hit bottom, continuing from top."
-msgstr ""
+msgstr "Hledání se dostalo dolů, pokračuje se odshora."
 
 #: part/widgets/KoFindToolbar.cpp:243
 #, kde-format
 msgid "Search hit top, continuing from bottom."
-msgstr ""
+msgstr "Hledání se dostalo nahoru, pokračuje se odzdola."
 
 #: part/Words.cpp:41
 #, kde-format
