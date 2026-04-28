@@ -312,7 +312,7 @@ msgstr "********<MenoZošitu>********"
 #: sheets/csv/exportdialogui.ui:144
 #, kde-format
 msgid "<SHEETNAME> gets replaced by the name of the next sheet."
-msgstr "<MenoZošitu> sa nahradí menom ďaľšieho zošitu."
+msgstr "<MenoZošitu> sa nahradí menom ďalšieho zošitu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
 #: sheets/csv/exportdialogui.ui:163
@@ -1289,7 +1289,7 @@ msgstr "Súbor nie je možné načítať."
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
-#~ msgstr "<MenoZošitu> sa nahradí menom ďaľšieho zošitu."
+#~ msgstr "<MenoZošitu> sa nahradí menom ďalšieho zošitu."
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Print delimiter line above every sheet"

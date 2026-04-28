@@ -6767,7 +6767,7 @@ msgstr "G_PRODUCT(hodnota;hodnota;...)"
 #: functions/math.xml:507
 #, kde-format
 msgid "The DIV() function divides the first value by the other values in turn."
-msgstr "Funkcia DIV() delí prvú hodnotu ďaľšími hodnotami v poradí."
+msgstr "Funkcia DIV() delí prvú hodnotu ďalšími hodnotami v poradí."
 
 #: functions/math.xml:508
 #, kde-format
@@ -8786,10 +8786,11 @@ msgid ""
 "Both parameters should be positive and the first parameter should not be "
 "less than the second. Otherwise the function returns an error."
 msgstr ""
-"Funkcia COMBINA() vypočíta počet kombinácií. Prvý parameter je celkový počet "
-"členov. Druhý parameter je počet vyberaných členov. Tieto dva parametre by "
-"mali byť kladné, pretože inak funkcia vráti chybu. Prvý parameter by mal byť "
-"väčší ako druhý parameter, inak funkcia tak isto vráti chybu."
+"Funkcia COMBINA() vypočíta počet kombinácií s opakovaním. Prvý parameter je "
+"celkový počet členov. Druhý parameter je počet vyberaných členov s povoleným "
+"opakovaním. Tieto dva parametre by mali byť kladné, pretože inak funkcia "
+"vráti chybu. Prvý parameter by mal byť väčší ako druhý parameter, inak "
+"funkcia tak isto vráti chybu."
 
 #: functions/statistical.xml:207
 #, kde-format
@@ -10419,12 +10420,11 @@ msgid ""
 "2)."
 msgstr ""
 "Parameter režim sa používa na určenie, či vyžadujete rozdiel medzi dvoma "
-"sadami údajov, aby boli v rovnakom smere alebo nie. Napríklad, ak "
-"predpovedáme, že všetci vysokí ľudia sú schopní bežať rýchlejšie ako nízki "
-"ľudia, mali by sme použiť one-tailed test (režim = 1); avšak, ak "
-"predpovedáme, že jedna skupina bude schopná bežať rýchlejšie ako iná, ale "
-"nevieme, ktorá bude najrýchlejšia, mali by sme použiť two-tailed test (režim "
-"= 2)."
+"sadami údajov v konkrétnom smere alebo nie. Napríklad, ak predpovedáme, že "
+"všetci vysokí ľudia sú schopní bežať rýchlejšie ako nízki ľudia, mali by sme "
+"použiť jednostranný test (režim = 1); avšak, ak predpovedáme, že jedna "
+"skupina bude schopná bežať rýchlejšie ako iná, ale nevieme, ktorá bude "
+"najrýchlejšia, mali by sme použiť dvojstranný test (režim = 2)."
 
 #: functions/statistical.xml:1487
 #, kde-format
@@ -32443,7 +32443,7 @@ msgstr "Odkaz %1 aktivovaný"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The DIV() function divides the first value by the other values in turn."
-#~ msgstr "Funkcia DIV() delí prvú hodnotu ďaľšími hodnotami v poradí."
+#~ msgstr "Funkcia DIV() delí prvú hodnotu ďalšími hodnotami v poradí."
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
