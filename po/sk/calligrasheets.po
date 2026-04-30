@@ -3467,7 +3467,7 @@ msgstr "IMABS(\"12\") vracia 12"
 #: functions/math.xml:1158
 #, kde-format
 msgid "Floating point value"
-msgstr "Reálna hodnota"
+msgstr "Hodnota s pohyblivou rádovou čiarkou"
 
 #: functions/engineering.xml:882
 #, kde-format
@@ -3640,7 +3640,7 @@ msgstr "ACCRINTM(\"2/28/2001\"; \"8/31/2001\"; 0.1; 100) vracia 5.0278"
 #: functions/financial.xml:1265
 #, kde-format
 msgid "Cost"
-msgstr "Cena"
+msgstr "Náklady"
 
 #: functions/financial.xml:85 functions/financial.xml:111
 #: functions/financial.xml:1218
@@ -4471,7 +4471,7 @@ msgstr "ISPMT(0.1; 1; 3; 8000000) sa rovná -533333"
 #: functions/financial.xml:731 functions/financial.xml:1508
 #, kde-format
 msgid "Face value"
-msgstr "Nominálna hodnota"
+msgstr "Menovitá hodnota"
 
 #: functions/financial.xml:735
 #, kde-format
@@ -6555,7 +6555,7 @@ msgstr "COUNTIF(A2:A3;\"14\") vracia 1 ak A2 je -4 a A3 je 14"
 #: functions/math.xml:979 functions/math.xml:1038
 #, kde-format
 msgid "A floating point value"
-msgstr "Reálna hodnota"
+msgstr "Hodnota s pohyblivou rádovou čiarkou"
 
 #: functions/math.xml:368
 #, kde-format
@@ -7490,7 +7490,7 @@ msgstr "Stredná hodnota normálneho rozdelenia"
 #: functions/math.xml:1057
 #, kde-format
 msgid "Dispersion of the normal distribution"
-msgstr "Smerodajná odchýlka normálneho rozdelenia"
+msgstr "Rozptyl normálneho rozdelenia"
 
 #: functions/math.xml:1061
 #, kde-format
@@ -8294,8 +8294,8 @@ msgid ""
 "Look for a matching value in the first row of the given table, and return "
 "the value of the indicated row."
 msgstr ""
-"Hľadá zhodnú hodnotu v prvom stĺpci danej tabuľky a vráti hodnotu "
-"indikovaného stĺpca."
+"Hľadá zhodnú hodnotu v prvom riadku danej tabuľky a vráti hodnotu "
+"indikovaného riadka."
 
 #: functions/reference.xml:275
 #, kde-format
@@ -8680,8 +8680,8 @@ msgid ""
 "The start and end parameters are optional. They set the lower and upper "
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
-"Posledné dva parametre sú voliteľné. Pomocou nich určujete hornú a dolnú "
-"hranicu. Ak nie sú uvedené, je použitá prednastavená hodnota 0.0 a 1.0."
+"Parametre začiatku a konca sú voliteľné. Pomocou nich určujete dolnú a hornú "
+"hranicu; prednastavená hodnota je 0.0 resp. 1.0."
 
 #: functions/statistical.xml:149
 #, kde-format
@@ -9267,7 +9267,7 @@ msgstr "Počet úspešných v príklade"
 #: functions/statistical.xml:1801
 #, kde-format
 msgid "Number of trials"
-msgstr "Počet období"
+msgstr "Počet pokusov"
 
 #: functions/statistical.xml:569
 #, kde-format
@@ -9767,7 +9767,7 @@ msgstr "PERMUTATIONA(0,0) vracia 1"
 #: functions/statistical.xml:970
 #, kde-format
 msgid "Range of values"
-msgstr "Rozsah buniek"
+msgstr "Rozsah hodnôt"
 
 #: functions/statistical.xml:974
 #, kde-format
@@ -13528,7 +13528,7 @@ msgstr "Listy"
 #: part/dialogs/SheetSelectWidget.ui:40
 #, kde-format
 msgid "All Sheets"
-msgstr "Dostupné listy"
+msgstr "Všetky hárky"
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeSheetButton)
 #: part/dialogs/SheetSelectWidget.ui:47
@@ -14797,12 +14797,12 @@ msgstr "Vzorka"
 #: ui/dialogs/LayoutPage_Border.cpp:312
 #, kde-format
 msgid "Customize"
-msgstr "Upraviť"
+msgstr "Prispôsobiť"
 
 #: ui/dialogs/LayoutPage_Float.cpp:57
 #, kde-format
 msgid "Generic"
-msgstr "Všeobecné"
+msgstr "Generické"
 
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
@@ -14852,7 +14852,7 @@ msgstr ""
 #: ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
 msgid "Money"
-msgstr "Mena"
+msgstr "Peniaze"
 
 #: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
@@ -14960,12 +14960,12 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Na zadanie dátumu je potrebné ho zadať v jednom z formátov v Systémových "
-"nastaveniach -> Vhľad a témy -> Miestne nastavenia -> Krajina/región a jazyk "
-"-> Čas a dátum. Sú tu nastavené dva formáty: formátu dátumu a krátky formátu "
-"dátumu.\n"
+"Na zadanie dátumu a času je potrebné ho zadať v jednom z formátov v "
+"Systémových nastaveniach -> Vzhľad a témy -> Miestne nastavenia -> Krajina/"
+"región a jazyk -> Čas a dátum. Sú tu nastavené dva formáty: formát dátumu a "
+"krátky formát dátumu.\n"
 "Rovnako ako môžete potiahnuť dolu čísla, môžete potiahnuť aj dátumy a ďalšie "
-"bunky tiež budú obsahovať dátum."
+"bunky tiež budú obsahovať dátumy a časy."
 
 #: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
