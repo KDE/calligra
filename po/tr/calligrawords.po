@@ -7,13 +7,13 @@
 # Serdar Cevher <scevher@anet.com.tr>, 2000.
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-09-03 17:02+0300\n"
+"PO-Revision-Date: 2026-05-02 19:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -639,7 +639,7 @@ msgstr "Yer İmini Yeniden Adlandır"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:72
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr "“%1” adlı bir yer imi halihazırda var."
+msgstr "“%1” adlı bir yer imi hâlihazırda var."
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:104
 #, kde-format
@@ -1362,7 +1362,7 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Serdar Soytetir, Bekir Bozdoğan, Anıl Özbek, Emir SARI"
+msgstr "Serdar SOYTETİR, Bekir Bozdoğan, Anıl Özbek, Emir SARI"
 
 #: part/KWDocument.cpp:492
 #, kde-format

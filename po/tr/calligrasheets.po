@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-03-08 15:20+0300\n"
+"PO-Revision-Date: 2026-05-02 19:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -12711,7 +12711,7 @@ msgstr "tulliana@fmail.com, gorkem@kde.org, emir_sari@icloud.com"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Serdar Soytetir, Görkem Çetin, Emir SARI"
+msgstr "Serdar SOYTETİR, Görkem ÇETİN, Emir SARI"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
@@ -15259,7 +15259,7 @@ msgstr "Biçemden kullan:"
 #: ui/dialogs/LayoutPage_General.cpp:86
 #, kde-format
 msgid "A style with this name already exists."
-msgstr "Bu adda bir biçem halihazırda var."
+msgstr "Bu adda bir biçem hâlihazırda var."
 
 #: ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
