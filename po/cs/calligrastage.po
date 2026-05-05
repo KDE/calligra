@@ -3,21 +3,22 @@
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2024 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012.
 # Vit Pelcak <vit@pelcak.org>, 2021, 2023.
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-08-23 15:31+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-05-04 20:03+0200\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -69,17 +70,17 @@ msgstr "Přidat vlastní prezentaci"
 #: part/commands/KPrAnimationCreateCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Create shape animation"
-msgstr ""
+msgstr "Vytvořit animaci tvaru"
 
 #: part/commands/KPrAnimationEditNodeTypeCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
-msgstr ""
+msgstr "Upravit událost spouštějící animaci"
 
 #: part/commands/KPrAnimationRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove shape animation"
-msgstr ""
+msgstr "Odstranit animaci tvaru"
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -102,7 +103,7 @@ msgstr[2] "Odstranit snímky"
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Edit animation delay/duration"
-msgstr ""
+msgstr "Upravit zpoždění/délku animace"
 
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -112,17 +113,17 @@ msgstr "Upravit vlastní prezentaci"
 #: part/commands/KPrPageEffectSetCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Create Slide Effect"
-msgstr ""
+msgstr "Vytvořit efekt snímku"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Effect"
-msgstr ""
+msgstr "Upravit efekt snímku"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Delete Slide Effect"
-msgstr ""
+msgstr "Odstranit efekt snímku"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
 msgctxt "(qtundo-format)"
@@ -279,14 +280,14 @@ msgstr "Timothée Lacroix "
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "lukas@kde.org,koty@seznam.cz"
+msgstr "lukas@kde.org,koty@seznam.cz,libor.filipek@gmail.com"
 
 #. i18n translator strings
 #: part/KPrAboutData.h:55
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Lukáš Tinkl,Klára Cihlářová"
+msgstr "Lukáš Tinkl,Klára Cihlářová,Libor Filípek"
 
 #: part/KPrCustomSlideShowsModel.cpp:52
 #: part/KPrSlidesSorterDocumentModel.cpp:83
@@ -314,11 +315,13 @@ msgstr "Rozvržení"
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
+"Nelze najít požadovanou textovou komponentu, Calligra Stage se nyní ukončí."
 
 #: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
+"Nelze najít požadovanou obrazovou komponentu, Calligra Stage se nyní ukončí."
 
 #: part/KPrPart.cpp:87
 #, kde-format
@@ -428,26 +431,26 @@ msgstr "Konec prezentace"
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
-msgstr ""
+msgstr "spustit kliknutím myši"
 
 #: part/KPrShapeAnimations.cpp:193
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
-msgstr ""
+msgstr "spustit po předchozí animaci"
 
 #: part/KPrShapeAnimations.cpp:195
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
-msgstr ""
+msgstr "spustit s předchozí animací"
 
 #: part/KPrShapeAnimations.cpp:206
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
-msgstr ""
+msgstr "Spustit za %1 sekund. Délka trvání %2 sekund."
 
 #: part/KPrShapeAnimations.cpp:225
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
@@ -578,7 +581,7 @@ msgstr "Vložit obrázky jako snímky..."
 #: part/KPrView.cpp:273
 #, kde-format
 msgid "Create Appear Animation"
-msgstr ""
+msgstr "Vytvořit animaci vzhledu"
 
 #: part/KPrView.cpp:277
 #, kde-format
@@ -633,17 +636,17 @@ msgstr "Nastavit pohled v KPresenteru..."
 #: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
-msgstr ""
+msgstr "Nakreslit na prezentaci..."
 
 #: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
-msgstr ""
+msgstr "Zvýraznit prezentaci..."
 
 #: part/KPrView.cpp:332
 #, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr ""
+msgstr "Černá obrazovka na prezentaci..."
 
 #: part/KPrViewModeNotes.cpp:36
 #, kde-format
@@ -663,22 +666,22 @@ msgstr "Prezentace: "
 #: part/KPrViewModeSlidesSorter.cpp:83
 #, kde-format
 msgid "Add a new custom slide show"
-msgstr ""
+msgstr "Přidat novou vlastní prezentaci"
 
 #: part/KPrViewModeSlidesSorter.cpp:88
 #, kde-format
 msgid "Delete current custom slide show"
-msgstr ""
+msgstr "Smazat aktuální vlastní prezentaci"
 
 #: part/KPrViewModeSlidesSorter.cpp:92
 #, kde-format
 msgid "Add slides to current custom slide show"
-msgstr ""
+msgstr "Přidat snímky do aktuální vlastní prezentace"
 
 #: part/KPrViewModeSlidesSorter.cpp:97
 #, kde-format
 msgid "Remove slides from current custom slide show"
-msgstr ""
+msgstr "Odstranit snímky z aktuální vlastní prezentace"
 
 #: part/KPrViewModeSlidesSorter.cpp:173
 #, kde-format
@@ -751,7 +754,7 @@ msgstr "Nastavit rozvržení"
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, kde-format
 msgid "Automatic animation preview"
-msgstr ""
+msgstr "Automatický náhled animace"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:301
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:309
@@ -767,17 +770,17 @@ msgstr "Přechody snímků"
 #: part/tools/animationtool/KPrAnimationTool.cpp:217
 #, kde-format
 msgid "Shape Click Actions"
-msgstr ""
+msgstr "Akce při kliknutí na tvar"
 
 #: part/tools/animationtool/KPrAnimationTool.cpp:219
 #, kde-format
 msgid "Shape Animations"
-msgstr ""
+msgstr "Animace tvarů"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
 #, kde-format
 msgid "Manage animation delay and duration: "
-msgstr ""
+msgstr "Nastavení zpoždění a délky animace: "
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
 #, kde-format
@@ -792,12 +795,12 @@ msgstr "při kliknutí myší"
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
 #, kde-format
 msgid "after previous animation"
-msgstr ""
+msgstr "po předchozí animaci"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
 #, kde-format
 msgid "with previous animation"
-msgstr ""
+msgstr "s předchozí animací"
 
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
 #, kde-format
@@ -813,7 +816,7 @@ msgstr "Délka trvání: "
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:124
 #, kde-format
 msgid "Preview Shape Animation"
-msgstr ""
+msgstr "Náhled animace tvaru"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:50
 #, kde-format
@@ -848,12 +851,12 @@ msgstr "Aplikovat na všechny snímky"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:253
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
-msgstr ""
+msgstr "Použít efekt na všechny snímky"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:158
 #, kde-format
 msgid "Entrance"
-msgstr ""
+msgstr "Vstup"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:164
 #, kde-format
@@ -873,17 +876,17 @@ msgstr "Vlastní"
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:179
 #, kde-format
 msgid "Motion path"
-msgstr ""
+msgstr "Dráha pohybu"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:184
 #, kde-format
 msgid "Ole Action"
-msgstr ""
+msgstr "Akce Ole"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:189
 #, kde-format
 msgid "Media Call"
-msgstr ""
+msgstr "Volání médií"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
@@ -954,7 +957,7 @@ msgstr "Šíř&ka:"
 #: part/tools/animationtool/wdg_tool_crop.ui:63
 #, kde-format
 msgid "Will keep the width of the crop constant"
-msgstr "Ponechá výšku ořezu konstantní"
+msgstr "Ponechá šířku ořezu konstantní"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
 #: part/tools/animationtool/wdg_tool_crop.ui:84
@@ -966,7 +969,7 @@ msgstr "&Výška:"
 #: part/tools/animationtool/wdg_tool_crop.ui:87
 #, kde-format
 msgid "Will keep the height of the crop constant"
-msgstr ""
+msgstr "Ponechá výšku ořezu konstantní"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: part/tools/animationtool/wdg_tool_crop.ui:94
@@ -984,7 +987,7 @@ msgstr "P&oměr:"
 #: part/tools/animationtool/wdg_tool_crop.ui:114
 #, kde-format
 msgid "Will keep the ratio constant"
-msgstr ""
+msgstr "Ponechá poměr konstantní"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: part/tools/animationtool/wdg_tool_crop.ui:132
@@ -1019,13 +1022,13 @@ msgstr "Více monitorů"
 #: part/ui/KPrConfigurePresenterView.ui:24
 #, kde-format
 msgid "Presentation monitor:"
-msgstr "Monitor prezentace"
+msgstr "Monitor prezentace:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
 #: part/ui/KPrConfigurePresenterView.ui:39
 #, kde-format
 msgid "Enable presenter view"
-msgstr ""
+msgstr "Zapnout zobrazení pro přednášejícího"
 
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:27
 #, kde-format
@@ -1077,7 +1080,7 @@ msgstr "Export HTML"
 #: part/ui/KPrHtmlExport.ui:29
 #, kde-format
 msgid "Tick the slide should be exported :"
-msgstr ""
+msgstr "Zaškrtněte, zda má být snímek exportován:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
 #: part/ui/KPrHtmlExport.ui:55
@@ -1107,7 +1110,7 @@ msgstr "Název"
 #: part/ui/KPrHtmlExport.ui:117
 #, kde-format
 msgid "Output preview"
-msgstr ""
+msgstr "Náhled výstupu"
 
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
@@ -1132,7 +1135,7 @@ msgstr "Autor"
 #: part/ui/KPrHtmlExport.ui:258
 #, kde-format
 msgid "Delete Favorite"
-msgstr ""
+msgstr "Smazat oblíbené"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
 #: part/ui/KPrHtmlExport.ui:286
@@ -1153,17 +1156,17 @@ msgstr "Exportovat"
 #: part/ui/KPrHtmlExportDialog.cpp:153
 #, kde-format
 msgid "There is already a favorite file with this name"
-msgstr ""
+msgstr "Soubor oblíbených s tímto názvem již existuje"
 
 #: part/ui/KPrHtmlExportDialog.cpp:198
 #, kde-format
 msgid "Incorrect file, .zip only or corrupted zip"
-msgstr ""
+msgstr "Nesprávný soubor, pouze formát .zip nebo poškozený soubor ZIP"
 
 #: part/ui/KPrHtmlExportDialog.cpp:203
 #, kde-format
 msgid "Zip file need to contain style.css"
-msgstr ""
+msgstr "Soubor ZIP musí obsahovat soubor style.css"
 
 #: part/ui/KPrHtmlExportDialog.cpp:306
 #, kde-format
@@ -1173,7 +1176,7 @@ msgstr "Smazat šablonu"
 #: part/ui/KPrHtmlExportDialog.cpp:309
 #, kde-format
 msgid "You may not remove the templates provided with the application"
-msgstr ""
+msgstr "Šablony dodané s aplikací nesmíte odstranit"
 
 #: part/ui/KPrHtmlExportDialog.cpp:315
 #, kde-format
@@ -1293,7 +1296,7 @@ msgstr "Shora"
 #: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:30
 #, kde-format
 msgid "Unknown subtype"
-msgstr ""
+msgstr "Neznámý podtyp"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:17
 #, kde-format
@@ -1302,208 +1305,208 @@ msgstr "Hodiny"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:31
 msgid "From Twelve Clockwise"
-msgstr ""
+msgstr "Od dvanácti ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:32
 msgid "From Three Clockwise"
-msgstr ""
+msgstr "Od tří ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
 msgid "From Six Clockwise"
-msgstr ""
+msgstr "Od šesti ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
 msgid "From Nine Clockwise"
-msgstr ""
+msgstr "Od devíti ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
 msgid "From Twelve Counterclockwise"
-msgstr ""
+msgstr "Od dvanácti proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
 msgid "From Three Counterclockwise"
-msgstr ""
+msgstr "Od tří proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
 msgid "From Six Counterclockwise"
-msgstr ""
+msgstr "Od šesti proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
 msgid "From Nine Counterclockwise"
-msgstr ""
+msgstr "Od devíti proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Double Fan"
-msgstr ""
+msgstr "Dvojitý vějíř"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:29
 msgid "Fan Out Vertical"
-msgstr ""
+msgstr "Vějíř ven svisle"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:30
 msgid "Fan Out Horizontal"
-msgstr ""
+msgstr "Vějíř ven vodorovně"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:31
 msgid "Fan In Vertical"
-msgstr ""
+msgstr "Vějíř dovnitř svisle"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
 msgid "Fan In Horizontal"
-msgstr ""
+msgstr "Vějíř dovnitř vodorovně"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
 msgid "Fan In Vertical Reverse"
-msgstr ""
+msgstr "Vějíř dovnitř svisle reverzně"
 
 #: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
 msgid "Fan In Horizontal Reverse"
-msgstr ""
+msgstr "Vějíř dovnitř vodorovně reverzně"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Double Sweep"
-msgstr ""
+msgstr "Dvojitý stěrač"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:34
 msgid "Parallel Vertical"
-msgstr ""
+msgstr "Paralelně svisle"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:35
 msgid "Parallel Diagonal"
-msgstr ""
+msgstr "Paralelně úhlopříčně"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:36
 msgid "Opposite Vertical"
-msgstr ""
+msgstr "Naproti svisle"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
 msgid "Opposite Horizontal"
-msgstr ""
+msgstr "Naproti vodorovně"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
 msgid "Parallel Diagonal Top Left"
-msgstr ""
+msgstr "Paralelně úhlopříčně zleva nahoře"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
 msgid "Parallel Diagonal Bottom Left"
-msgstr ""
+msgstr "Paralelně úhlopříčně zleva dole"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
 msgid "Parallel Vertical Reverse"
-msgstr ""
+msgstr "Paralelně svisle reverzně"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
 msgid "Parallel Diagonal Reverse"
-msgstr ""
+msgstr "Paralelně úhlopříčně reverzně"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
 msgid "Opposite Vertical Reverse"
-msgstr ""
+msgstr "Naproti svisle reverzně"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
 msgid "Opposite Horizontal Reverse"
-msgstr ""
+msgstr "Naproti vodorovně reverzně"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
 msgid "Parallel Diagonal Top Left Reverse"
-msgstr ""
+msgstr "Paralelně úhlopříčně reverzně zleva nahoře"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
 msgid "Parallel Diagonal Bottom Left Reverse"
-msgstr ""
+msgstr "Paralelně úhlopříčně reverzně zleva dole"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:18
 #, kde-format
 msgid "Fan"
-msgstr "Větrák"
+msgstr "Vějíř"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:37
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
 msgid "Center Right"
-msgstr ""
+msgstr "Centrálně zprava"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:38
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
 msgid "Center Top"
-msgstr ""
+msgstr "Centrálně shora"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
 msgid "Center Left"
-msgstr ""
+msgstr "Centrálně zleva"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
 msgid "Center Bottom"
-msgstr ""
+msgstr "Centrálně zdola"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
 msgid "Fan Out Top"
-msgstr ""
+msgstr "Vějíř ven shora"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
 msgid "Fan Out Right"
-msgstr ""
+msgstr "Vějíř ven zprava"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
 msgid "Fan Out Bottom"
-msgstr ""
+msgstr "Vějíř ven zdola"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
 msgid "Fan Out Left"
-msgstr ""
+msgstr "Vějíř ven zleva"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
 msgid "Fan In Top"
-msgstr ""
+msgstr "Vějíř dovnitř shora"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
 msgid "Fan In Right"
-msgstr ""
+msgstr "Vějíř dovnitř zprava"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
 msgid "Fan In Bottom"
-msgstr ""
+msgstr "Vějíř dovnitř zdola"
 
 #: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
 msgid "Fan In Left"
-msgstr ""
+msgstr "Vějíř dovnitř zleva"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Pin Wheel"
-msgstr ""
+msgstr "Větrník"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:28
 msgid "Two Blades Vertical Clockwise"
-msgstr ""
+msgstr "Dvě čepele svisle ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:29
 msgid "Two Blades Horizontal Clockwise"
-msgstr ""
+msgstr "Dvě čepele vodorovně ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:30
 msgid "Four Blades Horizontal Clockwise"
-msgstr ""
+msgstr "Čtyři čepele vodorovně ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
 msgid "Two Blades Vertical Counterclockwise"
-msgstr ""
+msgstr "Dvě čepele svisle proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
 msgid "Two Blades Horizontal Counterclockwise"
-msgstr ""
+msgstr "Dvě čepele vodorovně proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
 msgid "Four Blades Horizontal Counterclockwise"
-msgstr ""
+msgstr "Čtyři čepele vodorovně proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Saloon Door"
-msgstr ""
+msgstr "Dvojité dveře"
 
 #: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
 #: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
@@ -1528,89 +1531,89 @@ msgstr "Doprava"
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:17
 #, kde-format
 msgid "Single Sweep"
-msgstr ""
+msgstr "Jeden stěrač"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:39
 msgid "Clockwise Top"
-msgstr ""
+msgstr "Shora ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:40
 msgid "Clockwise Right"
-msgstr ""
+msgstr "Zprava ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:41
 msgid "Clockwise Bottom"
-msgstr ""
+msgstr "Zdola ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:42
 msgid "Clockwise Left"
-msgstr ""
+msgstr "Zleva ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:43
 msgid "Clockwise Top Left"
-msgstr ""
+msgstr "Zleva nahoře ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:44
 msgid "Counterclockwise Bottom Left"
-msgstr ""
+msgstr "Zleva dole proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:45
 msgid "Clockwise Bottom Right"
-msgstr ""
+msgstr "Zprava dole ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:46
 msgid "Counterclockwise Top Right"
-msgstr ""
+msgstr "Zprava nahoře proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:47
 msgid "Counterclockwise Top"
-msgstr ""
+msgstr "Shora proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:48
 msgid "Counterclockwise Right"
-msgstr ""
+msgstr "Zprava proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:49
 msgid "Counterclockwise Bottom"
-msgstr ""
+msgstr "Zdola proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:50
 msgid "Counterclockwise Left"
-msgstr ""
+msgstr "Zleva proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:51
 msgid "Counterclockwise Top Left"
-msgstr ""
+msgstr "Zleva nahoře proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:52
 msgid "Clockwise Bottom Left"
-msgstr ""
+msgstr "Zleva dole ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:53
 msgid "Counterclockwise Bottom Right"
-msgstr ""
+msgstr "Zprava dole proti směru hodin"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:54
 msgid "Clockwise Top Right"
-msgstr ""
+msgstr "Zprava nahoře ve směru hodin"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Windshield"
-msgstr ""
+msgstr "Rotační stěrač"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:31
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:74
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:70
 msgid "Right"
-msgstr "Vpravo"
+msgstr "Zprava"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:32
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:72
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:68
 msgid "Up"
-msgstr "Nahoru"
+msgstr "Shora"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:33
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:30
@@ -1637,14 +1640,14 @@ msgstr "Vodorovně"
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:71
 msgid "Right Reverse"
-msgstr ""
+msgstr "Zprava reverzně"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
 #: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:73
 #: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:50
 #: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:69
 msgid "Up Reverse"
-msgstr ""
+msgstr "Shora reverzně"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:31
@@ -1653,7 +1656,7 @@ msgstr ""
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
 msgid "Vertical Reverse"
-msgstr ""
+msgstr "Svisle reverzně"
 
 #: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
@@ -1662,7 +1665,7 @@ msgstr ""
 #: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:59
 #: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:36
 msgid "Horizontal Reverse"
-msgstr ""
+msgstr "Vodorovně reverzně"
 
 #: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
 #, kde-format
