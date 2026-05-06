@@ -5,13 +5,13 @@
 # Görkem Çetin <gorkem@kde.org>, 2003.
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-03-08 15:20+0300\n"
+"PO-Revision-Date: 2026-05-06 00:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -81,7 +81,7 @@ msgid ""
 "Invalid document. Expected mimetype application/x-kspread or application/vnd."
 "kde.kspread, got %1"
 msgstr ""
-"Geçersiz belge. application/x-kspread veya application/vnd.kde.kspread MIME "
+"Geçersiz belge; application/x-kspread veya application/vnd.kde.kspread MIME "
 "türü bekleniyordu, %1 alındı"
 
 #: core/ksp/SheetsKspDoc.cpp:52
@@ -109,7 +109,7 @@ msgstr "Biçemler yüklenemedi."
 #: core/ksp/SheetsKspDoc.cpp:113
 #, kde-format
 msgid "Invalid document. No map tag."
-msgstr "Geçersiz belge. Eşlem etiketi yok."
+msgstr "Geçersiz belge. Eşlem künyesi yok."
 
 #: core/ksp/SheetsKspMap.cpp:77
 #, kde-format
@@ -192,7 +192,7 @@ msgstr "Bir doğruluk değeri (TRUE veya FALSE)"
 #: engine/FunctionDescription.cpp:43
 #, kde-format
 msgid "A floating point value (like 1.3, 0.343, 253 )"
-msgstr "Bir kayan noktalı değer (1,3, 0,343, 253 gibi)"
+msgstr "Bir kayan noktalı değer (1,3; 0,343; 253 gibi)"
 
 #: engine/FunctionDescription.cpp:45
 #, kde-format
@@ -202,7 +202,7 @@ msgstr "Herhangi bir türde değer"
 #: engine/FunctionDescription.cpp:47
 #, kde-format
 msgid "A string representing a date (like \"2/22/2012\")"
-msgstr "Tarihi gösteren bir dizi (\"2/2/2012\" gibi)"
+msgstr "Tarihi gösteren bir dizi (“2/2/2012\" gibi)"
 
 #: engine/FunctionDescription.cpp:52
 #, kde-format
@@ -222,7 +222,7 @@ msgstr "Doğruluk değeri erimi (TRUE veya FALSE)"
 #: engine/FunctionDescription.cpp:58
 #, kde-format
 msgid "A range of floating point values (like 1.3, 0.343, 253 )"
-msgstr "Kayan noktalı değer erimi (1,3, 0,343, 253 gibi)"
+msgstr "Kayan noktalı değer erimi (1,3; 0,343; 253 gibi)"
 
 #: engine/FunctionDescription.cpp:60
 #, kde-format
@@ -233,7 +233,7 @@ msgstr "Herhangi bir türde değerler erimi"
 #, kde-format
 msgid ""
 "A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")"
-msgstr "Tarih erimini gösteren bir dizi (\"2/2/2012\"–\"5/2/2012\" gibi)"
+msgstr "Tarih erimini gösteren bir dizi (“2/2/2012\"–“5/2/2012\" gibi)"
 
 #: engine/FunctionDescription.cpp:165
 #, kde-format
@@ -507,17 +507,17 @@ msgstr "BOOL2STRING(değer)"
 #: functions/conversion.xml:17
 #, kde-format
 msgid "BOOL2STRING(true) returns \"True\""
-msgstr "BOOL2STRING(doğru), \"doğru\" döndürür"
+msgstr "BOOL2STRING(true), “doğru” döndürür"
 
 #: functions/conversion.xml:18
 #, kde-format
 msgid "BOOL2STRING(false) returns \"False\""
-msgstr "BOOL2STRING(yanlış), \"yanlış\" döndürür"
+msgstr "BOOL2STRING(false), “yanlış” döndürür"
 
 #: functions/conversion.xml:19
 #, kde-format
 msgid "upper(BOOL2STRING(find(\"nan\";\"banana\"))) returns TRUE"
-msgstr "UPPER(BOOL2STRING(find(\"nan\";\"ananas\"))), 3 döndürür"
+msgstr "UPPER(BOOL2STRING(find(\"nan\"; \"ananas\"))), 3 döndürür"
 
 #: functions/conversion.xml:27
 #, kde-format
@@ -575,12 +575,12 @@ msgstr "BOOL2INT(değer)"
 #: functions/conversion.xml:50
 #, kde-format
 msgid "BOOL2INT(True) returns 1"
-msgstr "BOOL2INT(doğru), 1 döndürür"
+msgstr "BOOL2INT(True), 1 döndürür"
 
 #: functions/conversion.xml:51
 #, kde-format
 msgid "BOOL2INT(False) returns 0"
-msgstr "BOOL2INT(yanlış), 0 döndürür"
+msgstr "BOOL2INT(False), 0 döndürür"
 
 #: functions/conversion.xml:60 functions/conversion.xml:77
 #, kde-format
@@ -606,12 +606,12 @@ msgstr "NUM2STRING(değer)"
 #: functions/conversion.xml:66
 #, kde-format
 msgid "NUM2STRING(10) returns \"10\""
-msgstr "NUM2STRING(10), \"10\" döndürür"
+msgstr "NUM2STRING(10), “10” döndürür"
 
 #: functions/conversion.xml:67
 #, kde-format
 msgid "NUM2STRING(2.05) returns \"2.05\""
-msgstr "NUM2STRING(2,05), \"2,05\" döndürür"
+msgstr "NUM2STRING(2,05), “2,05” döndürür"
 
 #: functions/conversion.xml:68
 #, kde-format
@@ -674,12 +674,12 @@ msgstr "ASCIITOCHAR(değer)"
 #: functions/conversion.xml:111
 #, kde-format
 msgid "ASCIITOCHAR(118) returns \"v\""
-msgstr "ASCIITOCHAR(118), \"v\" döndürür"
+msgstr "ASCIITOCHAR(118), “v” döndürür"
 
 #: functions/conversion.xml:112
 #, kde-format
 msgid "ASCIITOCHAR(75; 68; 69) returns \"KDE\""
-msgstr "ASCIITOCHAR(75; 68; 69), \"KDE\" döndürür"
+msgstr "ASCIITOCHAR(75; 68; 69), “KDE” döndürür"
 
 #: functions/conversion.xml:120 functions/conversion.xml:142
 #, kde-format
@@ -777,12 +777,12 @@ msgstr "CARX(Yarıçap;Açı)"
 #: functions/conversion.xml:175
 #, kde-format
 msgid "CARX(12;1.5707) returns 0.00115592"
-msgstr "CARX(12;1.5707) işlevi, 0,00115592 döndürür"
+msgstr "CARX(12; 1,5707), 0,00115592 döndürür"
 
 #: functions/conversion.xml:176
 #, kde-format
 msgid "CARX(12;0) returns 12"
-msgstr "CARX(12;0) işlevi, 12 döndürür"
+msgstr "CARX(12; 0), 12 döndürür"
 
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
@@ -805,7 +805,7 @@ msgstr "DECSEX(çift)"
 #: functions/conversion.xml:193
 #, kde-format
 msgid "DECSEX(1.6668) returns 1:40 "
-msgstr "DECSEX(1.6668), 1:40 döndürür "
+msgstr "DECSEX(1,6668), 1:40 döndürür"
 
 #: functions/conversion.xml:194
 #, kde-format
@@ -844,12 +844,12 @@ msgstr "SEXDEC(zaman değeri) veya SEXDEC(saat;dakika;saniye)"
 #: functions/conversion.xml:216
 #, kde-format
 msgid "SEXDEC(1;5;7) returns 1.0852778 "
-msgstr "SEXDEC(1;5;7) işlevi 1,0852778 döndürür "
+msgstr "SEXDEC(1; 5; 7), 1,0852778 döndürür"
 
 #: functions/conversion.xml:217
 #, kde-format
 msgid "DECSEX(\"8:05\") returns 8.08333333"
-msgstr "DECSEX(\"8:05\") işlevi, 8,08333333 döndürür"
+msgstr "DECSEX(\"8:05\"), 8,08333333 döndürür"
 
 #: functions/conversion.xml:233
 #, kde-format
@@ -868,12 +868,12 @@ msgstr "CARY(Yarıçap;Açı)"
 #: functions/conversion.xml:235
 #, kde-format
 msgid "CARY(12;1.5707) returns 12"
-msgstr "CARY(12;1,5707) işlevi, 12 döndürür"
+msgstr "CARY(12; 1,5707), 12 döndürür"
 
 #: functions/conversion.xml:236
 #, kde-format
 msgid "CARY(12;0) returns 0"
-msgstr "CARY(12;0) işlevi, 0 döndürür"
+msgstr "CARY(12;0), 0 döndürür"
 
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
@@ -917,12 +917,12 @@ msgstr "ROMAN(Sayı)"
 #: functions/conversion.xml:257
 #, kde-format
 msgid "ROMAN(99) returns \"XCIX\""
-msgstr "ROMAN(99) işlevi \"XCIX\" döndürür"
+msgstr "ROMAN(99), “XCIX” döndürür"
 
 #: functions/conversion.xml:258
 #, kde-format
 msgid "ROMAN(-55) returns \"Err\""
-msgstr "ROMAN(-55) işlevi \"Err\" döndürür"
+msgstr "ROMAN(-55), “Err” döndürür"
 
 #: functions/conversion.xml:267
 #, kde-format
@@ -942,12 +942,12 @@ msgstr "ARABIC(Sayı)"
 #: functions/conversion.xml:273
 #, kde-format
 msgid "ARABIC(\"IV\") returns 4"
-msgstr "ARABIC(\"IV\") işlevi, 4 döndürür"
+msgstr "ARABIC(\"IV\"), 4 döndürür"
 
 #: functions/conversion.xml:274
 #, kde-format
 msgid "ARABIC(\"XCIX\") returns 99"
-msgstr "ARABIC(\"XCIX\") işlevi, 99 döndürür"
+msgstr "ARABIC(\"XCIX\"), 99 döndürür"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
 #, kde-format
@@ -962,7 +962,7 @@ msgstr "Veri Tabanı"
 #: functions/database.xml:237 functions/database.xml:260
 #, kde-format
 msgid "Range marking the database"
-msgstr "Veri tabanı için seçim aralığı"
+msgstr "Veri tabanı için seçim erimi"
 
 #: functions/database.xml:15 functions/database.xml:37
 #: functions/database.xml:59 functions/database.xml:82
@@ -982,7 +982,7 @@ msgstr "Veritabınındaki sütunun seçilme ifadesi"
 #: functions/database.xml:245 functions/database.xml:268
 #, kde-format
 msgid "Range marking the conditions"
-msgstr "Koşulları belirleyen aralık"
+msgstr "Koşulları belirleyen erim"
 
 #: functions/database.xml:23
 #, kde-format
@@ -1223,7 +1223,7 @@ msgstr "DVARP(A1:C5; \"Aylık Maaş\"; A9:A11)"
 #: functions/database.xml:284
 #, kde-format
 msgid "Range containing the pivot table"
-msgstr "Pivot tablosunu içeren aralık"
+msgstr "Pivot tablosunu içeren erim"
 
 #: functions/database.xml:288
 #, kde-format
@@ -1270,9 +1270,9 @@ msgid ""
 msgstr ""
 "WEEKDAY() işlevi, verilen tarihin haftanın hangi gününe geldiğini bulur. "
 "Eğer 1. (öntanımlı) yöntem kullanılırsa WEEKDAY() işlevi, 1 değeri için "
-"Pazar, 2 değeri için Pazartesi ... sonuçlarını döndürür. Eğer 2. yöntem "
-"kullanılırsa Pazartesi için 1, Salı için 2.. değerleri geçerli olur. Eğer 3. "
-"yöntem kullanılırsa WEEKDAY() işlevi, Pazartesi için 0, Salı için 1..."
+"Pazar, 2 değeri için Pazartesi…. sonuçlarını döndürür. Eğer 2. yöntem "
+"kullanılırsa Pazartesi için 1, Salı için 2… değerleri geçerli olur. Eğer 3. "
+"yöntem kullanılırsa WEEKDAY() işlevi, Pazartesi için 0, Salı için 1…"
 
 #: functions/datetime.xml:20
 #, kde-format
@@ -1282,7 +1282,7 @@ msgstr "WEEKDAY(tarih; yöntem)"
 #: functions/datetime.xml:21
 #, kde-format
 msgid "WEEKDAY(\"2002-02-22\"; 2) returns 5"
-msgstr "WEEKDAY(\"2002-02-22\"; 2) 5 döndürür"
+msgstr "WEEKDAY(\"2002-02-22\"; 2), 5 döndürür"
 
 #: functions/datetime.xml:30
 #, kde-format
@@ -1388,12 +1388,12 @@ msgstr "EDATE(tarih; ay)"
 #: functions/datetime.xml:96
 #, kde-format
 msgid "EDATE(\"2/22/2002\"; 3) returns \"5/22/2002\""
-msgstr "EDATE(\"2/22/2002\"; 3), \"5/22/2002\" döndürür"
+msgstr "EDATE(\"2/22/2002\"; 3), “5/22/2002” döndürür"
 
 #: functions/datetime.xml:97
 #, kde-format
 msgid "EDATE(\"3/31/2002\"; -1) returns \"2/28/2002\""
-msgstr "EDATE(\"3/31/2002\"; -1), \"2/28/2002\" döndürür"
+msgstr "EDATE(\"3/31/2002\"; -1), “2/28/2002” döndürür"
 
 #: functions/datetime.xml:115
 #, kde-format
@@ -1412,17 +1412,17 @@ msgstr "EOMONTH(tarih; ay)"
 #: functions/datetime.xml:117
 #, kde-format
 msgid "EOMONTH(\"2/22/2002\"; 3) returns \"5/31/2002\""
-msgstr "EOMONTH(\"2/22/2002\"; 3), \"5/31/2002\" döndürür"
+msgstr "EOMONTH(\"2/22/2002\"; 3), “5/31/2002” döndürür"
 
 #: functions/datetime.xml:118
 #, kde-format
 msgid "EOMONTH(\"3/12/2002\"; -1) returns \"2/28/2002\""
-msgstr "EOMONTH(\"3/12/2002\"; -1), \"2/28/2002\" döndürür"
+msgstr "EOMONTH(\"3/12/2002\"; -1), “2/28/2002” döndürür"
 
 #: functions/datetime.xml:119
 #, kde-format
 msgid "EOMONTH(\"3/12/2002\"; 0) returns \"3/31/2002\""
-msgstr "EOMONTH(\"3/12/2002\"; 0), \"3/31/2002\" döndürür"
+msgstr "EOMONTH(\"3/12/2002\"; 0), “3/31/2002” döndürür"
 
 #: functions/datetime.xml:133
 #, kde-format
@@ -1610,7 +1610,7 @@ msgid ""
 "WEEKS(\"2002-02-18\"; \"2002-02-26\"; 0) returns 1, because there is one "
 "week and 1 day in between"
 msgstr ""
-"WEEKS(\"2002-02-18\";\"2002-02-26\"; 0), 0 döndürür; çünkü arada bir hafta "
+"WEEKS(\"2002-02-18\"; \"2002-02-26\"; 0), 0 döndürür; çünkü arada bir hafta "
 "ve bir gün vardır"
 
 #: functions/datetime.xml:246
@@ -1711,7 +1711,7 @@ msgstr "DAYS(tarih2; tarih1)"
 #: functions/datetime.xml:310
 #, kde-format
 msgid "DAYS(\"2002-02-22\"; \"2002-02-26\") returns 4"
-msgstr "DAYS(\"2002-02-22\"; \"2002-02-26\") işlevi, 4 döndürür"
+msgstr "DAYS(\"2002-02-22\"; \"2002-02-26\"), 4 döndürür"
 
 #: functions/datetime.xml:318 functions/datetime.xml:341
 #: functions/datetime.xml:401 functions/datetime.xml:415
@@ -1736,7 +1736,7 @@ msgstr "Gün"
 #, kde-format
 msgid ""
 "The DAYOFYEAR() function returns the number of the day in the year (1...365)."
-msgstr "DAYOFYEAR() işlevi, yıl içindeki günü sayı (1...365) olarak döndürür."
+msgstr "DAYOFYEAR() işlevi, yıl içindeki günü sayı (1…365) olarak döndürür."
 
 #: functions/datetime.xml:331
 #, kde-format
@@ -1766,7 +1766,7 @@ msgstr "DATE(yıl;ay;tarih)"
 #: functions/datetime.xml:355
 #, kde-format
 msgid "DATE(2000;5;5) returns Friday 05 May 2000"
-msgstr "DATE(2000,5,5), 'Cuma 05 Mayıs 2000' döndürür"
+msgstr "DATE(2000,5,5), “Cuma 05 Mayıs 2000” döndürür"
 
 #: functions/datetime.xml:375
 #, kde-format
@@ -1904,7 +1904,7 @@ msgstr "SECONDS(zaman)"
 #: functions/datetime.xml:481
 #, kde-format
 msgid "SECONDS(\"10:5:2\") returns 2"
-msgstr "SECONDS(\"10:5:2\")i 2 döndürür"
+msgstr "SECONDS(\"10:5:2\"), 2 döndürür"
 
 #: functions/datetime.xml:489
 #, kde-format
@@ -1939,7 +1939,7 @@ msgstr "Ay numarası 1..12)"
 #: functions/datetime.xml:508
 #, kde-format
 msgid "The MONTHNAME() function returns the name of the month (1...12)."
-msgstr "MONTHNAME() işlevi, ayın numarasını (1...12) döndürür."
+msgstr "MONTHNAME() işlevi, ayın numarasını (1…12) döndürür."
 
 #: functions/datetime.xml:509
 #, kde-format
@@ -1966,7 +1966,7 @@ msgstr "CURRENTDATE()"
 #: functions/datetime.xml:520
 #, kde-format
 msgid "CURRENTDATE() returns \"Saturday 13 April 2002\""
-msgstr "CURRENTDATE(), \"13 Nisan 2002 Cumartesi\" döndürür"
+msgstr "CURRENTDATE(), “13 Nisan 2002 Cumartesi” döndürür"
 
 #: functions/datetime.xml:530
 #, kde-format
@@ -1981,7 +1981,7 @@ msgstr "TODAY()"
 #: functions/datetime.xml:532
 #, kde-format
 msgid "TODAY() returns \"Saturday 13 April 2002\""
-msgstr "TODAY(), \"13 Nisan 2002 Cumartesi\" döndürür"
+msgstr "TODAY(), “13 Nisan 2002 Cumartesi” döndürür"
 
 #: functions/datetime.xml:542
 #, kde-format
@@ -2001,7 +2001,7 @@ msgstr "NOW()"
 #: functions/datetime.xml:544
 #, kde-format
 msgid "NOW() returns \"Saturday 13 April 2002 19:12:01\""
-msgstr "NOW(), \"13 Nisan 2002 Cumartesi 19:12:01\""
+msgstr "NOW(), “13 Nisan 2002 Cumartesi 19:12:01” döndürür"
 
 #: functions/datetime.xml:554
 #, kde-format
@@ -2016,7 +2016,7 @@ msgstr "CURRENTDATETIME()"
 #: functions/datetime.xml:556
 #, kde-format
 msgid "CURRENTDATETIME() returns \"Saturday 13 April 2002 19:12:01\""
-msgstr "CURRENTDATETIME(), \"13 Nisan 2002 Cumartesi 19:12:01\""
+msgstr "CURRENTDATETIME(), “13 Nisan 2002 Cumartesi 19:12:01” döndürür"
 
 #: functions/datetime.xml:564
 #, kde-format
@@ -2035,7 +2035,7 @@ msgstr "CURRENTTIME()"
 #: functions/datetime.xml:566
 #, kde-format
 msgid "CURRENTTIME() returns \"19:12:01\""
-msgstr "CURRENTTIME(), \"19:12:01\" döndürür"
+msgstr "CURRENTTIME(), “19:12:01” döndürür"
 
 #: functions/datetime.xml:578
 #, kde-format
@@ -2054,7 +2054,7 @@ msgstr "EASTERSUNDAY(yıl)"
 #: functions/datetime.xml:580
 #, kde-format
 msgid "EASTERSUNDAY(2003) returns \"20th April 2003\""
-msgstr "EASTERSUNDAY(2003), \"13 Nisan 2003\" döndürür"
+msgstr "EASTERSUNDAY(2003), “13 Nisan 2003” döndürür"
 
 #: functions/datetime.xml:592
 #, kde-format
@@ -2076,7 +2076,7 @@ msgstr "ISOWEEKNUM(tarih)"
 #: functions/datetime.xml:594
 #, kde-format
 msgid "ISOWEEKNUM(A1) returns 51 when A1 is \"21st of Dec\"."
-msgstr "ISOWEEKNUM(A1), A1 \"21 Aralık\" iken 51 döndürür."
+msgstr "ISOWEEKNUM(A1), A1 “21 Aralık” iken 51 döndürür."
 
 #: functions/datetime.xml:611
 #, kde-format
@@ -2099,7 +2099,7 @@ msgid ""
 "week in the year, with a week beginning on Sunday (1, this is the default if "
 "Method is omitted.)"
 msgstr ""
-"WEEKNUM(A1; 1), A1 içeriği \"9 Mart 2008\" olduğunda 11 döndürür. Yıldaki "
+"WEEKNUM(A1; 1), A1 içeriği “9 Mart 2008” olduğunda 11 döndürür. Yıldaki "
 "hafta numarasını Pazar’ı başlangıç alarak döndürür (1, yöntem yazılmadığında "
 "öntanımlıdır.)"
 
@@ -2109,8 +2109,8 @@ msgid ""
 "WEEKNUM(A1; 2) returns 10 when A1 is \"9th of March 2008\". Number of the "
 "week in the year, with a week beginning on Monday (2)"
 msgstr ""
-"WEEKNUM(A1; 2), A1 \"9 Mart 2008\" olduğunda 10 döndürür. Hafta Pazartesi "
-"(2) ile başladığında yıldaki hafta sayısıdır"
+"WEEKNUM(A1; 2), A1 “9 Mart 2008” olduğunda 10 döndürür. Hafta, Pazartesi (2) "
+"ile başladığında yıldaki hafta sayısıdır."
 
 #: functions/datetime.xml:623 functions/datetime.xml:647
 #, kde-format
@@ -2139,9 +2139,8 @@ msgid ""
 "complete years; \"ym\": month excluding years; \"yd\": days excluding years; "
 "\"md\": days excluding months and years"
 msgstr ""
-"Aralık şunlardan biri olmalıdır: \"m\": ay; \"d\": gün; \"y\": yıl; \"ym\": "
-"ay hariç yıllar; \"yd\": gün hariç yıllar; \"md\": aylar ve yıllar hariç "
-"günler"
+"Aralık şunlardan biri olmalıdır: “m”: Ay; “d”: Gün; “y”: Yıl; \"ym”: Ay "
+"dışında yıllar; “yd”: Gün hariç yıllar; “md”: Aylar ve yıllar dışında günler."
 
 #: functions/datetime.xml:637
 #, kde-format
@@ -2154,7 +2153,7 @@ msgid ""
 "DATEDIF(A1;A2;\"d\") A1 is \"1st of January 1995\" and A2 is \"15th of June "
 "1999\" returns number of days 1626"
 msgstr ""
-"DATEDIF(A1;A2;\"d\"), A1 \"1 Ocak 1995\" ve A2 \"15 Haziran 1999\" olduğunda "
+"DATEDIF(A1; A2; \"d\"), A1 “1 Ocak 1995” ve A2 “15 Haziran 1999” olduğunda "
 "gün sayısı olarak 1626 döndürür"
 
 #: functions/datetime.xml:639
@@ -2163,7 +2162,7 @@ msgid ""
 "DATEDIF(A1;A2;\"m\") A1 is \"1st of January 1995\" and A2 is \"15th of June "
 "1999\" returns number of months 53"
 msgstr ""
-"DATEDIF(A1;A2;\"m\"), A1 \"1 Ocak 1995\" ve A2 \"15 Haziran 1999\" olduğunda "
+"DATEDIF(A1; A2; \"m\"), A1 “1 Ocak 1995” ve A2 “15 Haziran 1999” olduğunda "
 "ay sayısı olarak 53 döndürür"
 
 #: functions/datetime.xml:659
@@ -2232,8 +2231,8 @@ msgid ""
 "if B9 is \"01/01/2001\", D3 is \"01/03/2001\", D4 is \"01/04/2001\" then "
 "WORKDAY(B9;2;D3:D4) returns \"Fri Jan 5 2001\""
 msgstr ""
-"Eğer B9 \"01/01/2001\", D3 \"01/03/2001\" ve D4 \"01/04/2001\" olursa "
-"WORKDAY(B9;2;D3:D4), \"Cuma 5 Ocak 2001\" döndürür"
+"Eğer B9 “01/01/2001”, D3 “01/03/2001” ve D4 “01/04/2001” olursa WORKDAY(B9;2;"
+"D3:D4), “5 Ocak 2001 Cuma” döndürür"
 
 #: functions/datetime.xml:696
 #, kde-format
@@ -2257,12 +2256,12 @@ msgstr "NETWORKDAY(başlangıç tarihi; bitiş tarihi; tatil günleri)"
 #: functions/datetime.xml:707
 #, kde-format
 msgid "NETWORKDAY(\"01/01/2001\";\"01/08/2001\") returns 5 workdays"
-msgstr "NETWORKDAY(\"01/01/2001\";\"01/08/2001\"), 5 iş günü döndürür"
+msgstr "NETWORKDAY(\"01/01/2001\"; \"01/08/2001\"), 5 iş günü döndürür"
 
 #: functions/datetime.xml:708
 #, kde-format
 msgid "NETWORKDAY(\"01/01/2001\";\"01/08/2001\";2) returns 3 workdays"
-msgstr "NETWORKDAY(\"01/01/2001\";\"01/08/2001\";2), 3 iş günü döndürür"
+msgstr "NETWORKDAY(\"01/01/2001\"; \"01/08/2001\";2), 3 iş günü döndürür"
 
 #: functions/datetime.xml:720
 #, kde-format
@@ -2283,7 +2282,7 @@ msgstr "DATE2UNIX(tarih)"
 #: functions/datetime.xml:723
 #, kde-format
 msgid "DATE2UNIX(\"01/01/2000\") returns 946,684,800"
-msgstr "DATE2UNIX(\"01/01/2000\"), 946,684,800 döndürür"
+msgstr "DATE2UNIX(\"01/01/2000\"), 946.684.800 döndürür"
 
 #: functions/datetime.xml:731
 #, kde-format
@@ -2304,7 +2303,7 @@ msgstr "UNIX2DATE(unixzamanı)"
 #: functions/datetime.xml:738
 #, kde-format
 msgid "UNIX2DATE(0) returns 1970-01-01"
-msgstr "UNIX2DATE(0), 1970-01-01 döndürür"
+msgstr "UNIX2DATE(0), 1970‒01‒01 döndürür"
 
 #: functions/engineering.xml:5
 #, kde-format
@@ -2327,7 +2326,7 @@ msgid ""
 "The BASE() function converts a number from base-10 to a string value in a "
 "target base from 2 to 36."
 msgstr ""
-"BASE() işlevi, onluk tabanda olan bir sayıyı, 2-36 arası herhangi bir "
+"BASE() işlevi, onluk tabanda olan bir sayıyı, 2–36 arası herhangi bir "
 "tabanda döndürür."
 
 #: functions/engineering.xml:24
@@ -2338,7 +2337,7 @@ msgstr "BASE(sayı;taban;duyarlılık)"
 #: functions/engineering.xml:25
 #, kde-format
 msgid "BASE(128;8) returns \"200\""
-msgstr "BASE(128;8), \"200\" döndürür"
+msgstr "BASE(128;8), “200” döndürür"
 
 #: functions/engineering.xml:33 functions/engineering.xml:54
 #: functions/engineering.xml:75 functions/engineering.xml:96
@@ -2418,7 +2417,7 @@ msgstr "BESSELY(X;N)"
 #: functions/engineering.xml:106
 #, kde-format
 msgid "BESSELY(4;2) equals 0.215903595"
-msgstr "BESSELY(4;2) eşittir 0,215903595"
+msgstr "BESSELY(4; 2) eşittir 0,215903595"
 
 #: functions/engineering.xml:121
 #, kde-format
@@ -2480,7 +2479,7 @@ msgid ""
 msgstr ""
 "Desteklenen enerji birimleri: J (Joule), e (erg), c (Termodinamik kalori), "
 "cal (IT kalori), eV (elektronvolt), HPh (beygirgücü-saat), Wh (Watt-saat), "
-"flb (ayak-paund), BTU."
+"flb (ayak-libre), BTU."
 
 #: functions/engineering.xml:135
 #, kde-format
@@ -2543,9 +2542,9 @@ msgid ""
 msgstr ""
 "Metrik birimler için aşağıdaki öneklerden herhangi biri kullanılabilir: E "
 "(exa, 1E+18), P (peta, 1E+15), T (tera, 1E+12), G (giga, 1E+09), M (mega, 1E"
-"+06), k (kilo, 1E+03), h (hecto, 1E+02), e (dekao, 1E+01), d (deci, 1E-01), "
-"c (centi, 1E-02), m (milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p "
-"(pico, 1E-12), f (femto, 1E-15), a (atto, 1E-18)."
+"+06), k (kilo, 1E+03), h (hecto, 1E+02), e (dekao, 1E+01), d (deci, 1E−01), "
+"c (centi, 1E−02), m (milli, 1E−03), u (micro, 1E−06), n (nano, 1E−09), p "
+"(pico, 1E−12), f (femto, 1E−15), a (atto, 1E−18)."
 
 #: functions/engineering.xml:142
 #, kde-format
@@ -2555,17 +2554,17 @@ msgstr "CONVERT(Sayı; Birimden; Birime)"
 #: functions/engineering.xml:143
 #, kde-format
 msgid "CONVERT(32;\"C\";\"F\") equals 89.6"
-msgstr "CONVERT(32;\"C\";\"F\") eşittir 89,6"
+msgstr "CONVERT(32; \"C\"; \"F\") eşittir 89,6"
 
 #: functions/engineering.xml:144
 #, kde-format
 msgid "CONVERT(3;\"lbm\";\"kg\") equals 1.3608"
-msgstr "CONVERT(3;\"lbm\";\"kg\") eşittir 1,3608"
+msgstr "CONVERT(3; \"lbm\"; \"kg\") eşittir 1,3608"
 
 #: functions/engineering.xml:145
 #, kde-format
 msgid "CONVERT(7.9;\"cal\";\"J\") equals 33.0757"
-msgstr "CONVERT(7,9;\"cal\";\"J\") eşittir 33,0757"
+msgstr "CONVERT(7,9; \"cal\"; \"J\") eşittir 33,0757"
 
 #: functions/engineering.xml:153 functions/engineering.xml:172
 #, kde-format
@@ -2645,12 +2644,12 @@ msgstr "DEC2BIN(değer)"
 #: functions/engineering.xml:201
 #, kde-format
 msgid "DEC2BIN(12) returns \"1100\""
-msgstr "DEC2BIN(12), \"1100\" döndürür"
+msgstr "DEC2BIN(12), “1100” döndürür"
 
 #: functions/engineering.xml:202
 #, kde-format
 msgid "DEC2BIN(55) returns \"110111\""
-msgstr "DEC2BIN(55), \"110111\" döndürür"
+msgstr "DEC2BIN(55), “110111” döndürür"
 
 #: functions/engineering.xml:218
 #, kde-format
@@ -2669,12 +2668,12 @@ msgstr "DEC2HEX(değer)"
 #: functions/engineering.xml:220
 #, kde-format
 msgid "DEC2HEX(12) returns \"c\""
-msgstr "DEC2HEX(12), \"c\" döndürür"
+msgstr "DEC2HEX(12), “c” döndürür"
 
 #: functions/engineering.xml:221
 #, kde-format
 msgid "DEC2HEX(55) returns \"37\""
-msgstr "DEC2HEX(55), \"37\" döndürür"
+msgstr "DEC2HEX(55), “37” döndürür"
 
 #: functions/engineering.xml:237
 #, kde-format
@@ -2692,12 +2691,12 @@ msgstr "DEC2OCT(değer)"
 #: functions/engineering.xml:239
 #, kde-format
 msgid "DEC2OCT(12) returns \"14\""
-msgstr "DEC2OCT(12), \"14\" döndürür"
+msgstr "DEC2OCT(12), “14” döndürür"
 
 #: functions/engineering.xml:240
 #, kde-format
 msgid "DEC2OCT(55) returns \"67\""
-msgstr "DEC2OCT(55), \"67\" döndürür"
+msgstr "DEC2OCT(55), “67” döndürür"
 
 #: functions/engineering.xml:256
 #, kde-format
@@ -2715,12 +2714,12 @@ msgstr "OCT2BIN(değer)"
 #: functions/engineering.xml:258
 #, kde-format
 msgid "OCT2BIN(\"12\") returns \"1010\""
-msgstr "OCT2BIN(\"12\"), \"1010\" döndürür"
+msgstr "OCT2BIN(\"12\"), “1010” döndürür"
 
 #: functions/engineering.xml:259
 #, kde-format
 msgid "OCT2BIN(\"55\") returns \"101101\""
-msgstr "OCT2BIN(\"55\"), \"101101\" döndürür"
+msgstr "OCT2BIN(\"55\"), “101101” döndürür"
 
 #: functions/engineering.xml:271
 #, kde-format
@@ -2762,12 +2761,12 @@ msgstr "OCT2HEX(değer)"
 #: functions/engineering.xml:292
 #, kde-format
 msgid "OCT2HEX(\"12\") returns \"A\""
-msgstr "OCT2HEX(\"12\"), \"A\" döndürür"
+msgstr "OCT2HEX(\"12\"), “A” döndürür"
 
 #: functions/engineering.xml:293
 #, kde-format
 msgid "OCT2HEX(\"55\") returns \"2D\""
-msgstr "OCT2HEX(\"55\"), \"2D\" döndürür"
+msgstr "OCT2HEX(\"55\"), “2D” döndürür"
 
 #: functions/engineering.xml:305
 #, kde-format
@@ -2808,12 +2807,12 @@ msgstr "BIN2OCT(değer)"
 #: functions/engineering.xml:326
 #, kde-format
 msgid "BIN2OCT(\"1010\") returns \"12\" "
-msgstr "BIN2OCT(\"1010\"), \"12\" döndürür "
+msgstr "BIN2OCT(\"1010\"), “12” döndürür"
 
 #: functions/engineering.xml:327
 #, kde-format
 msgid "BIN2OCT(\"11111\") returns \"37\" "
-msgstr "BIN2OCT(\"11111\"), \"37\" döndürür "
+msgstr "BIN2OCT(\"11111\"), “37” döndürür "
 
 #: functions/engineering.xml:343
 #, kde-format
@@ -2832,12 +2831,12 @@ msgstr "BIN2HEX(değer)"
 #: functions/engineering.xml:345
 #, kde-format
 msgid "BIN2HEX(\"1010\") returns \"a\""
-msgstr "BIN2HEX(\"1010\"), \"a\" döndürür"
+msgstr "BIN2HEX(\"1010\"), “a” döndürür"
 
 #: functions/engineering.xml:346
 #, kde-format
 msgid "BIN2HEX(\"11111\") returns \"1f\""
-msgstr "BIN2HEX(\"11111\"), \"1f\" döndürür"
+msgstr "BIN2HEX(\"11111\"), “1f” döndürür"
 
 #: functions/engineering.xml:358
 #, kde-format
@@ -2880,12 +2879,12 @@ msgstr "HEX2OCT(değer)"
 #: functions/engineering.xml:375
 #, kde-format
 msgid "HEX2OCT(\"a\") returns \"12\" "
-msgstr "HEX2OCT(\"a\"), \"12\" döndürür "
+msgstr "HEX2OCT(\"a\"), “12” döndürür"
 
 #: functions/engineering.xml:376
 #, kde-format
 msgid "HEX2OCT(\"37\") returns \"67\" "
-msgstr "HEX2OCT(\"37\"), \"67\" döndürür "
+msgstr "HEX2OCT(\"37\"), “67” döndürür"
 
 #: functions/engineering.xml:388
 #, kde-format
@@ -2904,12 +2903,12 @@ msgstr "HEX2BIN(değer)"
 #: functions/engineering.xml:390
 #, kde-format
 msgid "HEX2BIN(\"a\") returns \"1010\""
-msgstr "HEX2BIN(\"a\"), \"1010\" döndürür"
+msgstr "HEX2BIN(\"a\"), “1010” döndürür"
 
 #: functions/engineering.xml:391
 #, kde-format
 msgid "HEX2BIN(\"37\") returns \"110111\""
-msgstr "HEX2BIN(\"37\"), \"110111\" döndürür"
+msgstr "HEX2BIN(\"37\"), “110111” döndürür"
 
 #: functions/engineering.xml:399
 #, kde-format
@@ -2935,12 +2934,12 @@ msgstr "COMPLEX(gerçek;sanal)"
 #: functions/engineering.xml:409
 #, kde-format
 msgid "COMPLEX(1.2;3.4) returns \"1.2+3.4i\""
-msgstr "COMPLEX(1,2;3,4), \"1,2+3,4i\" döndürür"
+msgstr "COMPLEX(1,2; 3,4), “1,2+3,4i” döndürür"
 
 #: functions/engineering.xml:410
 #, kde-format
 msgid "COMPLEX(0;-1) returns \"-i\""
-msgstr "COMPLEX(0;-1), \"-i\" döndürür"
+msgstr "COMPLEX(0;-1), “−i” döndürür"
 
 #: functions/engineering.xml:418 functions/engineering.xml:433
 #: functions/engineering.xml:448 functions/engineering.xml:463
@@ -2982,7 +2981,7 @@ msgstr "IMAGINARY(dizi)"
 #: functions/engineering.xml:424
 #, kde-format
 msgid "IMAGINARY(\"1.2+3.4i\") returns 3.4"
-msgstr "IMAGINARY(\"1,2+3,4i\"), 3.4 döndürür"
+msgstr "IMAGINARY(\"1,2 + 3,4i\"), 3,4 döndürür"
 
 #: functions/engineering.xml:425
 #, kde-format
@@ -3024,7 +3023,7 @@ msgstr "IMCOS(dizi)"
 #: functions/engineering.xml:454
 #, kde-format
 msgid "IMCOS(\"1+i\") returns \"0.83373-0.988898i\""
-msgstr "IMCOS(\"1+i\"), \"0,83373-0,988898i\" döndürür"
+msgstr "IMCOS(\"1+i\"), “0,83373 − 0,988898i” döndürür"
 
 #: functions/engineering.xml:455
 #, kde-format
@@ -3045,7 +3044,7 @@ msgstr "IMCOSH(dizi)"
 #: functions/engineering.xml:469
 #, kde-format
 msgid "IMCOSH(\"1+i\") returns \"0.83373+0.988898i\""
-msgstr "IMCOSH(\"1+i\"), \"0,83373+0,988898i\" döndürür"
+msgstr "IMCOSH(\"1+i\"), “0,83373+0,988898i” döndürür"
 
 #: functions/engineering.xml:470
 #, kde-format
@@ -3065,7 +3064,7 @@ msgstr "IMCOT(dizi)"
 #: functions/engineering.xml:484
 #, kde-format
 msgid "IMCOT(\"1+i\") returns \"0.21762-0.86801i\""
-msgstr "IMCOT(\"1+i\"), \"0,21762-0,86801i\" döndürür"
+msgstr "IMCOT(\"1+i\"), “0,21762 − 0,86801i” döndürür"
 
 #: functions/engineering.xml:496
 #, kde-format
@@ -3080,7 +3079,7 @@ msgstr "IMCSC(dizi)"
 #: functions/engineering.xml:498
 #, kde-format
 msgid "IMCSC(\"1+i\") returns \"0.62151-0.30393i\""
-msgstr "IMCSC(\"1+i\"), \"0,62151-0,30393i\" döndürür"
+msgstr "IMCSC(\"1+i\"), “0,62151-0,30393i” döndürür"
 
 #: functions/engineering.xml:510
 #, kde-format
@@ -3096,7 +3095,7 @@ msgstr "IMCSCH(dizi)"
 #: functions/engineering.xml:512
 #, kde-format
 msgid "IMCSCH(\"1+i\") returns \"0.30393-i0.62151\""
-msgstr "IMCSCH(\"1+i\") \"0,30393-i0,62151\" döndürür"
+msgstr "IMCSCH(\"1+i\"), “0,30393 − i0,62151” döndürür"
 
 #: functions/engineering.xml:524
 #, kde-format
@@ -3111,7 +3110,7 @@ msgstr "IMSEC(dizi)"
 #: functions/engineering.xml:526
 #, kde-format
 msgid "IMSEC(\"1+i\") returns \"0.49833+i0.59108\""
-msgstr "IMSEC(\"1+i\") işlevi, \"0,49833+i0,59108\" döndürür"
+msgstr "IMSEC(\"1+i\"), “0,49833+i0,59108” döndürür"
 
 #: functions/engineering.xml:538
 #, kde-format
@@ -3127,7 +3126,7 @@ msgstr "IMSECH(dizi)"
 #: functions/engineering.xml:540
 #, kde-format
 msgid "IMSECH(\"1+i\") returns \"0.49833-i0.59108\""
-msgstr "IMSECH(\"1+i\") \"0,49833-i0,59108\" döndürür"
+msgstr "IMSECH(\"1+i\"), “0,49833 − i0,59108” döndürür"
 
 #: functions/engineering.xml:552
 #, kde-format
@@ -3142,12 +3141,12 @@ msgstr "IMSIN(dizi)"
 #: functions/engineering.xml:554
 #, kde-format
 msgid "IMSIN(\"1+i\") returns \"1.29846+0.634964i\""
-msgstr "IMSIN(\"1+i\"), \"1,29846+0,634964i\" döndürür"
+msgstr "IMSIN(\"1+i\"), “1,29846+0,634964i” döndürür"
 
 #: functions/engineering.xml:555
 #, kde-format
 msgid "IMSIN(\"1.2\") returns -0.536573 "
-msgstr "IMSIN(\"1,2\"), -0,536573 döndürür "
+msgstr "IMSIN(\"1,2\"), −0,536573 döndürür"
 
 #: functions/engineering.xml:567
 #, kde-format
@@ -3164,7 +3163,7 @@ msgstr "IMSINH(dizi)"
 #: functions/engineering.xml:569
 #, kde-format
 msgid "IMSINH(\"1+i\") returns \"0.63496+1.29846i\""
-msgstr "IMSINH(\"1+i\"), \"0,63496+1,29846i\" döndürür"
+msgstr "IMSINH(\"1+i\"), “0,63496+1,29846i” döndürür"
 
 #: functions/engineering.xml:570
 #, kde-format
@@ -3184,7 +3183,7 @@ msgstr "IMTAN(dizi)"
 #: functions/engineering.xml:584
 #, kde-format
 msgid "IMTAN(\"1+i\") returns \"0.27175+1.08392i\""
-msgstr "IMTAN(\"1+i\"), \"0,27175+1,08392i\" döndürür"
+msgstr "IMTAN(\"1+i\"), “0,27175+1,08392i” döndürür"
 
 #: functions/engineering.xml:585
 #, kde-format
@@ -3207,7 +3206,7 @@ msgstr "IMTANH(dizi)"
 #: functions/engineering.xml:599
 #, kde-format
 msgid "IMTANH(\"1+i\") returns \"1.08392+0.27175i\""
-msgstr "IMTANH(\"1+i\"), \"1,08392+0,27175i\" döndürür"
+msgstr "IMTANH(\"1+i\"), “1,08392+0,27175i” döndürür"
 
 #: functions/engineering.xml:600
 #, kde-format
@@ -3227,12 +3226,12 @@ msgstr "IMEXP(dizi)"
 #: functions/engineering.xml:614
 #, kde-format
 msgid "IMEXP(\"2-i\") returns \"3.99232-6.21768i\""
-msgstr "IMEXP(\"2-i\"), \"3,99232-6,21768i\" döndürür"
+msgstr "IMEXP(\"2-i\"), “3,99232 − 6,21768i” döndürür"
 
 #: functions/engineering.xml:615
 #, kde-format
 msgid "IMEXP(\"12i\") returns \"0.843854-0.536573i\" "
-msgstr "IMEXP(\"12i\"), \"0,843854-0,536573i\" döndürür "
+msgstr "IMEXP(\"12i\"), “0,843854-0,536573i” döndürür"
 
 #: functions/engineering.xml:627
 #, kde-format
@@ -3247,12 +3246,12 @@ msgstr "IMLN(dizi)"
 #: functions/engineering.xml:629
 #, kde-format
 msgid "IMLN(\"3-i\") returns \"1.15129-0.321751i\""
-msgstr "IMLN(\"3-i\"), \"1,15129-0,321751i\" döndürür"
+msgstr "IMLN(\"3-i\"), “1,15129 − 0,321751i” döndürür"
 
 #: functions/engineering.xml:630
 #, kde-format
 msgid "IMLN(\"12\") returns 2.48491 "
-msgstr "IMLN(\"12\"), 2,48491 döndürür "
+msgstr "IMLN(\"12\"), 2,48491 döndürür"
 
 #: functions/engineering.xml:642
 #, kde-format
@@ -3269,7 +3268,7 @@ msgstr "IMLOG2(dizi)"
 #: functions/engineering.xml:644
 #, kde-format
 msgid "IMLOG2(\"3+4i\") returns \"2.321928+1.337804i\""
-msgstr "IMLOG2(\"3+4i\"), \"2,321928+1,337804i\" döndürür"
+msgstr "IMLOG2(\"3+4i\"), “2,321928+1,337804i” döndürür"
 
 #: functions/engineering.xml:656
 #, kde-format
@@ -3286,7 +3285,7 @@ msgstr "IMLOG10(dizi)"
 #: functions/engineering.xml:658
 #, kde-format
 msgid "IMLOG10(\"3+4i\") returns \"0.69897+0.402719i\""
-msgstr "IMLOG10(\"3+4i\") \"0,69897+0,402719i\" döndürür"
+msgstr "IMLOG10(\"3+4i\") “0,69897+0,402719i” döndürür"
 
 #: functions/engineering.xml:670
 #, kde-format
@@ -3301,12 +3300,12 @@ msgstr "IMSQRT(dizi)"
 #: functions/engineering.xml:672
 #, kde-format
 msgid "IMSQRT(\"1+i\") returns \"1.09868+0.45509i\""
-msgstr "IMSQRT(\"1+i\"), \"1,09868+0,45509i\" döndürür"
+msgstr "IMSQRT(\"1+i\"), “1,09868+0,45509i” döndürür"
 
 #: functions/engineering.xml:673
 #, kde-format
 msgid "IMSQRT(\"1.2i\") returns \"0.774597+0.774597i\" "
-msgstr "IMSQRT(\"1,2i\"), \"0,774597+0,774597i\" döndürür "
+msgstr "IMSQRT(\"1,2i\"), “0,774597+0,774597i” döndürür"
 
 #: functions/engineering.xml:685
 #, kde-format
@@ -3327,7 +3326,7 @@ msgstr "IMPOWER(dizi)"
 #: functions/engineering.xml:691
 #, kde-format
 msgid "IMPOWER(\"4-i\";2) returns \"15-8i\""
-msgstr "IMPOWER(\"4-i\";2), \"15-8i\" döndürür"
+msgstr "IMPOWER(\"4-i\"; 2), “15 − 8i” döndürür"
 
 #: functions/engineering.xml:692
 #, kde-format
@@ -3344,17 +3343,17 @@ msgstr ""
 #: functions/engineering.xml:722
 #, kde-format
 msgid "IMSUM(value;value;...)"
-msgstr "IMSUM(değer;değer;...)"
+msgstr "IMSUM(değer; değer; …)"
 
 #: functions/engineering.xml:723
 #, kde-format
 msgid "IMSUM(1.2;\"3.4+5i\") returns \"4.6+5i\""
-msgstr "IMSUM(1,2;\"3,4+5i\"), \"4,6+5i\" döndürür"
+msgstr "IMSUM(1,2; \"3,4+5i\"), “4,6+5i” döndürür"
 
 #: functions/engineering.xml:724
 #, kde-format
 msgid "IMSUM(1.2;\"1i\") returns \"1.2+i\""
-msgstr "IMSUM(1,2;\"1i\"), \"1,2+i\" döndürür"
+msgstr "IMSUM(1,2; \"1i\"), “1,2+i” döndürür"
 
 #: functions/engineering.xml:752
 #, kde-format
@@ -3366,17 +3365,17 @@ msgstr ""
 #: functions/engineering.xml:753
 #, kde-format
 msgid "IMDIV(value;value;...)"
-msgstr "IMDIV(değer;değer;...)"
+msgstr "IMDIV(değer; değer; …)"
 
 #: functions/engineering.xml:754
 #, kde-format
 msgid "IMDIV(1.2;\"3.4+5i\") returns \"0.111597-0.164114i\""
-msgstr "IMDIV(1,2;\"3,4+5i\"), \"0,111597-0,164114i\" döndürür"
+msgstr "IMDIV(1,2; \"3,4+5i\"), “0,111597 − 0,164114i” döndürür"
 
 #: functions/engineering.xml:755
 #, kde-format
 msgid "IMDIV(\"12+i\";\"12-i\") returns \"0.986207+0.16551i\""
-msgstr "IMDIV(\"12+i\";\"12-i\"), \"0,986207+0,16551i\" döndürür"
+msgstr "IMDIV(\"12+i\"; \"12-i\"), “0,986207 + 0,16551i” döndürür"
 
 #: functions/engineering.xml:784
 #, kde-format
@@ -3387,17 +3386,17 @@ msgstr "IMSUB() işlevi, x+yi biçimindeki karmaşık sayıların farkını dön
 #: functions/engineering.xml:785
 #, kde-format
 msgid "IMSUB(value;value;...)"
-msgstr "IMSUB(değer;değer;...)"
+msgstr "IMSUB(değer; değer; …)"
 
 #: functions/engineering.xml:786
 #, kde-format
 msgid "IMSUB(1.2;\"3.4+5i\") returns \"-2.2-5i\""
-msgstr "IMSUB(1,2;\"3,4+5i\"), \"-2,2-5i\" döndürür"
+msgstr "IMSUB(1,2; \"3,4+5i\"), “−2,2−5i” döndürür"
 
 #: functions/engineering.xml:787
 #, kde-format
 msgid "IMSUB(1.2;\"1i\") returns \"1.2-i\""
-msgstr "IMSUB(1,2;\"1i\"), \"1,2-i\" döndürür"
+msgstr "IMSUB(1,2; \"1i\"), “1,2 − i” döndürür"
 
 #: functions/engineering.xml:815
 #, kde-format
@@ -3410,17 +3409,17 @@ msgstr ""
 #: functions/engineering.xml:816
 #, kde-format
 msgid "IMPRODUCT(value;value;...)"
-msgstr "IMPRODUCT(değer;değer;...)"
+msgstr "IMPRODUCT(değer; değer; …)"
 
 #: functions/engineering.xml:817
 #, kde-format
 msgid "IMPRODUCT(1.2;\"3.4+5i\") returns \"4.08+6i\""
-msgstr "IMPRODUCT(1,2;\"3,4+5i\"), \"4,08+6i\" döndürür"
+msgstr "IMPRODUCT(1,2; \"3,4+5i\"), “4,08+6i” döndürür"
 
 #: functions/engineering.xml:818
 #, kde-format
 msgid "IMPRODUCT(1.2;\"1i\") returns \"+1.2i\""
-msgstr "IMPRODUCT(1,2;\"1i\"), \"+1,2i\" döndürür"
+msgstr "IMPRODUCT(1,2; \"1i\"), “+1,2i” döndürür"
 
 #: functions/engineering.xml:830
 #, kde-format
@@ -3439,17 +3438,17 @@ msgstr "IMCONJUGATE(karmaşık sayı)"
 #: functions/engineering.xml:832
 #, kde-format
 msgid "IMCONJUGATE(\"1.2+5i\") returns \"1.2-5i\""
-msgstr "IMCONJUGATE(\"1,2+5i\"), \"1,2-5i\" döndürür"
+msgstr "IMCONJUGATE(\"1,2+5i\"), “1,2−5i” döndürür"
 
 #: functions/engineering.xml:833
 #, kde-format
 msgid "IMCONJUGATE(\"-i\") returns \"i\""
-msgstr "IMCONJUGATE(\"-i\"), \"i\" döndürür"
+msgstr "IMCONJUGATE(\"-i\"), “i” döndürür"
 
 #: functions/engineering.xml:834
 #, kde-format
 msgid "IMCONJUGATE(\"12\") returns \"12\""
-msgstr "IMCONJUGATE(\"12\"), \"12\" döndürür"
+msgstr "IMCONJUGATE(\"12\"), “12” döndürür"
 
 #: functions/engineering.xml:846
 #, kde-format
@@ -3473,12 +3472,12 @@ msgstr "IMARGUMENT(\"1,2+5i\"), 0,6072 döndürür"
 #: functions/engineering.xml:849
 #, kde-format
 msgid "IMARGUMENT(\"-i\") returns -1.57079633 "
-msgstr "IMARGUMENT(\"-i\"), -1,57079633 döndürür "
+msgstr "IMARGUMENT(\"-i\"), −1,57079633 döndürür"
 
 #: functions/engineering.xml:850
 #, kde-format
 msgid "IMARGUMENT(\"12\") returns \"#Div/0\""
-msgstr "IMARGUMENT(\"12\"), \"#BÖL/0\" döndürür"
+msgstr "IMARGUMENT(\"12\"), “#BÖL/0” döndürür"
 
 #: functions/engineering.xml:862
 #, kde-format
@@ -3643,7 +3642,7 @@ msgid ""
 "30/360."
 msgstr ""
 "ACCRINT işlevi, periyodik faiz ödeyen bir menkul kıymet için birikmiş faizi "
-"döndürür. İzin verilen aralıklar 1 - yıllık, 2 - yarı-yıllık veya 4 - üç "
+"döndürür. İzin verilen aralıklar 1 — yıllık, 2 — yarı yıllık veya 4 — üç "
 "ayda bir olur. Kural, kullanmak istediğiniz gün sayısının türü: 0: US 30/360 "
 "(öntanımlı), 1: gerçek günler, 2: gerçek günler/360, 3: gerçek günler/365 ya "
 "da Avrupai 30/360."
@@ -3804,7 +3803,7 @@ msgstr "COMPOUND(başlangıçtaki değer;faiz oranı;dönemler;yıldaki dönem s
 #: functions/financial.xml:151
 #, kde-format
 msgid "COMPOUND(5000;0.12;4;5) equals 9030.56"
-msgstr "COMPOUND(5000;0,12;4;5), 9030,56 döndürür"
+msgstr "COMPOUND(5000; 0,12; 4; 5) eşittir 9030,56"
 
 #: functions/financial.xml:171
 #, no-c-format, kde-format
@@ -3825,7 +3824,7 @@ msgstr "CONTINUOUS(anapara;basit faiz;yıl)"
 #: functions/financial.xml:173
 #, kde-format
 msgid "CONTINUOUS(1000;0.1;1) equals 1105.17"
-msgstr "CONTINUOUS(1000;0,1;1), 1105,17 döndürür"
+msgstr "CONTINUOUS(1000; 0,1; 1) eşittir 1105,17"
 
 #: functions/financial.xml:185 functions/financial.xml:353
 #: functions/financial.xml:448 functions/financial.xml:608
@@ -3911,7 +3910,7 @@ msgstr "CUMIPMT(oran; dönem; değer; başlangıç; bitiş; tür)"
 #: functions/financial.xml:238
 #, kde-format
 msgid "CUMIPMT( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -3562,187023"
-msgstr "CUMIPMT( 0,06/12; 5*12; 100000; 5; 12; 0 ) eşittir -3562,187023"
+msgstr "CUMIPMT( 0,06/12; 5*12; 100000; 5; 12; 0 ) eşittir −3562,187023"
 
 #: functions/financial.xml:273
 #, kde-format
@@ -3926,7 +3925,7 @@ msgstr "CUMPRINC(oran; dönem; değer; başlangıç; bitiş; tür)"
 #: functions/financial.xml:275
 #, kde-format
 msgid "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -11904.054201"
-msgstr "CUMPRINC(0,06/12; 5*12; 100000; 5; 12; 0) eşittir -11904,054201"
+msgstr "CUMPRINC(0,06/12; 5*12; 100000; 5; 12; 0) eşittir −11904,054201"
 
 #: functions/financial.xml:289 functions/financial.xml:322
 #: functions/financial.xml:1245 functions/financial.xml:1269
@@ -3954,7 +3953,7 @@ msgid ""
 "period using the fixed-declining balance method. Month is optional, if "
 "omitted it is assumed to be 12."
 msgstr ""
-"DB() işlevi, bir varlığın, sabit-azalan yöntemi ile belirli bir dönemdeki "
+"DB() işlevi, bir varlığın, sabit azalan yöntemi ile belirli bir dönemdeki "
 "değer kaybını hesaplar. Ay değeri seçmeli olarak girilebilir. Girilmemesi "
 "durumunda ise 12 olarak varsayılır."
 
@@ -3966,12 +3965,12 @@ msgstr "DB(maliyet; atıl değeri; yaşam süresi; dönem [;ay])"
 #: functions/financial.xml:307
 #, kde-format
 msgid "DB(8000;400;6;3) equals 1158.40"
-msgstr "DB(8000;400;6;3) eşittir 1158,40"
+msgstr "DB(8000; 400; 6; 3) eşittir 1158,40"
 
 #: functions/financial.xml:308
 #, kde-format
 msgid "DB(8000;400;6;3;2) equals 1783.41"
-msgstr "DB(8000;400;6;3;2) eşittir 1783,41"
+msgstr "DB(8000; 400; 6; 3; 2) eşittir 1783,41"
 
 #: functions/financial.xml:334
 #, kde-format
@@ -4202,7 +4201,7 @@ msgstr "EFFECT(basit faiz;dönem)"
 #: functions/financial.xml:489
 #, kde-format
 msgid "EFFECT(0.08;12) equals 0.083"
-msgstr "EFFECT(0,08;12) eşittir 0,083"
+msgstr "EFFECT(0,08; 12) eşittir 0,083"
 
 #: functions/financial.xml:507
 #, kde-format
@@ -4312,7 +4311,7 @@ msgstr "FV(şimdiki değer;getiri;dönem)"
 #: functions/financial.xml:569
 #, kde-format
 msgid "FV(1000;0.08;2) equals 1166.40"
-msgstr "FV(1000;0,08;2) eşittir 1166,40"
+msgstr "FV(1000; 0,08; 2) eşittir 1166,40"
 
 #: functions/financial.xml:581 functions/financial.xml:1128
 #, kde-format
@@ -4343,7 +4342,7 @@ msgstr "FV_ANNUITY(tutar;faiz;dönemler)"
 #: functions/financial.xml:595
 #, kde-format
 msgid "FV_ANNUITY(1000;0.05;5) equals 5525.63"
-msgstr "FV_ANNUITY(1000;0,05;5) eşittir 5525,63"
+msgstr "FV_ANNUITY(1000; 0,05; 5) eşittir 5525,63"
 
 #: functions/financial.xml:612 functions/financial.xml:800
 #: functions/financial.xml:1192
@@ -4460,7 +4459,7 @@ msgstr "IPMT(Oran;Dönem;Dsay;ŞD;GD;Tür)"
 #: functions/financial.xml:667
 #, kde-format
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
-msgstr "IPMT(0,1;3;3;8000) eşittir -292,45"
+msgstr "IPMT(0,1; 3; 3; 8000) eşittir −292,45"
 
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
@@ -4524,7 +4523,7 @@ msgstr "ISPMT(Oran;Dönem;Dsay;ŞD)"
 #: functions/financial.xml:718
 #, kde-format
 msgid "ISPMT(0.1; 1; 3; 8000000) equals -533333"
-msgstr "ISPMT(0,1; 1; 3; 8000000) eşittir -533333"
+msgstr "ISPMT(0,1; 1; 3; 8000000) eşittir −533333"
 
 #: functions/financial.xml:731 functions/financial.xml:1508
 #, kde-format
@@ -4568,7 +4567,7 @@ msgstr ""
 #: functions/financial.xml:753
 #, kde-format
 msgid "LEVEL_COUPON(1000;.13;2;4;.1) equals 1096.95"
-msgstr "LEVEL_COUPON(1000;.13;2;4;.1) eşittir 1096,95"
+msgstr "LEVEL_COUPON(1000; .13; 2; 4; .1) eşittir 1096,95"
 
 #: functions/financial.xml:785
 #, kde-format
@@ -4615,7 +4614,7 @@ msgstr "MIRR(değerler; yatırım; yenidenyatırım)"
 #: functions/financial.xml:810
 #, no-c-format, kde-format
 msgid "MIRR({100;200;-50;300;-200}, 5%, 6%) equals 34.2823387842%"
-msgstr "MIRR({100;200;-50;300;-200}, 5%, 6%) eşittir %​34,2823387842"
+msgstr "MIRR({100; 200; -50; 300; -200}, 5%, 6%) eşittir %​34,2823387842"
 
 #: functions/financial.xml:819
 #, kde-format
@@ -4642,7 +4641,7 @@ msgstr "NOMINAL(ekten;dönemler)"
 #: functions/financial.xml:829
 #, kde-format
 msgid "NOMINAL(0.08;12) equals 0.0772"
-msgstr "NOMINAL(0,08;12) eşittir 0,0772"
+msgstr "NOMINAL(0,08; 12) eşittir 0,0772"
 
 #: functions/financial.xml:842
 #, kde-format
@@ -4652,7 +4651,7 @@ msgstr "Ödeme"
 #: functions/financial.xml:850 functions/financial.xml:999
 #, kde-format
 msgid "Future value (FV - optional)"
-msgstr "Future value (GD - seçmeli)"
+msgstr "Future value (GD — isteğe bağlı)"
 
 #: functions/financial.xml:858
 #, kde-format
@@ -4667,7 +4666,7 @@ msgstr "NPER(oran;ödeme;şd;gd;tür)"
 #: functions/financial.xml:860
 #, kde-format
 msgid "NPER(0.1; -100; 1000) equals 11"
-msgstr "PERMUT(1;1) eşittir 1"
+msgstr "PERMUT(1; 1) eşittir 1"
 
 #: functions/financial.xml:861
 #, kde-format
@@ -4798,7 +4797,7 @@ msgstr "PMT(rate; nper ; pv [; fv = 0 [; type = 0 ]] )"
 #: functions/financial.xml:1009
 #, kde-format
 msgid "PMT(0.1; 4; 10000) equals -3154.71"
-msgstr "PMT(0,1; 4; 10000) eşittir -3154,71"
+msgstr "PMT(0,1; 4; 10000) eşittir −3154,71"
 
 #: functions/financial.xml:1045
 #, kde-format
@@ -4816,7 +4815,7 @@ msgstr "PPMT(Oran; Dönem; NPer; PV [; FV = 9 [; Tür = 0 ]] )"
 #: functions/financial.xml:1053
 #, kde-format
 msgid "PPMT(0.0875;1;36;5000;8000;1) equals -18.48"
-msgstr "PPMT(0,0875;1;36;5000;8000;1) eşittir -18,48"
+msgstr "PPMT(0,0875; 1; 36;5000; 8000; 1) eşittir −18,48"
 
 #: functions/financial.xml:1072 functions/financial.xml:1479
 #, kde-format
@@ -4898,10 +4897,10 @@ msgid ""
 "want to buy it in two years while earning 8% interest, you need to start "
 "with PV(1166.4;0.08;2) or $1000."
 msgstr ""
-"PV() işlevi, bir yatırımın mevcut döndürür -- faiz oranı veya enflasyon "
+"PV() işlevi, bir yatırımın mevduatını döndürür — faiz oranı veya enflasyon "
 "değeri verildiğinde, gelecekteki paranın toplam değeridir. Örneğin; yeni bir "
 "bilgisayar almak için $1166,40’a gereksiniminiz varsa ve bunu iki yıl içinde "
-"%​8 faiz kazanarak almak istiyorsanız PV(1166,4;0,08;2) veya $1000’la "
+"%​8 faiz kazanarak almak istiyorsanız PV(1166,4; 0,08; 2) veya $1000’la "
 "başlamalısınız."
 
 #: functions/financial.xml:1119
@@ -4937,7 +4936,7 @@ msgstr "PV_ANNUITY(tutar;faiz;dönemler)"
 #: functions/financial.xml:1142
 #, kde-format
 msgid "PV_ANNUITY(1000;0.05;5) equals 4329.48"
-msgstr "PV_ANNUITY(1000;0,05;5) eşittir 4329,48"
+msgstr "PV_ANNUITY(1000; 0,05; 5) eşittir 4329,48"
 
 #: functions/financial.xml:1150
 #, kde-format
@@ -4970,7 +4969,7 @@ msgstr "RATE(nper;pmt;pv;fv;tür;tahmin)"
 #: functions/financial.xml:1176
 #, kde-format
 msgid "RATE(4*12;-200;8000) equals 0.007701472"
-msgstr "FAİZ_ORANI(4*12;-200;8000) eşittir 0,007701472"
+msgstr "RATE(4*12; -200; 8000) eşittir 0,007701472"
 
 #: functions/financial.xml:1204
 #, kde-format
@@ -4980,9 +4979,9 @@ msgid ""
 "30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: "
 "European 30/360. The settlement date must be before maturity date."
 msgstr ""
-"GETİRİ işlevi, bir yatırım senedinin bitiş tarihindeki tutarı döndürür. Ölçü "
-"ise kullanılacak olan hesaplama yöntemidir: 0: ABD 30/360 (öntanımlı) 1: "
-"takvim günü, 2: takvim günü/360, 3:takvim günü/365 veya 4:Avrupa 30/360. "
+"RECEIVED işlevi, bir yatırım senedinin bitiş tarihindeki tutarı döndürür. "
+"Ölçü ise kullanılacak olan hesaplama yöntemidir: 0: ABD 30/360 (öntanımlı) "
+"1: takvim günü, 2: takvim günü/360, 3:takvim günü/365 veya 4:Avrupa 30/360. "
 "Ödeme tarihi vadesinden önce olmalıdır."
 
 #: functions/financial.xml:1205
@@ -4994,8 +4993,7 @@ msgstr "RECEIVED(ödeme; vade; yatırım; indirim;temel)"
 #, kde-format
 msgid "RECEIVED(\"2/28/2001\"; \"8/31/2001\"; 1000; 0.05; 0) returns 1,025.787"
 msgstr ""
-"RECEIVED(\"2/28/2001\"; \"8/31/2001\"; 1000; 0,05; 0), 1.025,787 değerini "
-"döndürür"
+"RECEIVED(\"2/28/2001\"; \"8/31/2001\"; 1000; 0,05; 0), 1.025,787 döndürür"
 
 #: functions/financial.xml:1226
 #, kde-format
@@ -5012,7 +5010,7 @@ msgstr "RRI( P; Pv; Fv)"
 #: functions/financial.xml:1228
 #, kde-format
 msgid "RRI(1;100;200) returns 1"
-msgstr "RRI(1;100;200) 1 döndürür"
+msgstr "RRI(1; 100; 200), 1 döndürür"
 
 #: functions/financial.xml:1253
 #, kde-format
@@ -5036,7 +5034,7 @@ msgstr "SLN(maliyet; atıl değer; yaşam süresi)"
 #: functions/financial.xml:1255
 #, kde-format
 msgid "SLN(10000;700;10) equals 930"
-msgstr "SLN(10000;700;10), 930 döndürür"
+msgstr "SLN(10000; 700; 10) eşittir 930"
 
 #: functions/financial.xml:1281
 #, kde-format
@@ -5050,7 +5048,7 @@ msgid ""
 "depreciated."
 msgstr ""
 "SYD() işlevi, bir varlığın, maliyet, atıl değer, beklenen yaşa süresi ve "
-"döneme bağlı olarak yıl-haneleri-toplamı yöntemi ile değer kaybını hesaplar. "
+"döneme bağlı olarak yıl haneleri toplamı yöntemi ile değer kaybını hesaplar. "
 "Bu yöntem ile değer kaybı ilk yıllarda, daha sonraki yıllara göre daha hızlı "
 "olmaktadır. Kaybedilen değer, ilk değerden atıl değerin çıkarılması ile "
 "bulunur. Kullanım süresi, varlığın değer kaybına uğradığı (bu ise gelende "
@@ -5092,7 +5090,7 @@ msgid ""
 "bill. The maturity date must be after the settlement date but within 365 "
 "days. The discount rate must be positive."
 msgstr ""
-"TBILLPRICE işlevi, bir devlet tahvili için her 100$'lık değerin ücretini "
+"TBILLPRICE işlevi, bir devlet tahvili için her $100’lık değerin ücretini "
 "döndürür. Vade, ödeme tarihinden sonra; ancak 365 gün içinde olmalıdır. "
 "İndirim oranı pozitif olmalıdır."
 
@@ -5125,7 +5123,7 @@ msgstr "HTAHÖDEME(ödeme; vade; fiyat)"
 #: functions/financial.xml:1355
 #, kde-format
 msgid "TBILLYIELD(\"2/28/2001\"; \"8/31/2001\"; 600) returns -1.63"
-msgstr "TBILLYIELD(\"2/28/2001\"; \"8/31/2001\"; 600), -1,63 döndürür"
+msgstr "TBILLYIELD(\"2/28/2001\"; \"8/31/2001\"; 600), −1,63 döndürür"
 
 #: functions/financial.xml:1385
 #, kde-format
@@ -5135,7 +5133,7 @@ msgid ""
 "specified, using the variable-rate declining balance method."
 msgstr ""
 "VDB, başlangıç değeri, beklenen faydalı ömür ve belirtilen bir dönem için "
-"nihai kurtarma değeri ile, değişken-oran azalan bakiyeler oranını kullanarak "
+"nihai kurtarma değeri ile, değişken oran azalan bakiyeler oranını kullanarak "
 "bir varlığın amortisman indirimini hesaplar."
 
 #: functions/financial.xml:1386
@@ -5150,7 +5148,7 @@ msgstr ""
 #: functions/financial.xml:1387
 #, kde-format
 msgid "VDB(10000;600;10;0;0.875;1.5) returns 1312.5"
-msgstr "VDB(10000;600;10;0;0,875;1,5), 1312,5 döndürür"
+msgstr "VDB(10000; 600; 10; 0; 0,875; 1,5), 1312,5 döndürür"
 
 #: functions/financial.xml:1399 functions/financial.xml:1426
 #, kde-format
@@ -5177,9 +5175,9 @@ msgid ""
 "C4 contains \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", \"=DATE(2000;12;30)\", "
 "\"=DATE(2001;3;1)\" returns 0.2115964"
 msgstr ""
-"C1:C4, \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", \"=DATE(2000;12;30)\", "
-"\"=DATE(2001;3;1)\" değerlerini içerirken B1:B4'ün -20000, 4000, 12000, 8000 "
-"içerdiğini varsayarsanız XIRR(B1:B4;C1:C4), 0,2115964 döndürür"
+"C1:C4; “=DATE(2000; 1; 1)”, “=DATE(2000; 6; 1)”, “=DATE(2000; 12; 30)”, "
+"“=DATE(2001; 3; 1)” değerlerini içerirken B1:B4’ün −20000, 4000, 12000, 8000 "
+"içerdiğini varsayarsanız XIRR(B1:B4; C1:C4), 0,2115964 döndürür"
 
 #: functions/financial.xml:1430
 #, kde-format
@@ -5199,9 +5197,9 @@ msgid ""
 "C1:C4 contains \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", "
 "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" returns 2907.83187"
 msgstr ""
-"C1:C4, \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", \"=DATE(2000;12;30)\", "
-"\"=DATE(2001;3;1)\" değerlerini içerirken B1:B4'ün -20000, 4000, 12000, 8000 "
-"içerdiğini varsayarsanız XNPV(5%;B1:B4;C1:C4), 2907,83187 döndürür"
+"C1:C4; “=DATE(2000; 1; 1)”, “=DATE(2000; 6; 1)”, “=DATE(2000; 12; 30)”, "
+"“=DATE(2001; 3; 1)” değerlerini içerirken B1:B4’ün −20000, 4000, 12000, 8000 "
+"içerdiğini varsayarsanız XNPV(5%; B1:B4; C1:C4), 2907,83187 döndürür"
 
 #: functions/financial.xml:1461
 #, kde-format
@@ -5222,8 +5220,8 @@ msgstr "YIELDDISC(ödeme; vade; fiyat; paraya dönüştürme; temel)"
 msgid ""
 "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns 0.106194684"
 msgstr ""
-"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000), 0.106194684 "
-"döndürür"
+"YIELDDISC(DATE(1990; 6; 1); DATE(1990; 12; 31); 941,66667; 1000), "
+"0,106194684 döndürür"
 
 #: functions/financial.xml:1495
 #, kde-format
@@ -5244,8 +5242,8 @@ msgid ""
 "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); 6%;103.819218241) "
 "returns 0.050000000"
 msgstr ""
-"YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); "
-"6%;103,819218241), 0,050000000 döndürür"
+"YIELDMAT(DATE(1990; 6; 1); DATE(1995; 12; 31); DATE(1990; 1; 1); 6%; "
+"103,819218241), 0,050000000 döndürür"
 
 #: functions/financial.xml:1520
 #, no-c-format, kde-format
@@ -5256,7 +5254,7 @@ msgid ""
 msgstr ""
 "ZERO_COUPON() işlevi, bir sıfır kuponlu (iskontolu) tahvilin değerini "
 "hesaplar. Örneğin: %​10 faiz oranı ile 20 yıl vadeli $1000’lık bir tahvilin "
-"değeri ZERO_COUPON(1000;.1;20) veya $148,64’dır."
+"değeri ZERO_COUPON(1000; .1; 20) veya $148,64’dır."
 
 #: functions/financial.xml:1521
 #, kde-format
@@ -5266,7 +5264,7 @@ msgstr "ZERO_COUPON(görünür değer;oran;yıllar)"
 #: functions/financial.xml:1522
 #, kde-format
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
-msgstr "ZERO_COUPON(1000;.1;20) eşittir 148,64"
+msgstr "ZERO_COUPON(1000; .1; 20) eşittir 148,64"
 
 #: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
@@ -5340,7 +5338,7 @@ msgstr "FORMULA(x)"
 msgid ""
 "FORMULA(A1) returns \"=SUM(1+2)\" if the cell A1 contains such a formula."
 msgstr ""
-"FORMULA(A1) eğer A1 hücresi böyle bir formül içeriyor ise \"=SUM(1+2)\" "
+"FORMULA(A1), eğer A1 hücresi böyle bir formül içeriyor ise “=SUM(1+2)” "
 "döndürür."
 
 #: functions/information.xml:44
@@ -5351,8 +5349,8 @@ msgid ""
 "returns 1. If a value is a date, this function returns the serial number of "
 "that date. Anything else will cause the function to return 0."
 msgstr ""
-"N() işlevi, bir değeri bir sayıya dönüştürür.Eğer verilen değer bir sayıya "
-"karşılık geliyorsa, bu işlev o sayıyı döndürür. Eğer değer 'True' ise bu "
+"N() işlevi, bir değeri bir sayıya dönüştürür. Eğer verilen değer bir sayıya "
+"karşılık geliyorsa bu işlev o sayıyı döndürür. Eğer değer “True” ise bu "
 "işlev 1 döndürür. Eğer bu değer bir tarih ise, bu tarihin seri numarası "
 "gönderilir. Bunun dışındaki değerler karşılığında 0 gönderilecektir."
 
@@ -5369,7 +5367,7 @@ msgstr "N(3,14), 3,14 döndürür"
 #: functions/information.xml:47
 #, kde-format
 msgid "N(\"7\") returns 0 (because \"7\" is text)"
-msgstr "N(\"7\"), 0 döndürür (çünkü \"7\" metindir)"
+msgstr "N(\"7\"), 0 döndürür (çünkü “7”, metindir)"
 
 #: functions/information.xml:55
 #, kde-format
@@ -5390,11 +5388,11 @@ msgid ""
 msgstr ""
 "INFO() işlevi, geçerli işletim ortamı hakkında bilgi döndürür. Parametre "
 "türü ne tür bilgi döndürürleceğini belirtir. Şunlardan biri olabilir: "
-"\"directory\" mevcut dizini döndürür, \"numfile\" etkin belge sayısını "
-"döndürür, \"release\" Calligra Çizelgeleri versiyonunu karakter dizisi "
-"olarak döndürür, \"recalc\" mevcut yeniden hesaplama kipini döndürür: "
-"\"Automatic\" ya da \"Manual\", \"system\" işletim ortamının adını döndürür, "
-"\"osversion\" mevcut işletim sistemini döndürür."
+"“directory”, geçerli dizini döndürür; “numfile”, etkin belge sayısını "
+"döndürür; “release”, Calligra Tablolar sürümünü karakter dizisi olarak "
+"döndürür; “recalc”, geçerli yeniden hesaplama kipini döndürür: “automatic” "
+"veya “manual”; “system” işletim ortamının adını döndürür; “osversion” "
+"geçerli işletim sistemini döndürür."
 
 #: functions/information.xml:60
 #, kde-format
@@ -5419,7 +5417,7 @@ msgid ""
 "The ISLOGICAL() function returns True if the parameter is a boolean value. "
 "Otherwise it returns False."
 msgstr ""
-"ISLOGICAL() işlevi, verilen değişken boolean değeri ile True değerini "
+"ISLOGICAL() işlevi, verilen değişken Boole değeri ile True değerini "
 "döndürür. Diğer durumlarda False döndürür."
 
 #: functions/information.xml:73
@@ -5502,12 +5500,12 @@ msgstr "ISNUM(x)"
 #: functions/information.xml:120
 #, kde-format
 msgid "ISNUM(12) returns True"
-msgstr "ESAYIYSA(12), True döndürür"
+msgstr "ISNUM(12), True döndürür"
 
 #: functions/information.xml:121
 #, kde-format
 msgid "ISNUM(hello) returns False"
-msgstr "ESAYIYSA(merhaba), False döndürür"
+msgstr "ISNUM(merhaba), False döndürür"
 
 #: functions/information.xml:134
 #, kde-format
@@ -5786,7 +5784,7 @@ msgstr "TYPE(x)"
 #: functions/information.xml:328
 #, kde-format
 msgid "TYPE(A1) returns 2, if A1 contains \"Text\""
-msgstr "TYPE(A1), A1 hücresi \"Text\" içeriyorsa 2 döndürür"
+msgstr "TYPE(A1), A1 hücresi \"Metin\" içeriyorsa 2 döndürür"
 
 #: functions/information.xml:329
 #, kde-format
@@ -5796,7 +5794,7 @@ msgstr "TYPE(-7), 1 döndürür"
 #: functions/information.xml:330
 #, kde-format
 msgid "TYPE(A2) returns 1, if A2 contains \"=CURRENTDATE()\""
-msgstr "TYPE(A2), A2 hücresi \"=CURRENTDATE()\" içeriyorsa 1 döndürür"
+msgstr "TYPE(A2), A2 hücresi “=CURRENTDATE()” içeriyorsa 1 döndürür"
 
 #: functions/information.xml:338
 #, kde-format
@@ -5820,7 +5818,7 @@ msgstr "Mantııksal"
 #: functions/logic.xml:11
 #, kde-format
 msgid "The FALSE() function returns the boolean value FALSE."
-msgstr "FALSE() işlevi, boolean değeri olan FALSE sonucunu döndürür."
+msgstr "FALSE() işlevi, Boole değeri olan FALSE sonucunu döndürür."
 
 #: functions/logic.xml:12
 #, kde-format
@@ -5835,7 +5833,7 @@ msgstr "FALSE(), FALSE döndürür"
 #: functions/logic.xml:21
 #, kde-format
 msgid "The TRUE() function returns the boolean value TRUE."
-msgstr "TRUE() işlevi, boolean değeri olan TRUE sonucunu döndürür."
+msgstr "TRUE() işlevi, Boole değeri olan TRUE sonucunu döndürür."
 
 #: functions/logic.xml:22
 #, kde-format
@@ -5858,7 +5856,7 @@ msgstr "TRUE(), TRUE döndürür"
 #: functions/logic.xml:171
 #, kde-format
 msgid "Boolean values"
-msgstr "Boolean değerleri"
+msgstr "Boole değerleri"
 
 #: functions/logic.xml:51
 #, kde-format
@@ -5873,17 +5871,17 @@ msgstr ""
 #: functions/logic.xml:52
 #, kde-format
 msgid "AND(value;value;...)"
-msgstr "AND (değer; değer; ... )"
+msgstr "AND(değer; değer; …)"
 
 #: functions/logic.xml:53
 #, kde-format
 msgid "AND(true;true;true) returns True"
-msgstr "AND(true;true;true) True döndürür"
+msgstr "AND(true; true; true) True döndürür"
 
 #: functions/logic.xml:54
 #, kde-format
 msgid "AND(true;false) returns False"
-msgstr "AND(true;false) False döndürür"
+msgstr "AND(true; false) False döndürür"
 
 #: functions/logic.xml:82
 #, kde-format
@@ -5898,17 +5896,17 @@ msgstr ""
 #: functions/logic.xml:83
 #, kde-format
 msgid "OR(value;value;...)"
-msgstr "OR(değer;değer;...)"
+msgstr "OR(değer; değer; …)"
 
 #: functions/logic.xml:84
 #, kde-format
 msgid "OR(false;false;false) returns False"
-msgstr "OR(false;false;false), False döndürür"
+msgstr "OR(false; false; false), False döndürür"
 
 #: functions/logic.xml:85
 #, kde-format
 msgid "OR(true;false) returns True"
-msgstr "OR(true;false), True döndürür"
+msgstr "OR(true; false), True döndürür"
 
 #: functions/logic.xml:113
 #, kde-format
@@ -5922,17 +5920,17 @@ msgstr ""
 #: functions/logic.xml:114
 #, kde-format
 msgid "NAND(value;value;...)"
-msgstr "NAND(değerler; değerler; ...)"
+msgstr "NAND(değer; değer; …)"
 
 #: functions/logic.xml:115
 #, kde-format
 msgid "NAND(true;false;false) returns True"
-msgstr "NAND(true;false;false), True döndürür"
+msgstr "NAND(true; false; false), True döndürür"
 
 #: functions/logic.xml:116
 #, kde-format
 msgid "NAND(true;true) returns False"
-msgstr "NAND(true;true), False döndürür"
+msgstr "NAND(true; true), False döndürür"
 
 #: functions/logic.xml:144
 #, kde-format
@@ -5940,23 +5938,23 @@ msgid ""
 "The NOR() function returns True if all the values given as parameters are of "
 "boolean type and have the value false. Otherwise it returns False."
 msgstr ""
-"NOR() işlevi, eğer tüm parametre olarak verilen değerler boolean ve yanlış "
-"değerine sahipse True döndürür. Diğer durumlarda ise False değerini."
+"NOR() işlevi, eğer tüm parametre olarak verilen değerler Boole ve yanlış "
+"değerine sahipse True döndürür. Diğer durumlarda ise False değerini döndürür."
 
 #: functions/logic.xml:145
 #, kde-format
 msgid "NOR(value;value;...)"
-msgstr "NOR(değer;değer;...)"
+msgstr "NOR(değer; değer; …)"
 
 #: functions/logic.xml:146
 #, kde-format
 msgid "NOR(true;false;false) returns False"
-msgstr "NOR(true;false;false), False döndürür"
+msgstr "NOR(true; false; false), False döndürür"
 
 #: functions/logic.xml:147
 #, kde-format
 msgid "NOR(false;false) returns True"
-msgstr "NOR(false;false), True döndürür"
+msgstr "NOR(false; false), True döndürür"
 
 #: functions/logic.xml:175
 #, kde-format
@@ -5970,17 +5968,17 @@ msgstr ""
 #: functions/logic.xml:176
 #, kde-format
 msgid "XOR(value;value;...)"
-msgstr "XOR(değer;değer;...)"
+msgstr "XOR(değer; değer; …)"
 
 #: functions/logic.xml:177
 #, kde-format
 msgid "XOR(false;false;false) returns True"
-msgstr "XOR(false;false;false), True döndürür"
+msgstr "XOR(false; false; false), True döndürür"
 
 #: functions/logic.xml:178
 #, kde-format
 msgid "XOR(true;false) returns True"
-msgstr "XOR(true;false), True döndürür"
+msgstr "XOR(true; false), True döndürür"
 
 #: functions/logic.xml:186
 #, kde-format
@@ -6045,7 +6043,7 @@ msgstr "IF(koşul;true_ise;false_ise)"
 #: functions/logic.xml:215
 #, kde-format
 msgid "A1=4;A2=6;IF(A1>A2;5;3) returns 3"
-msgstr "A1=4; A2=6; if(A1>A2;5;3), 3 döndürür"
+msgstr "A1=4; A2=6; IF(A1>A2; 5; 3), 3 döndürür"
 
 #: functions/logic.xml:223 functions/logic.xml:241
 #, kde-format
@@ -6074,7 +6072,7 @@ msgid ""
 "IFERROR(A1;A2) returns the content of A1 if that content is not an error-"
 "value else the content of A2 is returned."
 msgstr ""
-"IFERROR(A1;A2), A1 hücresinin içeriği bir hata değeri değilse A1 hücresinin "
+"IFERROR(A1; A2), A1 hücresinin içeriği bir hata değeri değilse A1 hücresinin "
 "içeriğini, aksi halde A2 hücresinin içeriğini döndürür."
 
 #: functions/logic.xml:249
@@ -6093,7 +6091,7 @@ msgid ""
 "IFNA(A1;A2) returns the content of A1 if that content is not an #N/A error-"
 "value else the content of A2 is returned."
 msgstr ""
-"IFNA(A1;A2), A1 hücresinin içeriği bir #N/A hata değeri değilse A1 "
+"IFNA(A1; A2), A1 hücresinin içeriği bir #N/A hata değeri değilse A1 "
 "hücresinin içeriğini, aksi halde A2 hücresinin içeriğini döndürür."
 
 #: functions/math.xml:5
@@ -6115,9 +6113,9 @@ msgid ""
 "Product, 7 - StDev, 8 - StDevP, 9 - Sum, 10 - Var, 11 - VarP."
 msgstr ""
 "SUBTOTAL() işlevi, diğer alt toplamları yok sayarak verilen bir listedeki "
-"değerlerin alt toplamını döndürür. İşlev, şunlardan biri olmalıdır: 1 - "
-"Average, 2 - Count, 3 - CountA, 4 - Max, 5 - Min, 6 - Product, 7 - StDev, 8 "
-"- StDevP, 9 - Sum, 10 - Var, 11 - VarP."
+"değerlerin alt toplamını döndürür. İşlev, şunlardan biri olmalıdır: 1 — "
+"Average, 2 — Count, 3 — CountA, 4 — Max, 5 — Min, 6 — Product, 7 — StDev, 8 "
+"— StDevP, 9 — Sum, 10 — Var, 11 — VarP."
 
 #: functions/math.xml:20
 #, kde-format
@@ -6185,7 +6183,7 @@ msgstr "SERIESSUM( X; N; M; Katsayılar)"
 #: functions/math.xml:62
 #, kde-format
 msgid "SERIESSUM(2;0;2;{1;2}) return 9"
-msgstr "SERIESSUM(2;0;2;{1;2}), 9 döndürür"
+msgstr "SERIESSUM(2; 0; 2; {1; 2}), 9 döndürür"
 
 #: functions/math.xml:79
 #, kde-format
@@ -6204,17 +6202,17 @@ msgstr "LCM(değer; değer)"
 #: functions/math.xml:81
 #, kde-format
 msgid "LCM(6;4) returns 12"
-msgstr "LCM(6;4), 12 döndürür"
+msgstr "LCM(6; 4), 12 döndürür"
 
 #: functions/math.xml:82
 #, kde-format
 msgid "LCM(1.5;2.25) returns 4.5"
-msgstr "LCM(1,5;2,25), 4,5 döndürür"
+msgstr "LCM(1,5; 2,25), 4,5 döndürür"
 
 #: functions/math.xml:83
 #, kde-format
 msgid "LCM(2;3;4) returns 12"
-msgstr "LCM(2;3;4), 12 döndürür"
+msgstr "LCM(2; 3; 4), 12 döndürür"
 
 #: functions/math.xml:100
 #, kde-format
@@ -6238,17 +6236,17 @@ msgstr "GCD(değer; değer)"
 #: functions/math.xml:106
 #, kde-format
 msgid "GCD(6;4) returns 2"
-msgstr "GCD(6;4), 2 döndürür"
+msgstr "GCD(6; 4), 2 döndürür"
 
 #: functions/math.xml:107
 #, kde-format
 msgid "GCD(10;20) returns 10"
-msgstr "GCD(10;20), 10 döndürür"
+msgstr "GCD(10; 20), 10 döndürür"
 
 #: functions/math.xml:108
 #, kde-format
 msgid "GCD(20;15;10) returns 5"
-msgstr "GCD(20;15;10), 5 döndürür"
+msgstr "GCD(20; 15; 10), 5 döndürür"
 
 #: functions/math.xml:117
 #, kde-format
@@ -6271,7 +6269,7 @@ msgstr "EPS()"
 #: functions/math.xml:119
 #, kde-format
 msgid "On most systems, this returns 2^-52=2.2204460492503131e-16"
-msgstr "Çoğu sistemde bu, 2^-52=2,2204460492503131e-16 döndürür"
+msgstr "Çoğu sistemde bu, 2^−52=2,2204460492503131E−16 döndürür"
 
 #: functions/math.xml:120
 #, kde-format
@@ -6279,15 +6277,15 @@ msgid ""
 "0.5*EPS() returns the \"unit round\"; this value is interesting because it "
 "is the largest number x where (1+x)-1=0 (due to roundoff errors)."
 msgstr ""
-"0.5*EPS(), \"unit round\" sonucunu gönderecktir. (1+x)-1=0 eşitliğini "
-"(yuvarlama hataları ile) sağlayan en büyük x değeri olması açısından bu "
-"değer ile ilgilenilmektedir."
+"0,5 * EPS(), “birim yuvarlama” sonucunu gönderecektir. (1 + x) − 1 = 0 "
+"eşitliğini (yuvarlama hataları ile) sağlayan en büyük x değeri olması "
+"açısından bu değer ile ilgilenilmektedir."
 
 #: functions/math.xml:121
 #, kde-format
 msgid "EPS() is so small that Calligra Sheets displays 1+eps() as 1"
 msgstr ""
-"EPS() o kadar küçüktür ki 1+eps() Calligra Çizelgeleri içinde 1 olarak "
+"EPS() o kadar küçüktür ki 1+eps() Calligra Tablolar içinde 1 olarak "
 "gösterilir"
 
 #: functions/math.xml:122
@@ -6296,14 +6294,14 @@ msgid ""
 "Pick a number x between 0 and EPS(). Observe that 1+x rounds x to either 0 "
 "or EPS() by using the equation (1+x)-1"
 msgstr ""
-"0 ve EPS() arasında bir x değeri seçin. 1+x değerinin (1+x)-1 eşitliği ile x "
-"değerini 0 veya EPS() değerini yuvarladığını göreceksiniz"
+"0 ve EPS() arasında bir x değeri seçin. 1+x değerinin (1 + x) −1 eşitliği "
+"ile x değerini 0 veya EPS() değerini yuvarladığını göreceksiniz"
 
 #: functions/math.xml:138
 #, kde-format
 msgid ""
 "The POWER(x;y) function returns the value of x raised to the power of y."
-msgstr "POWER(x;y) işlevi, x üssü y işleminin sonucunu döndürür."
+msgstr "POWER(x; y) işlevi, x üssü y işleminin sonucunu döndürür."
 
 #: functions/math.xml:139
 #, kde-format
@@ -6313,12 +6311,12 @@ msgstr "POWER(değer;değer)"
 #: functions/math.xml:140
 #, kde-format
 msgid "POWER(1.2;3.4) equals 1.8572"
-msgstr "POWER(1,2;3,4) eşittir 1,8572"
+msgstr "POWER(1,2; 3,4) eşittir 1,8572"
 
 #: functions/math.xml:141
 #, kde-format
 msgid "POWER(2;3) equals 8"
-msgstr "POWER(2;3) eşittir 8"
+msgstr "POWER(2; 3) eşittir 8"
 
 #: functions/math.xml:158
 #, kde-format
@@ -6337,12 +6335,12 @@ msgstr "KUV(değer;değer)"
 #: functions/math.xml:160
 #, kde-format
 msgid "POW(1.2;3.4) equals 1.8572"
-msgstr "KUV(1,2;3,4) eşittir 1,8572"
+msgstr "KUV(1,2; 3,4) eşittir 1,8572"
 
 #: functions/math.xml:161
 #, kde-format
 msgid "POW(2;3) equals 8"
-msgstr "KUV(2;3) eşittir 8"
+msgstr "KUV(2; 3) eşittir 8"
 
 #: functions/math.xml:174
 #, kde-format
@@ -6422,7 +6420,7 @@ msgstr "ODD(2), 3 döndürür"
 #: functions/math.xml:216
 #, kde-format
 msgid "ODD(-2) returns -3"
-msgstr "ODD(-2), -3 döndürür"
+msgstr "ODD(-2), −3 döndürür"
 
 #: functions/math.xml:229
 #, kde-format
@@ -6437,7 +6435,7 @@ msgstr "GAMMA(değer)"
 #: functions/math.xml:231
 #, kde-format
 msgid "GAMMA(1) returns 1"
-msgstr "GAMMA(1) 1 döndürür"
+msgstr "GAMMA(1), 1 döndürür"
 
 #: functions/math.xml:248
 #, kde-format
@@ -6456,12 +6454,12 @@ msgstr "MOD(değer;değer)"
 #: functions/math.xml:250
 #, kde-format
 msgid "MOD(12;5) returns 2"
-msgstr "MOD(12;5), 2 döndürür"
+msgstr "MOD(12; 5), 2 döndürür"
 
 #: functions/math.xml:251
 #, kde-format
 msgid "MOD(5;5) returns 0"
-msgstr "MOD(5;5), 0 döndürür"
+msgstr "MOD(5; 5), 0 döndürür"
 
 #: functions/math.xml:264
 #, kde-format
@@ -6469,7 +6467,7 @@ msgid ""
 "This function returns -1 if the number is negative, 0 if the number is null "
 "and 1 if the number is positive."
 msgstr ""
-"Bu işlev, eğer girilen sayı eksi ise -1, girilen değer boş ise 0, artı ise "
+"Bu işlev, eğer girilen sayı eksi ise −1, girilen değer boş ise 0, artı ise "
 "de 1 döndürür."
 
 #: functions/math.xml:265
@@ -6490,12 +6488,12 @@ msgstr "SIGN(0) eşittir 0"
 #: functions/math.xml:268
 #, kde-format
 msgid "SIGN(-5) equals -1"
-msgstr "SIGN(-5) eşittir -1"
+msgstr "SIGN(-5) eşittir −1"
 
 #: functions/math.xml:280
 #, kde-format
 msgid "This function multiplies each value by -1."
-msgstr "Bu işlev tüm değerileri -1 sayısı ile çarpar."
+msgstr "Bu işlev tüm değerileri −1 sayısı ile çarpar."
 
 #: functions/math.xml:281
 #, kde-format
@@ -6510,7 +6508,7 @@ msgstr "INV(-5) eşittir 5"
 #: functions/math.xml:283
 #, kde-format
 msgid "INV(5) equals -5"
-msgstr "INV(5) eşittir -5"
+msgstr "INV(5) eşittir −5"
 
 #: functions/math.xml:284
 #, kde-format
@@ -6524,19 +6522,19 @@ msgid ""
 "can count using a range: COUNT(A1:B5) or using a list of values like "
 "COUNT(12;5;12.5)."
 msgstr ""
-"Bu işlev, tamsayı veya kayan noktalı argümanların sayısını döndürür. Bir "
-"aralık COUNT(A1:B5) veya bir değerler listesi COUNT(12;5;12.5) "
-"kullanabilirsiniz."
+"Bu işlev, kendisine geçirilen tamsayı veya ondalık sayı argümanlarının "
+"sayısını döndürür. Bir erim kullanarak sayım yapabilirsiniz: COUNT(A1:B5) "
+"veya COUNT(12; 5; 12,5) gibi bir değer listesi kullanabilirsiniz."
 
 #: functions/math.xml:297
 #, kde-format
 msgid "COUNT(value;value;value...)"
-msgstr "COUNT(değer;değer;değer...)"
+msgstr "COUNT(değer; değer; değer; …)"
 
 #: functions/math.xml:298
 #, kde-format
 msgid "COUNT(-5;\"KSpread\";2) returns 2"
-msgstr "COUNT(-5;\"KSpread\";2), 2 döndürür"
+msgstr "COUNT(-5; \"KSpread\"; 2), 2 döndürür"
 
 #: functions/math.xml:299
 #, kde-format
@@ -6550,19 +6548,19 @@ msgid ""
 "count using a range: COUNTA(A1:B5) or using a list of values like "
 "COUNTA(12;5;12.5)."
 msgstr ""
-"Bu işlev, tüm boş olmayan argümanların sayısını döndürür. Bir aralık "
-"kullanarak: COUNTA(A1:B5) veya bir değerler listesi kullanarak: "
-"COUNTA(12;5;12,5) sayabilirsiniz."
+"Bu işlev, kendisine iletilen tüm boş olmayan argümanların sayısını döndürür. "
+"Bir erim kullanarak sayım yapabilirsiniz: COUNTA(A1:B5) veya COUNTA(12; 5; "
+"12,5) gibi bir değer listesi kullanabilirsiniz."
 
 #: functions/math.xml:315
 #, kde-format
 msgid "COUNTA(value;value;value...)"
-msgstr "COUNTA(değer;değer;değer...)"
+msgstr "COUNTA(değer; değer; değer; …)"
 
 #: functions/math.xml:316
 #, kde-format
 msgid "COUNTA(-5;\"KSpread\";2) returns 3"
-msgstr "COUNTA(-5;\"KSpread\";2), 3 döndürür"
+msgstr "COUNTA(-5; \"KSpread\"; 2), 3 döndürür"
 
 #: functions/math.xml:317
 #, kde-format
@@ -6572,17 +6570,17 @@ msgstr "COUNTA(5), 1 döndürür"
 #: functions/math.xml:327
 #, kde-format
 msgid "Cell range"
-msgstr "Hücre aralığı"
+msgstr "Hücre erimi"
 
 #: functions/math.xml:331
 #, kde-format
 msgid "This function returns the count of all empty cells within the range."
-msgstr "Bu işlev, aralıkta belirtilen boş hücrelerin sayısını döndürür."
+msgstr "Bu işlev, erimde belirtilen boş hücrelerin sayısını döndürür."
 
 #: functions/math.xml:332
 #, kde-format
 msgid "COUNTBLANK(range)"
-msgstr "COUNTBLANK(aralık)"
+msgstr "COUNTBLANK(erim)"
 
 #: functions/math.xml:333
 #, kde-format
@@ -6592,7 +6590,7 @@ msgstr "COUNTBLANK(A1:B5)"
 #: functions/math.xml:344 functions/math.xml:1215
 #, kde-format
 msgid "Range"
-msgstr "Aralık"
+msgstr "Erim"
 
 #: functions/math.xml:348 functions/math.xml:433
 #, kde-format
@@ -6605,17 +6603,17 @@ msgid ""
 "The COUNTIF() function returns the number of cells in the given range that "
 "meet the given criteria."
 msgstr ""
-"COUNTIF() işlevi, verilen aralıktaki ölçütlere uyan hücre sayısını döndürür."
+"COUNTIF() işlevi, verilen erimdeki ölçütlere uyan hücre sayısını döndürür."
 
 #: functions/math.xml:353
 #, kde-format
 msgid "COUNTIF(range;criteria)"
-msgstr "COUNTIF(aralık;ölçüt)"
+msgstr "COUNTIF(erim; ölçüt)"
 
 #: functions/math.xml:354
 #, kde-format
 msgid "COUNTIF(A2:A3;\"14\") returns 1 if A2 is -4 and A3 is 14"
-msgstr "COUNTIF(A2:A3;\"14\"), A2 içeriği -4 ve A3 içeriği 14 ise 1 döndürür"
+msgstr "COUNTIF(A2:A3; \"14\"), A2 içeriği −4 ve A3 içeriği 14 ise 1 döndürür"
 
 #: functions/math.xml:364 functions/math.xml:379 functions/math.xml:654
 #: functions/math.xml:670 functions/math.xml:684 functions/math.xml:702
@@ -6681,24 +6679,24 @@ msgid ""
 "You can calculate the sum of a range SUM(A1:B5) or a list of values like "
 "SUM(12;5;12.5)."
 msgstr ""
-"SUM() işlevi, parametrede verilen değerlerin toplamını hesaplar. SUM(A1:B5)  "
-"gibi bir aralığın veya SUM(12;5;12.5) gibi bir listenin toplamını "
-"hesaplarabilirsiniz."
+"SUM() işlevi, parametre olarak verilen tüm değerlerin toplamını hesaplar. "
+"SUM(A1:B5) gibi bir erimin veya SUM(12; 5; 12,5) gibi bir değer listesinin "
+"toplamını hesaplayabilirsiniz."
 
 #: functions/math.xml:399 functions/math.xml:417
 #, kde-format
 msgid "SUM(value;value;...)"
-msgstr "SUM(değer;değer;...)"
+msgstr "SUM(değer; değer; …)"
 
 #: functions/math.xml:400
 #, kde-format
 msgid "SUM(12;5;7) equals 24"
-msgstr "SUM(12;5;7) eşittir 24"
+msgstr "SUM(12;5; 7) eşittir 24"
 
 #: functions/math.xml:401
 #, kde-format
 msgid "SUM(12.5;2) equals 14.5"
-msgstr "SUM(12,5;2) eşittir 14,5"
+msgstr "SUM(12,5; 2) eşittir 14,5"
 
 #: functions/math.xml:416
 #, kde-format
@@ -6710,15 +6708,14 @@ msgid ""
 "counted as 1."
 msgstr ""
 "SUMA() işlevi, parametre olarak verilen tüm değerlerin toplamını hesaplar. "
-"SUM(A1:B5)  gibi bir aralığın veya SUM(12;5;12.5) gibi bir listenin "
-"toplamını hesaplayabilirsiniz. Eğer parametreler arasında azı veya FALSE "
-"Boole değeri varsa bunlar 0 olarak hesaplanır, eğer aradaki değer TRUE ise "
-"bu 1 olarak hesaplanır."
+"SUMA(A1:B5) gibi bir erimin veya SUMA(12; 5; 12,5) gibi bir değer listesinin "
+"toplamını hesaplayabilirsiniz. Bir parametre metin veya FALSE Boole değeri "
+"içeriyorsa 0, TRUE değeri içeriyorsa 1 olarak sayılır."
 
 #: functions/math.xml:418
 #, kde-format
 msgid "SUMA(12;5; 7) equals 24"
-msgstr "SUMA(12;5; 7) eşittir 24"
+msgstr "SUMA(12; 5; 7) eşittir 24"
 
 #: functions/math.xml:419
 #, kde-format
@@ -6728,12 +6725,12 @@ msgstr "SUMA(12,5; 2; TRUE) eşittir 15,5"
 #: functions/math.xml:429
 #, kde-format
 msgid "Check range"
-msgstr "Aralığı denetle"
+msgstr "denetim_erimi"
 
 #: functions/math.xml:437
 #, kde-format
 msgid "Sum range"
-msgstr "Toplam aralığı"
+msgstr "toplam_erimi"
 
 #: functions/math.xml:441
 #, kde-format
@@ -6743,21 +6740,21 @@ msgid ""
 "values in the check range are summed. The length of the check range should "
 "be equal or less than the length of the sum range."
 msgstr ""
-"SUMIF() işlevi, kıstaslara uyan her bir paramatreler için toplma değeri "
-"hesaplar. Toplama aralığı isteğe bağlıdır. Eğer verilmez ise, kontrol "
-"aralığındaki değerler toplanır. Kontrol aralığının uzunluğu, toplama "
-"aralığının uzunluğuna eşit veya daha kısa olmalıdır."
+"SUMIF() işlevi, parametre olarak verilen ve kriterlere uyan tüm değerlerin "
+"toplamını hesaplar. Toplam erimi isteğe bağlıdır. Belirtilmezse denetim "
+"aralığındaki değerler toplanır. Denetim eriminin uzunluğu, toplam eriminin "
+"uzunluğuna eşit veya ondan küçük olmalıdır."
 
 #: functions/math.xml:442
 #, kde-format
 msgid "SUMIF(checkrange;criteria;sumrange)"
-msgstr "SUMIF(denetim_aralığı;koşul;toplamaaralığı)"
+msgstr "SUMIF(denetim_erimi; kriter; toplam_erimi)"
 
 #: functions/math.xml:443
 #, kde-format
 msgid "SUMIF(A1:A4;\">1\") sums all values in range A1:A4 which match >1"
 msgstr ""
-"SUMIF(A1:A4;\">1\"), >1 koşulunu sağlayan A1:A4 aralığındaki değerlerin "
+"SUMIF(A1:A4; \">1\"), >1 koşulunu sağlayan A1:A4 erimindeki değerlerin "
 "toplamını döndürür"
 
 #: functions/math.xml:444
@@ -6766,8 +6763,8 @@ msgid ""
 "SUMIF(A1:A4;\"=0\";B1:B4) sums all values in range B1:B4 if the "
 "corresponding value in A1:A4 matches =0"
 msgstr ""
-"SUMIF(A1:A4;\"=0\";B1:B4), =0 koşulunu sağlayan B1:B4 aralığındaki "
-"değerlerin toplamını, eğer o değer A1:A4 aralığında ise döndürür"
+"SUMIF(A1:A4; \"=0\"; B1:B4) ifadesi, A1:A4 erimindeki karşılık gelen değerin "
+"=0 olması durumunda B1:B4 aralığındaki tüm değerleri toplar"
 
 #: functions/math.xml:458
 #, kde-format
@@ -6778,23 +6775,24 @@ msgid ""
 "returned."
 msgstr ""
 "PRODUCT() işlevi, parametre olarak verilen tüm değerlerin çarpımını "
-"hesaplar. Bir aralığın çarpımını, PRODUCT(A1:B5) veya PRODUCT(12;5;12,5) "
-"biçiminde hesaplayabilirsiniz. Bir sayısal değer bulunamazsa 0 döndürülür."
+"hesaplar. Bir erimin çarpımını hesaplayabilirsiniz: PRODUCT(A1:B5) veya bir "
+"değer listesinin çarpımını hesaplayabilirsiniz: product(12; 5; 12,5). "
+"Sayısal değer bulunmazsa 0 döndürülür."
 
 #: functions/math.xml:459
 #, kde-format
 msgid "PRODUCT(value;value;...)"
-msgstr "PRODUCT(değer;değer;...)"
+msgstr "PRODUCT(değer; değer; …)"
 
 #: functions/math.xml:460
 #, kde-format
 msgid "PRODUCT(3;5;7) equals 105"
-msgstr "PRODUCT(3;5;7) eşittir 105"
+msgstr "PRODUCT(3; 5; 7) eşittir 105"
 
 #: functions/math.xml:461
 #, kde-format
 msgid "PRODUCT(12.5;2) equals 25"
-msgstr "PRODUCT(12,5;2) eşittir 25"
+msgstr "PRODUCT(12,5; 2) eşittir 25"
 
 #: functions/math.xml:475
 #, kde-format
@@ -6804,24 +6802,25 @@ msgid ""
 "list of values like KPRODUCT(12;5;12.5). If no numeric values are found 1 is "
 "returned."
 msgstr ""
-"KPRODUCT() işlevi, verilen bütün değerlerin çarpımını döndürür. Bir aralığın "
-"çarpımını hesaplayabilirsiniz: KPRODUCT(A1:B5) veya bir değerler dizisinin: "
-"KPRODUCT(12;5;12.5) gibi. Eğer herhangi bir sayısal değer yoksa 1 döndürülür."
+"KPRODUCT() işlevi, parametre olarak verilen tüm değerlerin çarpımını "
+"hesaplar. Bir erimin çarpımını hesaplayabilirsiniz: KPRODUCT(A1:B5) veya "
+"KPRODUCT(12; 5; 12,5) gibi bir değer listesinin çarpımını "
+"hesaplayabilirsiniz. Sayısal değer bulunmazsa 1 döndürülür."
 
 #: functions/math.xml:476
 #, kde-format
 msgid "KPRODUCT(value;value;...)"
-msgstr "KPRODUCT(değer;değer;...)"
+msgstr "KPRODUCT(değer; değer; …)"
 
 #: functions/math.xml:477
 #, kde-format
 msgid "KPRODUCT(3;5;7) equals 105"
-msgstr "KPRODUCT(3;5;7) eşittir 105"
+msgstr "KPRODUCT(3; 5; 7) eşittir 105"
 
 #: functions/math.xml:478
 #, kde-format
 msgid "KPRODUCT(12.5;2) equals 25"
-msgstr "KPRODUCT(12,5;2) eşittir 25"
+msgstr "KPRODUCT(12,5; 2) eşittir 25"
 
 #: functions/math.xml:493
 #, kde-format
@@ -6833,7 +6832,7 @@ msgstr "G_PRODUCT() işlevi, KPRODUCT ile aynıdır. Gnumeric uyumluluğu sağla
 #: functions/math.xml:494
 #, kde-format
 msgid "G_PRODUCT(value;value;...)"
-msgstr "G_PRODUCT(değer;değer;...)"
+msgstr "G_PRODUCT(değer; değer; …)"
 
 #: functions/math.xml:507
 #, kde-format
@@ -6843,17 +6842,17 @@ msgstr "DIV() işlevi, ilk değeri sırasıyla diğer değerlere böler."
 #: functions/math.xml:508
 #, kde-format
 msgid "DIV(value;value;...)"
-msgstr "DIV(değer;değer;...)"
+msgstr "DIV(değer; değer; …)"
 
 #: functions/math.xml:509
 #, kde-format
 msgid "DIV(20;2;2) returns 5"
-msgstr "DIV(20;2;2), 5 döndürür"
+msgstr "DIV(20; 2; 2), 5 döndürür"
 
 #: functions/math.xml:510
 #, kde-format
 msgid "DIV(25;2.5) returns 10"
-msgstr "DIV(25;2.5), 10 döndürür"
+msgstr "DIV(25; 2,5), 10 döndürür"
 
 #: functions/math.xml:524
 #, kde-format
@@ -6862,24 +6861,24 @@ msgid ""
 "as parameters. You can calculate the sum of a range SUMSQ(A1:B5) or a list "
 "of values like SUMSQ(12;5;12.5)."
 msgstr ""
-"SUMSQ() işlevi, parametre olararak verilen değerlerin karelerinin toplamını "
-"hesaplar. SUMSQ(A1:B5) gibi aralıktaki veya SUMSQ(12;5;12.5) gibi liste "
-"biçimindeki değerlerle işlem yapabilirsiniz."
+"SUMSQ() işlevi, parametre olarak verilen değerlerin tüm karelerinin "
+"toplamını hesaplar. SUMSQ(A1:B5) gibi bir erimin veya SUMSQ(12; 5; 12,5) "
+"gibi bir değer listesinin toplamını hesaplayabilirsiniz."
 
 #: functions/math.xml:525
 #, kde-format
 msgid "SUMSQ(value;value;...)"
-msgstr "SUMSQ(değer;değer;...)"
+msgstr "SUMSQ(değer; değer; …)"
 
 #: functions/math.xml:526
 #, kde-format
 msgid "SUMSQ(12;5;7) equals 218"
-msgstr "SUMSQ(12;5;7) eşittir 218"
+msgstr "SUMSQ(12; 5; 7) eşittir 218"
 
 #: functions/math.xml:527
 #, kde-format
 msgid "SUMSQ(12.5;2) equals 173"
-msgstr "SUMSQ(12,5;2) eşittir 173"
+msgstr "SUMSQ(12,5; 2) eşittir 173"
 
 #: functions/math.xml:541
 #, kde-format
@@ -6893,12 +6892,12 @@ msgstr ""
 #: functions/math.xml:542
 #, kde-format
 msgid "MAX(value;value;...)"
-msgstr "MAK(değer;değer;...)"
+msgstr "MAK(değer; değer; …)"
 
 #: functions/math.xml:543
 #, kde-format
 msgid "MAX(12;5; 7) returns 12"
-msgstr "MAK(12;5; 7), 12 döndürür"
+msgstr "MAK(12; 5; 7), 12 döndürür"
 
 #: functions/math.xml:544
 #, kde-format
@@ -6922,7 +6921,7 @@ msgstr ""
 #: functions/math.xml:563
 #, kde-format
 msgid "MAXA(value;value;...)"
-msgstr "MAKA(değer;değer;...)"
+msgstr "MAKA(değer; değer; …)"
 
 #: functions/math.xml:564
 #, kde-format
@@ -6951,17 +6950,17 @@ msgstr ""
 #: functions/math.xml:584
 #, kde-format
 msgid "MIN(value;value;...)"
-msgstr "MIN(değer;değer;...)"
+msgstr "MIN(değer; değer; …)"
 
 #: functions/math.xml:585
 #, kde-format
 msgid "MIN(12;5; 7) returns 5"
-msgstr "MIN(12;5; 7), 5 döndürür"
+msgstr "MIN(12; 5; 7), 5 döndürür"
 
 #: functions/math.xml:586
 #, kde-format
 msgid "MIN(12.5; 2) returns 2"
-msgstr "MIN(12.5; 2), 2 döndürür"
+msgstr "MIN(12,5; 2), 2 döndürür"
 
 #: functions/math.xml:587
 #, kde-format
@@ -6981,12 +6980,12 @@ msgstr ""
 #: functions/math.xml:605
 #, kde-format
 msgid "MINA(value;value;...)"
-msgstr "MINA(değer;değer;...)"
+msgstr "MINA(değer; değer; …)"
 
 #: functions/math.xml:606
 #, kde-format
 msgid "MINA(12;5; 7) returns 5"
-msgstr "MINA(12;5; 7), 5 döndürür"
+msgstr "MINA(12; 5; 7), 5 döndürür"
 
 #: functions/math.xml:607
 #, kde-format
@@ -7005,24 +7004,24 @@ msgid ""
 "You can multiply values given by a range MULTIPLY(A1:B5) or a list of values "
 "like MULTIPLY(12;5;12.5). It's equivalent to PRODUCT."
 msgstr ""
-"MULTIPLY() işlevi, verilen bütün değerlerin çarpımını döndürür. Değerleri "
-"bir aralık vererek MULTIPLY(A1:B5) ya da bir liste halinde vererek "
-"MULTIPLY(12;5;12.5) çarpabilirsiniz. PRODUCT ile aynıdır."
+"MULTIPLY() işlevi, parametrelerde verilen tüm değerleri çarpar. MULTIPLY(A1:"
+"B5) gibi bir erimde veya MULTIPLY(12; 5; 12,5) gibi bir değer listesinde "
+"verilen değerleri çarpabilirsiniz. Bu, PRODUCT işlevine eşdeğerdir."
 
 #: functions/math.xml:626
 #, kde-format
 msgid "MULTIPLY(value;value;...)"
-msgstr "MULTIPLY(değer;değer;...)"
+msgstr "MULTIPLY(değer; değer; …)"
 
 #: functions/math.xml:627
 #, kde-format
 msgid "MULTIPLY(12;5;7) equals 420"
-msgstr "MULTIPLY(12;5;7), 420 döndürür"
+msgstr "MULTIPLY(12; 5; 7) eşittir 420"
 
 #: functions/math.xml:628
 #, kde-format
 msgid "MULTIPLY(12.5;2) equals 25"
-msgstr "MULTIPLY(12,5;2), 25 döndürür"
+msgstr "MULTIPLY(12,5; 2) eşittir 25"
 
 #: functions/math.xml:643
 #, kde-format
@@ -7041,12 +7040,12 @@ msgstr "(a+b+c)! / a!b!c!"
 #: functions/math.xml:645
 #, kde-format
 msgid "MULTINOMIAL(value;value;...)"
-msgstr "MULTINOMIAL(değer;değer;...)"
+msgstr "MULTINOMIAL(değer; değer; …)"
 
 #: functions/math.xml:646
 #, kde-format
 msgid "MULTINOMIAL(3;4;5) equals 27720"
-msgstr "MULTINOMIAL(3;4;5) eşittir 27720"
+msgstr "MULTINOMIAL(3; 4; 5) eşittir 27720"
 
 #: functions/math.xml:658
 #, kde-format
@@ -7089,7 +7088,7 @@ msgstr "SQRTPI(x)"
 #: functions/math.xml:676
 #, kde-format
 msgid "SQRTPI(2) equals 2.506628"
-msgstr "SQRTPI(2) 2.506628"
+msgstr "SQRTPI(2) eşittir 2,506628"
 
 #: functions/math.xml:688
 #, kde-format
@@ -7104,12 +7103,12 @@ msgstr "LN(x)"
 #: functions/math.xml:690
 #, kde-format
 msgid "LN(0.8) equals -0.22314355"
-msgstr "LN(0,8) eşittir -0,22314355"
+msgstr "LN(0,8) eşittir −0,22314355"
 
 #: functions/math.xml:691
 #, kde-format
 msgid "LN(0) equals -inf"
-msgstr "LN(0) eşittir -inf"
+msgstr "LN(0) eşittir −sonsuz"
 
 #: functions/math.xml:710
 #, kde-format
@@ -7124,12 +7123,12 @@ msgstr "LOGn(değer;taban)"
 #: functions/math.xml:712
 #, kde-format
 msgid "LOGn(12;10) equals 1.07918125"
-msgstr "LOGn(12;10) eşittir 1,07918125"
+msgstr "LOGn(12; 10) eşittir 1,07918125"
 
 #: functions/math.xml:713
 #, kde-format
 msgid "LOGn(12;2) equals 3.5849625"
-msgstr "LOGn(12;2) eşittir 3,5849625"
+msgstr "LOGn(12; 2) eşittir 3,5849625"
 
 #: functions/math.xml:733
 #, kde-format
@@ -7144,7 +7143,7 @@ msgstr "ROOTN(x;n)"
 #: functions/math.xml:735
 #, kde-format
 msgid "ROOTN(9;2) equals 3"
-msgstr "ROOTN(9;2) eşittir 3"
+msgstr "ROOTN(9; 2) eşittir 3"
 
 #: functions/math.xml:748
 #, kde-format
@@ -7179,7 +7178,7 @@ msgstr "LOG(x)"
 #: functions/math.xml:765
 #, kde-format
 msgid "LOG(0.8) equals -0.09691001"
-msgstr "LOG(0,8) eşittir -0,09691001"
+msgstr "LOG(0,8) eşittir −0,09691001"
 
 #: functions/math.xml:766
 #, kde-format
@@ -7194,7 +7193,7 @@ msgstr "Bir pozitif kayan nokta değeri"
 #: functions/math.xml:782
 #, kde-format
 msgid "The LOG10() function returns the base-10 logarithm of the argument."
-msgstr "LOG10() işlevi, verilen değerin 10-tabanında logaritmasını döndürür."
+msgstr "LOG10() işlevi, verilen değerin 10 tabanında logaritmasını döndürür."
 
 #: functions/math.xml:783
 #, kde-format
@@ -7224,12 +7223,12 @@ msgstr "LOG2(x)"
 #: functions/math.xml:803
 #, kde-format
 msgid "LOG2(0.8) equals -0.32192809"
-msgstr "LOG2(0,8) eşittir -0,32192809"
+msgstr "LOG2(0,8) eşittir −0,32192809"
 
 #: functions/math.xml:804
 #, kde-format
 msgid "LOG2(0) equals -inf."
-msgstr "LOG2(0) eşittir -inf."
+msgstr "LOG2(0) eşittir −sonsuz"
 
 #: functions/math.xml:820
 #, kde-format
@@ -7246,7 +7245,7 @@ msgstr "EXP(x)"
 #: functions/math.xml:822
 #, kde-format
 msgid "EXP(9) equals 8 103.08392758"
-msgstr "EXP(9), eşittir 8 103,08392758"
+msgstr "EXP(9) eşittir 8 103,08392758"
 
 #: functions/math.xml:823
 #, kde-format
@@ -7270,12 +7269,12 @@ msgstr "CEIL(x)"
 #: functions/math.xml:838
 #, kde-format
 msgid "CEIL(12.5) equals 13"
-msgstr "CEIL(12,5), eşittir 13"
+msgstr "CEIL(12,5) eşittir 13"
 
 #: functions/math.xml:839
 #, kde-format
 msgid "CEIL(-12.5) equals -12"
-msgstr "CEIL(-12,5) eşittir -12"
+msgstr "CEIL(-12,5) eşittir −12"
 
 #: functions/math.xml:855 functions/math.xml:884
 #, kde-format
@@ -7298,7 +7297,7 @@ msgid ""
 msgstr ""
 "CEILING() işlevi, x’i girdiden büyük olan Ağırlığın en yakın çarpımına "
 "(sıfırdan uzağa) yukarı yuvarlar. Ağırlığın öntanımlı değeri 1 (veya değer "
-"negatif ise -1)’dir, bu da en yakın tamsayıya yukarı yuvarlandığı anlamına "
+"negatif ise −1)’dir, bu da en yakın tamsayıya yukarı yuvarlandığı anlamına "
 "gelir. Mod paremetresi sıfır değilse işlev pozitif sonsuza yuvarlamak yerine "
 "sıfırdan uzağa yuvarlar."
 
@@ -7320,12 +7319,12 @@ msgstr "CEILING(6,43; 4) eşittir 8"
 #: functions/math.xml:867
 #, kde-format
 msgid "CEILING(-6.43; -4; 1) equals -8"
-msgstr "CEILING(-6,43; -4; 1) eşittir -8"
+msgstr "CEILING(-6,43; -4; 1) eşittir −8"
 
 #: functions/math.xml:868
 #, kde-format
 msgid "CEILING(-6.43; -4; 0) equals -4"
-msgstr "CEILING(-6,43; -4; 0) eşittir -4"
+msgstr "CEILING(-6,43; -4; 0) eşittir −4"
 
 #: functions/math.xml:892
 #, kde-format
@@ -7352,7 +7351,7 @@ msgid ""
 msgstr ""
 "The FLOOR() işlevi, x’i girdiden daha küçük olan Ağırlığın en yakın "
 "çarpımına aşağı (sıfıra doğru) yuvarlar.\n"
-"x pozitif ise Ağırlık 1’dir. Eğer değer negatif ise -1’dir,\n"
+"x pozitif ise Ağırlık 1’dir. Eğer değer negatif ise −1’dir,\n"
 "bu da en yakın tamsayıya yukarı doğru yuvarlandığı anlamına gelir.\n"
 "Eğer mod verilmişse ve sıfıra eşit değilse x’in miktarı ağırlığın\n"
 " bir katına sıfıra doğru yuvarlanır ve daha sonra işaret uygulanır. Aksi "
@@ -7367,12 +7366,12 @@ msgstr "FLOOR(x)"
 #: functions/math.xml:901
 #, kde-format
 msgid "FLOOR(12.5) equals 12"
-msgstr "FLOOR(12,5), eşittir 12"
+msgstr "FLOOR(12,5) eşittir 12"
 
 #: functions/math.xml:902
 #, kde-format
 msgid "FLOOR(-12.5) equals -13"
-msgstr "FLOOR(-1,.5) eşittir -13"
+msgstr "FLOOR(-12,5) eşittir −13"
 
 #: functions/math.xml:903
 #, kde-format
@@ -7438,7 +7437,7 @@ msgstr "RAND()"
 #: functions/math.xml:950
 #, kde-format
 msgid "RAND() equals for example 0.78309922..."
-msgstr "RAND(), örneğin eşittir 0,78309922..."
+msgstr "RAND(); örneğin eşittir 0,78309922…"
 
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
@@ -7606,7 +7605,7 @@ msgstr "RANDBETWEEN(alt;üst)"
 #: functions/math.xml:1082
 #, kde-format
 msgid "RANDBETWEEN(12;78) equals for example 61.0811..."
-msgstr "RANDBETWEEN(12;78), örneğin eşittir 61,0811..."
+msgstr "RANDBETWEEN(12; 78); örneğin eşittir 61,0811…"
 
 #: functions/math.xml:1094
 #, kde-format
@@ -7635,7 +7634,7 @@ msgstr "MROUND(1,252; 0,5) eşittir 1,5"
 #: functions/math.xml:1101
 #, kde-format
 msgid "MROUND(-1.252; -0.5) equals -1.5"
-msgstr "MROUND(-1,252; -0,5) eşittir -1,5"
+msgstr "MROUND(-1,252; -0,5) eşittir −1,5"
 
 #: functions/math.xml:1114 functions/math.xml:1139 functions/math.xml:1162
 #, kde-format
@@ -7663,27 +7662,27 @@ msgstr "ROUND(değer;[basamaklar])"
 #: functions/math.xml:1120
 #, kde-format
 msgid "ROUND(1.252;2) equals 1.25"
-msgstr "ROUND(1,252;2) eşittir 1,25"
+msgstr "ROUND(1,252; 2) eşittir 1,25"
 
 #: functions/math.xml:1121
 #, kde-format
 msgid "ROUND(-1.252;2) equals -1.25"
-msgstr "ROUND(-1,252;2) eşittir -1,25"
+msgstr "ROUND(-1,252; 2) eşittir −1,25"
 
 #: functions/math.xml:1122
 #, kde-format
 msgid "ROUND(1.258;2) equals 1.26"
-msgstr "ROUND(1,258;2) eşittir 1,26"
+msgstr "ROUND(1,258; 2) eşittir 1,26"
 
 #: functions/math.xml:1123
 #, kde-format
 msgid "ROUND(-12.25;-1) equals -10"
-msgstr "ROUND(-12,25;-1), -10"
+msgstr "ROUND(-12,25; -1) eşittir −10"
 
 #: functions/math.xml:1124
 #, kde-format
 msgid "ROUND(-1.252;0) equals -1"
-msgstr "ROUND(-1,252;0) eşittir -1"
+msgstr "ROUND(-1,252; 0) eşittir −1"
 
 #: functions/math.xml:1143
 #, kde-format
@@ -7711,17 +7710,17 @@ msgstr "ROUNDUP(1,252) eşittir 2"
 #: functions/math.xml:1146
 #, kde-format
 msgid "ROUNDUP(1.252;2) equals 1.26"
-msgstr "ROUNDUP(1,252;2) eşittir 1,26"
+msgstr "ROUNDUP(1,252; 2) eşittir 1,26"
 
 #: functions/math.xml:1147
 #, kde-format
 msgid "ROUNDUP(-1.252;2) equals -1.26"
-msgstr "ROUNDUP(-1,252;2) eşittir -1,26"
+msgstr "ROUNDUP(-1,252; 2) eşittir −1,26"
 
 #: functions/math.xml:1148
 #, kde-format
 msgid "ROUNDUP(-1.252) equals -2"
-msgstr "ROUNDUP(-1,252) eşittir -2"
+msgstr "ROUNDUP(-1,252) eşittir −2"
 
 #: functions/math.xml:1166
 #, kde-format
@@ -7749,17 +7748,17 @@ msgstr "ROUNDDOWN(1,252) eşittir 1"
 #: functions/math.xml:1169
 #, kde-format
 msgid "ROUNDDOWN(1.252;2) equals 1.25"
-msgstr "ROUNDDOWN(1,252;2) eşittir 1,25"
+msgstr "ROUNDDOWN(1,252; 2) eşittir 1,25"
 
 #: functions/math.xml:1170
 #, kde-format
 msgid "ROUNDDOWN(-1.252;2) equals -1.25"
-msgstr "ROUNDDOWN(-1,252;2), -1,25"
+msgstr "ROUNDDOWN(-1,252; 2) eşittir −1,25"
 
 #: functions/math.xml:1171
 #, kde-format
 msgid "ROUNDDOWN(-1.252) equals -1"
-msgstr "ROUNDDOWN(-1,252) eşittir -1"
+msgstr "ROUNDDOWN(-1,252) eşittir −1"
 
 #: functions/math.xml:1181
 #, kde-format
@@ -7773,8 +7772,8 @@ msgid ""
 "8, 13, 21...), in which each number, after the first two, is the sum of the "
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
-"FIB işlevi her değeri kendinden önceki iki değerin toplamı olan Fibonacci "
-"serisinin (1, 1, 2, 3, 5, 8, 13, 21...) Ninci terimini döndürür. FIB(0) 0 "
+"FIB işlevi, her değeri kendinden önceki iki değerin toplamı olan Fibonacci "
+"serisinin (1, 1, 2, 3, 5, 8, 13, 21, …) Ninci terimini döndürür. FIB(0) 0 "
 "olarak tanımlıdır."
 
 #: functions/math.xml:1186
@@ -8111,12 +8110,12 @@ msgstr "Dizin ile belirtilen paramtreyi döndürür."
 #: functions/reference.xml:90
 #, kde-format
 msgid "CHOOSE(index; parameter1; parameter2;...)"
-msgstr "CHOOSE(indeks; parametre1; parametre2;...)"
+msgstr "CHOOSE(indeks; parametre1; parametre2; …)"
 
 #: functions/reference.xml:91
 #, kde-format
 msgid "CHOOSE(1; \"1st\"; \"2nd\") returns \"1st\""
-msgstr "CHOOSE(1; \"1.\"; \"2.\"),  \"1.\" döndürür"
+msgstr "CHOOSE(1; \"1.\"; \"2.\"), “1.” döndürür"
 
 #: functions/reference.xml:92
 #, kde-format
@@ -8183,8 +8182,9 @@ msgid ""
 "If a range is given, returns value stored in a given row/column. If one cell "
 "is given, which contains an array, then one element of the array is returned."
 msgstr ""
-"Eğer bir aralık verilirse verilen satır/sütundaki değeri döndürür. Eğer bir "
-"diziliş içeren bir hücre verilirse dizilişnin bir ögesi döndürülür."
+"Bir erim verilirse belirtilen satır/sütunda saklanan değeri döndürür. Bir "
+"hücre verilirse ve bu hücre bir diziliş içeriyorsa dizilişin bir ögesi "
+"döndürülür."
 
 #: functions/reference.xml:146
 #, kde-format
@@ -8194,12 +8194,12 @@ msgstr "INDEX(hücre, satır, sütun)"
 #: functions/reference.xml:147
 #, kde-format
 msgid "INDEX(range, row, column)"
-msgstr "INDEX(aralık, satır, sütun)"
+msgstr "INDEX(erim, satır, sütun)"
 
 #: functions/reference.xml:148
 #, kde-format
 msgid "INDEX(A1:C3;2;2), returns contents of B2"
-msgstr "INDEX(A1:C3;2;2), B2’nin içeriğini döndürür"
+msgstr "INDEX(A1:C3; 2; 2), B2’nin içeriğini döndürür"
 
 #: functions/reference.xml:149
 #, kde-format
@@ -8342,9 +8342,8 @@ msgstr ""
 "Eğer değer arama vektöründe yoksa bir sonraki daha düşük olanı alır. Eğer "
 "arama vektöründen hiç bir değer eşleşmez ise bir hata döndürülür. Arama "
 "vektörü artan sırada olmalıdır ve arama ve sonuç vekrörleri aynı boyutta "
-"olmalıdır. Sayısal değerler, karakter dizileri ve boolean değerler "
-"tanımlıdır. Karakter dizileri arasındaki karşılaştırma büyük-küçük harf "
-"duyarsızdır."
+"olmalıdır. Sayısal değerler, karakter dizileri ve Boole değerler tanımlıdır. "
+"Karakter dizileri arasındaki karşılaştırma BÜYÜK/küçük harf duyarsızdır."
 
 #: functions/reference.xml:249
 #, kde-format
@@ -8354,7 +8353,7 @@ msgstr "LOOKUP(değer; arama vektörü; sonuç vektörü)"
 #: functions/reference.xml:250
 #, kde-format
 msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
-msgstr "LOOKUP(1.232; A1:A6; B1:B6), A1 = 1, A2 = 2 için B1’in döndürür."
+msgstr "LOOKUP(1,232; A1:A6; B1:B6), A1 = 1, A2 = 2 için B1’in döndürür."
 
 #: functions/reference.xml:262 functions/reference.xml:288
 #, kde-format
@@ -8501,43 +8500,43 @@ msgid ""
 "value is found, and the search region needs to be sorted in descending order."
 msgstr ""
 "Bir arama değerini arama bölgesinde bulur ve konumunu (1’den başlayarak) "
-"döndürür. Eşleşme türü -1, 0 ya da 1 olabilir ve aramanın nasıl yapıldığına "
+"döndürür. Eşleşme türü −1, 0 ya da 1 olabilir ve aramanın nasıl yapıldığına "
 "karar verir. Eğer eşleşme türü 0 ise arama değerine eşit olan ilk değerin "
 "indeksi döndürülür. Eğer eşleşme türü 1 (ya da boş) ise arama değerine eşit "
 "ya da daha küçük olan ilk değerin indeksi döndürülür ve arama bölgesindeki "
-"değerler artan sırada sıralı olmalıdır. Eğer eşleşme türü -1 ise arama "
+"değerler artan sırada sıralı olmalıdır. Eğer eşleşme türü −1 ise arama "
 "değerine eşit ya da daha büyük olan en küçük değer bulunur ve aram  bölgesi "
 "azalan sırada sıralı olmalıdır."
 
 #: functions/reference.xml:352
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
-msgstr "MATCH(Arama değeri; Arama bölgesi; Eşleşme türü)"
+msgstr "MATCH(arama_değeri; arama_bölgesi; eşleşme_türü)"
 
 #: functions/reference.xml:360
 #, kde-format
 msgid "Reference or range"
-msgstr "Kaynak veya aralık"
+msgstr "Başvuru veya erim"
 
 #: functions/reference.xml:364
 #, kde-format
 msgid "Number of rows to offset"
-msgstr "Konuma kadar ki satır sayısı"
+msgstr "Ofsete kadarki satır sayısı"
 
 #: functions/reference.xml:368
 #, kde-format
 msgid "Number of columns to offset"
-msgstr "Konuma kadar ki sütun sayısı"
+msgstr "Ofsete kadarki sütun sayısı"
 
 #: functions/reference.xml:372
 #, kde-format
 msgid "Height of the offset range (optional)"
-msgstr "Konum aralığının yüksekliği (isteğe bağlı)"
+msgstr "Ofset eriminin yüksekliği (isteğe bağlı)"
 
 #: functions/reference.xml:376
 #, kde-format
 msgid "Width of the offset range (optional)"
-msgstr "Konum aralığının genişliği (isteğe bağlı)"
+msgstr "Ofset eriminin genişliği (isteğe bağlı)"
 
 #: functions/reference.xml:380
 #, kde-format
@@ -8615,17 +8614,17 @@ msgstr ""
 #: functions/statistical.xml:32
 #, kde-format
 msgid "AVEDEV(value;value;...)"
-msgstr "AVEDEV(değer;değer;...)"
+msgstr "AVEDEV(değer; değer; …)"
 
 #: functions/statistical.xml:33
 #, kde-format
 msgid "AVEDEV(11.4;17.3;21.3;25.9;40.1) returns 7.84"
-msgstr "AVEDEV(11.4;17.3;21.3;25.9;40.1), 7.84 döndürür"
+msgstr "AVEDEV(11,4; 17,3; 21,3; 25,9; 40,1), 7,84 döndürür"
 
 #: functions/statistical.xml:34
 #, kde-format
 msgid "AVEDEV(A1:A5) ..."
-msgstr "AVEDEV(A1:A5) ..."
+msgstr "AVEDEV(A1:A5)…"
 
 #: functions/statistical.xml:62
 #, kde-format
@@ -8634,24 +8633,24 @@ msgid ""
 "parameters. You can calculate the average of a range AVERAGE(A1:B5) or a "
 "list of values like AVERAGE(12;5;12.5)."
 msgstr ""
-"AVERAGE() işlevi, parametrede verilen tüm değerlerin ortalamasını alır. "
-"AVERAGE(A1:B5) gibi bir aralığın veya AVERAGE(12;5;12.5) gibi bir değerleri "
-"dizisinin ortalamasını hesaplayabilirsiniz."
+"AVERAGE() işlevi, parametre olarak verilen tüm değerlerin ortalamasını "
+"hesaplar. AVERAGE(A1:B5) gibi bir erimin veya AVERAGE(12;5;12.5) gibi bir "
+"değer listesinin ortalamasını hesaplayabilirsiniz."
 
 #: functions/statistical.xml:63
 #, kde-format
 msgid "AVERAGE(value;value;...)"
-msgstr "AVERAGE(değer;değer;...)"
+msgstr "AVERAGE(değer; değer; …)"
 
 #: functions/statistical.xml:64
 #, kde-format
 msgid "AVERAGE(12;5;7) equals 8"
-msgstr "AVERAGE(12;5;7), 8 döndürür"
+msgstr "AVERAGE(12; 5; 7) eşittir 8"
 
 #: functions/statistical.xml:65
 #, kde-format
 msgid "AVERAGE(12.5;2) equals 7.25"
-msgstr "AVERAGE(12.5;2), 7.25 döndürür"
+msgstr "AVERAGE(12,5; 2) eşittir 7,25"
 
 #: functions/statistical.xml:77 functions/text.xml:447 functions/text.xml:451
 #: functions/text.xml:455 functions/text.xml:459 functions/text.xml:463
@@ -8677,12 +8676,12 @@ msgstr ""
 #: functions/statistical.xml:82
 #, kde-format
 msgid "AVERAGEA(value;value;...)"
-msgstr "AVERAGEA(değer;değer;...)"
+msgstr "AVERAGEA(değer; değer; …)"
 
 #: functions/statistical.xml:83
 #, kde-format
 msgid "AVERAGEA(11.4;17.3;\"sometext\";25.9;40.1) equals 18.94"
-msgstr "AVERAGEA(11.4;17.3;\"sometext\";25.9;40.1), 18.94 döndürür"
+msgstr "AVERAGEA(11,4; 17,3; \"metin\"; 25,9; 40,1) eşittir 18,94"
 
 #: functions/statistical.xml:95 functions/statistical.xml:131
 #: functions/statistical.xml:434 functions/statistical.xml:463
@@ -8737,12 +8736,12 @@ msgstr "BETADIST(sayı;alfa;beta;bağlangıç;bitiş;[birikimli=TRUE])"
 #: functions/statistical.xml:118
 #, kde-format
 msgid "BETADIST(0.2859;0.2606;0.8105) equals 0.675444"
-msgstr "BETADIST(0.2859;0.2606;0.8105), 0.675444 döndürür"
+msgstr "BETADIST(0,2859; 0,2606; 0,8105) eşittir 0,675444"
 
 #: functions/statistical.xml:119
 #, kde-format
 msgid "BETADIST(0.2859;0.2606;0.8105;0.2;0.9) equals 0.537856"
-msgstr "BETADIST(0.2859;0.2606;0.8105;0.2;0.9), 0.537856 döndürür"
+msgstr "BETADIST(0,2859; 0,2606; 0,8105; 0,2; 0,9) eşittir 0,537856"
 
 #: functions/statistical.xml:147
 #, kde-format
@@ -8770,12 +8769,12 @@ msgstr "BETAINV(sayı;alfa;beta [; başlangıç=0 [; bitiş=1]])"
 #: functions/statistical.xml:150
 #, kde-format
 msgid "BETADIST(BETAINV(0.1;3;4);3;4) equals 0.1"
-msgstr "BETADIST(BETAINV(0.1;3;4);3;4), 0.1"
+msgstr "BETADIST(BETAINV(0,1; 3; 4); 3; 4) eşittir 0,1"
 
 #: functions/statistical.xml:151
 #, kde-format
 msgid "BETADIST(BETAINV(0.3;3;4);3;4) equals 0.3"
-msgstr "BETADIST(BETAINV(0.3;3;4);3;4), 0.3"
+msgstr "BETADIST(BETAINV(0,3; 3; 4); 3; 4) eşittir 0,3"
 
 #: functions/statistical.xml:164
 #, kde-format
@@ -8788,7 +8787,7 @@ msgid ""
 "The CHIDIST() function returns the probability value from the indicated Chi "
 "square that a hypothesis is confirmed."
 msgstr ""
-"CHIDIST() işlevi, doğrulanmış bir hipotezle gösterilen bir ki-kare’den "
+"CHIDIST() işlevi, doğrulanmış bir hipotezle gösterilen bir ki kare’den "
 "olasılık döndürür."
 
 #: functions/statistical.xml:169
@@ -8800,10 +8799,10 @@ msgid ""
 "determines from this the probability of error for the hypothesis to be "
 "tested."
 msgstr ""
-"CHIDIST teorik ki kare dağılımı ile tüm değerler için (gözlemlenen değer-"
-"beklenen değer)^2/beklenen değerin sonucundan hesaplanarak verilen rasgele "
-"örnekler için ki kare değerini karşılaştırır ve bundan test edilen hipotezin "
-"hata olasılığını belirler."
+"CHIDIST teorik ki kare dağılımı ile tüm değerler için “(gözlemlenen değer − "
+"beklenen değer) ^ 2/beklenen değer”in sonucundan hesaplanarak verilen "
+"rastgele örnekler için ki kare değerini karşılaştırır ve bundan test edilen "
+"hipotezin hata olasılığını belirler."
 
 #: functions/statistical.xml:170
 #, kde-format
@@ -8854,7 +8853,7 @@ msgstr "COMBIN(12,5), 792 döndürür"
 #: functions/statistical.xml:190
 #, kde-format
 msgid "COMBIN(5;5) returns 1"
-msgstr "COMBIN(5;5), 1 döndürür"
+msgstr "COMBIN(5; 5), 1 döndürür"
 
 #: functions/statistical.xml:206
 #, kde-format
@@ -8879,12 +8878,12 @@ msgstr "COMBINA(toplam;seçilen)"
 #: functions/statistical.xml:208
 #, kde-format
 msgid "COMBINA(12;5) returns 4368"
-msgstr "COMBINA(12;5), 4368 döndürür"
+msgstr "COMBINA(12; 5), 4368 döndürür"
 
 #: functions/statistical.xml:209
 #, kde-format
 msgid "COMBINA(5;5) returns 126"
-msgstr "COMBINA(5;5), 126 döndürür"
+msgstr "COMBINA(5; 5), 126 döndürür"
 
 #: functions/statistical.xml:217
 #, kde-format
@@ -8927,32 +8926,32 @@ msgstr "CONFIDENCE(alfa;ölçsap;boy)"
 #: functions/statistical.xml:232
 #, kde-format
 msgid "CONFIDENCE(0.05;1.5;100) equals 0.294059"
-msgstr "CONFIDENCE(0,05; 1,5; 100), 0,294059 döndürür"
+msgstr "CONFIDENCE(0,05; 1,5; 100) eşittir 0,294059"
 
 #: functions/statistical.xml:240 functions/statistical.xml:259
 #: functions/statistical.xml:668 functions/statistical.xml:913
 #: functions/statistical.xml:1144
 #, kde-format
 msgid "Cell range of values"
-msgstr "Değerlerin içinde bulunduğu hücreler"
+msgstr "Değerlerin hücre erimi"
 
 #: functions/statistical.xml:244 functions/statistical.xml:263
 #: functions/statistical.xml:917
 #, kde-format
 msgid "Second cell range of values"
-msgstr "Değerlerin içinde bulunduğu ikincil hücreler"
+msgstr "Değerlerin ikinci hücre erimi"
 
 #: functions/statistical.xml:248
 #, kde-format
 msgid ""
 "The CORREL() function calculates the correlation coefficient of two cell "
 "ranges."
-msgstr "CORREL() işlevi, iki hücre aralığının bağıntı katsayısını hesaplar."
+msgstr "CORREL() işlevi, iki hücre eriminin bağıntı katsayısını hesaplar."
 
 #: functions/statistical.xml:249
 #, kde-format
 msgid "CORREL(range1; range2)"
-msgstr "CORREL(aralık1;aralık2)"
+msgstr "CORREL(erim1; erim2)"
 
 #: functions/statistical.xml:250
 #, kde-format
@@ -8962,12 +8961,12 @@ msgstr "CORREL(A1:A3; B1:B3)"
 #: functions/statistical.xml:267
 #, kde-format
 msgid "The COVAR() function calculates the covariance of two cell ranges."
-msgstr "COVAR() işlevi, iki hücre aralağının ortak değişkesini hesaplar."
+msgstr "COVAR() işlevi, iki hücre eriminin ortak değişkesini hesaplar."
 
 #: functions/statistical.xml:268
 #, kde-format
 msgid "COVAR(range1; range2)"
-msgstr "COVAR(aralık1; aralık2)"
+msgstr "COVAR(erim1; erim2)"
 
 #: functions/statistical.xml:269
 #, kde-format
@@ -8982,7 +8981,7 @@ msgstr "DEVSQ() işlevi, sapma değerlerinin karelerinin toplamlarını hesaplar
 #: functions/statistical.xml:298
 #, kde-format
 msgid "DEVSQ(value; value;...)"
-msgstr "DEVSQ(değer; değer;...)"
+msgstr "DEVSQ(değer; değer; …)"
 
 #: functions/statistical.xml:299
 #, kde-format
@@ -8992,7 +8991,7 @@ msgstr "DEVSQ(A1:A5)"
 #: functions/statistical.xml:300
 #, kde-format
 msgid "DEVSQ(21; 33; 54; 23) returns 684.75"
-msgstr "DEVSQ(21; 33; 54; 23), 684.75 döndürür"
+msgstr "DEVSQ(21; 33; 54; 23), 684,75 döndürür"
 
 #: functions/statistical.xml:312
 #, kde-format
@@ -9032,12 +9031,12 @@ msgstr "EXPONDIST(sayı;lambda;genel)"
 #: functions/statistical.xml:324
 #, kde-format
 msgid "EXPONDIST(3;0.5;0) equals 0.111565"
-msgstr "EXPONDIST(3;0.5;0), 0.111565 döndürür"
+msgstr "EXPONDIST(3; 0,5; 0) eşittir 0,111565"
 
 #: functions/statistical.xml:325
 #, kde-format
 msgid "EXPONDIST(3;0.5;1) equals 0.776870"
-msgstr "EXPONDIST(3;0.5;1), 0.776870 döndürür"
+msgstr "EXPONDIST(3; 0,5; 1) eşittir 0,776870"
 
 #: functions/statistical.xml:337 functions/statistical.xml:690
 #, kde-format
@@ -9052,7 +9051,7 @@ msgstr "Bağımsızlık derecesi 2"
 #: functions/statistical.xml:345
 #, kde-format
 msgid "The FDIST() function returns the f-distribution."
-msgstr "FDIST() işlevi, f-dağılımını döndürür."
+msgstr "FDIST() işlevi, f dağılımını döndürür."
 
 #: functions/statistical.xml:346
 #, kde-format
@@ -9062,7 +9061,7 @@ msgstr "FDIST(sayı;1_bağımsızlık_derecesi;2_bağımsızlık_derecesi)"
 #: functions/statistical.xml:347
 #, kde-format
 msgid "FDIST(0.8;8;12) yields 0.61"
-msgstr "FDIST(0.8;8;12), 0.61 döndürür"
+msgstr "FDIST(0,8; 8; 12), 0,61 döndürür"
 
 #: functions/statistical.xml:359
 #, kde-format
@@ -9081,7 +9080,7 @@ msgid ""
 "FDIST(x;r1;r2) = p."
 msgstr ""
 "FINV() işlevi, eşsiz negatif olmayan x sayısını döndürür; öyle ki FDIST(x;r1;"
-"r2) = p 'dir."
+"r2) = p’dir."
 
 #: functions/statistical.xml:368
 #, kde-format
@@ -9091,7 +9090,7 @@ msgstr "FINV(sayı; r1; r2)"
 #: functions/statistical.xml:369
 #, kde-format
 msgid "FDIST(FINV(0.1;3;4);3;4) equals 0.1"
-msgstr "FDIST(FINV(0.1;3;4);3;4), 0.1"
+msgstr "FDIST(FINV(0,1; 3; 4); 3; 4) eşittir 0,1"
 
 #: functions/statistical.xml:381
 #, kde-format
@@ -9110,12 +9109,12 @@ msgstr "FISHER(sayı)"
 #: functions/statistical.xml:383
 #, kde-format
 msgid "FISHER(0.2859) equals 0.294096"
-msgstr "FISHER(0.2859), 0.294096 döndürür"
+msgstr "FISHER(0,2859) eşittir 0,294096"
 
 #: functions/statistical.xml:384
 #, kde-format
 msgid "FISHER(0.8105) equals 1.128485"
-msgstr "FISHER(0.8105), 1.128485"
+msgstr "FISHER(0,8105) eşittir 1,128485"
 
 #: functions/statistical.xml:396
 #, kde-format
@@ -9134,12 +9133,12 @@ msgstr "FISHERINV(sayı)"
 #: functions/statistical.xml:398
 #, kde-format
 msgid "FISHERINV(0.2859) equals 0.278357"
-msgstr "FISHERINV(0.2859), 0.278357 döndürür"
+msgstr "FISHERINV(0,2859) eşittir 0,278357"
 
 #: functions/statistical.xml:399
 #, kde-format
 msgid "FISHERINV(0.8105) equals 0.669866"
-msgstr "FISHERINV(0.8105), 0.669866 döndürür"
+msgstr "FISHERINV(0,8105) eşittir 0,669866"
 
 #: functions/statistical.xml:407
 #, kde-format
@@ -9197,7 +9196,7 @@ msgstr ""
 #: functions/statistical.xml:422
 #, kde-format
 msgid "FREQUENCY(Range data; Range bins)"
-msgstr "FREQUENCY(Aralık verisi; Aralık kutuları)"
+msgstr "FREQUENCY(erim_verisi; erim_kovaları)"
 
 #: functions/statistical.xml:442
 #, kde-format
@@ -9207,7 +9206,7 @@ msgstr "Toplam bayrak"
 #: functions/statistical.xml:446
 #, kde-format
 msgid "The GAMMADIST() function returns the gamma distribution."
-msgstr "GAMMADIST() işlevi, gamma dağılımını döndürür."
+msgstr "GAMMADIST() işlevi, gama dağılımını döndürür."
 
 #: functions/statistical.xml:447
 #, kde-format
@@ -9231,12 +9230,12 @@ msgstr "GAMMADIST(sayı;alfa;beta;toplam)"
 #: functions/statistical.xml:450
 #, kde-format
 msgid "GAMMADIST(0.758;0.1;0.35;1) equals 0.995450"
-msgstr "GAMMADIST(0.758;0.1;0.35;1), 0.995450 döndürür"
+msgstr "GAMMADIST(0,758; 0,1; 0,35; 1) eşittir 0,995450"
 
 #: functions/statistical.xml:451
 #, kde-format
 msgid "GAMMADIST(0.758;0.1;0.35;0) equals 0.017179"
-msgstr "GAMMADIST(0,758; 0,1; 0,35; 0), 0,017179 döndürür"
+msgstr "GAMMADIST(0,758; 0,1; 0,35; 0) eşittir 0,017179"
 
 #: functions/statistical.xml:471
 #, kde-format
@@ -9255,12 +9254,12 @@ msgstr "GAMMAINV(sayı;alfa;beta)"
 #: functions/statistical.xml:473
 #, kde-format
 msgid "GAMMADIST(GAMMAINV(0.1;3;4);3;4) equals 0.1"
-msgstr "GAMMADIST(GAMMAINV(0.1;3;4);3;4), 0.1"
+msgstr "GAMMADIST(GAMMAINV(0,1; 3; 4); 3; 4) eşittir 0,1"
 
 #: functions/statistical.xml:474
 #, kde-format
 msgid "GAMMADIST(GAMMAINV(0.3;3;4);3;4) equals 0.3"
-msgstr "GAMMADIST(GAMMAINV(0.3;3;4);3;4), 0.3"
+msgstr "GAMMADIST(GAMMAINV(0,3; 3; 4); 3; 4) eşittir 0,3"
 
 #: functions/statistical.xml:483
 #, kde-format
@@ -9286,7 +9285,7 @@ msgstr "GAUSS(değer)"
 #: functions/statistical.xml:489
 #, kde-format
 msgid "GAUSS(0.25) equals 0.098706"
-msgstr "GAUSS(0,25), 0,098706 döndürür"
+msgstr "GAUSS(0,25) eşittir 0,098706"
 
 #: functions/statistical.xml:517
 #, kde-format
@@ -9300,7 +9299,7 @@ msgstr ""
 #: functions/statistical.xml:518
 #, kde-format
 msgid "GEOMEAN(value; value;...)"
-msgstr "GEOMEAN (değer; değer;...)"
+msgstr "GEOMEAN (değer; değer; …)"
 
 #: functions/statistical.xml:519
 #, kde-format
@@ -9310,7 +9309,7 @@ msgstr "GEOMEAN(A1:A5)"
 #: functions/statistical.xml:520
 #, kde-format
 msgid "GEOMEAN(21; 33; 54; 23) returns 30.45886"
-msgstr "GEOMEAN(21; 33; 54; 23), 30.45886 döndürür"
+msgstr "GEOMEAN(21; 33; 54; 23), 30,45886 döndürür"
 
 #: functions/statistical.xml:549
 #, kde-format
@@ -9324,7 +9323,7 @@ msgstr ""
 #: functions/statistical.xml:550
 #, kde-format
 msgid "HARMEAN(value; value;...)"
-msgstr "HARMEAN(değer; değer;...)"
+msgstr "HARMEAN(değer; değer; …)"
 
 #: functions/statistical.xml:551
 #, kde-format
@@ -9334,7 +9333,7 @@ msgstr "HARMEAN(A1:A5)"
 #: functions/statistical.xml:552
 #, kde-format
 msgid "HARMEAN(21; 33; 54; 23) returns 28.588"
-msgstr "HARMEAN(21; 33; 54; 23), 28.588 döndürür"
+msgstr "HARMEAN(21; 33; 54; 23), 28,588 döndürür"
 
 #: functions/statistical.xml:561
 #, kde-format
@@ -9370,7 +9369,7 @@ msgstr "HYPGEOMDIST(x; n; M; N)"
 #: functions/statistical.xml:579
 #, kde-format
 msgid "HYPGEOMDIST(2; 5; 6; 20) returns 0.3522"
-msgstr "HYPGEOMDIST(2; 5; 6; 20), 0.3522 döndürür"
+msgstr "HYPGEOMDIST(2; 5; 6; 20), 0,3522 döndürür"
 
 #: functions/statistical.xml:587 functions/statistical.xml:1127
 #: functions/statistical.xml:1313
@@ -9411,7 +9410,7 @@ msgstr ""
 #: functions/statistical.xml:625
 #, kde-format
 msgid "KURT(value; value;...)"
-msgstr "KURT(değer; değer;...)"
+msgstr "KURT(değer; değer; …)"
 
 #: functions/statistical.xml:626
 #, kde-format
@@ -9421,7 +9420,7 @@ msgstr "KURT(A1:A5)"
 #: functions/statistical.xml:627
 #, kde-format
 msgid "KURT(21; 33; 54; 23) returns 1.344239"
-msgstr "KURT(21; 33; 54; 23), 1.344239 döndürür"
+msgstr "KURT(21; 33; 54; 23), 1,344239 döndürür"
 
 #: functions/statistical.xml:656
 #, kde-format
@@ -9436,7 +9435,7 @@ msgstr ""
 #: functions/statistical.xml:657
 #, kde-format
 msgid "KURTP(value; value;...)"
-msgstr "KURTP(değer; değer;...)"
+msgstr "KURTP(değer; değer; …)"
 
 #: functions/statistical.xml:658
 #, kde-format
@@ -9446,7 +9445,7 @@ msgstr "KURTP(A1:A5)"
 #: functions/statistical.xml:659
 #, kde-format
 msgid "KURTP(21; 33; 54; 23) returns -1.021"
-msgstr "KURTP(21; 33; 54; 23), -1,021 döndürür"
+msgstr "KURTP(21; 33; 54; 23), −1,021 döndürür"
 
 #: functions/statistical.xml:672
 #, kde-format
@@ -9461,7 +9460,7 @@ msgstr "LARGE() işlevi, veri kümesinden k’ıncı en büyük değeri döndür
 #: functions/statistical.xml:677
 #, kde-format
 msgid "LARGE(range; k)"
-msgstr "LARGE(aralık;k)"
+msgstr "LARGE(erim; k)"
 
 #: functions/statistical.xml:678
 #, kde-format
@@ -9471,17 +9470,17 @@ msgstr "A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2), 3 döndürür"
 #: functions/statistical.xml:698
 #, kde-format
 msgid "The LEGACYFDIST() function returns the f-distribution."
-msgstr "LEGACYFDIST() işlevi, f-dağılımını döndürür."
+msgstr "LEGACYFDIST() işlevi, f dağılımını döndürür."
 
 #: functions/statistical.xml:699
 #, kde-format
 msgid "LEGACYFDIST(number;degrees_freedom_1;degrees_freedom_2)"
-msgstr "LEGACYFDIST(sayı;1_bağımsızlık_derecesi;2_bağımsızlık_derecesi)"
+msgstr "LEGACYFDIST(sayı; 1_bağımsızlık_derecesi; 2_bağımsızlık_derecesi)"
 
 #: functions/statistical.xml:700
 #, kde-format
 msgid "LEGACYFDIST(0.8;8;12) yields 0.61"
-msgstr "LEGACYFDIST(0,8;8;12), 0,61 verir"
+msgstr "LEGACYFDIST(0,8; 8; 12), 0,61 verir"
 
 #: functions/statistical.xml:708
 #, kde-format
@@ -9513,7 +9512,7 @@ msgstr "LOGINV(p; orta; stdev)"
 #: functions/statistical.xml:722
 #, kde-format
 msgid "LOGINV(0.1;0;1) equals 0.2776"
-msgstr "LOGINV(0.1;0;1) eşittir 0,2776"
+msgstr "LOGINV(0,1; 0; 1) eşittir 0,2776"
 
 #: functions/statistical.xml:730 functions/statistical.xml:863
 #, kde-format
@@ -9536,18 +9535,18 @@ msgstr "LOGNORMDIST(Sayı;MV;STD)"
 #: functions/statistical.xml:744
 #, kde-format
 msgid "LOGNORMDIST(0.1;0;1) equals 0.01"
-msgstr "LOGNORMDIST(0.1;0;1) eşittir 0,01"
+msgstr "LOGNORMDIST(0,1; 0; 1) eşittir 0,01"
 
 #: functions/statistical.xml:752
 #, kde-format
 msgid "Floating point value or range of values"
-msgstr "Değerler aralığının kayan nokta değeri"
+msgstr "Değerler eriminin kayan nokta değeri"
 
 #: functions/statistical.xml:756 functions/statistical.xml:760
 #: functions/statistical.xml:764 functions/statistical.xml:768
 #, kde-format
 msgid "Floating point values or range of values"
-msgstr "Değerler aralığının kayan nokta değerleri"
+msgstr "Değerler eriminin kayan nokta değerleri"
 
 #: functions/statistical.xml:772
 #, kde-format
@@ -9557,20 +9556,20 @@ msgid ""
 "list of values like MEDIAN(12; 5; 12.5). Blank cells will be considered as a "
 "zero, and cells with text will be ignored."
 msgstr ""
-"MEDIAN() işlevi, parametrede verilen değerlerin tümünün ortanca değerini "
-"hesaplar. MEDIAN(A1:B5) gibi değerler aralığını veya MEDIAN(12; 5; 12.5) "
-"gibi bir değerler dizisi kullanılabilir. Boş hücreler sıfır olarak kabul "
-"edilecek ve yazı içeren hücreler yok sayılacaktır."
+"MEDIAN() işlevi, parametre olarak verilen tüm değerlerin ortancasını "
+"hesaplar. MEDIAN(A1:B5) gibi bir erimin veya MEDIAN(12; 5; 12,5) gibi bir "
+"değer listesinin ortancasını hesaplayabilirsiniz. Boş hücreler sıfır olarak "
+"kabul edilecek ve metin içeren hücreler göz ardı edilecektir."
 
 #: functions/statistical.xml:773
 #, kde-format
 msgid "MEDIAN(value;value;...)"
-msgstr "MEDIAN(değer;değer;...)"
+msgstr "MEDIAN(değer; değer; …)"
 
 #: functions/statistical.xml:774
 #, kde-format
 msgid "MEDIAN(12; 5; 5.5) equals 5.5"
-msgstr "MEDIAN(12; 5; 5.5) eşittir 5,5"
+msgstr "MEDIAN(12; 5; 5,5) eşittir 5,5"
 
 #: functions/statistical.xml:775
 #, kde-format
@@ -9597,12 +9596,12 @@ msgstr "MODE() işlevi, veri kümesinde en çok bulunan değeri döndürür."
 #: functions/statistical.xml:800
 #, kde-format
 msgid "MODE(number; number2; ...)"
-msgstr "MODE(sayı;sayı2; ...)"
+msgstr "MODE(sayı; sayı2; …)"
 
 #: functions/statistical.xml:801
 #, kde-format
 msgid "MODE(range)"
-msgstr "MODE(aralık)"
+msgstr "MODE(erim)"
 
 #: functions/statistical.xml:802
 #, kde-format
@@ -9639,7 +9638,7 @@ msgstr ""
 #: functions/statistical.xml:824
 #, kde-format
 msgid "NEGBINOMDIST(2;5;0.55) returns 0.152872629"
-msgstr "NEGBINOMDIST(2;5;0,55), 0,152872629 döndürür"
+msgstr "NEGBINOMDIST(2; 5; 0,55), 0,152872629 döndürür"
 
 #: functions/statistical.xml:836
 #, kde-format
@@ -9687,12 +9686,12 @@ msgstr "NORMDIST(Sayı;MV;STD;K)"
 #: functions/statistical.xml:854
 #, kde-format
 msgid "NORMDIST(0.859;0.6;0.258;0) equals 0.934236"
-msgstr "NORMDIST(0,859;0.6;0,258;0) eşittir 0,934236"
+msgstr "NORMDIST(0,859; 0,6; 0,258; 0) eşittir 0,934236"
 
 #: functions/statistical.xml:855
 #, kde-format
 msgid "NORMDIST(0.859;0.6;0.258;1) equals 0.842281"
-msgstr "NORMDIST(0,859;0.6;0.258;1) eşittir 0,842281"
+msgstr "NORMDIST(0,859; 0,6; 0,258; 1) eşittir 0,842281"
 
 #: functions/statistical.xml:867
 #, kde-format
@@ -9722,7 +9721,7 @@ msgstr "NORMINV(sayı;MV;STD)"
 #: functions/statistical.xml:877
 #, kde-format
 msgid "NORMINV(0.9;63;5) equals 69.41"
-msgstr "NORMINV(0,9;63;5), 69,41 döndürür"
+msgstr "NORMINV(0,9; 63; 5) eşittir 69,41"
 
 #: functions/statistical.xml:885
 #, kde-format
@@ -9732,7 +9731,7 @@ msgstr "Ölçünlü (stadart) normal dağılımın hesaplanacağı değer"
 #: functions/statistical.xml:889
 #, kde-format
 msgid "The NORMSDIST() function returns the standard normal distribution."
-msgstr "The NORMSDIST() işlevi, ölçünlü (standart) normal dağılımı döndürür."
+msgstr "NORMSDIST() işlevi, ölçünlü (standart) normal dağılımı döndürür."
 
 #: functions/statistical.xml:890
 #, kde-format
@@ -9742,7 +9741,7 @@ msgstr "NORMSDIST(Sayı)"
 #: functions/statistical.xml:891
 #, kde-format
 msgid "NORMSDIST(1) equals 0.84"
-msgstr "NORMSDIST(1), 0.84 döndürür"
+msgstr "NORMSDIST(1) eşittir 0,84"
 
 #: functions/statistical.xml:903
 #, kde-format
@@ -9769,13 +9768,13 @@ msgid ""
 "The PEARSON() function calculates the correlation coefficient of two cell "
 "ranges. It is the same as the CORREL function."
 msgstr ""
-"PEARSON() işlevi, iki hücre aralığının bağıntı katsayısını döndürür. CORREL "
+"PEARSON() işlevi, iki hücre eriminin bağıntı katsayısını döndürür. CORREL "
 "işlevi ile aynıdır."
 
 #: functions/statistical.xml:922
 #, kde-format
 msgid "PEARSON(range1; range2)"
-msgstr "PEARSON(aralık1; aralık2)"
+msgstr "PEARSON(erim1; erim2)"
 
 #: functions/statistical.xml:923
 #, kde-format
@@ -9805,12 +9804,12 @@ msgstr "PERMUT(toplam;kullanılacak)"
 #: functions/statistical.xml:942
 #, kde-format
 msgid "PERMUT(8;5) equals 6720"
-msgstr "PERMUT(8,5), 6720 döndürür"
+msgstr "PERMUT(8,5) eşittir 6720"
 
 #: functions/statistical.xml:943
 #, kde-format
 msgid "PERMUT(1;1) equals 1"
-msgstr "PERMUT(1;1), 1 döndürür"
+msgstr "PERMUT(1; 1) eşittir 1"
 
 #: functions/statistical.xml:959
 #, kde-format
@@ -9843,7 +9842,7 @@ msgstr "PERMUTATIONA(0,0), 1 döndürür"
 #: functions/statistical.xml:970
 #, kde-format
 msgid "Range of values"
-msgstr "Değerlerin aralığı"
+msgstr "Değerler erimi"
 
 #: functions/statistical.xml:974
 #, kde-format
@@ -9918,12 +9917,12 @@ msgstr "POISSON(sayı;lambda;genel)"
 #: functions/statistical.xml:1019
 #, kde-format
 msgid "POISSON(60;50;0) equals 0.020105"
-msgstr "POISSON(60;50;0) eşittir 0,020105"
+msgstr "POISSON(60; 50; 0) eşittir 0,020105"
 
 #: functions/statistical.xml:1020
 #, kde-format
 msgid "POISSON(60;50;1) equals 0.927840"
-msgstr "POISSON(60;50;1) eşittir 0,927840"
+msgstr "POISSON(60; 50; 1) eşittir 0,927840"
 
 #: functions/statistical.xml:1032
 #, kde-format
@@ -9963,7 +9962,7 @@ msgstr "SIRA(Değer; Veri; Sıralama)"
 #: functions/statistical.xml:1045
 #, kde-format
 msgid "RANK (2;{1;2;3}) equals 2"
-msgstr "RANK (2;{1;2;3}) eşittir 2"
+msgstr "RANK (2; {1; 2; 3}) eşittir 2"
 
 #: functions/statistical.xml:1053
 #, kde-format
@@ -10006,12 +10005,12 @@ msgstr "SKEW() işlevi, bir dağılımın eğikliği hakkında bir tahmin dönd�
 #: functions/statistical.xml:1088
 #, kde-format
 msgid "SKEW(number; number2; ...)"
-msgstr "SKEW(sayı;sayı2; ...)"
+msgstr "SKEW(sayı; sayı2; …)"
 
 #: functions/statistical.xml:1089
 #, kde-format
 msgid "SKEW(range)"
-msgstr "SKEW(aralık)"
+msgstr "SKEW(erim)"
 
 #: functions/statistical.xml:1090
 #, kde-format
@@ -10026,12 +10025,12 @@ msgstr "SKEWP() işlevi, bir dağılımın nüfus eğriliğini döndürür"
 #: functions/statistical.xml:1116
 #, kde-format
 msgid "SKEWP(number; number2; ...)"
-msgstr "SKEWP(sayı;sayı2; ...)"
+msgstr "SKEWP(sayı; sayı2; …)"
 
 #: functions/statistical.xml:1117
 #, kde-format
 msgid "SKEWP(range)"
-msgstr "SKEWP(aralık)"
+msgstr "SKEWP(erim)"
 
 #: functions/statistical.xml:1118
 #, kde-format
@@ -10062,7 +10061,7 @@ msgstr "SMALL() işlevi, veri kümesinden en küçük k’ıncı değeri döndü
 #: functions/statistical.xml:1153
 #, kde-format
 msgid "SMALL(range; k)"
-msgstr "SMALL(aralık; k)"
+msgstr "SMALL(erim; k)"
 
 #: functions/statistical.xml:1154
 #, kde-format
@@ -10113,12 +10112,12 @@ msgstr ""
 #: functions/statistical.xml:1205
 #, kde-format
 msgid "STDEV(value;value;...)"
-msgstr "STDEV(değer;değer;...)"
+msgstr "STDEV(değer; değer; …)"
 
 #: functions/statistical.xml:1206
 #, kde-format
 msgid "STDEV(6;7;8) equals 1"
-msgstr "STDEV(6;7;8) eşittir 1"
+msgstr "STDEV(6; 7; 8) eşittir 1"
 
 #: functions/statistical.xml:1235
 #, kde-format
@@ -10132,13 +10131,13 @@ msgstr ""
 "STDEVA() işlevi, bir örneğe bağlı olarak tahmini standart sapmayı döndürür. "
 "Standart sapma, değerlerin ortalama değerden ne kadar dağıtık olduğu "
 "konusunda bir ölçüdür. Eğer başvurulan hücre karakter dizisi ya da FALSE "
-"boolean değerini içeriyorsa 0 olarak sayılır. Eğer Boole değişken TRUE ise 1 "
+"Boole değerini içeriyorsa 0 olarak sayılır. Eğer Boole değişken TRUE ise 1 "
 "olarak sayılır."
 
 #: functions/statistical.xml:1236
 #, kde-format
 msgid "STDEVA(value;value;...)"
-msgstr "STDEVA(değer;değer;...)"
+msgstr "STDEVA(değer; değer; …)"
 
 #: functions/statistical.xml:1237
 #, kde-format
@@ -10148,7 +10147,7 @@ msgstr "STDEVA(6; 7; A1; 8) eşittir 1, A1 boş ise"
 #: functions/statistical.xml:1238
 #, kde-format
 msgid "STDEVA(6; 7; A1; 8) equals 3.109, if A1 is TRUE"
-msgstr "STDEVA(6; 7; A1; 8) eşittir 3,109, A1 TRUE ise"
+msgstr "STDEVA(6; 7; A1; 8) eşittir 3,109; A1 TRUE ise"
 
 #: functions/statistical.xml:1268
 #, kde-format
@@ -10160,12 +10159,12 @@ msgstr "STDEVP() işlevi, bütün bir nüfusa bağlı standart sapmayı döndür
 #: functions/statistical.xml:1269
 #, kde-format
 msgid "STDEVP(value;value;...)"
-msgstr "STDEVP(değer;değer;...)"
+msgstr "STDEVP(değer; değer; …)"
 
 #: functions/statistical.xml:1270
 #, kde-format
 msgid "STDEVP(6;7;8) equals 0.816497..."
-msgstr "STDEVP(6;7;8) eşittir 0,816497..."
+msgstr "STDEVP(6; 7; 8) eşittir 0,816497…"
 
 #: functions/statistical.xml:1299
 #, kde-format
@@ -10181,22 +10180,22 @@ msgstr ""
 #: functions/statistical.xml:1300
 #, kde-format
 msgid "STDEVPA(value;value;...)"
-msgstr "STDEVPA(değer;değer;...)"
+msgstr "STDEVPA(değer; değer; …)"
 
 #: functions/statistical.xml:1301
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty"
-msgstr "STDEVPA(6; 7; A1; 8) eşittir 0,816497..., A1 boş ise"
+msgstr "STDEVPA(6; 7; A1; 8) eşittir 0,816497…, A1 boş ise"
 
 #: functions/statistical.xml:1302
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE"
-msgstr "STDEVPA(6; 7; A1; 8) eşittir 2,69..., A1 TRUE ise"
+msgstr "STDEVPA(6; 7; A1; 8) eşittir 2,69…, A1 TRUE ise"
 
 #: functions/statistical.xml:1303
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 3.11..., if A1 is FALSE"
-msgstr "STDEVPA(6; 7; A1; 8) eşittir 3,11..., A1 FALSE ise"
+msgstr "STDEVPA(6; 7; A1; 8) eşittir 3,11…, A1 FALSE ise"
 
 #: functions/statistical.xml:1321
 #, kde-format
@@ -10210,7 +10209,7 @@ msgstr ""
 #: functions/statistical.xml:1322
 #, kde-format
 msgid "STEYX(y;x)"
-msgstr "STEYX(y;x)"
+msgstr "STEYX(y; x)"
 
 #: functions/statistical.xml:1338 functions/statistical.xml:1342
 #: functions/statistical.xml:1356 functions/statistical.xml:1360
@@ -10234,13 +10233,13 @@ msgstr ""
 #: functions/statistical.xml:1347
 #, kde-format
 msgid "SUMPRODUCT(array1;array2)"
-msgstr "SUMPRODUCT(diziliş1;diziliş2)"
+msgstr "SUMPRODUCT(diziliş1; diziliş2)"
 
 #: functions/statistical.xml:1348
 #, kde-format
 msgid "SUMPRODUCT(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 31"
 msgstr ""
-"SUMPRODUCT(A1:A2;B1:B2), A1=2, A2=5, B1=3 ve B2=5 koşullarında 31 döndürür"
+"SUMPRODUCT(A1:A2; B1:B2), A1=2, A2=5, B1=3 ve B2=5 koşullarında 31 döndürür"
 
 #: functions/statistical.xml:1364
 #, kde-format
@@ -10256,13 +10255,13 @@ msgstr ""
 #: functions/statistical.xml:1365
 #, kde-format
 msgid "SUMX2PY2(array1;array2)"
-msgstr "SUMX2PY2(diziliş1;diziliş2)"
+msgstr "SUMX2PY2(diziliş1; diziliş2)"
 
 #: functions/statistical.xml:1366
 #, kde-format
 msgid "SUMX2PY2(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 63"
 msgstr ""
-"SUMX2PY2(A1:A2;B1:B2), A1=2, A2=5, B1=3 ve B2=5 koşullarında 63 döndürür"
+"SUMX2PY2(A1:A2; B1:B2), A1=2, A2=5, B1=3 ve B2=5 koşullarında 63 döndürür"
 
 #: functions/statistical.xml:1382
 #, kde-format
@@ -10278,13 +10277,13 @@ msgstr ""
 #: functions/statistical.xml:1383
 #, kde-format
 msgid "SUMX2MY2(array1;array2)"
-msgstr "SUMX2MY2(diziliş1;diziliş2)"
+msgstr "SUMX2MY2(diziliş1; diziliş2)"
 
 #: functions/statistical.xml:1384
 #, kde-format
 msgid "SUMX2MY2(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns -5"
 msgstr ""
-"SUMX2MY2(A1:A2;B1:B2), A1=2, A2=5, B1=3 ve B2=5 koşullarında -5 döndürür"
+"SUMX2MY2(A1:A2; B1:B2), A1=2, A2=5, B1=3 ve B2=5 koşullarında −5 döndürür"
 
 #: functions/statistical.xml:1396
 #, kde-format
@@ -10299,45 +10298,45 @@ msgstr "Durum (1 veya 2)"
 #: functions/statistical.xml:1404
 #, kde-format
 msgid "The TDIST() function returns the t-distribution."
-msgstr "The TDIST() işlevi, t-dağılımını döndürür."
+msgstr "TDIST() işlevi, t dağılımını döndürür."
 
 #: functions/statistical.xml:1405
 #, kde-format
 msgid ""
 "Mode = 1 returns the one-tailed test, Mode = 2 returns the two-tailed test."
 msgstr ""
-"Durum = 1 ise bir-uzantılı testi yapar, Durum = 2 ise iki uzantılı testi "
+"Durum = 1 ise bir uzantılı testi yapar, Durum = 2 ise iki uzantılı testi "
 "yapar."
 
 #: functions/statistical.xml:1406
 #, kde-format
 msgid "TDIST(number;degrees_freedom;mode)"
-msgstr "TDIST(sayı;bağımsızlık_derecesi;durum)"
+msgstr "TDIST(sayı; serbestlik_derecesi; kip)"
 
 #: functions/statistical.xml:1407
 #, kde-format
 msgid "TDIST(12;5;1) returns 0.000035"
-msgstr "TDIST(12;5;1), 0,000035 döndürür"
+msgstr "TDIST(12; 5; 1), 0,000035 döndürür"
 
 #: functions/statistical.xml:1415
 #, kde-format
 msgid "KnownY"
-msgstr "BilinenY"
+msgstr "bilinen_y"
 
 #: functions/statistical.xml:1419
 #, kde-format
 msgid "KnownX"
-msgstr "BilinenX"
+msgstr "bilinen_x"
 
 #: functions/statistical.xml:1423
 #, kde-format
 msgid "NumberSequence newX"
-msgstr "SayıDizisi yeniX"
+msgstr "sayı_dizisi yeni_x"
 
 #: functions/statistical.xml:1427
 #, kde-format
 msgid "allowOffset"
-msgstr "ofseteİzinVer"
+msgstr "ofsete_izin_ver"
 
 #: functions/statistical.xml:1431
 #, kde-format
@@ -10347,10 +10346,10 @@ msgid ""
 "must firstly select a cell-range containing the Y-values, followed by the "
 "cell-range of the corresponding X-values. "
 msgstr ""
-"TREND() işlevi, bilinen X- ve Y-değer çiftlerinin doğrusal regresyonunu "
-"temel alarak Y-değerlerinin bir serisini hesaplar. Girdi parametreleri için "
-"kullanıcı öncelikle Y-değerlerini kapsayan hücre-aralığı seçmek zorundadır, "
-"daha sonra uygun X-değerlerinin hücre değerlerini seçer. "
+"TREND() işlevi, bilinen X ve Y değer çiftlerinin doğrusal regresyonunu temel "
+"alarak Y değerlerinin bir serisini hesaplar. Girdi parametreleri için "
+"kullanıcı öncelikle Y değerlerini kapsayan hücre erimi seçmek zorundadır, "
+"daha sonra uygun X değerlerinin hücre değerlerini seçer. "
 
 #: functions/statistical.xml:1432
 #, kde-format
@@ -10359,9 +10358,9 @@ msgid ""
 "specified as the 3rd parameter. However, the input X-range should be given "
 "again if no extrapolation is required. "
 msgstr ""
-"En uygun satırı, 3. parametre olarak belirlenen farklı bir X değerini tahmin "
-"edilmiş olabilir. Ama verilen X erimi hiç tahmin gerekmiyorsa yeniden "
-"verilmelidir. "
+"En iyi uyum doğrusu, 3. parametre olarak belirtilen farklı bir X erimine "
+"ekstrapole edilebilir. Ancak, ekstrapolasyon gerekmiyorsa, giriş X erimi "
+"yeniden verilmelidir. "
 
 #: functions/statistical.xml:1433
 #, kde-format
@@ -10371,10 +10370,10 @@ msgid ""
 "parameter to TRUE or 1 (the default) allows the best-fit line to intersect "
 "the vertical axis at a non-zero value of Y. "
 msgstr ""
-"Regresyon satırı, 4. parametreyi, allowOffset’i, FALSE veya 0’a ayarlayarak "
-"merkezi (X=0, Y=0)’ı kesmeye zorlanabilir. Bu parametreyi TRUE veya "
-"1(öntanımlı değer)’e ayarlamak, en uygun satırını, dikey eksenden Y’nin "
-"sıfır olmayan bir değerinde kesmeyi sağlar. "
+"Regresyon doğrusunun orijinden (X=0, Y=0) geçmesini sağlamak için 4. "
+"parametre olan ofsete_izin_ver’i FALSE veya 0 olarak ayarlayabilirsiniz. Bu "
+"parametreyi TRUE veya 1 (öntanımlı) olarak ayarlamak, en iyi uyum doğrusunun "
+"dikey ekseni sıfır olmayan bir Y değerinde kesmesine olanak tanır. "
 
 #: functions/statistical.xml:1434
 #, kde-format
@@ -10383,14 +10382,13 @@ msgid ""
 "plotting the data will be facilitated if the X- and Y- values are also in "
 "rows, rather than columns."
 msgstr ""
-"Not olarak, bu işlevin sonucu Y-değerlerinin hesaplanmış bir satırı olduğu "
-"için X- ve Y-değerleri sütun yerine satırsa veriyi çizmeyi "
-"kolaylaştıracaktır."
+"Not olarak, bu işlevin sonucu Y değerlerinin hesaplanmış bir satırı olduğu "
+"için X ve Y değerleri sütun yerine satırsa veriyi çizmeyi kolaylaştıracaktır."
 
 #: functions/statistical.xml:1435
 #, kde-format
 msgid "Constraints: COUNT(knownY) = COUNT(knownX)."
-msgstr "Kısıtlamalar: COUNT(bilinenY) = COUNT(bilinenX)."
+msgstr "Kısıtlamalar: COUNT(bilinen_y) = COUNT(bilinen_x)."
 
 #: functions/statistical.xml:1436
 #, kde-format
@@ -10407,18 +10405,18 @@ msgid ""
 "TREND(known Y-range; [known X-range; [new X-range; [allowOffset=TRUE/"
 "FALSE]]])"
 msgstr ""
-"TREND(known Y-range; [known X-range; [new X-range; [allowOffset=TRUE/"
+"TREND(bilinen_y_erimi; [bilinen_x_erimi; [yeni_x_erimi; [ofseteİzinVer=TRUE/"
 "FALSE]]])"
 
 #: functions/statistical.xml:1448
 #, kde-format
 msgid "dataSet"
-msgstr "veriKümesi"
+msgstr "veri_kümesi"
 
 #: functions/statistical.xml:1452
 #, kde-format
 msgid "cutOffFraction"
-msgstr "kesmeBölümü"
+msgstr "kesilen_bölüm"
 
 #: functions/statistical.xml:1456
 #, kde-format
@@ -10428,15 +10426,15 @@ msgid ""
 "fraction of measurements which are to be excluded is set by the second "
 "parameter (cutOffFraction)."
 msgstr ""
-"TRIMMEAN() işlevi, en küçük ve en büyük değerler olası ana hat düzleyicisini "
-"elemek için dışlayarak bir veri kümesinin ortalamasını hesaplar. Dışlanacak "
-"ölçümlerin toplam fraksiyonu ikinci parametre tarafından ayarlanır "
-"(cutOffFraction)."
+"TRIMMEAN() işlevi, olası aykırı değerleri ortadan kaldırmak için en küçük ve "
+"en büyük değerleri dışarıda bırakarak bir veri kümesinin ortalamasını "
+"hesaplar. Dışlanacak ölçümlerin toplam oranı ikinci parametre "
+"(kesilen_bölüm) ile belirlenir."
 
 #: functions/statistical.xml:1457
 #, kde-format
 msgid "TRIMMEAN(dataSet; cutOffFraction)"
-msgstr "TRIMMEAN(veriKümesi; kesmeBölümü)"
+msgstr "TRIMMEAN(veri_kümesi; kesilen_bölüm)"
 
 #: functions/statistical.xml:1468
 #, kde-format
@@ -10454,8 +10452,8 @@ msgid ""
 "mode Whether to look up 1-tailed (mode = 1) or 2-tailed (mode = 2) "
 "probability for t."
 msgstr ""
-"mode, t için 1-tailed (mode = 1) olasılığına mı yoksa 2-tailed (mode = 2) "
-"olasılığına mı bakılacak."
+"mod: T için 1 uzantılı (mode = 1) olasılığına mı yoksa 2 uzantılı (mode = 2) "
+"olasılığına mı bakar."
 
 #: functions/statistical.xml:1480
 #, kde-format
@@ -10463,8 +10461,8 @@ msgid ""
 "type The type of t-test to perform. Set this to 1 for a paired t-test, 2 or "
 "3 for an unpaired t-test."
 msgstr ""
-"type uygulanacak t-test’in türü. Eşli bir t-test için bunu 1’e ayarlayın, "
-"eşli olmayan t-test için 2 veya 3’e ayarlayın."
+"tür: Uygulanacak t-testinin türü. Eşleştirilmiş t-testi için 1, "
+"eşleştirilmemiş t-testi için 2 veya 3 olarak ayarlayın."
 
 #: functions/statistical.xml:1484
 #, kde-format
@@ -10472,7 +10470,7 @@ msgid ""
 "The TTEST() function calculates the probability of a t-test given two ranges "
 "of data to compare."
 msgstr ""
-"TTEST() işlevi, verilen iki veri aralığını karşılaştırmak için t-test’in "
+"TTEST() işlevi, karşılaştırılacak iki veri erimi verildiğinde t testinin "
 "olasılığını hesaplar."
 
 #: functions/statistical.xml:1485
@@ -10485,11 +10483,11 @@ msgid ""
 "can run, a t-test can tell you how likely it is that any speed difference "
 "between the two groups of people is due to their height."
 msgstr ""
-"Bir t-test iki veri kümesini karşılaştırır ve etkilenen bazı değişkenlerin "
-"neden olduğu ikisi arasındaki herhangi bir değişikliğin olasılığını çıkarır. "
-"Örneğin iki veri kümesi, bir tanesi 30 uzun insanın koşabildiği hızı içerir "
-"ve diğer 30 kısa insanın koşabildiği hızı, bir t-test iki grup insan "
-"arasındaki herhangi hız farkının boyları ile alakalı olma olasılığını "
+"T testi, iki veri kümesini karşılaştırır ve ikisi arasındaki herhangi bir "
+"farkın, bir değişkenin etkisinden kaynaklanma olasılığını belirler. Örneğin, "
+"biri 30 uzun boylu kişinin koşma hızını, diğeri ise 30 kısa boylu kişinin "
+"koşma hızını içeren iki veri kümesi verildiğinde t testi, iki grup insan "
+"arasındaki hız farkının boylarından kaynaklanma olasılığını size "
 "söyleyebilir."
 
 #: functions/statistical.xml:1486
@@ -10503,12 +10501,12 @@ msgid ""
 "which one will actually be fastest, we would use a two-tailed test (mode = "
 "2)."
 msgstr ""
-"Mod parametresi, iki veri kümesi arasındaki farkın belirli bir yönde "
-"olmasını isteyip istemediğinizi belirtmek için kullanılır. Örneğin, eğer "
-"uzun boylu insanların kısa insanlardan daha hızlı koştuğunu tahmin "
-"ediyorsak, tek kuyruklu bir test (mod = 1) kullanırız; Bununla birlikte, "
-"eğer bir grubun diğerlerinden daha hızlı koşabildiğini; ancak hangisinin en "
-"hızlı olacağını tahmin ediyorsak, iki taraflı test (mod = 2) kullanırız."
+"mod: İki veri kümesi arasındaki farkın belirli bir yönde olmasını isteyip "
+"istemediğinizi belirtmek için kullanılır. Örneğin, eğer uzun boylu "
+"insanların kısa insanlardan daha hızlı koştuğunu tahmin ediyorsak, tek "
+"kuyruklu bir test (mod = 1) kullanırız; Bununla birlikte, eğer bir grubun "
+"diğerlerinden daha hızlı koşabildiğini; ancak hangisinin en hızlı olacağını "
+"tahmin ediyorsak, iki taraflı test (mod = 2) kullanırız."
 
 #: functions/statistical.xml:1487
 #, kde-format
@@ -10524,16 +10522,16 @@ msgid ""
 "sized; for paired t-tests the two ranges are required to contain the same "
 "number of cells."
 msgstr ""
-"Eşleştirilmiş sınamalar (type = 1, aşağıdaki sözdizim bölümüne bakınız) "
-"yalnızca her iki veri değeri seti aynı kaynaktan alındığında uygundur (yani, "
-"her bir veri kaynağı birinci veri aralığında bir öge ve ikinci veri "
-"aralığında bir öge sağlamıştır). Koşma hızı örneğinde, bu olanaklı değildir; "
-"çünkü bir kişi hem kısa hem de uzun olamaz: her kişi yalnızca bir grup ya da "
-"diğer grup için veri sağlayabilir. Bu gibi durumlarda, her veri kümesindeki "
-"değerlerin farklı kaynaklardan alındığı durumlarda eşleştirilmemiş bir t-"
-"testi uygundur (type = 2 veya type = 3). Eşleştirilmemiş t-testleri için iki "
-"veri aralığının eşit boyutta olması gerekmez; Eşleştirilmiş t-testleri için "
-"iki aralığın aynı sayıda hücre içermesi gereklidir."
+"Eşleştirilmiş testler (tip = 1, aşağıdaki sözdizimine bakın) yalnızca her "
+"iki veri kümesi de aynı kaynaktan alındığında uygundur (yani, her veri "
+"kaynağı birinci veri aralığında bir öge ve ikinci veri aralığında bir öge "
+"sağlamıştır). Koşu hızı örneğinde, bir kişi hem kısa hem de uzun olamayacağı "
+"için bu olanaklı değildir: her kişi yalnızca bir grup veya diğer grup için "
+"veri sağlayabilir. Bu gibi durumlarda, her veri kümesindeki değerler farklı "
+"kaynaklardan alındığında, eşleştirilmemiş t testi uygundur (tip = 2 veya tip "
+"= 3). Eşleştirilmemiş t testleri için iki veri eriminin eşit büyüklükte "
+"olması gerekmez; eşleştirilmiş t testleri için ise iki erimin aynı sayıda "
+"hücre içermesi gerekir."
 
 #: functions/statistical.xml:1488
 #, kde-format
@@ -10545,12 +10543,12 @@ msgid ""
 "where the variances are not sufficiently similar you must use an unpaired t-"
 "test for samples with differing variances (type = 3)."
 msgstr ""
-"Veri değerleriniz setleri aynı kaynaktan çıkmazsa eşleştirilmemiş testin "
-"uygun türünü seçmek, iki örneğinizin her birindeki varyansa bağlıdır. İki "
-"örneğin varyansları benzerse, benzer varyansa sahip örnekler için eşlenmemiş "
-"t-testi kullanabilirsiniz (type = 2); Varyansların yeterince benzer olmadığı "
-"durumlarda, farklı varyanslara (tür = 3) sahip örnekler için eşleştirilmemiş "
-"t-testi kullanmanız gerekir."
+"Veri kümeleriniz aynı kaynaktan alınmadığında, uygun eşleştirilmemiş test "
+"türünü seçmek, iki örneğin her birindeki varyansa bağlıdır. İki örneğin "
+"varyansları benzer ise benzer varyanslara sahip örnekler için "
+"eşleştirilmemiş t-testi (tip = 2) kullanabilirsiniz; varyanslar yeterince "
+"benzer değilse, farklı varyanslara sahip örnekler için eşleştirilmemiş t-"
+"testi (tip = 3) kullanmalısınız."
 
 #: functions/statistical.xml:1489
 #, kde-format
@@ -10565,22 +10563,22 @@ msgstr "VARA() işlevi, bir örneği temel alarak varyansı hesaplar."
 #: functions/statistical.xml:1519
 #, kde-format
 msgid "VAR(value;value;...)"
-msgstr "VAR(değer;değer;...)"
+msgstr "VAR(değer; değer; …)"
 
 #: functions/statistical.xml:1520
 #, kde-format
 msgid "VAR(12;5;7) equals 13"
-msgstr "VAR(12;5;7) eşittir 13"
+msgstr "VAR(12; 5; 7) eşittir 13"
 
 #: functions/statistical.xml:1521
 #, kde-format
 msgid "VAR(15;80;3) equals 1716.333..."
-msgstr "VAR(15;80;3) eşittir 1716,333..."
+msgstr "VAR(15; 80; 3) eşittir 1716,33…"
 
 #: functions/statistical.xml:1522
 #, kde-format
 msgid "VAR(6;7;8) equals 1"
-msgstr "VAR(6;7;8) eşittir 1"
+msgstr "VAR(6; 7; 8) eşittir 1"
 
 #: functions/statistical.xml:1554
 #, kde-format
@@ -10599,22 +10597,22 @@ msgstr ""
 #: functions/statistical.xml:1555
 #, kde-format
 msgid "VARA(value;value;...)"
-msgstr "VARA(değer;değer;...)"
+msgstr "VARA(değer; değer; …)"
 
 #: functions/statistical.xml:1556
 #, kde-format
 msgid "VARA(12;5;7) equals 13"
-msgstr "VARA(12;5;7) eşittir 13"
+msgstr "VARA(12; 5; 7) eşittir 13"
 
 #: functions/statistical.xml:1557
 #, kde-format
 msgid "VARA(15;80;3) equals 1716.333..."
-msgstr "VARA(15;80;3) eşittir 1716,333..."
+msgstr "VARA(15; 80; 3) eşittir 1716,333…"
 
 #: functions/statistical.xml:1558
 #, kde-format
 msgid "VARA(6;7;8) equals 1"
-msgstr "VARA(6;7;8) eşittir 1"
+msgstr "VARA(6; 7; 8) eşittir 1"
 
 #: functions/statistical.xml:1589
 #, kde-format
@@ -10628,22 +10626,22 @@ msgstr ""
 #: functions/statistical.xml:1590
 #, kde-format
 msgid "VARIANCE(value;value;...)"
-msgstr "VARIANCE(değer;değer;...)"
+msgstr "VARIANCE(değer; değer; …)"
 
 #: functions/statistical.xml:1591
 #, kde-format
 msgid "VARIANCE(12;5;7) equals 13"
-msgstr "VARIANCE(12;5;7) eşittir 13"
+msgstr "VARIANCE(12; 5; 7) eşittir 13"
 
 #: functions/statistical.xml:1592
 #, kde-format
 msgid "VARIANCE(15;80;3) equals 1716.333..."
-msgstr "VARIANCE(15;80;3) eşittir 1716,333..."
+msgstr "VARIANCE(15; 80; 3) eşittir 1716,333…"
 
 #: functions/statistical.xml:1593
 #, kde-format
 msgid "VARIANCE(6;7;8) equals 1"
-msgstr "VARIANCE(6;7;8) eşittir 1"
+msgstr "VARIANCE(6; 7; 8) eşittir 1"
 
 #: functions/statistical.xml:1625
 #, kde-format
@@ -10654,22 +10652,22 @@ msgstr "VARP() işlevi, tüm topluluğun varyansını hesaplar."
 #: functions/statistical.xml:1626
 #, kde-format
 msgid "VARP(value;value;...)"
-msgstr "VARP(değer;değer;...)"
+msgstr "VARP(değer; değer; …)"
 
 #: functions/statistical.xml:1627
 #, kde-format
 msgid "VARP(12;5;7) equals 8.666..."
-msgstr "VARP(12;5;7) eşittir 8,666..."
+msgstr "VARP(12; 5; 7) eşittir 8,666…"
 
 #: functions/statistical.xml:1628
 #, kde-format
 msgid "VARP(15;80;3) equals 1144.22..."
-msgstr "VARP(15;80;3) eşittir 1144,22..."
+msgstr "VARP(15; 80; 3) eşittir 1144,22…"
 
 #: functions/statistical.xml:1629
 #, kde-format
 msgid "VARP(6;7;8) equals 0.6666667..."
-msgstr "VARP(6;7;8) eşittir 0,6666667..."
+msgstr "VARP(6; 7; 8) eşittir 0,6666667…"
 
 #: functions/statistical.xml:1660
 #, kde-format
@@ -10685,22 +10683,22 @@ msgstr ""
 #: functions/statistical.xml:1661
 #, kde-format
 msgid "VARPA(value;value;...)"
-msgstr "VARPA(değer;değer;...)"
+msgstr "VARPA(değer; değer; …)"
 
 #: functions/statistical.xml:1662
 #, kde-format
 msgid "VARPA(12;5;7) equals 8.666..."
-msgstr "VARPA(12;5;7) eşittir 8,666..."
+msgstr "VARPA(12; 5; 7) eşittir 8,666…"
 
 #: functions/statistical.xml:1663
 #, kde-format
 msgid "VARPA(15;80;3) equals 1144.22..."
-msgstr "VARPA(15;80;3) eşittir 1144,22..."
+msgstr "VARPA(15; 80; 3) eşittir 1144,22…"
 
 #: functions/statistical.xml:1664
 #, kde-format
 msgid "VARPA(6;7;8) equals 0.6666667..."
-msgstr "VARPA(6;7;8) eşittir 0,6666667..."
+msgstr "VARPA(6; 7; 8) eşittir 0,6666667…"
 
 #: functions/statistical.xml:1691
 #, kde-format
@@ -10719,17 +10717,17 @@ msgstr ""
 #: functions/statistical.xml:1694
 #, kde-format
 msgid "WEIBULL(number;alpha;beta;cumulative)"
-msgstr "WEIBULL(sayı;alfa;beta;genel)"
+msgstr "WEIBULL(sayı; alfa; beta; toplam)"
 
 #: functions/statistical.xml:1695
 #, kde-format
 msgid "WEIBULL(2;1;1;0) equals 0.135335"
-msgstr "WEIBULL(2;1;1;0), 0,135335 döndürür"
+msgstr "WEIBULL(2; 1; 1; 0) eşittir 0,135335"
 
 #: functions/statistical.xml:1696
 #, kde-format
 msgid "WEIBULL(2;1;1;1) equals 0.864665"
-msgstr "WEIBULL(2;1;1;1), 0,864665 döndürür"
+msgstr "WEIBULL(2; 1; 1; 1) eşittir 0,864665"
 
 #: functions/statistical.xml:1704
 #, kde-format
@@ -10744,7 +10742,7 @@ msgstr "ortalama"
 #: functions/statistical.xml:1712
 #, kde-format
 msgid "standardDeviation"
-msgstr "Standart Sapma"
+msgstr "standart_sapma"
 
 #: functions/statistical.xml:1716
 #, kde-format
@@ -10752,7 +10750,7 @@ msgid ""
 "The ZTEST() function calculates the two tailed probability of a z-test with "
 "normal distribution."
 msgstr ""
-"ZTEST() işlevi, normal dağılım ile bir z-testin iki uçlu olasılığını "
+"ZTEST() işlevi, normal dağılım ile bir z testinin iki uçlu olasılığını "
 "hesaplar."
 
 #: functions/statistical.xml:1717
@@ -10774,7 +10772,7 @@ msgstr ""
 #: functions/statistical.xml:1719
 #, kde-format
 msgid "ZTEST(x; mean; standardDeviation)"
-msgstr "ZTEST(x; mean; standart Sapma)"
+msgstr "ZTEST(x; ortalama; standart_sapma)"
 
 #: functions/statistical.xml:1772
 #, kde-format
@@ -10796,12 +10794,12 @@ msgstr ""
 #: functions/statistical.xml:1774
 #, kde-format
 msgid "BINO(trials;success;prob_of_success)"
-msgstr "BINO(deneme sayısı;başarı;başarı olasılığı)"
+msgstr "BINO(deneme_sayısı; başarı; başarı_olasılığı)"
 
 #: functions/statistical.xml:1775
 #, kde-format
 msgid "BINO(12;9;0.8) returns 0.236223201"
-msgstr "BINO(12;9;0.8), 0,236223201 döndürür"
+msgstr "BINO(12; 9; 0,8), 0,236223201 döndürür"
 
 #: functions/statistical.xml:1791
 #, kde-format
@@ -10810,19 +10808,19 @@ msgid ""
 "of these values. The number of values in the two arrays should be equal. "
 "Otherwise this function returns Err."
 msgstr ""
-"SUMXMY2 () işlevi, (SUM ((X-Y) ^ 2)), bu değerlerin farklarının karesini "
+"SUMXMY2 () işlevi, (SUM ((X-Y)^2)), bu değerlerin farklarının karesini "
 "döndürür. İki dizilişteki değerlerin sayısı eşit olmalıdır. Aksi takdirde bu "
 "işlev Err döndürür."
 
 #: functions/statistical.xml:1792
 #, kde-format
 msgid "SUMXMY2(array1;array2)"
-msgstr "SUMXMY2(diziliş1;diziliş2)"
+msgstr "SUMXMY2(diziliş1; diziliş2)"
 
 #: functions/statistical.xml:1793
 #, kde-format
 msgid "SUMXMY2(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 1"
-msgstr "SUMXMY2(A1:A2;B1:B2), A1=2, A2=5, B1=3 ve B2=5 için 1 döndürür"
+msgstr "SUMXMY2(A1:A2; B1:B2), A1=2, A2=5, B1=3 ve B2=5 için 1 döndürür"
 
 #: functions/statistical.xml:1809
 #, kde-format
@@ -10846,12 +10844,12 @@ msgstr ""
 #: functions/statistical.xml:1814
 #, kde-format
 msgid "INVBINO(trials;failure;prob_of_failure)"
-msgstr "INVBINO(deneme sayısı;başarısızlık;başarısızlık olasılığı)"
+msgstr "INVBINO(deneme_sayısı; başarısızlık; başarısızlık_olasılığı)"
 
 #: functions/statistical.xml:1815
 #, kde-format
 msgid "INVBINO(12;3;0.2) returns 0.236223201"
-msgstr "INVBINO(12;3;0,8), 0,236223201 döndürür"
+msgstr "INVBINO(12; 3; 0,8), 0,236223201 döndürür"
 
 #: functions/statistical.xml:1827
 #, kde-format
@@ -10865,7 +10863,7 @@ msgstr ""
 #: functions/statistical.xml:1828
 #, kde-format
 msgid "GAMMALN(Number)"
-msgstr "GAMMALN(Sayı)"
+msgstr "GAMMALN(sayı)"
 
 #: functions/statistical.xml:1829
 #, kde-format
@@ -10896,12 +10894,12 @@ msgstr "DOLLAR(sayı;ondalık_basamaklar)"
 #: functions/text.xml:21
 #, kde-format
 msgid "DOLLAR(1403.77) returns \"$ 1,403.77\""
-msgstr "DOLLAR(1403,77), \"$ 1.403,77\" döndürür"
+msgstr "DOLLAR(1403,77), “$1.403,77” döndürür"
 
 #: functions/text.xml:22
 #, kde-format
 msgid "DOLLAR(-0.123;4) returns \"$-0.1230\""
-msgstr "DOLLAR(-0,123;4), \"$-0,1230\" döndürür"
+msgstr "DOLLAR(-0,123; 4), “$-0,1230” döndürür"
 
 #: functions/text.xml:38
 #, kde-format
@@ -10926,22 +10924,22 @@ msgstr ""
 #: functions/text.xml:43
 #, kde-format
 msgid "FIXED(number;decimals;no_commas)"
-msgstr "FIXED(sayı;basamak;virgülsüz)"
+msgstr "FIXED(sayı; basamak; virgülsüz)"
 
 #: functions/text.xml:44
 #, kde-format
 msgid "FIXED(1234.567;1) returns \"1,234.6\""
-msgstr "FIXED(1234,567;1), \"1.234,6\" döndürür"
+msgstr "FIXED(1234,567; 1), “1.234,6” döndürür"
 
 #: functions/text.xml:45
 #, kde-format
 msgid "FIXED(1234.567;1;FALSE) returns \"1234.6\""
-msgstr "FIXED(1234,567;1;FALSE), \"1234,6\" döndürür"
+msgstr "FIXED(1234,567; 1; FALSE), “1234,6” döndürür"
 
 #: functions/text.xml:46
 #, kde-format
 msgid "FIXED(44.332) returns \"44.33\""
-msgstr "FIXED(44,332), \"44,33\" döndürür"
+msgstr "FIXED(44,332), “44,33” döndürür"
 
 #: functions/text.xml:54
 #, kde-format
@@ -10987,18 +10985,18 @@ msgstr "SUBSTITUTE(metin; eski_metin; yeni_metin; bir_seferlik)"
 #, kde-format
 msgid "SUBSTITUTE(\"Cost Data\";\"Cost\";\"Sales\") returns \"Sales Data\""
 msgstr ""
-"SUBSTITUTE(\"Cost Data\";\"Cost\";\"Sales\"), \"Sales Data\" değerini "
+"SUBSTITUTE(\"Cost Data\"; \"Cost\"; \"Sales\"), \"Sales Data\" değerini "
 "döndürür"
 
 #: functions/text.xml:73
 #, kde-format
 msgid "SUBSTITUTE(\"Qtr 1, 2001\";\"1\";\"3\";1) returns \"Qtr 3, 2001\""
-msgstr "SUBSTITUTE(\"Qtr 1, 2001\";\"1\";\"3\";1), \"Qtr 3, 2001\" döndürür"
+msgstr "SUBSTITUTE(\"Qtr 1, 2001\"; \"1\"; \"3\"; 1), “Qtr 3, 2001” döndürür"
 
 #: functions/text.xml:74
 #, kde-format
 msgid "SUBSTITUTE(\"Qtr 1, 2001\";\"1\";\"3\";4) returns \"Qtr 3, 2003\""
-msgstr "SUBSTITUTE(\"Qtr 1, 2001\";\"1\";\"3\";4), \"Qtr 3, 2003\" döndürür"
+msgstr "SUBSTITUTE(\"Qtr 1, 2001\"; \"1\"; \"3\"; 4), “Qtr 3, 2003” döndürür"
 
 #: functions/text.xml:86 functions/text.xml:114 functions/text.xml:289
 #: functions/text.xml:320
@@ -11010,7 +11008,7 @@ msgstr "Bulunması istenilen metin"
 #: functions/text.xml:324
 #, kde-format
 msgid "The text which may contain find_text"
-msgstr "Aranılan_metin’i içermesi olası metin"
+msgstr "aranılan_metin’i içermesi olası metin"
 
 #: functions/text.xml:94
 #, kde-format
@@ -11047,24 +11045,24 @@ msgid ""
 "assumed to be 1. SEARCH does not distinguish between uppercase and lowercase "
 "letters."
 msgstr ""
-"Başlangıç_sayısı aramaya başlanılacak olan karakterin sayısını belirler. İlk "
+"başlangıç_sayısı aramaya başlanılacak olan karakterin sayısını belirler. İlk "
 "değer 1 olabilir. Eğer başlangıç_sayısı girilmezse 1 olarak kabul edilir. "
 "Arama BÜYÜK/küçük harfe duyarlı değildir."
 
 #: functions/text.xml:101
 #, kde-format
 msgid "SEARCH(find_text;within_text;start_num)"
-msgstr "SEARCH(aranılan_metin;ana_metin;başlangıç_sayısı)"
+msgstr "SEARCH(aranılan_metin; ana_metin; başlangıç_sayısı)"
 
 #: functions/text.xml:102
 #, kde-format
 msgid "SEARCH(\"e\";\"Statements\";6) returns 7"
-msgstr "SEARCH(\"e\";\"Statements\";6), 7 döndürür"
+msgstr "SEARCH(\"e\"; \"Statements\"; 6), 7 döndürür"
 
 #: functions/text.xml:103
 #, kde-format
 msgid "SEARCH(\"margin\";\"Profit Margin\") returns 8"
-msgstr "SEARCH(\"margin\";\"Profit Margin\"), 8 döndürür"
+msgstr "SEARCH(\"margin\"; \"Profit Margin\"), 8 döndürür"
 
 #: functions/text.xml:122
 #, kde-format
@@ -11091,14 +11089,14 @@ msgid ""
 "assumed to be 2. SEARCHB does not distinguish between uppercase and "
 "lowercase letters."
 msgstr ""
-"BaytKonumu parametresi, aramanın başlatılacağı karakteri belirtir. İlk "
-"karakter 2 karakter numarasıdır. BytePosition atlandıysa 2 olarak kabul "
-"edilir. SEARCHB, büyük ve küçük harfleri ayırmaz."
+"bayt_konumu parametresi, aramanın başlatılacağı karakteri belirtir. İlk "
+"karakter 2 karakter numarasıdır. bayt_konumu atlandıysa 2 olarak kabul "
+"edilir. SEARCHB, BÜYÜK/küçük harf duyarsızdır."
 
 #: functions/text.xml:129
 #, kde-format
 msgid "SEARCHB(find_text;within_text;BytePosition Start)"
-msgstr "SEARCHB(bulunacak_metin;metin_içinde;BaytKonumu Başlangıcı)"
+msgstr "SEARCHB(bulunacak_metin; metin_içinde; bayt_konumu)"
 
 #: functions/text.xml:144
 #, kde-format
@@ -11119,7 +11117,7 @@ msgstr "T(değer)"
 #: functions/text.xml:146
 #, kde-format
 msgid "T(\"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\"), \"Calligra\" döndürür"
+msgstr "T(\"Calligra\"), “Calligra” döndürür"
 
 #: functions/text.xml:147
 #, kde-format
@@ -11139,12 +11137,12 @@ msgstr "TEXT(değer)"
 #: functions/text.xml:161
 #, kde-format
 msgid "TEXT(1234.56) returns \"1234.56\""
-msgstr "TEXT(1234,56), \"1234,56\" döndürür"
+msgstr "TEXT(1234,56), “1234,56” döndürür"
 
 #: functions/text.xml:162
 #, kde-format
 msgid "TEXT(\"KSpread\") returns \"KSpread\""
-msgstr "TEXT(\"KSpread\"), \"KSpread\" döndürür"
+msgstr "TEXT(\"KSpread\"), “KSpread” döndürür"
 
 #: functions/text.xml:170 functions/text.xml:209 functions/text.xml:213
 #: functions/text.xml:404 functions/text.xml:420 functions/text.xml:433
@@ -11169,7 +11167,7 @@ msgstr "PROPER(dizi)"
 #: functions/text.xml:176
 #, kde-format
 msgid "PROPER(\"this is a title\") returns \"This Is A Title\""
-msgstr "PROPER(\"this is a title\"), \"This Is A Title\" döndürür"
+msgstr "PROPER(\"this is a title\"), “This Is A Title” döndürür"
 
 #: functions/text.xml:184
 #, kde-format
@@ -11232,12 +11230,12 @@ msgstr "EXACT(dizi1; dizi2)"
 #: functions/text.xml:219
 #, kde-format
 msgid "EXACT(\"Calligra\";\"Calligra\") returns True"
-msgstr "EXACT(\"Calligra\";\"Calligra\"), True döndürür"
+msgstr "EXACT(\"Calligra\"; \"Calligra\"), True döndürür"
 
 #: functions/text.xml:220
 #, kde-format
 msgid "EXACT(\"KSpread\";\"Calligra\") returns False"
-msgstr "EXACT(\"KSpread\";\"Calligra\"), False döndürür"
+msgstr "EXACT(\"KSpread\"; \"Calligra\"), False döndürür"
 
 #: functions/text.xml:229
 #, kde-format
@@ -11276,12 +11274,12 @@ msgstr "REPLACE(dizi;konum;uzunluk;yeni_dizi)"
 #: functions/text.xml:247
 #, kde-format
 msgid "REPLACE(\"abcdefghijk\";6;5;\"-\") returns \"abcde-k\""
-msgstr "REPLACE(\"abcdefghijk\";6;5;\"-\"), \"abcde-k\" döndürür"
+msgstr "REPLACE(\"abcdefghijk\"; 6; 5; \"-\"), “abcde-k” döndürür"
 
 #: functions/text.xml:248
 #, kde-format
 msgid "REPLACE(\"2002\";3;2;\"03\") returns \"2003\""
-msgstr "REPLACE(\"2002\";3;2;\"03\"), \"2003\" döndürür"
+msgstr "REPLACE(\"2002\"; 3; 2; \"03\"), “2003” döndürür"
 
 #: functions/text.xml:260
 #, kde-format
@@ -11357,17 +11355,17 @@ msgstr "FIND(aranılan_metin;ana_metin;başlangıç_sayısı)"
 #: functions/text.xml:305
 #, kde-format
 msgid "FIND(\"Cal\";\"Calligra\") returns 1"
-msgstr "FIND(\"Cal\";\"Calligra\"), 1 döndürür"
+msgstr "FIND(\"Cal\"; \"Calligra\"), 1 döndürür"
 
 #: functions/text.xml:306
 #, kde-format
 msgid "FIND(\"i\";\"Calligra\") returns 5"
-msgstr "FIND(\"i\";\"Calligra\"), 5 döndürür"
+msgstr "FIND(\"i\"; \"Calligra\"), 5 döndürür"
 
 #: functions/text.xml:307
 #, kde-format
 msgid "FIND(\"a\";\"Sheets in Calligra\";4) returns 12"
-msgstr "FIND(\"a\";\"Tablolar in Calligra\";4), 12 döndürür"
+msgstr "FIND(\"a\"; \"Sheets in Calligra\"; 4), 12 döndürür"
 
 #: functions/text.xml:328
 #, kde-format
@@ -11442,12 +11440,12 @@ msgstr "MID(metin;konum)"
 #: functions/text.xml:363
 #, kde-format
 msgid "MID(\"Calligra\";2;3) returns \"all\""
-msgstr "MID(\"Calligra\";2;3), \"all\" döndürür"
+msgstr "MID(\"Calligra\"; 2; 3), “all” döndürür"
 
 #: functions/text.xml:364
 #, kde-format
 msgid "MID(\"Calligra\";2) returns \"alligra\""
-msgstr "MID(\"Calligra\";2), \"alligra\" döndürür"
+msgstr "MID(\"Calligra\"; 2), “alligra” döndürür"
 
 #: functions/text.xml:381
 #, kde-format
@@ -11526,7 +11524,7 @@ msgstr "TRIM(metin)"
 #: functions/text.xml:439
 #, kde-format
 msgid "TRIM(\" hello    KSpread   \") returns \"hello KSpread\""
-msgstr "TRIM(\" merhaba    KSpread   \"), \"merhaba KSpread\" döndürür"
+msgstr "TRIM(\" merhaba    KSpread   \"), “merhaba KSpread” döndürür"
 
 #: functions/text.xml:467
 #, kde-format
@@ -11540,7 +11538,7 @@ msgstr ""
 #: functions/text.xml:468
 #, kde-format
 msgid "CONCATENATE(value;value;...)"
-msgstr "CONCATENATE(değer;değer;...)"
+msgstr "CONCATENATE(değer; değer; …)"
 
 #: functions/text.xml:469
 #, kde-format
@@ -11573,17 +11571,17 @@ msgstr "RIGHT(metin;uzunluk)"
 #: functions/text.xml:487
 #, kde-format
 msgid "RIGHT(\"hello\";2) returns \"lo\""
-msgstr "RIGHT(\"merhaba\";2), \"ba\"  döndürür"
+msgstr "RIGHT(\"merhaba\"; 2), \"ba\"  döndürür"
 
 #: functions/text.xml:488
 #, kde-format
 msgid "RIGHT(\"KSpread\";10) returns \"KSpread\""
-msgstr "RIGHT(\"KSpread\";10), \"KSpread\" döndürür"
+msgstr "RIGHT(\"KSpread\"; 10), “KSpread” döndürür"
 
 #: functions/text.xml:489
 #, kde-format
 msgid "RIGHT(\"KSpread\") returns \"d\""
-msgstr "RIGHT(\"KSpread\"), \"d\" döndürür"
+msgstr "RIGHT(\"KSpread\"), “d” döndürür"
 
 #: functions/text.xml:509
 #, kde-format
@@ -11623,17 +11621,17 @@ msgstr "LEFT(metin;uzunluk)"
 #: functions/text.xml:532
 #, kde-format
 msgid "LEFT(\"hello\";2) returns \"he\""
-msgstr "LEFT(\"merhaba\";2), \"me\" döndürür"
+msgstr "LEFT(\"merhaba\"; 2), “me” döndürür"
 
 #: functions/text.xml:533
 #, kde-format
 msgid "LEFT(\"KSpread\";10) returns \"KSpread\""
-msgstr "LEFT(\"KSpread\";10), \"KSpread\" döndürür"
+msgstr "LEFT(\"KSpread\"; 10), “KSpread” döndürür"
 
 #: functions/text.xml:534
 #, kde-format
 msgid "LEFT(\"KSpread\") returns \"K\""
-msgstr "LEFT(\"KSpread\"), \"K\" döndürür"
+msgstr "LEFT(\"KSpread\"), “K” döndürür"
 
 #: functions/text.xml:554
 #, kde-format
@@ -11678,12 +11676,12 @@ msgstr "REPT(metin;sayı)"
 #: functions/text.xml:577
 #, kde-format
 msgid "REPT(\"KSpread\";3) returns \"KSpreadKSpreadKSpread\""
-msgstr "REPT(\"KSpread\";3), \"KSpreadKSpreadKSpread\" döndürür"
+msgstr "REPT(\"KSpread\";3), “KSpreadKSpreadKSpread” döndürür"
 
 #: functions/text.xml:578
 #, kde-format
 msgid "REPT(\"KSpread\";0) returns \"\""
-msgstr "REPT(\"KSpread\";0), \"\" döndürür"
+msgstr "REPT(\"KSpread\";0), “” (boş) döndürür"
 
 #: functions/text.xml:590
 #, kde-format
@@ -11711,12 +11709,12 @@ msgstr "ROT13(Metin)"
 #: functions/text.xml:593
 #, kde-format
 msgid "ROT13(\"KSpread\") returns \"XFcernq\""
-msgstr "ROT13(\"KSpread\"), \"XFcernq\" döndürür"
+msgstr "ROT13(\"KSpread\"), “XFcernq” döndürür"
 
 #: functions/text.xml:594
 #, kde-format
 msgid "ROT13(\"XFcernq\") returns \"KSpread\""
-msgstr "ROT13(\"XFcernq\"), \"KSpread\" döndürür"
+msgstr "ROT13(\"XFcernq\"), “KSpread” döndürür"
 
 #: functions/text.xml:606
 #, kde-format
@@ -11733,17 +11731,17 @@ msgstr "TOGGLE(metin)"
 #: functions/text.xml:608
 #, kde-format
 msgid "TOGGLE(\"hello\") returns \"HELLO\""
-msgstr "TOGGLE(\"merhaba\"), \"MERHABA\" döndürür"
+msgstr "TOGGLE(\"merhaba\"), “MERHABA” döndürür"
 
 #: functions/text.xml:609
 #, kde-format
 msgid "TOGGLE(\"HELLO\") returns \"hello\""
-msgstr "TOGGLE(\"MERHABA\"), \"merhaba\" döndürür"
+msgstr "TOGGLE(\"MERHABA\"), “merhaba” döndürür"
 
 #: functions/text.xml:610
 #, kde-format
 msgid "TOGGLE(\"HeLlO\") returns \"hElLo\""
-msgstr "TOGGLE(\"MeRhAbA\"), \"mErHaBa\" döndürür"
+msgstr "TOGGLE(\"MeRhAbA\"), “mErHaBa” döndürür"
 
 #: functions/text.xml:624
 #, kde-format
@@ -11759,7 +11757,7 @@ msgstr "CLEAN(metin)"
 #: functions/text.xml:626
 #, kde-format
 msgid "CLEAN(AsciiToChar(7) + \"HELLO\") returns \"HELLO\""
-msgstr "CLEAN(AsciiToChar(7) + \"MERHAA\"), \"MERHABA\" döndürür"
+msgstr "CLEAN(AsciiToChar(7) + \"MERHABA\"), “MERHABA” döndürür"
 
 #: functions/text.xml:638
 #, kde-format
@@ -11774,7 +11772,7 @@ msgstr "SLEEK(metin)"
 #: functions/text.xml:640
 #, kde-format
 msgid "SLEEK(\"This is   some  text \") returns \"Thisissometext\""
-msgstr "SLEEK(\"This is   some  text \"), \"Thisissometext\"döndürür"
+msgstr "SLEEK(\"This is   some  text \"), “Thisissometext” döndürür"
 
 #: functions/text.xml:653
 #, kde-format
@@ -11789,12 +11787,12 @@ msgstr "UPPER(metin)"
 #: functions/text.xml:655
 #, kde-format
 msgid "UPPER(\"hello\") returns \"HELLO\""
-msgstr "UPPER(\"merhaba\"), \"MERHABA\" döndürür"
+msgstr "UPPER(\"merhaba\"), “MERHABA” döndürür"
 
 #: functions/text.xml:656
 #, kde-format
 msgid "UPPER(\"HELLO\") returns \"HELLO\""
-msgstr "UPPER(\"MERHABA\"), \"MERHABA\" döndürür"
+msgstr "UPPER(\"MERHABA\"), “MERHABA” döndürür"
 
 #: functions/text.xml:670
 #, kde-format
@@ -11809,12 +11807,12 @@ msgstr "LOWER(metin)"
 #: functions/text.xml:672
 #, kde-format
 msgid "LOWER(\"hello\") returns \"hello\""
-msgstr "LOWER(\"merhaba\"), \"merhaba\" döndürür"
+msgstr "LOWER(\"merhaba\"), “merhaba” döndürür"
 
 #: functions/text.xml:673
 #, kde-format
 msgid "LOWER(\"HELLO\") returns \"hello\""
-msgstr "LOWER(\"MERHABA\"), \"merhaba\" döndürür"
+msgstr "LOWER(\"MERHABA\"), “merhaba” döndürür"
 
 #: functions/text.xml:683 functions/text.xml:794
 #, kde-format
@@ -11834,7 +11832,7 @@ msgstr "CHAR(kod)"
 #: functions/text.xml:689
 #, kde-format
 msgid "CHAR(65) returns \"A\""
-msgstr "CHAR(65), \"A\" döndürür"
+msgstr "CHAR(65), “A” döndürür"
 
 #: functions/text.xml:702
 #, kde-format
@@ -11853,7 +11851,7 @@ msgstr "KOD(metin)"
 #: functions/text.xml:704
 #, kde-format
 msgid "CODE(\"KDE\") returns 75"
-msgstr "KOD(\"KDE\"), 75 döndürür"
+msgstr "CODE(\"KDE\"), 75 döndürür"
 
 #: functions/text.xml:717
 #, kde-format
@@ -11925,12 +11923,13 @@ msgstr "REGEXP(text; regexp; default; backref)"
 #: functions/text.xml:747
 #, kde-format
 msgid "REGEXP(\"Number is   15.\";\"[0-9]+\") = \"15\" "
-msgstr "REGEXP(\"Sayı   15.\";\"[0-9]+\") = \"15\" "
+msgstr "REGEXP(\"Sayı   15.\"; \"[0-9]+\"), “15” döndürür"
 
 #: functions/text.xml:748
 #, kde-format
 msgid "REGEXP(\"15, 20, 26, 41\";\"([0-9]+), *[0-9]+$\";\"\";1) = \"26\" "
-msgstr "REGEXP(\"15, 20, 26, 41\";\"([0-9]+), *[0-9]+$\";\"\";1) = \"26\" "
+msgstr ""
+"REGEXP(\"15, 20, 26, 41\";\"([0-9]+), *[0-9]+$\";\"\";1), “26” döndürür"
 
 #: functions/text.xml:764
 #, kde-format
@@ -11954,7 +11953,7 @@ msgid ""
 "REGEXPRE(\"14 and 15 and 16\";\"[0-9]+\";\"num\") returns \"num and num and "
 "num\""
 msgstr ""
-"REGEXPRE(\"14 ve 15 ve 16\";\"[0-9]+\";\"num\"), \"num and num and num\" "
+"REGEXPRE(\"14 ve 15 ve 16\"; \"[0-9]+\"; \"num\"), “num and num and num” "
 "döndürür"
 
 #: functions/text.xml:782
@@ -11993,7 +11992,7 @@ msgstr "UNICHAR(kod)"
 #: functions/text.xml:800
 #, kde-format
 msgid "UNICHAR(65) returns \"A\""
-msgstr "UNICHAR(65), \"A\" döndürür"
+msgstr "UNICHAR(65), “A” döndürür"
 
 #: functions/text.xml:810
 #, kde-format
@@ -12050,7 +12049,7 @@ msgstr "BAHTTEXT(sayı)"
 #: functions/text.xml:844
 #, kde-format
 msgid "BAHTTEXT(23) returns \"ยี่สิบสามบาทถ้วน\""
-msgstr "BAHTTEXT(23), \"ยี่สิบสามบาทถ้วน\" döndürür"
+msgstr "BAHTTEXT(23), “ยี่สิบสามบาทถ้วน” döndürür"
 
 #: functions/trig.xml:4
 #, kde-format
@@ -12071,7 +12070,7 @@ msgstr "COS(Kayannokta)"
 #: functions/trig.xml:16
 #, kde-format
 msgid "COS(0) equals 1.0"
-msgstr "COS(0), 1,0 döndürür"
+msgstr "COS(0) eşittir 1,0"
 
 #: functions/trig.xml:17
 #, kde-format
@@ -12107,12 +12106,12 @@ msgstr "SİN(Kayannokta)"
 #: functions/trig.xml:48
 #, kde-format
 msgid "SIN(0) equals 0"
-msgstr "SİN(0) eşittir 0"
+msgstr "SIN(0) eşittir 0"
 
 #: functions/trig.xml:49
 #, kde-format
 msgid "SIN(PI()/2) equals 1"
-msgstr "SİN(PI()/2) eşittir 1"
+msgstr "SIN(PI()/2) eşittir 1"
 
 #: functions/trig.xml:63
 #, kde-format
@@ -12130,12 +12129,12 @@ msgstr "TAN(Kayannokta)"
 #: functions/trig.xml:65
 #, kde-format
 msgid "TAN(0.7) equals 0.84228838"
-msgstr "TAN(0.7), 0.84228838 döndürür"
+msgstr "TAN(0,7) eşittir 0,84228838"
 
 #: functions/trig.xml:66
 #, kde-format
 msgid "TAN(0) equals 0"
-msgstr "TAN(0), 0 döndürür"
+msgstr "TAN(0) eşittir 0"
 
 #: functions/trig.xml:79
 #, kde-format
@@ -12167,8 +12166,8 @@ msgid ""
 "The ASIN() function returns the arc sine in radians and the value is "
 "mathematically defined to be -PI/2 to PI/2 (inclusive)."
 msgstr ""
-"ASİN() işlevi, radyan türünden verilen değerlerin ark sinüsünü hesaplar ve "
-"değer matematiksel olarak -PI/2’den PI/2’ye olacak biçimde tanımlıdır "
+"ASIN() işlevi, radyan türünden verilen değerlerin ark sinüsünü hesaplar ve "
+"değer matematiksel olarak −PI/2’den PI/2’ye olacak biçimde tanımlıdır "
 "(içerir)."
 
 #: functions/trig.xml:96
@@ -12202,7 +12201,7 @@ msgstr "ATAN(Kayannokta)"
 #: functions/trig.xml:113
 #, kde-format
 msgid "ATAN(0.8) equals 0.67474094"
-msgstr "ATAN(0.8), 0.67474094 döndürür"
+msgstr "ATAN(0,8), 0,67474094 döndürür"
 
 #: functions/trig.xml:114
 #, kde-format
@@ -12215,7 +12214,7 @@ msgid ""
 "The COSH() function returns the hyperbolic cosine of x, which is defined "
 "mathematically as (exp(x) + exp(-x)) / 2."
 msgstr ""
-"COSH() işlevi, verilen x değişkeninin  (exp(x) + exp(-x)) / 2. olarak "
+"COSH() işlevi, verilen x değişkeninin  (exp(x) + exp(−x)) / 2. olarak "
 "tanımlanan hiperbolik kosinüsünü hesaplar."
 
 #: functions/trig.xml:129
@@ -12239,7 +12238,7 @@ msgid ""
 "The SINH() function returns the hyperbolic sine of x, which is defined "
 "mathematically as (exp(x) - exp(-x)) / 2."
 msgstr ""
-"SINH() işlevi, x değişkeninin matematiksel olarak (exp(x) - exp(-x)) / 2 "
+"SINH() işlevi, x değişkeninin matematiksel olarak (exp(x) − exp(−x)) / 2 "
 "olarak tanımlanan hiperbolik sinüsünü hesaplar."
 
 #: functions/trig.xml:145
@@ -12289,7 +12288,7 @@ msgid ""
 "returns not-a-number (NaN) and errno is set."
 msgstr ""
 "ACOSH() işlevi, x değişkenin ters hiperbolik kosinüs değerini hesaplar. Eğer "
-"x değişkeni 1,0’dan küçük ise ACOSH() sayı olmayan değer (NaN) döndürür ve "
+"x değişkeni 1,0’dan küçükse ACOSH() sayı olmayan değer (NaN) döndürür ve "
 "hata numarası belirtilir."
 
 #: functions/trig.xml:177
@@ -12376,12 +12375,12 @@ msgstr "ATAN2(değer;değer)"
 #: functions/trig.xml:230
 #, kde-format
 msgid "ATAN2(0.5;1.0) equals 1.107149"
-msgstr "ATAN2(0,5;1,0) eşittir 1,107149"
+msgstr "ATAN2(0,5; 1,0) eşittir 1,107149"
 
 #: functions/trig.xml:231
 #, kde-format
 msgid "ATAN2(-0.5;2.0) equals 1.815775"
-msgstr "ATAN2(-0,5;2,0) eşittir 1,815775"
+msgstr "ATAN2(-0,5; 2,0) eşittir 1,815775"
 
 #: functions/trig.xml:244
 #, kde-format
@@ -12441,7 +12440,7 @@ msgstr "PI()"
 #: functions/trig.xml:274
 #, kde-format
 msgid "PI() equals 3.141592654..."
-msgstr "PI() eşittir 3,141592654..."
+msgstr "PI() eşittir 3,141592654…"
 
 #: functions/trig.xml:286
 #, kde-format
@@ -12475,7 +12474,7 @@ msgstr "CSCH(KayanNoktalı)"
 #: functions/trig.xml:302
 #, kde-format
 msgid "CSCH(PI()/2) equals 0.434537208..."
-msgstr "CSCH(PI()/2) eşittir 0,434537208..."
+msgstr "CSCH(PI()/2) eşittir 0,434537208…"
 
 #: functions/trig.xml:314
 #, kde-format
@@ -12526,7 +12525,7 @@ msgstr "Hesap Tablosu Uygulaması"
 #: part/AboutData.h:30
 #, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
-msgstr "Telif hakkı 1998-%1, Calligra Tablolar Takımı"
+msgstr "© 1998–%1, Calligra Tablolar Takımı"
 
 #: part/AboutData.h:36
 #, kde-format
@@ -12711,7 +12710,7 @@ msgstr "tulliana@fmail.com, gorkem@kde.org, emir_sari@icloud.com"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Serdar Soytetir, Görkem Çetin, Emir SARI"
+msgstr "Serdar SOYTETİR, Görkem ÇETİN, Emir SARI"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
@@ -12803,7 +12802,7 @@ msgstr "&Sayfa"
 #: part/calligrasheets.rc:134
 #, kde-format
 msgid "&Print Range"
-msgstr "&Yazdırma Aralığı"
+msgstr "&Yazdırma Erimi"
 
 #. i18n: ectx: Menu
 #: part/calligrasheets.rc:139
@@ -12885,12 +12884,12 @@ msgstr "Formül"
 #: part/CellTool.cpp:63
 #, kde-format
 msgid "Define Print Range"
-msgstr "Yazdırma Aralığı Tanımla"
+msgstr "Yazdırma Erimini Tanımla"
 
 #: part/CellTool.cpp:66
 #, kde-format
 msgid "Define the print range in the current sheet"
-msgstr "Geçerli sayfa için yazdırma aralığını tanımla"
+msgstr "Geçerli sayfa için yazdırma erimini tanımla"
 
 #: part/CellToolFactory.cpp:20
 #, kde-format
@@ -12948,7 +12947,7 @@ msgstr "Sütunlardaki veri kümeleri"
 #: part/commands/DefinePrintRangeCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Define Print Range"
-msgstr "Yazdırma Aralığı Belirle"
+msgstr "Yazdırma Erimini Tanımla"
 
 #: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:201
 msgctxt "(qtundo-format)"
@@ -12974,7 +12973,7 @@ msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
 "> Open Recent."
 msgstr ""
-"Dosya -> Son Kullanılan Dosyalar yolunu izlediğinizde gösterilecek en çok "
+"Dosya → Son Kullanılan Dosyalar yolunu izlediğinizde gösterilecek en çok "
 "dosya sayısını denetler."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -13112,8 +13111,8 @@ msgid ""
 "displayed. Click here to choose another color for the borders than the "
 "default red."
 msgstr ""
-"Görünüm -> Sayfa Kenarlıklarını Göster menu ögesi seçildiğinde sayfa "
-"kenarlıkları gösterilir. Kenarlıklar içinön tanımlı kırmızı renginden başka "
+"Görünüm → Sayfa Kenarlıklarını Göster menu ögesi seçildiğinde sayfa "
+"kenarlıkları gösterilir. Kenarlıklar için öntanımlı kırmızı renkten başka "
 "bir renk seçmek için buraya tıklayın."
 
 #: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:92
@@ -13406,7 +13405,7 @@ msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
 "the drop down selection box."
 msgstr ""
-"Aşağı açılan seçim kutusundaki seçenek aralığından (kendiliğinden) metin "
+"Aşağı açılan seçim kutusundaki seçenek eriminden (kendiliğinden) metin "
 "tamamlama kipini seçmenizi sağlar."
 
 #: part/dialogs/PreferenceDialog.cpp:434
@@ -13667,8 +13666,8 @@ msgid ""
 msgstr ""
 "<b>Kullanılabilir tüm sayfaların listesi.</b><br>\n"
 "Bir sayfayı yazdırmak için bu listedeki bir veya daha fazla sayfayı seçmeniz "
-"ve yazdırılacak sayfaların bulunduğu sağ taraftaki listeye seçilen "
-"çizelge(leri/yi) eklemek için düğmeleri kullanmanız gerekir.<br>\n"
+"ve yazdırılacak sayfaların bulunduğu sağ taraftaki listeye seçilen sayfaları "
+"eklemek için düğmeleri kullanmanız gerekir.<br>\n"
 "Bir sayfayı istediğiniz sıklıkta ekleyebilirsiniz, bu şekilde birden fazla "
 "kere yazdırılacaktır. Bu örneğin, bölücüler veya başlık sayfaları için "
 "kullanışlıdır."
@@ -13803,7 +13802,7 @@ msgstr "Sayfa(lar) için yazdırılacak bir şey yok %1."
 #: part/View.cpp:227
 #, kde-format
 msgid "Sheet Properties..."
-msgstr "Sayfa Özellikleri..."
+msgstr "Sayfa Özellikleri…"
 
 #: part/View.cpp:230
 #, kde-format
@@ -13843,7 +13842,7 @@ msgstr "Etkin sayfayı kaldır"
 #: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
-msgstr "Sayfayı Yeniden Adlandır..."
+msgstr "Sayfayı Yeniden Adlandır…"
 
 #: part/View.cpp:252
 #, kde-format
@@ -13853,7 +13852,7 @@ msgstr "Etkin sayfayı yeniden adlandır"
 #: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
-msgstr "Sayfayı Göster..."
+msgstr "Sayfayı Göster…"
 
 #: part/View.cpp:257
 #, kde-format
@@ -13873,7 +13872,7 @@ msgstr "Etkin sayfayı gizle"
 #: part/View.cpp:264
 #, kde-format
 msgid "Page Layout..."
-msgstr "Sayfa Düzeni..."
+msgstr "Sayfa Yerleşimi…"
 
 #: part/View.cpp:267
 #, kde-format
@@ -13883,12 +13882,12 @@ msgstr "Yazdırma çıktısı için hesap tablosu düzenini belirle"
 #: part/View.cpp:269
 #, kde-format
 msgid "Reset Print Range"
-msgstr "Yazdırma Aralığını Sıfırla"
+msgstr "Yazdırma Erimini Sıfırla"
 
 #: part/View.cpp:272
 #, kde-format
 msgid "Reset the print range in the current sheet"
-msgstr "Geçerli sayfa için yazdırma aralığını tanımla"
+msgstr "Geçerli sayfa için yazdırma erimini sıfırla"
 
 #: part/View.cpp:274
 #, kde-format
@@ -13929,7 +13928,7 @@ msgstr "Çalışma sayfalarındaki tüm hücrelerin değerlerini yeniden hesapla
 #: part/View.cpp:295
 #, kde-format
 msgid "Protect &Sheet..."
-msgstr "S&ayfayı Koru..."
+msgstr "&Sayfayı Koru…"
 
 #: part/View.cpp:297
 #, kde-format
@@ -13939,7 +13938,7 @@ msgstr "Sayfanın değiştirilmesini engelle"
 #: part/View.cpp:300
 #, kde-format
 msgid "Protect &Document..."
-msgstr "Belgeyi &Koru..."
+msgstr "Belgeyi &Koru…"
 
 #: part/View.cpp:302
 #, kde-format
@@ -13949,7 +13948,7 @@ msgstr "Belgenin değiştirilmesini engelle"
 #: part/View.cpp:307
 #, kde-format
 msgid "&Create Template From Document..."
-msgstr "&Belgeden Şablon Oluştur..."
+msgstr "&Belgeden Şablon Oluştur…"
 
 #: part/View.cpp:311
 #, kde-format
@@ -14180,7 +14179,7 @@ msgstr "Sayfanın Korumasını Kaldır"
 #: part/View.cpp:1819
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
-msgstr "Yazdırma Aralığını Sıfırla"
+msgstr "Yazdırma Erimini Sıfırla"
 
 #: part/View.cpp:1828
 #, kde-format
@@ -14704,9 +14703,9 @@ msgid ""
 msgstr ""
 "Burada geçerli hücre metni için yazıtipi biçemi, boyutu ve renginin yanı "
 "sıra altı çizili veya üzeri çizili ek özellikleri de seçebilirsiniz. "
-"Sayfanın altında seçtiğiniz metin biçiminin ön izlemesini görebilirsiniz.\n"
-"Tüm hücreler için öntanımlı yazıtipi Biçim -> Biçem Yöneticisi "
-"bağlantısından atanır."
+"Sayfanın altında seçtiğiniz metin biçiminin önizlemesini görebilirsiniz.\n"
+"Tüm hücreler için öntanımlı yazıtipi Biçim → Biçem Yöneticisi bağlantısından "
+"atanır."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -14923,7 +14922,7 @@ msgid ""
 "justifies numbers, dates and times within a cell and left justifies anything "
 "else."
 msgstr ""
-"Bu öntanımlı biçimdir ve Calligra Çizelgeleri geçerli hücre verisine dayalı "
+"Bu öntanımlı biçimdir ve Calligra Tablolar geçerli hücre verisine dayalı "
 "olarak gerçek veri türünü kendiliğinden algılar. Öntanımlı olarak Calligra "
 "Tablolar sayıları, tarihleri ve zamanı hücrelerde sağa, geri kalan her şeyi "
 "sola hizalar."
@@ -14935,8 +14934,8 @@ msgid ""
 "-> Common Appearance and Behavior -> Locale -> Country/Region & Language -> "
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
-"Sayı yazımı sizin Sistem Ayarları -> Yaygın Görünüş ve Davranış -> Yerel -> "
-"Ülke/Bölge ve Dil -> Sayılar sekmesi altında genel olarak ayarladığınız "
+"Sayı yazımı sizin Sistem Ayarları → Yaygın Görünüş ve Davranış → Yerel → "
+"Ülke/Bölge ve Dil → Sayılar sekmesi altında genel olarak ayarladığınız "
 "gösterimi kullanır. Sayılar öntanımlı olarak sağa hizalanır."
 
 #: ui/dialogs/LayoutPage_Float.cpp:69
@@ -14977,12 +14976,12 @@ msgid ""
 "You can also use the Currency icon in the Format Toolbar to set the cell "
 "formatting to look like your current currency."
 msgstr ""
-"Para biçimi girilen sayıyı Sistem Ayarları -> Yaygın Görünüş ve Davranış -> "
-"Yerel -> Ülke/Bölge ve Dil -> Para sekmesi altında genel olarak "
-"ayarladığınız para gösterimini kullanarak dönüştürür. Para birimi sembolü "
-"gösterilir ve Sistem Ayarlarında belirtilen hassasiyet kullanılır.\n"
-"Hücre biçimlendirmesinde geçerli para birimini Biçimlendirme Araç "
-"Çubuğundaki Para Birimi simgesinden de ayarlayabilirsiniz."
+"Para biçimi girilen sayıyı Sistem Ayarları → Yaygın Görünüş ve Davranış → "
+"Yerel → Ülke/Bölge ve Dil → Para sekmesi altında genel olarak ayarladığınız "
+"para gösterimini kullanarak dönüştürür. Para birimi sembolü gösterilir ve "
+"Sistem Ayarlarında belirtilen hassasiyet kullanılır.\n"
+"Hücre biçimlendirmesinde geçerli para birimini Biçimlendirme araç "
+"çubuğundaki Para Birimi simgesinden de ayarlayabilirsiniz."
 
 #: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
@@ -14997,7 +14996,7 @@ msgid ""
 "format will display 0.0012 again."
 msgstr ""
 "Bilimsel biçim, sayınızı bilimsel gösterimi kullanarak değiştirir. Örneğin, "
-"0,0012 ifadesi 1,2E-03 ile değiştirilir. Genel hücre biçimini kullanmaya "
+"0,0012 ifadesi 1,2E−03 ile değiştirilir. Genel hücre biçimini kullanmaya "
 "geri döndüğünüzde yine 0,0012 olarak görünür."
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
@@ -15032,9 +15031,9 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get dates."
 msgstr ""
-"Bir tarih girebilmek için Sistem Ayarları -> Yaygın Görünüş ve Davranış -> "
-"Yerel -> Ülke/Bölge ve Dil -> Tarih ve Zaman sekmesi altında ayarladığınız "
-"biçimlerden birini girmelisiniz. Burada iki biçim bulunur: tarih biçimi ve "
+"Bir tarih girebilmek için Sistem Ayarları → Yaygın Görünüş ve Davranış → "
+"Yerel → Ülke/Bölge ve Dil → Tarih ve Zaman sekmesi altında ayarladığınız "
+"biçimlerden birini girmelisiniz. Burada iki biçim bulunur: Tarih biçimi ve "
 "kısa tarih biçimi.\n"
 "Sayıları aşağı doğru sürükleyebildiğiniz gibi tarihleri de aynı şekilde "
 "sürükleyebilir ve sürdürebilirsiniz."
@@ -15052,12 +15051,12 @@ msgid ""
 "have in System Settings."
 msgstr ""
 "Bu hücre içeriğinizi tarih olarak biçimlendirir. Bir tarih girmek için Zaman "
-"biçimini Sistem Ayarları -> Yaygın Görünüş ve Davranış -> Yerel -> Ülke/"
-"Bölge ve Dil -> Tarih ve Zaman sekmesinden ayarlamalısınız. Hücre Biçimi "
+"biçimini Sistem Ayarları → Yaygın Görünüş ve Davranış → Yerel → Ülke/Bölge "
+"ve Dil → Tarih ve Zaman sekmesinden ayarlamalısınız. Hücre Biçimi "
 "penceresinde kullanılabilir zaman biçimlerinden birini seçerek zamanın nasıl "
 "görüntülenmesini istediğinizi belirleyebilirsiniz. Öntanımlı biçim Sistem "
 "Ayarlarında ayarlanan sistem biçimidir. Hücredeki sayı zaman olarak bir "
-"anlam ifade etmediğinde Calligra Çizelgeleri Sistem Ayarlarında genel biçim "
+"anlam ifade etmediğinde Calligra Tablolar, Sistem Ayarlarında genel biçim "
 "olarak ayarladığınız 00:00’ı görüntüler."
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
@@ -15075,10 +15074,10 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Tarih ve zaman girebilmek için Sistem Ayarları -> Yaygın Görünüş ve Davranış "
-"-> Yerel -> Ülke/Bölge ve Dil -> Tarih ve Zaman sekmesi altında "
-"ayarladığınız biçimlerden birini girmelisiniz. Burada iki biçim bulunur: "
-"tarih biçimi ve kısa tarih biçimi.\n"
+"Tarih ve zaman girebilmek için Sistem Ayarları → Yaygın Görünüş ve Davranış "
+"→ Yerel → Ülke/Bölge ve Dil → Tarih ve Zaman sekmesi altında ayarladığınız "
+"biçimlerden birini girmelisiniz. Burada iki biçim bulunur: Tarih biçimi ve "
+"kısa tarih biçimi.\n"
 "Sayıları aşağı doğru sürükleyebildiğiniz gibi tarihleri de aynı şekilde "
 "sürükleyebilir ve sürdürebilirsiniz."
 
@@ -15259,7 +15258,7 @@ msgstr "Biçemden kullan:"
 #: ui/dialogs/LayoutPage_General.cpp:86
 #, kde-format
 msgid "A style with this name already exists."
-msgstr "Bu adda bir biçem halihazırda var."
+msgstr "Bu adda bir biçem hâlihazırda var."
 
 #: ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
@@ -15274,7 +15273,7 @@ msgstr "Bir biçem kendisinden kalıtım edinemez."
 #: ui/dialogs/LayoutPage_General.cpp:106
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
-msgstr "Biçem, özyineli başvurular nedeniyle '%1' kalıtımını alamaz."
+msgstr "Biçem, özyineli başvurular nedeniyle “%1” kalıtımını alamaz."
 
 #: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format
@@ -15443,17 +15442,17 @@ msgid ""
 "You can learn more about all these settings in the User Manual in the "
 "Advanced Calligra Sheets chapter."
 msgstr ""
-"Bu sekme Hücre Korumayı ayarlamanıza olanak verir. Öntanımlı olarak bütün "
+"Bu sekme, hücre korumayı ayarlamanıza olanak verir. Öntanımlı olarak bütün "
 "hücreler korumalıdır (yani hücre içeriği değiştirilemez) ve hücre "
-"korumasının etkin olması için çalışma sayfasını da Araçlar -> Çizelgeyi Koru "
+"korumasının etkin olması için çalışma sayfasını da Araçlar → Sayfayı Koru "
 "menüsünden parola girerek korumalı hale getirmeniz gerekir.\n"
 "Ayrıca hücredeki formülü de gizleyebilir ve yaptığınız hesaplamanın "
-"formülünün görünmemesini sağlayabilirsiniz. Bunun da çalışması için "
-"çizelgenin korumalı olması gerekir.\n"
+"formülünün görünmemesini sağlayabilirsiniz. Bunun da çalışması için sayfanın "
+"korumalı olması gerekir.\n"
 "Tümünü Gizle diyerek hücre içeriğini de gizleyebilirsiniz ve bu işlem de "
-"çizelge korumalı olduğunda çalışır.\n"
+"sayfa korumalı olduğunda çalışır.\n"
 "Bütün bu ayarlar hakkında daha fazla bilgiyi Kullanıcı Kılavuzunun Gelişmiş "
-"Calligra Çizelgeleri faslında bulabilirsiniz."
+"Calligra Tablolar faslında bulabilirsiniz."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: ui/dialogs/ProtectionWidget.ui:41
@@ -15492,7 +15491,7 @@ msgid ""
 "This hides the cell content and works only when the sheet is protected. "
 "Whether the cell itself is protected or not does not matter."
 msgstr ""
-"Bu hücre içeriğini gizler ve yalnızca çizelge korumalı olduğunda çalışır. "
+"Bu hücre içeriğini gizler ve yalnızca sayfa korumalı olduğunda çalışır. "
 "Hücrenin kendisinin korumalı olup olmaması önemli değildir."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
@@ -15512,9 +15511,9 @@ msgid ""
 "is protected, its content cannot be changed."
 msgstr ""
 "İşaretlendiğinde hücre içeriği korumalı olur. Bu öntanımlı davranıştır. "
-"Tekil hücre içeriklerini korumak için Araçlar -> Çizelgeyi Koru menü "
+"Tekil hücre içeriklerini korumak için Araçlar → Sayfayı Koru menü "
 "seçeneğinden tüm çizelgeyi korumalı yapmanız gerekir. Daha fazla ayrıntıyı "
-"kullanıcı kılavuzunun Gelişmiş Calligra Çizelgeleri faslında bulabilirsiniz. "
+"kullanıcı kılavuzunun Gelişmiş Calligra Tablolar faslında bulabilirsiniz. "
 "Bir hücre korumalı olduğunda içeriği değiştirilemez."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
@@ -15534,7 +15533,7 @@ msgid ""
 msgstr ""
 "İşaretlendiğinde hücre hala görünür durumdadır. Yine de içeriği Formül "
 "çubuğunda görüntülenmez. Formül gizlemek yalnızca içeriğinde bir formül olan "
-"hücrelerde çalışır. Bunun için de tüm çizelgenin korumalı olması gerekir."
+"hücrelerde çalışır. Bunun için de tüm sayfanın korumalı olması gerekir."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
 #: ui/dialogs/ProtectionWidget.ui:133
@@ -15545,12 +15544,12 @@ msgstr "&Formülü gizle"
 #: ui/dialogs/ShowDialog.cpp:35
 #, kde-format
 msgid "Show Sheet"
-msgstr "Çizelgeyi Göster"
+msgstr "Sayfayı Göster"
 
 #: ui/dialogs/ShowDialog.cpp:45
 #, kde-format
 msgid "Select hidden sheets to show:"
-msgstr "Gösterilecek gizli çizelgeleri seç:"
+msgstr "Gösterilecek gizli sayfaları seç:"
 
 #: ui/ExternalEditor.cpp:55
 #, kde-format
