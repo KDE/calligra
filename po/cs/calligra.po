@@ -3,31 +3,32 @@
 # SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2024 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2013.
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2024-08-27 13:55+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-05-06 19:13+0200\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Poedit 3.8\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Vít Pelčák"
+msgstr "Vít Pelčák,Libor Filípek"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "vit@pelcak.org"
+msgstr "vit@pelcak.org,libor.filipek@gmail.com"
 
 #: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
 #, kde-format
@@ -119,7 +120,7 @@ msgstr "Převést na cestu"
 #: flake/commands/KoPathBreakAtPointCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr ""
+msgstr "Rozbít podcestu v bodech"
 
 #: flake/commands/KoPathCombineCommand.cpp:47
 msgctxt "(qtundo-format)"
@@ -134,7 +135,7 @@ msgstr "Přesunout kontrolní bod"
 #: flake/commands/KoPathFillRuleCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
-msgstr ""
+msgstr "Nastavit vyplňovací pravidlo"
 
 #: flake/commands/KoPathPointInsertCommand.cpp:70
 msgctxt "(qtundo-format)"
@@ -166,22 +167,22 @@ msgstr "Nastavit typ bodu"
 #: flake/commands/KoPathReverseCommand.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Reverse paths"
-msgstr ""
+msgstr "Obrátit cesty"
 
 #: flake/commands/KoPathSegmentBreakCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
-msgstr ""
+msgstr "Rozbít podcestu"
 
 #: flake/commands/KoPathSegmentTypeCommand.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
-msgstr ""
+msgstr "Změnit úsečky na křivky"
 
 #: flake/commands/KoPathSegmentTypeCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
-msgstr ""
+msgstr "Změnit úsečky na přímky"
 
 #: flake/commands/KoPathShapeMarkerCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -204,7 +205,7 @@ msgstr "Nastavit pozadí"
 #: flake/commands/KoShapeClipCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
-msgstr ""
+msgstr "Připnout tvar"
 
 #: flake/commands/KoShapeCreateCommand.cpp:41
 msgctxt "(qtundo-format)"
@@ -227,7 +228,7 @@ msgstr[2] "Smazat tvary"
 #: flake/commands/KoShapeDistributeCommand.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
-msgstr ""
+msgstr "Rozmístit tvar"
 
 #: flake/commands/KoShapeGroupCommand.cpp:85
 msgctxt "(qtundo-format)"
@@ -237,7 +238,7 @@ msgstr "Seskupit tvary"
 #: flake/commands/KoShapeGroupCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
-msgstr ""
+msgstr "Přidat tvar do skupiny"
 
 #: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
 msgctxt "(qtundo-format)"
@@ -247,13 +248,13 @@ msgstr "Zachovat poměr"
 #: flake/commands/KoShapeLockCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
-msgstr ""
+msgstr "Zamknout tvary"
 
 #: flake/commands/KoShapeMoveCommand.cpp:37
 #: flake/commands/KoShapeMoveCommand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
-msgstr ""
+msgstr "Přesunout tvary"
 
 #: flake/commands/KoShapeRenameCommand.cpp:29
 msgctxt "(qtundo-format)"
@@ -263,12 +264,12 @@ msgstr "Přejmenovat tvar"
 #: flake/commands/KoShapeReorderCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Reorder shapes"
-msgstr ""
+msgstr "Seřadit tvary"
 
 #: flake/commands/KoShapeRunAroundCommand.cpp:77
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
-msgstr ""
+msgstr "Změnit obtékání tvaru"
 
 #: flake/commands/KoShapeShadowCommand.cpp:55
 #: flake/commands/KoShapeShadowCommand.cpp:72
@@ -285,7 +286,7 @@ msgstr "Zkosit tvary"
 #: flake/commands/KoShapeSizeCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Resize shapes"
-msgstr ""
+msgstr "Změnit velikost tvarů"
 
 #: flake/commands/KoShapeStrokeCommand.cpp:59
 #: flake/commands/KoShapeStrokeCommand.cpp:76
@@ -304,12 +305,12 @@ msgstr "Nastavit krytí"
 #: flake/commands/KoShapeUnclipCommand.cpp:114
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
-msgstr ""
+msgstr "Odepnout tvar"
 
 #: flake/commands/KoShapeUnclipCommand.cpp:124
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
-msgstr ""
+msgstr "Odepnout tvary"
 
 #: flake/commands/KoShapeUngroupCommand.cpp:48
 msgctxt "(qtundo-format)"
@@ -319,17 +320,17 @@ msgstr "Zrušit seskupení tvarů"
 #: flake/commands/KoSubpathJoinCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
-msgstr ""
+msgstr "Zavřít podcestu"
 
 #: flake/commands/KoSubpathJoinCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
-msgstr ""
+msgstr "Připojit podcesty"
 
 #: flake/commands/KoSubpathRemoveCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
-msgstr ""
+msgstr "Odstranit podcesty"
 
 #: flake/KoConnectionShapeConfigWidget.cpp:17
 #, kde-format
@@ -353,7 +354,7 @@ msgstr "Typ:"
 #: flake/KoConnectionShapeFactory.cpp:22
 #, kde-format
 msgid "Tie"
-msgstr "Vazba:"
+msgstr "Vazba"
 
 #: flake/KoConnectionShapeFactory.cpp:24
 #, kde-format
@@ -373,12 +374,12 @@ msgstr "Zobrazí nebo skryje mřížku"
 #: flake/KoPathShapeFactory.cpp:22
 #, kde-format
 msgid "Simple path shape"
-msgstr ""
+msgstr "Jednoduchý tvar cesty"
 
 #: flake/KoPathShapeFactory.cpp:24
 #, kde-format
 msgid "A simple path shape"
-msgstr ""
+msgstr "Jednoduchý tvar cesty"
 
 #: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:42
 #: rdf/InsertSemanticObjectReferenceAction.cpp:48
@@ -453,7 +454,7 @@ msgstr "Vodicí čáry"
 #: flake/svg/SvgShapeFactory.cpp:23
 #, kde-format
 msgid "Embedded svg shape"
-msgstr ""
+msgstr "Vložený tvar SVG"
 
 #: flake/tools/KoCreateShapesToolFactory.cpp:16
 #, kde-format
@@ -473,37 +474,37 @@ msgstr "Změnit prvek"
 #: flake/tools/KoPathTool.cpp:95
 #, kde-format
 msgid "Corner point"
-msgstr ""
+msgstr "Rohový bod"
 
 #: flake/tools/KoPathTool.cpp:100
 #, kde-format
 msgid "Smooth point"
-msgstr ""
+msgstr "Hladký bod"
 
 #: flake/tools/KoPathTool.cpp:105
 #, kde-format
 msgid "Symmetric Point"
-msgstr ""
+msgstr "Symetrický bod"
 
 #: flake/tools/KoPathTool.cpp:110
 #, kde-format
 msgid "Make curve point"
-msgstr ""
+msgstr "Vytvořit bod křivky"
 
 #: flake/tools/KoPathTool.cpp:114
 #, kde-format
 msgid "Make line point"
-msgstr ""
+msgstr "Vytvořit bod přímky"
 
 #: flake/tools/KoPathTool.cpp:118
 #, kde-format
 msgid "Segment to Line"
-msgstr ""
+msgstr "Úsečka na přímku"
 
 #: flake/tools/KoPathTool.cpp:123
 #, kde-format
 msgid "Segment to Curve"
-msgstr ""
+msgstr "Úsečka na křivku"
 
 #: flake/tools/KoPathTool.cpp:128
 #, kde-format
@@ -518,17 +519,17 @@ msgstr "Odstranit bod"
 #: flake/tools/KoPathTool.cpp:138
 #, kde-format
 msgid "Break at point"
-msgstr ""
+msgstr "Zastavit v bodě"
 
 #: flake/tools/KoPathTool.cpp:142
 #, kde-format
 msgid "Break at segment"
-msgstr ""
+msgstr "Zastavit na úsečce"
 
 #: flake/tools/KoPathTool.cpp:146
 #, kde-format
 msgid "Join with segment"
-msgstr ""
+msgstr "Připojit k úsečce"
 
 #: flake/tools/KoPathTool.cpp:151
 #, kde-format
@@ -538,42 +539,45 @@ msgstr "Sloučit body"
 #: flake/tools/KoPathTool.cpp:155
 #, kde-format
 msgid "To Path"
-msgstr ""
+msgstr "Na cestu"
 
 #: flake/tools/KoPathTool.cpp:188
 #, kde-format
 msgid "Line/Curve"
-msgstr ""
+msgstr "Přímka/křivka"
 
 #: flake/tools/KoPathTool.cpp:522
 #, kde-format
 msgid "Drag to move handle."
-msgstr ""
+msgstr "Přetažením přesuňte."
 
 #: flake/tools/KoPathTool.cpp:586
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
+"Přetažením přesuňte bod. Kliknutím při stisknuté klávese Shift změníte typ "
+"bodu."
 
 #: flake/tools/KoPathTool.cpp:588
 #, kde-format
 msgid "Drag to move control point."
-msgstr ""
+msgstr "Přetažením přesuňte kontrolní bod."
 
 #: flake/tools/KoPathTool.cpp:613
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
+"Přetažením přímo upravte křivku. Dvojitým kliknutím vložíte nový bod cesty."
 
 #: flake/tools/KoPathTool.cpp:620
 #, kde-format
 msgid "Press B to break path at selected point."
-msgstr ""
+msgstr "Stiskněte tlačítko B pro rozdělení cesty ve vybraném bodě."
 
 #: flake/tools/KoPathTool.cpp:622
 #, kde-format
 msgid "Press B to break path at selected segments."
-msgstr ""
+msgstr "Stiskněte tlačítko B pro rozdělení cesty ve vybrané úsečce."
 
 #: flake/tools/KoPathToolFactory.cpp:17
 #, kde-format
@@ -762,7 +766,7 @@ msgstr "Jednotky:"
 #: main/config/KoConfigMiscPage.cpp:85
 #, kde-format
 msgid "Handle radius:"
-msgstr ""
+msgstr "Rádius uchopení:"
 
 #: main/config/KoConfigMiscPage.cpp:92
 #, kde-format
@@ -788,12 +792,12 @@ msgstr "Pouze vytisknout a ukončit"
 #: main/KoApplication.cpp:196
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
-msgstr ""
+msgstr "Otevřít nový dokument na základě zadané šablony (název souboru)"
 
 #: main/KoApplication.cpp:197
 #, kde-format
 msgid "Open a new document based on the given template file"
-msgstr ""
+msgstr "Otevřít nový dokument na základě zadaného souboru šablony"
 
 #: main/KoApplication.cpp:198
 #, kde-format
@@ -808,27 +812,27 @@ msgstr "Pouze vyexportovat do PDF a ukončit"
 #: main/KoApplication.cpp:200
 #, kde-format
 msgid "Filename for export-pdf"
-msgstr ""
+msgstr "Název souboru pro export do PDF"
 
 #: main/KoApplication.cpp:201
 #, kde-format
 msgid "just load the file and then exit"
-msgstr ""
+msgstr "stačí soubor načíst a poté program ukončit"
 
 #: main/KoApplication.cpp:203
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
-msgstr ""
+msgstr "načíst soubor, zobrazit okno a ukazatel průběhu a poté ukončit"
 
 #: main/KoApplication.cpp:205
 #, kde-format
 msgid "Filename to write profiling information into."
-msgstr ""
+msgstr "Název souboru, do kterého se mají zapsat informace o profilování."
 
 #: main/KoApplication.cpp:208
 #, kde-format
 msgid "Load a file and save it as an ODF file. Meant for debugging."
-msgstr ""
+msgstr "Načíst soubor a uložit jej ve formátu ODF. Určeno pro ladění."
 
 #: main/KoApplication.cpp:210
 #, kde-format
@@ -842,6 +846,9 @@ msgid ""
 "This is not recommended.\n"
 "Please download and install the x64 build instead."
 msgstr ""
+"Používáte 32bitovou verzi na 64bitovém systému Windows.\n"
+"To není doporučeno.\n"
+"Stáhněte a nainstalujte si místo toho 64bitovou verzi."
 
 #: main/KoApplication.cpp:260
 #, kde-format
@@ -855,11 +862,14 @@ msgid ""
 "This might be an installation issue.\n"
 "Try restarting or reinstalling."
 msgstr ""
+"Nebyly nalezeny základní součásti aplikace.\n"
+"Může se jednat o problém s instalací.\n"
+"Zkuste aplikaci restartovat nebo přeinstalovat."
 
 #: main/KoApplication.cpp:498
 #, kde-format
 msgid "No template found for: %1"
-msgstr ""
+msgstr "Nenalezena žádná šablona pro: %1"
 
 #: main/KoApplication.cpp:501
 #, kde-format
@@ -874,7 +884,7 @@ msgstr "Načtení šablony %1 selhalo."
 #: main/KoApplication.cpp:530
 #, kde-format
 msgid "No template found at: %1"
-msgstr ""
+msgstr "Nenalezena žádná šablona v: %1"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:158
 #, kde-format
@@ -890,12 +900,12 @@ msgstr "Zahodit vše"
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr ""
+msgstr "Lze obnovit následující soubor automatického ukládání:"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:167
 #, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr ""
+msgstr "Lze obnovit následující soubory automatického ukládání:"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:205
 #, kde-format
@@ -904,6 +914,10 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Pokud zvolíte možnost Zrušit, všechny soubory, které lze obnovit, zůstanou "
+"zachovány.\n"
+"Pokud stisknete tlačítko OK, vybrané soubory budou obnoveny a nevybrané "
+"soubory budou odstraněny."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -956,6 +970,8 @@ msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
+"Heslo k tomuto zašifrovanému dokumentu není známo. Automatické ukládání bylo "
+"přerušeno! Uložte prosím svou práci ručně."
 
 #: main/KoDocument.cpp:712
 #, kde-format
@@ -981,7 +997,7 @@ msgstr "Nelze zapisovat '%1'; není disk plný?"
 #: main/KoDocument.cpp:863
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
-msgstr ""
+msgstr "Nelze zapsat metadata RDF. Je oddíl plný?"
 
 #: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
 #, kde-format
@@ -1084,17 +1100,17 @@ msgstr "Nedostatek paměti"
 #: main/KoDocument.cpp:1505
 #, kde-format
 msgid "Empty Filter Plugin"
-msgstr ""
+msgstr "Vyprázdnit modul filtru"
 
 #: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
-msgstr ""
+msgstr "Pokus o načtení do nesprávného typu dokumentu"
 
 #: main/KoDocument.cpp:1513
 #, kde-format
 msgid "Failed to download remote file"
-msgstr ""
+msgstr "Stahování vzdáleného souboru se nezdařilo"
 
 #: main/KoDocument.cpp:1522
 #, kde-format
@@ -1171,6 +1187,8 @@ msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
+"Dokument <i>%1</i> obsahuje několik verzí. Chcete-li otevřít starší verzi, "
+"přejděte do nabídky Soubor->Verze."
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
@@ -1299,7 +1317,7 @@ msgstr "Při hledání rozlišovat malá a velká písmena"
 #: main/KoFindText.cpp:48
 #, kde-format
 msgid "Match only whole words"
-msgstr ""
+msgstr "Vyhledávat pouze celá slova"
 
 #: main/KoFindText.cpp:48
 #, kde-format
@@ -1309,12 +1327,12 @@ msgstr "Pouze celá slova"
 #: main/KoFindText.cpp:49
 #, kde-format
 msgid "Find from Cursor"
-msgstr ""
+msgstr "Vyhledat od kurzoru"
 
 #: main/KoFindText.cpp:49
 #, kde-format
 msgid "Start searching from the current cursor"
-msgstr ""
+msgstr "Začít hledat od aktuální pozice kurzoru"
 
 #: main/KoMainWindow.cpp:154
 #, kde-format
@@ -1324,7 +1342,7 @@ msgstr "%1 neuložený dokument (%2)"
 #: main/KoMainWindow.cpp:259
 #, kde-format
 msgid "Export as PDF..."
-msgstr "Exportovat do PDF"
+msgstr "Exportovat do PDF..."
 
 #: main/KoMainWindow.cpp:271
 #, kde-format
@@ -1354,7 +1372,7 @@ msgstr "Zaši&frovat dokument"
 #: main/KoMainWindow.cpp:292
 #, kde-format
 msgid "&Uncompress to Directory"
-msgstr ""
+msgstr "&Rozbalit do adresáře"
 
 #: main/KoMainWindow.cpp:297
 #, kde-format
@@ -1380,7 +1398,7 @@ msgstr "Zobrazit doky"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
-msgstr ""
+msgstr "Zobrazit záhlaví doků"
 
 #: main/KoMainWindow.cpp:344
 #, kde-format
@@ -1463,7 +1481,7 @@ msgstr "Exportovat do PDF"
 #: main/KoMainWindow.cpp:1414
 #, kde-format
 msgid "Cannot export to the specified file"
-msgstr ""
+msgstr "Nelze exportovat do zadaného souboru"
 
 #: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
@@ -1481,6 +1499,8 @@ msgid ""
 "You will lose all changes made since your last save\n"
 "Do you want to continue?"
 msgstr ""
+"Ztratíte všechny změny provedené od posledního uložení\n"
+"Chcete pokračovat?"
 
 #: main/KoMainWindow.cpp:1653
 #, kde-format
@@ -1767,7 +1787,7 @@ msgstr "Neznámý"
 #: odf/KoOdfReadStore.cpp:91
 #, kde-format
 msgid "No store backend"
-msgstr ""
+msgstr "Žádná podpůrná vrstva pro uložení"
 
 #: odf/KoOdfReadStore.cpp:126
 #, kde-format
@@ -1971,12 +1991,12 @@ msgstr "Nepodporovaná jednotka"
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change master slide"
-msgstr ""
+msgstr "Změnit hlavní snímek"
 
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change master page"
-msgstr ""
+msgstr "Změnit hlavní stránku"
 
 #: pageapp/commands/KoPAChangePageLayoutCommand.cpp:23
 msgctxt "(qtundo-format)"
@@ -1986,7 +2006,7 @@ msgstr "Nastavit rozvržení stránky"
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Display master background"
-msgstr ""
+msgstr "Zobrazit hlavní pozadí"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -2001,12 +2021,12 @@ msgstr "Zobrazit pozadí stránky"
 #: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Show master shapes"
-msgstr ""
+msgstr "Zobrazit hlavní tvary"
 
 #: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Hide master shapes"
-msgstr ""
+msgstr "Skrýt hlavní tvary"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
 msgctxt "(qtundo-format) Delete one slide"
@@ -2103,7 +2123,7 @@ msgstr "Autor"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
 #, kde-format
 msgid "Select a master slide design:"
-msgstr ""
+msgstr "Vybrat vzhled hlavního snímku:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
 #, kde-format
@@ -2113,7 +2133,7 @@ msgstr "Hlavní snímek"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
 #, kde-format
 msgid "Select a master page design:"
-msgstr ""
+msgstr "Vybrat vzhled hlavní stránky:"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
@@ -2181,7 +2201,7 @@ msgstr "Uzamčeno"
 #: pageapp/KoPADocumentModel.cpp:525 pageapp/KoPADocumentModel.cpp:544
 msgctxt "(qtundo-format)"
 msgid "Reparent shapes"
-msgstr ""
+msgstr "Předefinovat tvary"
 
 #: pageapp/KoPADocumentModel.cpp:676
 #, kde-format
@@ -2357,7 +2377,7 @@ msgstr "Přichytávat k mřížce"
 #: pageapp/KoPAView.cpp:369
 #, kde-format
 msgid "Show Master Pages"
-msgstr ""
+msgstr "Zobrazit hlavní stránky"
 
 #: pageapp/KoPAView.cpp:373
 #, kde-format
@@ -2367,7 +2387,7 @@ msgstr "Zobrazit pravítka"
 #: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show/hide the view's rulers"
-msgstr ""
+msgstr "Zobrazit/skrýt pravítka v zobrazení"
 
 #: pageapp/KoPAView.cpp:379
 #, kde-format
@@ -2387,7 +2407,7 @@ msgstr "Vložit stránku"
 #: pageapp/KoPAView.cpp:387 pageapp/KoPAView.cpp:388
 #, kde-format
 msgid "Insert a new page after the current one"
-msgstr ""
+msgstr "Vložit novou stránku za aktuální stránku"
 
 #: pageapp/KoPAView.cpp:391
 #, kde-format
@@ -2397,7 +2417,7 @@ msgstr "Kopírovat stránku"
 #: pageapp/KoPAView.cpp:393 pageapp/KoPAView.cpp:394
 #, kde-format
 msgid "Copy the current page"
-msgstr ""
+msgstr "Kopírovat aktuální stránku"
 
 #: pageapp/KoPAView.cpp:397
 #, kde-format
@@ -2555,7 +2575,7 @@ msgstr "Násobit"
 #: pigment/KoColorModelStandardIds.cpp:11
 #, kde-format
 msgid "Alpha mask"
-msgstr ""
+msgstr "Alfa na masku"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:229
 #: pigment/colorspaces/KoLabColorSpace.cpp:49
@@ -3691,7 +3711,7 @@ msgstr "Upravit šířku sloupce"
 #: text/commands/ResizeTableCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
-msgstr ""
+msgstr "Upravit výšku řádku"
 
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -4429,7 +4449,7 @@ msgstr "D&ešifrovat"
 #: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document will be encrypted."
-msgstr "Tento dokument bude zašifrován"
+msgstr "Tento dokument bude zašifrován."
 
 #: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
@@ -4978,7 +4998,7 @@ msgstr "Nejsou dostupné žádné vlastnosti"
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "Terčový závěr"
 
 #: widgets/KoStrokeConfigWidget.cpp:90
 #, kde-format
@@ -5008,7 +5028,7 @@ msgstr "Kosý spoj"
 #: widgets/KoStrokeConfigWidget.cpp:132
 #, kde-format
 msgid "Miter limit"
-msgstr ""
+msgstr "Omezení úhlu"
 
 #: widgets/KoStrokeConfigWidget.cpp:202
 #, kde-format
@@ -5018,7 +5038,7 @@ msgstr "Tloušťka:"
 #: widgets/KoStrokeConfigWidget.cpp:212
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr ""
+msgstr "Nastavit šířku čáry aktuálního výběru"
 
 #: widgets/KoStrokeConfigWidget.cpp:228
 #, kde-format

@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-08-23 15:31+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-05-06 19:20+0200\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Poedit 3.8\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -80,7 +80,7 @@ msgid ""
 "kde.kspread, got %1"
 msgstr ""
 "Neplatný dokument. Očekáván MIME typ application/x-kspread nebo application/"
-"vnd.kde.kspread, ale obdržen %1."
+"vnd.kde.kspread, ale obdržen %1"
 
 #: core/ksp/SheetsKspDoc.cpp:52
 #, kde-format
@@ -470,7 +470,7 @@ msgid ""
 "This method is intended for using a boolean in methods which require a string"
 msgstr ""
 "Funkce BOOL2STRING() vrací řetězec dané booleovské hodnoty. Tato metoda je "
-"určena k použití booleovské hodnoty v metodách, které vyžadují řetězec."
+"určena k použití booleovské hodnoty v metodách, které vyžadují řetězec"
 
 #: functions/conversion.xml:16
 #, kde-format
@@ -633,7 +633,7 @@ msgstr "ASCII hodnota k převedení"
 #, kde-format
 msgid ""
 "The ASCIITOCHAR() function returns the character for each given ASCII code"
-msgstr "Funkce ASCIITOCHAR() vrací znak pro každý zadán ASCII kód."
+msgstr "Funkce ASCIITOCHAR() vrací znak pro každý zadán ASCII kód"
 
 #: functions/conversion.xml:110
 #, kde-format
@@ -772,7 +772,7 @@ msgstr "DECSEX(double)"
 #: functions/conversion.xml:193
 #, kde-format
 msgid "DECSEX(1.6668) returns 1:40 "
-msgstr "DECSEX(1,6668) vrací 1:40"
+msgstr "DECSEX(1,6668) vrací 1:40 "
 
 #: functions/conversion.xml:194
 #, kde-format
@@ -811,7 +811,7 @@ msgstr "SEXDEC(časový_údaj) anebo SEXDEC(hodina;minuta;sekunda)"
 #: functions/conversion.xml:216
 #, kde-format
 msgid "SEXDEC(1;5;7) returns 1.0852778 "
-msgstr "SEXDEC(1;5;7) vrací 1,0852778"
+msgstr "SEXDEC(1;5;7) vrací 1,0852778 "
 
 #: functions/conversion.xml:217
 #, kde-format
@@ -1311,7 +1311,7 @@ msgid ""
 "of days elapsed since December 31, 1899."
 msgstr ""
 "Funkce DATEVALUE vrací číslo reprezentující den, např. počet dní od 31.12. "
-"1899"
+"1899."
 
 #: functions/datetime.xml:76
 #, kde-format
@@ -2654,12 +2654,12 @@ msgstr "OCT2DEC(hodnota)"
 #: functions/engineering.xml:273
 #, kde-format
 msgid "OCT2DEC(\"12\") returns 10 "
-msgstr "OCT2DEC(\"12\") vrací 10"
+msgstr "OCT2DEC(\"12\") vrací 10 "
 
 #: functions/engineering.xml:274
 #, kde-format
 msgid "OCT2DEC(\"55\") returns 45 "
-msgstr "OCT2DEC(55) vrací 45"
+msgstr "OCT2DEC(55) vrací 45 "
 
 #: functions/engineering.xml:290
 #, kde-format
@@ -2700,12 +2700,12 @@ msgstr "BIN2DEC(hodnota)"
 #: functions/engineering.xml:307
 #, kde-format
 msgid "BIN2DEC(\"1010\") returns 10 "
-msgstr "BIN2DEC(1010) vrací 10"
+msgstr "BIN2DEC(1010) vrací 10 "
 
 #: functions/engineering.xml:308
 #, kde-format
 msgid "BIN2DEC(\"11111\") returns 31 "
-msgstr "BIN2DEC(11111) vrací 31"
+msgstr "BIN2DEC(11111) vrací 31 "
 
 #: functions/engineering.xml:324
 #, kde-format
@@ -2722,12 +2722,12 @@ msgstr "BIN2OCT(hodnota)"
 #: functions/engineering.xml:326
 #, kde-format
 msgid "BIN2OCT(\"1010\") returns \"12\" "
-msgstr "BIN2OCT(\"1010\") vrací \"12\""
+msgstr "BIN2OCT(\"1010\") vrací \"12\" "
 
 #: functions/engineering.xml:327
 #, kde-format
 msgid "BIN2OCT(\"11111\") returns \"37\" "
-msgstr "BIN2OCT(11111) vrací 37"
+msgstr "BIN2OCT(11111) vrací 37 "
 
 #: functions/engineering.xml:343
 #, kde-format
@@ -2770,12 +2770,12 @@ msgstr "HEX2DEC(hodnota)"
 #: functions/engineering.xml:360
 #, kde-format
 msgid "HEX2DEC(\"a\") returns 10 "
-msgstr "HEX2DEC(a) vrací 10"
+msgstr "HEX2DEC(a) vrací 10 "
 
 #: functions/engineering.xml:361
 #, kde-format
 msgid "HEX2DEC(\"37\") returns 55 "
-msgstr "HEX2DEC(37) vrací 55"
+msgstr "HEX2DEC(37) vrací 55 "
 
 #: functions/engineering.xml:373
 #, kde-format
@@ -2794,12 +2794,12 @@ msgstr "HEX2OCT(hodnota)"
 #: functions/engineering.xml:375
 #, kde-format
 msgid "HEX2OCT(\"a\") returns \"12\" "
-msgstr "HEX2OCT(\"a\") vrací \"12\""
+msgstr "HEX2OCT(\"a\") vrací \"12\" "
 
 #: functions/engineering.xml:376
 #, kde-format
 msgid "HEX2OCT(\"37\") returns \"67\" "
-msgstr "HEX2OCT(37) vrací \"67\""
+msgstr "HEX2OCT(37) vrací \"67\" "
 
 #: functions/engineering.xml:388
 #, kde-format
@@ -2901,7 +2901,7 @@ msgstr "IMAGINARY(\"1,2+3,4i\") vrací 3,4"
 #: functions/engineering.xml:425
 #, kde-format
 msgid "IMAGINARY(\"1.2\") returns 0 "
-msgstr "IMAGINARY(\"1,2\") vrací 0"
+msgstr "IMAGINARY(\"1,2\") vrací 0 "
 
 #: functions/engineering.xml:437
 #, kde-format
@@ -2921,7 +2921,7 @@ msgstr "IMREAL(\"1,2+3,4i\") vrací 1,2"
 #: functions/engineering.xml:440
 #, kde-format
 msgid "IMREAL(\"1.2i\") returns 0 "
-msgstr "IMREAL(\"1,2i\") vrací 0"
+msgstr "IMREAL(\"1,2i\") vrací 0 "
 
 #: functions/engineering.xml:452
 #, kde-format
@@ -2941,7 +2941,7 @@ msgstr "IMCOS(\"1+i\") vrací \"0,83373-0,988898i\""
 #: functions/engineering.xml:455
 #, kde-format
 msgid "IMCOS(\"12i\") returns 81 377.4 "
-msgstr "IMCOS(\"12i\") vrací 81 377,4"
+msgstr "IMCOS(\"12i\") vrací 81 377,4 "
 
 #: functions/engineering.xml:467
 #, kde-format
@@ -3056,7 +3056,7 @@ msgstr "IMSIN(\"1+i\") vrací \"1,29846+0,634964i\""
 #: functions/engineering.xml:555
 #, kde-format
 msgid "IMSIN(\"1.2\") returns -0.536573 "
-msgstr "IMSIN(\"1,2\") vrací -0,536573"
+msgstr "IMSIN(\"1,2\") vrací -0,536573 "
 
 #: functions/engineering.xml:567
 #, kde-format
@@ -3139,7 +3139,7 @@ msgstr "IMEXP(\"2-i\") vrací \"3,99232-6,21768i\""
 #: functions/engineering.xml:615
 #, kde-format
 msgid "IMEXP(\"12i\") returns \"0.843854-0.536573i\" "
-msgstr "IMEXP(\"12i\") vrací \"0,843854-0,536573i\""
+msgstr "IMEXP(\"12i\") vrací \"0,843854-0,536573i\" "
 
 #: functions/engineering.xml:627
 #, kde-format
@@ -3159,7 +3159,7 @@ msgstr "IMLN(\"3-i\") vrací \"1,15129-0,321751i\""
 #: functions/engineering.xml:630
 #, kde-format
 msgid "IMLN(\"12\") returns 2.48491 "
-msgstr "IMLN(\"12\") vrací 2,48491"
+msgstr "IMLN(\"12\") vrací 2,48491 "
 
 #: functions/engineering.xml:642
 #, kde-format
@@ -3211,7 +3211,7 @@ msgstr "IMSQRT(\"1+i\") vrací \"1,09868+0,45509i\""
 #: functions/engineering.xml:673
 #, kde-format
 msgid "IMSQRT(\"1.2i\") returns \"0.774597+0.774597i\" "
-msgstr "IMSQRT(\"1,2i\") vrací \"0,774597+0,774597i\""
+msgstr "IMSQRT(\"1,2i\") vrací \"0,774597+0,774597i\" "
 
 #: functions/engineering.xml:685
 #, kde-format
@@ -3236,7 +3236,7 @@ msgstr "IMPOWER(\"4-i\";2) vrací \"15-8i\""
 #: functions/engineering.xml:692
 #, kde-format
 msgid "IMPOWER(\"1.2\";2) returns 1.44 "
-msgstr "IMPOWER(\"1,2\";2) vrací 1,44"
+msgstr "IMPOWER(\"1,2\";2) vrací 1,44 "
 
 #: functions/engineering.xml:721
 #, kde-format
@@ -3373,7 +3373,7 @@ msgstr "IMARGUMENT(\"1,2+5i\") vrací 0,6072"
 #: functions/engineering.xml:849
 #, kde-format
 msgid "IMARGUMENT(\"-i\") returns -1.57079633 "
-msgstr "IMARGUMENT(\"-i\") vrací -1,57079633"
+msgstr "IMARGUMENT(\"-i\") vrací -1,57079633 "
 
 #: functions/engineering.xml:850
 #, kde-format
@@ -5006,13 +5006,13 @@ msgstr "ZERO_COUPON(1000;0,1;20) se rovná 148,64"
 #: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
-msgstr "ruční"
+msgstr "Ručně"
 
 #: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
-msgstr "automatický"
+msgstr "Automaticky"
 
 #: functions/information.xml:5
 #, kde-format
@@ -5252,7 +5252,7 @@ msgid ""
 "The ISDATE() function returns True if the parameter is a date value. "
 "Otherwise it returns False"
 msgstr ""
-"Funkce ISDATE() vrací True, je-li parametr platné datum, jinak vrací False."
+"Funkce ISDATE() vrací True, je-li parametr platné datum, jinak vrací False"
 
 #: functions/information.xml:150
 #, kde-format
@@ -5275,8 +5275,7 @@ msgid ""
 "The ISREF() function returns True if the parameter refers to a reference. "
 "Otherwise it returns False"
 msgstr ""
-"Funkce ISREF() vrací True, pokud parametr ukazuje na odkaz. Jinak vrací "
-"False."
+"Funkce ISREF() vrací True, pokud parametr ukazuje na odkaz. Jinak vrací False"
 
 #: functions/information.xml:165
 #, kde-format
@@ -5298,7 +5297,7 @@ msgstr "ISREF(\"ahoj\") vrací false"
 msgid ""
 "The ISTEXT() function returns True if the parameter is a string. Otherwise "
 "it returns False"
-msgstr "Funkce ISTEXT() vrací True, je-li parametr řetězec, jinak vrací False."
+msgstr "Funkce ISTEXT() vrací True, je-li parametr řetězec, jinak vrací False"
 
 #: functions/information.xml:180
 #, kde-format
@@ -5346,7 +5345,7 @@ msgid ""
 "Otherwise it returns False. It's the same as ISNONTEXT."
 msgstr ""
 "Funkce ISNOTTEXT() vrací True, není-li parametr řetězec, jinak vrací False. "
-"Je to to samé jako ISNONTEXT"
+"Je to to samé jako ISNONTEXT."
 
 #: functions/information.xml:211
 #, kde-format
@@ -5870,8 +5869,7 @@ msgid ""
 "The LCM() function returns the least common multiple for two or more float "
 "values"
 msgstr ""
-"Funkce LCM() vrací nejmenší společný násobek dvou nebo více desetinných "
-"čísel."
+"Funkce LCM() vrací nejmenší společný násobek dvou nebo více desetinných čísel"
 
 #: functions/math.xml:80
 #, kde-format
@@ -6313,7 +6311,7 @@ msgstr "FACT(0) vrací 1"
 msgid ""
 "The FACTDOUBLE() function calculates the double factorial of a number, i.e. "
 "x!!."
-msgstr "Funkce FACTDOUBLE() spočítá dvojitý faktoriál parametru, tj. x!!"
+msgstr "Funkce FACTDOUBLE() spočítá dvojitý faktoriál parametru, tj. x!!."
 
 #: functions/math.xml:384
 #, kde-format
@@ -6639,7 +6637,7 @@ msgstr "MINA(12,5;2) vrací 2"
 #: functions/math.xml:608
 #, kde-format
 msgid "MINA(0.4; 2; FALSE; 0.7) returns 0."
-msgstr "MINA(0,4; 2; FALSE; 0,7) vrací 0"
+msgstr "MINA(0,4; 2; FALSE; 0,7) vrací 0."
 
 #: functions/math.xml:625
 #, kde-format
@@ -7066,7 +7064,7 @@ msgstr "RAND()"
 #: functions/math.xml:950
 #, kde-format
 msgid "RAND() equals for example 0.78309922..."
-msgstr "RAND() se může například rovnat 0,53151156"
+msgstr "RAND() se může například rovnat 0,53151156..."
 
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
@@ -9830,7 +9828,7 @@ msgstr ""
 #: functions/statistical.xml:1448
 #, kde-format
 msgid "dataSet"
-msgstr "Soubor dat"
+msgstr "soubor dat"
 
 #: functions/statistical.xml:1452
 #, kde-format
@@ -11026,7 +11024,7 @@ msgstr "TOGGLE(\"aHoj\") vrací \"AhOJ\""
 #, kde-format
 msgid ""
 "The CLEAN() function removes every non-printable character from the string"
-msgstr "Funkce CLEAN() odstraní z řetězce netisknutelné znaky."
+msgstr "Funkce CLEAN() odstraní z řetězce netisknutelné znaky"
 
 #: functions/text.xml:625
 #, kde-format
@@ -11135,7 +11133,7 @@ msgstr "CODE(\"KDE\") vrací 75"
 msgid "Converts text string that represents a value to the real value.  "
 msgstr ""
 "Převádí textový řetězec, který představuje nějakou číselnou hodnotu, na jeho "
-"reálnou hodnotu."
+"reálnou hodnotu. "
 
 #: functions/text.xml:718
 #, kde-format
@@ -12275,7 +12273,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:19
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
-msgstr "Pohyb kurzoru po stisku klávesy Enter."
+msgstr "Pohyb kurzoru po stisku klávesy Enter:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
 #: part/dialogs/InterfaceOptionsWidget.ui:29
@@ -12559,7 +12557,7 @@ msgstr "Dolů, První sloupec"
 #: part/dialogs/PreferenceDialog.cpp:432 part/View.cpp:389
 #, kde-format
 msgid "None"
-msgstr "žádný"
+msgstr "Žádný"
 
 #: part/dialogs/PreferenceDialog.cpp:301 part/View.cpp:395
 #, kde-format
@@ -12647,12 +12645,12 @@ msgstr ""
 #: part/dialogs/PreferenceDialog.cpp:434
 #, kde-format
 msgid "Popup"
-msgstr "rozbalení"
+msgstr "Rozbalení"
 
 #: part/dialogs/PreferenceDialog.cpp:436
 #, kde-format
 msgid "Semi-Automatic"
-msgstr "poloautomatický"
+msgstr "Poloautomatický"
 
 #: part/dialogs/SheetPropertiesDialog.cpp:17
 #, kde-format
@@ -12857,7 +12855,7 @@ msgstr "Aktivní list"
 #: part/dialogs/SheetSelectWidget.ui:57
 #, kde-format
 msgid "Selected Sheets:"
-msgstr "Vybrané listy"
+msgstr "Vybrané listy:"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:67
@@ -13422,7 +13420,7 @@ msgstr "Toto jméno je již používáno."
 #: part/View.cpp:1936
 #, kde-format
 msgid "Sum: "
-msgstr " Součet: "
+msgstr "Součet: "
 
 #: part/View.cpp:1940
 #, kde-format
@@ -13447,7 +13445,7 @@ msgstr "Počet: "
 #: part/View.cpp:1956
 #, kde-format
 msgid "CountA: "
-msgstr "PočetA"
+msgstr "PočetA: "
 
 #: part/View.cpp:1963
 #, kde-format

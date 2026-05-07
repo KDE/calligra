@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-06 00:59+0300\n"
+"PO-Revision-Date: 2026-05-06 22:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 25.11.70\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -187,7 +187,7 @@ msgstr "Tamsayı (1, 23, 874 gibi)"
 #: engine/FunctionDescription.cpp:41
 #, kde-format
 msgid "A truth value (TRUE or FALSE)"
-msgstr "Bir doğruluk değeri (TRUE veya FALSE)"
+msgstr "Bir doğruluk değeri (true veya false)"
 
 #: engine/FunctionDescription.cpp:43
 #, kde-format
@@ -202,7 +202,7 @@ msgstr "Herhangi bir türde değer"
 #: engine/FunctionDescription.cpp:47
 #, kde-format
 msgid "A string representing a date (like \"2/22/2012\")"
-msgstr "Tarihi gösteren bir dizi (“2/2/2012\" gibi)"
+msgstr "Tarihi gösteren bir dizi (“2/2/2012” gibi)"
 
 #: engine/FunctionDescription.cpp:52
 #, kde-format
@@ -217,7 +217,7 @@ msgstr "Tamsayı erimi (1, 132, 2344 gibi)"
 #: engine/FunctionDescription.cpp:56
 #, kde-format
 msgid "A range of truth values (TRUE or FALSE)"
-msgstr "Doğruluk değeri erimi (TRUE veya FALSE)"
+msgstr "Doğruluk değeri erimi (true veya false)"
 
 #: engine/FunctionDescription.cpp:58
 #, kde-format
@@ -233,7 +233,7 @@ msgstr "Herhangi bir türde değerler erimi"
 #, kde-format
 msgid ""
 "A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")"
-msgstr "Tarih erimini gösteren bir dizi (“2/2/2012\"–“5/2/2012\" gibi)"
+msgstr "Tarih erimini gösteren bir dizi (“2/2/2012”–“5/2/2012” gibi)"
 
 #: engine/FunctionDescription.cpp:165
 #, kde-format
@@ -1812,7 +1812,7 @@ msgstr "HOURS(\"10:5:2\"), 10 döndürür"
 #: functions/datetime.xml:405
 #, kde-format
 msgid "The function ISLEAPYEAR() returns True if the given year is leap."
-msgstr "ARTIKYILMI() işlevi, verilen yıl artık yıl olduğunda True döndürür."
+msgstr "ARTIKYILMI() işlevi, verilen yıl artık yıl olduğunda “doğru” döndürür."
 
 #: functions/datetime.xml:406
 #, kde-format
@@ -1822,7 +1822,7 @@ msgstr "ISLEAPYEAR(yıl)"
 #: functions/datetime.xml:407
 #, kde-format
 msgid "ISLEAPYEAR(2000) returns True"
-msgstr "ISLEAPYEAR(2000), True döndürür"
+msgstr "ISLEAPYEAR(2000), “doğru” döndürür"
 
 #: functions/datetime.xml:423
 #, kde-format
@@ -5350,7 +5350,7 @@ msgid ""
 "that date. Anything else will cause the function to return 0."
 msgstr ""
 "N() işlevi, bir değeri bir sayıya dönüştürür. Eğer verilen değer bir sayıya "
-"karşılık geliyorsa bu işlev o sayıyı döndürür. Eğer değer “True” ise bu "
+"karşılık geliyorsa bu işlev o sayıyı döndürür. Eğer değer “true” ise bu "
 "işlev 1 döndürür. Eğer bu değer bir tarih ise, bu tarihin seri numarası "
 "gönderilir. Bunun dışındaki değerler karşılığında 0 gönderilecektir."
 
@@ -5717,9 +5717,9 @@ msgid ""
 "A. Otherwise, it returns False. Use ISERROR() if you want to include the N/A "
 "error as well."
 msgstr ""
-"ISERR() işlevi, parametresi N/A hatici bir hata ise True, aksi halde False "
-"döndürür. Eğer N/A hatasını da dahil etmek istiyorsanız ISERROR() işlevini "
-"kullanınız."
+"ISERR() işlevi, parametresi #YOK dışında bir hata ise True, aksi halde False "
+"döndürür. Eğer #YOK hatasını da içermek istiyorsanız ISERROR() işlevini "
+"kullanın."
 
 #: functions/information.xml:270
 #, kde-format
@@ -5746,7 +5746,7 @@ msgid ""
 "The ISNA() function returns True if its parameter is a N/A error. In all "
 "other cases, it returns False."
 msgstr ""
-"ISNA() işlevi, verilen değer N/A hatası ise True döndürür. Diğer durumlarda "
+"ISNA() işlevi, verilen değer #YOK hatası ise True döndürür. Diğer durumlarda "
 "False döndürür."
 
 #: functions/information.xml:300
@@ -5757,7 +5757,7 @@ msgstr "ISNA(x)"
 #: functions/information.xml:310
 #, kde-format
 msgid "The NA() function returns the constant error value, N/A."
-msgstr "NA() işlevi, sabit hata değeri olan N/A döndürür."
+msgstr "NA() işlevi, sabit hata değeri olan #YOK döndürür."
 
 #: functions/information.xml:311
 #, kde-format
@@ -5784,7 +5784,7 @@ msgstr "TYPE(x)"
 #: functions/information.xml:328
 #, kde-format
 msgid "TYPE(A1) returns 2, if A1 contains \"Text\""
-msgstr "TYPE(A1), A1 hücresi \"Metin\" içeriyorsa 2 döndürür"
+msgstr "TYPE(A1), A1 hücresi “Metin” içeriyorsa 2 döndürür"
 
 #: functions/information.xml:329
 #, kde-format
@@ -5949,12 +5949,12 @@ msgstr "NOR(değer; değer; …)"
 #: functions/logic.xml:146
 #, kde-format
 msgid "NOR(true;false;false) returns False"
-msgstr "NOR(true; false; false), False döndürür"
+msgstr "NOR(true; false; false), “doğru” döndürür"
 
 #: functions/logic.xml:147
 #, kde-format
 msgid "NOR(false;false) returns True"
-msgstr "NOR(false; false), True döndürür"
+msgstr "NOR(false; false), “doğru” döndürür"
 
 #: functions/logic.xml:175
 #, kde-format
@@ -5962,8 +5962,8 @@ msgid ""
 "The XOR() function returns False if the number of True values is even. "
 "Otherwise it returns True. It returns an error if any argument is an error."
 msgstr ""
-"XOR() işlevi, True değerlerinin sayısı tek ise False döndürür. Diğer "
-"durumlarda True döndürür. Eğer herhangi bir değer hata ise hata döndürür."
+"XOR() işlevi, “doğru” değerlerinin sayısı tek ise False döndürür. Diğer "
+"durumlarda “doğru” döndürür. Eğer herhangi bir değer hata ise hata döndürür."
 
 #: functions/logic.xml:176
 #, kde-format
@@ -5973,12 +5973,12 @@ msgstr "XOR(değer; değer; …)"
 #: functions/logic.xml:177
 #, kde-format
 msgid "XOR(false;false;false) returns True"
-msgstr "XOR(false; false; false), True döndürür"
+msgstr "XOR(false; false; false), “doğru” döndürür"
 
 #: functions/logic.xml:178
 #, kde-format
 msgid "XOR(true;false) returns True"
-msgstr "XOR(true; false), True döndürür"
+msgstr "XOR(true; false), “doğru” döndürür"
 
 #: functions/logic.xml:186
 #, kde-format
@@ -5991,7 +5991,7 @@ msgid ""
 "The NOT() function returns True if the value is False and returns False if "
 "the value is True. It returns an error if the input in an error."
 msgstr ""
-"NOT() işlevi, verilen değer True ise False ve False ise True değerini "
+"NOT() işlevi, verilen değer “doğru” ise False ve False ise “doğru” değerini "
 "döndürür. Eğer girdi bir hata içeriyor ise hata döndürür."
 
 #: functions/logic.xml:191
@@ -6002,7 +6002,7 @@ msgstr "NOT(bool)"
 #: functions/logic.xml:192
 #, kde-format
 msgid "NOT(false) returns True"
-msgstr "NOT(false), True döndürür"
+msgstr "NOT(false), “doğru” döndürür"
 
 #: functions/logic.xml:193
 #, kde-format
@@ -6091,7 +6091,7 @@ msgid ""
 "IFNA(A1;A2) returns the content of A1 if that content is not an #N/A error-"
 "value else the content of A2 is returned."
 msgstr ""
-"IFNA(A1; A2), A1 hücresinin içeriği bir #N/A hata değeri değilse A1 "
+"IFNA(A1; A2), A1 hücresinin içeriği bir #YOK hata değeri değilse A1 "
 "hücresinin içeriğini, aksi halde A2 hücresinin içeriğini döndürür."
 
 #: functions/math.xml:5
@@ -9989,8 +9989,8 @@ msgid ""
 "If \"arrayY\" and \"arrayX\" are empty or have a different number of data "
 "points, then #N/A is returned."
 msgstr ""
-"Eğer \"dizilişY\" ve \"dizilişX\" boş veya farklı sayıda veri noktasına "
-"sahipse #N/A değeri döndürülür."
+"Eğer “dizilişY” ve “dizilişX” boş veya farklı sayıda veri noktasına sahipse "
+"#YOK değeri döndürülür."
 
 #: functions/statistical.xml:1063
 #, kde-format
@@ -10147,7 +10147,7 @@ msgstr "STDEVA(6; 7; A1; 8) eşittir 1, A1 boş ise"
 #: functions/statistical.xml:1238
 #, kde-format
 msgid "STDEVA(6; 7; A1; 8) equals 3.109, if A1 is TRUE"
-msgstr "STDEVA(6; 7; A1; 8) eşittir 3,109; A1 TRUE ise"
+msgstr "STDEVA(6; 7; A1; 8) eşittir 3,109; A1 “doğru” ise"
 
 #: functions/statistical.xml:1268
 #, kde-format
@@ -10174,8 +10174,8 @@ msgid ""
 "FALSE, it is counted as 0. If the boolean value is TRUE it is counted as 1."
 msgstr ""
 "STDEVPA() işlevi, bütün bir nüfusa bağlı standart sapmayı döndürür. Eğer bir "
-"kaynak hücre karakter dizisi ya fa FALSE mantıksal değerini içeriyor ise 0 "
-"olarak sayılır. Eğer mantıksal değer TRUE ise 1 olarak sayılır."
+"kaynak hücre karakter dizisi FALSE mantıksal değerini içeriyor ise 0 olarak "
+"sayılır. Eğer mantıksal değer TRUE ise 1 olarak sayılır."
 
 #: functions/statistical.xml:1300
 #, kde-format
@@ -10190,7 +10190,7 @@ msgstr "STDEVPA(6; 7; A1; 8) eşittir 0,816497…, A1 boş ise"
 #: functions/statistical.xml:1302
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE"
-msgstr "STDEVPA(6; 7; A1; 8) eşittir 2,69…, A1 TRUE ise"
+msgstr "STDEVPA(6; 7; A1; 8) eşittir 2,69…, A1 “doğru” ise"
 
 #: functions/statistical.xml:1303
 #, kde-format
@@ -10372,8 +10372,9 @@ msgid ""
 msgstr ""
 "Regresyon doğrusunun orijinden (X=0, Y=0) geçmesini sağlamak için 4. "
 "parametre olan ofsete_izin_ver’i FALSE veya 0 olarak ayarlayabilirsiniz. Bu "
-"parametreyi TRUE veya 1 (öntanımlı) olarak ayarlamak, en iyi uyum doğrusunun "
-"dikey ekseni sıfır olmayan bir Y değerinde kesmesine olanak tanır. "
+"parametreyi “true” veya 1 (öntanımlı) olarak ayarlamak, en iyi uyum "
+"doğrusunun dikey ekseni sıfır olmayan bir Y değerinde kesmesine olanak "
+"tanır. "
 
 #: functions/statistical.xml:1434
 #, kde-format
@@ -10405,8 +10406,8 @@ msgid ""
 "TREND(known Y-range; [known X-range; [new X-range; [allowOffset=TRUE/"
 "FALSE]]])"
 msgstr ""
-"TREND(bilinen_y_erimi; [bilinen_x_erimi; [yeni_x_erimi; [ofseteİzinVer=TRUE/"
-"FALSE]]])"
+"TREND(bilinen_y_erimi; [bilinen_x_erimi; [yeni_x_erimi; [ofseteİzinVer=true/"
+"false]]])"
 
 #: functions/statistical.xml:1448
 #, kde-format
@@ -10592,7 +10593,7 @@ msgstr ""
 "VARA() işlevi, sayılar, metin ve mantıksal değerleri de hesaplamaya dahil "
 "edecek bir örneği temel alarak varyansı hesaplar. Eğer hücre metin "
 "içeriyorsa veya argüman FALSE ise sıfır (0) değeri olarak sayılır. Eğer "
-"argüman TRUE ise, bir (1) olarak sayılır. Boş hücreler hesaba dahil edilmez."
+"argüman “true” ise bir (1) olarak sayılır. Boş hücreler hesaba dahil edilmez."
 
 #: functions/statistical.xml:1555
 #, kde-format
@@ -10677,8 +10678,8 @@ msgid ""
 "value that evaluate to TRUE are counted as 1. Empty cells are not counted."
 msgstr ""
 "VARPA() işlevi, bütün bir nüfusu temel alarak varyansı hesaplar. FALSE olan "
-"metin ve mantıksal değerler 0 olarak hesaplanır, TRUE olan mantıksal değer 1 "
-"olarak hesaplanır. Boş hücreler hesaba katılmaz."
+"metin ve mantıksal değerler 0 olarak hesaplanır, “true” olan mantıksal değer "
+"1 olarak hesaplanır. Boş hücreler hesaba katılmaz."
 
 #: functions/statistical.xml:1661
 #, kde-format
@@ -10764,9 +10765,9 @@ msgid ""
 "using STDEV."
 msgstr ""
 "Boş hipotezi sınar; örnek, ortalama, ortalama ve standart sapma, sigma "
-"(standart Öteleme) ile normal dağılmış rasgele değişkenin gerçek bir "
+"(standart sapma) ile normal dağılmış rastgele değişkenin gerçek bir "
 "örneğidir. Bir dönüş değeri 1, boş hipotezin reddedildiğini, yani örnekteki "
-"normal dağılımın rasgele bir örneği olmadığını gösterir. Eğer sigma "
+"normal dağılımın rastgele bir örneği olmadığını gösterir. Eğer sigma "
 "atlanırsa, örnekten STDEV kullanılarak tahmin edilir."
 
 #: functions/statistical.xml:1719
@@ -10918,8 +10919,8 @@ msgstr ""
 "FIXED() işlevi, bir sayıyı, sıfırdan sonraki basamaklarını belli bir sayıya "
 "yuvarlayarak sonucu metin olarak döndürür. Eğer basamak değeri eksi ise "
 "noktanın solundaki bölümü yuvarlanır. Eğer basamak değeri girilmezse bu "
-"değer 2 olarak alınır. Eğer seçmeli değişken, virgülsüz, True olarak "
-"girilise binlik ayraçları görüntülenmeyecektir."
+"değer 2 olarak alınır. Eğer seçmeli değişken, virgülsüz, “true” olarak "
+"girilirse binlik ayraçları görüntülenmeyecektir."
 
 #: functions/text.xml:43
 #, kde-format
@@ -10984,9 +10985,7 @@ msgstr "SUBSTITUTE(metin; eski_metin; yeni_metin; bir_seferlik)"
 #: functions/text.xml:72
 #, kde-format
 msgid "SUBSTITUTE(\"Cost Data\";\"Cost\";\"Sales\") returns \"Sales Data\""
-msgstr ""
-"SUBSTITUTE(\"Cost Data\"; \"Cost\"; \"Sales\"), \"Sales Data\" değerini "
-"döndürür"
+msgstr "SUBSTITUTE(\"Cost Data\"; \"Cost\"; \"Sales\"), “Sales Data” döndürür"
 
 #: functions/text.xml:73
 #, kde-format
@@ -11122,7 +11121,7 @@ msgstr "T(\"Calligra\"), “Calligra” döndürür"
 #: functions/text.xml:147
 #, kde-format
 msgid "T(1.2) returns \"\" (empty text)"
-msgstr "T(1,2), \"\" (boş metin) döndürür"
+msgstr "T(1,2), “” (boş metin) döndürür"
 
 #: functions/text.xml:159
 #, kde-format
@@ -11182,7 +11181,7 @@ msgstr "Karşılaştırılacak dizi"
 #: functions/text.xml:192
 #, kde-format
 msgid "Compare case-sensitive (true/false)"
-msgstr "Büyük/küçük harfe duyarlılık (true/false)"
+msgstr "BÜYÜK/küçük harfe duyarlılık (true/false)"
 
 #: functions/text.xml:196
 #, kde-format
@@ -11196,7 +11195,7 @@ msgstr ""
 #: functions/text.xml:197
 #, kde-format
 msgid "COMPARE(string1; string2; true|false)"
-msgstr "COMPARE(dizi1;dizi2;true|false)"
+msgstr "COMPARE(dizi1; dizi2; true|false)"
 
 #: functions/text.xml:198
 #, kde-format
@@ -11219,8 +11218,8 @@ msgid ""
 "The EXACT() function returns True if these two strings are equal. Otherwise, "
 "it returns False."
 msgstr ""
-"EXACT() işlevi, verilen iki değer de eşitse True döndürür. Diğer durumlarda "
-"False döndürür."
+"EXACT() işlevi, verilen iki değer de eşitse “doğru” döndürür. Diğer "
+"durumlarda False döndürür."
 
 #: functions/text.xml:218
 #, kde-format
@@ -11230,7 +11229,7 @@ msgstr "EXACT(dizi1; dizi2)"
 #: functions/text.xml:219
 #, kde-format
 msgid "EXACT(\"Calligra\";\"Calligra\") returns True"
-msgstr "EXACT(\"Calligra\"; \"Calligra\"), True döndürür"
+msgstr "EXACT(\"Calligra\"; \"Calligra\"), “doğru” döndürür"
 
 #: functions/text.xml:220
 #, kde-format
@@ -11545,7 +11544,7 @@ msgstr "CONCATENATE(değer; değer; …)"
 msgid ""
 "CONCATENATE(\"Sheets\";\"Calligra\";\"KDE\") returns \"SheetsCalligraKDE\""
 msgstr ""
-"CONCATENATE(\"Tablolar\";\"Calligra\";\"KDE\"), \"TablolarCalligraKDE\" "
+"CONCATENATE(\"Tablolar\"; \"Calligra\"; \"KDE\"), “TablolarCalligraKDE” "
 "döndürür"
 
 #: functions/text.xml:481 functions/text.xml:526
@@ -11571,7 +11570,7 @@ msgstr "RIGHT(metin;uzunluk)"
 #: functions/text.xml:487
 #, kde-format
 msgid "RIGHT(\"hello\";2) returns \"lo\""
-msgstr "RIGHT(\"merhaba\"; 2), \"ba\"  döndürür"
+msgstr "RIGHT(\"merhaba\"; 2), “ba”  döndürür"
 
 #: functions/text.xml:488
 #, kde-format
@@ -11681,7 +11680,7 @@ msgstr "REPT(\"KSpread\";3), “KSpreadKSpreadKSpread” döndürür"
 #: functions/text.xml:578
 #, kde-format
 msgid "REPT(\"KSpread\";0) returns \"\""
-msgstr "REPT(\"KSpread\";0), “” (boş) döndürür"
+msgstr "REPT(\"KSpread\";0), “” (boş metin) döndürür"
 
 #: functions/text.xml:590
 #, kde-format
@@ -12430,7 +12429,7 @@ msgstr "RADIANS(90) eşittir 1,5707"
 #: functions/trig.xml:272
 #, kde-format
 msgid "The PI() function returns the value of PI."
-msgstr "PI() işlevi, PI değerini döndürür."
+msgstr "PI() işlevi, Pİ değerini döndürür."
 
 #: functions/trig.xml:273
 #, kde-format
