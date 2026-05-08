@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-05-06 19:13+0200\n"
+"PO-Revision-Date: 2026-05-07 10:49+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2472,7 +2472,7 @@ msgstr ""
 #: pageapp/KoPAView.cpp:659
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
-msgstr ""
+msgstr "Změnit rozložení stránky"
 
 #. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
 #: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
@@ -2504,22 +2504,22 @@ msgstr "Návrh snímku"
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, kde-format
 msgid "Use background of master page"
-msgstr ""
+msgstr "Použít pozadí hlavní stránky"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:40
 #, kde-format
 msgid "Use background of master slide"
-msgstr ""
+msgstr "Použít pozadí hlavního snímku"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, kde-format
 msgid "Display shapes of master page"
-msgstr ""
+msgstr "Zobrazit tvary hlavní stránky"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:42
 #, kde-format
 msgid "Display shapes of master slide"
-msgstr ""
+msgstr "Zobrazit tvary hlavního snímku"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 msgctxt "(qtundo-format)"
@@ -2596,13 +2596,13 @@ msgstr "Alfa"
 #: pigment/colorspaces/KoAlphaColorSpace.h:188
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr ""
+msgstr "Nedefinovaná operace v barevném kanálu alfa"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:26
 #: pigment/colorspaces/KoLabColorSpace.h:55
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "L*a*b* (16-bitové celé číslo na kanál, nespravované)"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:28
 #: pigment/compositeops/KoCompositeOps.h:207
@@ -2627,13 +2627,13 @@ msgstr "b*"
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:47
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "RGB (16-bitové celé číslo na kanál, nespravované)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:27
 #: pigment/colorspaces/KoRgbU8ColorSpace.h:47
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr ""
+msgstr "RGB (8-bitové celé číslo na kanál, nespravované)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:29
 #, kde-format
@@ -2654,7 +2654,7 @@ msgstr "Červená"
 #: pigment/colorspaces/KoSimpleColorSpace.h:70
 #, kde-format
 msgid "Undefined operation in the %1 space"
-msgstr ""
+msgstr "Nedefinovaná operace v kanálu %1"
 
 #: pigment/colorspaces/KoSimpleColorSpace.h:91
 #: pigment/colorspaces/KoSimpleColorSpace.h:97
@@ -2669,19 +2669,19 @@ msgstr ""
 #: pigment/colorspaces/KoSimpleColorSpace.h:144
 #, kde-format
 msgid "Undefined operation in the %1 color space"
-msgstr ""
+msgstr "Nedefinovaná operace v barevném kanálu %1"
 
 #: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:56
 #, kde-format
 msgid "Simple Color Conversion Engine"
-msgstr ""
+msgstr "Jednoduchý modul pro převod barev"
 
 #: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:189
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:233
 #, kde-format
 msgid "Alpha darken"
-msgstr ""
+msgstr "Ztmavit alfa"
 
 #: pigment/compositeops/KoCompositeOpBehind.h:26
 #: pigment/KoCompositeOpRegistry.cpp:60
@@ -2725,19 +2725,19 @@ msgstr "Přesah"
 #: pigment/KoCompositeOpRegistry.cpp:66
 #, kde-format
 msgid "Grain Merge"
-msgstr ""
+msgstr "Sloučení zrnitosti"
 
 #: pigment/compositeops/KoCompositeOps.h:111
 #: pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
 msgid "Grain Extract"
-msgstr ""
+msgstr "Extrakce zrnitosti"
 
 #: pigment/compositeops/KoCompositeOps.h:112
 #: pigment/KoCompositeOpRegistry.cpp:65
 #, kde-format
 msgid "Hard Mix"
-msgstr ""
+msgstr "Ostrý mix"
 
 #: pigment/compositeops/KoCompositeOps.h:113
 #: pigment/KoCompositeOpRegistry.cpp:70
@@ -2755,7 +2755,7 @@ msgstr "Paralelní"
 #: pigment/KoCompositeOpRegistry.cpp:69
 #, kde-format
 msgid "Allanon"
-msgstr ""
+msgstr "Allanon"
 
 #: pigment/compositeops/KoCompositeOps.h:117
 #: pigment/KoCompositeOpRegistry.cpp:44
@@ -2767,13 +2767,13 @@ msgstr "Obrazovka"
 #: pigment/KoCompositeOpRegistry.cpp:40
 #, kde-format
 msgid "Color Dodge"
-msgstr ""
+msgstr "Zesvětlení barvy"
 
 #: pigment/compositeops/KoCompositeOps.h:119
 #: pigment/KoCompositeOpRegistry.cpp:41
 #, kde-format
 msgid "Linear Dodge"
-msgstr ""
+msgstr "Lineární zesvětlení"
 
 #: pigment/compositeops/KoCompositeOps.h:120 pigment/KoCompositeOp.cpp:31
 #: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:42
@@ -2785,54 +2785,54 @@ msgstr "Zesvětlit"
 #: pigment/KoCompositeOpRegistry.cpp:47
 #, kde-format
 msgid "Hard Light"
-msgstr ""
+msgstr "Ostré zesvětlení"
 
 #: pigment/compositeops/KoCompositeOps.h:122
 #: pigment/KoCompositeOpRegistry.cpp:49
 #, kde-format
 msgid "Soft Light (SVG)"
-msgstr ""
+msgstr "Měkké zesvětlení (SVG)"
 
 #: pigment/compositeops/KoCompositeOps.h:123
 #: pigment/KoCompositeOpRegistry.cpp:48
 #, kde-format
 msgid "Soft Light (Photoshop)"
-msgstr ""
+msgstr "Měkké zesvětlení (Photoshop)"
 
 #: pigment/compositeops/KoCompositeOps.h:124
 #: pigment/KoCompositeOpRegistry.cpp:50
 #, kde-format
 msgid "Gamma Light"
-msgstr ""
+msgstr "Gama zesvětlení"
 
 #: pigment/compositeops/KoCompositeOps.h:125
 #: pigment/KoCompositeOpRegistry.cpp:46
 #, kde-format
 msgid "Vivid Light"
-msgstr ""
+msgstr "Zářivé zesvětlení"
 
 #: pigment/compositeops/KoCompositeOps.h:126
 #: pigment/KoCompositeOpRegistry.cpp:45
 #, kde-format
 msgid "Pin Light"
-msgstr ""
+msgstr "Bodové zesvětlení"
 
 #: pigment/compositeops/KoCompositeOps.h:127
 #: pigment/KoCompositeOpRegistry.cpp:43
 #, kde-format
 msgid "Linear Light"
-msgstr ""
+msgstr "Lineární zesvětlení"
 
 #: pigment/compositeops/KoCompositeOps.h:129
 #, kde-format
 msgid "Color Burn"
-msgstr ""
+msgstr "Vypálení barvy"
 
 #: pigment/compositeops/KoCompositeOps.h:130
 #: pigment/KoCompositeOpRegistry.cpp:35
 #, kde-format
 msgid "Linear Burn"
-msgstr ""
+msgstr "Lineární vypálení"
 
 #: pigment/compositeops/KoCompositeOps.h:131 pigment/KoCompositeOp.cpp:35
 #: pigment/KoCompositeOpRegistry.cpp:24 pigment/KoCompositeOpRegistry.cpp:36
@@ -2844,7 +2844,7 @@ msgstr "Ztmavit"
 #: pigment/KoCompositeOpRegistry.cpp:37
 #, kde-format
 msgid "Gamma Dark"
-msgstr ""
+msgstr "Gama ztmavení"
 
 #: pigment/compositeops/KoCompositeOps.h:134
 #: pigment/KoCompositeOpRegistry.cpp:28
@@ -2855,7 +2855,7 @@ msgstr "Sčítání"
 #: pigment/compositeops/KoCompositeOps.h:136
 #, kde-format
 msgid "Inversed-Subtract"
-msgstr ""
+msgstr "Obrácené odečtení"
 
 #: pigment/compositeops/KoCompositeOps.h:138
 #: pigment/KoCompositeOpRegistry.cpp:31
@@ -2879,42 +2879,42 @@ msgstr "Rozdíl"
 #: pigment/KoCompositeOpRegistry.cpp:56
 #, kde-format
 msgid "Exclusion"
-msgstr ""
+msgstr "Vyloučení"
 
 #: pigment/compositeops/KoCompositeOps.h:143
 #: pigment/KoCompositeOpRegistry.cpp:54
 #, kde-format
 msgid "Equivalence"
-msgstr ""
+msgstr "Rovnocennost"
 
 #: pigment/compositeops/KoCompositeOps.h:144
 #, kde-format
 msgid "Additive-Subtractive"
-msgstr ""
+msgstr "Sčítání a odečítání"
 
 #: pigment/compositeops/KoCompositeOps.h:175
 #: pigment/KoCompositeOpRegistry.cpp:75
 #, kde-format
 msgid "Copy Red"
-msgstr ""
+msgstr "Kopírovat červenou"
 
 #: pigment/compositeops/KoCompositeOps.h:176
 #: pigment/KoCompositeOpRegistry.cpp:76
 #, kde-format
 msgid "Copy Green"
-msgstr ""
+msgstr "Kopírovat zelenou"
 
 #: pigment/compositeops/KoCompositeOps.h:177
 #: pigment/KoCompositeOpRegistry.cpp:77
 #, kde-format
 msgid "Copy Blue"
-msgstr ""
+msgstr "Kopírovat modrou"
 
 #: pigment/compositeops/KoCompositeOps.h:178
 #: pigment/KoCompositeOpRegistry.cpp:79
 #, kde-format
 msgid "Tangent Normalmap"
-msgstr ""
+msgstr "Tangens normálové mapy"
 
 #: pigment/compositeops/KoCompositeOps.h:179
 #, kde-format
@@ -3123,7 +3123,7 @@ msgstr "Snížit hodnotu"
 #: pigment/KoBasicHistogramProducers.cpp:405
 #, kde-format
 msgid "Generic RGB Histogram"
-msgstr ""
+msgstr "Obecný RGB histogram"
 
 #: pigment/KoBasicHistogramProducers.cpp:344
 #, kde-format
@@ -3153,7 +3153,7 @@ msgstr "L*"
 #: pigment/KoBasicHistogramProducers.cpp:492
 #, kde-format
 msgid "Generic L*a*b* Histogram"
-msgstr ""
+msgstr "Obecný L*a*b* histogram"
 
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
@@ -3183,7 +3183,7 @@ msgstr "Odstíny šedé"
 #: pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
 msgid "Grayscale (without transparency)"
-msgstr ""
+msgstr "Odstíny šedé (bez průhlednosti)"
 
 #: pigment/KoColorModelStandardIds.cpp:18
 #, kde-format
@@ -3253,7 +3253,7 @@ msgstr "Mix"
 #: pigment/KoCompositeOpRegistry.cpp:32
 #, kde-format
 msgid "Inverse Subtract"
-msgstr ""
+msgstr "Obrácené odečtení"
 
 #: pigment/KoCompositeOpRegistry.cpp:34
 #, kde-format
@@ -3263,12 +3263,12 @@ msgstr "Vypálit"
 #: pigment/KoCompositeOpRegistry.cpp:55
 #, kde-format
 msgid "Additive Subtractive"
-msgstr ""
+msgstr "Sčítání a odečítání"
 
 #: pigment/KoCompositeOpRegistry.cpp:64
 #, kde-format
 msgid "Alpha Darken"
-msgstr ""
+msgstr "Ztmavit alfa"
 
 #: pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
@@ -3288,7 +3288,7 @@ msgstr "SVG přechod"
 #: rdf/InsertSemanticObjectReferenceAction.cpp:40
 #, kde-format
 msgid "Select the object you want to reference"
-msgstr ""
+msgstr "Vyberte objekt, na který chcete odkazovat"
 
 #: rdf/KoDocumentRdf.cpp:594
 #, kde-format
@@ -3298,7 +3298,7 @@ msgstr "Odkaz"
 #: rdf/KoDocumentRdfEditWidget.cpp:238
 #, kde-format
 msgid "Set For All Existing"
-msgstr ""
+msgstr "Nastavit pro všechny existující"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
@@ -3306,15 +3306,15 @@ msgctxt "statement is an Rdf related term"
 msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
 msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "<qt>Úpravy budou ztraceny.<p>Zbývá %1 neplatný příkaz.</qt>"
+msgstr[1] "<qt>Úpravy budou ztraceny.<p>Zbývají %1 neplatné příkazy.</qt>"
+msgstr[2] "<qt>Úpravy budou ztraceny.<p>Zbývá %1 neplatných příkazů.</qt>"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:303
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
-msgstr ""
+msgstr "Zrušit neplatné příkazy?"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:342
 #, kde-format
@@ -3325,7 +3325,7 @@ msgstr "Rdf"
 #: rdf/KoDocumentRdfEditWidget.ui:21
 #, kde-format
 msgid "Triples"
-msgstr ""
+msgstr "Trojice"
 
 #. i18n: ectx: property (text), widget (QPushButton, newStylesheet)
 #. i18n: ectx: property (text), widget (QPushButton, newTripleButton)
@@ -3373,7 +3373,7 @@ msgstr "Jmenný prostor"
 #: rdf/KoDocumentRdfEditWidget.ui:137
 #, kde-format
 msgid "Semantic"
-msgstr ""
+msgstr "Sémantický"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: rdf/KoDocumentRdfEditWidget.ui:156
@@ -3395,6 +3395,15 @@ msgid ""
 "            select ?s ?p ?o\n"
 "            where { ?s ?p ?o }"
 msgstr ""
+"\n"
+"            prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+"            prefix foaf: <http://xmlns.com/foaf/0.1/>\n"
+"            prefix pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/"
+"pkg#>\n"
+"            prefix geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n"
+"\n"
+"            select ?s ?p ?o\n"
+"            where { ?s ?p ?o }"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
 #: rdf/KoDocumentRdfEditWidget.ui:181
@@ -3417,6 +3426,10 @@ msgid ""
 "the stylesheet for all existing semantic objects to the new default "
 "stylesheet as well."
 msgstr ""
+"Nastavte výchozí stylový šablonu pro sémantické objekty v tomto dokumentu. "
+"Nové objekty RDF budou tuto stylovou šablonu používat automaticky. Pomocí "
+"těchto tlačítek můžete nastavit, aby se nová výchozí stylová šablona použila "
+"i na všechny stávající sémantické objekty."
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
 #, kde-format
