@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-05-07 10:49+0200\n"
+"PO-Revision-Date: 2026-05-08 19:32+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3451,12 +3451,12 @@ msgstr "Uživatel"
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:121
 #, kde-format
 msgid "Reapply Current"
-msgstr ""
+msgstr "Znovu použít aktuální nastavení"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:124
 #, kde-format
 msgid "Disassociate"
-msgstr ""
+msgstr "Odpojit"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:143
 #, kde-format
@@ -3467,13 +3467,13 @@ msgstr "Upravit %1"
 #: rdf/KoSemanticStylesheetsEditor.ui:17
 #, kde-format
 msgid "Stylesheet Definition"
-msgstr ""
+msgstr "Definice stylu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: rdf/KoSemanticStylesheetsEditor.ui:29
 #, kde-format
 msgid "Variables Available"
-msgstr ""
+msgstr "Dostupné proměnné"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: rdf/KoSemanticStylesheetsEditor.ui:62
@@ -3500,7 +3500,7 @@ msgstr "URI"
 #: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:29
 #, kde-format
 msgid "Literal"
-msgstr ""
+msgstr "Doslovný"
 
 #: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:30
 #, kde-format
@@ -3520,7 +3520,7 @@ msgstr "Předmět"
 #: rdf/KoSopranoTableModel.cpp:123
 #, kde-format
 msgid "Predicate"
-msgstr ""
+msgstr "Predikce"
 
 #: rdf/KoSopranoTableModel.cpp:125
 #, kde-format
@@ -3530,7 +3530,7 @@ msgstr "Objekt"
 #: rdf/KoSopranoTableModel.cpp:127
 #, kde-format
 msgid "Obj Type"
-msgstr ""
+msgstr "Typ objektu"
 
 #: rdf/KoSopranoTableModel.cpp:129
 #, kde-format
@@ -3540,7 +3540,7 @@ msgstr "Datový typ"
 #: rdf/KoSopranoTableModel.cpp:131
 #, kde-format
 msgid "Stored In"
-msgstr ""
+msgstr "Uloženo v"
 
 #: store/KoEncryptedStore.cpp:244
 #, kde-format
@@ -3548,6 +3548,8 @@ msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
+"Tento dokument obsahuje neznámý kontrolní součet. Po zadání hesla nemusí být "
+"ověřeno."
 
 #: store/KoEncryptedStore.cpp:245
 #, kde-format
@@ -3561,6 +3563,8 @@ msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
+"Tento dokument obsahuje neznámý způsob šifrování. Některé části mohou být "
+"nečitelné."
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
@@ -3575,6 +3579,8 @@ msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
+"Tento dokument obsahuje neúplné šifrovací údaje. Některé části mohou být "
+"nečitelné."
 
 #: store/KoEncryptedStore.cpp:349
 #, kde-format
@@ -3583,6 +3589,9 @@ msgid ""
 "document will remain unreadable. Please try and save the document again to "
 "prevent losing your work."
 msgstr ""
+"Zdá se, že soubor manifestu je poškozený. Nelze jej upravit a dokument "
+"zůstane nečitelný. Zkuste dokument uložit znovu, abyste nepřišli o svou "
+"práci."
 
 #: store/KoEncryptedStore.cpp:447
 #, kde-format
@@ -3590,11 +3599,13 @@ msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
 "Please try and save the document again to prevent losing your work."
 msgstr ""
+"Soubor manifestu nelze uložit. Dokument zůstane nečitelný. Zkuste dokument "
+"uložit znovu, abyste nepřišli o svou práci."
 
 #: store/KoEncryptedStore.cpp:569
 #, kde-format
 msgid "Please enter the password to open this file."
-msgstr ""
+msgstr "Zadejte prosím heslo pro otevření tohoto souboru."
 
 #: store/KoEncryptedStore.cpp:768
 #, kde-format
@@ -3709,7 +3720,7 @@ msgstr "Nový oddíl"
 #: text/commands/ParagraphFormattingCommand.cpp:82
 msgctxt "(qtundo-format)"
 msgid "Direct Paragraph Formatting"
-msgstr ""
+msgstr "Přímé formátování odstavců"
 
 #: text/commands/RenameSectionCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -3729,12 +3740,12 @@ msgstr "Upravit výšku řádku"
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Split sections startings"
-msgstr ""
+msgstr "Začátky rozdělených úseků"
 
 #: text/commands/SplitSectionsCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Split sections endings"
-msgstr ""
+msgstr "Konce rozdělených úseků"
 
 #: text/commands/TextPasteCommand.cpp:53
 msgctxt "(qtundo-format)"
@@ -3759,12 +3770,12 @@ msgstr "Odkaz na text"
 #: text/InsertTextReferenceAction.cpp:31
 #, kde-format
 msgid "Please create an index to reference first."
-msgstr ""
+msgstr "Nejprve prosím vytvořte index, na který chcete odkazovat."
 
 #: text/InsertTextReferenceAction.cpp:40
 #, kde-format
 msgid "Select the index you want to reference"
-msgstr ""
+msgstr "Vyberte index, na který chcete odkazovat"
 
 #: text/KoFindStrategy.cpp:55
 #, kde-format
@@ -3777,7 +3788,7 @@ msgstr[2] "Nalezeno %1 shod"
 #: text/KoFindStrategy.cpp:55
 #, kde-format
 msgid "Found no match"
-msgstr "Nenalezena shoda"
+msgstr "Nenalezena žádná shoda"
 
 #: text/KoReplaceStrategy.cpp:43
 #, kde-format
@@ -3786,6 +3797,9 @@ msgid ""
 "\n"
 "No text was replaced"
 msgstr ""
+"Nenalezena žádná shoda\n"
+"\n"
+"Nebyl nahrazen žádný text"
 
 #: text/KoReplaceStrategy.cpp:45
 #, kde-format
@@ -3885,12 +3899,12 @@ msgstr "Změnit formátování okraje"
 #: text/KoTextEditor.cpp:1197
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
-msgstr ""
+msgstr "Vložit tabulku obsahu"
 
 #: text/KoTextEditor.cpp:1236
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
-msgstr ""
+msgstr "Upravit tabulku obsahu"
 
 #: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
 #: text/KoTextEditor.cpp:1274
@@ -3987,7 +4001,7 @@ msgstr "Nastavit styl znaků"
 #: text/KoTextEditor_format.cpp:469
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
-msgstr ""
+msgstr "Nastavit styl odstavce"
 
 #: text/KoTextEditor_format.cpp:531
 msgctxt "(qtundo-format)"
@@ -4165,13 +4179,13 @@ msgstr "Data"
 #: widgets/KoCsvImportDialog.ui:64
 #, kde-format
 msgid "First row contains headers"
-msgstr ""
+msgstr "První řádek obsahuje záhlaví"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
 #: widgets/KoCsvImportDialog.ui:77
 #, kde-format
 msgid "First column contains headers"
-msgstr ""
+msgstr "První sloupec obsahuje záhlaví"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
 #: widgets/KoCsvImportDialog.ui:101
@@ -4497,6 +4511,8 @@ msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
+"<qt>Dešifrováním dokumentu dojde k odstranění jeho heslové ochrany."
+"<p>Opravdu chcete soubor dešifrovat?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:339
 #, kde-format
@@ -4539,6 +4555,9 @@ msgid ""
 "to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
+"<qt>Dokument je momentálně uložen jako %1. Aby bylo možné dokument "
+"zašifrovat, je třeba jej převést do formátu <b>OASIS OpenDocument</b>."
+"<p>Chcete soubor převést do formátu OASIS OpenDocument?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:378
 #, kde-format
@@ -4596,7 +4615,7 @@ msgstr "Uložit paletu"
 #: widgets/KoEditColorSetDialog.cpp:146
 #, kde-format
 msgid "Add Color To Palette"
-msgstr ""
+msgstr "Přidat barvu do palety"
 
 #: widgets/KoEditColorSetDialog.cpp:146
 #, kde-format
@@ -4606,7 +4625,7 @@ msgstr "Název barvy:"
 #: widgets/KoEditColorSetDialog.cpp:174
 #, kde-format
 msgid "Gimp Color Palette (*.gpl)"
-msgstr ""
+msgstr "Barevná paleta Gimp (*.gpl)"
 
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
@@ -4722,7 +4741,7 @@ msgstr "Konečná barva:"
 #: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
 msgid "Stop color."
-msgstr ""
+msgstr "Zastavit barvu."
 
 #: widgets/KoGradientEditWidget.cpp:185
 #, kde-format
@@ -4762,29 +4781,29 @@ msgstr "Rozvržení stránky"
 #: widgets/KoPageLayoutDialog.cpp:95
 #, kde-format
 msgid "Apply to document"
-msgstr ""
+msgstr "Použít na dokument"
 
 #: widgets/KoPageLayoutWidget.cpp:180
 #, kde-format
 msgid "Left Edge Margin:"
-msgstr ""
+msgstr "Odsazení od levého okraje:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
 #, kde-format
 msgid "Right Edge Margin:"
-msgstr ""
+msgstr "Odsazení od pravého okraje:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
 #, kde-format
 msgid "Binding Edge Margin:"
-msgstr ""
+msgstr "Odsazení okraje vazby:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
 #, kde-format
 msgid "Page Edge Margin:"
-msgstr ""
+msgstr "Odsazení okraje stránky:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -4805,7 +4824,7 @@ msgstr "Rozvržení stránky:"
 #: widgets/KoPageLayoutWidget.cpp:290
 #, kde-format
 msgid "Page spread"
-msgstr ""
+msgstr "Dvojstrana"
 
 #. i18n: ectx: property (text), widget (QLabel, unitsLabel)
 #: widgets/KoPageLayoutWidget.ui:25
@@ -4950,7 +4969,7 @@ msgstr "Značky"
 #: widgets/KoResourceTaggingManager.cpp:131
 #, kde-format
 msgid "Unable to undelete tag"
-msgstr ""
+msgstr "Nelze obnovit značku"
 
 #: widgets/KoResourceTaggingManager.cpp:132
 #, kde-format
@@ -4958,11 +4977,13 @@ msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
+"<qt>Značka, kterou se pokoušíte obnovit, již v seznamu značek existuje."
+"<br>Zadejte prosím nový, jedinečný název.</qt>"
 
 #: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
 msgid "Tag was not undeleted."
-msgstr ""
+msgstr "Značka nebyla obnovena."
 
 #: widgets/KoRuler.cpp:1174
 #, kde-format
@@ -5056,7 +5077,7 @@ msgstr "Nastavit šířku čáry aktuálního výběru"
 #: widgets/KoStrokeConfigWidget.cpp:228
 #, kde-format
 msgid "Change the color of the line/border"
-msgstr ""
+msgstr "Změnit barvu čáry/ohraničení"
 
 #: widgets/KoTagChooserWidget.cpp:42
 #, kde-format
@@ -5078,6 +5099,18 @@ msgid ""
 "clearing the filter box will restore all items.<br>Create and/or switch to a "
 "different tag if you want to save filtered resources into named sets.</qt>"
 msgstr ""
+"<qt>Zadáním vyhledávacích výrazů sem přidáte nebo odeberete zdroje z "
+"aktuálního zobrazení štítků.<para>Filtrování podle částečného názvu zdroje "
+"bez rozlišování velkých a malých písmen:<br><icode>partialname</icode> nebo "
+"<icode>!partialname</icode>.</para><para>Zahrnutí/vyloučení jiných sad "
+"štítků:<br><icode>[Tagname]</icode> nebo <icode>![Tagname]</icode>.</"
+"para><para>Zahrnutí/vyloučení s rozlišováním velkých a malých písmen a "
+"shodou celého názvu:<br><icode>\"ExactMatch\"</icode> nebo <icode>!"
+"\"ExactMatch\"</icode>.</para>Výsledky filtrování nelze uložit pro zobrazení "
+"<interface>Všechny předvolby</interface>.<br>V tomto zobrazení stisknutím "
+"klávesy <interface>Enter</interface> nebo vymazáním pole filtru obnovíte "
+"všechny položky.<br>Vytvořte a/nebo přepněte na jinou značku, pokud chcete "
+"uložit filtrované zdroje do pojmenovaných sad.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
@@ -5092,11 +5125,21 @@ msgid ""
 "icode>.</para>Pressing <interface>Enter</interface> or clicking the "
 "<interface>Save</interface> button will save the changes.</qt>"
 msgstr ""
+"<qt>Zadáním vyhledávacích výrazů zde přidáte nebo odeberete zdroje z "
+"aktuálního zobrazení štítků.<para>Chcete-li filtrovat podle částečného názvu "
+"zdroje bez rozlišování velkých a malých písmen:<br><icode>partialname</"
+"icode> nebo <icode>!partialname</icode>.</para><para>Zahrnutí/vyloučení "
+"jiných sad značek:<br><icode>[Tagname]</icode> nebo <icode>![Tagname]</"
+"icode>.</para><para>Zahrnutí/vyloučení s rozlišováním velkých a malých "
+"písmen a shodou celého názvu:<br><icode>\"ExactMatch\"</icode> nebo <icode>!"
+"\"ExactMatch\"</icode>.</para>Stisknutím klávesy <interface>Enter</"
+"interface> nebo kliknutím na tlačítko <interface>Uložit</interface> se změny "
+"uloží.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:65
 #, kde-format
 msgid "Enter resource filters here"
-msgstr ""
+msgstr "Zde zadejte filtry zdrojů"
 
 #: widgets/KoTagFilterWidget.cpp:76
 #, kde-format
@@ -5105,12 +5148,14 @@ msgid ""
 "<qt>Save the currently filtered set as the new members of the current tag.</"
 "qt>"
 msgstr ""
+"<qt>Uložit aktuálně filtrovanou sadu jako nové položky aktuálního štítku.</"
+"qt>"
 
 #: widgets/KoTagToolButton.cpp:45
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr ""
+msgstr "<qt>Zobrazit možnosti pole štítků.</qt>"
 
 #: widgets/KoTagToolButton.cpp:60
 #, kde-format
@@ -5125,12 +5170,12 @@ msgstr "Smazat tuto značku"
 #: widgets/KoTagToolButton.cpp:86
 #, kde-format
 msgid "Clear undelete list"
-msgstr ""
+msgstr "Vymazat seznam obnovených položek"
 
 #: widgets/KoTagToolButton.cpp:114
 #, kde-format
 msgid "Undelete"
-msgstr ""
+msgstr "Obnovit"
 
 #: widgets/KoToolBox.cpp:310
 #, kde-format
@@ -5220,7 +5265,7 @@ msgstr "Přizpůsobit stránce"
 
 #: widgets/KoZoomMode.cpp:15
 msgid "Actual Pixels"
-msgstr ""
+msgstr "Aktuální pixely"
 
 #: widgets/KoZoomMode.cpp:19
 msgid "Fit Text Width"
@@ -5229,7 +5274,7 @@ msgstr "Přizpůsobit text šířce"
 #: widgets/KoZoomWidget.cpp:69
 #, kde-format
 msgid "Use same aspect as pixels"
-msgstr ""
+msgstr "Použít stejný poměr stran jako u pixelů"
 
 #: widgets/KoZoomWidget.cpp:78
 #, kde-format
