@@ -3,13 +3,14 @@
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2024, 2025 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012.
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-06 19:20+0200\n"
+"PO-Revision-Date: 2026-05-09 11:18+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Lokalize 26.04.1\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -90,6 +91,10 @@ msgid ""
 "When you open it with this version of Calligra Sheets, some information may "
 "be lost."
 msgstr ""
+"Tento dokument byl vytvořen v novější verzi aplikace Calligra Sheets (verze "
+"syntaxe: %1)\n"
+"Při otevření v této verzi aplikace Calligra Sheets může dojít ke ztrátě "
+"některých informací."
 
 #: core/ksp/SheetsKspDoc.cpp:55
 #, kde-format
@@ -197,7 +202,7 @@ msgstr "Jakákoliv hodnota"
 #: engine/FunctionDescription.cpp:47
 #, kde-format
 msgid "A string representing a date (like \"2/22/2012\")"
-msgstr ""
+msgstr "Řetězec představující datum (například \"2/22/2012\")"
 
 #: engine/FunctionDescription.cpp:52
 #, kde-format
@@ -229,6 +234,7 @@ msgstr "Rozsah jakýchkoliv hodnot"
 msgid ""
 "A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")"
 msgstr ""
+"Řetězec představující časové rozmezí (například \"2/22/2012\"-\"5/22/2012\")"
 
 #: engine/FunctionDescription.cpp:165
 #, kde-format
@@ -364,6 +370,8 @@ msgid ""
 "The BITAND() function performs a bit-wise AND operation for the two integer "
 "parameters."
 msgstr ""
+"Funkce BITAND() provede bitovou operaci AND na dvou celočíselných "
+"parametrech."
 
 #: functions/bitops.xml:20
 #, kde-format
@@ -376,11 +384,14 @@ msgid ""
 "BITAND(12;10) returns 8 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"anded\" with 1010 is 1000, which is integer 8)."
 msgstr ""
+"Funkce BITAND(12;10) vrátí hodnotu 8 (protože desítkové číslo 12 je v "
+"binární soustavě 1100 a desítkové číslo 10 je v binární soustavě 1010; a "
+"výsledek logické operace AND mezi 1100 a 1010 je 1000, což je celé číslo 8)."
 
 #: functions/bitops.xml:35
 #, kde-format
 msgid "Amount to left shift by"
-msgstr ""
+msgstr "O kolik se posunout doleva"
 
 #: functions/bitops.xml:39
 #, kde-format
@@ -390,16 +401,19 @@ msgid ""
 "parameter. Note that a negative number of bits to left shift by becomes a "
 "right shift. "
 msgstr ""
+"Funkce BITLSHIFT() provede bitové posunutí prvního parametru doleva. Počet "
+"bitů, o který se má posunout, je určen druhým parametrem. Upozorňujeme, že "
+"záporný počet bitů při posunu doleva se interpretuje jako posun doprava. "
 
 #: functions/bitops.xml:40
 #, kde-format
 msgid "BITLSHIFT(value; shift size)"
-msgstr ""
+msgstr "BITLSHIFT(hodnota; velikost posunu)"
 
 #: functions/bitops.xml:53
 #, kde-format
 msgid "Amount to right shift by"
-msgstr ""
+msgstr "O kolik se posunout doprava"
 
 #: functions/bitops.xml:57
 #, kde-format
@@ -409,11 +423,14 @@ msgid ""
 "parameter. Note that a negative number of bits to right shift by becomes a "
 "left shift. "
 msgstr ""
+"Funkce BITRSHIFT() provede bitové posunutí prvního parametru doprava. Počet "
+"bitů, o který se má posunout, je určen druhým parametrem. Upozorňujeme, že "
+"záporný počet bitů při posunu doprava se interpretuje jako posun doleva. "
 
 #: functions/bitops.xml:58
 #, kde-format
 msgid "BITRSHIFT(value; shift size)"
-msgstr ""
+msgstr "BITRSHIFT(hodnota; velikost posunu)"
 
 #: functions/bitops.xml:75
 #, kde-format
@@ -421,6 +438,7 @@ msgid ""
 "The BITOR() function performs a bit-wise OR operation for the two integer "
 "parameters. "
 msgstr ""
+"Funkce BITOR() provede bitovou operaci OR na dvou celočíselných parametrech. "
 
 #: functions/bitops.xml:76
 #, kde-format
@@ -433,6 +451,9 @@ msgid ""
 "BITOR(12;10) returns 14 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"ored\" with 1010 is 1110, which is integer 14)."
 msgstr ""
+"Funkce BITOR(12;10) vrátí hodnotu 14 (protože desítkové číslo 12 je v "
+"binární soustavě 1100 a desítkové číslo 10 je v binární soustavě 1010; a "
+"výsledek logické operace OR mezi 1100 a 1010 je 1110, což je celé číslo 14)."
 
 #: functions/bitops.xml:95
 #, kde-format
@@ -440,6 +461,8 @@ msgid ""
 "The BITXOR() function performs a bit-wise exclusive-OR operation for the two "
 "integer parameters. "
 msgstr ""
+"Funkce BITXOR() provede bitovou exkluzivní OR operaci na dvou celočíselných "
+"parametrech. "
 
 #: functions/bitops.xml:96
 #, kde-format
@@ -452,6 +475,9 @@ msgid ""
 "BITXOR(12;10) returns 6 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"xored\" with 1010 is 0110, which is integer 6)."
 msgstr ""
+"Funkce BITXOR(12;10) vrátí hodnotu 6 (protože desítkové číslo 12 je v "
+"binární soustavě 1100 a desítkové číslo 10 je v binární soustavě 1010; a "
+"výsledek operace XOR mezi 1100 a 1010 je 0110, což je celé číslo 6)."
 
 #: functions/conversion.xml:5
 #, kde-format
@@ -568,6 +594,9 @@ msgid ""
 "that Calligra Sheets can auto-convert numbers to strings if needed, so this "
 "function should rarely be needed."
 msgstr ""
+"Funkce NUM2STRING() vrátí řetězcovou hodnotu pro zadané číslo. Upozorňujeme, "
+"že aplikace Calligra Sheets dokáže čísla v případě potřeby automaticky "
+"převést na řetězce, takže tato funkce by měla být zapotřebí jen zřídka."
 
 #: functions/conversion.xml:65
 #, kde-format
