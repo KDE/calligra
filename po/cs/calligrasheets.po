@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-09 11:18+0200\n"
+"PO-Revision-Date: 2026-05-10 12:44+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -2067,6 +2067,8 @@ msgid ""
 "The WEEKNUM() function returns the non-ISO week number in which the date "
 "falls into."
 msgstr ""
+"Funkce WEEKNUM() vrací číslo týdne (v ne-ISO formátu), do kterého dané datum "
+"spadá."
 
 #: functions/datetime.xml:612
 #, kde-format
@@ -2080,6 +2082,9 @@ msgid ""
 "week in the year, with a week beginning on Sunday (1, this is the default if "
 "Method is omitted.)"
 msgstr ""
+"Funkce WEEKNUM(A1; 1) vrátí hodnotu 11, pokud je v buňce A1 zapsáno \"9. "
+"března 2008\". Jedná se o číslo týdne v daném roce, přičemž týden začíná v "
+"neděli (1; toto je výchozí nastavení, pokud není zadán parametr Metoda)."
 
 #: functions/datetime.xml:614
 #, kde-format
@@ -2087,6 +2092,9 @@ msgid ""
 "WEEKNUM(A1; 2) returns 10 when A1 is \"9th of March 2008\". Number of the "
 "week in the year, with a week beginning on Monday (2)"
 msgstr ""
+"Funkce WEEKNUM(A1; 2) vrátí hodnotu 10, pokud je v buňce A1 zapsáno \"9. "
+"března 2008\". Jedná se o číslo týdne v daném roce, přičemž týden začíná v "
+"pondělí (2)."
 
 #: functions/datetime.xml:623 functions/datetime.xml:647
 #, kde-format
@@ -2115,11 +2123,14 @@ msgid ""
 "complete years; \"ym\": month excluding years; \"yd\": days excluding years; "
 "\"md\": days excluding months and years"
 msgstr ""
+"Interval musí mít jednu z následujících hodnot: \"m\": měsíc; \"d\": dny; \"y"
+"\": celé roky; \"ym\": měsíce bez let; \"yd\": dny bez let; \"md\": dny bez "
+"měsíců a let"
 
 #: functions/datetime.xml:637
 #, kde-format
 msgid "DATEDIF(first date; second date; interval)"
-msgstr ""
+msgstr "DATEDIF(první datum; druhé datum; interval)"
 
 #: functions/datetime.xml:638
 #, kde-format
@@ -2127,6 +2138,8 @@ msgid ""
 "DATEDIF(A1;A2;\"d\") A1 is \"1st of January 1995\" and A2 is \"15th of June "
 "1999\" returns number of days 1626"
 msgstr ""
+"Funkce DATEDIF(A1;A2;\"d\") – pokud je v buňce A1 datum \"1. ledna 1995\" a "
+"v buňce A2 datum \"15. června 1999\", vrátí počet dní 1626"
 
 #: functions/datetime.xml:639
 #, kde-format
@@ -2134,6 +2147,8 @@ msgid ""
 "DATEDIF(A1;A2;\"m\") A1 is \"1st of January 1995\" and A2 is \"15th of June "
 "1999\" returns number of months 53"
 msgstr ""
+"Funkce DATEDIF(A1;A2;\"m\") – pokud je v buňce A1 datum \"1. ledna 1995\" a "
+"v buňce A2 datum \"15. června 1999\", vrátí počet měsíců 53"
 
 #: functions/datetime.xml:659
 #, kde-format
@@ -2141,6 +2156,8 @@ msgid ""
 "The YEARFRAC() function returns the number of full days between start date "
 "and end date according to the basis."
 msgstr ""
+"Funkce YEARFRAC() vrací počet celých dnů mezi počátečním a koncovým datem "
+"podle zvoleného základu."
 
 #: functions/datetime.xml:660
 #, kde-format
@@ -2148,11 +2165,14 @@ msgid ""
 "Basis must be one of the following: 0 = 30/360 US, 1 = Actual/actual, 2 = "
 "Actual/360, 3 = Actual/365, 4 = European 30/360"
 msgstr ""
+"Základ musí být nastaven na jednu z následujících hodnot: 0 = 30/360 "
+"(americký), 1 = aktuální/aktuální, 2 = aktuální/360, 3 = aktuální/365, 4 = "
+"evropský 30/360"
 
 #: functions/datetime.xml:661
 #, kde-format
 msgid "YEARFRAC(start date; end date; basis)"
-msgstr ""
+msgstr "YEARFRAC(počáteční datum; koncové datum; základ)"
 
 #: functions/datetime.xml:669 functions/datetime.xml:692
 #, kde-format
@@ -2175,6 +2195,8 @@ msgid ""
 "The WORKDAY() function returns the date which is working days from the start "
 "date."
 msgstr ""
+"Funkce WORKDAY() vrátí datum, které je vzdálené o tolik pracovních dnů od "
+"počátečního data."
 
 #: functions/datetime.xml:682 functions/datetime.xml:705
 #, kde-format
@@ -2182,11 +2204,13 @@ msgid ""
 "Holidays must be one of the following: number = days to add, a single date "
 "or an array of dates."
 msgstr ""
+"Svátky musí být uvedeny v jedné z následujících forem: číslo = počet dní, "
+"které se mají přidat, konkrétní datum nebo pole dat."
 
 #: functions/datetime.xml:683
 #, kde-format
 msgid "WORKDAY(start date; days; holidays)"
-msgstr ""
+msgstr "WORKDAY(počáteční datum; počet dní; svátky)"
 
 #: functions/datetime.xml:684
 #, kde-format
@@ -2194,6 +2218,8 @@ msgid ""
 "if B9 is \"01/01/2001\", D3 is \"01/03/2001\", D4 is \"01/04/2001\" then "
 "WORKDAY(B9;2;D3:D4) returns \"Fri Jan 5 2001\""
 msgstr ""
+"pokud je v buňce B9 \"01/01/2001\", v buňce D3 \"01/03/2001\" a v buňce D4 "
+"\"01/04/2001\", pak funkce WORKDAY(B9;2;D3:D4) vrátí \"pátek 5. ledna 2001\""
 
 #: functions/datetime.xml:696
 #, kde-format
@@ -2206,21 +2232,25 @@ msgid ""
 "The NETWORKDAY() function returns the number of working days between "
 "startdate and enddate."
 msgstr ""
+"Funkce NETWORKDAY() vrátí počet pracovních dnů mezi počátečním a koncovým "
+"datem."
 
 #: functions/datetime.xml:706
 #, kde-format
 msgid "NETWORKDAY(start date; end date; holidays)"
-msgstr ""
+msgstr "NETWORKDAY(počáteční datum; koncové datum; svátky)"
 
 #: functions/datetime.xml:707
 #, kde-format
 msgid "NETWORKDAY(\"01/01/2001\";\"01/08/2001\") returns 5 workdays"
 msgstr ""
+"Funkce NETWORKDAY(\"01/01/2001\"; \"01/08/2001\") vrátí 5 pracovních dnů"
 
 #: functions/datetime.xml:708
 #, kde-format
 msgid "NETWORKDAY(\"01/01/2001\";\"01/08/2001\";2) returns 3 workdays"
 msgstr ""
+"Funkce NETWORKDAY(\"01/01/2001\"; \"08/01/2001\"; 2) vrátí 3 pracovní dny"
 
 #: functions/datetime.xml:720
 #, kde-format
@@ -2230,7 +2260,7 @@ msgstr "Funkce DATE2UNIX() převede datum a čas na UNIXový čas."
 #: functions/datetime.xml:721 functions/datetime.xml:736
 #, kde-format
 msgid "A unix time is the number of seconds after midnight January 1st, 1970."
-msgstr ""
+msgstr "Unixový čas je počet sekund uplynulých od půlnoci 1. ledna 1970."
 
 #: functions/datetime.xml:722
 #, kde-format
@@ -2255,7 +2285,7 @@ msgstr "Funkce UNIX2DATE() převede UNIXový čas na datum a čas."
 #: functions/datetime.xml:737
 #, kde-format
 msgid "UNIX2DATE(unixtime)"
-msgstr ""
+msgstr "UNIX2DATE(unixový čas)"
 
 #: functions/datetime.xml:738
 #, kde-format
@@ -2402,6 +2432,9 @@ msgid ""
 "ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight "
 "(hundredweight)."
 msgstr ""
+"Podporované jednotky hmotnosti: g (gram), sg (kus), lbm (libra), u (atomová "
+"hmotnost), ozm (unce), stone, ton, grain, pweight (pennyweight), hweight "
+"(hundredweight)."
 
 #: functions/engineering.xml:131
 #, kde-format
@@ -2462,6 +2495,11 @@ msgid ""
 "meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 "
 "(cubic foot), yd3 (cubic yard), GRT or regton (gross register ton)."
 msgstr ""
+"Podporované jednotky objemu: l (litr), tsp (čajová lžička), tbs (polévková "
+"lžíce), oz (tekutá unce), cup (šálek), pt (pinta), qt (kvart), gal (galon), "
+"barel, m3 (metr krychlový), mi3 (míle krychlová), Nmi3 (námořní míle "
+"krychlová), in3 (palec krychlový), ft3 (stopa krychlová), yd3 (yard "
+"krychlový), GRT nebo regton (hrubá registrovaná tuna)."
 
 #: functions/engineering.xml:139
 #, kde-format
@@ -2534,6 +2572,8 @@ msgid ""
 "The ERF() function returns the error function. With a single argument, ERF() "
 "returns the error function between 0 and that argument."
 msgstr ""
+"Funkce ERF() vrací hodnotu chybové funkce. Při zadání jediného argumentu "
+"vrátí funkce ERF() hodnotu chybové funkce v rozmezí od 0 do daného argumentu."
 
 #: functions/engineering.xml:162
 #, kde-format
@@ -2576,7 +2616,7 @@ msgstr "Hodnota k převedení"
 #: functions/engineering.xml:339
 #, kde-format
 msgid "The minimum length of the output"
-msgstr ""
+msgstr "Minimální délka výstupu"
 
 #: functions/engineering.xml:199
 #, kde-format
@@ -2995,12 +3035,12 @@ msgstr "IMCOSH(\"12i\") vrací 0,84358 "
 #: functions/engineering.xml:482
 #, kde-format
 msgid "The IMCOT(string) returns the cotangent of a complex number."
-msgstr ""
+msgstr "Funkce IMCOT(řetězec) vrací kotangens komplexního čísla."
 
 #: functions/engineering.xml:483
 #, kde-format
 msgid "IMCOT(string)"
-msgstr ""
+msgstr "IMCOT(řetězec)"
 
 #: functions/engineering.xml:484
 #, kde-format
@@ -3010,12 +3050,12 @@ msgstr "IMCOT(\"1+i\") vrací \"0.21762-0.86801i\""
 #: functions/engineering.xml:496
 #, kde-format
 msgid "The IMCSC(string) returns the cosecant of a complex number."
-msgstr ""
+msgstr "Funkce IMCSC(string) vrací kosekant komplexního čísla."
 
 #: functions/engineering.xml:497
 #, kde-format
 msgid "IMCSC(string)"
-msgstr ""
+msgstr "IMCSC(řetězec)"
 
 #: functions/engineering.xml:498
 #, kde-format
@@ -3025,12 +3065,12 @@ msgstr "IMCSC(\"1+i\") vrací \"0.62151-0.30393i\""
 #: functions/engineering.xml:510
 #, kde-format
 msgid "The IMCSCH(string) returns the hyperbolic cosecant of a complex number."
-msgstr ""
+msgstr "Funkce IMCSCH(string) vrací hyperbolický kosekant komplexního čísla."
 
 #: functions/engineering.xml:511
 #, kde-format
 msgid "IMCSCH(string)"
-msgstr ""
+msgstr "IMCSCH(řetězec)"
 
 #: functions/engineering.xml:512
 #, kde-format
@@ -3040,12 +3080,12 @@ msgstr "IMCSCH(\"1+i\") vrací \"0.30393-i0.62151\""
 #: functions/engineering.xml:524
 #, kde-format
 msgid "The IMSEC(string) returns the secant of a complex number."
-msgstr ""
+msgstr "Funkce IMSEC(string) vrací sekantu komplexního čísla."
 
 #: functions/engineering.xml:525
 #, kde-format
 msgid "IMSEC(string)"
-msgstr ""
+msgstr "IMSEC(řetězec)"
 
 #: functions/engineering.xml:526
 #, kde-format
@@ -3055,12 +3095,12 @@ msgstr "IMSEC(\"1+i\") vrací \"0.49833+i0.59108\""
 #: functions/engineering.xml:538
 #, kde-format
 msgid "The IMSECH(string) returns the hyperbolic secant of a complex number."
-msgstr ""
+msgstr "Funkce IMSECH(řetězec) vrací hyperbolickou sekantu komplexního čísla."
 
 #: functions/engineering.xml:539
 #, kde-format
 msgid "IMSECH(string)"
-msgstr ""
+msgstr "IMSECH(řetězec)"
 
 #: functions/engineering.xml:540
 #, kde-format
@@ -3571,11 +3611,18 @@ msgid ""
 "(default), 1: real days, 2: real days/360, 3: real days/365 or 4: European "
 "30/360."
 msgstr ""
+"Funkce ACCRINT vrací naběhlé úroky u cenného papíru, u kterého se vyplácejí "
+"pravidelné úroky. Povolené frekvence jsou 1 – roční, 2 – pololetní nebo 4 – "
+"čtvrtletní. Základem je typ počítání dnů, který chcete použít: 0: US 30/360 "
+"(výchozí), 1: reálné dny, 2: reálné dny/360, 3: reálné dny/365 nebo 4: "
+"evropský 30/360."
 
 #: functions/financial.xml:40
 #, kde-format
 msgid "ACCRINT(issue; first interest; settlement; rate; par; frequency; basis)"
 msgstr ""
+"ACCRINT(emise; první úrok; datum vypořádání; sazba; nominální hodnota; "
+"periodicita; základ)"
 
 #: functions/financial.xml:41
 #, kde-format
@@ -3594,11 +3641,15 @@ msgid ""
 "use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real "
 "days/365 or 4: European 30/360."
 msgstr ""
+"Funkce ACCRINTM vrací naběhlé úroky u cenného papíru, u kterého se úroky "
+"vyplácejí v den splatnosti. Základem je typ počítání dnů, který chcete "
+"použít: 0: US 30/360 (výchozí), 1: reálné dny, 2: reálné dny/360, 3: reálné "
+"dny/365 nebo 4: Evropský 30/360."
 
 #: functions/financial.xml:71
 #, kde-format
 msgid "ACCRINTM(issue; settlement; rate; par; basis)"
-msgstr ""
+msgstr "ACCRINTM(emise; vypořádání; sazba; nominální hodnota; základ)"
 
 #: functions/financial.xml:72
 #, kde-format
@@ -3616,13 +3667,13 @@ msgstr "Cena"
 #: functions/financial.xml:1218
 #, kde-format
 msgid "Pv"
-msgstr ""
+msgstr "Pv"
 
 #: functions/financial.xml:89 functions/financial.xml:115
 #: functions/financial.xml:1222
 #, kde-format
 msgid "Fv"
-msgstr ""
+msgstr "Fv"
 
 #: functions/financial.xml:93
 #, kde-format
@@ -3630,6 +3681,8 @@ msgid ""
 "The AMORDEGRC function calculates the amortization value for the French "
 "accounting system using degressive depreciation."
 msgstr ""
+"Funkce AMORDEGRC vypočítává hodnotu odpisů pro francouzský účetní systém s "
+"použitím sestupných odpisů."
 
 #: functions/financial.xml:94
 #, kde-format
@@ -3637,6 +3690,8 @@ msgid ""
 "AMORDEGRC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; rate; "
 "basis)"
 msgstr ""
+"AMORDEGRC( cena; datum nákupu; datum konce prvního období; zbytková hodnota; "
+"období; sazba; základ)"
 
 #: functions/financial.xml:95
 #, kde-format
@@ -3656,6 +3711,8 @@ msgid ""
 "The AMORLINC function calculates the amortization value for the French "
 "accounting system using linear depreciation."
 msgstr ""
+"Funkce AMORLINC vypočítává hodnotu odpisů pro francouzský účetní systém s "
+"použitím lineárních odpisů."
 
 #: functions/financial.xml:120
 #, kde-format
@@ -3663,6 +3720,8 @@ msgid ""
 "AMORLINC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; rate; "
 "basis)"
 msgstr ""
+"AMORLINC( cena; datum nákupu; datum konce prvního období; zbytková hodnota; "
+"období; sazba; základ)"
 
 #: functions/financial.xml:121
 #, kde-format
@@ -3704,6 +3763,10 @@ msgid ""
 "example: $5000 at 12% interest compounded quarterly for 5 years will become "
 "COMPOUND(5000;0.12;4;5) or $9030.56."
 msgstr ""
+"Funkce COMPOUND() vypočítá hodnotu investice na základě jistiny, nominální "
+"úrokové sazby, frekvence úročení a doby trvání. Například: z částky 5 000 $ "
+"s úrokovou sazbou 12 % a čtvrtletním úročením po dobu 5 let bude výsledkem "
+"COMPOUND(5000;0,12;4;5), tedy 9 030,56 $."
 
 #: functions/financial.xml:150
 #, kde-format
@@ -3722,11 +3785,15 @@ msgid ""
 "interest, given the principal, nominal rate and time in years. For example: "
 "$1000 earning 10% for 1 year becomes CONTINUOUS(1000;.1;1) or $1105.17."
 msgstr ""
+"Funkce CONTINUOUS() vypočítá výnos z úroků s průběžným úročením na základě "
+"jistiny, nominální úrokové sazby a doby v letech. Například: 1000 $ s "
+"úrokovou sazbou 10 % po dobu 1 roku se zadá jako CONTINUOUS(1000;.1;1) a "
+"výsledkem je 1105,17 $."
 
 #: functions/financial.xml:172
 #, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
-msgstr ""
+msgstr "CONTINUOUS (jistina; úroky; počet let)"
 
 #: functions/financial.xml:173
 #, kde-format
@@ -3743,7 +3810,7 @@ msgstr "CONTINUOUS(1000;0,1;1) se rovná 1105,17"
 #: functions/financial.xml:1475
 #, kde-format
 msgid "Maturity"
-msgstr ""
+msgstr "Splatnost"
 
 #: functions/financial.xml:189 functions/financial.xml:460
 #: functions/financial.xml:777 functions/financial.xml:924
@@ -3760,11 +3827,15 @@ msgid ""
 "use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real "
 "days/365 or 4: European 30/360."
 msgstr ""
+"Funkce COUPNUM vrací počet kupónů, které mají být vyplaceny v období mezi "
+"datem vypořádání a datem splatnosti. Základem je typ výpočtu počtu dnů, "
+"který chcete použít: 0: US 30/360 (výchozí), 1: reálné dny, 2: reálné "
+"dny/360, 3: reálné dny/365 nebo 4: Evropský 30/360."
 
 #: functions/financial.xml:198
 #, kde-format
 msgid "COUPNUM(settlement; maturity; frequency; basis)"
-msgstr ""
+msgstr "COUPNUM(datum vypořádání; splatnost; frekvence; základ)"
 
 #: functions/financial.xml:199
 #, kde-format
@@ -3804,12 +3875,12 @@ msgstr "typ"
 #: functions/financial.xml:236
 #, kde-format
 msgid "Calculates the cumulative interest payment."
-msgstr ""
+msgstr "Vypočítá celkovou částku zaplacených úroků."
 
 #: functions/financial.xml:237
 #, kde-format
 msgid "CUMIPMT(rate; periods; value; start; end; type)"
-msgstr ""
+msgstr "CUMIPMT(sazba; období; hodnota; počátek; konec; typ)"
 
 #: functions/financial.xml:238
 #, kde-format
@@ -3819,12 +3890,12 @@ msgstr "CUMIPMT( 0,06/12; 5*12; 100000; 5; 12; 0 ) se rovná -3562,187023"
 #: functions/financial.xml:273
 #, kde-format
 msgid "Calculates the cumulative principal payment."
-msgstr ""
+msgstr "Vypočítá celkovou splátku jistiny."
 
 #: functions/financial.xml:274
 #, kde-format
 msgid "CUMPRINC(rate; periods; value; start; end; type)"
-msgstr ""
+msgstr "CUMPRINC(sazba; období; hodnota; počátek; konec; typ)"
 
 #: functions/financial.xml:275
 #, kde-format
@@ -3863,7 +3934,7 @@ msgstr ""
 #: functions/financial.xml:306
 #, kde-format
 msgid "DB(cost; salvage value; life; period [;month])"
-msgstr ""
+msgstr "DB(náklady; zbytková hodnota; životnost; období [;měsíc])"
 
 #: functions/financial.xml:307
 #, kde-format
@@ -3887,11 +3958,15 @@ msgid ""
 "period using the arithmetic-declining method. The factor is optional, if "
 "omitted it is assumed to be 2. All the parameter must be greater than zero."
 msgstr ""
+"Funkce DDB() vypočítá odpis majetku za dané období pomocí metody "
+"aritmetického klesajícího odepisování. Faktor je volitelný; pokud není "
+"zadán, předpokládá se, že má hodnotu 2. Všechny parametry musí být větší než "
+"nula."
 
 #: functions/financial.xml:339
 #, kde-format
 msgid "DDB(cost; salvage value; life; period [;factor])"
-msgstr ""
+msgstr "DDB (náklady; zbytková hodnota; životnost; období [;koeficient])"
 
 #: functions/financial.xml:340
 #, kde-format
@@ -3901,14 +3976,14 @@ msgstr "DDB(75000;1;60;12;2) vrací 1721,81"
 #: functions/financial.xml:357 functions/financial.xml:1349
 #, kde-format
 msgid "Price per $100 face value"
-msgstr ""
+msgstr "Cena za 100 $ nominální hodnoty"
 
 #: functions/financial.xml:361 functions/financial.xml:616
 #: functions/financial.xml:920 functions/financial.xml:963
 #: functions/financial.xml:1377 functions/financial.xml:1453
 #, kde-format
 msgid "Redemption"
-msgstr ""
+msgstr "Vykoupení"
 
 #: functions/financial.xml:369
 #, kde-format
@@ -3917,11 +3992,14 @@ msgid ""
 "type of day counting you want to use: 0: US 30/360 (default), 1: real days, "
 "2: real days/360, 3: real days/365 or 4: European 30/360."
 msgstr ""
+"Funkce DISC vrací diskontní sazbu pro cenný papír. Základem je způsob "
+"výpočtu dnů, který chcete použít: 0: US 30/360 (výchozí) – 1: reálné dny – "
+"2: reálné dny/360 – 3: reálné dny/365 nebo 4: Evropský 30/360."
 
 #: functions/financial.xml:370
 #, kde-format
 msgid "DISC(settlement; maturity; par; redemption [; basis ] )"
-msgstr ""
+msgstr "DISC(vypořádání; splatnost; nominální hodnota; splacení [; základ ] )"
 
 #: functions/financial.xml:371
 #, kde-format
@@ -3946,6 +4024,9 @@ msgid ""
 "number. The fractional dollar is the number to be converted and the fraction "
 "is the denominator of the fraction"
 msgstr ""
+"Funkce DOLLARDE() vrací cenu v dolarech vyjádřenou jako desetinné číslo. "
+"Částka v dolarech je číslo, které se má převést, a zlomek je jmenovatel "
+"tohoto zlomku."
 
 #: functions/financial.xml:389
 #, kde-format
@@ -3969,6 +4050,9 @@ msgid ""
 "decimal dollar is the number to be converted and the fraction is the "
 "denominator of the fraction"
 msgstr ""
+"Funkce DOLLARFR() vrací cenu v dolarech vyjádřenou jako zlomek. Číslo v "
+"desítkové formě představuje hodnotu, která se má převést, a zlomek je "
+"jmenovatel tohoto zlomku."
 
 #: functions/financial.xml:409
 #, kde-format
@@ -4042,11 +4126,12 @@ msgstr "Základ"
 #, kde-format
 msgid "Returns the Macauley duration of a fixed interest security in years."
 msgstr ""
+"Vrátí Macauleyovu dobu splatnosti cenného papíru s pevným úrokem v letech."
 
 #: functions/financial.xml:469
 #, kde-format
 msgid "DURATION_ADD(Settlement; Maturity; Coupon; Yield; Frequency; Basis)"
-msgstr ""
+msgstr "DURATION_ADD(vypořádání; splatnost; kupón; výnos; frekvence; základ)"
 
 #: functions/financial.xml:470
 #, kde-format
@@ -4077,6 +4162,9 @@ msgid ""
 "rate (annual rate or APR). For example: 8% interest compounded monthly "
 "provides an effective yield of EFFECT(.08;12) or 8.3%."
 msgstr ""
+"Funkce EFFECT() vypočítá efektivní výnos pro nominální úrokovou sazbu (roční "
+"sazbu nebo RPSN). Například: 8% úrok s měsíčním úročením představuje "
+"efektivní výnos EFFECT(.08;12), tedy 8,3 %."
 
 #: functions/financial.xml:488
 #, kde-format
@@ -4094,6 +4182,8 @@ msgid ""
 "The EFFECTIVE() function calculates the effective yield for a nominal "
 "interest rate (annual rate or APR). It is the same as the EFFECT function."
 msgstr ""
+"Funkce EFFECTIVE() vypočítá efektivní výnos pro nominální úrokovou sazbu "
+"(roční sazbu nebo RPSN). Je totožná s funkcí EFFECT."
 
 #: functions/financial.xml:508
 #, kde-format
@@ -4115,6 +4205,12 @@ msgid ""
 "(Italy), LTL (Lithuania), LUF (Luxembourg), LVL (Latvia), MTL (Malta), NLG "
 "(Netherlands), PTE (Portugal), SIT (Slovenia), or SKK (Slovakia)."
 msgstr ""
+"Funkce EURO() převádí jedno euro na danou národní měnu v rámci Evropské "
+"měnové unie. Měna je jedna z následujících: ATS (Rakousko), BEF (Belgie), "
+"CYP (Kypr), DEM (Německo), EEK (Estonsko), ESP (Španělsko), EUR (euro), FIM "
+"(Finsko), FRF (Francie), GRD (Řecko), IEP (Irsko), ITL (Itálie), LTL "
+"(Litva), LUF (Lucembursko), LVL (Lotyšsko), MTL (Malta), NLG (Nizozemsko), "
+"PTE (Portugalsko), SIT (Slovinsko) nebo SKK (Slovensko)."
 
 #: functions/financial.xml:522
 #, kde-format
@@ -4146,6 +4242,12 @@ msgid ""
 "(France), GRD (Greece), IEP (Ireland), ITL (Italy), LUF (Luxembourg), NLG "
 "(Netherlands), or PTE (Portugal)."
 msgstr ""
+"Funkce EUROCONVERT() převádí číselnou hodnotu z jedné národní měny na jinou "
+"měnu v rámci Evropské měnové unie s využitím eura jako zprostředkující měny. "
+"Měnou může být jedna z následujících: ATS (Rakousko), BEF (Belgie), DEM "
+"(Německo), ESP (Španělsko), EUR (euro), FIM (Finsko), FRF (Francie), GRD "
+"(Řecko), IEP (Irsko), ITL (Itálie), LUF (Lucembursko), NLG (Nizozemsko) nebo "
+"PTE (Portugalsko)."
 
 #: functions/financial.xml:545
 #, kde-format
@@ -4170,6 +4272,9 @@ msgid ""
 "and the time elapsed. If you have $1000 in a bank account earning 8% "
 "interest, after two years you will have FV(1000;0.08;2) or $1166.40."
 msgstr ""
+"Funkce FV() vypočítá budoucí hodnotu investice na základě zadaného výnosu a "
+"uplynulého času. Pokud máte na bankovním účtu 1000 $ s úrokovou sazbou 8 %, "
+"budete mít po dvou letech částku FV(1000;0,08;2), tedy 1166,40 $."
 
 #: functions/financial.xml:568
 #, kde-format
@@ -4196,6 +4301,11 @@ msgid ""
 "$22,880.98. This function assumes that payments are made at the end of each "
 "period."
 msgstr ""
+"Funkce FV_ANNUITY() vrátí budoucí hodnotu řady plateb na základě výše "
+"platby, úrokové sazby a počtu období. Například: Pokud dostáváte 500 $ ročně "
+"po dobu 20 let a investujete je s úrokovou sazbou 8 %, celková částka po 20 "
+"letech bude FV_annuity(500;0,08;20), tedy 22 880,98 $. Tato funkce "
+"předpokládá, že platby jsou prováděny na konci každého období."
 
 #: functions/financial.xml:594
 #, kde-format
@@ -4221,11 +4331,14 @@ msgid ""
 "(default), 1: real days, 2: real days/360, 3: real days/365 or 4: European "
 "30/360."
 msgstr ""
+"Funkce INTRATE vrací úrokovou sazbu pro plně investovaný cenný papír. "
+"Základem je způsob výpočtu dnů, který chcete použít: 0: US 30/360 (výchozí), "
+"1: reálné dny, 2: reálné dny/360, 3: reálné dny/365 nebo 4: Evropský 30/360."
 
 #: functions/financial.xml:625
 #, kde-format
 msgid "INTRATE(settlement; maturity; investment; redemption; basis)"
-msgstr ""
+msgstr "INTRATE(vypořádání; splatnost; investice; splacení; základ)"
 
 #: functions/financial.xml:626
 #, kde-format
@@ -4258,13 +4371,13 @@ msgstr "Typ (volitelně)"
 #, kde-format
 msgid ""
 "IPMT calculates the amount of a payment of an annuity going towards interest."
-msgstr ""
+msgstr "Funkce IPMT vypočítá částku splátky anuity, která připadá na úroky."
 
 #: functions/financial.xml:659 functions/financial.xml:713
 #: functions/financial.xml:1046
 #, kde-format
 msgid "Rate is the periodic interest rate."
-msgstr ""
+msgstr "Úroková sazba je periodická úroková sazba."
 
 #: functions/financial.xml:660 functions/financial.xml:1047
 #, kde-format
@@ -4272,6 +4385,8 @@ msgid ""
 "Period is the amortizement period. 1 for the first and NPER for the last "
 "period."
 msgstr ""
+"Období představuje dobu splácení. Hodnota 1 odpovídá prvnímu období a NPER "
+"poslednímu období."
 
 #: functions/financial.xml:661 functions/financial.xml:1048
 #, kde-format
@@ -4282,12 +4397,12 @@ msgstr "NPER je celkový počet období během kterých se platí anuita."
 #: functions/financial.xml:1049
 #, kde-format
 msgid "PV is the present value in the sequence of payments."
-msgstr ""
+msgstr "PV je současná hodnota v řadě plateb."
 
 #: functions/financial.xml:663 functions/financial.xml:1050
 #, kde-format
 msgid "FV (optional) is the desired (future) value.  default: 0."
-msgstr ""
+msgstr "FV (volitelné) je požadovaná (budoucí) hodnota.  výchozí hodnota: 0."
 
 #: functions/financial.xml:664 functions/financial.xml:1051
 #, kde-format
@@ -4295,6 +4410,8 @@ msgid ""
 "Type (optional) defines the due date. 1 for payment at the beginning of a "
 "period and 0 (default) for payment at the end of a period."
 msgstr ""
+"Typ (volitelné) určuje datum splatnosti. Hodnota 1 označuje platbu na "
+"začátku období a hodnota 0 (výchozí) platbu na konci období."
 
 #: functions/financial.xml:665
 #, kde-format
@@ -4302,11 +4419,13 @@ msgid ""
 "The example shows the interest to pay in the last year of a three year loan. "
 "The interest rate is 10 percent."
 msgstr ""
+"Příklad ukazuje výši úroků, které je třeba zaplatit v posledním roce "
+"tříletého úvěru. Úroková sazba činí 10 procent."
 
 #: functions/financial.xml:666
 #, kde-format
 msgid "IPMT(Rate; Period; NPer; PV; FV; Type)"
-msgstr ""
+msgstr "IPMT(sazba; období; NPer; PV; FV; typ)"
 
 #: functions/financial.xml:667
 #, kde-format
@@ -11986,14 +12105,15 @@ msgstr ""
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "lukas@kde.org,vit@pelcak.org,tomas.chvatal@gmail.com"
+msgstr ""
+"lukas@kde.org,vit@pelcak.org,tomas.chvatal@gmail.com,libor.filipek@gmail.com"
 
 #. i18n translator strings
 #: part/AboutData.h:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Lukáš Tinkl,Vít Pelčák,Tomáš Chvátal"
+msgstr "Lukáš Tinkl,Vít Pelčák,Tomáš Chvátal,Libor Filípek"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrasheets.rc:5
