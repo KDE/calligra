@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-11 18:43+0200\n"
+"PO-Revision-Date: 2026-05-12 17:05+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -6135,17 +6135,17 @@ msgstr "SUBTOTAL(11; A1:A5) vrací 307,76"
 #: functions/math.xml:44
 #, kde-format
 msgid "X the independent variable of the power series"
-msgstr ""
+msgstr "X – nezávislá proměnná mocninné řady"
 
 #: functions/math.xml:48
 #, kde-format
 msgid "N the initial power to which X is to be raised"
-msgstr ""
+msgstr "N je počáteční mocnina, na kterou se má X umocnit"
 
 #: functions/math.xml:52
 #, kde-format
 msgid "M the increment by which to increase N for each term in the series"
-msgstr ""
+msgstr "M je přírůstek, o který se má N zvýšit u každého člena řady"
 
 #: functions/math.xml:56
 #, kde-format
@@ -6153,16 +6153,18 @@ msgid ""
 "Coefficients a set of coefficients by which each successive power of the "
 "variable X is multiplied"
 msgstr ""
+"Koeficienty – soubor koeficientů, kterými se násobí každá následující "
+"mocnina proměnné X"
 
 #: functions/math.xml:60
 #, kde-format
 msgid "The SERIESSUM() function returns the sum of a power series."
-msgstr ""
+msgstr "Funkce SERIESSUM() vrací součet mocninné řady."
 
 #: functions/math.xml:61
 #, kde-format
 msgid "SERIESSUM( X; N; M; Coefficients)"
-msgstr "SERIESSUM( X; N; M; Koeficienty)"
+msgstr "SERIESSUM( X; N; M; koeficienty)"
 
 #: functions/math.xml:62
 #, kde-format
@@ -6238,6 +6240,10 @@ msgid ""
 "digits, roundoff error is inherent (but usually insignificant) in all "
 "calculations."
 msgstr ""
+"Funkce EPS() vrací strojový epsilon; jedná se o rozdíl mezi číslem 1 a "
+"nejbližším větším číslem s plovoucí desetinnou čárkou. Jelikož počítače "
+"používají konečný počet číslic, je ve všech výpočtech nevyhnutelná (ale "
+"obvykle zanedbatelná) zaokrouhlovací chyba."
 
 #: functions/math.xml:118
 #, kde-format
@@ -6255,11 +6261,15 @@ msgid ""
 "0.5*EPS() returns the \"unit round\"; this value is interesting because it "
 "is the largest number x where (1+x)-1=0 (due to roundoff errors)."
 msgstr ""
+"Funkce 0,5*EPS() vrací hodnotu \"zaokrouhlenou na jednotku\"; tato hodnota "
+"je zajímavá tím, že představuje největší číslo x, pro které platí (1+x)-1=0 "
+"(v důsledku zaokrouhlovacích chyb)."
 
 #: functions/math.xml:121
 #, kde-format
 msgid "EPS() is so small that Calligra Sheets displays 1+eps() as 1"
 msgstr ""
+"Hodnota EPS() je tak malá, že Calligra Sheets zobrazí výraz 1+eps() jako 1"
 
 #: functions/math.xml:122
 #, kde-format
@@ -6267,6 +6277,8 @@ msgid ""
 "Pick a number x between 0 and EPS(). Observe that 1+x rounds x to either 0 "
 "or EPS() by using the equation (1+x)-1"
 msgstr ""
+"Vyberte číslo x v rozmezí od 0 do EPS(). Všimněte si, že výraz 1+x "
+"zaokrouhluje x na 0 nebo EPS() podle rovnice (1+x)-1"
 
 #: functions/math.xml:138
 #, kde-format
@@ -6295,6 +6307,8 @@ msgid ""
 "The POW(x;y) function returns the value of x raised to the power of y. It's "
 "the same as POWER."
 msgstr ""
+"Funkce POW(x;y) vrací hodnotu x umocněnou na y. Je to totéž jako funkce "
+"POWER."
 
 #: functions/math.xml:159
 #, kde-format
@@ -6344,6 +6358,8 @@ msgid ""
 "The TRUNC() function truncates a numeric value to a certain precision. If "
 "the precision is omitted 0 is assumed."
 msgstr ""
+"Funkce TRUNC() zaokrouhlí číselnou hodnotu na zadanou přesnost. Pokud není "
+"přesnost uvedena, předpokládá se hodnota 0."
 
 #: functions/math.xml:195
 #, kde-format
@@ -6366,6 +6382,8 @@ msgid ""
 "The ODD() function returns the number rounded up (or down, for negative "
 "values) to the nearest odd integer. By definition, ODD(0) is 1."
 msgstr ""
+"Funkce ODD() vrací číslo zaokrouhlené nahoru (nebo dolů, v případě záporných "
+"hodnot) na nejbližší lichý celý počet. Podle definice je ODD(0) rovno 1."
 
 #: functions/math.xml:213
 #, kde-format
@@ -6568,6 +6586,8 @@ msgid ""
 "The COUNTIF() function returns the number of cells in the given range that "
 "meet the given criteria."
 msgstr ""
+"Funkce COUNTIF() vrátí počet buněk v zadaném rozsahu, které splňují zadaná "
+"kritéria."
 
 #: functions/math.xml:353
 #, kde-format
@@ -6577,7 +6597,7 @@ msgstr "COUNTIF(rozsah;kritéria)"
 #: functions/math.xml:354
 #, kde-format
 msgid "COUNTIF(A2:A3;\"14\") returns 1 if A2 is -4 and A3 is 14"
-msgstr ""
+msgstr "COUNTIF(A2:A3;\"14\") vrací 1 když A2 je -4 a A3 je 14"
 
 #: functions/math.xml:364 functions/math.xml:379 functions/math.xml:654
 #: functions/math.xml:670 functions/math.xml:684 functions/math.xml:702
@@ -6703,16 +6723,22 @@ msgid ""
 "values in the check range are summed. The length of the check range should "
 "be equal or less than the length of the sum range."
 msgstr ""
+"Funkce SUMIF() vypočítá součet všech hodnot zadaných jako parametry, které "
+"splňují zadaná kritéria. Rozsah pro výpočet součtu je volitelný. Pokud není "
+"zadán, sečtou se hodnoty v rozsahu pro porovnání. Délka rozsahu pro "
+"porovnání by měla být stejná nebo menší než délka rozsahu pro výpočet součtu."
 
 #: functions/math.xml:442
 #, kde-format
 msgid "SUMIF(checkrange;criteria;sumrange)"
-msgstr ""
+msgstr "SUMIF(kontrolovaný rozsah;kritéria;rozsah sčítání)"
 
 #: functions/math.xml:443
 #, kde-format
 msgid "SUMIF(A1:A4;\">1\") sums all values in range A1:A4 which match >1"
 msgstr ""
+"Funkce SUMIF(A1:A4;\">1\") sečte všechny hodnoty v rozsahu A1:A4, které "
+"odpovídají výrazu >1"
 
 #: functions/math.xml:444
 #, kde-format
@@ -6720,6 +6746,8 @@ msgid ""
 "SUMIF(A1:A4;\"=0\";B1:B4) sums all values in range B1:B4 if the "
 "corresponding value in A1:A4 matches =0"
 msgstr ""
+"Funkce SUMIF(A1:A4;\"=0\";B1:B4) sečte všechny hodnoty v rozsahu B1:B4, "
+"pokud odpovídající hodnota v rozsahu A1:A4 je rovna 0"
 
 #: functions/math.xml:458
 #, kde-format
@@ -6781,16 +6809,18 @@ msgid ""
 "The G_PRODUCT() function is the same as KPRODUCT. It is provided for "
 "Gnumeric compatibility."
 msgstr ""
+"Funkce G_PRODUCT() je totožná s funkcí KPRODUCT. Je k dispozici z důvodu "
+"kompatibility s programem Gnumeric."
 
 #: functions/math.xml:494
 #, kde-format
 msgid "G_PRODUCT(value;value;...)"
-msgstr ""
+msgstr "G_PRODUCT(hodnota;hodnota;...)"
 
 #: functions/math.xml:507
 #, kde-format
 msgid "The DIV() function divides the first value by the other values in turn."
-msgstr ""
+msgstr "Funkce DIV() postupně vydělí první hodnotu ostatními hodnotami."
 
 #: functions/math.xml:508
 #, kde-format
@@ -6839,6 +6869,8 @@ msgid ""
 "The MAX() function returns the largest value given in the parameters. String "
 "and logical values are ignored."
 msgstr ""
+"Funkce MAX() vrátí největší hodnotu z parametrů. Řetězce a logické hodnoty "
+"se ignorují."
 
 #: functions/math.xml:542
 #, kde-format
@@ -6866,6 +6898,8 @@ msgid ""
 "The MAXA() function returns the largest value given in the parameters. TRUE "
 "evaluates to 1, FALSE evaluates to 0. String values are ignored."
 msgstr ""
+"Funkce MAXA() vrací největší hodnotu zadanou v parametrech. Hodnota TRUE se "
+"vyhodnotí jako 1, hodnota FALSE jako 0. Řetězcové hodnoty se ignorují."
 
 #: functions/math.xml:563
 #, kde-format
@@ -6977,6 +7011,8 @@ msgid ""
 "The MULTINOMIAL() function returns the multinomial of each number in the "
 "parameters. It uses this formula for MULTINOMIAL(a,b,c):"
 msgstr ""
+"Funkce MULTINOMIAL() vrací multinomický koeficient každého čísla z "
+"parametrů. Pro funkci MULTINOMIAL(a,b,c) používá tento vzorec:"
 
 #: functions/math.xml:644
 #, kde-format
@@ -7242,6 +7278,12 @@ msgid ""
 "to the nearest integer. If the Mode parameter is non-zero, the function "
 "rounds away from zero, instead of up towards the positive infinity."
 msgstr ""
+"Funkce CEILING() zaokrouhluje hodnotu x nahoru (směrem od nuly) na nejbližší "
+"násobek parametru Significance, který je větší než zadaná hodnota. Výchozí "
+"hodnota parametru Significance je 1 (nebo -1, pokud je hodnota záporná), což "
+"znamená zaokrouhlení nahoru na nejbližší celé číslo. Pokud je parametr Mode "
+"nenulový, funkce zaokrouhluje směrem od nuly, nikoli nahoru k kladné "
+"nekonečnosti."
 
 #: functions/math.xml:864
 #, kde-format
@@ -7274,6 +7316,8 @@ msgid ""
 "Round a number x down to the nearest multiple of the second parameter, "
 "Significance."
 msgstr ""
+"Zaokrouhlení čísla x dolů na nejbližší násobek druhého parametru "
+"Significance."
 
 #: functions/math.xml:899
 #, kde-format
@@ -7290,6 +7334,17 @@ msgid ""
 "                    If any of the two parameters x or Significance is zero, "
 "the result is zero."
 msgstr ""
+"Funkce FLOOR() zaokrouhluje hodnotu x dolů (směrem k nule) na nejbližší "
+"násobek parametru Significance, který je menší než zadaná hodnota.\n"
+"                Výchozí hodnota parametru Significance je 1, pokud je x "
+"kladné. Je-li hodnota záporná, je to -1,\n"
+"                což znamená zaokrouhlení nahoru na nejbližší celé číslo.\n"
+"                Je-li zadán parametr mode a není roven nule, hodnota x se "
+"zaokrouhlí směrem k nule na násobek\n"
+"                Significance a poté se použije znaménko. V opačném případě "
+"se zaokrouhlí směrem k záporné nekonečnosti.\n"
+"                    Je-li některý z parametrů x nebo Significance roven "
+"nule, výsledek je nula."
 
 #: functions/math.xml:900
 #, kde-format
@@ -7419,7 +7474,7 @@ msgstr "Reálná hodnota (mezi 0 a 1)"
 #: functions/math.xml:998
 #, kde-format
 msgid "Trials (greater 0)"
-msgstr ""
+msgstr "Zkoušky (větší než 0)"
 
 #: functions/math.xml:1002
 #, kde-format
@@ -7450,6 +7505,8 @@ msgid ""
 "The RANDNEGBINOM() function returns a negative binomially-distributed pseudo-"
 "random number."
 msgstr ""
+"Funkce RANDNEGBINOM() vrací pseudonáhodné číslo s negativním binomickým "
+"rozdělením."
 
 #: functions/math.xml:1023
 #, kde-format
@@ -7548,6 +7605,8 @@ msgid ""
 "The MROUND() function returns the value rounded to the specified multiple. "
 "The value and the multiple must have the same sign"
 msgstr ""
+"Funkce MROUND() vrátí hodnotu zaokrouhlenou na zadaný násobek. Hodnota a "
+"násobek musí mít stejné znaménko"
 
 #: functions/math.xml:1099
 #, kde-format
@@ -7577,6 +7636,10 @@ msgid ""
 "or omitted, value is rounded up to the nearest integer. If digits is smaller "
 "than zero, the corresponding integer part of the number is rounded."
 msgstr ""
+"Funkce ROUND(hodnota;[čísla]) vrátí zaokrouhlenou hodnotu. Čísla udávají "
+"počet míst, na který chcete číslo zaokrouhlit. Pokud jsou čísla nulová nebo "
+"nebo nejsou zadána, hodnota se zaokrouhlí nahoru na nejbližší celé číslo. "
+"Pokud jsou čísla menší než nula, zaokrouhlí se příslušná celočíselná část."
 
 #: functions/math.xml:1119
 #, kde-format
@@ -7616,6 +7679,10 @@ msgid ""
 "to round that number. If digits is zero or omitted, value is rounded up to "
 "the nearest integer."
 msgstr ""
+"Funkce ROUNDUP(hodnota;[čísla]) vrátí hodnotu zaokrouhlenou tak, aby její "
+"absolutní hodnota byla větší. Čísla udávají jejich počet, na které chcete "
+"dané číslo zaokrouhlit. Pokud jsou čísla nulová nebo nejsou zadána, hodnota "
+"se zaokrouhlí nahoru na nejbližší celé číslo."
 
 #: functions/math.xml:1144
 #, kde-format
@@ -7650,6 +7717,10 @@ msgid ""
 "to round that number. If digits is zero or omitted, value is rounded down to "
 "the nearest integer."
 msgstr ""
+"Funkce ROUNDDOWN(hodnota;[čísla]) vrátí hodnotu zaokrouhlenou tak, aby její "
+"absolutní hodnota byla menší. Čísla udávají jejich počet, na které chcete "
+"dané číslo zaokrouhlit. Pokud jsou čísla nulová nebo nejsou zadána, hodnota "
+"se zaokrouhlí dolů na nejbližší celé číslo."
 
 #: functions/math.xml:1167
 #, kde-format
@@ -7688,6 +7759,10 @@ msgid ""
 "8, 13, 21...), in which each number, after the first two, is the sum of the "
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
+"Funkce FIB vypočítá N-tý člen Fibonacciho posloupnosti (1, 1, 2, 3, 5, 8, "
+"13, 21...), v níž je každé číslo, s výjimkou prvních dvou, součtem dvou "
+"čísel, která mu bezprostředně předcházejí. Hodnota FIB(0) je definována jako "
+"0."
 
 #: functions/math.xml:1186
 #, kde-format
@@ -7717,7 +7792,7 @@ msgstr "Dělitel"
 #: functions/math.xml:1204
 #, kde-format
 msgid "Function QUOTIENT returns the integer portion of numerator/denumerator."
-msgstr ""
+msgstr "Funkce QUOTIENT vrací celočíselnou část poměru čitatele a jmenovatele."
 
 #: functions/math.xml:1205
 #, kde-format
@@ -7735,6 +7810,7 @@ msgid ""
 "Function MDETERM returns the determinant of a given matrix. The matrix must "
 "be of type n x n."
 msgstr ""
+"Funkce MDETERM vrací determinant dané matice. Matice musí být typu n × n."
 
 #: functions/math.xml:1220
 #, kde-format
@@ -7763,6 +7839,8 @@ msgid ""
 "matrix must be the same as row count of the second one. The result is a "
 "matrix."
 msgstr ""
+"Funkce MMULT vynásobí dvě matice. Počet sloupců první matice se musí "
+"shodovat s počtem řádků druhé matice. Výsledkem je matice."
 
 #: functions/math.xml:1239 functions/math.xml:1257 functions/math.xml:1274
 #: functions/math.xml:1290
@@ -7771,11 +7849,14 @@ msgid ""
 "Since the result is an array, you need to use Ctrl+Alt+Enter (instead of "
 "just Enter) to display the array elements in separate cells."
 msgstr ""
+"Jelikož je výsledkem pole, musíte použít klávesovou zkratku Ctrl+Alt+Enter "
+"(namísto pouhého stisknutí klávesy Enter), aby se prvky pole zobrazily v "
+"samostatných buňkách."
 
 #: functions/math.xml:1240
 #, kde-format
 msgid "MMULT(matrix1;matrix2)"
-msgstr ""
+msgstr "MMULT(matice1;matice2)"
 
 #: functions/math.xml:1241
 #, kde-format
@@ -7790,7 +7871,7 @@ msgstr "Matice"
 #: functions/math.xml:1254
 #, kde-format
 msgid "Calculates the inverse of the matrix."
-msgstr ""
+msgstr "Vypočítá inverzní matici."
 
 #: functions/math.xml:1255
 #, kde-format
@@ -7798,11 +7879,13 @@ msgid ""
 "The matrix multiplied with its inverse results in the unity matrix of the "
 "same dimension."
 msgstr ""
+"Vynásobení matice její inverzní maticí dává jednotkovou matici stejného "
+"rozměru."
 
 #: functions/math.xml:1256
 #, kde-format
 msgid "Invertible matrices have a non-zero determinant."
-msgstr ""
+msgstr "Vratné matice mají nenulový determinant."
 
 #: functions/math.xml:1258
 #, kde-format
@@ -7822,7 +7905,7 @@ msgstr "Rozměr"
 #: functions/math.xml:1273
 #, kde-format
 msgid "Creates the unity matrix of the given dimension."
-msgstr ""
+msgstr "Vytvoří jednotkovou matici daného rozměru."
 
 #: functions/math.xml:1275
 #, kde-format
@@ -7832,7 +7915,7 @@ msgstr "MUNIT(rozměr)"
 #: functions/math.xml:1276
 #, kde-format
 msgid "MUNIT(3) creates a 3x3 unity matrix"
-msgstr ""
+msgstr "Funkce MUNIT(3) vytvoří jednotkovou matici o rozměrech 3×3"
 
 #: functions/math.xml:1289 functions/math.xml:1291
 #, kde-format
@@ -7840,6 +7923,7 @@ msgid ""
 "Returns the transpose of a matrix, i.e. rows and columns of the matrix are "
 "exchanged."
 msgstr ""
+"Vrátí transponovanou matici, tj. řádky a sloupce matice jsou prohozeny."
 
 #: functions/math.xml:1292
 #, kde-format
@@ -7887,6 +7971,8 @@ msgid ""
 "The ADDRESS creates a cell address. Parameter Row is the row number and "
 "Column is the column number."
 msgstr ""
+"Funkce ADDRESS vytvoří adresu buňky. Parametr Row udává číslo řádku a Column "
+"číslo sloupce."
 
 #: functions/reference.xml:32
 #, kde-format
@@ -7895,6 +7981,8 @@ msgid ""
 "= Absolute row, relative column,  3 = Relative row; absolute column and 4 = "
 "Relative."
 msgstr ""
+"Číslo určuje typ odkazu: 1 nebo vynecháno = absolutní, 2 = absolutní řádek, "
+"relativní sloupec, 3 = relativní řádek, absolutní sloupec a 4 = relativní."
 
 #: functions/reference.xml:33
 #, kde-format
@@ -7903,16 +7991,19 @@ msgid ""
 "(default) the address is returned in A1 style if it is set to FALSE in R1C1 "
 "style."
 msgstr ""
+"Styl A1 určuje styl, v jakém se má adresa vrátit. Je-li A1 nastaveno na TRUE "
+"(výchozí nastavení), adresa se vrátí ve stylu A1; je-li nastaveno na FALSE, "
+"vrátí se ve stylu R1C1."
 
 #: functions/reference.xml:34
 #, kde-format
 msgid "Sheet name is the text specifying the name of the sheet."
-msgstr ""
+msgstr "Název listu je text, který určuje název listu."
 
 #: functions/reference.xml:35
 #, kde-format
 msgid "ADDRESS(row; col; absolute; style; sheet name)"
-msgstr ""
+msgstr "ADRESA(řádek; sloupec; absolutní; styl; název listu)"
 
 #: functions/reference.xml:36
 #, kde-format
@@ -7945,6 +8036,8 @@ msgid ""
 "Returns the number of areas in the reference string. An area can be asingle "
 "cell or a set of cells."
 msgstr ""
+"Vrátí počet oblastí v referenčním řetězci. Oblast může představovat jednu "
+"buňku nebo skupinu buněk."
 
 #: functions/reference.xml:53
 #, kde-format
@@ -7965,27 +8058,27 @@ msgstr "AREAS((A1; A2:A4)) vrací 2"
 #, kde-format
 msgid ""
 "Returns information about position, formatting or contents in a reference."
-msgstr ""
+msgstr "Vrátí informace o pozici, formátování nebo obsahu v odkazu."
 
 #: functions/reference.xml:72
 #, kde-format
 msgid "CELL(type; reference)"
-msgstr ""
+msgstr "CELL(typ; odkaz)"
 
 #: functions/reference.xml:73
 #, kde-format
 msgid "CELL(\"COL\", C7) returns 3"
-msgstr ""
+msgstr "CELL(\"COL\", C7) vrací 3"
 
 #: functions/reference.xml:74
 #, kde-format
 msgid "CELL(\"ROW\", C7) returns 7"
-msgstr ""
+msgstr "CELL(\"ROW\", C7) vrací 7"
 
 #: functions/reference.xml:75
 #, kde-format
 msgid "CELL(\"ADDRESS\", C7) returns $C$7"
-msgstr ""
+msgstr "CELL(\"ADDRESS\", C7) vrací $C$7"
 
 #: functions/reference.xml:82
 #, kde-format
@@ -8023,6 +8116,8 @@ msgid ""
 "The COLUMN function returns the column of given cell reference. If no "
 "parameter is specified the column of the current cell gets returned."
 msgstr ""
+"Funkce COLUMN vrátí sloupec zadaného odkazu na buňku. Pokud není zadán žádný "
+"parametr, vrátí se sloupec aktuální buňky."
 
 #: functions/reference.xml:105
 #, kde-format
@@ -8042,7 +8137,7 @@ msgstr "COLUMN(D2) vrací 4"
 #: functions/reference.xml:121
 #, kde-format
 msgid "The COLUMNS function returns the number of columns in a reference."
-msgstr ""
+msgstr "Funkce COLUMNS vrátí počet sloupců v odkazovaném rozsahu."
 
 #: functions/reference.xml:122
 #, kde-format
@@ -8075,6 +8170,8 @@ msgid ""
 "If a range is given, returns value stored in a given row/column. If one cell "
 "is given, which contains an array, then one element of the array is returned."
 msgstr ""
+"Je-li zadán rozsah, vrátí hodnotu uloženou v daném řádku/sloupci. Je-li "
+"zadána jedna buňka obsahující pole, vrátí se jeden prvek tohoto pole."
 
 #: functions/reference.xml:146
 #, kde-format
@@ -8097,6 +8194,8 @@ msgid ""
 "INDEX(A1;2;2), if A1 is a result of array calculation, returns its (2,2) "
 "element."
 msgstr ""
+"Funkce INDEX(A1;2;2) vrátí prvek o rozměrech (2,2), pokud je A1 výsledkem "
+"výpočtu s polem."
 
 #: functions/reference.xml:164
 #, kde-format
@@ -8104,16 +8203,17 @@ msgid ""
 "Returns the content of the cell specified by the reference text. The second "
 "parameter is optional."
 msgstr ""
+"Vrátí obsah buňky určené referenčním textem. Druhý parametr je volitelný."
 
 #: functions/reference.xml:165
 #, kde-format
 msgid "INDIRECT(referenceText, a1 style)"
-msgstr ""
+msgstr "INDIRECT(referenčníText, a1 styl)"
 
 #: functions/reference.xml:166
 #, kde-format
 msgid "INDIRECT(A1), A1 contains \"B1\", and B1 1 => returns 1"
-msgstr ""
+msgstr "INDIRECT(A1), A1 obsahuje \"B1\" a B1 = 1 => vrátí 1"
 
 #: functions/reference.xml:167
 #, kde-format
@@ -8126,6 +8226,8 @@ msgid ""
 "The ROW function returns the row of given cell reference. If no parameter is "
 "specified the row of the current cell gets returned."
 msgstr ""
+"Funkce ROW vrátí číslo řádku zadaného odkazu na buňku. Pokud není zadán "
+"žádný parametr, vrátí se číslo řádku aktuální buňky."
 
 #: functions/reference.xml:180
 #, kde-format
@@ -8145,7 +8247,7 @@ msgstr "ROW(D2) vrací 2"
 #: functions/reference.xml:196
 #, kde-format
 msgid "The ROWS function returns the number of rows in a reference."
-msgstr ""
+msgstr "Funkce ROWS vrátí počet řádků v odkazovaném rozsahu."
 
 #: functions/reference.xml:197
 #, kde-format
@@ -8168,26 +8270,27 @@ msgid ""
 "Returns the sheet number of the reference or the string representing a sheet "
 "name."
 msgstr ""
+"Vrátí číslo listu, na který odkazuje, nebo řetězec představující název listu."
 
 #: functions/reference.xml:214
 #, kde-format
 msgid "SHEET(reference)"
-msgstr ""
+msgstr "SHEET(odkaz)"
 
 #: functions/reference.xml:215
 #, kde-format
 msgid "SHEET(Sheet1!C7) returns 1"
-msgstr ""
+msgstr "SHEET(Sheet1!C7) vrací 1"
 
 #: functions/reference.xml:216
 #, kde-format
 msgid "SHEET(Sheet2!C7) returns 2"
-msgstr ""
+msgstr "SHEET(Sheet2!C7) vrací 2"
 
 #: functions/reference.xml:228
 #, kde-format
 msgid "Returns the number of sheets in a reference or current document."
-msgstr ""
+msgstr "Vrátí počet listů v odkazovaném nebo aktuálním dokumentu."
 
 #: functions/reference.xml:229
 #, kde-format
@@ -8221,16 +8324,26 @@ msgid ""
 "vector must have the same size. Numeric values, string and boolean values "
 "are recognized. Comparison between strings is case-insensitive."
 msgstr ""
+"Funkce LOOKUP vyhledá první parametr ve vyhledávacím vektoru. Vrátí hodnotu "
+"ve výsledném vektoru, která má stejný index jako odpovídající hodnota ve "
+"vyhledávacím vektoru. Pokud daná hodnota ve vyhledávacím vektoru není, vezme "
+"se nejbližší nižší hodnota. Pokud žádná hodnota ve vyhledávacím vektoru "
+"neodpovídá, je vrácena chyba. Vyhledávací vektor musí být seřazen vzestupně "
+"a vyhledávací i výsledný vektor musí mít stejnou velikost. Rozpoznávají se "
+"číselné hodnoty, řetězce a logické hodnoty. Při porovnávání řetězců se "
+"nerozlišují velká a malá písmena."
 
 #: functions/reference.xml:249
 #, kde-format
 msgid "LOOKUP(value; lookup vector; result vector)"
-msgstr ""
+msgstr "LOOKUP(hodnota; vyhledávací vektor; výsledný vektor)"
 
 #: functions/reference.xml:250
 #, kde-format
 msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr ""
+"Funkce LOOKUP(1,232; A1:A6; B1:B6) při hodnotách A1 = 1 a A2 = 2 vrátí "
+"hodnotu z buňky B1."
 
 #: functions/reference.xml:262 functions/reference.xml:288
 #, kde-format
@@ -8240,7 +8353,7 @@ msgstr "Zdroj dat"
 #: functions/reference.xml:270 functions/reference.xml:296
 #, kde-format
 msgid "Sorted (optional)"
-msgstr "Seřazeno (volitelně)"
+msgstr "Třídění (volitelně)"
 
 #: functions/reference.xml:274
 #, kde-format
@@ -8248,6 +8361,8 @@ msgid ""
 "Look for a matching value in the first row of the given table, and return "
 "the value of the indicated row."
 msgstr ""
+"Najde odpovídající hodnotu v prvním řádku dané tabulky a vrátí hodnotu z "
+"uvedeného řádku."
 
 #: functions/reference.xml:275
 #, kde-format
@@ -8258,11 +8373,16 @@ msgid ""
 "be sorted. The search will end, if the 'lookup value' is lower than the "
 "value, currently compared to."
 msgstr ""
+"Vyhledá 'vyhledávanou hodnotu' v prvním řádku 'zdroj dat'. Pokud se hodnota "
+"shoduje, vrátí se hodnota v 'řádku' a ve sloupci, ve kterém byla nalezena. "
+"Pokud je parametr 'třídění' nastaven na hodnotu true (výchozí nastavení), "
+"předpokládá se, že první řádek je seřazen. Vyhledávání se ukončí, pokud je "
+"'vyhledávací hodnota' nižší než hodnota, se kterou se právě porovnává."
 
 #: functions/reference.xml:276
 #, kde-format
 msgid "HLOOKUP(Lookup value; data source; Row; Sorted)"
-msgstr ""
+msgstr "HLOOKUP(vyhledávaná hodnota; zdroj dat; řádek; třídění)"
 
 #: functions/reference.xml:300
 #, kde-format
@@ -8270,6 +8390,8 @@ msgid ""
 "Look for a matching value in the first column of the given table, and return "
 "the value of the indicated column."
 msgstr ""
+"Najde odpovídající hodnotu v prvním sloupci dané tabulky a vrátí hodnotu z "
+"uvedeného sloupce."
 
 #: functions/reference.xml:301
 #, kde-format
@@ -8280,21 +8402,27 @@ msgid ""
 "to be sorted. The search will end, if the 'lookup value' is lower than the "
 "value, currently compared to."
 msgstr ""
+"Vyhledá 'vyhledávanou hodnotu' v prvním sloupci 'zdroje dat'. Pokud se "
+"hodnota shoduje, vrátí se hodnota ze 'sloupce' a řádku, ve kterém byla "
+"nalezena. Je-li parametr 'třídění' nastaven na hodnotu true (výchozí "
+"nastavení), předpokládá se, že první sloupec je seřazen. Vyhledávání se "
+"ukončí, pokud je 'vyhledávaná hodnota' nižší než hodnota, se kterou se právě "
+"porovnává."
 
 #: functions/reference.xml:302
 #, kde-format
 msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
-msgstr ""
+msgstr "VLOOKUP(vyhledávaná hodnota; zdroj dat; sloupec; třídění)"
 
 #: functions/reference.xml:310
 #, kde-format
 msgid "Formula cell"
-msgstr ""
+msgstr "Buňka vzorce"
 
 #: functions/reference.xml:314
 #, kde-format
 msgid "Row cell"
-msgstr "Buňka řady"
+msgstr "Buňka řádku"
 
 #: functions/reference.xml:318
 #, kde-format
@@ -8304,7 +8432,7 @@ msgstr "Nahrazení řady"
 #: functions/reference.xml:322
 #, kde-format
 msgid "Column cell (optional)"
-msgstr ""
+msgstr "Buňka sloupce (volitelné)"
 
 #: functions/reference.xml:326
 #, kde-format
@@ -8321,6 +8449,11 @@ msgid ""
 "may be used to easily create tables of expressions that depend on two input "
 "parameters."
 msgstr ""
+"Funkce MULTIPLE.OPERATIONS provede vzorec, na který odkazuje buňka vzorce, a "
+"všechny vzorce, na nichž tento vzorec závisí, přičemž nahradí všechny odkazy "
+"na buňku řádku odkazy na nahrazení řady a všechny odkazy na buňku sloupce "
+"odkazy na nahrazení sloupce. Tuto funkci lze použít k snadnému vytváření "
+"tabulek vzorců, které závisí na dvou vstupních parametrech."
 
 #: functions/reference.xml:331
 #, kde-format
@@ -8328,6 +8461,8 @@ msgid ""
 "MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; "
 "Column replacement)"
 msgstr ""
+"MULTIPLE.OPERATIONS(buňka vzorce; buňka řádku; nahrazení řádku; buňka "
+"sloupce; nahrazení sloupce)"
 
 #: functions/reference.xml:339
 #, kde-format
@@ -8342,7 +8477,7 @@ msgstr "Hledat oblast"
 #: functions/reference.xml:347
 #, kde-format
 msgid "Match type (optional)"
-msgstr ""
+msgstr "Typ shody (volitelné)"
 
 #: functions/reference.xml:351
 #, kde-format
@@ -8356,41 +8491,49 @@ msgid ""
 "type is -1, the smallest value that is greater than or equal to the search "
 "value is found, and the search region needs to be sorted in descending order."
 msgstr ""
+"Vyhledá hledanou hodnotu v oblasti prohledávání a vrátí její pozici "
+"(počínaje 1). Typ shody může mít hodnotu -1, 0 nebo 1 a určuje, jakým "
+"způsobem se hodnota vyhledává. Je-li typ shody 0, vrátí se index první "
+"hodnoty, která se rovná hledané hodnotě. Pokud je typ shody 1 (nebo je "
+"vynechán), vrátí se index první hodnoty, která je menší nebo rovna hledané "
+"hodnotě, a hodnoty v oblasti vyhledávání musí být seřazeny vzestupně. Pokud "
+"je typ shody -1, najde se nejmenší hodnota, která je větší nebo rovna "
+"hledané hodnotě, a oblast vyhledávání musí být seřazena sestupně."
 
 #: functions/reference.xml:352
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
-msgstr ""
+msgstr "MATCH(hledaná hodnota; oblast vyhledávání; typ shody)"
 
 #: functions/reference.xml:360
 #, kde-format
 msgid "Reference or range"
-msgstr ""
+msgstr "Odkaz nebo rozsah"
 
 #: functions/reference.xml:364
 #, kde-format
 msgid "Number of rows to offset"
-msgstr ""
+msgstr "Počet řádků, o které se má posunout"
 
 #: functions/reference.xml:368
 #, kde-format
 msgid "Number of columns to offset"
-msgstr ""
+msgstr "Počet sloupců, o které se má posunout"
 
 #: functions/reference.xml:372
 #, kde-format
 msgid "Height of the offset range (optional)"
-msgstr ""
+msgstr "Výška posunu (volitelné)"
 
 #: functions/reference.xml:376
 #, kde-format
 msgid "Width of the offset range (optional)"
-msgstr ""
+msgstr "Šířka posunu (volitelné)"
 
 #: functions/reference.xml:380
 #, kde-format
 msgid "Modifies a reference's position and dimension."
-msgstr ""
+msgstr "Upraví umístění a rozměry odkazu."
 
 #: functions/reference.xml:381
 #, kde-format
@@ -8398,6 +8541,8 @@ msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
 "newHeight; Integer newWidth)"
 msgstr ""
+"OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
+"newHeight; Integer newWidth)"
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -8455,6 +8600,8 @@ msgid ""
 "The AVEDEV() function calculates the average of the absolute deviations of a "
 "data set from their mean."
 msgstr ""
+"Funkce AVEDEV() vypočítá průměr absolutních odchylek datového souboru od "
+"jejich střední hodnoty."
 
 #: functions/statistical.xml:32
 #, kde-format
@@ -8512,6 +8659,11 @@ msgid ""
 "the argument evaluates to TRUE, it is counted as one (1). Note that empty "
 "cells are not counted."
 msgstr ""
+"Funkce AVERAGEA() vypočítá průměr zadaných argumentů. Do výpočtu se "
+"započítávají čísla, text i logické hodnoty. Pokud buňka obsahuje text nebo "
+"má argument hodnotu FALSE, počítá se jako nula (0). Pokud má argument "
+"hodnotu TRUE, počítá se jako jedna (1). Upozorňujeme, že prázdné buňky se "
+"nezapočítávají."
 
 #: functions/statistical.xml:82
 #, kde-format
@@ -8558,6 +8710,7 @@ msgid ""
 "The BETADIST() function returns the cumulative beta probability density "
 "function."
 msgstr ""
+"Funkce BETADIST() vrací kumulativní beta-funkci hustoty pravděpodobnosti."
 
 #: functions/statistical.xml:116
 #, kde-format
@@ -8565,11 +8718,13 @@ msgid ""
 "The third and fourth parameters are optional. They set the lower and upper "
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
+"Třetí a čtvrtý parametr jsou volitelné. Určují dolní a horní mez; v opačném "
+"případě jsou jejich výchozí hodnoty 0.0, respektive 1.0."
 
 #: functions/statistical.xml:117
 #, kde-format
 msgid "BETADIST(number;alpha;beta;start;end;[cumulative=TRUE])"
-msgstr ""
+msgstr "BETADIST(číslo;alfa;beta;počátek;konec;[kumulativní=TRUE])"
 
 #: functions/statistical.xml:118
 #, kde-format
@@ -8587,6 +8742,7 @@ msgid ""
 "The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;"
 "TRUE())."
 msgstr ""
+"Funkce BETAINV() vrací inverzní funkci k BETADIST(x;alfa;beta;a;b;TRUE())."
 
 #: functions/statistical.xml:148
 #, kde-format
@@ -8594,6 +8750,8 @@ msgid ""
 "The start and end parameters are optional. They set the lower and upper "
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
+"Parametry start a end jsou volitelné. Určují dolní a horní mez; v opačném "
+"případě jsou jejich výchozí hodnoty 0.0, respektive 1.0."
 
 #: functions/statistical.xml:149
 #, kde-format
