@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-12 17:05+0200\n"
+"PO-Revision-Date: 2026-05-13 19:11+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -8761,12 +8761,12 @@ msgstr "BETAINV(číslo;alfa;beta [; start=0 [; end=1]])"
 #: functions/statistical.xml:150
 #, kde-format
 msgid "BETADIST(BETAINV(0.1;3;4);3;4) equals 0.1"
-msgstr ""
+msgstr "BETADIST(BETAINV(0,1;3;4);3;4) se rovná 0.1"
 
 #: functions/statistical.xml:151
 #, kde-format
 msgid "BETADIST(BETAINV(0.3;3;4);3;4) equals 0.3"
-msgstr ""
+msgstr "BETADIST(BETAINV(0.3;3;4);3;4) se rovná 0.3"
 
 #: functions/statistical.xml:164
 #, kde-format
@@ -8779,6 +8779,8 @@ msgid ""
 "The CHIDIST() function returns the probability value from the indicated Chi "
 "square that a hypothesis is confirmed."
 msgstr ""
+"Funkce CHIDIST() vrací z uvedeného chí-kvadrátu hodnotu pravděpodobnosti, že "
+"je hypotéza potvrzena."
 
 #: functions/statistical.xml:169
 #, kde-format
@@ -8789,6 +8791,11 @@ msgid ""
 "determines from this the probability of error for the hypothesis to be "
 "tested."
 msgstr ""
+"Funkce CHIDIST porovnává hodnotu chi-kvadrátu, která by měla být vypočítána "
+"pro náhodný výběr na základě součtu (skutečná hodnota – očekávaná "
+"hodnota)² / očekávaná hodnota pro všechny hodnoty s teoretickým chi-"
+"kvadrátovým rozdělením, a na základě toho určí pravděpodobnost omylu pro "
+"testovanou hypotézu."
 
 #: functions/statistical.xml:170
 #, kde-format
@@ -8891,7 +8898,7 @@ msgstr "Velikost celé populace"
 msgid ""
 "The CONFIDENCE() function returns the confidence interval for a population "
 "mean."
-msgstr ""
+msgstr "Funkce CONFIDENCE() vrací interval spolehlivosti pro populační průměr."
 
 #: functions/statistical.xml:230
 #, kde-format
@@ -8899,6 +8906,8 @@ msgid ""
 "The alpha parameter must be between 0 and 1 (non-inclusive), stddev must be "
 "positive and size must be greater or equal to 1."
 msgstr ""
+"Parametr alpha musí být v rozmezí 0 až 1 (včetně), stddev musí být kladné a "
+"velikost musí být větší nebo rovna 1."
 
 #: functions/statistical.xml:231
 #, kde-format
@@ -8928,7 +8937,7 @@ msgstr "Druhý rozsah hodnot buněk"
 msgid ""
 "The CORREL() function calculates the correlation coefficient of two cell "
 "ranges."
-msgstr ""
+msgstr "Funkce CORREL() vypočítá korelační koeficient dvou oblastí buněk."
 
 #: functions/statistical.xml:249
 #, kde-format
@@ -8943,7 +8952,7 @@ msgstr "CORREL(A1:A3; B1:B3)"
 #: functions/statistical.xml:267
 #, kde-format
 msgid "The COVAR() function calculates the covariance of two cell ranges."
-msgstr ""
+msgstr "Funkce COVAR() vypočítá kovarianci dvou oblastí buněk."
 
 #: functions/statistical.xml:268
 #, kde-format
@@ -8958,7 +8967,7 @@ msgstr "COVAR(A1:A3; B1:B3)"
 #: functions/statistical.xml:297
 #, kde-format
 msgid "The DEVSQ() function calculates the sum of squares of deviations."
-msgstr ""
+msgstr "Funkce DEVSQ() vypočítá součet čtverců odchylek."
 
 #: functions/statistical.xml:298
 #, kde-format
@@ -8989,12 +8998,12 @@ msgstr "0 = hustota, 1 = rozložení"
 #: functions/statistical.xml:320
 #, kde-format
 msgid "The EXPONDIST() function returns the exponential distribution."
-msgstr ""
+msgstr "Funkce EXPONDIST() vrací exponenciální rozdělení."
 
 #: functions/statistical.xml:321
 #, kde-format
 msgid "The lambda parameter must be positive."
-msgstr ""
+msgstr "Parametr lambda musí být kladný."
 
 #: functions/statistical.xml:322 functions/statistical.xml:1017
 #: functions/statistical.xml:1693
@@ -9003,11 +9012,12 @@ msgid ""
 "Cumulative = 0 calculates the density function; cumulative = 1 calculates "
 "the distribution."
 msgstr ""
+"Kumulativní = 0 vypočítá hustotní funkci; kumulativní = 1 vypočítá rozdělení."
 
 #: functions/statistical.xml:323
 #, kde-format
 msgid "EXPONDIST(number;lambda;cumulative)"
-msgstr "EXPONDIST(číslo;lambda;kumulovaně)"
+msgstr "EXPONDIST(číslo;lambda;kumulativní)"
 
 #: functions/statistical.xml:324
 #, kde-format
@@ -9032,7 +9042,7 @@ msgstr "Stupňů volnosti 2"
 #: functions/statistical.xml:345
 #, kde-format
 msgid "The FDIST() function returns the f-distribution."
-msgstr ""
+msgstr "Funkce FDIST() vrací hodnotu f-rozdělení."
 
 #: functions/statistical.xml:346
 #, kde-format
@@ -9060,6 +9070,8 @@ msgid ""
 "The FINV() function returns the unique non-negative number x such that "
 "FDIST(x;r1;r2) = p."
 msgstr ""
+"Funkce FINV() vrací jedinečné nezáporné číslo x, pro které platí, že FDIST(x;"
+"r1;r2) = p."
 
 #: functions/statistical.xml:368
 #, kde-format
@@ -9077,6 +9089,8 @@ msgid ""
 "The FISHER() function returns the Fisher transformation for x and creates a "
 "function close to a normal distribution."
 msgstr ""
+"Funkce FISHER() vrací Fisherovu transformaci pro proměnnou x a vytváří "
+"funkci, která se blíží normálnímu rozdělení."
 
 #: functions/statistical.xml:382
 #, kde-format
@@ -9099,6 +9113,8 @@ msgid ""
 "The FISHERINV() function returns the inverse of the Fisher transformation "
 "for x and creates a function close to a normal distribution."
 msgstr ""
+"Funkce FISHERINV() vrací inverzi Fisherovy transformace pro proměnnou x a "
+"vytváří funkci, která se blíží normálnímu rozdělení."
 
 #: functions/statistical.xml:397
 #, kde-format
@@ -9132,6 +9148,8 @@ msgid ""
 "Counts the number of values for each interval given by the border values in "
 "the second parameter."
 msgstr ""
+"Spočítá počet hodnot pro každý interval daný mezními hodnotami uvedenými v "
+"druhém parametru."
 
 #: functions/statistical.xml:420
 #, kde-format
@@ -9146,6 +9164,14 @@ msgid ""
 "                   If the second parameter is empty, all values in the first "
 "parameter are counted."
 msgstr ""
+"Hodnoty v druhém parametru určují horní hranice intervalů.\n"
+"               Intervaly zahrnují horní hranice.\n"
+"               Vrácené pole je sloupcový vektor a má o jeden prvek více než "
+"druhý parametr;\n"
+"               poslední prvek představuje počet všech prvků, které jsou "
+"větší než poslední hodnota v druhém parametru.\n"
+"                   Je-li druhý parametr prázdný, započítávají se všechny "
+"hodnoty v prvním parametru."
 
 #: functions/statistical.xml:421
 #, kde-format
@@ -9154,11 +9180,15 @@ msgid ""
 "array, use Ctrl+Alt+Enter (instead of just Enter) to display the array "
 "elements in separate cells. "
 msgstr ""
+"Upozorňujeme, že data musí být uspořádána do sloupců a jelikož výsledkem je "
+"sloupcové pole, použijte klávesovou zkratku Ctrl+Alt+Enter (namísto pouhého "
+"stisknutí klávesy Enter), aby se prvky pole zobrazily v samostatných "
+"buňkách. "
 
 #: functions/statistical.xml:422
 #, kde-format
 msgid "FREQUENCY(Range data; Range bins)"
-msgstr ""
+msgstr "FREKVENCE (data rozsahu; intervaly rozsahu)"
 
 #: functions/statistical.xml:442
 #, kde-format
@@ -9176,6 +9206,8 @@ msgid ""
 "If the last parameter (cumulated) is 0, it calculates the density function; "
 "if it's 1, the distribution is returned."
 msgstr ""
+"Pokud je poslední parametr (kumulativní) nastaven na 0, vypočítá se hustota "
+"pravděpodobnosti; pokud je nastaven na 1, vrátí se samotné rozdělení."
 
 #: functions/statistical.xml:448
 #, kde-format
@@ -9203,11 +9235,13 @@ msgid ""
 "The GAMMAINV() function returns the unique number x >= 0 such that "
 "GAMMAINV(x;alpha;beta;TRUE()) = p."
 msgstr ""
+"Funkce GAMMAINV() vrací jedinečné číslo x >= 0, pro které platí, že "
+"GAMMAINV(x;alpha;beta;TRUE()) = p."
 
 #: functions/statistical.xml:472
 #, kde-format
 msgid "GAMMAINV(number;alpha;beta)"
-msgstr ""
+msgstr "GAMMAINV(číslo;alfa;beta)"
 
 #: functions/statistical.xml:473
 #, kde-format
@@ -9234,6 +9268,8 @@ msgid ""
 "The GAUSS() function returns the integral values for the standard normal "
 "cumulative distribution."
 msgstr ""
+"Funkce GAUSS() vrací hodnoty integrálu pro kumulativní rozdělení "
+"standardního normálního rozdělení."
 
 #: functions/statistical.xml:488
 #, kde-format
@@ -9251,6 +9287,8 @@ msgid ""
 "The GEOMEAN() function returns the geometric mean of the given arguments. "
 "This is equal to the Nth root of the product of the terms."
 msgstr ""
+"Funkce GEOMEAN() vrací geometrický průměr zadaných argumentů. Ten se rovná N-"
+"té odmocnině součinu jednotlivých členů."
 
 #: functions/statistical.xml:518
 #, kde-format
@@ -9273,6 +9311,8 @@ msgid ""
 "The HARMEAN() function returns the harmonic mean of the N data points (N "
 "divided by the sum of the inverses of the data points)."
 msgstr ""
+"Funkce HARMEAN() vrací harmonický průměr N datových bodů (N děleno součtem "
+"převrácených hodnot těchto datových bodů)."
 
 #: functions/statistical.xml:550
 #, kde-format
@@ -9313,7 +9353,7 @@ msgstr "Velikost populace"
 #: functions/statistical.xml:577
 #, kde-format
 msgid "The HYPGEOMDIST() function returns the hypergeometric distribution."
-msgstr ""
+msgstr "Funkce HYPGEOMDIST() vrací hypergeometrické rozdělení."
 
 #: functions/statistical.xml:578
 #, kde-format
@@ -9342,7 +9382,7 @@ msgstr "hodnoty x (rozsah)"
 msgid ""
 "The INTERCEPT() function calculates the interception of the linear "
 "regression line with the y axis."
-msgstr ""
+msgstr "Funkce INTERCEPT() vypočítá průsečík přímky lineární regrese s osou y."
 
 #: functions/statistical.xml:596
 #, kde-format
@@ -9406,7 +9446,7 @@ msgstr "Pozice (od největšího)"
 #: functions/statistical.xml:676
 #, kde-format
 msgid "The LARGE() function returns the k-th largest value from the data set."
-msgstr ""
+msgstr "Funkce LARGE() vrátí k-tou největší hodnotu z datového souboru."
 
 #: functions/statistical.xml:677
 #, kde-format
@@ -9421,7 +9461,7 @@ msgstr "A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2) vrací 3"
 #: functions/statistical.xml:698
 #, kde-format
 msgid "The LEGACYFDIST() function returns the f-distribution."
-msgstr ""
+msgstr "Funkce LEGACYFDIST() vrací hodnotu f-rozdělení."
 
 #: functions/statistical.xml:699
 #, kde-format
@@ -9446,7 +9486,7 @@ msgstr "Střední hodnota standardního logaritmického rozdělení"
 #: functions/statistical.xml:716 functions/statistical.xml:738
 #, kde-format
 msgid "Standard deviation of the standard logarithmic distribution"
-msgstr ""
+msgstr "Směrodatná odchylka standardního logaritmického rozdělení"
 
 #: functions/statistical.xml:720
 #, kde-format
@@ -9454,6 +9494,8 @@ msgid ""
 "The LOGINV() function returns the inverse of the lognormal cumulative "
 "distribution."
 msgstr ""
+"Funkce LOGINV() vrací inverzní hodnotu kumulativní distribuční funkce "
+"logaritmicko-normálního rozdělení."
 
 #: functions/statistical.xml:721
 #, kde-format
@@ -9471,12 +9513,15 @@ msgid ""
 "Probability value for which the standard logarithmic distribution is to be "
 "calculated"
 msgstr ""
+"Hodnota pravděpodobnosti, pro kterou se má vypočítat standardní logaritmické "
+"rozdělení"
 
 #: functions/statistical.xml:742
 #, kde-format
 msgid ""
 "The LOGNORMDIST() function returns the cumulative lognormal distribution."
 msgstr ""
+"Funkce LOGNORMDIST() vrací kumulativní logaritmicko-normální rozdělení."
 
 #: functions/statistical.xml:743
 #, kde-format
@@ -9507,6 +9552,10 @@ msgid ""
 "list of values like MEDIAN(12; 5; 12.5). Blank cells will be considered as a "
 "zero, and cells with text will be ignored."
 msgstr ""
+"Funkce MEDIAN() vypočítá medián všech hodnot zadaných jako parametry. Můžete "
+"vypočítat medián rozsahu, například MEDIAN(A1:B5), nebo seznamu hodnot, "
+"například MEDIAN(12; 5; 12.5). Prázdné buňky se považují za nulu a buňky s "
+"textem se ignorují."
 
 #: functions/statistical.xml:773
 #, kde-format
@@ -9539,6 +9588,7 @@ msgid ""
 "The MODE() function returns the most frequently occurring value in the data "
 "set."
 msgstr ""
+"Funkce MODE() vrátí hodnotu, která se v datovém souboru vyskytuje nejčastěji."
 
 #: functions/statistical.xml:800
 #, kde-format
@@ -9574,6 +9624,7 @@ msgstr "Pravděpodobnost úspěchu"
 #, kde-format
 msgid "The NEGBINOMDIST() function returns the negative binomial distribution."
 msgstr ""
+"Funkce NEGBINOMDIST() vrací hodnotu podle negativního binomického rozdělení."
 
 #: functions/statistical.xml:823
 #, kde-format
@@ -9599,6 +9650,7 @@ msgstr "Směrodatná odchylka rozložení"
 #, kde-format
 msgid "The NORMDIST() function returns the normal cumulative distribution."
 msgstr ""
+"Funkce NORMDIST() vrací kumulativní distribuční funkci normálního rozdělení."
 
 #: functions/statistical.xml:849
 #, kde-format
@@ -9606,22 +9658,25 @@ msgid ""
 "Number is the value of the distribution based on which the normal "
 "distribution is to be calculated."
 msgstr ""
+"Číslo představuje hodnotu rozdělení, na jehož základě se má vypočítat "
+"normální rozdělení."
 
 #: functions/statistical.xml:850
 #, kde-format
 msgid "MV is the linear middle of the distribution."
-msgstr ""
+msgstr "MV představuje lineární střední hodnotu rozložení."
 
 #: functions/statistical.xml:851
 #, kde-format
 msgid "STD is the standard deviation of the distribution."
-msgstr ""
+msgstr "STD je směrodatná odchylka rozdělení."
 
 #: functions/statistical.xml:852
 #, kde-format
 msgid ""
 "K = 0 calculates the density function; K = 1 calculates the distribution."
 msgstr ""
+"Při K = 0 se vypočítá hustotní funkce; při K = 1 se vypočítá rozdělení."
 
 #: functions/statistical.xml:853
 #, kde-format
@@ -9655,6 +9710,8 @@ msgid ""
 "distribution. The number must be between 0 and 1 (non-inclusive) and STD "
 "must be positive."
 msgstr ""
+"Funkce NORMINV() vrací inverzní hodnotu kumulativní normální distribuce. "
+"Číslo musí být v rozmezí 0 až 1 (včetně) a STD musí být kladné."
 
 #: functions/statistical.xml:876
 #, kde-format
@@ -9669,12 +9726,12 @@ msgstr "NORMINV(0,9;63;5) se rovná 69,41"
 #: functions/statistical.xml:885
 #, kde-format
 msgid "Value to which the standard normal distribution is calculated"
-msgstr ""
+msgstr "Hodnota, na jejímž základě se počítá standardní normální rozdělení"
 
 #: functions/statistical.xml:889
 #, kde-format
 msgid "The NORMSDIST() function returns the standard normal distribution."
-msgstr ""
+msgstr "Funkce NORMSDIST() vrací standardní normální rozdělení."
 
 #: functions/statistical.xml:890
 #, kde-format
@@ -9692,6 +9749,8 @@ msgid ""
 "The NORMSINV() function returns the inverse of the standard normal "
 "cumulative distribution. The number must be between 0 and 1 (non-inclusive)."
 msgstr ""
+"Funkce NORMSINV() vrací inverzní hodnotu kumulativní standardní normální "
+"distribuce. Číslo musí být v rozmezí od 0 do 1 (včetně)."
 
 #: functions/statistical.xml:904
 #, kde-format
@@ -9709,6 +9768,8 @@ msgid ""
 "The PEARSON() function calculates the correlation coefficient of two cell "
 "ranges. It is the same as the CORREL function."
 msgstr ""
+"Funkce PEARSON() vypočítá korelační koeficient dvou oblastí buněk. Je "
+"totožná s funkcí CORREL."
 
 #: functions/statistical.xml:922
 #, kde-format
@@ -9758,11 +9819,14 @@ msgid ""
 "second parameter is the number of elements to choose. Both parameters must "
 "be positive."
 msgstr ""
+"Funkce PERMUTATIONA() vrací počet uspořádaných permutací s opakováním. "
+"Prvním parametrem je počet prvků a druhým parametrem je počet prvků, které "
+"se mají vybrat. Oba parametry musí být kladné."
 
 #: functions/statistical.xml:960
 #, kde-format
 msgid "PERMUTATIONA(total;chosen)"
-msgstr ""
+msgstr "PERMUTACE(celkem;vybrané)"
 
 #: functions/statistical.xml:961
 #, kde-format
@@ -9777,12 +9841,12 @@ msgstr "PERMUTATIONA(0,0) vrací 1"
 #: functions/statistical.xml:970
 #, kde-format
 msgid "Range of values"
-msgstr ""
+msgstr "Rozsah hodnot"
 
 #: functions/statistical.xml:974
 #, kde-format
 msgid "The percentile value between 0 and 1, inclusive."
-msgstr ""
+msgstr "Percentilová hodnota v rozmezí od 0 do 1 včetně."
 
 #: functions/statistical.xml:978
 #, no-c-format, kde-format
@@ -9794,11 +9858,16 @@ msgid ""
 "MEDIAN. Blank cells will be considered as a zero, and cells with text will "
 "be ignored."
 msgstr ""
+"Funkce PERCENTILE() vrací x-tý percentil vzorku datových hodnot v poli Data. "
+"Percentil udává hodnotu na stupnici pro datovou řadu, která sahá od nejmenší "
+"(alfa = 0) po největší hodnotu (alfa = 1) dané datové řady. Pro alfa = 25 % "
+"znamená percentil první kvartil; alfa = 50 % je MEDIÁN. Prázdné buňky budou "
+"považovány za nulu a buňky s textem budou ignorovány."
 
 #: functions/statistical.xml:979
 #, kde-format
 msgid "PERCENTILE(data;alpha)"
-msgstr ""
+msgstr "PERCENTILE(data;alfa)"
 
 #: functions/statistical.xml:989
 #, kde-format
@@ -9812,6 +9881,8 @@ msgid ""
 "The PHI() function returns value of the distribution function for a standard "
 "normal distribution."
 msgstr ""
+"Funkce PHI() vrací hodnotu distribuční funkce pro standardní normální "
+"rozdělení."
 
 #: functions/statistical.xml:994
 #, kde-format
@@ -9831,12 +9902,12 @@ msgstr "Parametr lambda (střední hodnota)"
 #: functions/statistical.xml:1015
 #, kde-format
 msgid "The POISSON() function returns the Poisson distribution."
-msgstr ""
+msgstr "Funkce POISSON() vrací Poissonovo rozdělení."
 
 #: functions/statistical.xml:1016
 #, kde-format
 msgid "The lambda and number parameters must be positive."
-msgstr ""
+msgstr "Parametry lambda a number musí být kladné."
 
 #: functions/statistical.xml:1018
 #, kde-format
@@ -9866,27 +9937,27 @@ msgstr "Pořadí"
 #: functions/statistical.xml:1040
 #, kde-format
 msgid "The RANK() function returns the rank of a number in a list of numbers."
-msgstr ""
+msgstr "Funkce RANK() vrátí pořadí čísla v seznamu čísel."
 
 #: functions/statistical.xml:1041
 #, kde-format
 msgid "Order specifies how to rank the numbers:"
-msgstr ""
+msgstr "V pořadí je uvedeno, jak se čísla řadí:"
 
 #: functions/statistical.xml:1042
 #, kde-format
 msgid "If 0 or omitted, Data is ranked in descending order."
-msgstr ""
+msgstr "Pokud je hodnota 0 nebo pole vynecháno, data se seřadí sestupně."
 
 #: functions/statistical.xml:1043
 #, kde-format
 msgid "If not 0, Data is ranked in ascending order."
-msgstr ""
+msgstr "Pokud není hodnota 0, data jsou seřazena vzestupně."
 
 #: functions/statistical.xml:1044
 #, kde-format
 msgid "RANK(Value; Data; Order)"
-msgstr ""
+msgstr "RANK(hodnota; data; pořadí)"
 
 #: functions/statistical.xml:1045
 #, kde-format
@@ -9896,12 +9967,12 @@ msgstr "RANK (2;{1;2;3}) je rovno 2"
 #: functions/statistical.xml:1053
 #, kde-format
 msgid "known Y (array)"
-msgstr ""
+msgstr "hodnota Y (pole)"
 
 #: functions/statistical.xml:1057
 #, kde-format
 msgid "known X (array)"
-msgstr ""
+msgstr "hodnota X (pole)"
 
 #: functions/statistical.xml:1061
 #, kde-format
@@ -9909,6 +9980,8 @@ msgid ""
 "The RSQ() function returns the square of the Pearson product moment "
 "correlation coefficient through data points in known_y's and known_x's."
 msgstr ""
+"Funkce RSQ() vrací druhou mocninu Pearsonova korelačního koeficientu pro "
+"datové body v proměnných hodnota_y a hodnota_x."
 
 #: functions/statistical.xml:1062
 #, kde-format
@@ -9916,16 +9989,18 @@ msgid ""
 "If \"arrayY\" and \"arrayX\" are empty or have a different number of data "
 "points, then #N/A is returned."
 msgstr ""
+"Pokud jsou proměnné \"poleY\" a \"poleX\" prázdné nebo mají odlišný počet "
+"datových bodů, vrátí se hodnota #N/A."
 
 #: functions/statistical.xml:1063
 #, kde-format
 msgid "RSQ(known Y; known X)"
-msgstr ""
+msgstr "RSQ(hodnota Y; hodnota X)"
 
 #: functions/statistical.xml:1087
 #, kde-format
 msgid "The SKEW() function returns an estimate for skewness of a distribution"
-msgstr ""
+msgstr "Funkce SKEW() vrací odhad šikmosti rozdělení"
 
 #: functions/statistical.xml:1088
 #, kde-format
@@ -9945,7 +10020,7 @@ msgstr "SKEW(11,4; 17,3; 21,3; 25,9; 40,1) vrací 0,9768"
 #: functions/statistical.xml:1115
 #, kde-format
 msgid "The SKEWP() function returns the population skewness of a distribution"
-msgstr ""
+msgstr "Funkce SKEWP() vrací populační šikmost rozdělení"
 
 #: functions/statistical.xml:1116
 #, kde-format
@@ -9966,7 +10041,7 @@ msgstr "SKEWP(11,4; 17,3; 21,3; 25,9; 40,1) vrací 0,6552"
 #, kde-format
 msgid ""
 "The SLOPE() function calculates the slope of the linear regression line."
-msgstr ""
+msgstr "Funkce SLOPE() vypočítá sklon přímky lineární regrese."
 
 #: functions/statistical.xml:1136
 #, kde-format
@@ -9981,7 +10056,7 @@ msgstr "Pozice (od nejmenšího)"
 #: functions/statistical.xml:1152
 #, kde-format
 msgid "The SMALL() function returns the k-th smallest value from the data set."
-msgstr ""
+msgstr "Funkce SMALL() vrátí k-tou nejmenší hodnotu z datového souboru."
 
 #: functions/statistical.xml:1153
 #, kde-format
@@ -9996,12 +10071,12 @@ msgstr "A1: 3, A2: 1, A3: 5 => SMALL(A1:A3; 1) vrací 1"
 #: functions/statistical.xml:1162
 #, kde-format
 msgid "Number to be normalized"
-msgstr ""
+msgstr "Číslo, které má být normalizováno"
 
 #: functions/statistical.xml:1166
 #, kde-format
 msgid "Mean of the distribution"
-msgstr ""
+msgstr "Střední hodnota rozdělení"
 
 #: functions/statistical.xml:1170
 #, kde-format
@@ -10011,12 +10086,12 @@ msgstr "Směrodatná odchylka"
 #: functions/statistical.xml:1174
 #, kde-format
 msgid "The STANDARDIZE() function calculates a normalized value."
-msgstr ""
+msgstr "Funkce STANDARDIZE() vypočítá normalizovanou hodnotu."
 
 #: functions/statistical.xml:1175
 #, kde-format
 msgid "STANDARDIZE(x; mean, stdev)"
-msgstr ""
+msgstr "STANDARDIZE(x; průměr, směrodatná odchylka)"
 
 #: functions/statistical.xml:1176
 #, kde-format
@@ -10030,6 +10105,8 @@ msgid ""
 "sample. The standard deviation is a measure of how widely values are "
 "dispersed from the average value."
 msgstr ""
+"Funkce STDEV() vrací odhad standardní odchylky na základě vzorku. Standardní "
+"odchylka je míra toho, jak moc se hodnoty od průměrné hodnoty liší."
 
 #: functions/statistical.xml:1205
 #, kde-format
@@ -10050,6 +10127,10 @@ msgid ""
 "contains the boolean value FALSE, it is counted as 0. If the boolean value "
 "is TRUE it is counted as 1."
 msgstr ""
+"Funkce STDEVA() vrací odhad standardní odchylky na základě vzorku. "
+"Standardní odchylka je měřítkem toho, jak moc se hodnota odchyluje od "
+"průměrné hodnoty. Pokud odkazovaná buňka obsahuje text nebo logickou hodnotu "
+"FALSE, počítá se jako 0. Pokud je logická hodnota TRUE, počítá se jako 1."
 
 #: functions/statistical.xml:1236
 #, kde-format
@@ -10072,6 +10153,8 @@ msgid ""
 "The STDEVP() function returns the standard deviation based on an entire "
 "population"
 msgstr ""
+"Funkce STDEVP() vrací směrodatnou odchylku vypočítanou na základě celé "
+"populace"
 
 #: functions/statistical.xml:1269
 #, kde-format
@@ -10090,6 +10173,9 @@ msgid ""
 "population. If a referenced cell contains text or contains the boolean value "
 "FALSE, it is counted as 0. If the boolean value is TRUE it is counted as 1."
 msgstr ""
+"Funkce STDEVPA() vrací směrodatnou odchylku na základě celé populace. Pokud "
+"odkazovaná buňka obsahuje text nebo logickou hodnotu FALSE, počítá se jako "
+"0. Pokud je logická hodnota TRUE, počítá se jako 1."
 
 #: functions/statistical.xml:1300
 #, kde-format
@@ -10117,6 +10203,8 @@ msgid ""
 "The STEYX() function calculates the standard error of the predicted y value "
 "for each x in the regression."
 msgstr ""
+"Funkce STEYX() vypočítá standardní chybu odhadované hodnoty y pro každou "
+"hodnotu x v regresi."
 
 #: functions/statistical.xml:1322
 #, kde-format
@@ -10138,6 +10226,9 @@ msgid ""
 "values. The number of values in the two arrays should be equal. Otherwise "
 "this function returns Err."
 msgstr ""
+"Funkce SUMPRODUCT() (SUM(X*Y)) vrátí součet součinů těchto hodnot. Počet "
+"hodnot v obou polích by měl být stejný. V opačném případě tato funkce vrátí "
+"chybu Err."
 
 #: functions/statistical.xml:1347
 #, kde-format
@@ -10156,6 +10247,9 @@ msgid ""
 "these values. The number of values in the two arrays should be equal. "
 "Otherwise this function returns Err."
 msgstr ""
+"Funkce SUMX2PY2() (SUM(X^2+Y^2)) vrátí součet čtverců těchto hodnot. Počet "
+"hodnot v obou polích by měl být stejný. V opačném případě tato funkce vrátí "
+"chybu Err."
 
 #: functions/statistical.xml:1365
 #, kde-format
@@ -10174,6 +10268,9 @@ msgid ""
 "of these values. The number of values in the two arrays should be equal. "
 "Otherwise this function returns Err."
 msgstr ""
+"Funkce SUMX2MY2() (SUM(X^2-Y^2)) vrací rozdíl čtverců těchto hodnot. Počet "
+"prvků v obou polích by měl být stejný. V opačném případě tato funkce vrátí "
+"chybu Err."
 
 #: functions/statistical.xml:1383
 #, kde-format
@@ -10198,13 +10295,13 @@ msgstr "Režim (1 nebo 2)"
 #: functions/statistical.xml:1404
 #, kde-format
 msgid "The TDIST() function returns the t-distribution."
-msgstr ""
+msgstr "Funkce TDIST() vrací hodnotu t-rozdělení."
 
 #: functions/statistical.xml:1405
 #, kde-format
 msgid ""
 "Mode = 1 returns the one-tailed test, Mode = 2 returns the two-tailed test."
-msgstr ""
+msgstr "Režim = 1 vrátí jednostranný test, režim = 2 vrátí oboustranný test."
 
 #: functions/statistical.xml:1406
 #, kde-format
@@ -10219,22 +10316,22 @@ msgstr "TDIST(12;5;1) vrací 0,000035"
 #: functions/statistical.xml:1415
 #, kde-format
 msgid "KnownY"
-msgstr ""
+msgstr "HodnotaY"
 
 #: functions/statistical.xml:1419
 #, kde-format
 msgid "KnownX"
-msgstr ""
+msgstr "HodnotaX"
 
 #: functions/statistical.xml:1423
 #, kde-format
 msgid "NumberSequence newX"
-msgstr ""
+msgstr "Číselná řada novéX"
 
 #: functions/statistical.xml:1427
 #, kde-format
 msgid "allowOffset"
-msgstr ""
+msgstr "povolitOdsazení"
 
 #: functions/statistical.xml:1431
 #, kde-format
@@ -10244,6 +10341,10 @@ msgid ""
 "must firstly select a cell-range containing the Y-values, followed by the "
 "cell-range of the corresponding X-values. "
 msgstr ""
+"Funkce TREND() vypočítá posloupnost hodnot Y na základě lineární regrese "
+"známých dvojic hodnot X a Y. Jako vstupní parametry musí uživatel nejprve "
+"vybrat oblast buněk obsahující hodnoty Y a poté oblast buněk s "
+"odpovídajícími hodnotami X. "
 
 #: functions/statistical.xml:1432
 #, kde-format
@@ -10252,6 +10353,9 @@ msgid ""
 "specified as the 3rd parameter. However, the input X-range should be given "
 "again if no extrapolation is required. "
 msgstr ""
+"Přímku nejlepšího přiblížení lze extrapolovat do jiného rozsahu osy X, který "
+"se zadává jako třetí parametr. Pokud však extrapolace není požadována, je "
+"třeba zadat vstupní rozsah osy X znovu. "
 
 #: functions/statistical.xml:1433
 #, kde-format
@@ -10261,6 +10365,11 @@ msgid ""
 "parameter to TRUE or 1 (the default) allows the best-fit line to intersect "
 "the vertical axis at a non-zero value of Y. "
 msgstr ""
+"Regresní přímku lze nastavit tak, aby protínala počátek souřadnic (X=0, "
+"Y=0), a to nastavením čtvrtého parametru povolitOdsazení na hodnotu FALSE "
+"nebo 0. Nastavení tohoto parametru na hodnotu TRUE nebo 1 (výchozí "
+"nastavení) umožňuje, aby se přímka nejlepšího přiblížení protínala svislou "
+"osu v bodě s nenulovou hodnotou Y. "
 
 #: functions/statistical.xml:1434
 #, kde-format
@@ -10269,11 +10378,14 @@ msgid ""
 "plotting the data will be facilitated if the X- and Y- values are also in "
 "rows, rather than columns."
 msgstr ""
+"Vezměte na vědomí, že jelikož výsledkem této funkce je řádek vypočítaných "
+"hodnot Y, bude vykreslení dat snazší, pokud budou hodnoty X a Y rovněž "
+"uspořádány do řádků, nikoli do sloupců."
 
 #: functions/statistical.xml:1435
 #, kde-format
 msgid "Constraints: COUNT(knownY) = COUNT(knownX)."
-msgstr ""
+msgstr "Podmínka: COUNT(hodnotaY) = COUNT(hodnotaX)."
 
 #: functions/statistical.xml:1436
 #, kde-format
@@ -10281,6 +10393,9 @@ msgid ""
 "Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to "
 "display the values in separate cells."
 msgstr ""
+"Jelikož je výsledkem pole, použijte klávesovou zkratku Ctrl+Alt+Enter "
+"(namísto pouhého stisknutí klávesy Enter), aby se hodnoty zobrazily v "
+"jednotlivých buňkách."
 
 #: functions/statistical.xml:1437
 #, kde-format
@@ -10288,16 +10403,18 @@ msgid ""
 "TREND(known Y-range; [known X-range; [new X-range; [allowOffset=TRUE/"
 "FALSE]]])"
 msgstr ""
+"TREND(známý rozsah Y; [známý rozsah X; [nový rozsah X; [povolitOdsazení=TRUE/"
+"FALSE]]])"
 
 #: functions/statistical.xml:1448
 #, kde-format
 msgid "dataSet"
-msgstr "soubor dat"
+msgstr "souborDat"
 
 #: functions/statistical.xml:1452
 #, kde-format
 msgid "cutOffFraction"
-msgstr ""
+msgstr "zkrácenýZlomek"
 
 #: functions/statistical.xml:1456
 #, kde-format
@@ -10307,21 +10424,25 @@ msgid ""
 "fraction of measurements which are to be excluded is set by the second "
 "parameter (cutOffFraction)."
 msgstr ""
+"Funkce TRIMMEAN() vypočítá průměr datového souboru po odečtení nejmenší a "
+"největší hodnoty, aby se vyloučily případné odlehlé hodnoty. Celkový podíl "
+"měření, která mají být vyloučena, se nastavuje pomocí druhého parametru "
+"(zkrácenýZlomek)."
 
 #: functions/statistical.xml:1457
 #, kde-format
 msgid "TRIMMEAN(dataSet; cutOffFraction)"
-msgstr ""
+msgstr "TRIMMEAN(souborDat; zkrácenýZlomek)"
 
 #: functions/statistical.xml:1468
 #, kde-format
 msgid "x (array) The set of observed data for the first condition."
-msgstr ""
+msgstr "x (pole) Soubor naměřených dat pro první podmínku."
 
 #: functions/statistical.xml:1472
 #, kde-format
 msgid "y (array) The set of observed data for the second condition."
-msgstr ""
+msgstr "y (pole) Soubor naměřených dat pro druhou podmínku."
 
 #: functions/statistical.xml:1476
 #, kde-format
@@ -10329,6 +10450,8 @@ msgid ""
 "mode Whether to look up 1-tailed (mode = 1) or 2-tailed (mode = 2) "
 "probability for t."
 msgstr ""
+"režim určuje, zda se má vyhledat jednostranná (režim = 1) nebo oboustranná "
+"(režim = 2) pravděpodobnost pro t."
 
 #: functions/statistical.xml:1480
 #, kde-format
@@ -10336,6 +10459,8 @@ msgid ""
 "type The type of t-test to perform. Set this to 1 for a paired t-test, 2 or "
 "3 for an unpaired t-test."
 msgstr ""
+"typ t-testu, který se má provést. Nastavte hodnotu 1 pro párový t-test, 2 "
+"nebo 3 pro nepárový t-test."
 
 #: functions/statistical.xml:1484
 #, kde-format
@@ -10343,6 +10468,8 @@ msgid ""
 "The TTEST() function calculates the probability of a t-test given two ranges "
 "of data to compare."
 msgstr ""
+"Funkce TTEST() vypočítá pravděpodobnost t-testu na základě dvou "
+"porovnávaných datových řad."
 
 #: functions/statistical.xml:1485
 #, kde-format
@@ -10354,6 +10481,12 @@ msgid ""
 "can run, a t-test can tell you how likely it is that any speed difference "
 "between the two groups of people is due to their height."
 msgstr ""
+"T-test porovnává dva soubory dat a určuje pravděpodobnost, že případný "
+"rozdíl mezi nimi je způsoben vlivem určité proměnné. Například pokud máme "
+"dva soubory dat, z nichž jeden obsahuje rychlost, jakou dokáže běžet 30 "
+"vysokých lidí, a druhý rychlost, jakou dokáže běžet 30 malých lidí, t-test "
+"nám může říci, jaká je pravděpodobnost, že případný rozdíl v rychlosti mezi "
+"těmito dvěma skupinami lidí je způsoben jejich výškou."
 
 #: functions/statistical.xml:1486
 #, kde-format
@@ -10366,6 +10499,12 @@ msgid ""
 "which one will actually be fastest, we would use a two-tailed test (mode = "
 "2)."
 msgstr ""
+"Parametr mode se používá k určení, zda požadujete, aby rozdíl mezi dvěma "
+"datovými soubory směřoval určitým směrem, či nikoli. Například pokud "
+"předpokládáme, že vysocí lidé budou schopni běžet rychleji než malí lidé, "
+"použijeme jednostranný test (mode = 1); pokud však předpokládáme, že jedna "
+"skupina bude schopna běžet rychleji než druhá, ale nevíme, která z nich bude "
+"skutečně nejrychlejší, použijeme oboustranný test (mode = 2)."
 
 #: functions/statistical.xml:1487
 #, kde-format
@@ -10381,6 +10520,15 @@ msgid ""
 "sized; for paired t-tests the two ranges are required to contain the same "
 "number of cells."
 msgstr ""
+"Párové testy (typ = 1, viz syntaxe níže) jsou vhodné pouze v případě, že oba "
+"soubory dat pocházejí ze stejného zdroje (tj. každý zdroj dat poskytl jednu "
+"položku v prvním datovém rozsahu a jednu položku ve druhém datovém rozsahu). "
+"V příkladu s rychlostí běhu je to nemožné, protože jedna osoba nemůže být "
+"zároveň malá i vysoká: každá osoba může poskytnout data pouze pro jednu ze "
+"skupin. V takových případech, kdy hodnoty v každém datovém souboru pocházejí "
+"z různých zdrojů, je vhodný nepárový t-test (typ = 2 nebo typ = 3). U "
+"nepárových t-testů nemusí mít oba datové rozsahy stejnou velikost; u "
+"párových t-testů musí oba rozsahy obsahovat stejný počet buněk."
 
 #: functions/statistical.xml:1488
 #, kde-format
@@ -10392,11 +10540,17 @@ msgid ""
 "where the variances are not sufficiently similar you must use an unpaired t-"
 "test for samples with differing variances (type = 3)."
 msgstr ""
+"Pokud vaše soubory dat nepocházejí ze stejného zdroje, závisí volba vhodného "
+"typu nepárového testu na rozptylu v rámci každého z vašich dvou výběrů. "
+"Pokud jsou rozptyly obou vzorků podobné, můžete použít nepárový t-test pro "
+"vzorky s podobnými rozptyly (typ = 2); pokud rozptyly nejsou dostatečně "
+"podobné, musíte použít nepárový t-test pro vzorky s odlišnými rozptyly (typ "
+"= 3)."
 
 #: functions/statistical.xml:1489
 #, kde-format
 msgid "TTEST(x; y; mode; type)"
-msgstr ""
+msgstr "TTEST(x; y; režim; typ)"
 
 #: functions/statistical.xml:1518
 #, kde-format
