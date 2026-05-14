@@ -6,6 +6,7 @@
 
 #include <QDebug>
 #include <QRegularExpression>
+#include <QStringList>
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QUrl>
@@ -187,7 +188,7 @@ void TextDocumentRtfOutput::setFont(const int fontIndex)
     }
     FontTableEntry fontEntry = m_fontTable.value(fontIndex);
     qCDebug(lcRtf) << "selecting font:" << fontEntry.fontName();
-    m_textCharFormatStack.top().setFontFamily(fontEntry.fontName());
+    m_textCharFormatStack.top().setFontFamilies(QStringList{fontEntry.fontName()});
     m_cursor->setCharFormat(m_textCharFormatStack.top());
     m_encoding = fontEntry.encoding();
     m_haveSetFont = true;
