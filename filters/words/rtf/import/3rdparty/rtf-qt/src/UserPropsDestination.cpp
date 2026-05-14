@@ -11,7 +11,7 @@ namespace RtfReader
 UserPropsDestination::UserPropsDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
     : Destination(reader, output, name)
     , m_nextPlainTextIsPropertyName(true)
-    , m_propertyType(QVariant::String)
+    , m_propertyType(QMetaType::QString)
 {
 }
 
@@ -23,15 +23,15 @@ void UserPropsDestination::handleControlWord(const QByteArray &controlWord, bool
         m_nextPlainTextIsPropertyName = true;
     } else if ((controlWord == "proptype") && hasValue) {
         if (value == 30) {
-            m_propertyType = QVariant::String;
+            m_propertyType = QMetaType::QString;
         } else if (value == 3) {
-            m_propertyType = QVariant::Int;
+            m_propertyType = QMetaType::Int;
         } else if (value == 5) {
-            m_propertyType = QVariant::Double;
+            m_propertyType = QMetaType::Double;
         } else if (value == 64) {
-            m_propertyType = QVariant::Date;
+            m_propertyType = QMetaType::QDate;
         } else if (value == 11) {
-            m_propertyType = QVariant::Bool;
+            m_propertyType = QMetaType::Bool;
         } else {
             qCDebug(lcRtf) << "unhandled value type in UserPropsDestination:" << value;
         }
@@ -48,7 +48,7 @@ void UserPropsDestination::handlePlainText(const QByteArray &plainText)
         m_propertyName = QString::fromUtf8(plainText);
     } else {
         QVariant value;
-        if (m_propertyType == QVariant::String) {
+        if (m_propertyType == QMetaType::QString) {
             value = QVariant(plainText);
         } else {
             // TODO: Really need some examples of this stuff - int, float, date and boolean

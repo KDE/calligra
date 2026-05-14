@@ -26,7 +26,7 @@ public:
 
 private:
     bool m_nextPlainTextIsPropertyName;
-    QVariant::Type m_propertyType;
+    QMetaType::Type m_propertyType;
     QString m_propertyName;
 };
 }
