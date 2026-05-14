@@ -24,6 +24,6 @@ void PcdataDestination::handleControlWord(const QByteArray &controlWord, bool ha
 
 void PcdataDestination::handlePlainText(const QByteArray &plainText)
 {
-    m_pcdata = plainText;
+    m_pcdata = QString::fromUtf8(plainText);
 }
 }

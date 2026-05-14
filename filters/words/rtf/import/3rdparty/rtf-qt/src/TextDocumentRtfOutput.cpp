@@ -48,7 +48,8 @@ void TextDocumentRtfOutput::endGroup()
 void TextDocumentRtfOutput::appendText(const QByteArray &text)
 {
     static const QRegularExpression controlCharacters(QStringLiteral("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]"));
-    m_cursor->insertText((m_encoding != "UTF-8" ? QStringDecoder(m_encoding).decode(text) : QString::fromLatin1(text)).remove(controlCharacters));
+    m_cursor->insertText(
+        (m_encoding != QStringLiteral("UTF-8") ? QStringDecoder(m_encoding).decode(text) : QString::fromLatin1(text)).remove(controlCharacters));
 }
 
 void TextDocumentRtfOutput::appendText(const QString &str)
@@ -63,7 +64,7 @@ void TextDocumentRtfOutput::insertPar()
 
 void TextDocumentRtfOutput::insertTab()
 {
-    m_cursor->insertText("\t");
+    m_cursor->insertText(QStringLiteral("\t"));
 }
 
 void TextDocumentRtfOutput::insertLeftQuote()

@@ -115,7 +115,7 @@ bool Reader::parseFileHeader()
         result = false;
     }
 
-    if (!headerFormatIsKnown(token.name, token.parameter.toInt())) {
+    if (!headerFormatIsKnown(QString::fromUtf8(token.name), token.parameter.toInt())) {
         qCDebug(lcRtf) << "Not a valid RTF file - unknown header";
         result = false;
     }
@@ -125,7 +125,7 @@ bool Reader::parseFileHeader()
 
 bool Reader::headerFormatIsKnown(const QString &tokenName, int tokenValue)
 {
-    if (tokenName != QString("rtf")) {
+    if (tokenName != QLatin1String("rtf")) {
         qCDebug(lcRtf) << "unknown / unexpected header token name:" << tokenName;
         return false;
     }
@@ -140,51 +140,51 @@ bool Reader::headerFormatIsKnown(const QString &tokenName, int tokenValue)
 
 Destination *Reader::makeDestination(const QString &destinationName)
 {
-    if (destinationName == "colortbl") {
+    if (destinationName == QLatin1String("colortbl")) {
         return new ColorTableDestination(this, m_output, destinationName);
-    } else if (destinationName == "creatim") {
+    } else if (destinationName == QLatin1String("creatim")) {
         return new InfoCreatedTimeDestination(this, m_output, destinationName);
-    } else if (destinationName == "printim") {
+    } else if (destinationName == QLatin1String("printim")) {
         return new InfoPrintedTimeDestination(this, m_output, destinationName);
-    } else if (destinationName == "revtim") {
+    } else if (destinationName == QLatin1String("revtim")) {
         return new InfoRevisedTimeDestination(this, m_output, destinationName);
-    } else if (destinationName == "author") {
+    } else if (destinationName == QLatin1String("author")) {
         return new AuthorPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "company") {
+    } else if (destinationName == QLatin1String("company")) {
         return new CompanyPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "operator") {
+    } else if (destinationName == QLatin1String("operator")) {
         return new OperatorPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "comment") {
+    } else if (destinationName == QLatin1String("comment")) {
         return new CommentPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "doccomm") {
+    } else if (destinationName == QLatin1String("doccomm")) {
         return new DocumentCommentPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "title") {
+    } else if (destinationName == QLatin1String("title")) {
         return new TitlePcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "subject") {
+    } else if (destinationName == QLatin1String("subject")) {
         return new SubjectPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "manager") {
+    } else if (destinationName == QLatin1String("manager")) {
         return new ManagerPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "category") {
+    } else if (destinationName == QLatin1String("category")) {
         return new CategoryPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "keywords") {
+    } else if (destinationName == QLatin1String("keywords")) {
         return new KeywordsPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "hlinkbase") {
+    } else if (destinationName == QLatin1String("hlinkbase")) {
         return new HLinkBasePcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "generator") {
+    } else if (destinationName == QLatin1String("generator")) {
         return new GeneratorPcdataDestination(this, m_output, destinationName);
-    } else if (destinationName == "pict") {
+    } else if (destinationName == QLatin1String("pict")) {
         return new PictDestination(this, m_output, destinationName);
-    } else if (destinationName == "fonttbl") {
+    } else if (destinationName == QLatin1String("fonttbl")) {
         return new FontTableDestination(this, m_output, destinationName);
-    } else if (destinationName == "stylesheet") {
+    } else if (destinationName == QLatin1String("stylesheet")) {
         return new StyleSheetDestination(this, m_output, destinationName);
-    } else if (destinationName == "rtf") {
+    } else if (destinationName == QLatin1String("rtf")) {
         return new DocumentDestination(this, m_output, destinationName);
-    } else if (destinationName == "info") {
+    } else if (destinationName == QLatin1String("info")) {
         return new InfoDestination(this, m_output, destinationName);
-    } else if (destinationName == "userprops") {
+    } else if (destinationName == QLatin1String("userprops")) {
         return new UserPropsDestination(this, m_output, destinationName);
-    } else if (destinationName == "ignorable") {
+    } else if (destinationName == QLatin1String("ignorable")) {
         return new IgnoredDestination(this, m_output, destinationName);
     }
     qCDebug(lcRtf) << "creating plain old Destination for" << destinationName;
@@ -219,17 +219,17 @@ void Reader::parseDocument()
     m_stateStack.push(state);
 
     // Set up the outer part of the destination stack
-    Destination *dest = makeDestination("rtf");
+    Destination *dest = makeDestination(QStringLiteral("rtf"));
     m_destinationStack.push(dest);
     m_stateStack.top().didChangeDestination = true;
 
-    m_debugIndent = QString('\t');
+    m_debugIndent = QLatin1Char('\t');
     // Parse RTF document
     bool atEndOfFile = false;
     bool nextSymbolMightBeDestination = false;
     bool nextSymbolIsIgnorable = false;
 
-    RtfReader::ControlWord controlWord("");
+    RtfReader::ControlWord controlWord(QStringLiteral(""));
 
     while (!atEndOfFile) {
         Token token = m_tokenizer->fetchToken();
@@ -245,7 +245,7 @@ void Reader::parseDocument()
             nextSymbolMightBeDestination = true;
             m_output->startGroup();
             // qCDebug(lcRtf) << m_debugIndent << "opengroup";
-            m_debugIndent.append("\t");
+            m_debugIndent.append(QLatin1Char('\t'));
             break;
         }
         case CloseGroup: {
@@ -277,7 +277,7 @@ void Reader::parseDocument()
             break;
         }
         case Control:
-            controlWord = ControlWord(token.name);
+            controlWord = ControlWord(QString::fromUtf8(token.name));
             if (!controlWord.isKnown()) {
                 qCDebug(lcRtf) << "*** Unrecognised control word (not in spec 1.9.1): " << token.name;
             }
@@ -287,13 +287,13 @@ void Reader::parseDocument()
             if (nextSymbolMightBeDestination && controlWord.isSupportedDestination()) {
                 nextSymbolMightBeDestination = false;
                 nextSymbolIsIgnorable = false;
-                changeDestination(token.name);
+                changeDestination(QString::fromUtf8(token.name));
             } else if (nextSymbolMightBeDestination && nextSymbolIsIgnorable) {
                 // This is a control word we don't understand
                 nextSymbolMightBeDestination = false;
                 nextSymbolIsIgnorable = false;
                 qCDebug(lcRtf) << "ignorable destination word:" << token.name;
-                changeDestination("ignorable");
+                changeDestination(QStringLiteral("ignorable"));
             } else {
                 nextSymbolMightBeDestination = false;
                 if (token.name == "*") {

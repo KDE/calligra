@@ -16,7 +16,7 @@ void Tokenizer::pullControlWord(Token *token)
         } else if (isalpha(next)) {
             token->name.append(next);
         } else if (isdigit(next) || (next == '-')) {
-            token->parameter.append(next);
+            token->parameter.append(QLatin1Char(next));
             token->hasParameter = true;
         } else {
             m_inputDevice->ungetChar(next);
@@ -33,8 +33,8 @@ void Tokenizer::pullControlSymbol(Token *token)
         if (m_inputDevice->getChar(&highNibbleHexDigit) && m_inputDevice->getChar(&lowNibbleHexDigit) && isxdigit(highNibbleHexDigit)
             && isxdigit(lowNibbleHexDigit)) {
             QString hexDigits;
-            hexDigits.append(QChar(highNibbleHexDigit));
-            hexDigits.append(QChar(lowNibbleHexDigit));
+            hexDigits.append(QLatin1Char(highNibbleHexDigit));
+            hexDigits.append(QLatin1Char(lowNibbleHexDigit));
             uint codepoint = hexDigits.toUInt(nullptr, 16);
             token->type = Plain;
             token->name = QByteArray(1, codepoint);

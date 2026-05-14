@@ -76,7 +76,7 @@ void FontTableDestination::handleControlWord(const QByteArray &controlWord, bool
     } else if (controlWord == "fcharset") {
         for (const auto &entry : charsetToCodec) {
             if (entry.id == value) {
-                m_fontTableEntry.setEncoding(entry.name);
+                m_fontTableEntry.setEncoding(QString::fromLatin1(entry.name));
                 break;
             }
         }
@@ -94,7 +94,7 @@ void FontTableDestination::handlePlainText(const QByteArray &plainText)
         int delimiterPosition = plainText.indexOf(";");
         if (delimiterPosition == (plainText.length() - 1)) {
             // It is at the end, chop it off
-            QString fontName = plainText.left(delimiterPosition);
+            QString fontName = QString::fromUtf8(plainText.left(delimiterPosition));
             m_fontTableEntry.setFontName(fontName);
             m_output->insertFontTableEntry(m_fontTableEntry, m_currentFontTableIndex);
         } else {
@@ -103,7 +103,7 @@ void FontTableDestination::handlePlainText(const QByteArray &plainText)
         }
     } else {
         // plain font name
-        m_fontTableEntry.setFontName(plainText);
+        m_fontTableEntry.setFontName(QString::fromUtf8(plainText));
     }
 }
 

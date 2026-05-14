@@ -45,7 +45,7 @@ void UserPropsDestination::handleControlWord(const QByteArray &controlWord, bool
 void UserPropsDestination::handlePlainText(const QByteArray &plainText)
 {
     if (m_nextPlainTextIsPropertyName) {
-        m_propertyName = plainText;
+        m_propertyName = QString::fromUtf8(plainText);
     } else {
         QVariant value;
         if (m_propertyType == QVariant::String) {

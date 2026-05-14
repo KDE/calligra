@@ -37,7 +37,7 @@ void StyleSheetDestination::handleControlWord(const QByteArray &controlWord, boo
     } else if (controlWord == "sb") {
         qCDebug(lcRtf) << "space before default (0)";
     } else {
-        if (ControlWord::isDestination(controlWord)) {
+        if (ControlWord::isDestination(QString::fromUtf8(controlWord))) {
             qCDebug(lcRtf) << "unhandled **Destination** control word in StyleSheetDestination:" << controlWord;
         } else {
             qCDebug(lcRtf) << "unhandled control word in StyleSheetDestination:" << controlWord;
@@ -54,7 +54,7 @@ void StyleSheetDestination::handlePlainText(const QByteArray &plainText)
         int delimiterPosition = plainText.indexOf(";");
         if (delimiterPosition == (plainText.length() - 1)) {
             // It is at the end, chop it off
-            QString styleName = plainText.left(delimiterPosition);
+            QString styleName = QString::fromUtf8(plainText.left(delimiterPosition));
             m_style.setStyleName(styleName);
             m_output->insertStyleSheetTableEntry(m_currentStyleHandleNumber, m_style);
         } else {
@@ -63,7 +63,7 @@ void StyleSheetDestination::handlePlainText(const QByteArray &plainText)
         }
     } else {
         // plain font name
-        m_style.setStyleName(plainText);
+        m_style.setStyleName(QString::fromUtf8(plainText));
     }
 }
 

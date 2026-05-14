@@ -112,11 +112,11 @@ void DocumentDestination::handleControlWord(const QByteArray &controlWord, bool 
     } else if ((controlWord == "\'") && hasValue) {
         qCDebug(lcRtf) << "special character value:" << value;
     } else if (controlWord == "line") {
-        m_output->appendText(QString("\n"));
+        m_output->appendText(QStringLiteral("\n"));
     } else if (controlWord == "*") {
         // handled elsewhere
     } else {
-        if (ControlWord::isDestination(controlWord)) {
+        if (ControlWord::isDestination(QString::fromUtf8(controlWord))) {
             qCDebug(lcRtf) << "unhandled *Destination* control word in DocumentDestination:" << controlWord;
         } else {
             qCDebug(lcRtf) << "unhandled control word in DocumentDestination:" << controlWord;

@@ -1849,14 +1849,18 @@ FIXME: This should be table / hash driven
   */
 bool ControlWord::isSupportedDestination() const
 {
-    if ((m_name == "pict") || (m_name == "fonttbl") || (m_name == "stylesheet") || (m_name == "colortbl") || (m_name == "info") || (m_name == "title")
-        || (m_name == "generator") || (m_name == "company") || (m_name == "creatim") || (m_name == "printim") || (m_name == "revtim") || (m_name == "operator")
-        || (m_name == "comment") || (m_name == "subject") || (m_name == "manager") || (m_name == "category") || (m_name == "doccomm") || (m_name == "keywords")
-        || (m_name == "hlinkbase") || (m_name == "userprops") || (m_name == "author") ||
+    if ((m_name == QLatin1String("pict")) || (m_name == QLatin1String("fonttbl")) || (m_name == QLatin1String("stylesheet"))
+        || (m_name == QLatin1String("colortbl")) || (m_name == QLatin1String("info")) || (m_name == QLatin1String("title"))
+        || (m_name == QLatin1String("generator")) || (m_name == QLatin1String("company")) || (m_name == QLatin1String("creatim"))
+        || (m_name == QLatin1String("printim")) || (m_name == QLatin1String("revtim")) || (m_name == QLatin1String("operator"))
+        || (m_name == QLatin1String("comment")) || (m_name == QLatin1String("subject")) || (m_name == QLatin1String("manager"))
+        || (m_name == QLatin1String("category")) || (m_name == QLatin1String("doccomm")) || (m_name == QLatin1String("keywords"))
+        || (m_name == QLatin1String("hlinkbase")) || (m_name == QLatin1String("userprops")) || (m_name == QLatin1String("author")) ||
         // destinations from here on are marked supported so content like images inside them are handled,
         // but they don't have their own destination class to parse destination specific control words
-        (m_name == "pgdsc") || (m_name == "pgdsctbl") || (m_name == "shppict") || (m_name == "shp") || (m_name == "shpinst") || (m_name == "pntxta")
-        || (m_name == "pntxtb") || (m_name == "mmathPr")) {
+        (m_name == QLatin1String("pgdsc")) || (m_name == QLatin1String("pgdsctbl")) || (m_name == QLatin1String("shppict")) || (m_name == QLatin1String("shp"))
+        || (m_name == QLatin1String("shpinst")) || (m_name == QLatin1String("pntxta")) || (m_name == QLatin1String("pntxtb"))
+        || (m_name == QLatin1String("mmathPr"))) {
         return true;
     }
     return false;
@@ -1865,7 +1869,7 @@ bool ControlWord::isSupportedDestination() const
 bool ControlWord::isDestination(const QString &controlword)
 {
     for (int i = 0; known_control_words[i].controlword != nullptr; ++i) {
-        if (controlword == QString(known_control_words[i].controlword)) {
+        if (controlword == QLatin1String(known_control_words[i].controlword)) {
             if (known_control_words[i].wordtype == Destination) {
                 return true;
             } else {
@@ -1880,7 +1884,7 @@ bool ControlWord::isDestination(const QString &controlword)
 bool ControlWord::isKnown() const
 {
     for (int i = 0; known_control_words[i].controlword != nullptr; ++i) {
-        if (m_name == QString(known_control_words[i].controlword)) {
+        if (m_name == QLatin1String(known_control_words[i].controlword)) {
             return true;
         }
     }
