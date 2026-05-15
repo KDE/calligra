@@ -12,7 +12,6 @@
 #include <QTextDocument>
 #include <QTextFormat>
 
-#include "Destination.h"
 #include "RtfGroupState.h"
 #include "Tokenizer.h"
 #include "rtfreader_export.h"
@@ -23,7 +22,7 @@ namespace RtfReader
 {
 class AbstractRtfOutput;
 class RtfProperty;
-class Reader;
+class Destination;
 
 /**
    Reader for RTF formatted documents
