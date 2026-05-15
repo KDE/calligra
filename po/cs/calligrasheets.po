@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-13 19:11+0200\n"
+"PO-Revision-Date: 2026-05-14 11:04+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -10586,6 +10586,10 @@ msgid ""
 "value zero (0). If the argument evaluates to TRUE, it is counted as one (1). "
 "Note that empty cells are not counted."
 msgstr ""
+"Funkce VARA() vypočítá rozptyl na základě vzorku, přičemž do výpočtu lze "
+"zahrnout i čísla, text a logické hodnoty. Pokud buňka obsahuje text nebo má "
+"argument hodnotu FALSE, počítá se jako nula (0). Pokud má argument hodnotu "
+"TRUE, počítá se jako jedna (1). Upozorňujeme, že prázdné buňky se nepočítají."
 
 #: functions/statistical.xml:1555
 #, kde-format
@@ -10618,7 +10622,7 @@ msgstr ""
 #: functions/statistical.xml:1590
 #, kde-format
 msgid "VARIANCE(value;value;...)"
-msgstr ""
+msgstr "VARIANCE(hodnota;hodnota;...)"
 
 #: functions/statistical.xml:1591
 #, kde-format
@@ -10639,7 +10643,7 @@ msgstr "VARIANCE(6;7;8) se rovná 1"
 #, kde-format
 msgid ""
 "The VARP() function calculates the variance based on an entire population."
-msgstr ""
+msgstr "Funkce VARP() vypočítá rozptyl na základě celé populace."
 
 #: functions/statistical.xml:1626
 #, kde-format
@@ -10668,6 +10672,9 @@ msgid ""
 "Text and boolean values that evaluate to FALSE are counted as 0, boolean "
 "value that evaluate to TRUE are counted as 1. Empty cells are not counted."
 msgstr ""
+"Funkce VARPA() vypočítá rozptyl na základě celé populace. Textové a logické "
+"hodnoty, jejichž výsledkem je FALSE, se počítají jako 0, logické hodnoty, "
+"jejichž výsledkem je TRUE, se počítají jako 1. Prázdné buňky se nepočítají."
 
 #: functions/statistical.xml:1661
 #, kde-format
@@ -10692,7 +10699,7 @@ msgstr "VARPA(6;7;8) je rovno 0,6666667..."
 #: functions/statistical.xml:1691
 #, kde-format
 msgid "The WEIBULL() function returns the Weibull distribution."
-msgstr ""
+msgstr "Funkce WEIBULL() vrací Weibullovo rozdělení."
 
 #: functions/statistical.xml:1692
 #, kde-format
@@ -10700,6 +10707,8 @@ msgid ""
 "The alpha and beta parameters must be positive, the number (first parameter) "
 "must be non-negative."
 msgstr ""
+"Parametry alfa a beta musí být kladné, číslo (první parametr) nesmí být "
+"záporné."
 
 #: functions/statistical.xml:1694
 #, kde-format
@@ -10737,6 +10746,8 @@ msgid ""
 "The ZTEST() function calculates the two tailed probability of a z-test with "
 "normal distribution."
 msgstr ""
+"Funkce ZTEST() vypočítá oboustrannou pravděpodobnost z-testu při normálním "
+"rozdělení."
 
 #: functions/statistical.xml:1717
 #, kde-format
@@ -10748,16 +10759,22 @@ msgid ""
 "the normal distribution. If sigma is omitted, it is estimated from sample, "
 "using STDEV."
 msgstr ""
+"Provede test nulové hypotézy, že vzorek je reprezentativním výběrem z "
+"normálně rozdělené náhodné veličiny se střední hodnotou a směrodatnou "
+"odchylkou sigma (standardDeviation). Návratová hodnota 1 znamená, že nulová "
+"hypotéza je zamítnuta, tj. vzorek není reprezentativním výběrem z normálního "
+"rozdělení. Pokud je sigma vynechána, odhadne se ze vzorku pomocí funkce "
+"STDEV."
 
 #: functions/statistical.xml:1719
 #, kde-format
 msgid "ZTEST(x; mean; standardDeviation)"
-msgstr ""
+msgstr "ZTEST(x; střední hodnota; směrodatná odchylka)"
 
 #: functions/statistical.xml:1772
 #, kde-format
 msgid "The BINO() function returns the binomial distribution."
-msgstr ""
+msgstr "Funkce BINO() vrací binomické rozdělení."
 
 #: functions/statistical.xml:1773
 #, kde-format
@@ -10767,6 +10784,9 @@ msgid ""
 "of trials should be greater than the number of successes and the probability "
 "should be smaller or equal to 1."
 msgstr ""
+"Prvním parametrem je počet pokusů, druhým počet úspěšných pokusů a třetím "
+"pravděpodobnost úspěchu. Počet pokusů by měl být větší než počet úspěšných "
+"pokusů a pravděpodobnost by měla být menší nebo rovna 1."
 
 #: functions/statistical.xml:1774
 #, kde-format
@@ -10785,6 +10805,9 @@ msgid ""
 "of these values. The number of values in the two arrays should be equal. "
 "Otherwise this function returns Err."
 msgstr ""
+"Funkce SUMXMY2() (SUM((X-Y)^2)) vrací součet čtverců rozdílů těchto hodnot. "
+"Počet prvků v obou polích by měl být stejný. V opačném případě tato funkce "
+"vrátí chybu Err."
 
 #: functions/statistical.xml:1792
 #, kde-format
@@ -10810,6 +10833,10 @@ msgid ""
 "should be larger than the number of failures and the probability should be "
 "smaller or equal to 1."
 msgstr ""
+"Funkce INVBINO() vrací hodnotu negativního binomického rozdělení. Prvním "
+"parametrem je počet pokusů, druhým počet neúspěchů a třetím pravděpodobnost "
+"neúspěchu. Počet pokusů by měl být větší než počet neúspěchů a "
+"pravděpodobnost by měla být menší nebo rovna 1."
 
 #: functions/statistical.xml:1814
 #, kde-format
@@ -10852,6 +10879,9 @@ msgid ""
 "the decimals rounded to the specified place. Although the name is DOLLAR, "
 "this function will do the conversion according to the current locale."
 msgstr ""
+"Funkce DOLLAR() převede číslo na text v měnovém formátu, přičemž desetinná "
+"místa se zaokrouhlí na zadaný počet. Ačkoli se funkce jmenuje DOLLAR, "
+"provede převod podle aktuálního národního prostředí."
 
 #: functions/text.xml:20
 #, kde-format
@@ -10882,6 +10912,12 @@ msgid ""
 "If you omit decimals, it is assumed to be 2. If optional parameter no_commas "
 "is True, thousand separators will not show up."
 msgstr ""
+"Funkce FIXED() zaokrouhluje číslo na zadaný počet desetinných míst, převede "
+"číslo do řetězce v desítkovém formátu a vrátí výsledek jako text. Je-li "
+"počet desetinných míst záporný, číslo se zaokrouhluje směrem k levé straně "
+"desetinné čárky. Pokud počet desetinných míst vynecháte, předpokládá se, že "
+"je 2. Je-li volitelný parametr bez_čárek nastaven na True, oddělovače tisíců "
+"se nezobrazí."
 
 #: functions/text.xml:43
 #, kde-format
@@ -10916,7 +10952,7 @@ msgstr "Část nebo text, který se má nahradit"
 #: functions/text.xml:62
 #, kde-format
 msgid "New text which will be replacement"
-msgstr ""
+msgstr "Nový text, který nahradí původní"
 
 #: functions/text.xml:66
 #, kde-format
@@ -10932,6 +10968,12 @@ msgid ""
 "SUBSTITUTE when you want to replace specific text, use REPLACE when you want "
 "to replace any text that occurs in a specific location."
 msgstr ""
+"Funkce SUBSTITUTE() nahradí text starý_text v textovém řetězci textem "
+"nový_text. Je-li zadáno číslo počet, nahradí se pouze daná instance textu "
+"starý_text. V opačném případě se každý výskyt textu starý_text změní na text "
+"nový_text. Funkci SUBSTITUTE použijte, pokud chcete nahradit konkrétní text; "
+"funkci REPLACE použijte, pokud chcete nahradit jakýkoli text, který se "
+"vyskytuje na konkrétním místě."
 
 #: functions/text.xml:71
 #, kde-format
@@ -10963,12 +11005,12 @@ msgstr "Text, který si přejete najít"
 #: functions/text.xml:324
 #, kde-format
 msgid "The text which may contain find_text"
-msgstr ""
+msgstr "Text, který může obsahovat najít_text"
 
 #: functions/text.xml:94
 #, kde-format
 msgid "Specified index to start the search"
-msgstr ""
+msgstr "Zadaný index pro zahájení vyhledávání"
 
 #: functions/text.xml:98
 #, kde-format
@@ -10977,6 +11019,9 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text."
 msgstr ""
+"Funkce SEARCH() vyhledá jeden textový řetězec (najít_text) v rámci jiného "
+"textového řetězce (v_textu) a vrátí číslo počátečního bodu řetězce "
+"najít_text počítáno od prvního znaku řetězce v_textu."
 
 #: functions/text.xml:99 functions/text.xml:127
 #, kde-format
@@ -10996,26 +11041,29 @@ msgid ""
 "assumed to be 1. SEARCH does not distinguish between uppercase and lowercase "
 "letters."
 msgstr ""
+"Parametr start_num určuje znak, od kterého má hledání začít. První znak má "
+"číslo 1. Pokud je parametr start_num vynechán, předpokládá se, že má hodnotu "
+"1. Příkaz SEARCH nerozlišuje velká a malá písmena."
 
 #: functions/text.xml:101
 #, kde-format
 msgid "SEARCH(find_text;within_text;start_num)"
-msgstr ""
+msgstr "SEARCH(najít_text;v_textu;start_num)"
 
 #: functions/text.xml:102
 #, kde-format
 msgid "SEARCH(\"e\";\"Statements\";6) returns 7"
-msgstr ""
+msgstr "SEARCH(\"e\";\"Statements\";6) vrací 7"
 
 #: functions/text.xml:103
 #, kde-format
 msgid "SEARCH(\"margin\";\"Profit Margin\") returns 8"
-msgstr ""
+msgstr "SEARCH(\"margin\";\"Profit Margin\") vrací 8"
 
 #: functions/text.xml:122
 #, kde-format
 msgid "Specified byte position to start the search"
-msgstr ""
+msgstr "Zadaná pozice bajtu, od které se má zahájit vyhledávání"
 
 #: functions/text.xml:126
 #, kde-format
@@ -11024,6 +11072,10 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
+"Funkce SEARCHB() vyhledá jeden textový řetězec (najít_text) v rámci jiného "
+"textového řetězce (v_textu) a vrátí číslo počátečního bodu řetězce "
+"najít_text, počítáno od prvního znaku řetězce v_textu, a to v bajtových "
+"pozicích."
 
 #: functions/text.xml:128
 #, kde-format
@@ -11033,11 +11085,14 @@ msgid ""
 "assumed to be 2. SEARCHB does not distinguish between uppercase and "
 "lowercase letters."
 msgstr ""
+"Parametr pozice bajtu určuje znak, u kterého má být zahájeno vyhledávání. "
+"První znak má číslo 2. Pokud není parametr BytePosition zadán, předpokládá "
+"se hodnota 2. Funkce SEARCHB nerozlišuje mezi velkými a malými písmeny."
 
 #: functions/text.xml:129
 #, kde-format
 msgid "SEARCHB(find_text;within_text;BytePosition Start)"
-msgstr ""
+msgstr "SEARCHB(najít_text;v_textu;počáteční pozice bajtu)"
 
 #: functions/text.xml:144
 #, kde-format
@@ -11046,6 +11101,9 @@ msgid ""
 "refers to, text then T returns value. If value does not refer to text then T "
 "returns empty text."
 msgstr ""
+"Funkce T() vrátí text, na který odkazuje proměnná. Pokud je proměnná textem "
+"nebo odkazuje na text, vrátí funkce T hodnotu proměnné. Pokud proměnná "
+"neodkazuje na text, vrátí funkce T prázdný text."
 
 #: functions/text.xml:145
 #, kde-format
@@ -11055,7 +11113,7 @@ msgstr "T(hodnota)"
 #: functions/text.xml:146
 #, kde-format
 msgid "T(\"Calligra\") returns \"Calligra\""
-msgstr ""
+msgstr "T(\"Calligra\") vrací \"Calligra\""
 
 #: functions/text.xml:147
 #, kde-format
@@ -11199,6 +11257,7 @@ msgid ""
 "The REPLACE() function replaces part of a text string with a different text "
 "string."
 msgstr ""
+"Funkce REPLACE() nahradí část textového řetězce jiným textovým řetězcem."
 
 #: functions/text.xml:246
 #, kde-format
@@ -11218,17 +11277,17 @@ msgstr "REPLACE(\"2002\";3;2;\"03\") vrací \"2003\""
 #: functions/text.xml:260
 #, kde-format
 msgid "Text which you want to replace some characters using byte position"
-msgstr ""
+msgstr "Text, ve kterém chcete nahradit některé znaky na základě pozice bajtu"
 
 #: functions/text.xml:264
 #, kde-format
 msgid "Byte position of the characters to replace"
-msgstr ""
+msgstr "Pozice znaků, které mají být nahrazeny"
 
 #: functions/text.xml:268
 #, kde-format
 msgid "The byte length of characters to replace"
-msgstr ""
+msgstr "Počet znaků v bajtech, které mají být nahrazeny"
 
 #: functions/text.xml:276
 #, kde-format
@@ -11236,11 +11295,13 @@ msgid ""
 "The REPLACEB() function replaces part of a text string with a different text "
 "string using byte positions."
 msgstr ""
+"Funkce REPLACEB() nahradí část textového řetězce jiným textovým řetězcem na "
+"základě pozic bajtů."
 
 #: functions/text.xml:277
 #, kde-format
 msgid "REPLACEB(text;BytePosition;ByteLength Len;new_text)"
-msgstr ""
+msgstr "REPLACEB(text;pozice bajtu;počet bajtů;nový_text)"
 
 #: functions/text.xml:297
 #, kde-format
@@ -11254,6 +11315,9 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text."
 msgstr ""
+"Funkce FIND() vyhledá jeden textový řetězec (najít_text) v jiném textovém "
+"řetězci (v_textu) a vrátí číslo počátečního bodu řetězce najít_text počítáno "
+"od prvního znaku řetězce v_textu."
 
 #: functions/text.xml:302
 #, kde-format
@@ -11297,7 +11361,7 @@ msgstr "FIND(\"a\";\"Sheets v Calligra\";4) vrací 12"
 #: functions/text.xml:328
 #, kde-format
 msgid "Specifies byte position to start the search"
-msgstr ""
+msgstr "Určuje pozici v bajtech, kde má být zahájeno vyhledávání"
 
 #: functions/text.xml:332
 #, kde-format
@@ -11306,6 +11370,9 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
+"Funkce FINDB() vyhledá jeden textový řetězec (najít_text) v jiném textovém "
+"řetězci (v_textu) a vrátí číslo počátečního bodu řetězce najít_text, "
+"počítáno od prvního znaku řetězce v_textu, a to v bajtových pozicích."
 
 #: functions/text.xml:333
 #, kde-format
@@ -11314,11 +11381,13 @@ msgid ""
 "The first character is character number 2. If start_num is omitted, it is "
 "assumed to be 2."
 msgstr ""
+"Parametr pozice bajtu určuje znak, u kterého má být zahájeno vyhledávání. "
+"První znak má číslo 2. Pokud není zadáno start_num, předpokládá se hodnota 2."
 
 #: functions/text.xml:335
 #, kde-format
 msgid "FINDB(find_text;within_text;BytePosition Start)"
-msgstr ""
+msgstr "FINDB(najít_text;v_textu;počáteční pozice bajtu)"
 
 #: functions/text.xml:348 functions/text.xml:377 functions/text.xml:477
 #: functions/text.xml:501 functions/text.xml:522 functions/text.xml:546
@@ -11360,7 +11429,7 @@ msgstr "MID(text;pozice)"
 #: functions/text.xml:363
 #, kde-format
 msgid "MID(\"Calligra\";2;3) returns \"all\""
-msgstr ""
+msgstr "MID(\"Calligra\";2;3) vrací \"all\""
 
 #: functions/text.xml:364
 #, kde-format
@@ -11370,12 +11439,12 @@ msgstr "MID(\"Calligra\";2) vrací \"alligra\""
 #: functions/text.xml:381
 #, kde-format
 msgid "Byte Position"
-msgstr ""
+msgstr "Pozice bajtu"
 
 #: functions/text.xml:385 functions/text.xml:505 functions/text.xml:550
 #, kde-format
 msgid "Byte Length"
-msgstr ""
+msgstr "Počet bajtů"
 
 #: functions/text.xml:389
 #, kde-format
