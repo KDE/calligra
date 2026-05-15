@@ -16,8 +16,6 @@ class QTextImageFormat;
 #include <QTextCharFormat>
 namespace RtfReader
 {
-class Reader;
-
 class RTFREADER_EXPORT TextDocumentRtfOutput : public AbstractRtfOutput
 {
 public:
