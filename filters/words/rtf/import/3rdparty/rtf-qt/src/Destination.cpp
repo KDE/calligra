@@ -8,9 +8,8 @@
 
 namespace RtfReader
 {
-Destination::Destination(Reader *reader, AbstractRtfOutput *output, const QString &name)
+Destination::Destination(AbstractRtfOutput *output, const QString &name)
     : m_name(name)
-    , m_reader(reader)
     , m_output(output)
 {
 }

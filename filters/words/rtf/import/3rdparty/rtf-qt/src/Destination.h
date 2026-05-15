@@ -12,16 +12,13 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-class Reader;
-
 /**
    A representation of a destination
 */
 class RTFREADER_EXPORT Destination
 {
 public:
-    // TODO: remove reader
-    Destination(Reader *reader, AbstractRtfOutput *output, const QString &name);
+    Destination(AbstractRtfOutput *output, const QString &name);
 
     virtual ~Destination();
 
@@ -40,7 +37,6 @@ public:
 
 protected:
     QString m_name;
-    Reader *m_reader;
     AbstractRtfOutput *m_output;
 };
 

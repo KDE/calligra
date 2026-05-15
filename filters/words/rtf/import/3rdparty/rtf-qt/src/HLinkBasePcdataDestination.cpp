@@ -7,8 +7,8 @@
 
 namespace RtfReader
 {
-HLinkBasePcdataDestination::HLinkBasePcdataDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
-    : PcdataDestination(reader, output, name)
+HLinkBasePcdataDestination::HLinkBasePcdataDestination(AbstractRtfOutput *output, const QString &name)
+    : PcdataDestination(output, name)
 {
 }
 

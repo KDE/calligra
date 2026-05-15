@@ -7,8 +7,8 @@
 
 namespace RtfReader
 {
-SubjectPcdataDestination::SubjectPcdataDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
-    : PcdataDestination(reader, output, name)
+SubjectPcdataDestination::SubjectPcdataDestination(AbstractRtfOutput *output, const QString &name)
+    : PcdataDestination(output, name)
 {
 }
 

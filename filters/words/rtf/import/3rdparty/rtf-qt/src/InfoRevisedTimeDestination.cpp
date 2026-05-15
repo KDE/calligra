@@ -7,8 +7,8 @@
 
 namespace RtfReader
 {
-InfoRevisedTimeDestination::InfoRevisedTimeDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
-    : InfoTimeDestination(reader, output, name)
+InfoRevisedTimeDestination::InfoRevisedTimeDestination(AbstractRtfOutput *output, const QString &name)
+    : InfoTimeDestination(output, name)
 {
 }
 

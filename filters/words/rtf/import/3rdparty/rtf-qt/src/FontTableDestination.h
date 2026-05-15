@@ -12,12 +12,10 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-class Reader;
-
 class RTFREADER_EXPORT FontTableDestination : public Destination
 {
 public:
-    FontTableDestination(Reader *reader, AbstractRtfOutput *output, const QString &name);
+    FontTableDestination(AbstractRtfOutput *output, const QString &name);
 
     ~FontTableDestination() override;
 

@@ -8,8 +8,8 @@
 
 namespace RtfReader
 {
-UserPropsDestination::UserPropsDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
-    : Destination(reader, output, name)
+UserPropsDestination::UserPropsDestination(AbstractRtfOutput *output, const QString &name)
+    : Destination(output, name)
     , m_nextPlainTextIsPropertyName(true)
     , m_propertyType(QMetaType::QString)
 {

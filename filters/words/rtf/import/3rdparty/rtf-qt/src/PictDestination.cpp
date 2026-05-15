@@ -12,8 +12,8 @@
 
 namespace RtfReader
 {
-PictDestination::PictDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
-    : Destination(reader, output, name)
+PictDestination::PictDestination(AbstractRtfOutput *output, const QString &name)
+    : Destination(output, name)
 {
 }
 

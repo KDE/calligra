@@ -7,8 +7,8 @@
 
 namespace RtfReader
 {
-GeneratorPcdataDestination::GeneratorPcdataDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
-    : PcdataDestination(reader, output, name)
+GeneratorPcdataDestination::GeneratorPcdataDestination(AbstractRtfOutput *output, const QString &name)
+    : PcdataDestination(output, name)
 {
 }
 

@@ -8,8 +8,8 @@
 
 namespace RtfReader
 {
-ColorTableDestination::ColorTableDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
-    : Destination(reader, output, name)
+ColorTableDestination::ColorTableDestination(AbstractRtfOutput *output, const QString &name)
+    : Destination(output, name)
     , m_currentColor(Qt::black)
     , m_colorSet(false)
 {

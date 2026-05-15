@@ -11,12 +11,10 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-class Reader;
-
 class RTFREADER_EXPORT ColorTableDestination : public Destination
 {
 public:
-    ColorTableDestination(Reader *reader, AbstractRtfOutput *output, const QString &name);
+    ColorTableDestination(AbstractRtfOutput *output, const QString &name);
 
     ~ColorTableDestination() override;
 

@@ -139,54 +139,54 @@ bool Reader::headerFormatIsKnown(const QString &tokenName, int tokenValue)
 Destination *Reader::makeDestination(const QString &destinationName)
 {
     if (destinationName == QLatin1String("colortbl")) {
-        return new ColorTableDestination(this, m_output, destinationName);
+        return new ColorTableDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("creatim")) {
-        return new InfoCreatedTimeDestination(this, m_output, destinationName);
+        return new InfoCreatedTimeDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("printim")) {
-        return new InfoPrintedTimeDestination(this, m_output, destinationName);
+        return new InfoPrintedTimeDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("revtim")) {
-        return new InfoRevisedTimeDestination(this, m_output, destinationName);
+        return new InfoRevisedTimeDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("author")) {
-        return new AuthorPcdataDestination(this, m_output, destinationName);
+        return new AuthorPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("company")) {
-        return new CompanyPcdataDestination(this, m_output, destinationName);
+        return new CompanyPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("operator")) {
-        return new OperatorPcdataDestination(this, m_output, destinationName);
+        return new OperatorPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("comment")) {
-        return new CommentPcdataDestination(this, m_output, destinationName);
+        return new CommentPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("doccomm")) {
-        return new DocumentCommentPcdataDestination(this, m_output, destinationName);
+        return new DocumentCommentPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("title")) {
-        return new TitlePcdataDestination(this, m_output, destinationName);
+        return new TitlePcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("subject")) {
-        return new SubjectPcdataDestination(this, m_output, destinationName);
+        return new SubjectPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("manager")) {
-        return new ManagerPcdataDestination(this, m_output, destinationName);
+        return new ManagerPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("category")) {
-        return new CategoryPcdataDestination(this, m_output, destinationName);
+        return new CategoryPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("keywords")) {
-        return new KeywordsPcdataDestination(this, m_output, destinationName);
+        return new KeywordsPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("hlinkbase")) {
-        return new HLinkBasePcdataDestination(this, m_output, destinationName);
+        return new HLinkBasePcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("generator")) {
-        return new GeneratorPcdataDestination(this, m_output, destinationName);
+        return new GeneratorPcdataDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("pict")) {
-        return new PictDestination(this, m_output, destinationName);
+        return new PictDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("fonttbl")) {
-        return new FontTableDestination(this, m_output, destinationName);
+        return new FontTableDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("stylesheet")) {
-        return new StyleSheetDestination(this, m_output, destinationName);
+        return new StyleSheetDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("rtf")) {
-        return new DocumentDestination(this, m_output, destinationName);
+        return new DocumentDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("info")) {
-        return new InfoDestination(this, m_output, destinationName);
+        return new InfoDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("userprops")) {
-        return new UserPropsDestination(this, m_output, destinationName);
+        return new UserPropsDestination(m_output, destinationName);
     } else if (destinationName == QLatin1String("ignorable")) {
-        return new IgnoredDestination(this, m_output, destinationName);
+        return new IgnoredDestination(m_output, destinationName);
     }
     qCDebug(lcRtf) << "creating plain old Destination for" << destinationName;
-    return new Destination(this, m_output, destinationName);
+    return new Destination(m_output, destinationName);
 }
 
 void Reader::changeDestination(const QString &destinationName)

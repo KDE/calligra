@@ -11,12 +11,10 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-class Reader;
-
 class RTFREADER_EXPORT TitlePcdataDestination : public PcdataDestination
 {
 public:
-    TitlePcdataDestination(Reader *reader, AbstractRtfOutput *output, const QString &name);
+    TitlePcdataDestination(AbstractRtfOutput *output, const QString &name);
 
     ~TitlePcdataDestination() override;
 

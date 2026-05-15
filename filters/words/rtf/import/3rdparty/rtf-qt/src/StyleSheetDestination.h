@@ -12,12 +12,10 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-class Reader;
-
 class RTFREADER_EXPORT StyleSheetDestination : public Destination
 {
 public:
-    StyleSheetDestination(Reader *reader, AbstractRtfOutput *output, const QString &name);
+    StyleSheetDestination(AbstractRtfOutput *output, const QString &name);
 
     ~StyleSheetDestination() override;
 

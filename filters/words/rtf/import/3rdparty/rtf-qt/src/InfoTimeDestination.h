@@ -11,12 +11,10 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-class Reader;
-
 class RTFREADER_EXPORT InfoTimeDestination : public Destination
 {
 public:
-    InfoTimeDestination(Reader *reader, AbstractRtfOutput *output, const QString &name);
+    InfoTimeDestination(AbstractRtfOutput *output, const QString &name);
 
     ~InfoTimeDestination() override;
 
