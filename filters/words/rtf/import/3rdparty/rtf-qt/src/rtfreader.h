@@ -96,13 +96,13 @@ private:
     void parseFile();
 
     // parse the file header section, including sanity checks
-    bool parseFileHeader();
+    bool parseFileHeader(Tokenizer &tokenizer);
 
     // check the file header for format / version compatibility
     bool headerFormatIsKnown(const QString &tokenName, int tokenValue);
 
     // parse the body of the document
-    void parseDocument();
+    void parseDocument(Tokenizer &tokenizer);
 
     // Change the destination
     void changeDestination(const QString &destinationName);
@@ -118,9 +118,6 @@ private:
 
     // The name of the file that is open (if any)
     QFile *m_inputDevice;
-
-    // The tokenizer on the RTF document being parsed
-    Tokenizer *m_tokenizer;
 
     // The output strategy
     AbstractRtfOutput *m_output;

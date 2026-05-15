@@ -90,26 +90,24 @@ bool Reader::parseTo(AbstractRtfOutput *output)
 
 void Reader::parseFile()
 {
-    m_tokenizer = new Tokenizer(m_inputDevice);
+    Tokenizer tokenizer(m_inputDevice);
 
-    if (parseFileHeader()) {
-        parseDocument();
+    if (parseFileHeader(tokenizer)) {
+        parseDocument(tokenizer);
     }
-
-    delete m_tokenizer;
 }
 
-bool Reader::parseFileHeader()
+bool Reader::parseFileHeader(Tokenizer &tokenizer)
 {
     bool result = true;
 
-    Token token = m_tokenizer->fetchToken();
+    Token token = tokenizer.fetchToken();
     if (token.type != OpenGroup) {
         qCDebug(lcRtf) << "Not an RTF file";
         result = false;
     }
 
-    token = m_tokenizer->fetchToken();
+    token = tokenizer.fetchToken();
     if (token.type != Control) {
         qCDebug(lcRtf) << "Not an RTF file - wrong document type";
         result = false;
@@ -210,7 +208,7 @@ void Reader::changeDestination(const QString &destinationName)
     qCDebug(lcRtf) << m_debugIndent << "destinationStack after changeDestination (" << destStackElementNames << ")";
 }
 
-void Reader::parseDocument()
+void Reader::parseDocument(Tokenizer &tokenizer)
 {
     class RtfGroupState state;
 
@@ -232,7 +230,7 @@ void Reader::parseDocument()
     RtfReader::ControlWord controlWord(QStringLiteral(""));
 
     while (!atEndOfFile) {
-        Token token = m_tokenizer->fetchToken();
+        Token token = tokenizer.fetchToken();
         // token.dump();
         switch (token.type) {
         case Invalid:
