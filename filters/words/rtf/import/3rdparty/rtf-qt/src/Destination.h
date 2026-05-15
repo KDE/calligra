@@ -32,9 +32,6 @@ public:
 
     virtual void aboutToEndDestination();
 
-    // TODO: this doesn't belong here - remove it.
-    QTextCharFormat m_textCharFormat;
-
 protected:
     QString m_name;
     AbstractRtfOutput *m_output;
