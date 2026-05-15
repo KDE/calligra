@@ -10,20 +10,20 @@
 #
 # Diego Iastrubni <elcuco@kde.org>, 2012.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024-2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-04-11 22:15+0300\n"
+"PO-Revision-Date: 2026-05-14 20:57+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.0\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -91,15 +91,15 @@ msgstr ""
 "kde.kspread, אך קיבלתי %1 במקום זאת."
 
 #: core/ksp/SheetsKspDoc.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "This document was created with a newer version of Calligra Sheets (syntax "
 "version: %1)\n"
 "When you open it with this version of Calligra Sheets, some information may "
 "be lost."
 msgstr ""
-"מסמך זה נוצר על ידי גירסה חדשה יותר של KSpread (גירסת תחביר: %1)\n"
-"כאשר תפתח אותו עם גירסה זו של KSpread, ייתכן שמידע מסויים יאבד."
+"מסמך זה נוצר על ידי גרסה חדשה יותר של Calligra Sheets (גרסת תחביר: %1)\n"
+"פתיחתו עם הגרסה הזאת של Calligra Sheets, עלולה לגרום לאיבוד מידע מסוים."
 
 #: core/ksp/SheetsKspDoc.cpp:55
 #, kde-format
@@ -1123,7 +1123,7 @@ msgid ""
 "of conditions."
 msgstr ""
 "החזרת הערכה לסטיית התקן של אוכלוסייה בהתבסס על מדגם, וזאת על ידי שימוש בכל "
-"הערכים המספריים בעמודה של מסד נתונים המצויינת בהתאם לסידרת תנאים."
+"הערכים המספריים בעמודה של מסד נתונים המצוינת בהתאם לסדרת תנאים."
 
 #: functions/database.xml:204
 #, kde-format
@@ -1887,8 +1887,8 @@ msgid ""
 "some countries the first day of the week is Monday, while in others the "
 "first day of the week is Sunday."
 msgstr ""
-"הפונקציה ()DAYNAME מחזירה את שם היום בשבוע (1...7). בארצות מסויימות היום "
-"הראשון בשבוע הוא יום ראשון, בעוד שבארצות באחרות היום הראשון הוא יום שני."
+"הפונקציה ()DAYNAME מחזירה את שם היום בשבוע (1…7). בארצות מסוימות היום הראשון "
+"בשבוע הוא יום ראשון, בעוד שבארצות באחרות היום הראשון הוא יום שני."
 
 #: functions/datetime.xml:494
 #, kde-format
@@ -4886,7 +4886,7 @@ msgid ""
 "depreciated."
 msgstr ""
 "הפונקציה ()SYD מחשבת את פחת הספרות של סכום השנים עבור נכס, לפי העלות שלו, "
-"ערך הניצולת, אורך החיים הצפוי ותקופה מסויימת. שיטה זו מאיצה את קצב הפחת, כך "
+"ערך הניצולת, אורך החיים הצפוי ותקופה מסוימת. שיטה זו מאיצה את קצב הפחת, כך "
 "שיש יותר הוצאות פחת בתקופות מוקדמות מאשר בתקופות מאוחרות יותר. עלות הפחת היא "
 "העלות האמיתית מינוס ערך הניצולת. אורך החיים האפקטיבי הוא מספר התקופות (בדרך "
 "כלל שנים) שבמהלכן פוחת ערכו של הנכס."
@@ -6172,7 +6172,7 @@ msgid ""
 "The TRUNC() function truncates a numeric value to a certain precision. If "
 "the precision is omitted 0 is assumed."
 msgstr ""
-"הפונקציה ()TRUNC מקצצת ערך מספרי לדיוק מסויים. אם הדיוק מושמט, מניחים שהוא 0."
+"הפונקציה ()TRUNC מקצצת ערך מספרי לדיוק מסוים. אם הדיוק מושמט, מניחים שהוא 0."
 
 #: functions/math.xml:195
 #, kde-format
@@ -10570,10 +10570,10 @@ msgid ""
 "SUBSTITUTE when you want to replace specific text, use REPLACE when you want "
 "to replace any text that occurs in a specific location."
 msgstr ""
-"הפונקציה ()SUBSTITUE מחליפה את טקסט_ישן בטקסט_חדש במחרוזת טקסט. אם מצויין "
+"הפונקציה ()SUBSTITUE מחליפה את טקסט_ישן בטקסט_חדש במחרוזת טקסט. אם מצוין "
 "מספר_מופע, הפונקציה תחליף רק את המופע המצויין של טקסט_ישן. אחרת, כל מופע של "
-"טקסט_ישן יוחלף בטקסט_חדש. השתמש ב־SUBSTITUTE כאשר ברצונך להחליף טקסט ספציפי, "
-"וב־REPLACE כאשר ברצונך להחליף כל טקסט שהוא שמופיע במיקום מסויים."
+"טקסט_ישן יוחלף בטקסט_חדש. יש להשתמש ב־SUBSTITUTE כדי להחליף טקסט מסוים, וב־"
+"REPLACE כדי להחליף כל טקסט ששמופיע במקום מסוים."
 
 #: functions/text.xml:71
 #, kde-format
@@ -10702,7 +10702,7 @@ msgid ""
 "refers to, text then T returns value. If value does not refer to text then T "
 "returns empty text."
 msgstr ""
-"הפונקציה ()T מחזירה את הטקסט אליו מתייחס ערך מסויים. אם הערך הוא טקסט או אם "
+"הפונקציה ()T מחזירה את הטקסט אליו מתייחס ערך מסוים. אם הערך הוא טקסט או אם "
 "הוא מתייחס לטקסט, T תחזיר את אותו הערך. אם הערך לא מתייחס לטקסט, T תחזיר את "
 "הטקסט הריק."
 
@@ -11013,8 +11013,8 @@ msgid ""
 "The MID() function returns a substring that contains 'length' characters of "
 "the string, starting at 'position' index."
 msgstr ""
-"הפונקציה ()MID מחזירה תת־מחרוזת המכילה את מספר התווים של המצויין בפרמטר "
-"\"אורך\", החל מהאינדקס \"מיקום\"."
+"הפונקציה ()MID מחזירה תת־מחרוזת המכילה את מספר התווים שמצוין במשתנה „אורך”, "
+"החל מנקודת המפתח „מקום”."
 
 #: functions/text.xml:361
 #, kde-format
@@ -11144,9 +11144,9 @@ msgid ""
 "rightmost characters of the string. The whole string is returned if 'length' "
 "exceeds the length of the string."
 msgstr ""
-"הפונקציה ()RIGHT מחזירה תת־מחרוזת המכילה את המספר המצויין בפרמטר \"אורך\" של "
-"התווים האחרונים של המחרוזת. אם \"אורך\" גדול מאורך המחרוזת, הפונקציה תחזיר "
-"את כל המחרוזת."
+"הפונקציה ()RIGHT מחזירה תת־מחרוזת המכילה את המספר המצוין במשתנה „אורך” של "
+"התווים האחרונים של המחרוזת. אם „אורך” גדול מאורך המחרוזת, הפונקציה תחזיר את "
+"כל המחרוזת."
 
 #: functions/text.xml:486
 #, kde-format
@@ -11403,7 +11403,7 @@ msgstr "קוד תו"
 #: functions/text.xml:687
 #, kde-format
 msgid "The CHAR() function returns the character specified by a number."
-msgstr "הפונקציה ()CHAR מחזירה את התו המצויין על ידי הקוד המספרי הנתון."
+msgstr "הפונקציה ()CHAR מחזירה את התו שמצוין על ידי הקוד המספרי הנתון."
 
 #: functions/text.xml:688
 #, kde-format
@@ -11475,14 +11475,14 @@ msgid ""
 "default is returned."
 msgstr ""
 "החזרת חלק של מחרוזת שמתאים לביטוי רגולרי. אם המחרוזת לא מתאימה לביטוי "
-"הרגולרי הנתון, הפונקציה תחזיר את הערך המצויין כברירת מחדל."
+"הרגולרי הנתון, הפונקציה תחזיר את הערך שמצוין כברירת מחדל."
 
 #: functions/text.xml:744
 #, kde-format
 msgid ""
 "If a back-reference is provided, then the value of that back-reference is "
 "returned."
-msgstr "אם מצויינת התייחסות חוזרת, הפונקציה תחזיר את הערך של אותה התייחסות."
+msgstr "אם מצוינת התייחסות חוזרת, הפונקציה תחזיר את הערך של אותה התייחסות."
 
 #: functions/text.xml:745
 #, kde-format
@@ -11490,7 +11490,7 @@ msgid ""
 "If no default value is given, an empty string is assumed. If no back-"
 "reference is given, 0 is assumed (so that entire matching part is returned)."
 msgstr ""
-"אם לא מצויין ערך ברירת מחדל, מניחים שזו מחרוזת ריקה. אם לא מצויינת התייחסות "
+"אם לא מצוין ערך ברירת מחדל, מניחים שזו מחרוזת ריקה. אם לא מצוינת התייחסות "
 "חוזרת, מניחים שהיא 0 (כך שהפונקציה תחזיר את כל החלק המתאים לביטוי)."
 
 #: functions/text.xml:746
@@ -12872,12 +12872,12 @@ msgstr "סכום"
 #: part/dialogs/PreferenceDialog.cpp:302 part/View.cpp:401
 #, kde-format
 msgid "Min"
-msgstr "מינימום"
+msgstr "מזערי"
 
 #: part/dialogs/PreferenceDialog.cpp:303 part/View.cpp:407
 #, kde-format
 msgid "Max"
-msgstr "מקסימום"
+msgstr "מרבי"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/View.cpp:413
 #, kde-format
