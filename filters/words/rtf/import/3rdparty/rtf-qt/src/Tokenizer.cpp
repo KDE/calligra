@@ -7,17 +7,17 @@
 
 namespace RtfReader
 {
-void Tokenizer::pullControlWord(Token *token)
+void Tokenizer::pullControlWord(Token &token)
 {
     char next;
     while (m_inputDevice->getChar(&next)) {
         if ((next == ' ') || (next == '\r') || (next == '\n')) {
             break;
         } else if (isalpha(next)) {
-            token->name.append(next);
+            token.name.append(next);
         } else if (isdigit(next) || (next == '-')) {
-            token->parameter.append(QLatin1Char(next));
-            token->hasParameter = true;
+            token.parameter.append(QLatin1Char(next));
+            token.hasParameter = true;
         } else {
             m_inputDevice->ungetChar(next);
             break;
@@ -25,9 +25,9 @@ void Tokenizer::pullControlWord(Token *token)
     }
 }
 
-void Tokenizer::pullControlSymbol(Token *token)
+void Tokenizer::pullControlSymbol(Token &token)
 {
-    if (token->name == "\'") {
+    if (token.name == "\'") {
         char highNibbleHexDigit;
         char lowNibbleHexDigit;
         if (m_inputDevice->getChar(&highNibbleHexDigit) && m_inputDevice->getChar(&lowNibbleHexDigit) && isxdigit(highNibbleHexDigit)
@@ -36,30 +36,30 @@ void Tokenizer::pullControlSymbol(Token *token)
             hexDigits.append(QLatin1Char(highNibbleHexDigit));
             hexDigits.append(QLatin1Char(lowNibbleHexDigit));
             uint codepoint = hexDigits.toUInt(nullptr, 16);
-            token->type = Plain;
-            token->name = QByteArray(1, codepoint);
+            token.type = Plain;
+            token.name = QByteArray(1, codepoint);
         }
-    } else if (token->name == "\\") {
-        token->type = Plain;
-        token->name = "\\";
-    } else if (token->name == "{") {
-        token->type = Plain;
-        token->name = "{";
-    } else if (token->name == "}") {
-        token->type = Plain;
-        token->name = "}";
-    } else if (token->name == "*") {
+    } else if (token.name == "\\") {
+        token.type = Plain;
+        token.name = "\\";
+    } else if (token.name == "{") {
+        token.type = Plain;
+        token.name = "{";
+    } else if (token.name == "}") {
+        token.type = Plain;
+        token.name = "}";
+    } else if (token.name == "*") {
         // don't need anything else here
     } else {
-        qCDebug(lcRtf) << "unhandled control symbol in Tokenizer:" << token->name;
+        qCDebug(lcRtf) << "unhandled control symbol in Tokenizer:" << token.name;
     }
 }
 
-void Tokenizer::pullControl(Token *token)
+void Tokenizer::pullControl(Token &token)
 {
     char c;
     m_inputDevice->getChar(&c);
-    token->name.append(c);
+    token.name.append(c);
     if (isalpha(c)) {
         pullControlWord(token);
     } else {
@@ -67,7 +67,7 @@ void Tokenizer::pullControl(Token *token)
     }
 }
 
-void Tokenizer::pullPlainText(Token *token)
+void Tokenizer::pullPlainText(Token &token)
 {
     char c;
     while (m_inputDevice->getChar(&c)) {
@@ -82,7 +82,7 @@ void Tokenizer::pullPlainText(Token *token)
         case '\n':
             break;
         default:
-            token->name.append(c);
+            token.name.append(c);
         }
     }
 }
@@ -109,13 +109,13 @@ Token Tokenizer::fetchToken()
             break;
         case '\\':
             token.type = Control;
-            pullControl(&token);
+            pullControl(token);
             return token;
             break;
         default:
             token.type = Plain;
             token.name.append(c);
-            pullPlainText(&token);
+            pullPlainText(token);
             return token;
         }
     }

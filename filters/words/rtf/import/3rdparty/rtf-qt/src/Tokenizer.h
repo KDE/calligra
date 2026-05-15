@@ -24,10 +24,10 @@ public:
 
 private:
     QFile *m_inputDevice;
-    void pullControl(Token *token);
-    void pullControlWord(Token *token);
-    void pullControlSymbol(Token *token);
-    void pullPlainText(Token *token);
+    void pullControl(Token &token);
+    void pullControlWord(Token &token);
+    void pullControlSymbol(Token &token);
+    void pullPlainText(Token &token);
 };
 }
 
