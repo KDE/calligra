@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-14 11:04+0200\n"
+"PO-Revision-Date: 2026-05-15 23:51+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.04.1\n"
+"X-Generator: Poedit 3.8\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -5637,7 +5637,7 @@ msgid ""
 "formula. Otherwise it returns False"
 msgstr ""
 "Funkce ISFORMULA() vrací True, pokud odkazovaná buňka obsahuje vzorec. V "
-"opačném případě vrací False."
+"opačném případě vrací False"
 
 #: functions/information.xml:227
 #, kde-format
@@ -11452,16 +11452,18 @@ msgid ""
 "The MIDB() function returns a substring that contains 'length' characters of "
 "the string, starting at 'position' index using byte positions."
 msgstr ""
+"Funkce MIDB() vrátí podřetězec, který obsahuje 'délku' znaků daného řetězce, "
+"počínaje indexem 'pozice' (v bajtových pozicích)."
 
 #: functions/text.xml:390
 #, kde-format
 msgid "MIDB(text;BytePosition Start;ByteLength)"
-msgstr ""
+msgstr "MIDB(text;počáteční pozice bajtu;délka bajtu)"
 
 #: functions/text.xml:391
 #, kde-format
 msgid "MIDB(text;BytePosition Start)"
-msgstr ""
+msgstr "MIDB(text;počáteční pozice bajtu)"
 
 #: functions/text.xml:408
 #, kde-format
@@ -11487,12 +11489,12 @@ msgstr "LEN(\"kspread\") vrací 7"
 #, kde-format
 msgid ""
 "The LENB() function returns the length of the string using byte positions."
-msgstr ""
+msgstr "Funkce LENB() vrací délku řetězce vyjádřenou v bajtových pozicích."
 
 #: functions/text.xml:425
 #, kde-format
 msgid "LENB(text)"
-msgstr ""
+msgstr "LENB(text)"
 
 #: functions/text.xml:437
 #, kde-format
@@ -11572,11 +11574,14 @@ msgid ""
 "rightmost characters of the string using byte positions. The whole string is "
 "returned if 'length' exceeds the length of the string."
 msgstr ""
+"Funkce RIGHTB() vrátí podřetězec obsahující 'délku' znaků z pravého konce "
+"řetězce, přičemž se vychází z pozic bajtů. Pokud hodnota 'délky' přesahuje "
+"délku řetězce, vrátí se celý řetězec."
 
 #: functions/text.xml:510
 #, kde-format
 msgid "RIGHTB(text;ByteLength)"
-msgstr ""
+msgstr "RIGHTB(text;délka bajtu)"
 
 #: functions/text.xml:530
 #, kde-format
@@ -11586,6 +11591,9 @@ msgid ""
 "the length of the string. It is an error for the number of characters to be "
 "less than 0."
 msgstr ""
+"Funkce LEFT() vrací podřetězec obsahující 'délku' znaků z levého konce "
+"řetězce. Pokud hodnota 'délky' přesahuje délku řetězce, vrátí se celý "
+"řetězec. Pokud je počet znaků menší než 0, dojde k chybě."
 
 #: functions/text.xml:531
 #, kde-format
@@ -11615,11 +11623,15 @@ msgid ""
 "if 'length' exceeds the length of the string. It is an error for the number "
 "of characters to be less than 0."
 msgstr ""
+"Funkce LEFTB() vrací podřetězec obsahující 'délku' znaků z levého okraje "
+"řetězce, přičemž se vychází z pozic bajtů. Pokud hodnota 'délky' přesahuje "
+"délku řetězce, vrátí se celý řetězec. Pokud je počet znaků menší než 0, "
+"dojde k chybě."
 
 #: functions/text.xml:555
 #, kde-format
 msgid "LEFTB(text;ByteLength)"
-msgstr ""
+msgstr "LEFTB(text;délka bajtu)"
 
 #: functions/text.xml:571
 #, kde-format
@@ -11634,6 +11646,9 @@ msgid ""
 "function will return an empty string if the second parameter is zero (or "
 "rounds down to zero)."
 msgstr ""
+"Funkce REPT() zopakuje první parametr tolikrát, kolikrát určuje druhý "
+"parametr. Druhý parametr nesmí být záporný a pokud je jeho hodnota nulová "
+"(nebo se zaokrouhluje dolů na nulu), vrátí tato funkce prázdný řetězec."
 
 #: functions/text.xml:576
 #, kde-format
@@ -11657,18 +11672,22 @@ msgid ""
 "places along in the alphabet. If the 13th position is beyond the letter Z, "
 "it begins again at A (rotation)."
 msgstr ""
+"Funkce ROT13() šifruje text tak, že každé písmeno nahradí písmenem, které se "
+"v abecedě nachází o 13 míst dále. Pokud se na 13. místě nachází písmeno za "
+"písmenem Z, začne se znovu od písmene A (rotace)."
 
 #: functions/text.xml:591
 #, kde-format
 msgid ""
 "By applying the encryption function again to the resulting text, you can "
 "decrypt the text."
-msgstr "Aplikováním této funkce na již zašifrovaný text jé můžete rozšifrovat."
+msgstr ""
+"Aplikováním této funkce na již zašifrovaný text jej můžete rozšifrovat."
 
 #: functions/text.xml:592
 #, kde-format
 msgid "ROT13(Text)"
-msgstr ""
+msgstr "ROT13(Text)"
 
 #: functions/text.xml:593
 #, kde-format
@@ -11859,13 +11878,15 @@ msgid ""
 "string does not match the given regular expression, value specified as "
 "default is returned."
 msgstr ""
+"Vrátí část řetězce, která odpovídá regulárnímu výrazu. Pokud řetězec "
+"neodpovídá zadanému regulárnímu výrazu, vrátí se hodnota zadaná jako výchozí."
 
 #: functions/text.xml:744
 #, kde-format
 msgid ""
 "If a back-reference is provided, then the value of that back-reference is "
 "returned."
-msgstr ""
+msgstr "Je-li zadán zpětný odkaz, vrátí se hodnota tohoto zpětného odkazu."
 
 #: functions/text.xml:745
 #, kde-format
@@ -11873,6 +11894,9 @@ msgid ""
 "If no default value is given, an empty string is assumed. If no back-"
 "reference is given, 0 is assumed (so that entire matching part is returned)."
 msgstr ""
+"Pokud není zadána žádná výchozí hodnota, předpokládá se prázdný řetězec. "
+"Pokud není zadán žádný zpětný odkaz, předpokládá se hodnota 0 (takže se "
+"vrátí celá odpovídající část)."
 
 #: functions/text.xml:746
 #, kde-format
@@ -11919,6 +11943,7 @@ msgid ""
 "The UNICODE() function returns a unicode code point for the first character "
 "in a text string."
 msgstr ""
+"Funkce UNICODE() vrací kódový bod Unicode pro první znak v textovém řetězci."
 
 #: functions/text.xml:783
 #, kde-format
@@ -11935,7 +11960,7 @@ msgstr "UNICODE(\"KDE\") vrací 75"
 msgid ""
 "The UNICHAR() function returns the character specified by a unicode code "
 "point."
-msgstr ""
+msgstr "Funkce UNICHAR() vrátí znak určený kódem Unicode."
 
 #: functions/text.xml:799
 #, kde-format
@@ -11950,7 +11975,7 @@ msgstr "UNICHAR(65) vrací \"A\""
 #: functions/text.xml:810
 #, kde-format
 msgid "Full width characters"
-msgstr ""
+msgstr "Znaky v plné šířce"
 
 #: functions/text.xml:814
 #, kde-format
@@ -11958,6 +11983,8 @@ msgid ""
 "The ASC() function returns the half-width characters corresponding to the "
 "full-width argument."
 msgstr ""
+"Funkce ASC() vrací znaky o poloviční šířce, které odpovídají argumentu o "
+"plné šířce."
 
 #: functions/text.xml:815
 #, kde-format
@@ -11967,7 +11994,7 @@ msgstr "ASC(text)"
 #: functions/text.xml:824
 #, kde-format
 msgid "Half-width characters"
-msgstr ""
+msgstr "Znaky v poloviční šířce"
 
 #: functions/text.xml:828
 #, kde-format
@@ -11975,6 +12002,8 @@ msgid ""
 "The JIS() function returns the full-width characters corresponding to the "
 "half-width argument."
 msgstr ""
+"Funkce JIS() vrací znaky s plnou šířkou, které odpovídají argumentu s "
+"poloviční šířkou."
 
 #: functions/text.xml:829
 #, kde-format
@@ -11986,12 +12015,12 @@ msgstr "JIS(text)"
 msgid ""
 "The BAHTTEXT() function converts a number to a text in Thai characters "
 "(baht)."
-msgstr ""
+msgstr "Funkce BAHTTEXT() převede číslo na text v thajském písmu (baht)."
 
 #: functions/text.xml:843
 #, kde-format
 msgid "BAHTTEXT(number)"
-msgstr ""
+msgstr "BAHTTEXT(číslo)"
 
 #: functions/text.xml:844
 #, kde-format
@@ -12027,7 +12056,7 @@ msgstr "COS(PI()/2) se rovná 0,0"
 #: functions/trig.xml:31
 #, kde-format
 msgid "The ACOT() function returns the inverse cotangent of a number."
-msgstr ""
+msgstr "Funkce ACOT() vrací inverzní kotangens daného čísla."
 
 #: functions/trig.xml:32
 #, kde-format
@@ -12390,17 +12419,17 @@ msgstr "PI() je rovno 3,141592654..."
 #, kde-format
 msgid ""
 "The CSC() function returns the cosecant of x, where x is given in radians."
-msgstr ""
+msgstr "Funkce CSC() vrací kosekant hodnotu x, kde x je zadáno v radiánech."
 
 #: functions/trig.xml:287
 #, kde-format
 msgid "CSC(Float)"
-msgstr ""
+msgstr "CSC(plovoucí)"
 
 #: functions/trig.xml:288
 #, kde-format
 msgid "CSC(PI()/2) equals 1"
-msgstr ""
+msgstr "CSC(PI()/2) je rovno 1"
 
 #: functions/trig.xml:300
 #, kde-format
@@ -12408,32 +12437,34 @@ msgid ""
 "The CSCH() function returns the hyperbolic cosecant of x, where x is given "
 "in radians."
 msgstr ""
+"Funkce CSCH() vrací hyperbolickou kosekantovou funkci hodnoty x, kde x je "
+"zadáno v radiánech."
 
 #: functions/trig.xml:301
 #, kde-format
 msgid "CSCH(Float)"
-msgstr ""
+msgstr "CSCH(plovoucí)"
 
 #: functions/trig.xml:302
 #, kde-format
 msgid "CSCH(PI()/2) equals 0.434537208..."
-msgstr ""
+msgstr "CSCH(PI()/2) je rovno 0.434537208..."
 
 #: functions/trig.xml:314
 #, kde-format
 msgid ""
 "The SEC() function returns the secant of x, where x is given in radians."
-msgstr ""
+msgstr "Funkce SEC() vrací sekant hodnotu x, kde x je zadáno v radiánech."
 
 #: functions/trig.xml:315
 #, kde-format
 msgid "SEC(Float)"
-msgstr ""
+msgstr "SEC(plovoucí)"
 
 #: functions/trig.xml:316
 #, kde-format
 msgid "SEC(0) equals 1"
-msgstr ""
+msgstr "SEC(0) je rovno 1"
 
 #: functions/trig.xml:328
 #, kde-format
@@ -12441,16 +12472,18 @@ msgid ""
 "The SECH() function returns the hyperbolic secant of x, where x is given in "
 "radians."
 msgstr ""
+"Funkce SECH() vrací hyperbolickou sekantovou funkci hodnoty x, přičemž x je "
+"zadáno v radiánech."
 
 #: functions/trig.xml:329
 #, kde-format
 msgid "SECH(Float)"
-msgstr ""
+msgstr "SECH(plovoucí)"
 
 #: functions/trig.xml:330
 #, kde-format
 msgid "SECH(0) equals 1"
-msgstr ""
+msgstr "SECH(0) je rovno 1"
 
 #: part/AboutData.h:26
 #, kde-format
@@ -12538,7 +12571,7 @@ msgstr "Norbert Andres"
 #: part/AboutData.h:56 part/AboutData.h:57 part/AboutData.h:58
 #, kde-format
 msgid "Import/export filter developer"
-msgstr ""
+msgstr "Vývojář filtrů pro import a export"
 
 #: part/AboutData.h:49
 #, kde-format
@@ -12638,7 +12671,7 @@ msgstr "Brad Hards"
 #: part/AboutData.h:66
 #, kde-format
 msgid "Implemented, reviewed and tested various functions"
-msgstr ""
+msgstr "Implementace, kontrola a testování různých funkcí"
 
 #: part/AboutData.h:68
 #, kde-format
@@ -12842,7 +12875,7 @@ msgstr "Formát buňky"
 #: part/chart/ChartDatabaseSelector.ui:13
 #, kde-format
 msgid "Database Selector"
-msgstr ""
+msgstr "Výběr databáze"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_areaBox)
 #: part/chart/ChartDatabaseSelector.ui:22
@@ -12915,6 +12948,8 @@ msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
 "> Open Recent."
 msgstr ""
+"Určuje maximální počet názvů souborů, které se zobrazí při výběru položky "
+"Soubor -> Otevřít poslední."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/FileOptionsWidget.ui:41
@@ -12929,6 +12964,9 @@ msgid ""
 "Here you can select the time between autosaves, or disable this feature "
 "altogether by choosing \"No autosave\" (by selecting the minimum value)."
 msgstr ""
+"Zde můžete nastavit interval mezi automatickými uloženími nebo tuto funkci "
+"úplně vypnout výběrem možnosti \"Neukládat automaticky\" (zvolením minimální "
+"hodnoty)."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:51
@@ -12956,6 +12994,8 @@ msgid ""
 "Check this box if you want some backup files created. This is checked per "
 "default."
 msgstr ""
+"Zaškrtněte toto políčko, pokud chcete, aby byly vytvořeny záložní soubory. "
+"Toto políčko je ve výchozím nastavení zaškrtnuto."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/InterfaceOptionsWidget.ui:19
@@ -12970,6 +13010,8 @@ msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
 "cursor one cell left, right, up or down, as determined by this setting."
 msgstr ""
+"Po výběru buňky se stisknutím klávesy Enter posune kurzor o jednu buňku "
+"doleva, doprava, nahoru nebo dolů, a to podle tohoto nastavení."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/InterfaceOptionsWidget.ui:36
@@ -12984,6 +13026,8 @@ msgid ""
 "This drop down selection box can be used to choose the calculation performed "
 "by the Statusbar Summary  function."
 msgstr ""
+"Toto rozevírací pole lze použít k výběru výpočtu, který provede funkce "
+"Souhrn na stavovém řádku."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: part/dialogs/InterfaceOptionsWidget.ui:53
@@ -12995,7 +13039,7 @@ msgstr "&Jednotka:"
 #: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
-msgstr ""
+msgstr "Vyberte výchozí jednotku, která se bude v tabulkách používat."
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
 #: part/dialogs/InterfaceOptionsWidget.ui:70
@@ -13010,6 +13054,8 @@ msgid ""
 "Lets you define the amount of indenting used by the Increase Indent and "
 "Decrease Indent actions."
 msgstr ""
+"Umožňuje nastavit velikost odsazení používanou při akcích Zvětšit odsazení a "
+"Zmenšit odsazení."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
@@ -13023,6 +13069,7 @@ msgstr "&Barva mřížky:"
 msgid ""
 "Click here to change the grid color ie the color of the borders of each cell."
 msgstr ""
+"Klikněte sem a změňte barvu mřížky, tedy barvu okrajů jednotlivých buněk."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
@@ -13038,6 +13085,9 @@ msgid ""
 "displayed. Click here to choose another color for the borders than the "
 "default red."
 msgstr ""
+"Je-li zaškrtnuta položka nabídky Zobrazit -> Zobrazit okraje stránek, "
+"zobrazí se okraje stránek. Kliknutím sem můžete zvolit jinou barvu okrajů "
+"než výchozí červenou."
 
 #: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:92
 #: part/dialogs/PageLayoutDialog.cpp:96
@@ -13131,7 +13181,7 @@ msgstr "Zdola nahoru, potom napříč"
 #: part/dialogs/PageLayoutSheetPage.ui:150
 #, kde-format
 msgid "Table alignment on page"
-msgstr ""
+msgstr "Zarovnání tabulky na stránce"
 
 #. i18n: ectx: property (text), widget (QCheckBox, horizontalCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:156
@@ -13181,7 +13231,7 @@ msgstr "Škálování"
 #: part/dialogs/PageLayoutSheetPage.ui:275
 #, kde-format
 msgid "Fixed zoom:"
-msgstr ""
+msgstr "Pevné přiblížení:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, pageLimitsButton)
 #: part/dialogs/PageLayoutSheetPage.ui:305
@@ -13329,6 +13379,8 @@ msgid ""
 "Lets you choose the (auto) text completion mode from a range of options in "
 "the drop down selection box."
 msgstr ""
+"Umožňuje vybrat režim (automatického) doplňování textu z řady možností v "
+"rozevíracím seznamu."
 
 #: part/dialogs/PreferenceDialog.cpp:434
 #, kde-format
@@ -13357,7 +13409,7 @@ msgstr "Zleva doprava"
 #: part/dialogs/SheetPropertiesWidget.ui:64
 #, kde-format
 msgid "Right to Left"
-msgstr "Zprava do leva"
+msgstr "Zprava doleva"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SheetPropertiesWidget)
 #: part/dialogs/SheetPropertiesWidget.ui:38
@@ -13379,6 +13431,9 @@ msgid ""
 "Right to Left, then the first column will be on the right and the others "
 "added from right to left."
 msgstr ""
+"Ve výchozím nastavení je první sloupec listu vlevo. Pokud zvolíte možnost "
+"Zprava doleva, bude první sloupec vpravo a další sloupce budou přidávány "
+"zprava doleva."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showCommentIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:110
@@ -13387,6 +13442,8 @@ msgid ""
 "If this box is checked cells containing comments will be marked by a small "
 "red triangle at the top right corner."
 msgstr ""
+"Pokud je toto políčko zaškrtnuto, budou buňky obsahující poznámky označeny "
+"malým červeným trojúhelníkem v pravém horním rohu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showCommentIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:113
@@ -13402,6 +13459,9 @@ msgid ""
 "Formula Bar will be displayed in LC mode (i.e. L2C3) rather than in its "
 "normal form B3. This does not seem to be of much use at the moment."
 msgstr ""
+"Pokud je toto políčko zaškrtnuto, bude odkaz na buňku zobrazený na levém "
+"konci řádku vzorců zobrazen v režimu LC (tj. L2C3) namísto obvyklého zápisu "
+"B3. V současné době to však nemá příliš velký význam."
 
 #. i18n: ectx: property (text), widget (QCheckBox, useLCModeCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:123
@@ -13417,6 +13477,9 @@ msgid ""
 "sheet. Per default the page borders are not displayed. It is useful to see "
 "the page borders if you want to print your sheet."
 msgstr ""
+"Pokud tuto možnost zaškrtnete, na aktuálním listu se zobrazí okraje stránky. "
+"Ve výchozím nastavení se okraje stránky nezobrazují. Zobrazení okrajů "
+"stránky je užitečné, pokud chcete list vytisknout."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:133
@@ -13431,6 +13494,8 @@ msgid ""
 "Check this box and the first letter of any text you type in will "
 "automatically be converted to uppercase."
 msgstr ""
+"Zaškrtněte toto políčko a první písmeno každého zadaného textu se "
+"automaticky převede na velké."
 
 #. i18n: ectx: property (text), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:143
@@ -13444,6 +13509,8 @@ msgstr "Převést první písm&eno na velké"
 msgid ""
 "If this box is checked any cell containing the value zero will appear blank."
 msgstr ""
+"Pokud je toto políčko zaškrtnuto, budou všechny buňky s hodnotou nula "
+"zobrazeny jako prázdné."
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideZeroCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:153
@@ -13458,6 +13525,8 @@ msgid ""
 "If this box is checked Calligra Sheets will display the actual formulae in "
 "cells rather than the results."
 msgstr ""
+"Pokud je toto políčko zaškrtnuto, Calligra Sheets bude v buňkách zobrazovat "
+"samotné vzorce namísto výsledků."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:163
@@ -13472,6 +13541,8 @@ msgid ""
 "If this box is checked the column headings will show as numbers rather than "
 "as letters. Letters are default."
 msgstr ""
+"Pokud je toto políčko zaškrtnuto, budou se záhlaví sloupců zobrazovat jako "
+"čísla namísto písmen. Výchozí nastavení jsou písmena."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showColumnAsNumbersCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:173
@@ -13487,6 +13558,9 @@ msgid ""
 "the bottom left corner of cells containing formulae. This is useful if you "
 "want to protect cells with formulae."
 msgstr ""
+"Pokud je toto políčko zaškrtnuto, Calligra Sheets zobrazí v levém dolním "
+"rohu buněk obsahujících vzorce malý modrý trojúhelník. To se hodí, pokud "
+"chcete buňky s vzorci chránit."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:183
@@ -13501,6 +13575,8 @@ msgid ""
 "If checked, the grid (the cell limits) will be shown. This is the default. "
 "If unchecked, the grid will be hidden."
 msgstr ""
+"Pokud je toto políčko zaškrtnuto, zobrazí se mřížka (ohraničení buněk). Toto "
+"je výchozí nastavení. Pokud není zaškrtnuto, mřížka se skryje."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:193
@@ -13515,6 +13591,8 @@ msgid ""
 "This setting controls whether formulae are recalculated automatically when "
 "the value of any cell they refer to changes."
 msgstr ""
+"Toto nastavení určuje, zda se vzorce automaticky přepočítávají, když se "
+"změní hodnota některé z buněk, na kterou odkazují."
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoCalcCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:203
@@ -13562,6 +13640,12 @@ msgid ""
 "You can insert a sheet as often as you like, this way it will be printed "
 "multiple times. This is useful for dividers or title pages, for example."
 msgstr ""
+"<b>Seznam všech dostupných listů.</b><br>\n"
+"Chcete-li list vytisknout, musíte v tomto seznamu vybrat jeden nebo více "
+"listů a pomocí tlačítek je vložit do seznamu vpravo, kde jsou uvedeny "
+"všechny listy určené k tisku.<br>\n"
+"List můžete vložit libovolně-krát, čímž se vytiskne vícekrát. To se hodí "
+"například pro oddělovací listy nebo titulní stránky."
 
 #. i18n: ectx: property (text), widget (QListWidget, ListViewAvailable)
 #: part/dialogs/SheetSelectWidget.ui:79
@@ -13585,6 +13669,11 @@ msgid ""
 "It is even possible to print a sheet more than once. Just insert the desired "
 "sheet again and order the list to your needs."
 msgstr ""
+"<b>Seznam listů k tisku.</b><br>\n"
+"Vytisknou se pouze listy uvedené v tomto seznamu, a to v pořadí, v jakém "
+"jsou uvedeny. Pořadí tisku můžete změnit pomocí tlačítek nahoru a dolů.<br>\n"
+"Je dokonce možné vytisknout jeden list vícekrát. Stačí vložit požadovaný "
+"list znovu a seřadit seznam podle svých potřeb."
 
 #. i18n: ectx: property (text), widget (QListWidget, ListViewSelected)
 #: part/dialogs/SheetSelectWidget.ui:124
@@ -13678,7 +13767,7 @@ msgstr "Oblast je příliš velká."
 #: part/PrintJob.cpp:88
 #, kde-format
 msgid "Sheet %1 could not be found for printing"
-msgstr ""
+msgstr "List %1 nebyl nalezen pro tisk"
 
 #: part/PrintJob.cpp:286
 #, kde-format
@@ -13853,7 +13942,7 @@ msgstr "Strana"
 #: part/View.cpp:315
 #, kde-format
 msgid "Switch shape anchoring"
-msgstr ""
+msgstr "Upevnění pomocí přepínacího prvku"
 
 #: part/View.cpp:321
 #, kde-format
@@ -13979,7 +14068,7 @@ msgstr "Zobrazit panel s kartami"
 #: part/View.cpp:380
 #, kde-format
 msgid "Set various Calligra Sheets options"
-msgstr ""
+msgstr "Nastavte různé možnosti listů v Calligra"
 
 #: part/View.cpp:392
 #, kde-format
@@ -14159,7 +14248,7 @@ msgstr "Změnit ohraničení"
 #: ui/CellToolBase.cpp:813
 #, kde-format
 msgid "Unable to locate action %1"
-msgstr ""
+msgstr "Nelze najít akci %1"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14586,6 +14675,11 @@ msgid ""
 "The default font is set for all cells in the Format -> Style Manager menu "
 "with the currently used style."
 msgstr ""
+"Zde můžete vybrat styl, velikost a barvu písma, včetně některých dalších "
+"možností, jako je podtržení nebo přeškrtnutí textu v aktuální buňce. Ve "
+"spodní části stránky se zobrazuje náhled vybraného formátu textu.\n"
+"Výchozí písmo se pro všechny buňky nastavuje v nabídce Formát -> Správce "
+"stylů pomocí aktuálně použitého stylu."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -14597,6 +14691,11 @@ msgid ""
 "settings for each cell. Changing to Roman for example will change all the "
 "selected cells style text to Roman."
 msgstr ""
+"Vyberte styl písma pro aktuálně vybrané buňky. Pokud vyberete několik buněk "
+"s různými styly, zobrazí se volba Různé (beze změny); pokud tuto volbu "
+"ponecháte, zachová se stávající nastavení stylů pro každou buňku. Pokud "
+"například zvolíte styl Roman, změní se styl textu ve všech vybraných buňkách "
+"na Roman."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
@@ -14629,6 +14728,11 @@ msgid ""
 "weight settings for each cell. Changing to Bold for example will change all "
 "the selected cells font weight to Bold."
 msgstr ""
+"Zvolte tloušťku písma pro aktuálně vybrané buňky. Pokud vyberete několik "
+"buněk s různou tloušťkou písma, zobrazí se možnost Různé (beze změny) a "
+"pokud tuto volbu ponecháte, zachovají se stávající nastavení tloušťky písma "
+"pro každou buňku. Pokud například zvolíte tučné písmo, změní se tloušťka "
+"písma ve všech vybraných buňkách na tučné."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:78
@@ -14791,6 +14895,10 @@ msgid ""
 "justifies numbers, dates and times within a cell and left justifies anything "
 "else."
 msgstr ""
+"Toto je výchozí formát a Calligra Sheets automaticky rozpozná skutečný "
+"datový typ na základě aktuálního obsahu buňky. Ve výchozím nastavení "
+"Calligra Sheets zarovnává čísla, data a časy v buňce vpravo a vše ostatní "
+"vlevo."
 
 #: ui/dialogs/LayoutPage_Float.cpp:65
 #, kde-format
@@ -14799,6 +14907,9 @@ msgid ""
 "-> Common Appearance and Behavior -> Locale -> Country/Region & Language -> "
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
+"Zobrazení čísel se řídí nastavením, které jste globálně zvolili v části "
+"Nastavení systému -> Jazyk a čas -> Region a jazyk -> Čísla. Čísla jsou ve "
+"výchozím nastavení zarovnána vpravo."
 
 #: ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
@@ -14816,6 +14927,12 @@ msgid ""
 "back to 12.\n"
 "You can also use the Percent icon in the Format Toolbar."
 msgstr ""
+"Pokud je v aktuální buňce zadáno číslo a změníte formát buňky z Obecný na "
+"Procenta, bude aktuální číslo v buňce vynásobeno 100 %.\n"
+"Například pokud zadáte číslo 12 a nastavíte formát buňky na Procenta, "
+"výsledkem bude 1 200 %. Zpětným přepnutím na formát Obecný se hodnota vrátí "
+"na 12.\n"
+"Můžete také použít ikonu Procenta na panelu nástrojů Formát."
 
 #: ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
@@ -14832,6 +14949,12 @@ msgid ""
 "You can also use the Currency icon in the Format Toolbar to set the cell "
 "formatting to look like your current currency."
 msgstr ""
+"Formát Číslo převede vaše číslo do peněžního zápisu podle nastavení, které "
+"je globálně uloženo v části Nastavení systému -> Jazyk a čas -> Region a "
+"jazyk -> Měna. Zobrazí se symbol měny a přesnost bude odpovídat nastavení v "
+"Nastavení systému.\n"
+"K nastavení formátování buňky tak, aby odpovídalo vaší aktuální měně, můžete "
+"také použít ikonu Měna na panelu nástrojů pro formátování."
 
 #: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
@@ -14845,6 +14968,9 @@ msgid ""
 "example, 0.0012 will be changed to 1.2E-03. Going back using Generic cell "
 "format will display 0.0012 again."
 msgstr ""
+"Vědecký formát převede číslo do vědeckého zápisu. Například hodnota 0,0012 "
+"se změní na 1,2E-03. Pokud se vrátíte k obecnému formátu buňky, zobrazí se "
+"opět hodnota 0,0012."
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -14859,6 +14985,14 @@ msgid ""
 "Sixteenths 1/16 then the cell will display \"1 6/16\" which is the nearest "
 "closest Sixteenth fraction."
 msgstr ""
+"Formát zlomku převede vaše číslo na zlomek. Například číslo 0,1 lze převést "
+"na 1/8, 2/16, 1/10 atd. Typ zlomku určíte výběrem v poli vpravo. Pokud v "
+"zvoleném režimu zlomku není možné zobrazit přesný zlomek, vybere se "
+"nejbližší odpovídající hodnota.\n"
+" Například: pokud máme číslo 1,5, vybereme zlomek a šestnáctiny 1/16, v "
+"buňce se zobrazí text \"1 8/16\", což je přesný zlomek. Pokud máte v buňce "
+"číslo 1,4 a vyberete zlomek a šestnáctiny 1/16, v buňce se zobrazí \"1 "
+"6/16\", což je nejbližší šestnáctinový zlomek."
 
 #: ui/dialogs/LayoutPage_Float.cpp:100
 #, kde-format
@@ -14870,6 +15004,11 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get dates."
 msgstr ""
+"Chcete-li zadat datum, zadejte jej v jednom z formátů nastavených v části "
+"Nastavení systému -> Jazyk a čas -> Region a jazyk -> Čas. Zde jsou "
+"nastaveny dva formáty: formát data a zkrácený formát data.\n"
+"Stejně jako můžete přetahovat čísla dolů, můžete přetahovat i data, přičemž "
+"do následujících buněk se také vyplní data."
 
 #: ui/dialogs/LayoutPage_Float.cpp:107
 #, kde-format
@@ -14883,6 +15022,13 @@ msgid ""
 "sense as a time, Calligra Sheets will display 00:00 in the global format you "
 "have in System Settings."
 msgstr ""
+"Tímto způsobem se obsah buňky naformátuje jako čas. Chcete-li zadat čas, "
+"měli byste jej zadat ve formátu času nastaveném v Nastavení systému -> Jazyk "
+"a čas -> Region a jazyk -> Čas. V dialogovém okně Formát buňky můžete "
+"nastavit, jak se má čas zobrazovat, a to výběrem jedné z dostupných možností "
+"formátu času. Výchozí formát je systémový formát nastavený v Nastaveních "
+"systému. Pokud číslo v buňce nedává smysl jako čas, Calligra Sheets zobrazí "
+"00:00 v globálním formátu, který máte nastavený v Systémových nastaveních."
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
 #, kde-format
@@ -14899,6 +15045,11 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
+"Chcete-li zadat datum, zadejte jej v jednom z formátů nastavených v části "
+"Nastavení systému -> Jazyk a čas -> Region a jazyk -> Čas. Zde jsou "
+"nastaveny dva formáty: formát data a zkrácený formát data.\n"
+"Stejně jako můžete přetahovat čísla dolů, můžete přetahovat i data, přičemž "
+"do následujících buněk se také vyplní datum a čas."
 
 #: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
@@ -14909,6 +15060,11 @@ msgid ""
 "formatted as text, they cannot be used in calculations or formulas. It also "
 "change the way the cell is justified."
 msgstr ""
+"Tímto nastavením se obsah buňky naformátuje jako text. To se může hodit, "
+"pokud chcete, aby se číslo chovalo jako text a ne jako číslo, například u "
+"PSČ. Nastavení čísla jako textu způsobí jeho zarovnání vlevo. Jsou-li čísla "
+"naformátována jako text, nelze je použít ve výpočtech ani ve vzorcích. Změní "
+"se tím také způsob zarovnání buňky."
 
 #: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
@@ -14918,7 +15074,7 @@ msgstr "Vlastní"
 #: ui/dialogs/LayoutPage_Float.cpp:128
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
-msgstr ""
+msgstr "Vlastní formát zatím nefunguje. Bude k dispozici v příští verzi."
 
 #: ui/dialogs/LayoutPage_Float.cpp:136
 #, kde-format
@@ -14926,11 +15082,13 @@ msgid ""
 "This will display a preview of your choice so you can know what it does "
 "before clicking the OK button to validate it."
 msgstr ""
+"Zobrazí se náhled vašeho výběru, abyste věděli, co se stane, než kliknete na "
+"tlačítko OK a potvrdíte výběr."
 
 #: ui/dialogs/LayoutPage_Float.cpp:146
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
-msgstr ""
+msgstr "Zobrazí možnosti formátování zlomků, data nebo času."
 
 #: ui/dialogs/LayoutPage_Float.cpp:156
 #, kde-format
@@ -14938,6 +15096,8 @@ msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
 "content in the checked format."
 msgstr ""
+"Na konec obsahu každé buňky v zadaném formátu můžete přidat příponu, "
+"například znak $HK."
 
 #: ui/dialogs/LayoutPage_Float.cpp:159
 #, kde-format
@@ -14951,6 +15111,9 @@ msgid ""
 "numeric values. This can also be changed using the Increase precision or "
 "Decrease precision icons in the Format toolbar. "
 msgstr ""
+"Můžete nastavit, kolik číslic se u číselných hodnot zobrazí za desetinnou "
+"čárkou. Toto nastavení lze změnit také pomocí ikon Zvýšit přesnost nebo "
+"Snížit přesnost na panelu nástrojů Formát. "
 
 #: ui/dialogs/LayoutPage_Float.cpp:168
 #, kde-format
@@ -14958,6 +15121,8 @@ msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
 "content in the checked format."
 msgstr ""
+"Zde můžete přidat předponu, například znak $, na začátek obsahu každé buňky "
+"ve vybraném formátu."
 
 #: ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
@@ -14965,6 +15130,8 @@ msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
 "and whether negative values are shown in red."
 msgstr ""
+"Můžete si vybrat, zda se kladné hodnoty budou zobrazovat s předponou + a zda "
+"se záporné hodnoty budou zobrazovat červeně."
 
 #: ui/dialogs/LayoutPage_Float.cpp:178
 #, kde-format
@@ -15099,6 +15266,11 @@ msgid ""
 "<b>Right</b> means the content of the cell will be displayed on the right of "
 "the cell.</qt>"
 msgstr ""
+"<qt>Nastavte vodorovné umístění obsahu v buňce.\n"
+"<b>Standardní</b> je výchozí nastavení a je určeno formátem, který zvolíte.\n"
+"<b>Vlevo</b> znamená, že obsah bude zobrazen vlevo v buňce.\n"
+"<b>Na střed</b> znamená, že obsah bude vodorovně vycentrován v buňce.\n"
+"<b>Vpravo</b> znamená, že obsah buňky bude zobrazen vpravo v buňce.</qt>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, standard)
 #: ui/dialogs/PositionWidget.ui:54
@@ -15146,6 +15318,11 @@ msgid ""
 "<b>Bottom</b> means the content of the cell will be displayed at the bottom "
 "of the cell.</qt>"
 msgstr ""
+"<qt>Nastavte vertikální umístění obsahu v buňce.\n"
+"<b>Nahoře</b> znamená, že se obsah zobrazí v horní části buňky.\n"
+"<b>Uprostřed</b> znamená, že se obsah zobrazí ve středu buňky ve vertikálním "
+"směru.\n"
+"<b>Dole</b> znamená, že se obsah buňky zobrazí v dolní části buňky.</qt>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
 #: ui/dialogs/PositionWidget.ui:141
@@ -15172,6 +15349,8 @@ msgid ""
 "Set the amount of indent that will be used in the cell when you choose the "
 "Increase Indent or Decrease Indent actions."
 msgstr ""
+"Nastavte velikost odsazení, která se v buňce použije při provedení akce "
+"zvětšit odsazení nebo zmenšit odsazení."
 
 #. i18n: ectx: property (title), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:168
@@ -15189,6 +15368,11 @@ msgid ""
 "adjusted to contain the text.\n"
 "Vertical text puts your text vertically."
 msgstr ""
+"Tato možnost je k dispozici pouze v případě, že je úhel natočení 0°.\n"
+"Funkce zalamování textu jej zalamuje tak, aby se vešel do velikosti "
+"předchozí buňky. Pokud tuto možnost nezaškrtnete, text zůstane na jednom "
+"řádku a velikost buňky se přizpůsobí tak, aby text pojala.\n"
+"Funkce vertikální text jej zobrazí svisle."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #: ui/dialogs/PositionWidget.ui:180
@@ -15229,6 +15413,16 @@ msgid ""
 "You can learn more about all these settings in the User Manual in the "
 "Advanced Calligra Sheets chapter."
 msgstr ""
+"Na této záložce můžete nastavit ochranu buněk. Ve výchozím nastavení jsou "
+"všechny buňky chráněné (což znamená, že obsah buněk nelze měnit) a aby byla "
+"ochrana buněk aktivní, musíte navíc chránit list pomocí nabídky Nástroje -> "
+"Ochránit list... a zadat heslo.\n"
+"Můžete také skrýt vzorec v buňce, abyste ochránili způsob výpočtu vzorce. "
+"Aby tato funkce fungovala, je rovněž nutné povolit ochranu listu.\n"
+"Obsah buněk můžete skrýt pomocí možnosti Skrýt vše, ale i v tomto případě je "
+"nutná ochrana listu.\n"
+"Více informací o všech těchto nastaveních najdete v uživatelské příručce v "
+"kapitole Pokročilé funkce Calligra Sheets."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: ui/dialogs/ProtectionWidget.ui:41
@@ -15244,6 +15438,9 @@ msgid ""
 "checked (default), the cell content will be printed.\n"
 "Note that you can print it even if the cell is protected"
 msgstr ""
+"Je-li toto políčko zaškrtnuto, obsah buňky se nevytiskne. Není-li zaškrtnuto "
+"(výchozí nastavení), obsah buňky se vytiskne.\n"
+"Upozorňujeme, že obsah lze vytisknout i v případě, že je buňka chráněna"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
 #: ui/dialogs/ProtectionWidget.ui:51
@@ -15264,6 +15461,8 @@ msgid ""
 "This hides the cell content and works only when the sheet is protected. "
 "Whether the cell itself is protected or not does not matter."
 msgstr ""
+"Tím se skryje obsah buňky a funguje to pouze v případě, že je list chráněn. "
+"Na tom, zda je samotná buňka chráněna, nezáleží."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideAll)
 #: ui/dialogs/ProtectionWidget.ui:72
@@ -15281,6 +15480,11 @@ msgid ""
 "manual for more details in the Advanced Calligra Sheets chapter. When a cell "
 "is protected, its content cannot be changed."
 msgstr ""
+"Pokud je toto políčko zaškrtnuto, obsah buňky bude chráněn. Jedná se o "
+"výchozí nastavení. Aby tato ochrana jednotlivých buněk fungovala, je nutné "
+"chránit celý list pomocí položky nabídky Nástroje -> Ochránit list... Další "
+"podrobnosti najdete v příručce v kapitole Pokročilé funkce aplikace Calligra "
+"Sheets. Je-li buňka chráněna, nelze její obsah měnit."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:100
@@ -15297,6 +15501,10 @@ msgid ""
 "contain formulae so the user cannot view the formula. And the sheet must be "
 "protected for this to work."
 msgstr ""
+"Je-li tato možnost zaškrtnuta, buňka zůstane viditelná. Její obsah se však "
+"nezobrazí v řádku vzorců. Skrytí vzorce funguje pouze u buněk obsahujících "
+"vzorce, takže uživatel vzorec nevidí. Aby tato funkce fungovala, musí být "
+"list chráněn."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
 #: ui/dialogs/ProtectionWidget.ui:133
