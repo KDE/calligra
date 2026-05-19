@@ -19,11 +19,11 @@
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate
 {
 public:
-    KoDocumentInfo *m_info;
-    KoDocumentInfoDlg *m_dlg;
+    KoDocumentInfo *m_info = nullptr;
+    KoDocumentInfoDlg *m_dlg = nullptr;
     QUrl m_url;
-    KoStore *m_src;
-    KoStore *m_dst;
+    KoStore *m_src = nullptr;
+    KoStore *m_dst = nullptr;
 };
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props, const QVariantList &)
@@ -32,12 +32,9 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props, const
 {
     d->m_info = new KoDocumentInfo(this);
     d->m_url = props->item().url();
-    d->m_dlg = nullptr;
 
     if (!d->m_url.isLocalFile())
         return;
-
-    d->m_dst = nullptr;
 
     d->m_src = KoStore::createStore(d->m_url.toLocalFile(), KoStore::Read);
 
