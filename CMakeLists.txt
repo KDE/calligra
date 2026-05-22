@@ -131,7 +131,6 @@ find_package(KF6 ${REQUIRED_KF6_VERSION} REQUIRED
     ConfigWidgets
     CoreAddons
     Crash
-    DocTools
     GuiAddons
     I18n
     IconThemes
@@ -147,6 +146,13 @@ find_package(KF6 ${REQUIRED_KF6_VERSION} REQUIRED
     WindowSystem
     XmlGui
 )
+if(SHOULD_BUILD_DOC)
+    find_package(KF6DocTools ${REQUIRED_KF6_VERSION} REQUIRED)
+    set_package_properties(KF6DocTools PROPERTIES
+        DESCRIPTION "Tools to generate documentation"
+        TYPE REQUIRED
+)
+endif()
 
 find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS
