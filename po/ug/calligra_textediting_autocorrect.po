@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: AutocorrectPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:08-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: Autocorrect.cpp:26
 #, kde-format
@@ -23,10 +24,9 @@ msgid "Configure &Autocorrection..."
 msgstr "ئۆزلۈكىدىن تۈزىتىش سەپلىمىسى(&A)…"
 
 #: Autocorrect.cpp:30
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "Enable Autocorrection"
-msgstr "ئۆزلۈكىدىن تۈزەت"
+msgstr ""
 
 #: AutocorrectFactory.cpp:16
 #, kde-format
@@ -120,199 +120,166 @@ msgstr "ئۆزلۈكىدىن تۈزەتكۈچ"
 #~ msgid "Select Character"
 #~ msgstr "ھەرپ تاللا"
 
-#, fuzzy
 #~| msgid "Si&mple Autocorrection"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Si&mple Autocorrection"
 #~ msgstr "ئاددىي ئۆزلۈكىدىن تۈزەتكۈچ(&M)"
 
-#, fuzzy
 #~| msgid "Autoformat &URLs"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Autoformat &URLs"
 #~ msgstr "&URL نىڭ ئاپتوماتىك پىچىمى"
 
-#, fuzzy
 #~| msgid "&Suppress double spaces"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Suppress double spaces"
 #~ msgstr "قوش بوشلۇقنى پرېسلا(&S)"
 
-#, fuzzy
 #~| msgid "Re&place 1/2... with ½..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Re&place 1/2... with ½..."
 #~ msgstr "1/2... نى ½... غا ئالماشتۇر(&P)"
 
-#, fuzzy
 #~| msgid "Re&place 1/2... with ½..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Rep&lace 1st... with 1^st..."
 #~ msgstr "1/2... نى ½... غا ئالماشتۇر(&P)"
 
-#, fuzzy
 #~| msgid "Capitalize name of days"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Capitalize name of days"
 #~ msgstr "كۈن ئاتلىرىنىڭ چوڭ يېزىلىشى"
 
-#, fuzzy
 #~| msgid "Default"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Default"
 #~ msgstr "كۆڭۈلدىكى"
 
-#, fuzzy
 #~| msgid "Custom &Quotes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Custom &Quotes"
 #~ msgstr "ئۆزلەشتۈرگەن تىرناق(&Q)"
 
-#, fuzzy
 #~| msgid "Ad&vanced Autocorrection"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ad&vanced Autocorrection"
 #~ msgstr "ئالىي ئاپتوماتىك توغرىلاش(&V)"
 
-#, fuzzy
 #~| msgid "Replacements and exceptions for language:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Replacements and exceptions for language:"
 #~ msgstr "ئالماشتۇرۇش ۋە مۇستەسنا ئىشلىتىدىغان تىل:"
 
-#, fuzzy
 #~| msgid "All Languages"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "All Languages"
 #~ msgstr "بارلىق تىللار"
 
-#, fuzzy
 #~| msgid "&Enable word replacement"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Enable word replacement"
 #~ msgstr "سۆز ئالماشتۇرۇشنى قوزغات(&E)"
 
-#, fuzzy
 #~| msgid "Replace &text with format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Replace &text with format"
 #~ msgstr "تېكىستنى پىچىمغا ئالماشتۇر(&T)"
 
-#, fuzzy
 #~| msgid "&Find"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Find"
 #~ msgstr "ئىزدە(&F)"
 
-#, fuzzy
 #~| msgid "..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "..."
 #~ msgstr "…"
 
-#, fuzzy
 #~| msgid "Re&place"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Re&place"
 #~ msgstr "ئالماشتۇر(&P)"
 
-#, fuzzy
 #~| msgid "Remove"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove"
 #~ msgstr "چىقىرىۋەت"
 
-#, fuzzy
 #~| msgid "C&hange Format..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "C&hange Format..."
 #~ msgstr "پىچىم ئۆزگەرت(&H)…"
 
-#, fuzzy
 #~| msgid "C&lear Format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "C&lear Format"
 #~ msgstr "پىچىمنى تازىلا(&L)"
 
-#, fuzzy
 #~| msgid "Find"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Find"
 #~ msgstr "ئىزدە"
 
-#, fuzzy
 #~| msgid "Replace"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Replace"
 #~ msgstr "ئالماشتۇر"
 
-#, fuzzy
 #~| msgid "E&xceptions"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "E&xceptions"
 #~ msgstr "مۇستەسنا(&X)"
 
-#, fuzzy
 #~| msgid "Do not treat as the end of a sentence:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Do not treat as the end of a sentence:"
 #~ msgstr "جۈملە ئاخىرلاشقانلىقىنى بىلدۈرمەيدۇ:"
 
-#, fuzzy
 #~| msgid "Autoinclude"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Autoinclude"
 #~ msgstr "ئۆزلۈكىدىن قوش"
 
-#, fuzzy
 #~| msgid "R&emove"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "R&emove"
 #~ msgstr "چىقىرىۋەت(&E)"
 
-#, fuzzy
 #~| msgid "Accept two uppercase letters in:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Accept two uppercase letters in:"
 #~ msgstr "ئىككى چوڭ ھەرپكە قوشۇل:"
 
-#, fuzzy
 #~| msgid "A&dd"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A&dd"
 #~ msgstr "قوش(&D)"
 
-#, fuzzy
 #~| msgid "Configure &Autocorrection..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure &Autocorrection..."
 #~ msgstr "ئۆزلۈكىدىن تۈزىتىش سەپلىمىسى(&A)…"
 
-#, fuzzy
 #~| msgid "Autocorrection"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Autocorrection"
 #~ msgstr "ئۆزلۈكىدىن تۈزەت"
 
-#, fuzzy
 #~| msgid "&Modify"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Modify"
 #~ msgstr "ئۆزگەرت(&M)"
 
-#, fuzzy
 #~| msgid "&Add"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Add"
 #~ msgstr "قوش(&A)"
 
-#, fuzzy
 #~| msgid "Select Character"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select Character"
 #~ msgstr "ھەرپ تاللا"
 
-#, fuzzy
 #~| msgid "Autocorrect"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Autocorrect"

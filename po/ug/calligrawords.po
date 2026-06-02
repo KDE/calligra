@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:11-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -44,10 +45,9 @@ msgstr "كۆرسىتىش ھالىتى(&D)"
 
 #. i18n: ectx: Menu (semantic)
 #: part/calligrawords.rc:62
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Semantics"
-msgstr "ستاتىستىكا"
+msgstr ""
 
 #. i18n: ectx: Menu (format)
 #: part/calligrawords.rc:74
@@ -69,16 +69,15 @@ msgstr "ئىملا تەكشۈر"
 
 #. i18n: ectx: Menu (AutoCorrection)
 #: part/calligrawords.rc:83
-#, fuzzy, kde-format
-#| msgid "Cover selection"
+#, kde-format
 msgid "AutoCorrection"
-msgstr "مۇقاۋا تاللاش"
+msgstr ""
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
 #, kde-format
 msgid "Edit"
-msgstr "تەھرىرلەش"
+msgstr "تەھرىر"
 
 #. i18n: ectx: Menu (check_spell_list)
 #: part/calligrawords.rc:147
@@ -96,22 +95,17 @@ msgstr ""
 #: part/calligrawords_readonly.rc:30
 #, kde-format
 msgid "&Tools"
-msgstr "قوراللار(&T)"
+msgstr "قورال(&T)"
 
 #: part/commands/KWChangePageStyleCommand.cpp:11
-#, fuzzy
-#| msgid "Page Size"
 msgctxt "(qtundo-format)"
 msgid "Set Page Style"
-msgstr "بەت چوڭلۇقى"
+msgstr ""
 
 #: part/commands/KWNewPageStyleCommand.cpp:12
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Page"
 msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
-msgstr "بەت قىستۇر"
+msgstr ""
 
 #: part/commands/KWPageStylePropertiesCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -119,16 +113,14 @@ msgid "Page Properties"
 msgstr "بەت خاسلىقى"
 
 #: part/commands/KWShapeCreateCommand.cpp:42
-#, fuzzy
-#| msgid "Even Pages Header"
 msgctxt "(qtundo-format)"
 msgid "Create shape"
-msgstr "جۈپ نومۇرلۇق بەتنىڭ بەت قېشى"
+msgstr "شەكىل قۇر"
 
 #: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
 msgid "Baseline"
-msgstr "Baseline"
+msgstr ""
 
 #: part/dialogs/KWAnchoringProperties.cpp:413
 #: part/dialogs/KWAnchoringProperties.cpp:424
@@ -217,33 +209,29 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
-#, fuzzy, kde-format
-#| msgid "Vertical Alignment"
+#, kde-format
 msgid "Vertical Positioning"
-msgstr "بويىغا توغرىلاش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rTop)
 #: part/dialogs/KWAnchoringProperties.ui:60
-#, fuzzy, kde-format
-#| msgid "&Right"
+#, kde-format
 msgid "Top align with:"
-msgstr "ئوڭ(&R)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
 #. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
 #: part/dialogs/KWAnchoringProperties.ui:77
 #: part/dialogs/KWAnchoringProperties.ui:186
-#, fuzzy, kde-format
-#| msgid "&Center"
+#, kde-format
 msgid "Center align with:"
-msgstr "ئوتتۇرا(&C)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rBottom)
 #: part/dialogs/KWAnchoringProperties.ui:87
-#, fuzzy, kde-format
-#| msgid "&Right"
+#, kde-format
 msgid "Bottom align with:"
-msgstr "ئوڭ(&R)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
 #. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
@@ -263,24 +251,21 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
 #: part/dialogs/KWAnchoringProperties.ui:163
-#, fuzzy, kde-format
-#| msgid "Horizontal Alignment"
+#, kde-format
 msgid "Horizontal Positioning"
-msgstr "توغرىسىغا توغرىلاش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rLeft)
 #: part/dialogs/KWAnchoringProperties.ui:169
-#, fuzzy, kde-format
-#| msgid "&Center"
+#, kde-format
 msgid "Left align with:"
-msgstr "ئوتتۇرا(&C)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rRight)
 #: part/dialogs/KWAnchoringProperties.ui:196
-#, fuzzy, kde-format
-#| msgid "&Right"
+#, kde-format
 msgid "Right align with:"
-msgstr "ئوڭ(&R)"
+msgstr ""
 
 #: part/dialogs/KWConfigureDialog.cpp:29
 #, kde-format
@@ -295,7 +280,7 @@ msgstr "ئارىلاش"
 #: part/dialogs/KWConfigureDialog.cpp:38 part/dialogs/KWConfigureDialog.cpp:39
 #, kde-format
 msgid "Grid"
-msgstr "سېتكا"
+msgstr "شادا"
 
 #: part/dialogs/KWConfigureDialog.cpp:45
 #, kde-format
@@ -312,20 +297,19 @@ msgstr "پۈتۈك تەڭشىكى"
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
-msgstr "ئاپتور"
+msgstr "يازغۇچى"
 
 #: part/dialogs/KWConfigureDialog.cpp:51
 #, kde-format
 msgid "Author"
-msgstr "ئاپتور"
+msgstr "يازغۇچى"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
 #: part/dialogs/KWCreateBookmark.ui:13
 #: part/dialogs/KWCreateBookmarkDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Rename Bookmark"
+#, kde-format
 msgid "Create New Bookmark"
-msgstr "خەتكۈش ئاتىنى ئۆزگەرت"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lExplain)
 #: part/dialogs/KWCreateBookmark.ui:20
@@ -345,13 +329,13 @@ msgstr "ئاتى:"
 #: part/dialogs/KWDocumentColumns.ui:21
 #, kde-format
 msgid "Columns:"
-msgstr "ئىستون:"
+msgstr "رەت:"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
 #: part/dialogs/KWDocumentColumns.ui:41
 #, kde-format
 msgid "Column spacing:"
-msgstr "ئىستون بوشلۇقى:"
+msgstr "رەت بوشلۇقى:"
 
 #: part/dialogs/KWFrameConnectSelector.cpp:98
 #, kde-format
@@ -388,10 +372,9 @@ msgid "Frameset Name"
 msgstr ""
 
 #: part/dialogs/KWFrameDialog.cpp:29
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Smart Positioning"
-msgstr "ئورنى"
+msgstr ""
 
 #: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:60
 #, kde-format
@@ -404,12 +387,9 @@ msgid "Connect Text Frames"
 msgstr ""
 
 #: part/dialogs/KWFrameDialog.cpp:64
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Page Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Shape Properties"
-msgstr "بەت خاسلىقى"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
 #: part/dialogs/KWInsertImage.ui:17
@@ -431,17 +411,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWInsertImage.ui:40
-#, fuzzy, kde-format
-#| msgid "Character"
+#, kde-format
 msgid "&To Character"
-msgstr "ھەرپ"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWInsertImage.ui:47
-#, fuzzy, kde-format
-#| msgid "Character"
+#, kde-format
 msgid "&As Character"
-msgstr "ھەرپ"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
 #: part/dialogs/KWInsertImage.ui:59
@@ -549,7 +527,7 @@ msgstr ""
 #: part/dialogs/KWPageSettingsDialog.cpp:38 part/dialogs/KWStartupWidget.ui:37
 #, kde-format
 msgid "Columns"
-msgstr "ئىستونلار"
+msgstr "رەت"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:44
 #, kde-format
@@ -559,7 +537,7 @@ msgstr "ئۇسلۇب"
 #: part/dialogs/KWPageSettingsDialog.cpp:60
 #, kde-format
 msgid "Clone"
-msgstr "كىلون"
+msgstr "نۇسخىلا"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:65 part/KWView.cpp:304
 #, kde-format
@@ -567,17 +545,14 @@ msgid "Delete"
 msgstr "ئۆچۈر"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:154
-#, fuzzy
-#| msgid "Page Size"
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
-msgstr "بەت چوڭلۇقى"
+msgstr ""
 
 #: part/dialogs/KWPageSettingsDialog.cpp:235
-#, fuzzy, kde-format
-#| msgid "Page Size"
+#, kde-format
 msgid "Clone Page Style"
-msgstr "بەت چوڭلۇقى"
+msgstr ""
 
 #: part/dialogs/KWPageSettingsDialog.cpp:236
 #, kde-format
@@ -616,10 +591,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:129
-#, fuzzy, kde-format
-#| msgid "Right:"
+#, kde-format
 msgid "Right by:"
-msgstr "ئوڭ:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:142
@@ -661,10 +635,9 @@ msgid "A bookmark with the name \"%1\" already exists."
 msgstr ""
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:104
-#, fuzzy, kde-format
-#| msgid "Rename Bookmark"
+#, kde-format
 msgid "Select Bookmark"
-msgstr "خەتكۈش ئاتىنى ئۆزگەرت"
+msgstr ""
 
 #: part/dialogs/KWShapeConfigFactory.cpp:43
 #, kde-format
@@ -686,18 +659,17 @@ msgstr "ياسا"
 #: part/dockers/KWDebugDocker.cpp:18
 #, kde-format
 msgid "Debug"
-msgstr ""
+msgstr "سازلا"
 
 #: part/dockers/KWNavigationDocker.cpp:20
 #, kde-format
 msgid "Navigation"
-msgstr ""
+msgstr "يولباشچى"
 
 #: part/dockers/KWNavigationWidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "&Page"
+#, kde-format
 msgid "Page #"
-msgstr "بەت(&P)"
+msgstr ""
 
 #: part/dockers/KWNavigationWidget.cpp:92
 #, kde-format
@@ -712,7 +684,7 @@ msgstr ""
 #: part/dockers/KWStatisticsDocker.cpp:20
 #, kde-format
 msgid "Statistics"
-msgstr "ستاتىستىكا"
+msgstr "ئىستاتىستىكا"
 
 #: part/dockers/KWStatisticsWidget.cpp:125
 #, kde-format
@@ -725,22 +697,19 @@ msgid "Sentences:"
 msgstr "جۈملىلەر:"
 
 #: part/dockers/KWStatisticsWidget.cpp:131
-#, fuzzy, kde-format
-#| msgid "Syllables"
+#, kde-format
 msgid "Syllables:"
-msgstr "بوغۇملار"
+msgstr ""
 
 #: part/dockers/KWStatisticsWidget.cpp:134
-#, fuzzy, kde-format
-#| msgid "Characters without spaces"
+#, kde-format
 msgid "Characters (spaces):"
-msgstr "بوشلۇقنى ئۆز ئىچىگە ئالمىغان ھەرپ سانى:"
+msgstr ""
 
 #: part/dockers/KWStatisticsWidget.cpp:137
-#, fuzzy, kde-format
-#| msgid "Characters without spaces"
+#, kde-format
 msgid "Characters (no spaces):"
-msgstr "بوشلۇقنى ئۆز ئىچىگە ئالمىغان ھەرپ سانى:"
+msgstr ""
 
 #: part/dockers/KWStatisticsWidget.cpp:140
 #, kde-format
@@ -788,23 +757,21 @@ msgstr "سىزىقلار"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
 #: part/dockers/StatisticsPreferencesPopup.ui:45
-#, fuzzy, kde-format
-#| msgid "Characters without spaces"
+#, kde-format
 msgid "Characters With Spaces"
-msgstr "بوشلۇقنى ئۆز ئىچىگە ئالمىغان ھەرپ سانى:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
 #: part/dockers/StatisticsPreferencesPopup.ui:52
 #, kde-format
 msgid "Characters without spaces"
-msgstr "بوشلۇقنى ئۆز ئىچىگە ئالمىغان ھەرپ سانى:"
+msgstr "بوشلۇقنى ئۆز ئىچىگە ئالمىغان ھەرپ سانى"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_east)
 #: part/dockers/StatisticsPreferencesPopup.ui:59
-#, fuzzy, kde-format
-#| msgid "Character"
+#, kde-format
 msgid "East Asian characters"
-msgstr "ھەرپ"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
 #: part/dockers/StatisticsPreferencesPopup.ui:66
@@ -855,32 +822,28 @@ msgid "Bullet List"
 msgstr ""
 
 #: part/i18n/stylenames.cpp:15
-#, fuzzy, kde-format
-#| msgid "Document Title"
+#, kde-format
 msgctxt "Style name"
 msgid "Contents Title"
-msgstr "پۈتۈك ماۋزۇسى"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:16
-#, fuzzy, kde-format
-#| msgid "Document Title"
+#, kde-format
 msgctxt "Style name"
 msgid "Contents Head 1"
-msgstr "پۈتۈك ماۋزۇسى"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:17
-#, fuzzy, kde-format
-#| msgid "Document Title"
+#, kde-format
 msgctxt "Style name"
 msgid "Contents Head 2"
-msgstr "پۈتۈك ماۋزۇسى"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:18
-#, fuzzy, kde-format
-#| msgid "Document Title"
+#, kde-format
 msgctxt "Style name"
 msgid "Contents Head 3"
-msgstr "پۈتۈك ماۋزۇسى"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:19
 #, kde-format
@@ -892,7 +855,7 @@ msgstr "پۈتۈك ماۋزۇسى"
 #, kde-format
 msgctxt "Style name"
 msgid "Header"
-msgstr "بەت قېشى"
+msgstr "بەت قاش"
 
 #: part/i18n/stylenames.cpp:21
 #, kde-format
@@ -934,7 +897,7 @@ msgstr "قۇر"
 #, kde-format
 msgctxt "Style name"
 msgid "Column"
-msgstr "ئىستون"
+msgstr "رەت"
 
 #: part/i18n/stylenames.cpp:30
 #, kde-format
@@ -1033,39 +996,34 @@ msgid "Header 4"
 msgstr "تېما 4"
 
 #: part/i18n/stylenames.cpp:50
-#, fuzzy, kde-format
-#| msgid "Columns"
+#, kde-format
 msgctxt "Style name"
 msgid "Columns 1"
-msgstr "ئىستونلار"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:51
-#, fuzzy, kde-format
-#| msgid "Columns"
+#, kde-format
 msgctxt "Style name"
 msgid "Columns 2"
-msgstr "ئىستونلار"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:52
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt "Style name"
 msgid "Grid 1"
-msgstr "سېتكا"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:53
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt "Style name"
 msgid "Grid 2"
-msgstr "سېتكا"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:54
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt "Style name"
 msgid "Grid 3"
-msgstr "سېتكا"
+msgstr ""
 
 #: part/i18n/stylenames.cpp:55
 #, kde-format
@@ -1107,7 +1065,7 @@ msgstr ""
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
-msgstr "Calligra Words"
+msgstr ""
 
 #: part/KWAboutData.h:20
 #, kde-format
@@ -1122,7 +1080,7 @@ msgstr ""
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr ""
+msgstr "Carl Schwan"
 
 #: part/KWAboutData.h:29
 #, kde-format
@@ -1142,7 +1100,7 @@ msgstr ""
 #: part/KWAboutData.h:35
 #, kde-format
 msgid "C. Boemann"
-msgstr "C. Boemann"
+msgstr ""
 
 #: part/KWAboutData.h:36 part/KWAboutData.h:37 part/KWAboutData.h:38
 #: part/KWAboutData.h:40
@@ -1153,17 +1111,17 @@ msgstr "ھەممىسى"
 #: part/KWAboutData.h:36
 #, kde-format
 msgid "Sebastian Sauer"
-msgstr "Sebastian Sauer"
+msgstr ""
 
 #: part/KWAboutData.h:37
 #, kde-format
 msgid "Boudewijn Rempt"
-msgstr "Boudewijn Rempt"
+msgstr ""
 
 #: part/KWAboutData.h:38
 #, kde-format
 msgid "Pierre Stirnweiss"
-msgstr "Pierre Stirnweiss"
+msgstr ""
 
 #: part/KWAboutData.h:39
 #, kde-format
@@ -1173,7 +1131,7 @@ msgstr ""
 #: part/KWAboutData.h:39
 #, kde-format
 msgid "Inge Wallin"
-msgstr "Inge Wallin"
+msgstr ""
 
 #: part/KWAboutData.h:40
 #, kde-format
@@ -1210,10 +1168,9 @@ msgid "Shreya Pandit"
 msgstr ""
 
 #: part/KWAboutData.h:43
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics docker"
-msgstr "ستاتىستىكا"
+msgstr ""
 
 #: part/KWAboutData.h:44
 #, kde-format
@@ -1236,10 +1193,9 @@ msgid "Smit Patel"
 msgstr ""
 
 #: part/KWAboutData.h:46
-#, fuzzy, kde-format
-#| msgid "Mojtaba Shahi Senobari"
+#, kde-format
 msgid "Mojtaba Shahi"
-msgstr "Mojtaba Shahi Senobari"
+msgstr ""
 
 #: part/KWAboutData.h:46
 #, kde-format
@@ -1269,7 +1225,7 @@ msgstr "Thomas Zander"
 #: part/KWAboutData.h:51
 #, kde-format
 msgid "Girish Ramakrishnan"
-msgstr "Girish Ramakrishnan"
+msgstr ""
 
 #: part/KWAboutData.h:51 part/KWAboutData.h:52
 #, kde-format
@@ -1294,87 +1250,87 @@ msgstr "Laurent Montel"
 #: part/KWAboutData.h:55
 #, kde-format
 msgid "Sven Lüppken"
-msgstr "Sven Lüppken"
+msgstr ""
 
 #: part/KWAboutData.h:56
 #, kde-format
 msgid "Frank Dekervel"
-msgstr "Frank Dekervel"
+msgstr ""
 
 #: part/KWAboutData.h:57
 #, kde-format
 msgid "Krister Wicksell Eriksson"
-msgstr "Krister Wicksell Eriksson"
+msgstr ""
 
 #: part/KWAboutData.h:58
 #, kde-format
 msgid "Dag Andersen"
-msgstr "Dag Andersen"
+msgstr ""
 
 #: part/KWAboutData.h:59
 #, kde-format
 msgid "Nash Hoogwater"
-msgstr "Nash Hoogwater"
+msgstr ""
 
 #: part/KWAboutData.h:60
 #, kde-format
 msgid "KFormula"
-msgstr "KFormula"
+msgstr ""
 
 #: part/KWAboutData.h:60
 #, kde-format
 msgid "Ulrich Kuettler"
-msgstr "Ulrich Kuettler"
+msgstr ""
 
 #: part/KWAboutData.h:61
 #, kde-format
 msgid "Shaheed Haque"
-msgstr "Shaheed Haque"
+msgstr ""
 
 #: part/KWAboutData.h:62
 #, kde-format
 msgid "Werner Trobin"
-msgstr "Werner Trobin"
+msgstr ""
 
 #: part/KWAboutData.h:63
 #, kde-format
 msgid "Nicolas Goutte"
-msgstr "Nicolas Goutte"
+msgstr ""
 
 #: part/KWAboutData.h:64
 #, kde-format
 msgid "Ariya Hidayat"
-msgstr "Ariya Hidayat"
+msgstr ""
 
 #: part/KWAboutData.h:65
 #, kde-format
 msgid "Clarence Dang"
-msgstr "Clarence Dang"
+msgstr ""
 
 #: part/KWAboutData.h:66
 #, kde-format
 msgid "Robert Jacolin"
-msgstr "Robert Jacolin"
+msgstr ""
 
 #: part/KWAboutData.h:67
 #, kde-format
 msgid "Enno Bartels"
-msgstr "Enno Bartels"
+msgstr ""
 
 #: part/KWAboutData.h:68
 #, kde-format
 msgid "Ewald Snel"
-msgstr "Ewald Snel"
+msgstr ""
 
 #: part/KWAboutData.h:69
 #, kde-format
 msgid "Tomasz Grobelny"
-msgstr "Tomasz Grobelny"
+msgstr ""
 
 #: part/KWAboutData.h:70
 #, kde-format
 msgid "Michael Johnson"
-msgstr "Michael Johnson"
+msgstr ""
 
 #: part/KWAboutData.h:71
 #, kde-format
@@ -1390,14 +1346,14 @@ msgstr ""
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+msgstr "sahranbay@gmail.com, gheyret@gmail.com"
 
 #. i18n translator strings
 #: part/KWAboutData.h:73
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+msgstr "ئابدۇقادىر ئابلىز، غەيرەت كەنجى"
 
 #: part/KWDocument.cpp:492
 #, kde-format
@@ -1437,12 +1393,13 @@ msgstr ""
 #: part/KWGui.cpp:68
 #, kde-format
 msgid "Tools"
-msgstr "قوراللار"
+msgstr "قورال"
 
 #: part/KWOdfLoader.cpp:81
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
-msgstr "ئىناۋەتسىز OASIS OpenDocument پۈتۈك ھۆججىتى. office:body دېگەن tag يوق"
+msgstr ""
+"ئىناۋەتسىز OASIS OpenDocument پۈتۈك ھۆججىتى. office:body دېگەن tag يوق."
 
 #: part/KWOdfLoader.cpp:92
 #, kde-format
@@ -1459,8 +1416,7 @@ msgid ""
 msgstr ""
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
-#, fuzzy, kde-format
-#| msgid "Standard"
+#, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "ئۆلچەملىك"
@@ -1491,16 +1447,14 @@ msgid "Page %1 of %2"
 msgstr "بەت %1 / %2"
 
 #: part/KWStatusBar.cpp:38
-#, fuzzy, kde-format
-#| msgid "Page %1 of %2"
+#, kde-format
 msgid "Page %1-%2 of %3"
-msgstr "بەت %1 / %2"
+msgstr ""
 
 #: part/KWStatusBar.cpp:39
-#, fuzzy, kde-format
-#| msgid "Lines"
+#, kde-format
 msgid "Line %1"
-msgstr "سىزىقلار"
+msgstr ""
 
 #: part/KWStatusBar.cpp:132
 #, kde-format
@@ -1513,16 +1467,14 @@ msgid "Line Number"
 msgstr "قۇر نومۇرى"
 
 #: part/KWStatusBar.cpp:157
-#, fuzzy, kde-format
-#| msgid "Page Size"
+#, kde-format
 msgid "Change the page style"
-msgstr "بەت چوڭلۇقى"
+msgstr ""
 
 #: part/KWStatusBar.cpp:165
-#, fuzzy, kde-format
-#| msgid "Page Size"
+#, kde-format
 msgid "Page Style"
-msgstr "بەت چوڭلۇقى"
+msgstr ""
 
 #: part/KWStatusBar.cpp:179
 #, kde-format
@@ -1530,10 +1482,9 @@ msgid "Page Size"
 msgstr "بەت چوڭلۇقى"
 
 #: part/KWStatusBar.cpp:194
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgid "Saved/Modified"
-msgstr "ئۆزگەرتىلگەن ۋاقتى"
+msgstr ""
 
 #: part/KWStatusBar.cpp:207
 #, kde-format
@@ -1551,11 +1502,9 @@ msgid "Exit Fullscreen Mode"
 msgstr ""
 
 #: part/KWView.cpp:278
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Page Properties"
+#, kde-format
 msgid "Shape Properties..."
-msgstr "بەت خاسلىقى"
+msgstr ""
 
 #: part/KWView.cpp:280
 #, kde-format
@@ -1615,10 +1564,9 @@ msgid ""
 msgstr ""
 
 #: part/KWView.cpp:331
-#, fuzzy, kde-format
-#| msgid "Show Rulers"
+#, kde-format
 msgid "Show Text Shape Borders"
-msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
+msgstr ""
 
 #: part/KWView.cpp:332
 #, kde-format
@@ -1634,10 +1582,9 @@ msgid ""
 msgstr ""
 
 #: part/KWView.cpp:342
-#, fuzzy, kde-format
-#| msgid "Show Rulers"
+#, kde-format
 msgid "Show Table Borders"
-msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
+msgstr ""
 
 #: part/KWView.cpp:348
 #, kde-format
@@ -1671,7 +1618,7 @@ msgstr ""
 #: part/KWView.cpp:362
 #, kde-format
 msgid "Show Rulers"
-msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
+msgstr "‫سىزغۇچ كۆرسەت"
 
 #: part/KWView.cpp:364
 #, kde-format
@@ -1740,11 +1687,9 @@ msgid "Page Layout..."
 msgstr "بەت ئۇسلۇبى …"
 
 #: part/KWView.cpp:429
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Page Properties"
+#, kde-format
 msgid "Change properties of entire page"
-msgstr "بەت خاسلىقى"
+msgstr ""
 
 #: part/KWView.cpp:431
 #, kde-format
@@ -1754,16 +1699,14 @@ msgid ""
 msgstr ""
 
 #: part/KWView.cpp:434
-#, fuzzy, kde-format
-#| msgid "Even Pages Header"
+#, kde-format
 msgid "Create Header"
-msgstr "جۈپ نومۇرلۇق بەتنىڭ بەت قېشى"
+msgstr ""
 
 #: part/KWView.cpp:440
-#, fuzzy, kde-format
-#| msgid "Even Pages Footer"
+#, kde-format
 msgid "Create Footer"
-msgstr "جۈپ نومۇرلۇق بەتنىڭ بەت ئاستى"
+msgstr ""
 
 #: part/KWView.cpp:447
 #, kde-format
@@ -1781,10 +1724,9 @@ msgid "Word Count"
 msgstr "سۆز سانى"
 
 #: part/KWView.cpp:455
-#, fuzzy, kde-format
-#| msgid "Shows or hides the status bar"
+#, kde-format
 msgid "Shows or hides word counting in status bar"
-msgstr "ھالەت بالداقنى كۆرسەتسۇن ياكى يوشۇرسۇن"
+msgstr ""
 
 #: part/pagetool/KWPageTool.cpp:83
 #, kde-format
@@ -1792,16 +1734,14 @@ msgid "Page Setup"
 msgstr "بەت تەڭشەك"
 
 #: part/pagetool/KWPageTool.cpp:87
-#, fuzzy, kde-format
-#| msgid "Even Pages Footer"
+#, kde-format
 msgid "Header & Footer"
-msgstr "جۈپ نومۇرلۇق بەتنىڭ بەت ئاستى"
+msgstr ""
 
 #: part/pagetool/KWPageToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Page Layout..."
+#, kde-format
 msgid "Page layout"
-msgstr "بەت ئۇسلۇبى …"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
 #: part/pagetool/SimpleSetupWidget.ui:32
@@ -1813,25 +1753,22 @@ msgstr "…"
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
-msgstr ""
+msgstr "ئىزدە:"
 
 #: part/widgets/KoFindToolbar.cpp:81
-#, fuzzy, kde-format
-#| msgid "Next Page"
+#, kde-format
 msgctxt "Next search result"
 msgid "Next"
-msgstr "كېيىنكى بەت"
+msgstr "كېيىنكى"
 
 #: part/widgets/KoFindToolbar.cpp:93
-#, fuzzy, kde-format
-#| msgid "Previous Page"
+#, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
-msgstr "ئالدىنقى بەت"
+msgstr "ئالدىنقى"
 
 #: part/widgets/KoFindToolbar.cpp:104
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "Search options"
 msgid "Options"
 msgstr "تاللانما"
@@ -1840,31 +1777,31 @@ msgstr "تاللانما"
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
-msgstr ""
+msgstr "ئالماشتۇر:"
 
 #: part/widgets/KoFindToolbar.cpp:146
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
-msgstr ""
+msgstr "ئالماشتۇر"
 
 #: part/widgets/KoFindToolbar.cpp:154
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
-msgstr ""
+msgstr "ھەممىنى ئالماشتۇر"
 
 #: part/widgets/KoFindToolbar.cpp:164
 #, kde-format
 msgid "Replace"
-msgstr ""
+msgstr "ئالماشتۇر"
 
 #: part/widgets/KoFindToolbar.cpp:225
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
+msgstr[0] "%1 ئى تېپىلدى"
 
 #: part/widgets/KoFindToolbar.cpp:235
 #, kde-format
@@ -1911,729 +1848,611 @@ msgstr ""
 msgid "Other text"
 msgstr ""
 
-#, fuzzy
 #~| msgid "Left:"
 #~ msgid "Left by:"
 #~ msgstr "سول:"
 
-#, fuzzy
 #~| msgid "&Page"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Page"
 #~ msgstr "بەت(&P)"
 
-#, fuzzy
 #~| msgid "Horizontal Alignment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Horizontal Alignment"
 #~ msgstr "توغرىسىغا توغرىلاش"
 
-#, fuzzy
 #~| msgid "&Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Left"
 #~ msgstr "سول(&L)"
 
-#, fuzzy
 #~| msgid "&Center"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Center"
 #~ msgstr "ئوتتۇرا(&C)"
 
-#, fuzzy
 #~| msgid "&Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Right"
 #~ msgstr "ئوڭ(&R)"
 
-#, fuzzy
 #~| msgid "Vertical Alignment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Vertical Alignment"
 #~ msgstr "بويىغا توغرىلاش"
 
-#, fuzzy
 #~| msgid "&Top"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Top"
 #~ msgstr "ئۈستى(&T)"
 
-#, fuzzy
 #~| msgid "&Bottom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Bottom"
 #~ msgstr "ئاستى(&B)"
 
-#, fuzzy
 #~| msgid "Offset"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Offset"
 #~ msgstr "ئېغىش"
 
-#, fuzzy
 #~| msgid "&Rename"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Rename"
 #~ msgstr "ئات ئۆزگەرت(&R)"
 
-#, fuzzy
 #~| msgid "&Delete"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Delete"
 #~ msgstr "ئۆچۈر(&D)"
 
-#, fuzzy
 #~| msgid "Name:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Name:"
 #~ msgstr "ئاتى:"
 
-#, fuzzy
 #~| msgid "Page Size && Margins"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Size && Margins"
 #~ msgstr "بەت چوڭلۇقى ۋە گىرۋەكلەر"
 
-#, fuzzy
 #~| msgid "Contour"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Contour"
 #~ msgstr "ئىزنا"
 
-#, fuzzy
 #~| msgid "Columns:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Columns:"
 #~ msgstr "ئىستون:"
 
-#, fuzzy
 #~| msgid "Column spacing:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Column spacing:"
 #~ msgstr "ئىستون بوشلۇقى:"
 
-#, fuzzy
 #~| msgid "Words"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Words"
 #~ msgstr "سۆزلەر"
 
-#, fuzzy
 #~| msgid "Sentences"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sentences"
 #~ msgstr "جۈملىلەر"
 
-#, fuzzy
 #~| msgid "Syllables"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Syllables"
 #~ msgstr "بوغۇملار"
 
-#, fuzzy
 #~| msgid "Lines"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Lines"
 #~ msgstr "سىزىقلار"
 
-#, fuzzy
 #~| msgid "Characters without spaces"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Characters without spaces"
 #~ msgstr "بوشلۇقنى ئۆز ئىچىگە ئالمىغان ھەرپ سانى:"
 
-#, fuzzy
 #~| msgid "&File"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&File"
 #~ msgstr "ھۆججەت(&F)"
 
-#, fuzzy
 #~| msgid "&Edit"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Edit"
 #~ msgstr "تەھرىر(&E)"
 
-#, fuzzy
 #~| msgid "&View"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&View"
 #~ msgstr "كۆرۈنۈش(&V)"
 
-#, fuzzy
 #~| msgid "&Display Mode"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Display Mode"
 #~ msgstr "كۆرسىتىش ھالىتى(&D)"
 
-#, fuzzy
 #~| msgid "S&tyles"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "S&tyles"
 #~ msgstr "ئۇسلۇبلار(&T)"
 
-#, fuzzy
 #~| msgid "&Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Settings"
 #~ msgstr "تەڭشەك(&S)"
 
-#, fuzzy
 #~| msgid "Spellcheck"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Spellcheck"
 #~ msgstr "ئىملا تەكشۈر"
 
-#, fuzzy
 #~| msgid "Edit"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Edit"
 #~ msgstr "تەھرىرلەش"
 
-#, fuzzy
 #~| msgid "Spell Check Result"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Spell Check Result"
 #~ msgstr "ئىملا تەكشۈر نەتىجىسى"
 
-#, fuzzy
 #~| msgid "..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "..."
 #~ msgstr "…"
 
-#, fuzzy
 #~| msgid "&Tools"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Tools"
 #~ msgstr "قوراللار(&T)"
 
-#, fuzzy
 #~| msgid "Baseline"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Baseline"
 #~ msgstr "Baseline"
 
-#, fuzzy
 #~| msgid "Character"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Character"
 #~ msgstr "ھەرپ"
 
-#, fuzzy
 #~| msgid "Row"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Row"
 #~ msgstr "قۇر"
 
-#, fuzzy
 #~| msgid "Configure"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure"
 #~ msgstr "سەپلە"
 
-#, fuzzy
 #~| msgid "Misc"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Misc"
 #~ msgstr "ئارىلاش"
 
-#, fuzzy
 #~| msgid "Grid"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Grid"
 #~ msgstr "سېتكا"
 
-#, fuzzy
 #~| msgctxt "@title:tab Document settings page"
 #~| msgid "Document"
 #~ msgctxt "(qtundo-format) @title:tab Document settings page"
 #~ msgid "Document"
 #~ msgstr "پۈتۈك"
 
-#, fuzzy
 #~| msgid "Document Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document Settings"
 #~ msgstr "پۈتۈك تەڭشىكى"
 
-#, fuzzy
 #~| msgid "Author"
 #~ msgctxt "(qtundo-format) @title:tab Author page"
 #~ msgid "Author"
 #~ msgstr "ئاپتور"
 
-#, fuzzy
 #~| msgid "Author"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Author"
 #~ msgstr "ئاپتور"
 
-#, fuzzy
 #~| msgid "Columns"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Columns"
 #~ msgstr "ئىستونلار"
 
-#, fuzzy
 #~| msgid "Style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Style"
 #~ msgstr "ئۇسلۇب"
 
-#, fuzzy
 #~| msgid "Clone"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Clone"
 #~ msgstr "كىلون"
 
-#, fuzzy
 #~| msgid "Delete"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete"
 #~ msgstr "ئۆچۈر"
 
-#, fuzzy
 #~| msgid "Rename Bookmark"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Rename Bookmark"
 #~ msgstr "خەتكۈش ئاتىنى ئۆزگەرت"
 
-#, fuzzy
 #~| msgid "Geometry"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Geometry"
 #~ msgstr "گېئومېتىرىيە"
 
-#, fuzzy
 #~| msgid "&Page"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page #"
 #~ msgstr "بەت(&P)"
 
-#, fuzzy
 #~| msgid "Statistics"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Statistics"
 #~ msgstr "ستاتىستىكا"
 
-#, fuzzy
 #~| msgid "Words:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Words:"
 #~ msgstr "سۆزلەر:"
 
-#, fuzzy
 #~| msgid "Sentences:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sentences:"
 #~ msgstr "جۈملىلەر:"
 
-#, fuzzy
 #~| msgid "Lines:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Lines:"
 #~ msgstr "قۇر سانى:"
 
-#, fuzzy
 #~| msgid "Standard"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Standard"
 #~ msgstr "ئۆلچەملىك"
 
-#, fuzzy
 #~| msgid "Head 1"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Head 1"
 #~ msgstr "بىرىنچى ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Head 2"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Head 2"
 #~ msgstr "ئىككىنچى ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Head 3"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Head 3"
 #~ msgstr "ئۈچىنچى ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Document Title"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Document Title"
 #~ msgstr "پۈتۈك ماۋزۇسى"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Header"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Header"
 #~ msgstr "بەت قېشى"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Footer"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Footer"
 #~ msgstr "بەت ئاستى"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Plain"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Plain"
 #~ msgstr "تەكشىلىك"
 
-#, fuzzy
 #~| msgid "Row"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Row"
 #~ msgstr "قۇر"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Column"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Column"
 #~ msgstr "ئىستون"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Light Gray"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Light Gray"
 #~ msgstr "ئاچ كۈلرەڭ"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Dark Gray"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Dark Gray"
 #~ msgstr "قېنىق كۈلرەڭ"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Black"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Black"
 #~ msgstr "قارا"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Light Blue"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Light Blue"
 #~ msgstr "ئاچ كۆك"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Dark Blue"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Dark Blue"
 #~ msgstr "قارامتۇل كۆك"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Red"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Red"
 #~ msgstr "قىزىل"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Yellow"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Yellow"
 #~ msgstr "سېرىق"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Colorful"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Colorful"
 #~ msgstr "رەڭلىك"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Header 1"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Header 1"
 #~ msgstr "تېما 1"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Header 2"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Header 2"
 #~ msgstr "تېما 2"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Header 3"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Header 3"
 #~ msgstr "تېما 3"
 
-#, fuzzy
 #~| msgctxt "Style name"
 #~| msgid "Header 4"
 #~ msgctxt "(qtundo-format) Style name"
 #~ msgid "Header 4"
 #~ msgstr "تېما 4"
 
-#, fuzzy
 #~| msgctxt "application name"
 #~| msgid "Calligra Words"
 #~ msgctxt "(qtundo-format) application name"
 #~ msgid "Calligra Words"
 #~ msgstr "Calligra Words"
 
-#, fuzzy
 #~| msgid "C. Boemann"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "C. Boemann"
 #~ msgstr "C. Boemann"
 
-#, fuzzy
 #~| msgid "Everything"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Everything"
 #~ msgstr "ھەممىسى"
 
-#, fuzzy
 #~| msgid "Sebastian Sauer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sebastian Sauer"
 #~ msgstr "Sebastian Sauer"
 
-#, fuzzy
 #~| msgid "Boudewijn Rempt"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Boudewijn Rempt"
 #~ msgstr "Boudewijn Rempt"
 
-#, fuzzy
 #~| msgid "Pierre Stirnweiss"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pierre Stirnweiss"
 #~ msgstr "Pierre Stirnweiss"
 
-#, fuzzy
 #~| msgid "Inge Wallin"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Inge Wallin"
 #~ msgstr "Inge Wallin"
 
-#, fuzzy
 #~| msgid "Filter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Filter"
 #~ msgstr "سۈزگۈچ"
 
-#, fuzzy
 #~| msgid "Bibliography"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bibliography"
 #~ msgstr "كىتابلار مۇندەرىجىسى"
 
-#, fuzzy
 #~| msgid "Style Manager"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Style Manager"
 #~ msgstr "ئۇسلۇب باشقۇرغۇ"
 
-#, fuzzy
 #~| msgid "Thomas Zander"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Thomas Zander"
 #~ msgstr "Thomas Zander"
 
-#, fuzzy
 #~| msgid "Girish Ramakrishnan"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Girish Ramakrishnan"
 #~ msgstr "Girish Ramakrishnan"
 
-#, fuzzy
 #~| msgid "David Faure"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "David Faure"
 #~ msgstr "David Faure"
 
-#, fuzzy
 #~| msgid "Laurent Montel"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Laurent Montel"
 #~ msgstr "Laurent Montel"
 
-#, fuzzy
 #~| msgid "Sven Lüppken"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sven Lüppken"
 #~ msgstr "Sven Lüppken"
 
-#, fuzzy
 #~| msgid "Frank Dekervel"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Frank Dekervel"
 #~ msgstr "Frank Dekervel"
 
-#, fuzzy
 #~| msgid "Krister Wicksell Eriksson"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Krister Wicksell Eriksson"
 #~ msgstr "Krister Wicksell Eriksson"
 
-#, fuzzy
 #~| msgid "Dag Andersen"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Dag Andersen"
 #~ msgstr "Dag Andersen"
 
-#, fuzzy
 #~| msgid "Nash Hoogwater"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Nash Hoogwater"
 #~ msgstr "Nash Hoogwater"
 
-#, fuzzy
 #~| msgid "KFormula"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "KFormula"
 #~ msgstr "KFormula"
 
-#, fuzzy
 #~| msgid "Ulrich Kuettler"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ulrich Kuettler"
 #~ msgstr "Ulrich Kuettler"
 
-#, fuzzy
 #~| msgid "Shaheed Haque"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Shaheed Haque"
 #~ msgstr "Shaheed Haque"
 
-#, fuzzy
 #~| msgid "Werner Trobin"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Werner Trobin"
 #~ msgstr "Werner Trobin"
 
-#, fuzzy
 #~| msgid "Nicolas Goutte"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Nicolas Goutte"
 #~ msgstr "Nicolas Goutte"
 
-#, fuzzy
 #~| msgid "Ariya Hidayat"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ariya Hidayat"
 #~ msgstr "Ariya Hidayat"
 
-#, fuzzy
 #~| msgid "Clarence Dang"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Clarence Dang"
 #~ msgstr "Clarence Dang"
 
-#, fuzzy
 #~| msgid "Robert Jacolin"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Robert Jacolin"
 #~ msgstr "Robert Jacolin"
 
-#, fuzzy
 #~| msgid "Enno Bartels"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Enno Bartels"
 #~ msgstr "Enno Bartels"
 
-#, fuzzy
 #~| msgid "Ewald Snel"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ewald Snel"
 #~ msgstr "Ewald Snel"
 
-#, fuzzy
 #~| msgid "Tomasz Grobelny"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tomasz Grobelny"
 #~ msgstr "Tomasz Grobelny"
 
-#, fuzzy
 #~| msgid "Michael Johnson"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Michael Johnson"
 #~ msgstr "Michael Johnson"
 
-#, fuzzy
 #~| msgctxt "NAME OF TRANSLATORS"
 #~| msgid "Your names"
 #~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
 #~ msgid "Your names"
 #~ msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
 
-#, fuzzy
 #~| msgctxt "EMAIL OF TRANSLATORS"
 #~| msgid "Your emails"
 #~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
 #~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
 
-#, fuzzy
 #~| msgid "Copy"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Copy"
 #~ msgstr "كۆچۈر"
 
-#, fuzzy
 #~| msgid "Standard"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Standard"
 #~ msgstr "ئۆلچەملىك"
 
-#, fuzzy
 #~| msgid "Document Title"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document Title"
 #~ msgstr "پۈتۈك ماۋزۇسى"
 
-#, fuzzy
 #~| msgid "Head 1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Head 1"
 #~ msgstr "بىرىنچى ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Head 2"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Head 2"
 #~ msgstr "ئىككىنچى ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Head 3"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Head 3"
 #~ msgstr "ئۈچىنچى ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Tools"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tools"
 #~ msgstr "قوراللار"
 
-#, fuzzy
 #~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 #~ msgstr ""
 #~ "ئىناۋەتسىز OASIS OpenDocument پۈتۈك ھۆججىتى. office:body دېگەن tag يوق"
 
-#, fuzzy
 #~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
@@ -2641,145 +2460,121 @@ msgstr ""
 #~ "ئىناۋەتسىز OASIS OpenDocument پۈتۈك ھۆججىتى. office:body نىڭ ئىچىدە "
 #~ "ھېچقانداق tag يوق."
 
-#, fuzzy
 #~| msgid "Installation Error"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Installation Error"
 #~ msgstr "ئورنىتىشتىكى خاتالىق"
 
-#, fuzzy
 #~| msgid "Modified"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Modified"
 #~ msgstr "ئۆزگەرتىلگەن ۋاقتى"
 
-#, fuzzy
 #~| msgid "Saved"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Saved"
 #~ msgstr "ساقلاندى"
 
-#, fuzzy
 #~| msgid "Page %1 of %2"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page %1 of %2"
 #~ msgstr "بەت %1 / %2"
 
-#, fuzzy
 #~| msgid "Page Number"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Number"
 #~ msgstr "بەت نومۇرى"
 
-#, fuzzy
 #~| msgid "Line Number"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Line Number"
 #~ msgstr "قۇر نومۇرى"
 
-#, fuzzy
 #~| msgid "Page Size"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Size"
 #~ msgstr "بەت چوڭلۇقى"
 
-#, fuzzy
 #~| msgid "Show Rulers"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Show Rulers"
 #~ msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
 
-#, fuzzy
 #~| msgid "Shows or hides rulers"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Shows or hides rulers"
 #~ msgstr "سىزغۇچلارنى كۆرسەتسۇن ياكى يوشۇرسۇن"
 
-#, fuzzy
 #~| msgid "Snap to Grid"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Snap to Grid"
 #~ msgstr "سېتكىغا توغرىلا"
 
-#, fuzzy
 #~| msgid "Show Status Bar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Show Status Bar"
 #~ msgstr "ھالەت بالداق كۆرسەت"
 
-#, fuzzy
 #~| msgid "Shows or hides the status bar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Shows or hides the status bar"
 #~ msgstr "ھالەت بالداقنى كۆرسەتسۇن ياكى يوشۇرسۇن"
 
-#, fuzzy
 #~| msgid "Create"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Create"
 #~ msgstr "ياسا"
 
-#, fuzzy
 #~| msgid "Configure..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure..."
 #~ msgstr "سەپلە…"
 
-#, fuzzy
 #~| msgid "Page Layout..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Layout..."
 #~ msgstr "بەت ئۇسلۇبى …"
 
-#, fuzzy
 #~| msgid "Word Count"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Word Count"
 #~ msgstr "سۆز سانى"
 
-#, fuzzy
 #~| msgid "Page Setup"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Setup"
 #~ msgstr "بەت تەڭشەك"
 
-#, fuzzy
 #~| msgid "Next Page"
 #~ msgctxt "(qtundo-format) Next search result"
 #~ msgid "Next"
 #~ msgstr "كېيىنكى بەت"
 
-#, fuzzy
 #~| msgid "Previous Page"
 #~ msgctxt "(qtundo-format) Previous search result"
 #~ msgid "Previous"
 #~ msgstr "ئالدىنقى بەت"
 
-#, fuzzy
 #~| msgid "Options"
 #~ msgctxt "(qtundo-format) Search options"
 #~ msgid "Options"
 #~ msgstr "تاللانما"
 
-#, fuzzy
 #~| msgid "Odd Pages Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Odd Pages Header"
 #~ msgstr "تاق نومۇرلۇق بەتنىڭ بەت قېشى"
 
-#, fuzzy
 #~| msgid "Even Pages Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Even Pages Header"
 #~ msgstr "جۈپ نومۇرلۇق بەتنىڭ بەت قېشى"
 
-#, fuzzy
 #~| msgid "Odd Pages Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Odd Pages Footer"
 #~ msgstr "تاق نومۇرلۇق بەتنىڭ بەت ئاستى"
 
-#, fuzzy
 #~| msgid "Even Pages Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Even Pages Footer"
@@ -2807,7 +2602,6 @@ msgstr ""
 #~ msgid "Open..."
 #~ msgstr "ئاچ…"
 
-#, fuzzy
 #~| msgid "Open File"
 #~ msgid "Open Cover"
 #~ msgstr "ھۆججەت ئاچ"
@@ -2821,33 +2615,27 @@ msgstr ""
 #~ msgid "No cover selected yet"
 #~ msgstr "تېخى مۇقاۋا تاللانمىدى"
 
-#, fuzzy
 #~| msgid "Author"
 #~ msgid "Author's actor"
 #~ msgstr "ئاپتور"
 
-#, fuzzy
 #~| msgid "Type"
 #~ msgid "Type:"
 #~ msgstr "تىپى"
 
-#, fuzzy
 #~| msgid "Author"
 #~ msgctxt "displayname of the semantic item type AuthorActor"
 #~ msgid "AuthorActor"
 #~ msgstr "ئاپتور"
 
-#, fuzzy
 #~| msgid "Edit"
 #~ msgid "1st Edit"
 #~ msgstr "تەھرىرلەش"
 
-#, fuzzy
 #~| msgid "Edit"
 #~ msgid "2nd Edit"
 #~ msgstr "تەھرىرلەش"
 
-#, fuzzy
 #~| msgid "Edit"
 #~ msgid "3rd Edit"
 #~ msgstr "تەھرىرلەش"

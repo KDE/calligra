@@ -8,29 +8,30 @@ msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:12-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+msgstr "ئابدۇقادىر ئابلىز، غەيرەت كەنجى"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+msgstr "sahranbay@gmail.com, gheyret@gmail.com"
 
 #: calligraconverter.cpp:179
 #, kde-format
 msgid "CalligraConverter"
-msgstr "CalligraConverter"
+msgstr ""
 
 #: calligraconverter.cpp:181
 #, kde-format
@@ -38,10 +39,9 @@ msgid "Calligra Document Converter"
 msgstr "كاللىگىرا پۈتۈك ئايلاندۇرغۇچ"
 
 #: calligraconverter.cpp:183
-#, fuzzy, kde-format
-#| msgid "(c) 2001-2011 Calligra developers"
+#, kde-format
 msgid "Copyright 2001-%1 Calligra developers"
-msgstr "(c) 2001-2011 كاللىگىرا ئىجادىيەتچىلىرى"
+msgstr ""
 
 #: calligraconverter.cpp:184
 #, kde-format
@@ -51,7 +51,7 @@ msgstr "David Faure"
 #: calligraconverter.cpp:185
 #, kde-format
 msgid "Nicolas Goutte"
-msgstr "Nicolas Goutte"
+msgstr ""
 
 #: calligraconverter.cpp:186
 #, kde-format
@@ -86,7 +86,7 @@ msgstr ""
 #: calligraconverter.cpp:198
 #, kde-format
 msgid "Mimetype of the output file"
-msgstr "چىقىرىش ھۆججىتىنىڭ MIME تىپى"
+msgstr "چىقىرىش ھۆججىتىنىڭ mime تۈرى"
 
 #: calligraconverter.cpp:202
 #, kde-format
@@ -111,128 +111,110 @@ msgstr "ئىككى دانە ئارگۇمېنت كېرەك"
 #: calligraconverter.cpp:243
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
-msgstr "كىرىش ھۆججىتى %1 نىڭ MIME تىپى تېپىلمىدى"
+msgstr "كىرىش ھۆججىتى %1 نىڭ mime تۈرى تېپىلمىدى!"
 
 #: calligraconverter.cpp:252
 #, kde-format
 msgid "Mimetype not found %1"
-msgstr "MIME تىپى تېپىلمىدى %1"
+msgstr "Mime تۈرى تېپىلمىدى %1"
 
 #: calligraconverter.cpp:258
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr "MIME تىپى تېپىلمىدى، -mimetype تاللانمىسىنى ئىشلىتىپ كۆرۈڭ"
+msgstr "Mime تۈرى تېپىلمىدى، -mimetype تاللانمىسىنى ئىشلىتىپ كۆرۈڭ"
 
 #: calligraconverter.cpp:282
 #, kde-format
 msgid "*** The conversion failed! ***"
 msgstr "*** ئايلاندۇرۇش مەغلۇپ بولدى! ***"
 
-#, fuzzy
 #~| msgctxt "NAME OF TRANSLATORS"
 #~| msgid "Your names"
 #~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
 #~ msgid "Your names"
 #~ msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
 
-#, fuzzy
 #~| msgctxt "EMAIL OF TRANSLATORS"
 #~| msgid "Your emails"
 #~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
 #~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
 
-#, fuzzy
 #~| msgid "CalligraConverter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "CalligraConverter"
 #~ msgstr "CalligraConverter"
 
-#, fuzzy
 #~| msgid "Calligra Document Converter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Calligra Document Converter"
 #~ msgstr "كاللىگىرا پۈتۈك ئايلاندۇرغۇچ"
 
-#, fuzzy
 #~| msgid "(c) 2001-2011 Calligra developers"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Copyright 2001-%1 Calligra developers"
 #~ msgstr "(c) 2001-2011 كاللىگىرا ئىجادىيەتچىلىرى"
 
-#, fuzzy
 #~| msgid "David Faure"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "David Faure"
 #~ msgstr "David Faure"
 
-#, fuzzy
 #~| msgid "Nicolas Goutte"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Nicolas Goutte"
 #~ msgstr "Nicolas Goutte"
 
-#, fuzzy
 #~| msgid "Dan Leinir Turthra Jensen"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Dan Leinir Turthra Jensen"
 #~ msgstr "Dan Leinir Turthra Jensen"
 
-#, fuzzy
 #~| msgid "Input file"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Input file"
 #~ msgstr "كىرىش ھۆججىتى"
 
-#, fuzzy
 #~| msgid "Output file"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Output file"
 #~ msgstr "چىقىرىش ھۆججىتى"
 
-#, fuzzy
 #~| msgid "Make a backup of the destination file"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Make a backup of the destination file"
 #~ msgstr "نىشان ھۆججەتنى زاپاسلايدۇ"
 
-#, fuzzy
 #~| msgid "Batch mode: do not show dialogs"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Batch mode: do not show dialogs"
 #~ msgstr "توپ بىر تەرەپ قىلىش: سۆزلەشكۈلەرنى كۆرسەتمىسۇن"
 
-#, fuzzy
 #~| msgid "Mimetype of the output file"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mimetype of the output file"
 #~ msgstr "چىقىرىش ھۆججىتىنىڭ MIME تىپى"
 
-#, fuzzy
 #~| msgid "Two arguments required"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Two arguments required"
 #~ msgstr "ئىككى دانە ئارگۇمېنت كېرەك"
 
-#, fuzzy
 #~| msgid "Mimetype for input file %1 not found!"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mimetype for input file %1 not found!"
 #~ msgstr "كىرىش ھۆججىتى %1 نىڭ MIME تىپى تېپىلمىدى"
 
-#, fuzzy
 #~| msgid "Mimetype not found %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mimetype not found %1"
 #~ msgstr "MIME تىپى تېپىلمىدى %1"
 
-#, fuzzy
 #~| msgid "Mimetype not found, try using the -mimetype option"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mimetype not found, try using the -mimetype option"
 #~ msgstr "MIME تىپى تېپىلمىدى، -mimetype تاللانمىسىنى ئىشلىتىپ كۆرۈڭ"
 
-#, fuzzy
 #~| msgid "*** The conversion failed! ***"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "*** The conversion failed! ***"

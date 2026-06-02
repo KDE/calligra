@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:05-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpui.rc:8
@@ -58,13 +59,13 @@ msgstr "سۈرئەت"
 #: data/states/states/states.xml:8
 #, kde-format
 msgid "0 %"
-msgstr "0 %"
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:9
 #, kde-format
 msgid "25 %"
-msgstr "25 %"
+msgstr ""
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:10
@@ -101,10 +102,9 @@ msgid "State Shape"
 msgstr "ھالەت شەكىللىرى"
 
 #: plugins/stateshape/StateShapeFactory.cpp:32
-#, fuzzy, kde-format
-#| msgid "State Shape"
+#, kde-format
 msgid "A state shape"
-msgstr "ھالەت شەكىللىرى"
+msgstr ""
 
 #: plugins/stateshape/StateTool.cpp:107
 #, kde-format
@@ -112,15 +112,14 @@ msgid "State tool options"
 msgstr "ھالەت قورالى تاللانمىلىرى"
 
 #: plugins/stateshape/StateToolFactory.cpp:32
-#, fuzzy, kde-format
-#| msgid "Web Shape"
+#, kde-format
 msgid "State editing"
-msgstr "تور شەكلى"
+msgstr ""
 
 #: src/AboutData.h:33
 #, kde-format
 msgid "Braindump"
-msgstr "Braindump"
+msgstr ""
 
 #: src/AboutData.h:35
 #, kde-format
@@ -145,28 +144,27 @@ msgid "Somsubhra Bairi"
 msgstr ""
 
 #: src/AboutData.h:43 src/AboutData.h:46
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former maintainer"
-msgstr "مەسئۇل كىشى"
+msgstr "سابىق ئاسرىغۇچى"
 
 #: src/AboutData.h:46
 #, kde-format
 msgid "Cyrille Berger"
-msgstr "Cyrille Berger"
+msgstr ""
 
 #. i18n translator strings
 #: src/AboutData.h:48
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+msgstr "ئابدۇقادىر ئابلىز، غەيرەت كەنجى"
 
 #: src/AboutData.h:48
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+msgstr "sahranbay@gmail.com, gheyret@gmail.com"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/forms/wdgsectionproperties.ui:17
@@ -188,10 +186,9 @@ msgstr "تەكرار ئاق تاختا"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, bnDuplicate)
 #: src/forms/wdgsectionsbox.ui:81
-#, fuzzy, kde-format
-#| msgid "Duplicate whiteboard"
+#, kde-format
 msgid "Duplicate the currently selected whiteboard"
-msgstr "تەكرار ئاق تاختا"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
 #: src/forms/wdgsectionsbox.ui:106
@@ -234,7 +231,7 @@ msgstr ""
 #: src/layouts/ColumnLayout.cpp:126
 #, kde-format
 msgid "Column"
-msgstr "ئىستون"
+msgstr "رەت"
 
 #: src/layouts/FreeLayout.cpp:60
 #, kde-format
@@ -244,7 +241,7 @@ msgstr "بوش"
 #: src/MainWindow.cpp:96
 #, kde-format
 msgid "Dockers"
-msgstr ""
+msgstr "كۆزنەكچە"
 
 #: src/SectionGroup.cpp:86
 #, kde-format
@@ -282,22 +279,19 @@ msgid "View mode"
 msgstr "كۆرۈنۈش ھالىتى"
 
 #: src/SectionsBoxDock.cpp:82
-#, fuzzy, kde-format
-#| msgid "Move whiteboard down"
+#, kde-format
 msgid "Add new whiteboard below current."
-msgstr "ئاق تاختىنى ئاستىغا يۆتكە"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:83
-#, fuzzy, kde-format
-#| msgid "Move whiteboard down"
+#, kde-format
 msgid "Add new whiteboard above current."
-msgstr "ئاق تاختىنى ئاستىغا يۆتكە"
+msgstr ""
 
 #: src/SectionsBoxDock.cpp:84
-#, fuzzy, kde-format
-#| msgid "Move whiteboard down"
+#, kde-format
 msgid "Add new whiteboard as child of current."
-msgstr "ئاق تاختىنى ئاستىغا يۆتكە"
+msgstr ""
 
 #: src/View.cpp:182
 #, kde-format
@@ -323,12 +317,12 @@ msgstr "شەكىللەرنى گۇرۇپپىلىما"
 #: src/View.cpp:377
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr "شەكىللەرنى گۇرۇپپىلا"
+msgstr "شەكىلنى توپلا"
 
 #: src/View.cpp:399
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr "شەكىللەرنى گۇرۇپپىلىما"
+msgstr "شەكىلنى چاچ"
 
 #~ msgid "URL:"
 #~ msgstr "URL:"
@@ -339,267 +333,223 @@ msgstr "شەكىللەرنى گۇرۇپپىلىما"
 #~ msgid "A web shape"
 #~ msgstr "بىر تور شەكلى"
 
-#, fuzzy
 #~| msgid "Web Shape"
 #~ msgid "Web shape editing"
 #~ msgstr "تور شەكلى"
 
-#, fuzzy
 #~| msgid "Create a new whiteboard"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Create a new whiteboard"
 #~ msgstr "بىر ئاق تاختا قۇر"
 
-#, fuzzy
 #~| msgid "Duplicate whiteboard"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Duplicate whiteboard"
 #~ msgstr "تەكرار ئاق تاختا"
 
-#, fuzzy
 #~| msgid "Move whiteboard down"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move whiteboard down"
 #~ msgstr "ئاق تاختىنى ئاستىغا يۆتكە"
 
-#, fuzzy
 #~| msgid "Move whiteboard up"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move whiteboard up"
 #~ msgstr "ئاق تاختىنى ئۈستىگە يۆتكە"
 
-#, fuzzy
 #~| msgid "Delete the whiteboard"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete the whiteboard"
 #~ msgstr "ئاق تاختىنى ئۆچۈر"
 
-#, fuzzy
 #~| msgid "Layout:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Layout:"
 #~ msgstr "جايلاشتۇرۇش:"
 
-#, fuzzy
 #~| msgid "State:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "State:"
 #~ msgstr "ھالەت:"
 
-#, fuzzy
 #~| msgid "URL:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "URL:"
 #~ msgstr "URL:"
 
-#, fuzzy
 #~| msgid "Shapes"
 #~ msgctxt "(qtundo-format) @title:menu"
 #~ msgid "Shapes"
 #~ msgstr "شەكىل"
 
-#, fuzzy
 #~| msgid "Shapes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Shapes"
 #~ msgstr "شەكىل"
 
-#, fuzzy
 #~| msgid "Todo"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Todo"
 #~ msgstr "بېجىرىدىغان"
 
-#, fuzzy
 #~| msgid "Unchecked"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unchecked"
 #~ msgstr "تاللانمىغان"
 
-#, fuzzy
 #~| msgid "Checked"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Checked"
 #~ msgstr "تاللانغان"
 
-#, fuzzy
 #~| msgid "Progress"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Progress"
 #~ msgstr "سۈرئەت"
 
-#, fuzzy
 #~| msgid "0 %"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "0 %"
 #~ msgstr "0 %"
 
-#, fuzzy
 #~| msgid "25 %"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "25 %"
 #~ msgstr "25 %"
 
-#, fuzzy
 #~| msgid "50 %"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "50 %"
 #~ msgstr "50%"
 
-#, fuzzy
 #~| msgid "75 %"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "75 %"
 #~ msgstr "75%"
 
-#, fuzzy
 #~| msgid "100 %"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "100 %"
 #~ msgstr "100%"
 
-#, fuzzy
 #~| msgid "States"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "States"
 #~ msgstr "ھالەت"
 
-#, fuzzy
 #~| msgid "State Shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "State Shape"
 #~ msgstr "ھالەت شەكىللىرى"
 
-#, fuzzy
 #~| msgid "State tool options"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "State tool options"
 #~ msgstr "ھالەت قورالى تاللانمىلىرى"
 
-#, fuzzy
 #~| msgid "Web Shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Web Shape"
 #~ msgstr "تور شەكلى"
 
-#, fuzzy
 #~| msgid "A web shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A web shape"
 #~ msgstr "بىر تور شەكلى"
 
-#, fuzzy
 #~| msgid "Web Shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Web shape editing"
 #~ msgstr "تور شەكلى"
 
-#, fuzzy
 #~| msgid "Braindump"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Braindump"
 #~ msgstr "Braindump"
 
-#, fuzzy
 #~| msgid "Maintainer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Former maintainer"
 #~ msgstr "مەسئۇل كىشى"
 
-#, fuzzy
 #~| msgid "Cyrille Berger"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cyrille Berger"
 #~ msgstr "Cyrille Berger"
 
-#, fuzzy
 #~| msgctxt "NAME OF TRANSLATORS"
 #~| msgid "Your names"
 #~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
 #~ msgid "Your names"
 #~ msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
 
-#, fuzzy
 #~| msgctxt "EMAIL OF TRANSLATORS"
 #~| msgid "Your emails"
 #~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
 #~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
 
-#, fuzzy
 #~| msgid "Tool Options"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tool Options"
 #~ msgstr "قورال تاللانمىلىرى"
 
-#, fuzzy
 #~| msgid "Column"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Column"
 #~ msgstr "ئىستون"
 
-#, fuzzy
 #~| msgid "Free"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Free"
 #~ msgstr "بوش"
 
-#, fuzzy
 #~| msgid "Untitled %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Untitled %1"
 #~ msgstr "ماۋزۇسىز %1"
 
-#, fuzzy
 #~| msgid "Whiteboards"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Whiteboards"
 #~ msgstr "ئاق تاختا"
 
-#, fuzzy
 #~| msgid "Minimal View"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Minimal View"
 #~ msgstr "ئەڭ كىچىك كۆرۈنۈش"
 
-#, fuzzy
 #~| msgid "Detailed View"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Detailed View"
 #~ msgstr "تەپسىلات كۆرۈنۈش"
 
-#, fuzzy
 #~| msgid "Thumbnail View"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Thumbnail View"
 #~ msgstr "كىچىكلىتىلگەن سۈرەت كۆرۈنۈشى"
 
-#, fuzzy
 #~| msgid "View mode"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "View mode"
 #~ msgstr "كۆرۈنۈش ھالىتى"
 
-#, fuzzy
 #~| msgid "D&elete"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "D&elete"
 #~ msgstr "ئۆچۈر(&E)"
 
-#, fuzzy
 #~| msgctxt "Duplicate selection"
 #~| msgid "&Duplicate"
 #~ msgctxt "(qtundo-format) Duplicate selection"
 #~ msgid "&Duplicate"
 #~ msgstr "كۆچۈر(&D)"
 
-#, fuzzy
 #~| msgid "Group Shapes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Group Shapes"
 #~ msgstr "شەكىللەرنى گۇرۇپپىلا"
 
-#, fuzzy
 #~| msgid "Ungroup Shapes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ungroup Shapes"

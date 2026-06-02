@@ -8,36 +8,37 @@ msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:07-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "ئابدۇقادىر ئابلىز، غەيرەت كەنجى"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "sahranbay@gmail.com, gheyret@gmail.com"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:77 AxesConfigWidget.cpp:83 LegendConfigWidget.ui:33
 #, kde-format
 msgid "Start"
-msgstr ""
+msgstr "باشلا"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:78 AxesConfigWidget.cpp:82 LegendConfigWidget.ui:43
 #, kde-format
 msgid "End"
-msgstr ""
+msgstr "ئاخىر"
 
 #: AxesConfigWidget.cpp:80
 #, kde-format
@@ -51,50 +52,45 @@ msgstr ""
 
 #: AxesConfigWidget.cpp:245 AxesConfigWidget.cpp:253 ChartTool.cpp:914
 #: DataSetConfigWidget.cpp:345
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Axistitle"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Show Axis"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
 #: AxesConfigWidget.ui:58
 #, kde-format
 msgid "Scale"
-msgstr ""
+msgstr "نىسبەت"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
 #: AxesConfigWidget.ui:65
-#, fuzzy, kde-format
-#| msgid "Labels"
+#, kde-format
 msgid "Show Labels"
-msgstr "ئەنلەر"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
 #: AxesConfigWidget.ui:72
 #, kde-format
 msgid "Font"
-msgstr ""
+msgstr "خەت نۇسخا"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Show Major Grid"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Show Minor Grid"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
 #: AxesConfigWidget.ui:119
@@ -135,10 +131,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
 #: AxesConfigWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Show Title"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:201
@@ -230,7 +225,7 @@ msgstr "چۈشۈرۈش"
 #: ChartShape.cpp:755
 #, kde-format
 msgid "Skip"
-msgstr "ئۆتكۈزۈۋەت"
+msgstr "ئاتلا"
 
 #: ChartShapeFactory.cpp:55
 #, kde-format
@@ -238,10 +233,9 @@ msgid "Chart"
 msgstr "دىئاگرامما"
 
 #: ChartShapeFactory.cpp:58
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Business charts"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:77 DataSetConfigWidget.cpp:199
 #: PlotAreaConfigWidget.cpp:230
@@ -250,134 +244,113 @@ msgid "Bar Chart"
 msgstr "بالداق دىئاگرامما"
 
 #: ChartShapeFactory.cpp:78
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Normal bar chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:88
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Stacked Bar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:89
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Stacked bar chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:99
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent Bar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:100
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent bar chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:110 DataSetConfigWidget.cpp:204
 #: PlotAreaConfigWidget.cpp:236
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Line Chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:111
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Normal line chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:121
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Stacked Line Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:122
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Stacked line chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:132
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent Line Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:133
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent line chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:143 DataSetConfigWidget.cpp:209
 #: PlotAreaConfigWidget.cpp:242
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Area Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:144
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Normal area chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:154
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Stacked Area Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:155
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Stacked area chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:165
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent Area Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:166
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent area chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:176 DataSetConfigWidget.cpp:214
 #: PlotAreaConfigWidget.cpp:250
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Pie Chart"
-msgstr "كۆپۈك دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:177
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Pie chart"
-msgstr "كۆپۈك دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:187 DataSetConfigWidget.cpp:215
 #: PlotAreaConfigWidget.cpp:251
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Ring Chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:188
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Ring chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:198 DataSetConfigWidget.cpp:226
 #: PlotAreaConfigWidget.cpp:264
@@ -386,53 +359,45 @@ msgid "Bubble Chart"
 msgstr "كۆپۈك دىئاگرامما"
 
 #: ChartShapeFactory.cpp:199
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble chart"
-msgstr "كۆپۈك دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:209 DataSetConfigWidget.cpp:228
 #: PlotAreaConfigWidget.cpp:263
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Scatter Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:210
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Scatter chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:220
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Radar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:221
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Radar chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:231
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Filled Radar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:232
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Filled radar chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:242
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Candle Stick Stock Chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:243
 #, kde-format
@@ -440,10 +405,9 @@ msgid "Japanese candle stick stock chart"
 msgstr ""
 
 #: ChartShapeFactory.cpp:253
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "OHLC Stock Chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:254
 #, kde-format
@@ -451,10 +415,9 @@ msgid "Open High Low Close stock chart"
 msgstr ""
 
 #: ChartShapeFactory.cpp:264
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "HLC Stock Chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: ChartShapeFactory.cpp:265
 #, kde-format
@@ -465,19 +428,19 @@ msgstr ""
 #: ChartShapeFactory.cpp:631
 #, kde-format
 msgid "January"
-msgstr "قەھرىتان"
+msgstr "يانۋار"
 
 #: ChartShapeFactory.cpp:359 ChartShapeFactory.cpp:549
 #: ChartShapeFactory.cpp:632
 #, kde-format
 msgid "July"
-msgstr "چىللە"
+msgstr "ئىيۇل"
 
 #: ChartShapeFactory.cpp:360 ChartShapeFactory.cpp:550
 #: ChartShapeFactory.cpp:633
 #, kde-format
 msgid "December"
-msgstr "كۆنەك"
+msgstr "دېكابىر"
 
 #: ChartShapeFactory.cpp:363 ChartShapeFactory.cpp:364
 #: ChartShapeFactory.cpp:365 ChartShapeFactory.cpp:366
@@ -487,7 +450,7 @@ msgstr "كۆنەك"
 #: dialogs/BubbleDataEditor.cpp:70 dialogs/ScatterDataEditor.cpp:75
 #, kde-format
 msgid "Column %1"
-msgstr "ئىستون %1"
+msgstr "رەت %1"
 
 #: ChartShapeFactory.cpp:390
 #, kde-format
@@ -517,22 +480,22 @@ msgstr ""
 #: ChartShapeFactory.cpp:459
 #, kde-format
 msgid "Open"
-msgstr ""
+msgstr "ئاچ"
 
 #: ChartShapeFactory.cpp:460
 #, kde-format
 msgid "High"
-msgstr ""
+msgstr "يۇقىرى"
 
 #: ChartShapeFactory.cpp:461
 #, kde-format
 msgid "Low"
-msgstr ""
+msgstr "تۆۋەن"
 
 #: ChartShapeFactory.cpp:462
 #, kde-format
 msgid "Close"
-msgstr ""
+msgstr "ياپ"
 
 #: ChartShapeFactory.cpp:581
 #, kde-format
@@ -550,10 +513,9 @@ msgid "Do something else"
 msgstr ""
 
 #: ChartTool.cpp:269
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgid "Titles"
-msgstr "ماۋزۇ"
+msgstr ""
 
 #: ChartTool.cpp:284
 #, kde-format
@@ -566,38 +528,29 @@ msgid "Plot Area"
 msgstr ""
 
 #: ChartTool.cpp:1061
-#, fuzzy
-#| msgid "Legend"
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
-msgstr "چۈشەندۈرۈشى"
+msgstr ""
 
 #: ChartTool.cpp:1063
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: ChartToolFactory.cpp:26
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Chart editing"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: commands/AddRemoveAxisCommand.cpp:37
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Add Axis"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/AddRemoveAxisCommand.cpp:40
-#, fuzzy
-#| msgid "New Axis"
 msgctxt "(qtundo-format)"
 msgid "Remove Axis"
-msgstr "يېڭى كوئوردېنات ئوقى"
+msgstr ""
 
 #: commands/AxisCommand.cpp:111
 msgctxt "(qtundo-format)"
@@ -610,39 +563,29 @@ msgid "Hide Axis Title"
 msgstr ""
 
 #: commands/AxisCommand.cpp:138
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/AxisCommand.cpp:140
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/AxisCommand.cpp:149
-#, fuzzy
-#| msgid "Labels"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
-msgstr "ئەنلەر"
+msgstr ""
 
 #: commands/AxisCommand.cpp:151
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/AxisCommand.cpp:160
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/AxisCommand.cpp:162
 msgctxt "(qtundo-format)"
@@ -650,11 +593,9 @@ msgid "Hide Axis Major Gridlines"
 msgstr ""
 
 #: commands/AxisCommand.cpp:171
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/AxisCommand.cpp:173
 msgctxt "(qtundo-format)"
@@ -672,18 +613,14 @@ msgid "Linear Scaling"
 msgstr ""
 
 #: commands/AxisCommand.cpp:192
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/AxisCommand.cpp:199
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/AxisCommand.cpp:207
 msgctxt "(qtundo-format)"
@@ -706,25 +643,19 @@ msgid "Manual Substep Width"
 msgstr ""
 
 #: commands/AxisCommand.cpp:228
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/AxisCommand.cpp:234
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/AxisCommand.cpp:255
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -737,228 +668,164 @@ msgid "Hide Text Shape"
 msgstr ""
 
 #: commands/ChartTypeCommand.cpp:75
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:78
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:81
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:90
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:93
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:96
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:105
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:108
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:111
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:118
-#, fuzzy
-#| msgid "Bubble Chart"
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
-msgstr "كۆپۈك دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:121
-#, fuzzy
-#| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Ring Chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:124
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Scatter Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:127
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:130
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:133
-#, fuzzy
-#| msgid "Chart"
 msgctxt "(qtundo-format)"
 msgid "Stock Chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:136
-#, fuzzy
-#| msgid "Bubble Chart"
 msgctxt "(qtundo-format)"
 msgid "Bubble Chart"
 msgstr "كۆپۈك دىئاگرامما"
 
 #: commands/ChartTypeCommand.cpp:139
-#, fuzzy
-#| msgid "Bubble Chart"
 msgctxt "(qtundo-format)"
 msgid "Surface Chart"
-msgstr "كۆپۈك دىئاگرامما"
+msgstr ""
 
 #: commands/ChartTypeCommand.cpp:142
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:135
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:143
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:145
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:154
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:156
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:165
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:167
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:176
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:178
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:186
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:193
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:202
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:204
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/DatasetCommand.cpp:212
-#, fuzzy
-#| msgid "Data sets in rows"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: commands/GapCommand.cpp:58
 msgctxt "(qtundo-format)"
@@ -971,32 +838,24 @@ msgid "Set Gap Between Sets"
 msgstr ""
 
 #: commands/LegendCommand.cpp:73
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/LegendCommand.cpp:81
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/LegendCommand.cpp:88
-#, fuzzy
-#| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: commands/LegendCommand.cpp:95
-#, fuzzy
-#| msgid "Orientation"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
-msgstr "يۆنىلىش"
+msgstr ""
 
 #: commands/PlotAreaCommand.cpp:56
 msgctxt "(qtundo-format)"
@@ -1014,10 +873,9 @@ msgid "Series %1"
 msgstr ""
 
 #: DataSetConfigWidget.cpp:194 PlotAreaConfigWidget.cpp:226
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Chart Type"
-msgstr "دىئاگرامما"
+msgstr "ئىسخېما تىپى"
 
 #: DataSetConfigWidget.cpp:200 DataSetConfigWidget.cpp:205
 #: DataSetConfigWidget.cpp:210 DataSetConfigWidget.cpp:218
@@ -1025,7 +883,7 @@ msgstr "دىئاگرامما"
 #: PlotAreaConfigWidget.cpp:243 PlotAreaConfigWidget.cpp:257
 #, kde-format
 msgid "Normal"
-msgstr "نورمال"
+msgstr "ئادەتتىكى"
 
 #: DataSetConfigWidget.cpp:201 DataSetConfigWidget.cpp:206
 #: DataSetConfigWidget.cpp:211 PlotAreaConfigWidget.cpp:232
@@ -1047,10 +905,9 @@ msgid "Percent"
 msgstr "پىرسەنت"
 
 #: DataSetConfigWidget.cpp:217 PlotAreaConfigWidget.cpp:256
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Polar Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:219 PlotAreaConfigWidget.cpp:258
 #, kde-format
@@ -1058,10 +915,9 @@ msgid "Filled"
 msgstr "تولدۇر"
 
 #: DataSetConfigWidget.cpp:221 PlotAreaConfigWidget.cpp:269
-#, fuzzy, kde-format
-#| msgid "Chart"
+#, kde-format
 msgid "Stock Chart"
-msgstr "دىئاگرامما"
+msgstr ""
 
 #: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
@@ -1109,25 +965,22 @@ msgstr "تاللا"
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
 #: widgets/RadarDataSetConfigWidget.cpp:189
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgid "Auto"
 msgstr "ئاپتوماتىك"
 
 #: DataSetConfigWidget.cpp:651 PlotAreaConfigWidget.cpp:625
 #: PlotAreaConfigWidget.cpp:675 PlotAreaConfigWidget.cpp:851
 #: widgets/RadarDataSetConfigWidget.cpp:295
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Data Set %1"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dataSets)
 #: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
-#, fuzzy, kde-format
-#| msgid "New Axis"
+#, kde-format
 msgid "Select a data set"
-msgstr "يېڭى كوئوردېنات ئوقى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
 #: DataSetConfigWidget.ui:33
@@ -1137,10 +990,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Attach To Axis"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
@@ -1210,65 +1062,56 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AxisScalingDialog.ui:32
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Step Width:"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AxisScalingDialog.ui:65
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Substep Width:"
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:108
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Bubble Data Editor"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:121
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Column Before"
-msgstr "ئىستون قىستۇر"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:115 dialogs/ScatterDataEditor.cpp:122
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Column After"
-msgstr "ئىستون قىستۇر"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:116 dialogs/ScatterDataEditor.cpp:123
 #: dialogs/StockDataEditor.cpp:98
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Row Above"
-msgstr "قۇر قىستۇر"
+msgstr ""
 
 #: dialogs/BubbleDataEditor.cpp:117 dialogs/ScatterDataEditor.cpp:124
 #: dialogs/StockDataEditor.cpp:99
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Row Below"
-msgstr "قۇر قىستۇر"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
 #: dialogs/BubbleDataEditor.cpp:118 dialogs/PieDataEditor.cpp:65
 #: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:125
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete"
-msgstr "قۇر ئۆچۈر"
+msgstr "ئۆچۈر"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
 #: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubbles Editor"
-msgstr "كۆپۈك دىئاگرامما"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
@@ -1300,7 +1143,7 @@ msgstr ""
 #: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "…"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
 #: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
@@ -1327,10 +1170,9 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
 #: dialogs/ScatterDataEditor.ui:119
-#, fuzzy, kde-format
-#| msgid "Delete Columns"
+#, kde-format
 msgid "Delete selection"
-msgstr "ئىستون ئۆچۈر"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
@@ -1350,17 +1192,15 @@ msgstr ""
 #: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
 #: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
 #: TitlesConfigWidget.ui:153
-#, fuzzy, kde-format
-#| msgid "January"
+#, kde-format
 msgid "Manual"
-msgstr "قەھرىتان"
+msgstr "قولدا"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
-#, fuzzy, kde-format
-#| msgid "New Axis"
+#, kde-format
 msgid "Remove data set"
-msgstr "يېڭى كوئوردېنات ئوقى"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1372,38 +1212,33 @@ msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Dataset Name"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:105
 #: dialogs/ScatterDataSetTableModel.cpp:105
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "X-Values"
-msgstr "قىممەت"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:107
 #: dialogs/ScatterDataSetTableModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "Y-Values"
-msgstr "قىممەت"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble Size"
-msgstr "كۆپۈك دىئاگرامما"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:149
 #: dialogs/ScatterDataSetTableModel.cpp:144
-#, fuzzy, kde-format
-#| msgid "Label"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Label: %1"
-msgstr "ئەن"
+msgstr ""
 
 #: dialogs/BubbleDataSetTableModel.cpp:151
 #: dialogs/ScatterDataSetTableModel.cpp:146
@@ -1444,23 +1279,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "Y Values:"
-msgstr "قىممەت"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/CellRegionDialog.ui:59
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "X Values:"
-msgstr "قىممەت"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CellRegionDialog.ui:72
 #, kde-format
 msgid "<b>Choose a Data Set</b>"
-msgstr "<b>سانلىق-مەلۇمات توپلىمىنى تاللايدۇ</b>"
+msgstr "<b>سانلىق مەلۇمات توپلىمىنى تاللايدۇ</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/CellRegionDialog.ui:82
@@ -1486,24 +1319,21 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
 #: dialogs/ChartTableEditor.ui:14
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Data Editor"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "&Data sets in rows"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
 #: dialogs/ChartTableEditor.ui:36
-#, fuzzy, kde-format
-#| msgid "Data sets in columns"
+#, kde-format
 msgid "Data sets in &columns"
-msgstr "ئىستونلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
@@ -1563,7 +1393,7 @@ msgstr "ئۆلچەملىك ئېغىش"
 #: dialogs/FormatErrorBarDialog.ui:114
 #, kde-format
 msgid "Variance"
-msgstr "كۋادراتلىق پەرق"
+msgstr "كىۋادراتلىق پەرق"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:119
@@ -1657,169 +1487,155 @@ msgid "Title:"
 msgstr "ماۋزۇ:"
 
 #: dialogs/PieDataEditor.cpp:58
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Pie Data Editor"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
 #: dialogs/PieDataEditor.ui:52
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Del"
-msgstr "قۇر ئۆچۈر"
+msgstr "Del"
 
 #: dialogs/ScatterDataEditor.cpp:98 widgets/RingConfigWidget.cpp:98
 #, kde-format
 msgid "Row %1"
-msgstr ""
+msgstr "%1-قۇر"
 
 #: dialogs/ScatterDataEditor.cpp:115
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Scatter Data Editor"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:90 dialogs/StockDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Stock Data Editor"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #: dialogs/StockDataEditor.cpp:100
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete Row"
 msgstr "قۇر ئۆچۈر"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/StockDataEditor.ui:77
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete row"
-msgstr "قۇر ئۆچۈر"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Above"
-msgstr "قۇر قىستۇر"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:57
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Below"
-msgstr "قۇر قىستۇر"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Before"
-msgstr "ئىستون قىستۇر"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:59
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert After"
-msgstr "ئىستون قىستۇر"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:60
-#, fuzzy, kde-format
-#| msgid "Delete Columns"
+#, kde-format
 msgid "Delete Selection"
-msgstr "ئىستون ئۆچۈر"
+msgstr ""
 
 #: dialogs/TableEditorDialog.cpp:163 dialogs/TableEditorDialog.cpp:187
 #, kde-format
 msgid "New Row"
-msgstr ""
+msgstr "يېڭى قۇر"
 
 #: dialogs/TableEditorDialog.cpp:212 dialogs/TableEditorDialog.cpp:236
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "New Column"
-msgstr "ئىستون قىستۇر"
+msgstr "يېڭى رەت"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:19
 #, kde-format
 msgid "Vertical"
-msgstr ""
+msgstr "بويىغا"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:24
 #, kde-format
 msgid "Horizontal"
-msgstr ""
+msgstr "توغرىسىغا"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: LegendConfigWidget.ui:38
 #, kde-format
 msgid "Center"
-msgstr ""
+msgstr "ئوتتۇرا"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:52
 #, kde-format
 msgid "Right"
-msgstr ""
+msgstr "ئوڭ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:57
 #, kde-format
 msgid "Top"
-msgstr ""
+msgstr "ئۈستى"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:62
 #, kde-format
 msgid "Bottom"
-msgstr ""
+msgstr "ئاستى"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:67
 #, kde-format
 msgid "Left"
-msgstr ""
+msgstr "سول"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:72
 #, kde-format
 msgid "Top-left"
-msgstr ""
+msgstr "سول ئۈستى"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:77
 #, kde-format
 msgid "Top-right"
-msgstr ""
+msgstr "ئوڭ ئۈستى"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:82
 #, kde-format
 msgid "Bottom-left"
-msgstr ""
+msgstr "سول ئاستى"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:87
 #, kde-format
 msgid "Bottom-right"
-msgstr ""
+msgstr "ئوڭ ئاستى"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: LegendConfigWidget.ui:100
-#, fuzzy, kde-format
-#| msgid "Positive"
+#, kde-format
 msgid "Position"
-msgstr "مۇسبەت"
+msgstr "ئورنى"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLegend)
 #: LegendConfigWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Legend"
+#, kde-format
 msgid "Show Legend"
-msgstr "چۈشەندۈرۈشى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: LegendConfigWidget.ui:130
@@ -1834,10 +1650,9 @@ msgid "Fonts..."
 msgstr ""
 
 #: PieConfigWidget.cpp:98
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Data Point %1"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
@@ -1846,16 +1661,14 @@ msgid "E&xplode Factor"
 msgstr ""
 
 #: PlotAreaConfigWidget.cpp:275
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Surface Chart"
-msgstr "كۆپۈك دىئاگرامما"
+msgstr ""
 
 #: PlotAreaConfigWidget.cpp:277
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Gantt Chart"
-msgstr "بالداق دىئاگرامما"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
 #: PlotAreaConfigWidget.ui:61
@@ -1877,10 +1690,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, editData)
 #: PlotAreaConfigWidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Edit Data..."
-msgstr "خەت نۇسخا تاللا"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -1894,17 +1706,15 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: PlotAreaConfigWidget.ui:111 PlotAreaConfigWidget.ui:218
 #: widgets/RingConfigWidget.ui:171
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Data Sets"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: PlotAreaConfigWidget.ui:131
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "Data Points"
-msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
@@ -1926,23 +1736,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
-#, fuzzy, kde-format
-#| msgid "Positive"
+#, kde-format
 msgid "Positioning"
-msgstr "مۇسبەت"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: TitlesConfigWidget.ui:28
 #, kde-format
 msgid "Resize"
-msgstr ""
+msgstr "چوڭلۇقىنى ئۆزگەرت"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/RingConfigWidget.ui:18
-#, fuzzy, kde-format
-#| msgid "Categories:"
+#, kde-format
 msgid "Categories"
-msgstr "كاتېگورىيە:"
+msgstr "سەھىپە"
 
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
@@ -1952,12 +1760,12 @@ msgstr ""
 #: widgets/StrokeConfigWidget.cpp:98
 #, kde-format
 msgid "Round cap"
-msgstr ""
+msgstr "يۇمىلاق چوقا"
 
 #: widgets/StrokeConfigWidget.cpp:105
 #, kde-format
 msgid "Square cap"
-msgstr ""
+msgstr "تۆت چاسا چوقا"
 
 #: widgets/StrokeConfigWidget.cpp:116
 #, kde-format
@@ -1989,7 +1797,6 @@ msgstr ""
 msgid "Change the color of the line"
 msgstr ""
 
-#, fuzzy
 #~| msgid "Data sets in rows"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Set Dataset Marker Style"
@@ -2010,37 +1817,30 @@ msgstr ""
 #~ msgid "Delete Columns"
 #~ msgstr "ئىستون ئۆچۈر"
 
-#, fuzzy
 #~| msgid "Bar Chart"
 #~ msgid "Bar chart"
 #~ msgstr "بالداق دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Chart"
 #~ msgid "Line chart"
 #~ msgstr "دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Bar Chart"
 #~ msgid "Area chart"
 #~ msgstr "بالداق دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Bar Chart"
 #~ msgid "Radar"
 #~ msgstr "بالداق دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Bar Chart"
 #~ msgid "Scatter"
 #~ msgstr "بالداق دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Bubble Chart"
 #~ msgid "Bubbles"
 #~ msgstr "كۆپۈك دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Chart"
 #~ msgid "Stock HLC"
 #~ msgstr "دىئاگرامما"
@@ -2054,355 +1854,296 @@ msgstr ""
 #~ msgid "h"
 #~ msgstr "h"
 
-#, fuzzy
 #~| msgid "Select Font"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Show Legend Frame"
 #~ msgstr "خەت نۇسخا تاللا"
 
-#, fuzzy
 #~| msgid "Select Font"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hide Legend Frame"
 #~ msgstr "خەت نۇسخا تاللا"
 
-#, fuzzy
 #~| msgid "Dialog"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Dialog"
 #~ msgstr "سۆزلەشكۈ"
 
-#, fuzzy
 #~| msgid "Constant"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Constant"
 #~ msgstr "تۇراقلىق سان"
 
-#, fuzzy
 #~| msgid "Percentage"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Percentage"
 #~ msgstr "پىرسەنت"
 
-#, fuzzy
 #~| msgid "Standard Deviation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Standard Deviation"
 #~ msgstr "ئۆلچەملىك ئېغىش"
 
-#, fuzzy
 #~| msgid "Variance"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Variance"
 #~ msgstr "كۋادراتلىق پەرق"
 
-#, fuzzy
 #~| msgid "Positive "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Positive "
 #~ msgstr "مۇسبەت "
 
-#, fuzzy
 #~| msgid "Negative"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Negative"
 #~ msgstr "مەنپىي"
 
-#, fuzzy
 #~| msgid "Value"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Value"
 #~ msgstr "قىممەت"
 
-#, fuzzy
 #~| msgid " %"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " %"
 #~ msgstr " %"
 
-#, fuzzy
 #~| msgid "Positive"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Positive"
 #~ msgstr "مۇسبەت"
 
-#, fuzzy
 #~| msgid "Both"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Both"
 #~ msgstr "ئىككىلىسى"
 
-#, fuzzy
 #~| msgid "New Axis"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "New Axis"
 #~ msgstr "يېڭى كوئوردېنات ئوقى"
 
-#, fuzzy
 #~| msgid "Title:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Title:"
 #~ msgstr "ماۋزۇ:"
 
-#, fuzzy
 #~| msgid "Value"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Y Values:"
 #~ msgstr "قىممەت"
 
-#, fuzzy
 #~| msgid "Value"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "X Values:"
 #~ msgstr "قىممەت"
 
-#, fuzzy
 #~| msgid "<b>Choose a Data Set</b>"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<b>Choose a Data Set</b>"
 #~ msgstr "<b>سانلىق-مەلۇمات توپلىمىنى تاللايدۇ</b>"
 
-#, fuzzy
 #~| msgid "Categories:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Categories:"
 #~ msgstr "كاتېگورىيە:"
 
-#, fuzzy
 #~| msgid "Data Format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Data Format"
 #~ msgstr "سانلىق-مەلۇمات پىچىمى"
 
-#, fuzzy
 #~| msgid "Data sets in rows"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Data sets in rows"
 #~ msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
 
-#, fuzzy
 #~| msgid "Data sets in columns"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Data sets in columns"
 #~ msgstr "ئىستونلاردىكى سانلىق-مەلۇمات توپلىمى"
 
-#, fuzzy
 #~| msgid "Actions"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Actions"
 #~ msgstr "مەشغۇلاتلار"
 
-#, fuzzy
 #~| msgid "3D"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "3D"
 #~ msgstr "3D"
 
-#, fuzzy
 #~| msgid "Label"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Label"
 #~ msgstr "ئەن"
 
-#, fuzzy
 #~| msgid "Data sets in rows"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Data Sets"
 #~ msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
 
-#, fuzzy
 #~| msgid "%"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "%"
 #~ msgstr "%"
 
-#, fuzzy
 #~| msgid "Data sets in rows"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Attached Axis"
 #~ msgstr "قۇرلاردىكى سانلىق-مەلۇمات توپلىمى"
 
-#, fuzzy
 #~| msgid "Marker"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Marker"
 #~ msgstr "بەلگە قەلىمى"
 
-#, fuzzy
 #~| msgid "Stroke"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Stroke"
 #~ msgstr "سىزىق"
 
-#, fuzzy
 #~| msgid "Fill"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fill"
 #~ msgstr "تولدۇر"
 
-#, fuzzy
 #~| msgid "Insert"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert"
 #~ msgstr "قىستۇر"
 
-#, fuzzy
 #~| msgid "Category"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Category"
 #~ msgstr "كاتېگورىيە"
 
-#, fuzzy
 #~| msgid "Symbol"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Symbol"
 #~ msgstr "بەلگە"
 
-#, fuzzy
 #~| msgid "Number"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number"
 #~ msgstr "نومۇرى"
 
-#, fuzzy
 #~| msgid "Legend"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Legend"
 #~ msgstr "چۈشەندۈرۈشى"
 
-#, fuzzy
 #~| msgid "Select Font"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Show Frame"
 #~ msgstr "خەت نۇسخا تاللا"
 
-#, fuzzy
 #~| msgid "Orientation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Orientation"
 #~ msgstr "يۆنىلىش"
 
-#, fuzzy
 #~| msgid "v"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "v"
 #~ msgstr "v"
 
-#, fuzzy
 #~| msgid "h"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "h"
 #~ msgstr "h"
 
-#, fuzzy
 #~| msgid "Bar Chart"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bar Chart"
 #~ msgstr "بالداق دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Normal"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Normal"
 #~ msgstr "نورمال"
 
-#, fuzzy
 #~| msgid "Stacked"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Stacked"
 #~ msgstr "دەستىلەنگەن"
 
-#, fuzzy
 #~| msgid "Percent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Percent"
 #~ msgstr "پىرسەنت"
 
-#, fuzzy
 #~| msgid "Chart"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Line Chart"
 #~ msgstr "دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Bar Chart"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Area Chart"
 #~ msgstr "بالداق دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Bubble Chart"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pie Chart"
 #~ msgstr "كۆپۈك دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Bar Chart"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Polar Chart"
 #~ msgstr "بالداق دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Filled"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Filled"
 #~ msgstr "تولدۇر"
 
-#, fuzzy
 #~| msgid "None"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "None"
 #~ msgstr "يوق"
 
-#, fuzzy
 #~| msgid "Automatic"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Automatic"
 #~ msgstr "ئاپتوماتىك"
 
-#, fuzzy
 #~| msgid "Select"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select"
 #~ msgstr "تاللا"
 
-#, fuzzy
 #~| msgid "Data Ranges..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Data Ranges..."
 #~ msgstr "سانلىق-مەلۇمات دائىرىسى …"
 
-#, fuzzy
 #~| msgid "Plugin Missing"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Plugin Missing"
 #~ msgstr "قىستۇرما يوق"
 
-#, fuzzy
 #~| msgid "Plugin Incompatible"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Plugin Incompatible"
 #~ msgstr "قىستۇرما ماسلاشمىدى"
 
-#, fuzzy
 #~| msgid "Title"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Title"
 #~ msgstr "ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Subtitle"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Subtitle"
 #~ msgstr "قوشۇمچە ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Footer"
 #~ msgstr "بەت ئاستى"
 
-#, fuzzy
 #~| msgid ""
 #~| "This document contains an external link to a remote document\n"
 #~| "%1"
@@ -2414,85 +2155,71 @@ msgstr ""
 #~ "بۇ پۈتۈك تەركىبىدە يىراقتىكى پۈتۈكنىڭ ئۇلانمىسى بار \n"
 #~ "%1"
 
-#, fuzzy
 #~| msgid "Confirmation Required"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Confirmation Required"
 #~ msgstr "جەزملەش زۆرۈر"
 
-#, fuzzy
 #~| msgid "Download"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Download"
 #~ msgstr "چۈشۈرۈش"
 
-#, fuzzy
 #~| msgid "Skip"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Skip"
 #~ msgstr "ئۆتكۈزۈۋەت"
 
-#, fuzzy
 #~| msgid "Chart"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Chart"
 #~ msgstr "دىئاگرامما"
 
-#, fuzzy
 #~| msgid "January"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "January"
 #~ msgstr "قەھرىتان"
 
-#, fuzzy
 #~| msgid "July"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "July"
 #~ msgstr "چىللە"
 
-#, fuzzy
 #~| msgid "December"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "December"
 #~ msgstr "كۆنەك"
 
-#, fuzzy
 #~| msgid "Column %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Column %1"
 #~ msgstr "ئىستون %1"
 
-#, fuzzy
 #~| msgid "Month"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Month"
 #~ msgstr "ئاي"
 
-#, fuzzy
 #~| msgid "Select Font"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select Font"
 #~ msgstr "خەت نۇسخا تاللا"
 
-#, fuzzy
 #~| msgid "Insert Rows"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Rows"
 #~ msgstr "قۇر قىستۇر"
 
-#, fuzzy
 #~| msgid "Delete Rows"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete Rows"
 #~ msgstr "قۇر ئۆچۈر"
 
-#, fuzzy
 #~| msgid "Insert Columns"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Columns"
 #~ msgstr "ئىستون قىستۇر"
 
-#, fuzzy
 #~| msgid "Delete Columns"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete Columns"

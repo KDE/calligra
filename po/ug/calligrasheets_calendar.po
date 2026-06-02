@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: CalendarTool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:10-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: CalendarTool.cpp:62
 #, kde-format
@@ -37,8 +38,8 @@ msgid ""
 "Calendars should not be longer than 10 years. If you really need such long "
 "periods you need to split them up."
 msgstr ""
-"چېسلا 10 يىلدىن ئۇزۇن بولمايدۇ. ئەگەر سىز راستلا شۇنداق ئۇزۇن چېسلا بۆلىكىگە "
-"ئېھتىياجلىق بولسىڭىز، چوقۇم شۇ چېسلا بۆلىكىنى پارچىلاڭ."
+"چېسلا 10 يىلدىن ئۇزۇن بولمايدۇ. ئەگەر سىز راستتىنلا شۇنداق ئۇزۇن چېسلا "
+"بۆلىكىگە ئېھتىياجلىق بولسىڭىز، چوقۇم شۇ چېسلا بۆلىكىنى پارچىلاڭ."
 
 #: CalendarTool.cpp:76
 #, kde-format
@@ -47,7 +48,7 @@ msgid ""
 "continue?"
 msgstr ""
 "باشلاش چېسلاسى بىلەن ئاخىرلاشتۇرۇش چېسلاسى تەڭ! بۇنداق بولغاندا پەقەت بىرلا "
-"كۈننى قىستۇرىدۇ. راستلا داۋاملاشتۇرامسىز؟"
+"كۈننى قىستۇرىدۇ. راستتىنلا داۋاملاشتۇرامسىز؟"
 
 #: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
@@ -60,7 +61,7 @@ msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
 "space, do you want to continue?"
 msgstr ""
-"بىر يىلدىن ئۇزۇن يىلنامە قۇرغاندا نۇرغۇن بوشلۇقنى ئىگىلەيدۇ. راستلا "
+"بىر يىلدىن ئۇزۇن يىلنامە قۇرغاندا نۇرغۇن بوشلۇقنى ئىگىلەيدۇ. راستتىنلا "
 "داۋاملاشتۇرامسىز؟"
 
 #: CalendarTool.cpp:109
@@ -71,14 +72,12 @@ msgid ""
 "be required for the desired calendar will be selected so you can see what "
 "data would be overwritten."
 msgstr ""
-"يىلنامە قىستۇرماقچى بولغان رايون بوش ئەمەس، سىز داۋاملاشتۇرۇپ مەۋجۇت سانلىق-"
+"يىلنامە قىستۇرماقچى بولغان رايون بوش ئەمەس، سىز داۋاملاشتۇرۇپ مەۋجۇت سانلىق "
 "مەلۇماتنى قاپلىۋېتەمسىز؟ ئەگەر ياق دەپ تاللىسىڭىز، يىلنامە قىستۇرماقچى "
-"بولغان رايون تاللىنىپ  قايسى سانلىق-مەلۇماتلارنىڭ قاپلىنىپ كېتىدىغانلىقىنى "
+"بولغان رايون تاللىنىپ  قايسى سانلىق مەلۇماتلارنىڭ قاپلىنىپ كېتىدىغانلىقىنى "
 "كۆرەلەيسىز."
 
 #: CalendarTool.cpp:120
-#, fuzzy
-#| msgid "Insert Calendar"
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
 msgstr "يىلنامە قىستۇر"
@@ -94,10 +93,9 @@ msgid "week"
 msgstr "ھەپتە"
 
 #: CalendarToolFactory.cpp:22
-#, fuzzy, kde-format
-#| msgid "Calendar Tool"
+#, kde-format
 msgid "Calendar"
-msgstr "يىلنامە قورالى"
+msgstr "يىلنامە"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
 #: CalendarToolWidget.ui:14
@@ -123,31 +121,26 @@ msgstr "ئاخىرلاشتۇرۇش چېسلاسى:"
 msgid "Start date:"
 msgstr "باشلاش چېسلاسى:"
 
-#, fuzzy
 #~| msgid "Calendar Tool"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Calendar Tool"
 #~ msgstr "يىلنامە قورالى"
 
-#, fuzzy
 #~| msgid "Insert"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert"
 #~ msgstr "قىستۇر"
 
-#, fuzzy
 #~| msgid "Start date:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Start date:"
 #~ msgstr "باشلاش چېسلاسى:"
 
-#, fuzzy
 #~| msgid "End date:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "End date:"
 #~ msgstr "ئاخىرلاشتۇرۇش چېسلاسى:"
 
-#, fuzzy
 #~| msgid ""
 #~| "End date is before start date! Please make sure that end date comes "
 #~| "after start date."
@@ -159,13 +152,11 @@ msgstr "باشلاش چېسلاسى:"
 #~ "ئاخىرلاشتۇرۇش چېسلاسى باشلاش چېسلاسىدىن ئىلگىرى! ئاخىرلاشتۇرۇش چېسلاسىنىڭ "
 #~ "باشلاش چېسلاسىدىن كېيىن ئىكەنلىكىنى جەزملەڭ."
 
-#, fuzzy
 #~| msgid "Error"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Error"
 #~ msgstr "خاتالىق"
 
-#, fuzzy
 #~| msgid ""
 #~| "Calendars should not be longer than 10 years. If you really need such "
 #~| "long periods you need to split them up."
@@ -177,7 +168,6 @@ msgstr "باشلاش چېسلاسى:"
 #~ "چېسلا 10 يىلدىن ئۇزۇن بولمايدۇ. ئەگەر سىز راستلا شۇنداق ئۇزۇن چېسلا "
 #~ "بۆلىكىگە ئېھتىياجلىق بولسىڭىز، چوقۇم شۇ چېسلا بۆلىكىنى پارچىلاڭ."
 
-#, fuzzy
 #~| msgid ""
 #~| "Start and end dates are equal! Only one day will be inserted, do you "
 #~| "want to continue?"
@@ -189,13 +179,11 @@ msgstr "باشلاش چېسلاسى:"
 #~ "باشلاش چېسلاسى بىلەن ئاخىرلاشتۇرۇش چېسلاسى تەڭ! بۇنداق بولغاندا پەقەت "
 #~ "بىرلا كۈننى قىستۇرىدۇ. راستلا داۋاملاشتۇرامسىز؟"
 
-#, fuzzy
 #~| msgid "Warning"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Warning"
 #~ msgstr "ئاگاھلاندۇرۇش"
 
-#, fuzzy
 #~| msgid ""
 #~| "Creating a calendar for a longer period than a year can take up a lot of "
 #~| "space, do you want to continue?"
@@ -207,7 +195,6 @@ msgstr "باشلاش چېسلاسى:"
 #~ "بىر يىلدىن ئۇزۇن يىلنامە قۇرغاندا نۇرغۇن بوشلۇقنى ئىگىلەيدۇ. راستلا "
 #~ "داۋاملاشتۇرامسىز؟"
 
-#, fuzzy
 #~| msgid ""
 #~| "The area where the calendar is inserted is NOT empty, are you sure you "
 #~| "want to continue, overwriting existing data? If you choose No the area "
@@ -225,19 +212,16 @@ msgstr "باشلاش چېسلاسى:"
 #~ "قىستۇرماقچى بولغان رايون تاللىنىپ  قايسى سانلىق-مەلۇماتلارنىڭ قاپلىنىپ "
 #~ "كېتىدىغانلىقىنى كۆرەلەيسىز."
 
-#, fuzzy
 #~| msgid "Calendar from %1 to %2"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Calendar from %1 to %2"
 #~ msgstr "يىلنامە %1 دىن %2 غىچە"
 
-#, fuzzy
 #~| msgid "week"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "week"
 #~ msgstr "ھەپتە"
 
-#, fuzzy
 #~| msgid "Calendar Tool"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Calendar"

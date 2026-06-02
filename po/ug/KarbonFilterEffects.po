@@ -8,30 +8,30 @@ msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:11-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
 #, kde-format
 msgid "Blend"
-msgstr "ئارىلاشما"
+msgstr "ئارىلاشتۇر"
 
 #: BlendEffectConfigWidget.cpp:23
-#, fuzzy, kde-format
-#| msgid "Blend"
+#, kde-format
 msgid "Blend mode"
-msgstr "ئارىلاشما"
+msgstr ""
 
 #: BlendEffectConfigWidget.cpp:25
 #, kde-format
 msgid "Normal"
-msgstr "نورمال"
+msgstr "ئادەتتىكى"
 
 #: BlendEffectConfigWidget.cpp:26
 #, kde-format
@@ -74,10 +74,9 @@ msgid "Apply color matrix"
 msgstr ""
 
 #: ColorMatrixEffectConfigWidget.cpp:30
-#, fuzzy, kde-format
-#| msgid "Stop color."
+#, kde-format
 msgid "Saturate colors"
-msgstr "توختاش رەڭگى."
+msgstr ""
 
 #: ColorMatrixEffectConfigWidget.cpp:31
 #, kde-format
@@ -151,10 +150,9 @@ msgid "Slope"
 msgstr "يانتۇلۇق"
 
 #: ComponentTransferEffectConfigWidget.cpp:90
-#, fuzzy, kde-format
-#| msgid "Interface"
+#, kde-format
 msgid "Intercept"
-msgstr "ئارايۈز"
+msgstr ""
 
 #: ComponentTransferEffectConfigWidget.cpp:102
 #, kde-format
@@ -175,7 +173,7 @@ msgstr "ئېغىش"
 #: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
 #, kde-format
 msgid "Composite"
-msgstr "Composite"
+msgstr ""
 
 #: CompositeEffectConfigWidget.cpp:24
 #, kde-format
@@ -190,7 +188,7 @@ msgstr ""
 #: ConvolveMatrixEffectConfigWidget.cpp:33
 #, kde-format
 msgid "Duplicate"
-msgstr "كۆچۈر"
+msgstr "كۆپەيت"
 
 #: ConvolveMatrixEffectConfigWidget.cpp:34
 #, kde-format
@@ -243,10 +241,9 @@ msgid "Flood fill"
 msgstr ""
 
 #: FloodEffectConfigWidget.cpp:25
-#, fuzzy, kde-format
-#| msgid "Stop color."
+#, kde-format
 msgid "Flood color"
-msgstr "توختاش رەڭگى."
+msgstr ""
 
 #: ImageEffect.cpp:24 ImageEffectFactory.cpp:13
 #, kde-format
@@ -256,17 +253,17 @@ msgstr "سۈرەت"
 #: ImageEffectConfigWidget.cpp:28
 #, kde-format
 msgid "Select image..."
-msgstr "سۈرەت تاللاش:"
+msgstr "سۈرەت تاللا…"
 
 #: ImageEffectConfigWidget.cpp:55
 #, kde-format
 msgid "Select image"
-msgstr "سۈرەت تاللاش:"
+msgstr "سۈرەت تاللا"
 
 #: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
 #, kde-format
 msgid "Merge"
-msgstr "بىرىكتۈر"
+msgstr "بىرلەشتۈر"
 
 #: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
 #, kde-format
@@ -276,7 +273,7 @@ msgstr ""
 #: MorphologyEffectConfigWidget.cpp:26
 #, kde-format
 msgid "Erode"
-msgstr ""
+msgstr "ئېرودې"
 
 #: MorphologyEffectConfigWidget.cpp:27
 #, kde-format
@@ -301,260 +298,218 @@ msgstr "رادىئۇس y:"
 #: OffsetEffectConfigWidget.cpp:23
 #, kde-format
 msgid "dx"
-msgstr "dx"
+msgstr ""
 
 #: OffsetEffectConfigWidget.cpp:29
 #, kde-format
 msgid "dy"
-msgstr "dy"
+msgstr ""
 
-#, fuzzy
 #~| msgid "Blend"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Blend"
 #~ msgstr "ئارىلاشما"
 
-#, fuzzy
 #~| msgid "Blend"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Blend mode"
 #~ msgstr "ئارىلاشما"
 
-#, fuzzy
 #~| msgid "Normal"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Normal"
 #~ msgstr "نورمال"
 
-#, fuzzy
 #~| msgid "Multiply"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Multiply"
 #~ msgstr "ھەسسىلەپ ئېشىش"
 
-#, fuzzy
 #~| msgid "Screen"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Screen"
 #~ msgstr "ئېكران"
 
-#, fuzzy
 #~| msgid "Darken"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Darken"
 #~ msgstr "قارايت"
 
-#, fuzzy
 #~| msgid "Lighten"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Lighten"
 #~ msgstr "يورۇت"
 
-#, fuzzy
 #~| msgid "Radius"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Radius"
 #~ msgstr "رادىئۇس"
 
-#, fuzzy
 #~| msgid "Stop color."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Saturate colors"
 #~ msgstr "توختاش رەڭگى."
 
-#, fuzzy
 #~| msgid "Stop color."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Saturate value"
 #~ msgstr "توختاش رەڭگى."
 
-#, fuzzy
 #~| msgid "Angle"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Angle"
 #~ msgstr "بۇلۇڭ"
 
-#, fuzzy
 #~| msgid "Function"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Function"
 #~ msgstr "فۇنكسىيە"
 
-#, fuzzy
 #~| msgid "Identity"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Identity"
 #~ msgstr "سالاھىيەت"
 
-#, fuzzy
 #~| msgid "Table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Table"
 #~ msgstr "جەدۋەل"
 
-#, fuzzy
 #~| msgid "Discrete"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Discrete"
 #~ msgstr "تارقاق"
 
-#, fuzzy
 #~| msgid "Linear"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Linear"
 #~ msgstr "سىزىقلىق"
 
-#, fuzzy
 #~| msgid "Gamma"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Gamma"
 #~ msgstr "گامما"
 
-#, fuzzy
 #~| msgid "Values"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Values"
 #~ msgstr "قىممەتلەر"
 
-#, fuzzy
 #~| msgid "Slope"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Slope"
 #~ msgstr "يانتۇلۇق"
 
-#, fuzzy
 #~| msgid "Interface"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Intercept"
 #~ msgstr "ئارايۈز"
 
-#, fuzzy
 #~| msgid "Exponent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Exponent"
 #~ msgstr "كۆرسەتكۈچ"
 
-#, fuzzy
 #~| msgid "Offset"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Offset"
 #~ msgstr "ئېغىش"
 
-#, fuzzy
 #~| msgid "Composite"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Composite"
 #~ msgstr "Composite"
 
-#, fuzzy
 #~| msgid "Operation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Operation"
 #~ msgstr "مەشغۇلات"
 
-#, fuzzy
 #~| msgid "Duplicate"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Duplicate"
 #~ msgstr "كۆچۈر"
 
-#, fuzzy
 #~| msgid "Wrap"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Wrap"
 #~ msgstr "قۇر يۆتكەش"
 
-#, fuzzy
 #~| msgid "None"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "None"
 #~ msgstr "يوق"
 
-#, fuzzy
 #~| msgid "Edge mode:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Edge mode:"
 #~ msgstr "گىرۋەك ھالىتى:"
 
-#, fuzzy
 #~| msgid "Kernel size:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Kernel size:"
 #~ msgstr "يادرو چوڭلۇقى:"
 
-#, fuzzy
 #~| msgid "Target point:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Target point:"
 #~ msgstr "نىشان نۇقتا:"
 
-#, fuzzy
 #~| msgid "Edit kernel"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Edit kernel"
 #~ msgstr "يادرو تەھرىرلەش"
 
-#, fuzzy
 #~| msgid "Stop color."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Flood fill"
 #~ msgstr "توختاش رەڭگى."
 
-#, fuzzy
 #~| msgid "Stop color."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Flood color"
 #~ msgstr "توختاش رەڭگى."
 
-#, fuzzy
 #~| msgid "Image"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Image"
 #~ msgstr "سۈرەت"
 
-#, fuzzy
 #~| msgid "Select image..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select image..."
 #~ msgstr "سۈرەت تاللاش:"
 
-#, fuzzy
 #~| msgid "Select image"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select image"
 #~ msgstr "سۈرەت تاللاش:"
 
-#, fuzzy
 #~| msgid "Merge"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Merge"
 #~ msgstr "بىرىكتۈر"
 
-#, fuzzy
 #~| msgid "Operator:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Operator:"
 #~ msgstr "مەشغۇلاتچى:"
 
-#, fuzzy
 #~| msgid "Radius x:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Radius x:"
 #~ msgstr "رادىئۇس x:"
 
-#, fuzzy
 #~| msgid "Radius y:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Radius y:"
 #~ msgstr "رادىئۇس y:"
 
-#, fuzzy
 #~| msgid "dx"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "dx"
 #~ msgstr "dx"
 
-#, fuzzy
 #~| msgid "dy"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "dy"
@@ -629,12 +584,10 @@ msgstr "dy"
 #~ msgid "Radius:"
 #~ msgstr "رادىئۇس:"
 
-#, fuzzy
 #~| msgid "View"
 #~ msgid "List View"
 #~ msgstr "كۆرۈنۈش"
 
-#, fuzzy
 #~| msgid "View"
 #~ msgid "Icon View"
 #~ msgstr "كۆرۈنۈش"

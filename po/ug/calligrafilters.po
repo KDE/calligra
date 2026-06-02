@@ -8,26 +8,25 @@ msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-19 00:46+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:09-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: karbon/image/ImageExport.cpp:88
-#, fuzzy, kde-format
-#| msgid "PNG Export Options"
+#, kde-format
 msgid "%1 Export Options"
-msgstr "PNG ئېكسپورت قىلىش تاللانمىلىرى"
+msgstr ""
 
 #: karbon/image/ImageExportOptionsWidget.cpp:48
-#, fuzzy, kde-format
-#| msgid "Page "
+#, kde-format
 msgid "Page %1"
-msgstr "بەت "
+msgstr "%1 -بەت"
 
 #. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
 #: karbon/image/ImageExportOptionsWidget.ui:19
@@ -149,12 +148,12 @@ msgstr ""
 #: libmsooxml/MsooXmlReader.cpp:130
 #, kde-format
 msgid "%1 (line %2, column %3)"
-msgstr "%1 (قۇر %2، ئىستون %3)"
+msgstr "%1 (قۇر %2، رەت %3)"
 
 #: libmsooxml/MsooXmlReader.cpp:131
 #, kde-format
 msgid "%1 (%2, line %3, column %4)"
-msgstr "%1 (%2, قۇر %3، ئىستون %4)"
+msgstr "%1 (%2, قۇر %3، رەت %4)"
 
 #: libmsooxml/MsooXmlReader.cpp:153
 #, kde-format
@@ -234,22 +233,20 @@ msgstr ""
 #: sheets/csv/csvexport.cc:253
 #, kde-format
 msgid "<SHEETNAME>"
-msgstr "<SHEETNAME>"
+msgstr ""
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Export to Image"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "سۈرەتكە ئېكسپورت قىلىش"
+msgstr ""
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
-#, fuzzy, kde-format
-#| msgid "Export Error"
+#, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr "ئېكسپورت قىلىش خاتالىقى"
+msgstr "چىقار"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -264,10 +261,9 @@ msgstr "قۇر ئاخىرى"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End of Line:"
-msgstr "قۇر ئاخىرى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -309,7 +305,7 @@ msgstr ""
 #: sheets/csv/exportdialogui.ui:131
 #, kde-format
 msgid "********<SHEETNAME>********"
-msgstr "********<SHEETNAME>********"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: sheets/csv/exportdialogui.ui:144
@@ -331,10 +327,9 @@ msgstr "كاتەكچە"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
-#, fuzzy, kde-format
-#| msgid "Delimiter"
+#, kde-format
 msgid "Delimiter:"
-msgstr "ئايرىش بەلگىسى"
+msgstr "ئايرىغۇچ:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -376,13 +371,13 @@ msgstr "نەقىللەر:"
 #: sheets/csv/exportdialogui.ui:270
 #, kde-format
 msgid "\""
-msgstr "\""
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: sheets/csv/exportdialogui.ui:275
 #, kde-format
 msgid "'"
-msgstr "'"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
 #: sheets/csv/exportdialogui.ui:301
@@ -536,10 +531,9 @@ msgstr "پۈتۈك"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Document Style"
+#, kde-format
 msgid "Document style:"
-msgstr "پۈتۈك ئۇسلۇبى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -555,10 +549,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
-#, fuzzy, kde-format
-#| msgid "Document Type"
+#, kde-format
 msgid "Document type:"
-msgstr "پۈتۈك تىپى"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -636,7 +629,7 @@ msgstr "كۆڭۈلدىكى خەت چوڭلۇقى:"
 #: sheets/latex/export/latexexportwidget.ui:186
 #, kde-format
 msgid "Pictures"
-msgstr "سۈرەتلەر"
+msgstr "رەسىم"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: sheets/latex/export/latexexportwidget.ui:192
@@ -660,10 +653,9 @@ msgstr "تىل"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
-#, fuzzy, kde-format
-#| msgid "E&ncoding:"
+#, kde-format
 msgid "Encoding:"
-msgstr "كودلاش(&N):"
+msgstr "كودلاش:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289
@@ -681,7 +673,7 @@ msgstr "چىقىرىۋەت"
 #: sheets/latex/export/latexexportwidget.ui:321
 #, kde-format
 msgid "Contents"
-msgstr "مەزمۇنلار"
+msgstr "مەزمۇن"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: sheets/latex/export/latexexportwidget.ui:329
@@ -929,496 +921,414 @@ msgstr ""
 #~ msgid "QXml"
 #~ msgstr "QXml"
 
-#, fuzzy
 #~| msgid "Size in Pixels"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Size in Pixels"
 #~ msgstr "پىكسېل بىلەن ئىپادىلەنگەن چوڭلۇق"
 
-#, fuzzy
 #~| msgid "Image width:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Image width:"
 #~ msgstr "سۈرەت ئېگىزلىكى:"
 
-#, fuzzy
 #~| msgid "Image height:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Image height:"
 #~ msgstr "سۈرەت ئېگىزلىكى:"
 
-#, fuzzy
 #~| msgid "Size in Pixels"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Size in Units"
 #~ msgstr "پىكسېل بىلەن ئىپادىلەنگەن چوڭلۇق"
 
-#, fuzzy
 #~| msgid "Resolution:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Resolution:"
 #~ msgstr "ئېنىقلىق دەرىجىسى:"
 
-#, fuzzy
 #~| msgid "Unit:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unit:"
 #~ msgstr "بىرلىكى:"
 
-#, fuzzy
 #~| msgid "Background Color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Background Color"
 #~ msgstr "تەگلىك رەڭگى"
 
-#, fuzzy
 #~| msgid "Color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Color"
 #~ msgstr "رەڭ"
 
-#, fuzzy
 #~| msgid "Opacity"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Opacity"
 #~ msgstr "غۇۋالىقى"
 
-#, fuzzy
 #~| msgid "En&coding:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "En&coding:"
 #~ msgstr "كودلاش(&C):"
 
-#, fuzzy
 #~| msgid "Sheet Selection"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sheet Selection"
 #~ msgstr "ۋاراق تاللاش"
 
-#, fuzzy
 #~| msgid "Select &All"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select &All"
 #~ msgstr "ھەممىنى تاللا(&A)"
 
-#, fuzzy
 #~| msgid "Desele&ct All"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Desele&ct All"
 #~ msgstr "ھەممىنى تاللىما(&C)"
 
-#, fuzzy
 #~| msgid "Style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Style"
 #~ msgstr "ئۇسلۇب"
 
-#, fuzzy
 #~| msgid "Layout"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Layout"
 #~ msgstr "جايلاشتۇرۇش"
 
-#, fuzzy
 #~| msgid "Document"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document"
 #~ msgstr "پۈتۈك"
 
-#, fuzzy
 #~| msgid "Document Style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document Style"
 #~ msgstr "پۈتۈك ئۇسلۇبى"
 
-#, fuzzy
 #~| msgid "Latex style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Latex style"
 #~ msgstr "Latex ئۇسلۇبى"
 
-#, fuzzy
 #~| msgid "Document Type"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document Type"
 #~ msgstr "پۈتۈك تىپى"
 
-#, fuzzy
 #~| msgid "Open Document"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Independent document"
 #~ msgstr "پۈتۈك ئېچىش"
 
-#, fuzzy
 #~| msgid "Document Style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document to include"
 #~ msgstr "پۈتۈك ئۇسلۇبى"
 
-#, fuzzy
 #~| msgid "Document"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document class:"
 #~ msgstr "پۈتۈك"
 
-#, fuzzy
 #~| msgid "Quality:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Quality:"
 #~ msgstr "سۈپەت:"
 
-#, fuzzy
 #~| msgid "Final"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Final"
 #~ msgstr "ئاخىرقى"
 
-#, fuzzy
 #~| msgid "Draft"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Draft"
 #~ msgstr "دەسلەپكى نۇسخا"
 
-#, fuzzy
 #~| msgid "Default font size:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Default font size:"
 #~ msgstr "كۆڭۈلدىكى خەت چوڭلۇقى:"
 
-#, fuzzy
 #~| msgid "Pictures"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pictures"
 #~ msgstr "سۈرەتلەر"
 
-#, fuzzy
 #~| msgid "Language"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Language"
 #~ msgstr "تىل"
 
-#, fuzzy
 #~| msgid "Encoding"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Encoding"
 #~ msgstr "كودلاش"
 
-#, fuzzy
 #~| msgid "Add"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add"
 #~ msgstr "قوش"
 
-#, fuzzy
 #~| msgid "Remove"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove"
 #~ msgstr "چىقىرىۋەت"
 
-#, fuzzy
 #~| msgid "Contents"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Contents"
 #~ msgstr "مەزمۇنلار"
 
-#, fuzzy
 #~| msgid "Notes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Notes"
 #~ msgstr "ئىزاھ"
 
-#, fuzzy
 #~| msgid "Don't export"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Don't export"
 #~ msgstr "ئېكسپورت قىلما"
 
-#, fuzzy
 #~| msgid "Export to Image"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export notes in margin notes"
 #~ msgstr "سۈرەتكە ئېكسپورت قىلىش"
 
-#, fuzzy
 #~| msgid "E&ncoding:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "E&ncoding:"
 #~ msgstr "كودلاش(&N):"
 
-#, fuzzy
 #~| msgid "End of Line"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "End of Line"
 #~ msgstr "قۇر ئاخىرى"
 
-#, fuzzy
 #~| msgid "Sheets"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sheets"
 #~ msgstr "ۋاراقلار"
 
-#, fuzzy
 #~| msgid "Delimiter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delimiter Line"
 #~ msgstr "ئايرىش بەلگىسى"
 
-#, fuzzy
 #~| msgid "********<SHEETNAME>********"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "********<SHEETNAME>********"
 #~ msgstr "********<SHEETNAME>********"
 
-#, fuzzy
 #~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
 #~ msgstr "<SHEETNAME> كېيىنكى ۋاراق نامىغا ئالمىشىدۇ."
 
-#, fuzzy
 #~| msgid "Cells"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cells"
 #~ msgstr "كاتەكچە"
 
-#, fuzzy
 #~| msgid "Delimiter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delimiter"
 #~ msgstr "ئايرىش بەلگىسى"
 
-#, fuzzy
 #~| msgid "Comma"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Comma"
 #~ msgstr "پەش"
 
-#, fuzzy
 #~| msgid "Semicolon"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Semicolon"
 #~ msgstr "چېكىتلىك پەش"
 
-#, fuzzy
 #~| msgid "Tabulator"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tabulator"
 #~ msgstr "جەدۋەل بەلگىسى"
 
-#, fuzzy
 #~| msgid "Space"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Space"
 #~ msgstr "بوشلۇق"
 
-#, fuzzy
 #~| msgid "Other:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Other:"
 #~ msgstr "باشقا:"
 
-#, fuzzy
 #~| msgid "Quotes:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Quotes:"
 #~ msgstr "نەقىللەر:"
 
-#, fuzzy
 #~| msgid "\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "\""
 #~ msgstr "\""
 
-#, fuzzy
 #~| msgid "'"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "'"
 #~ msgstr "'"
 
-#, fuzzy
 #~| msgid "Page:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page:"
 #~ msgstr "بەت:"
 
-#, fuzzy
 #~| msgid "Size in Pixels"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Custom size (in pixels):"
 #~ msgstr "پىكسېل بىلەن ئىپادىلەنگەن چوڭلۇق"
 
-#, fuzzy
 #~| msgid "Height:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Height:"
 #~ msgstr "ئېگىزلىك:"
 
-#, fuzzy
 #~| msgid "Width:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Width:"
 #~ msgstr "كەڭلىك:"
 
-#, fuzzy
 #~| msgid "Export Error"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export Error"
 #~ msgstr "ئېكسپورت قىلىش خاتالىقى"
 
-#, fuzzy
 #~| msgid "Export to Image"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export to Image"
 #~ msgstr "سۈرەتكە ئېكسپورت قىلىش"
 
-#, fuzzy
 #~| msgid "PNG Export Options"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "PNG Export Options"
 #~ msgstr "PNG ئېكسپورت قىلىش تاللانمىلىرى"
 
-#, fuzzy
 #~| msgid "Enter password"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Enter password"
 #~ msgstr "ئىم كىرگۈزۈڭ"
 
-#, fuzzy
 #~| msgid "%1 (line %2, column %3)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "%1 (line %2, column %3)"
 #~ msgstr "%1 (قۇر %2، ئىستون %3)"
 
-#, fuzzy
 #~| msgid "%1 (%2, line %3, column %4)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "%1 (%2, line %3, column %4)"
 #~ msgstr "%1 (%2, قۇر %3، ئىستون %4)"
 
-#, fuzzy
 #~| msgid "QXml"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "QXml"
 #~ msgstr "QXml"
 
-#, fuzzy
 #~| msgid "<SHEETNAME>"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<SHEETNAME>"
 #~ msgstr "<SHEETNAME>"
 
-#, fuzzy
 #~| msgctxt "Descriptive encoding name"
 #~| msgid "Recommended ( %1 )"
 #~ msgctxt "(qtundo-format) Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"
 #~ msgstr "تەۋسىيە( %1 )"
 
-#, fuzzy
 #~| msgctxt "Descriptive encoding name"
 #~| msgid "Other ( %1 )"
 #~ msgctxt "(qtundo-format) Descriptive encoding name"
 #~ msgid "Locale ( %1 )"
 #~ msgstr "باشقا( %1 )"
 
-#, fuzzy
 #~| msgctxt "Descriptive encoding name"
 #~| msgid "Other ( %1 )"
 #~ msgctxt "(qtundo-format) Descriptive encoding name"
 #~ msgid "Other ( %1 )"
 #~ msgstr "باشقا( %1 )"
 
-#, fuzzy
 #~| msgid "Cannot find encoding: %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cannot find encoding: %1"
 #~ msgstr "كودلاشنى تاپقىلى بولمىدى: %1"
 
-#, fuzzy
 #~| msgid "Export Sheet to HTML"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export Sheet to HTML"
 #~ msgstr "ۋاراقنى HTML غا ئېكسپورت قىلىش"
 
-#, fuzzy
 #~| msgid "Recommended: UTF-8"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Recommended: UTF-8"
 #~ msgstr "تەۋسىيە: UTF-8"
 
-#, fuzzy
 #~| msgid "Top"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Top"
 #~ msgstr "ئۈستى"
 
-#, fuzzy
 #~| msgid "Page "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page "
 #~ msgstr "بەت "
 
-#, fuzzy
 #~| msgid "Slide %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Slide %1"
 #~ msgstr "تام تەسۋىر %1"
 
-#, fuzzy
 #~| msgid "AbiWord Import Filter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Words's Plain Text Import Filter"
 #~ msgstr "AbiWord ئىمپورت قىلىش سۈزگۈچى"
 
-#, fuzzy
 #~| msgid "End of Line"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "End notes"
 #~ msgstr "قۇر ئاخىرى"
 
-#, fuzzy
 #~| msgid "Even Pages Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Even Pages Header"
 #~ msgstr "جۈپ نومۇرلۇق بەتنىڭ بەت قېشى"
 
-#, fuzzy
 #~| msgid "Odd Pages Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Odd Pages Header"
 #~ msgstr "تاق نومۇرلۇق بەتنىڭ بەت قېشى"
 
-#, fuzzy
 #~| msgid "Even Pages Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Even Pages Footer"
 #~ msgstr "جۈپ نومۇرلۇق بەتنىڭ بەت ئاستى"
 
-#, fuzzy
 #~| msgid "Odd Pages Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Odd Pages Footer"
 #~ msgstr "تاق نومۇرلۇق بەتنىڭ بەت ئاستى"
 
-#, fuzzy
 #~| msgid "First Page Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "First Page Header"
 #~ msgstr "بىرىنچى بەتنىڭ بەت قېشى"
 
-#, fuzzy
 #~| msgid "First Page Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "First Page Footer"
 #~ msgstr "بىرىنچى بەتنىڭ بەت ئاستى"
 
-#, fuzzy
 #~| msgid "Table %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Table %1"
 #~ msgstr "جەدۋەل %1"
 
-#, fuzzy
 #~| msgid "AbiWord Import Filter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Words's RTF Import Filter"

@@ -8,24 +8,25 @@ msgstr ""
 "Project-Id-Version: PictureShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:07-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: ChangeImageCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change image"
-msgstr ""
+msgstr "سۈرەت ئۆزگەرت"
 
 #: ChangeImageCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Crop image"
-msgstr ""
+msgstr "سۈرەت كەس"
 
 #: ChangeImageCommand.cpp:57
 msgctxt "(qtundo-format)"
@@ -58,31 +59,31 @@ msgstr ""
 #: forms/wdgPictureTool.ui:58
 #, kde-format
 msgid "Left:"
-msgstr ""
+msgstr "سول:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: forms/wdgPictureTool.ui:68
 #, kde-format
 msgid "Right:"
-msgstr ""
+msgstr "ئوڭ:"
 
 #. i18n: ectx: property (text), widget (QLabel, bottomLabel)
 #: forms/wdgPictureTool.ui:91
 #, kde-format
 msgid "Bottom:"
-msgstr ""
+msgstr "ئاستى:"
 
 #. i18n: ectx: property (text), widget (QLabel, topLabel)
 #: forms/wdgPictureTool.ui:111
 #, kde-format
 msgid "Top:"
-msgstr ""
+msgstr "چوققا:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnFill)
 #: forms/wdgPictureTool.ui:131
 #, kde-format
 msgid "Reset"
-msgstr ""
+msgstr "ئەسلىگە قايتۇر"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbContour)
 #: forms/wdgPictureTool.ui:148
@@ -94,13 +95,13 @@ msgstr ""
 #: forms/wdgPictureTool.ui:178
 #, kde-format
 msgid "Color mode:"
-msgstr ""
+msgstr "رەڭ ھالىتى:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: forms/wdgPictureTool.ui:193
 #, kde-format
 msgid "Crop"
-msgstr ""
+msgstr "كەس"
 
 #: PictureShapeFactory.cpp:31
 #, kde-format
@@ -137,31 +138,26 @@ msgstr "سۇ باسما"
 msgid "Picture editing"
 msgstr ""
 
-#, fuzzy
 #~| msgid "Image"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Image"
 #~ msgstr "سۈرەت"
 
-#, fuzzy
 #~| msgid "Standard"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Standard"
 #~ msgstr "ئۆلچەملىك"
 
-#, fuzzy
 #~| msgid "Greyscale"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Greyscale"
 #~ msgstr "رەڭسىز"
 
-#, fuzzy
 #~| msgid "Monochrome"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Monochrome"
 #~ msgstr "رەڭسىز"
 
-#, fuzzy
 #~| msgid "Watermark"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Watermark"

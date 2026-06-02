@@ -8,21 +8,22 @@ msgstr ""
 "Project-Id-Version: kocolorspaces\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:11-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
 #: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:21
 #, kde-format
 msgid "Cyan"
-msgstr "توق يېشىل"
+msgstr "كۆكۈچ"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:26
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:21
@@ -125,14 +126,14 @@ msgstr "يورۇقلۇق دەرىجىسى"
 #: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:21
 #, kde-format
 msgid "a*"
-msgstr "a*"
+msgstr ""
 
 #: lcms2/colorspaces/lab_f32/LabF32ColorSpace.cpp:36
 #: lcms2/colorspaces/lab_u16/LabColorSpace.cpp:23
 #: lcms2/colorspaces/lab_u8/LabU8ColorSpace.cpp:22
 #, kde-format
 msgid "b*"
-msgstr "b*"
+msgstr ""
 
 #: lcms2/colorspaces/lab_f32/LabF32ColorSpace.h:75
 #, kde-format
@@ -199,7 +200,7 @@ msgstr ""
 #: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:20
 #, kde-format
 msgid "X"
-msgstr "X"
+msgstr ""
 
 #: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:33
@@ -268,7 +269,7 @@ msgstr ""
 #: lcms2/compositeops/RgbCompositeOpBumpmap.h:20
 #, kde-format
 msgid "Bumpmap"
-msgstr "Bumpmap"
+msgstr ""
 
 #: lcms2/compositeops/RgbCompositeOpClear.h:20
 #, kde-format
@@ -288,7 +289,7 @@ msgstr "قارايت"
 #: lcms2/compositeops/RgbCompositeOpDiff.h:22
 #, kde-format
 msgid "Diff"
-msgstr "سېلىشتۇرۇش(Diff)"
+msgstr "پەرق"
 
 #: lcms2/compositeops/RgbCompositeOpDissolve.h:20
 #, kde-format
@@ -328,7 +329,7 @@ msgstr "قىممەت"
 #: lcms2/IccColorSpaceEngine.cpp:86
 #, kde-format
 msgid "ICC Engine"
-msgstr "ICC ماتورى"
+msgstr "ICC موتورى"
 
 #: lcms2/LcmsEnginePlugin.cpp:116 lcms2/LcmsEnginePlugin.cpp:121
 #: lcms2/LcmsEnginePlugin.cpp:126
@@ -426,169 +427,141 @@ msgstr ""
 msgid "YCBCRF32 Histogram"
 msgstr ""
 
-#, fuzzy
 #~| msgid "Cyan"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cyan"
 #~ msgstr "توق يېشىل"
 
-#, fuzzy
 #~| msgid "Magenta"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Magenta"
 #~ msgstr "ھال رەڭ"
 
-#, fuzzy
 #~| msgid "Yellow"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Yellow"
 #~ msgstr "سېرىق"
 
-#, fuzzy
 #~| msgid "Black"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Black"
 #~ msgstr "قارا"
 
-#, fuzzy
 #~| msgid "Alpha"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Alpha"
 #~ msgstr "ئالفا"
 
-#, fuzzy
 #~| msgid "Gray"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Gray"
 #~ msgstr "كۈلرەڭ"
 
-#, fuzzy
 #~| msgid "Lightness"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Lightness"
 #~ msgstr "يورۇقلۇق دەرىجىسى"
 
-#, fuzzy
 #~| msgid "a*"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "a*"
 #~ msgstr "a*"
 
-#, fuzzy
 #~| msgid "b*"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "b*"
 #~ msgstr "b*"
 
-#, fuzzy
 #~| msgid "Red"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Red"
 #~ msgstr "قىزىل"
 
-#, fuzzy
 #~| msgid "Green"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Green"
 #~ msgstr "يېشىل"
 
-#, fuzzy
 #~| msgid "Blue"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Blue"
 #~ msgstr "كۆك"
 
-#, fuzzy
 #~| msgid "X"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "X"
 #~ msgstr "X"
 
-#, fuzzy
 #~| msgid "Y"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Y"
 #~ msgstr "Y"
 
-#, fuzzy
 #~| msgid "Z"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Z"
 #~ msgstr "Z"
 
-#, fuzzy
 #~| msgid "Bumpmap"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bumpmap"
 #~ msgstr "Bumpmap"
 
-#, fuzzy
 #~| msgid "Clear"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Clear"
 #~ msgstr "تازىلا"
 
-#, fuzzy
 #~| msgid "Color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Color"
 #~ msgstr "رەڭ"
 
-#, fuzzy
 #~| msgid "Darken"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Darken"
 #~ msgstr "قارايت"
 
-#, fuzzy
 #~| msgid "Diff"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Diff"
 #~ msgstr "سېلىشتۇرۇش(Diff)"
 
-#, fuzzy
 #~| msgid "Dissolve"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Dissolve"
 #~ msgstr "ئېرىت"
 
-#, fuzzy
 #~| msgid "Hue"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hue"
 #~ msgstr "رەڭگى"
 
-#, fuzzy
 #~| msgid "In"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "In"
 #~ msgstr "ئىچى"
 
-#, fuzzy
 #~| msgid "Lighten"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Lighten"
 #~ msgstr "يورۇت"
 
-#, fuzzy
 #~| msgid "Out"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Out"
 #~ msgstr "سىرتى"
 
-#, fuzzy
 #~| msgid "Saturation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Saturation"
 #~ msgstr "تويۇنۇش"
 
-#, fuzzy
 #~| msgid "Value"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Value"
 #~ msgstr "قىممەت"
 
-#, fuzzy
 #~| msgid "ICC Engine"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "ICC Engine"

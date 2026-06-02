@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:09-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
 #, kde-format
@@ -236,7 +237,7 @@ msgstr "ماۋزۇ"
 #: InfoVariableFactory.cpp:40
 #, kde-format
 msgid "Subject"
-msgstr "تېما"
+msgstr "ماۋزۇ"
 
 #: InfoVariableFactory.cpp:48
 #, kde-format
@@ -246,7 +247,7 @@ msgstr "ھۆججەت ئاتى"
 #: InfoVariableFactory.cpp:56
 #, kde-format
 msgid "Keywords"
-msgstr "ھالقىلىق سۆزلەر"
+msgstr "ئاچقۇچلۇق سۆز"
 
 #: InfoVariableFactory.cpp:64
 #, kde-format
@@ -353,386 +354,322 @@ msgstr "ئۆزگەرگۈچى <b>%1</b> نى ئۆچۈرسۇنمۇ؟"
 msgid "Delete Variable"
 msgstr "ئۆزگەرگۈچى ئۆچۈرۈش"
 
-#, fuzzy
 #~| msgid "Date Correction:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Date Correction:"
 #~ msgstr "چېسلا تۈزىتىلمىسى:"
 
-#, fuzzy
 #~| msgid " days"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " days"
 #~ msgstr " كۈن"
 
-#, fuzzy
 #~| msgid "Select the way the date should be displayed:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select the way the date should be displayed:"
 #~ msgstr "چېسلانى كۆرسىتىش شەكلىنى تاللاڭ:"
 
-#, fuzzy
 #~| msgid "Custom format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Custom format"
 #~ msgstr "ئىختىيارى فورمات"
 
-#, fuzzy
 #~| msgid "..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "..."
 #~ msgstr "…"
 
-#, fuzzy
 #~| msgid "Format:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Format:"
 #~ msgstr "فورمات:"
 
-#, fuzzy
 #~| msgid "Name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Name"
 #~ msgstr "ئاتى"
 
-#, fuzzy
 #~| msgid "Number"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number"
 #~ msgstr "نومۇرى"
 
-#, fuzzy
 #~| msgid "Number and name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number and name"
 #~ msgstr "نومۇرى ۋە ئاتى"
 
-#, fuzzy
 #~| msgid "Number and name without separator"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number and name without separator"
 #~ msgstr "ئايرىغۇچ يوق نومۇرى ۋە ئاتى"
 
-#, fuzzy
 #~| msgid "Number without separator"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number without separator"
 #~ msgstr "ئايرىغۇچ يوق نومۇر"
 
-#, fuzzy
 #~| msgid "Level:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Level:"
 #~ msgstr "دەرىجە:"
 
-#, fuzzy
 #~| msgid "Chapter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Chapter"
 #~ msgstr "باب"
 
-#, fuzzy
 #~| msgctxt "date that can not be changed later"
 #~| msgid "Date (Fixed)"
 #~ msgctxt "(qtundo-format) date that can not be changed later"
 #~ msgid "Date (Fixed)"
 #~ msgstr "چېسلا (مۇقىم)"
 
-#, fuzzy
 #~| msgid "Locale date format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Locale date format"
 #~ msgstr "يەرلىك چېسلا پىچىمى"
 
-#, fuzzy
 #~| msgid "Short locale date format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Short locale date format"
 #~ msgstr "قىسقا يەرلىك چېسلا پىچىمى"
 
-#, fuzzy
 #~| msgid "Locale date & time format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Locale date & time format"
 #~ msgstr "يەرلىك چېسلا ۋە ۋاقىت پىچىمى"
 
-#, fuzzy
 #~| msgid "Short locale date & time format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Short locale date & time format"
 #~ msgstr "قىسقا يەرلىك چېسلا ۋە ۋاقىت پىچىمى"
 
-#, fuzzy
 #~| msgid "Day"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Day"
 #~ msgstr "كۈن"
 
-#, fuzzy
 #~| msgid "Month"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Month"
 #~ msgstr "ئاي"
 
-#, fuzzy
 #~| msgid "Year"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Year"
 #~ msgstr "يىل"
 
-#, fuzzy
 #~| msgid "Hour"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hour"
 #~ msgstr "سائەت"
 
-#, fuzzy
 #~| msgid "Minute"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Minute"
 #~ msgstr "مىنۇت"
 
-#, fuzzy
 #~| msgid "Second"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Second"
 #~ msgstr "سېكۇنت"
 
-#, fuzzy
 #~| msgid "2 Digits (01-31)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Flexible Digits (1-31)"
 #~ msgstr "2 خانە (01-31)"
 
-#, fuzzy
 #~| msgid "2 Digits (01-31)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "2 Digits (01-31)"
 #~ msgstr "2 خانە (01-31)"
 
-#, fuzzy
 #~| msgid "Abbreviated Name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Abbreviated Name"
 #~ msgstr "قىسقارتىلما ئات"
 
-#, fuzzy
 #~| msgid "Long Name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Long Name"
 #~ msgstr "ئۇزۇن ئاتى"
 
-#, fuzzy
 #~| msgid "2 Digits (01-12)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Flexible Digits (1-12)"
 #~ msgstr "2 خانە (01-12)"
 
-#, fuzzy
 #~| msgid "2 Digits (01-12)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "2 Digits (01-12)"
 #~ msgstr "2 خانە (01-12)"
 
-#, fuzzy
 #~| msgid "Possessive Abbreviated Name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Possessive Abbreviated Name"
 #~ msgstr "بارلىق قىسقارتىلما ئات"
 
-#, fuzzy
 #~| msgid "Possessive Long Name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Possessive Long Name"
 #~ msgstr "بارلىق ئۇزۇن ئات"
 
-#, fuzzy
 #~| msgid "2 Digits (01-99)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "2 Digits (01-99)"
 #~ msgstr "2 خانە (01-99)"
 
-#, fuzzy
 #~| msgid "4 Digits"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "4 Digits"
 #~ msgstr "4 خانە"
 
-#, fuzzy
 #~| msgid "2 Digits (01-23)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Flexible Digits (1-23)"
 #~ msgstr "2 خانە (01-23)"
 
-#, fuzzy
 #~| msgid "2 Digits (01-23)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "2 Digits (01-23)"
 #~ msgstr "2 خانە (01-23)"
 
-#, fuzzy
 #~| msgid "2 Digits (01-59)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Flexible Digits (1-59)"
 #~ msgstr "2 خانە (01-59)"
 
-#, fuzzy
 #~| msgid "2 Digits (01-59)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "2 Digits (01-59)"
 #~ msgstr "2 خانە (01-59)"
 
-#, fuzzy
 #~| msgid "AM/PM"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "AM/PM"
 #~ msgstr "چ ب/چ ك"
 
-#, fuzzy
 #~| msgid "Author Name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Author Name"
 #~ msgstr "ئاپتور ئاتى"
 
-#, fuzzy
 #~| msgid "Title"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Title"
 #~ msgstr "ماۋزۇ"
 
-#, fuzzy
 #~| msgid "Subject"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Subject"
 #~ msgstr "تېما"
 
-#, fuzzy
 #~| msgid "File Name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "File Name"
 #~ msgstr "ھۆججەت ئاتى"
 
-#, fuzzy
 #~| msgid "Keywords"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Keywords"
 #~ msgstr "ھالقىلىق سۆزلەر"
 
-#, fuzzy
 #~| msgid "Comments"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Comments"
 #~ msgstr "ئىزاھات"
 
-#, fuzzy
 #~| msgid "Page Count"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Count"
 #~ msgstr "بەت سانى"
 
-#, fuzzy
 #~| msgid "Page Number"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Number"
 #~ msgstr "بەت نومۇرى"
 
-#, fuzzy
 #~| msgid "Custom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Custom"
 #~ msgstr "ئىختىيارى"
 
-#, fuzzy
 #~| msgid "Name:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Name:"
 #~ msgstr "ئاتى:"
 
-#, fuzzy
 #~| msgid "New"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "New"
 #~ msgstr "يېڭى"
 
-#, fuzzy
 #~| msgid "Delete"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete"
 #~ msgstr "ئۆچۈر"
 
-#, fuzzy
 #~| msgid "String"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "String"
 #~ msgstr "تېكىست"
 
-#, fuzzy
 #~| msgid "Boolean"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Boolean"
 #~ msgstr "بۇلىن"
 
-#, fuzzy
 #~| msgid "Float"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Float"
 #~ msgstr "لەيلىمە كەسىر سان"
 
-#, fuzzy
 #~| msgid "Percentage"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Percentage"
 #~ msgstr "پىرسەنت"
 
-#, fuzzy
 #~| msgid "Currency"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Currency"
 #~ msgstr "پۇل"
 
-#, fuzzy
 #~| msgid "Date"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Date"
 #~ msgstr "چېسلا"
 
-#, fuzzy
 #~| msgid "Time"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Time"
 #~ msgstr "ۋاقىت"
 
-#, fuzzy
 #~| msgid "Formula"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Formula"
 #~ msgstr "فورمۇلا"
 
-#, fuzzy
 #~| msgid "Value:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Value:"
 #~ msgstr "قىممىتى:"
 
-#, fuzzy
 #~| msgid "Name for new variable:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Name for new variable:"
 #~ msgstr "يېڭى ئۆزگەرگۈچىنىڭ ئاتى:"
 
-#, fuzzy
 #~| msgid "New Variable"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "New Variable"
 #~ msgstr "يېڭى ئۆزگەرگۈچى"
 
-#, fuzzy
 #~| msgid "Delete variable <b>%1</b>?"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete variable <b>%1</b>?"
 #~ msgstr "ئۆزگەرگۈچى <b>%1</b> نى ئۆچۈرسۇنمۇ؟"
 
-#, fuzzy
 #~| msgid "Delete Variable"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete Variable"

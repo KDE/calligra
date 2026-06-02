@@ -8,19 +8,20 @@ msgstr ""
 "Project-Id-Version: VectorShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:08-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: ChangeVectorDataCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Vector Data"
-msgstr "ۋېكتورلۇق سانلىق-مەلۇماتلارنى ئۆزگەرتىش"
+msgstr "ۋېكتورلۇق سانلىق مەلۇماتلارنى ئۆزگەرتىش"
 
 #: VectorShapeFactory.cpp:26
 #, kde-format
@@ -28,10 +29,9 @@ msgid "Vector image"
 msgstr "ۋېكتورلۇق سۈرەت"
 
 #: VectorShapeFactory.cpp:28
-#, fuzzy, kde-format
-#| msgid "Open Vector Image (EMF/WMF/SVM)"
+#, kde-format
 msgid "A shape that shows a vector image (EMF/WMF/SVM)"
-msgstr "ۋېكتورلۇق سۈرەت (EMF/WMF/SVM) نى ئېچىش"
+msgstr ""
 
 #: VectorTool.cpp:63
 #, kde-format
@@ -39,24 +39,20 @@ msgid "Open Vector Image (EMF/WMF/SVM)"
 msgstr "ۋېكتورلۇق سۈرەت (EMF/WMF/SVM) نى ئېچىش"
 
 #: VectorToolFactory.cpp:19
-#, fuzzy, kde-format
-#| msgid "Vector Image (EMF/WMF/SVM) tool"
+#, kde-format
 msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
-msgstr "ۋېكتورلۇق سۈرەت (EMF/WMF/SVM) قورالى"
+msgstr ""
 
-#, fuzzy
 #~| msgid "Vector image"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Vector image"
 #~ msgstr "ۋېكتورلۇق سۈرەت"
 
-#, fuzzy
 #~| msgid "Open Vector Image (EMF/WMF/SVM)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Open Vector Image (EMF/WMF/SVM)"
 #~ msgstr "ۋېكتورلۇق سۈرەت (EMF/WMF/SVM) نى ئېچىش"
 
-#, fuzzy
 #~| msgid "Vector Image (EMF/WMF/SVM) tool"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"

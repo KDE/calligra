@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: calligra-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:09-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
 #: connectionTool/ConnectionPointWidget.ui:48
@@ -46,46 +47,39 @@ msgid "%"
 msgstr "%"
 
 #: connectionTool/ConnectionTool.cpp:65
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Edit connection points"
-msgstr "باغلىنىش"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:72
-#, fuzzy, kde-format
-#| msgid "Align Left"
+#, kde-format
 msgid "Align to left edge"
-msgstr "سولغا توغرىلا"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:75
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Align to horizontal center"
-msgstr "توغرا"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:78
-#, fuzzy, kde-format
-#| msgid "Align Right"
+#, kde-format
 msgid "Align to right edge"
-msgstr "ئوڭغا توغرىلا"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:81
-#, fuzzy, kde-format
-#| msgid "Align Bottom"
+#, kde-format
 msgid "Align to top edge"
-msgstr "ئاستىغا توغرىلا"
+msgstr "ئۈستى گىرۋەككە توغرىلا"
 
 #: connectionTool/ConnectionTool.cpp:84
-#, fuzzy, kde-format
-#| msgid "Align Left"
+#, kde-format
 msgid "Align to vertical center"
-msgstr "سولغا توغرىلا"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:87
-#, fuzzy, kde-format
-#| msgid "Align Bottom"
+#, kde-format
 msgid "Align to bottom edge"
-msgstr "ئاستىغا توغرىلا"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:91
 #, kde-format
@@ -123,11 +117,9 @@ msgid "Escape in down direction"
 msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:427
-#, fuzzy
-#| msgid "Connection"
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
-msgstr "باغلىنىش"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:768 connectionTool/ConnectionTool.cpp:780
 #, kde-format
@@ -140,10 +132,9 @@ msgid "Double click connection or press delete to remove it."
 msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:772
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Click to edit connection points."
-msgstr "باغلىنىش"
+msgstr ""
 
 #: connectionTool/ConnectionTool.cpp:786
 #, kde-format
@@ -178,10 +169,9 @@ msgid "Line"
 msgstr "قۇر"
 
 #: connectionTool/ConnectionTool.cpp:831
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Connection Point"
-msgstr "باغلىنىش"
+msgstr ""
 
 #: connectionTool/ConnectionToolFactory.cpp:18
 #, kde-format
@@ -206,7 +196,7 @@ msgstr "تۆۋەنرەك(&L)"
 #: defaulttool/DefaultTool.cpp:235
 #, kde-format
 msgid "Send to &Back"
-msgstr ""
+msgstr "ئاستى قەۋەتكە يوللا(&B)"
 
 #: defaulttool/DefaultTool.cpp:240
 #, kde-format
@@ -214,10 +204,9 @@ msgid "Align Left"
 msgstr "سولغا توغرىلا"
 
 #: defaulttool/DefaultTool.cpp:244
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontally Center"
-msgstr "توغرا"
+msgstr "توغرىسىغا ئوتتۇرىغا توغرىلا"
 
 #: defaulttool/DefaultTool.cpp:248
 #, kde-format
@@ -230,10 +219,9 @@ msgid "Align Top"
 msgstr "ئۈستىگە توغرىلا"
 
 #: defaulttool/DefaultTool.cpp:256
-#, fuzzy, kde-format
-#| msgid "Vertical"
+#, kde-format
 msgid "Vertically Center"
-msgstr "تىك"
+msgstr "بويىغا ئوتتۇرىغا توغرىلا"
 
 #: defaulttool/DefaultTool.cpp:260
 #, kde-format
@@ -285,12 +273,12 @@ msgstr ""
 #: defaulttool/DefaultTool.cpp:1044
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr "شەكىللەرنى گۇرۇپپىلا"
+msgstr "شەكىلنى توپلا"
 
 #: defaulttool/DefaultTool.cpp:1076
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
-msgstr "شەكىللەرنى گۇرۇپپىلىما"
+msgstr "شەكىلنى چاچ"
 
 #: defaulttool/DefaultTool.cpp:1169
 #, kde-format
@@ -337,7 +325,7 @@ msgstr ""
 #: defaulttool/DefaultToolTransformWidget.cpp:252
 msgctxt "(qtundo-format)"
 msgid "Scale"
-msgstr "نىسبىتى"
+msgstr "نىسبەت"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:284
 msgctxt "(qtundo-format)"
@@ -384,7 +372,7 @@ msgstr "Y ئوقىدا چوڭايتىش-كىچىكلىتىش"
 #: defaulttool/DefaultToolTransformWidget.ui:161
 #, kde-format
 msgid "Keep aspect ratio"
-msgstr "ئېگىزلىك-كەڭلىك نىسبىتىنى ساقلاپ قال"
+msgstr "تەرەپ نىسبىتىنى ساقلاپ قال"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: defaulttool/DefaultToolTransformWidget.ui:174
@@ -402,13 +390,13 @@ msgstr "چوڭلۇقىنى ئۆزگەرت"
 #: defaulttool/DefaultToolWidget.ui:35
 #, kde-format
 msgid "X:"
-msgstr "X:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: defaulttool/DefaultToolWidget.ui:97
 #, kde-format
 msgid "Y:"
-msgstr "Y:"
+msgstr ""
 
 #: defaulttool/ShapeMoveStrategy.cpp:53
 #, kde-format
@@ -460,14 +448,14 @@ msgstr ""
 #: guidestool/InsertGuidesToolOptionWidget.ui:25
 #, kde-format
 msgid "Horizontal"
-msgstr "توغرا"
+msgstr "توغرىسىغا"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: guidestool/GuidesToolOptionWidget.cpp:19
 #: guidestool/InsertGuidesToolOptionWidget.ui:65
 #, kde-format
 msgid "Vertical"
-msgstr "تىك"
+msgstr "بويىغا"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: guidestool/GuidesToolOptionWidget.ui:17
@@ -529,193 +517,161 @@ msgstr ""
 msgid "Create"
 msgstr "ياسا"
 
-#, fuzzy
 #~| msgid "X:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "X:"
 #~ msgstr "X:"
 
-#, fuzzy
 #~| msgid "Y:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Y:"
 #~ msgstr "Y:"
 
-#, fuzzy
 #~| msgid "°"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "°"
 #~ msgstr "°"
 
-#, fuzzy
 #~| msgid "%"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "%"
 #~ msgstr "%"
 
-#, fuzzy
 #~| msgid "Scale X"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scale X"
 #~ msgstr "X ئوقىدا چوڭايتىش-كىچىكلىتىش"
 
-#, fuzzy
 #~| msgid "Scale Y"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Y"
 #~ msgstr "Y ئوقىدا چوڭايتىش-كىچىكلىتىش"
 
-#, fuzzy
 #~| msgid "Keep aspect ratio"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Keep aspect ratio"
 #~ msgstr "ئېگىزلىك-كەڭلىك نىسبىتىنى ساقلاپ قال"
 
-#, fuzzy
 #~| msgid "Orientation:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Orientation:"
 #~ msgstr "يۆنىلىش:"
 
-#, fuzzy
 #~| msgid "Position:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Position:"
 #~ msgstr "ئورنى:"
 
-#, fuzzy
 #~| msgid "Add"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add"
 #~ msgstr "قوش"
 
-#, fuzzy
 #~| msgid "Remove"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove"
 #~ msgstr "چىقىرىۋەت"
 
-#, fuzzy
 #~| msgid "Create"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Create"
 #~ msgstr "ياسا"
 
-#, fuzzy
 #~| msgid "Edit Mode"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Edit Mode"
 #~ msgstr "تەھرىر ھالىتى(&E)"
 
-#, fuzzy
 #~| msgid "Alignment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Alignment"
 #~ msgstr "توغرىلاش"
 
-#, fuzzy
 #~| msgid "Connection"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Connection"
 #~ msgstr "باغلىنىش"
 
-#, fuzzy
 #~| msgid "Line"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Line"
 #~ msgstr "قۇر"
 
-#, fuzzy
 #~| msgid "Connect shapes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Connect shapes"
 #~ msgstr "شەكىللەرنى باغلا"
 
-#, fuzzy
 #~| msgid "Bring to &Front"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bring to &Front"
 #~ msgstr "ئۈستى قەۋەتكە ئەكەل(&F)"
 
-#, fuzzy
 #~| msgid "&Raise"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Raise"
 #~ msgstr "ئۆرلەت(&R)"
 
-#, fuzzy
 #~| msgid "&Lower"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Lower"
 #~ msgstr "تۆۋەنرەك(&L)"
 
-#, fuzzy
 #~| msgid "Align Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Left"
 #~ msgstr "سولغا توغرىلا"
 
-#, fuzzy
 #~| msgid "Align Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Right"
 #~ msgstr "ئوڭغا توغرىلا"
 
-#, fuzzy
 #~| msgid "Align Top"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Top"
 #~ msgstr "ئۈستىگە توغرىلا"
 
-#, fuzzy
 #~| msgid "Align Bottom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Bottom"
 #~ msgstr "ئاستىغا توغرىلا"
 
-#, fuzzy
 #~| msgid "Group"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Group"
 #~ msgstr "گۇرۇپپا"
 
-#, fuzzy
 #~| msgid "Ungroup"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ungroup"
 #~ msgstr "گۇرۇپپا يەش"
 
-#, fuzzy
 #~| msgid "Arrange"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Arrange"
 #~ msgstr "تەرتىپلە"
 
-#, fuzzy
 #~| msgid "Geometry"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Geometry"
 #~ msgstr "گېئومېتىرىيە"
 
-#, fuzzy
 #~| msgid "Fill"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fill"
 #~ msgstr "تولدۇر"
 
-#, fuzzy
 #~| msgid "Shadow"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Shadow"
 #~ msgstr "سايە"
 
-#, fuzzy
 #~| msgid "Horizontal"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Horizontal"
 #~ msgstr "توغرا"
 
-#, fuzzy
 #~| msgid "Vertical"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Vertical"

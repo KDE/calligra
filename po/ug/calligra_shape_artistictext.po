@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: ArtisticTextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:07-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: AddTextRangeCommand.cpp:19 AddTextRangeCommand.cpp:29
 msgctxt "(qtundo-format)"
@@ -103,10 +104,9 @@ msgid "Drag handle to change start offset."
 msgstr ""
 
 #: ArtisticTextTool.cpp:315
-#, fuzzy, kde-format
-#| msgid "Press return to finish editing."
+#, kde-format
 msgid "Press escape to finish editing."
-msgstr "Enter بېسىلسا تەھرىرلەش تاماملىنىدۇ."
+msgstr ""
 
 #: ArtisticTextTool.cpp:494
 #, kde-format
@@ -129,10 +129,9 @@ msgid "Text On Path"
 msgstr "يولدىكى تېكىست"
 
 #: ArtisticTextToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Artistic Text Editing Tool"
+#, kde-format
 msgid "Artistic text editing"
-msgstr "ھۆسنخەت تەھرىرلەش قورالى"
+msgstr ""
 
 #: AttachTextToPathCommand.cpp:17
 msgctxt "(qtundo-format)"
@@ -166,92 +165,75 @@ msgstr "تېكىست چىقىرىۋېتىش دائىرىسى"
 
 #: ReplaceTextRangeCommand.cpp:23 ReplaceTextRangeCommand.cpp:40
 #: ReplaceTextRangeCommand.cpp:57
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove text range"
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
-msgstr "تېكىست چىقىرىۋېتىش دائىرىسى"
+msgstr ""
 
-#, fuzzy
 #~| msgid "ArtisticTextShape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "ArtisticTextShape"
 #~ msgstr "ھۆسنخەت شەكلى"
 
-#, fuzzy
 #~| msgid "A shape which shows a single text line"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A shape which shows a single text line"
 #~ msgstr "يەككە قۇرلۇق تېكىست كۆرسىتىدىغان شەكىل"
 
-#, fuzzy
 #~| msgid "Artistic Text"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Artistic Text"
 #~ msgstr "ھۆسنخەت"
 
-#, fuzzy
 #~| msgid "Bold text"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bold text"
 #~ msgstr "توم خەت"
 
-#, fuzzy
 #~| msgid "Italic text"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Italic text"
 #~ msgstr "يانتۇ خەت"
 
-#, fuzzy
 #~| msgid "Superscript"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Superscript"
 #~ msgstr "يۇقىرى ئىندېكس"
 
-#, fuzzy
 #~| msgid "Subscript"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Subscript"
 #~ msgstr "تۆۋەنكى ئىندېكس"
 
-#, fuzzy
 #~| msgid "Click to change cursor position."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Click to change cursor position."
 #~ msgstr "چېكىلسە نۇربەلگە ئورنى ئۆزگىرىدۇ."
 
-#, fuzzy
 #~| msgid "Click to select text shape."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Click to select text shape."
 #~ msgstr "چېكىلسە تېكىست شەكلى تاللىنىدۇ."
 
-#, fuzzy
 #~| msgid "Double click to put text on path."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Double click to put text on path."
 #~ msgstr "قوش چېكىلسە تېكىست يولغا قويۇلىدۇ."
 
-#, fuzzy
 #~| msgid "Press return to finish editing."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Press return to finish editing."
 #~ msgstr "Enter بېسىلسا تەھرىرلەش تاماملىنىدۇ."
 
-#, fuzzy
 #~| msgid "Text Properties"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text Properties"
 #~ msgstr "تېكىست خاسلىقى"
 
-#, fuzzy
 #~| msgid "Text On Path"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text On Path"
 #~ msgstr "يولدىكى تېكىست"
 
-#, fuzzy
 #~| msgid "Artistic Text Editing Tool"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Artistic text editing"

@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: MusicShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:07-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: actions/AccidentalAction.cpp:52
 #, kde-format
@@ -67,55 +68,47 @@ msgstr "ئۆچۈرگۈچ"
 #: actions/KeySignatureAction.cpp:29
 #, kde-format
 msgid "Ab Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:31
-#, fuzzy, kde-format
-#| msgid "Ab Major"
+#, kde-format
 msgid "Eb Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:33
-#, fuzzy, kde-format
-#| msgid "Ab Major"
+#, kde-format
 msgid "Bb Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:35
-#, fuzzy, kde-format
-#| msgid "Ab Major"
+#, kde-format
 msgid "F Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:37
-#, fuzzy, kde-format
-#| msgid "Ab Major"
+#, kde-format
 msgid "C Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:39
-#, fuzzy, kde-format
-#| msgid "Ab Major"
+#, kde-format
 msgid "G Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:41
-#, fuzzy, kde-format
-#| msgid "Ab Major"
+#, kde-format
 msgid "D Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:43
-#, fuzzy, kde-format
-#| msgid "Ab Major"
+#, kde-format
 msgid "A Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:45
-#, fuzzy, kde-format
-#| msgid "Ab Major"
+#, kde-format
 msgid "E Major"
-msgstr "Ab Major"
+msgstr ""
 
 #: actions/KeySignatureAction.cpp:62
 #, kde-format
@@ -129,11 +122,9 @@ msgid "note"
 msgstr "ئىزاھ"
 
 #: actions/NoteEntryAction.cpp:54
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add part"
+#, kde-format
 msgid "rest"
-msgstr "بۆلەك قوش"
+msgstr ""
 
 #: actions/NoteEntryAction.cpp:57
 #, kde-format
@@ -163,7 +154,7 @@ msgstr ""
 #: actions/NoteEntryAction.cpp:67
 #, kde-format
 msgid "16th "
-msgstr "16-چېسلا "
+msgstr "16-كۈنى "
 
 #: actions/NoteEntryAction.cpp:69
 #, kde-format
@@ -193,7 +184,7 @@ msgstr ""
 #: actions/RemoveBarAction.cpp:22
 #, kde-format
 msgid "Remove bar"
-msgstr "بالداقنى چىقىرىۋېتىش"
+msgstr "بالداقنى چىقىرىۋەت"
 
 #: actions/SelectionAction.cpp:32
 #, kde-format
@@ -210,7 +201,7 @@ msgstr "يۇقىرى ئاۋاز"
 #, kde-format
 msgctxt "Bass clef"
 msgid "Bass"
-msgstr "Bass مۇزىكىسى"
+msgstr "تۆۋەن ئاۋاز"
 
 #: actions/SetClefAction.cpp:46
 #, kde-format
@@ -241,19 +232,14 @@ msgid "Unknown clef"
 msgstr ""
 
 #: actions/TiedNoteAction.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add note"
+#, kde-format
 msgid "Tied notes"
-msgstr "ئىزاھ قوش"
+msgstr ""
 
 #: commands/AddBarsCommand.cpp:19
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add part"
 msgctxt "(qtundo-format)"
 msgid "Add measures"
-msgstr "بۆلەك قوش"
+msgstr ""
 
 #: commands/AddDotCommand.cpp:18
 msgctxt "(qtundo-format)"
@@ -276,10 +262,9 @@ msgid "Add part"
 msgstr "بۆلەك قوش"
 
 #: commands/AddPartCommand.cpp:26
-#, fuzzy, kde-format
-#| msgid "Parts"
+#, kde-format
 msgid "Part %1"
-msgstr "بۆلەكلەر"
+msgstr ""
 
 #: commands/ChangePartDetailsCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -287,20 +272,14 @@ msgid "Change part details"
 msgstr ""
 
 #: commands/CreateChordCommand.cpp:21
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add dot"
 msgctxt "(qtundo-format)"
 msgid "Add chord"
-msgstr "چېكىت قوش"
+msgstr ""
 
 #: commands/CreateChordCommand.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add part"
 msgctxt "(qtundo-format)"
 msgid "Add rest"
-msgstr "بۆلەك قوش"
+msgstr ""
 
 #: commands/MakeRestCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -310,42 +289,32 @@ msgstr ""
 #: commands/RemoveBarCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Remove bar"
-msgstr "بالداقنى چىقىرىۋېتىش"
+msgstr "بالداقنى چىقىرىۋەت"
 
 #: commands/RemoveChordCommand.cpp:21
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove part"
 msgctxt "(qtundo-format)"
 msgid "Remove rest"
-msgstr "بۆلەكنى چىقىرىۋېتىش"
+msgstr ""
 
 #: commands/RemoveChordCommand.cpp:23
-#, fuzzy
-#| msgid "Remove bar"
 msgctxt "(qtundo-format)"
 msgid "Remove chord"
-msgstr "بالداقنى چىقىرىۋېتىش"
+msgstr ""
 
 #: commands/RemoveNoteCommand.cpp:21
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove part"
 msgctxt "(qtundo-format)"
 msgid "Remove note"
-msgstr "بۆلەكنى چىقىرىۋېتىش"
+msgstr ""
 
 #: commands/RemovePartCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove part"
-msgstr "بۆلەكنى چىقىرىۋېتىش"
+msgstr "بۆلەكنى چىقىرىۋەت"
 
 #: commands/RemoveStaffElementCommand.cpp:25
-#, fuzzy
-#| msgid "Remove bar"
 msgctxt "(qtundo-format)"
 msgid "Remove clef"
-msgstr "بالداقنى چىقىرىۋېتىش"
+msgstr ""
 
 #: commands/RemoveStaffElementCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -394,11 +363,9 @@ msgstr "رايون"
 #. i18n: ectx: property (text), widget (QRadioButton, toNextChange)
 #: dialogs/KeySignatureDialog.ui:71 dialogs/KeySignatureDialog.ui:122
 #: dialogs/KeySignatureDialog.ui:163
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add part"
+#, kde-format
 msgid "Measure"
-msgstr "بۆلەك قوش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/KeySignatureDialog.ui:88
@@ -495,29 +462,26 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
 #: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:87
 #: SimpleEntryTool.cpp:681
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add part"
+#, kde-format
 msgid "Add measures"
-msgstr "بۆلەك قوش"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, importButton)
 #: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:79
 #, kde-format
 msgid "Import"
-msgstr "ئىمپورت قىل"
+msgstr "ئەكىر"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportButton)
 #: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:83
 #, kde-format
 msgid "Export"
-msgstr "ئېكسپورت قىل"
+msgstr "چىقار"
 
 #: MusicShape.cpp:71
-#, fuzzy, kde-format
-#| msgid "Parts"
+#, kde-format
 msgid "Part 1"
-msgstr "بۆلەكلەر"
+msgstr ""
 
 #: MusicShapeFactory.cpp:34
 #, kde-format
@@ -532,7 +496,7 @@ msgstr "مۇزىكا تەھرىرلىگىلى بولىدىغان شەكىل"
 #: MusicTool.cpp:81
 #, kde-format
 msgid "Parts"
-msgstr "بۆلەكلەر"
+msgstr "بۆلەك"
 
 #: MusicToolFactory.cpp:18
 #, kde-format
@@ -555,18 +519,15 @@ msgid "Key signature"
 msgstr ""
 
 #: SimpleEntryTool.cpp:681
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add part"
+#, kde-format
 msgid "Add how many measures?"
-msgstr "بۆلەك قوش"
+msgstr ""
 
 #: SimpleEntryTool.cpp:743
-#, fuzzy, kde-format
-#| msgid "Import"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import"
-msgstr "ئىمپورت قىل"
+msgstr "ئەكىر"
 
 #: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
 #, kde-format
@@ -574,173 +535,146 @@ msgid "MusicXML files (*.xml)"
 msgstr ""
 
 #: SimpleEntryTool.cpp:761
-#, fuzzy, kde-format
-#| msgid "Export"
+#, kde-format
 msgctxt "@title:window"
 msgid "Export"
-msgstr "ئېكسپورت قىل"
+msgstr "چىقار"
 
 #: SimpleEntryToolFactory.cpp:17
 #, kde-format
 msgid "Music editing"
 msgstr ""
 
-#, fuzzy
 #~| msgid "Region"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Region"
 #~ msgstr "رايون"
 
-#, fuzzy
 #~| msgid "Name:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Name:"
 #~ msgstr "ئاتى:"
 
-#, fuzzy
 #~| msgid "..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "..."
 #~ msgstr "…"
 
-#, fuzzy
 #~| msgctxt "lowered half a step"
 #~| msgid "Flat"
 #~ msgctxt "(qtundo-format) lowered half a step"
 #~ msgid "Flat"
 #~ msgstr "تەكشى"
 
-#, fuzzy
 #~| msgid "Natural"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Natural"
 #~ msgstr "تەبىئىي"
 
-#, fuzzy
 #~| msgctxt "raised half a step"
 #~| msgid "Sharp"
 #~ msgctxt "(qtundo-format) raised half a step"
 #~ msgid "Sharp"
 #~ msgstr "ئۇچلۇق"
 
-#, fuzzy
 #~| msgid "Dots"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Dots"
 #~ msgstr "چېكىت"
 
-#, fuzzy
 #~| msgid "Eraser"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Eraser"
 #~ msgstr "ئۆچۈرگۈچ"
 
-#, fuzzy
 #~| msgid "Ab Major"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ab Major"
 #~ msgstr "Ab Major"
 
-#, fuzzy
 #~| msgctxt "Other key signature"
 #~| msgid "Other"
 #~ msgctxt "(qtundo-format) Other key signature"
 #~ msgid "Other"
 #~ msgstr "باشقا"
 
-#, fuzzy
 #~| msgid "note"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "note"
 #~ msgstr "ئىزاھ"
 
-#, fuzzy
 #~| msgid "Half "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Half "
 #~ msgstr "يېرىم "
 
-#, fuzzy
 #~| msgid "Quarter "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Quarter "
 #~ msgstr "پەسىل "
 
-#, fuzzy
 #~| msgid "16th "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "16th "
 #~ msgstr "16-چېسلا "
 
-#, fuzzy
 #~| msgid "Select"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select"
 #~ msgstr "تاللا"
 
-#, fuzzy
 #~| msgctxt "Treble clef"
 #~| msgid "Treble"
 #~ msgctxt "(qtundo-format) Treble clef"
 #~ msgid "Treble"
 #~ msgstr "يۇقىرى ئاۋاز"
 
-#, fuzzy
 #~| msgctxt "Bass clef"
 #~| msgid "Bass"
 #~ msgctxt "(qtundo-format) Bass clef"
 #~ msgid "Bass"
 #~ msgstr "Bass مۇزىكىسى"
 
-#, fuzzy
 #~| msgid "Parts"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Part %1"
 #~ msgstr "بۆلەكلەر"
 
-#, fuzzy
 #~| msgid "Parts"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Part 1"
 #~ msgstr "بۆلەكلەر"
 
-#, fuzzy
 #~| msgid "Music Shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Music Shape"
 #~ msgstr "مۇزىكا شەكلى"
 
-#, fuzzy
 #~| msgid "A shape which provides a music editor"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A shape which provides a music editor"
 #~ msgstr "مۇزىكا تەھرىرلىگىلى بولىدىغان شەكىل"
 
-#, fuzzy
 #~| msgid "Parts"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Parts"
 #~ msgstr "بۆلەكلەر"
 
-#, fuzzy
 #~| msgid "Import"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Import"
 #~ msgstr "ئىمپورت قىل"
 
-#, fuzzy
 #~| msgid "Export"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export"
 #~ msgstr "ئېكسپورت قىل"
 
-#, fuzzy
 #~| msgid "Import"
 #~ msgctxt "(qtundo-format) @title:window"
 #~ msgid "Import"
 #~ msgstr "ئىمپورت قىل"
 
-#, fuzzy
 #~| msgid "Export"
 #~ msgctxt "(qtundo-format) @title:window"
 #~ msgid "Export"

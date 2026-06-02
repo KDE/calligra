@@ -8,21 +8,20 @@ msgstr ""
 "Project-Id-Version: PathShapes\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:07-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: ellipse/EllipseShapeConfigCommand.cpp:23
-#, fuzzy
-#| msgid "Ellipse"
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
-msgstr "ئېللىپس"
+msgstr ""
 
 #: ellipse/EllipseShapeConfigWidget.cpp:16
 #, kde-format
@@ -49,14 +48,13 @@ msgstr "ئېللىپس شەكلى"
 #: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
 #, kde-format
 msgid "Type:"
-msgstr "تىپى:"
+msgstr "تۈرى:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ellipse/EllipseShapeConfigWidget.ui:29
-#, fuzzy, kde-format
-#| msgid "A rectangle"
+#, kde-format
 msgid "Start angle:"
-msgstr "تىك تۆت تەرەپلىك"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
@@ -68,35 +66,31 @@ msgstr "°"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ellipse/EllipseShapeConfigWidget.ui:46
-#, fuzzy, kde-format
-#| msgid "A rectangle"
+#, kde-format
 msgid "End angle:"
-msgstr "تىك تۆت تەرەپلىك"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
 #: ellipse/EllipseShapeConfigWidget.ui:63
-#, fuzzy, kde-format
-#| msgid "Ellipse"
+#, kde-format
 msgid "Close ellipse"
-msgstr "ئېللىپس"
+msgstr ""
 
 #: ellipse/EllipseShapeFactory.cpp:20
 #, kde-format
 msgid "Ellipse"
-msgstr "ئېللىپس"
+msgstr "ئېللىپىس"
 
 #: ellipse/EllipseShapeFactory.cpp:22
-#, fuzzy, kde-format
-#| msgid "Ellipse"
+#, kde-format
 msgid "An ellipse"
-msgstr "ئېللىپس"
+msgstr ""
 
 #: enhancedpath/CalloutShapeFactory.cpp:31
 #: enhancedpath/CalloutShapeFactory.cpp:33
-#, fuzzy, kde-format
-#| msgid "Callout"
+#, kde-format
 msgid "A callout shape"
-msgstr "مىساللىق چۈشەندۈرۈش"
+msgstr ""
 
 #: enhancedpath/CalloutShapeFactory.cpp:148
 #, kde-format
@@ -104,28 +98,24 @@ msgid "Rectangular Callout"
 msgstr ""
 
 #: enhancedpath/CalloutShapeFactory.cpp:150
-#, fuzzy, kde-format
-#| msgid "A rectangle"
+#, kde-format
 msgid "A rectangular callout"
-msgstr "تىك تۆت تەرەپلىك"
+msgstr ""
 
 #: enhancedpath/CalloutShapeFactory.cpp:229
-#, fuzzy, kde-format
-#| msgid "Callout"
+#, kde-format
 msgid "Rounded Callout"
-msgstr "مىساللىق چۈشەندۈرۈش"
+msgstr ""
 
 #: enhancedpath/CalloutShapeFactory.cpp:231
-#, fuzzy, kde-format
-#| msgid "A rectangle"
+#, kde-format
 msgid "A rounded rectangular callout"
-msgstr "تىك تۆت تەرەپلىك"
+msgstr ""
 
 #: enhancedpath/CalloutToolFactory.cpp:23
-#, fuzzy, kde-format
-#| msgid "Callout"
+#, kde-format
 msgid "Callout editing"
-msgstr "مىساللىق چۈشەندۈرۈش"
+msgstr ""
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:26
 #, kde-format
@@ -143,10 +133,9 @@ msgid "Cross"
 msgstr "كېسىشىش"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:144
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgid "A cross"
-msgstr "كېسىشىش"
+msgstr ""
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:177
 #: enhancedpath/EnhancedPathShapeFactory.cpp:210
@@ -160,10 +149,9 @@ msgstr "يا ئوق"
 #: enhancedpath/EnhancedPathShapeFactory.cpp:212
 #: enhancedpath/EnhancedPathShapeFactory.cpp:245
 #: enhancedpath/EnhancedPathShapeFactory.cpp:278
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "An arrow"
-msgstr "يا ئوق"
+msgstr ""
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:321
 #: enhancedpath/EnhancedPathShapeFactory.cpp:323
@@ -177,10 +165,9 @@ msgid "Circular Arrow"
 msgstr "يۇمىلاق ئىسترېلكا"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:403
-#, fuzzy, kde-format
-#| msgid "Circular Arrow"
+#, kde-format
 msgid "A circular-arrow"
-msgstr "يۇمىلاق ئىسترېلكا"
+msgstr ""
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:446
 #, kde-format
@@ -193,18 +180,15 @@ msgid "A gearhead"
 msgstr ""
 
 #: rectangle/RectangleShapeConfigCommand.cpp:19
-#, fuzzy
-#| msgid "A rectangle"
 msgctxt "(qtundo-format)"
 msgid "Change rectangle"
-msgstr "تىك تۆت تەرەپلىك"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
 #: rectangle/RectangleShapeConfigWidget.ui:5
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "Rectangle Shape"
-msgstr "تىك تۆت بۇلۇڭ"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rectangle/RectangleShapeConfigWidget.ui:21
@@ -255,10 +239,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: spiral/SpiralShapeConfigWidget.ui:13
-#, fuzzy, kde-format
-#| msgid "Spiral"
+#, kde-format
 msgid "Spiral Shape"
-msgstr "بۇرمىسىمان"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: spiral/SpiralShapeConfigWidget.ui:29
@@ -278,10 +261,9 @@ msgid "Spiral"
 msgstr "بۇرمىسىمان"
 
 #: spiral/SpiralShapeFactory.cpp:19
-#, fuzzy, kde-format
-#| msgid "A star shape"
+#, kde-format
 msgid "A spiral shape"
-msgstr "يۇلتۇزسىمان"
+msgstr ""
 
 #: star/StarShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -290,10 +272,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
 #: star/StarShapeConfigWidget.ui:13
-#, fuzzy, kde-format
-#| msgid "A star shape"
+#, kde-format
 msgid "Star shape"
-msgstr "يۇلتۇزسىمان"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: star/StarShapeConfigWidget.ui:19
@@ -340,10 +321,9 @@ msgid "Flower"
 msgstr "گۈل"
 
 #: star/StarShapeFactory.cpp:53
-#, fuzzy, kde-format
-#| msgid "Flower"
+#, kde-format
 msgid "A flower"
-msgstr "گۈل"
+msgstr ""
 
 #: star/StarShapeFactory.cpp:68
 #, kde-format
@@ -351,10 +331,9 @@ msgid "Pentagon"
 msgstr "بەش تەرەپلىك"
 
 #: star/StarShapeFactory.cpp:70
-#, fuzzy, kde-format
-#| msgid "Pentagon"
+#, kde-format
 msgid "A pentagon"
-msgstr "بەش تەرەپلىك"
+msgstr ""
 
 #: star/StarShapeFactory.cpp:84
 #, kde-format
@@ -362,144 +341,120 @@ msgid "Hexagon"
 msgstr "ئالتە تەرەپلىك"
 
 #: star/StarShapeFactory.cpp:86
-#, fuzzy, kde-format
-#| msgid "Hexagon"
+#, kde-format
 msgid "A hexagon"
-msgstr "ئالتە تەرەپلىك"
+msgstr ""
 
-#, fuzzy
 #~| msgid "Ellipse Shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ellipse Shape"
 #~ msgstr "ئېللىپس شەكلى"
 
-#, fuzzy
 #~| msgid "Type:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Type:"
 #~ msgstr "تىپى:"
 
-#, fuzzy
 #~| msgid "°"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "°"
 #~ msgstr "°"
 
-#, fuzzy
 #~| msgid "Direction:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Direction:"
 #~ msgstr "يونۇلۇش:"
 
-#, fuzzy
 #~| msgid "Arc"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Arc"
 #~ msgstr "ياي"
 
-#, fuzzy
 #~| msgid "Pie"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pie"
 #~ msgstr "دۈگىلەك دىئاگرامما"
 
-#, fuzzy
 #~| msgid "Chord"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Chord"
 #~ msgstr "ئاككورد"
 
-#, fuzzy
 #~| msgid "Ellipse"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ellipse"
 #~ msgstr "ئېللىپس"
 
-#, fuzzy
 #~| msgid "Cross"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cross"
 #~ msgstr "كېسىشىش"
 
-#, fuzzy
 #~| msgid "Arrow"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Arrow"
 #~ msgstr "يا ئوق"
 
-#, fuzzy
 #~| msgid "Callout"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Callout"
 #~ msgstr "مىساللىق چۈشەندۈرۈش"
 
-#, fuzzy
 #~| msgid "Circular Arrow"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Circular Arrow"
 #~ msgstr "يۇمىلاق ئىسترېلكا"
 
-#, fuzzy
 #~| msgid "Rectangle"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Rectangle"
 #~ msgstr "تىك تۆت بۇلۇڭ"
 
-#, fuzzy
 #~| msgid "A rectangle"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A rectangle"
 #~ msgstr "تىك تۆت تەرەپلىك"
 
-#, fuzzy
 #~| msgid "Curve"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Curve"
 #~ msgstr "ئەگرى سىزىق"
 
-#, fuzzy
 #~| msgid "Line"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Line"
 #~ msgstr "قۇر"
 
-#, fuzzy
 #~| msgid "Spiral"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Spiral"
 #~ msgstr "بۇرمىسىمان"
 
-#, fuzzy
 #~| msgid "A star shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A star shape"
 #~ msgstr "يۇلتۇزسىمان"
 
-#, fuzzy
 #~| msgid "A star"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A star"
 #~ msgstr "يۇلتۇز"
 
-#, fuzzy
 #~| msgid "Star"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Star"
 #~ msgstr "يۇلتۇز"
 
-#, fuzzy
 #~| msgid "Flower"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Flower"
 #~ msgstr "گۈل"
 
-#, fuzzy
 #~| msgid "Pentagon"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pentagon"
 #~ msgstr "بەش تەرەپلىك"
 
-#, fuzzy
 #~| msgid "Hexagon"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hexagon"

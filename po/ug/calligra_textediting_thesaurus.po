@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:09-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: Thesaurus.cpp:81
 #, kde-format
@@ -36,13 +37,13 @@ msgstr "ئىزدە(&E)"
 #, kde-format
 msgctxt "@action:button Go back to the previous word in history"
 msgid "Back"
-msgstr "كەينى"
+msgstr "قايت"
 
 #: Thesaurus.cpp:107
 #, kde-format
 msgctxt "@action:button Go forward to the next word in history"
 msgid "Forward"
-msgstr "ئالدى"
+msgstr "ئالدىغا"
 
 #: Thesaurus.cpp:110
 #, kde-format
@@ -72,7 +73,7 @@ msgstr ""
 #: Thesaurus.cpp:166
 #, kde-format
 msgid "&Wordnet"
-msgstr "&Wordnet"
+msgstr ""
 
 #: Thesaurus.cpp:190
 #, kde-format
@@ -104,7 +105,7 @@ msgstr ""
 #: Thesaurus.cpp:428
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
-msgstr "<b>خاتالىق:</b> پروگرامما «grep» نى ئىجرا قىلىش مەغلۇپ بولدى."
+msgstr "<b>خاتالىق:</b> پىروگرامما «grep» نى ئىجرا قىلىش مەغلۇپ بولدى."
 
 #: Thesaurus.cpp:578
 #, kde-format
@@ -139,7 +140,7 @@ msgstr ""
 #: Thesaurus.cpp:585
 #, kde-format
 msgid "Attributes"
-msgstr "خاسلىقلار"
+msgstr "خاسلىق"
 
 #: Thesaurus.cpp:586
 #, kde-format
@@ -190,25 +191,21 @@ msgstr ""
 #~ msgid "&Close"
 #~ msgstr "ياپ(&C)"
 
-#, fuzzy
 #~| msgid "(No match)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "(No match)"
 #~ msgstr "(ماس كەلگىنى يوق)"
 
-#, fuzzy
 #~| msgid "&Search for:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Search for:"
 #~ msgstr "ئىزدە(&S):"
 
-#, fuzzy
 #~| msgid "S&earch"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "S&earch"
 #~ msgstr "ئىزدە(&E)"
 
-#, fuzzy
 #~| msgctxt "@action:button Go back to the previous word in history"
 #~| msgid "Back"
 #~ msgctxt ""
@@ -216,7 +213,6 @@ msgstr ""
 #~ msgid "Back"
 #~ msgstr "كەينى"
 
-#, fuzzy
 #~| msgctxt "@action:button Go forward to the next word in history"
 #~| msgid "Forward"
 #~ msgctxt ""
@@ -224,50 +220,42 @@ msgstr ""
 #~ msgid "Forward"
 #~ msgstr "ئالدى"
 
-#, fuzzy
 #~| msgid "Synonyms"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Synonyms"
 #~ msgstr "مەنىداش سۆزلەر"
 
-#, fuzzy
 #~| msgid "&Wordnet"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Wordnet"
 #~ msgstr "&Wordnet"
 
-#, fuzzy
 #~| msgid "&Replace with:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Replace with:"
 #~ msgstr "بىلەن ئالماشتۇر(&R):"
 
-#, fuzzy
 #~| msgctxt "@action:button Close thesaurus dialog"
 #~| msgid "&Close"
 #~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
 #~ msgid "&Close"
 #~ msgstr "ياپ(&C)"
 
-#, fuzzy
 #~| msgid "&Replace"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Replace"
 #~ msgstr "ئالماشتۇر(&R)"
 
-#, fuzzy
 #~| msgid "&Replace"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Replace Word"
 #~ msgstr "ئالماشتۇر(&R)"
 
-#, fuzzy
 #~| msgid "<b>Error:</b> Failed to execute grep."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<b>Error:</b> Failed to execute grep."
 #~ msgstr "<b>خاتالىق:</b> پروگرامما «grep» نى ئىجرا قىلىش مەغلۇپ بولدى."
 
-#, fuzzy
 #~| msgid "Attributes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Attributes"

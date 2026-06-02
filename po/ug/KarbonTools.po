@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: KarbonTools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-29 17:11-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -28,10 +29,9 @@ msgid "Calligraphic Shape"
 msgstr ""
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
-#, fuzzy, kde-format
-#| msgid "Remove profile"
+#, kde-format
 msgid "Save profile as..."
-msgstr "سەپلىمە ھۆججەت چىقىرىۋەت"
+msgstr ""
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
 #, kde-format
@@ -96,10 +96,9 @@ msgid "Current"
 msgstr "نۆۋەتتىكى"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
-#, fuzzy, kde-format
-#| msgid "Effect name"
+#, kde-format
 msgid "Profile name"
-msgstr "ئۇنۇم ئاتى"
+msgstr "سەپلىمە ھۆججەت ئاتى"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
 #, kde-format
@@ -178,17 +177,14 @@ msgid "Add effect to current filter stack"
 msgstr ""
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add filter effect"
+#, kde-format
 msgid "Add to filter presets"
-msgstr "سۈزگۈچ ئۈنۈمى قوش"
+msgstr ""
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:74
-#, fuzzy, kde-format
-#| msgid "Remove profile"
+#, kde-format
 msgid "Remove filter preset"
-msgstr "سەپلىمە ھۆججەت چىقىرىۋەت"
+msgstr ""
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
@@ -231,10 +227,9 @@ msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: filterEffectTool/FilterEffectEditWidget.ui:92
-#, fuzzy, kde-format
-#| msgid "Filter Effect Editor"
+#, kde-format
 msgid "Filter Presets"
-msgstr "سۈزگۈچ ئۈنۈمى تەھرىرلىگۈچ"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: filterEffectTool/FilterEffectEditWidget.ui:116
@@ -244,23 +239,19 @@ msgid "Effect Properties"
 msgstr "ئۈنۈم خاسلىقى"
 
 #: filterEffectTool/FilterRemoveCommand.cpp:23
-#, fuzzy
-#| msgid "Remove profile"
 msgctxt "(qtundo-format)"
 msgid "Remove filter effect"
-msgstr "سەپلىمە ھۆججەت چىقىرىۋەت"
+msgstr ""
 
 #: filterEffectTool/FilterStackSetCommand.cpp:25
-#, fuzzy
-#| msgid "Remove profile"
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
-msgstr "سەپلىمە ھۆججەت چىقىرىۋەت"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:439
 #, kde-format
 msgid "Effects"
-msgstr "ئۈنۈملەر"
+msgstr "ئۈنۈم"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:447
 #, kde-format
@@ -268,10 +259,9 @@ msgid "View and edit filter"
 msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:453
-#, fuzzy, kde-format
-#| msgid "Remove profile"
+#, kde-format
 msgid "Remove filter from object"
-msgstr "سەپلىمە ھۆججەت چىقىرىۋەت"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:457
 #, kde-format
@@ -281,34 +271,32 @@ msgstr "سۈزگۈچ قوش"
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:486
 #, kde-format
 msgid "X:"
-msgstr "X:"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:492
 #, kde-format
 msgid "Y:"
-msgstr "Y:"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:498
 #, kde-format
 msgid "W:"
-msgstr "W:"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:504
 #, kde-format
 msgid "H:"
-msgstr "H:"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:509
-#, fuzzy, kde-format
-#| msgid "Effect name"
+#, kde-format
 msgid "Effect Region"
-msgstr "ئۇنۇم ئاتى"
+msgstr ""
 
 #: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
-#, fuzzy, kde-format
-#| msgid "Filter Effect Editor"
+#, kde-format
 msgid "Filter effects editing"
-msgstr "سۈزگۈچ ئۈنۈمى تەھرىرلىگۈچ"
+msgstr ""
 
 #: KarbonGradientTool.cpp:199
 #, kde-format
@@ -341,10 +329,9 @@ msgid "Predefined Gradients"
 msgstr ""
 
 #: KarbonGradientToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Pattern Editing Tool"
+#, kde-format
 msgid "Gradient editing"
-msgstr "ئەندىزە تەھرىرلەش قورالى"
+msgstr ""
 
 #: KarbonPatternOptionsWidget.cpp:22
 #, kde-format
@@ -384,7 +371,7 @@ msgstr "سول"
 #: KarbonPatternOptionsWidget.cpp:30
 #, kde-format
 msgid "Center"
-msgstr "مەركەز"
+msgstr "ئوتتۇرا"
 
 #: KarbonPatternOptionsWidget.cpp:31
 #, kde-format
@@ -414,226 +401,189 @@ msgstr "ئەندىزە تاللانمىسى"
 #: KarbonPatternTool.cpp:272
 #, kde-format
 msgid "Patterns"
-msgstr "ئەندىزىلەر"
+msgstr "ئەندىزە"
 
 #: KarbonPatternToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Pattern Editing Tool"
+#, kde-format
 msgid "Pattern editing"
-msgstr "ئەندىزە تەھرىرلەش قورالى"
+msgstr ""
 
-#, fuzzy
 #~| msgid "Effects and Connections"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Effects and Connections"
 #~ msgstr "ئۈنۈملەر ۋە باغلىنىشلار"
 
-#, fuzzy
 #~| msgid "..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "..."
 #~ msgstr "…"
 
-#, fuzzy
 #~| msgid "Remove profile"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove profile"
 #~ msgstr "سەپلىمە ھۆججەت چىقىرىۋەت"
 
-#, fuzzy
 #~| msgid "Width:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Width:"
 #~ msgstr "كەڭلىك:"
 
-#, fuzzy
 #~| msgid "Angle:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Angle:"
 #~ msgstr "بۇلۇڭ:"
 
-#, fuzzy
 #~| msgid "Mass:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mass:"
 #~ msgstr "ماسسا:"
 
-#, fuzzy
 #~| msgid "Drag:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Drag:"
 #~ msgstr "سۆرەش:"
 
-#, fuzzy
 #~| msgid "Current"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Current"
 #~ msgstr "نۆۋەتتىكى"
 
-#, fuzzy
 #~| msgctxt "invalid profile name"
 #~| msgid "Invalid name."
 #~ msgctxt "(qtundo-format) invalid profile name"
 #~ msgid "Invalid name."
 #~ msgstr "ئىناۋەتسىز ئات."
 
-#, fuzzy
 #~| msgid "Mouse"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Mouse"
 #~ msgstr "چاشقىنەك"
 
-#, fuzzy
 #~| msgid "Fill"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fill"
 #~ msgstr "تولدۇر"
 
-#, fuzzy
 #~| msgid "Effect name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Effect name"
 #~ msgstr "ئۇنۇم ئاتى"
 
-#, fuzzy
 #~| msgid "Filter Effect Editor"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Filter Effect Editor"
 #~ msgstr "سۈزگۈچ ئۈنۈمى تەھرىرلىگۈچ"
 
-#, fuzzy
 #~| msgid "Effects"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Effects"
 #~ msgstr "ئۈنۈملەر"
 
-#, fuzzy
 #~| msgid "Add Filter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add Filter"
 #~ msgstr "سۈزگۈچ قوش"
 
-#, fuzzy
 #~| msgid "Effect Properties"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Effect Properties"
 #~ msgstr "ئۈنۈم خاسلىقى"
 
-#, fuzzy
 #~| msgid "X:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "X:"
 #~ msgstr "X:"
 
-#, fuzzy
 #~| msgid "Y:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Y:"
 #~ msgstr "Y:"
 
-#, fuzzy
 #~| msgid "W:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "W:"
 #~ msgstr "W:"
 
-#, fuzzy
 #~| msgid "H:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "H:"
 #~ msgstr "H:"
 
-#, fuzzy
 #~| msgid "Filter Effect Editor"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Filter effects editing"
 #~ msgstr "سۈزگۈچ ئۈنۈمى تەھرىرلىگۈچ"
 
-#, fuzzy
 #~| msgid "Original"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Original"
 #~ msgstr "ئەسلى"
 
-#, fuzzy
 #~| msgid "Tiled"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tiled"
 #~ msgstr "يېيىلغان"
 
-#, fuzzy
 #~| msgid "Stretched"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Stretched"
 #~ msgstr "سوزۇلغان"
 
-#, fuzzy
 #~| msgid "Top Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Top Left"
 #~ msgstr "سول ئۈستى"
 
-#, fuzzy
 #~| msgid "Top"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Top"
 #~ msgstr "ئۈستى"
 
-#, fuzzy
 #~| msgid "Top Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Top Right"
 #~ msgstr "ئوڭ ئۈستى"
 
-#, fuzzy
 #~| msgid "Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Left"
 #~ msgstr "سول"
 
-#, fuzzy
 #~| msgid "Center"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Center"
 #~ msgstr "مەركەز"
 
-#, fuzzy
 #~| msgid "Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Right"
 #~ msgstr "ئوڭ"
 
-#, fuzzy
 #~| msgid "Bottom Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bottom Left"
 #~ msgstr "سول ئاستى"
 
-#, fuzzy
 #~| msgid "Bottom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bottom"
 #~ msgstr "ئاستى"
 
-#, fuzzy
 #~| msgid "Bottom Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bottom Right"
 #~ msgstr "ئوڭ ئاستى"
 
-#, fuzzy
 #~| msgid "Pattern Options"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pattern Options"
 #~ msgstr "ئەندىزە تاللانمىسى"
 
-#, fuzzy
 #~| msgid "Patterns"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Patterns"
 #~ msgstr "ئەندىزىلەر"
 
-#, fuzzy
 #~| msgid "Pattern Editing Tool"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pattern editing"
