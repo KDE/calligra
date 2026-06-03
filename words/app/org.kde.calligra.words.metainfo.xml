@@ -78,6 +78,7 @@
   <summary xml:lang="sl">Urejevalnik besedil</summary>
   <summary xml:lang="sv">Ordbehandlare</summary>
   <summary xml:lang="tr">Sözcük İşlemcisi</summary>
+  <summary xml:lang="ug">يېزىق بىر تەرەپ قىلىش</summary>
   <summary xml:lang="uk">Текстовий процесор</summary>
   <summary xml:lang="zh-CN">文字处理与排版软件</summary>
   <summary xml:lang="zh-TW">文書處理器</summary>
@@ -163,6 +164,7 @@
     <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
+    <p xml:lang="ug">ئىقتىدار:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="zh-CN">程序功能：</p>
     <p xml:lang="zh-TW">功能：</p>

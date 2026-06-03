@@ -160,6 +160,7 @@
     <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
+    <p xml:lang="ug">ئىقتىدار:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="zh-CN">程序功能：</p>
     <p xml:lang="zh-TW">功能：</p>
@@ -643,6 +644,7 @@
       <caption xml:lang="sl">Glavno okno Carbona</caption>
       <caption xml:lang="sv">Huvudfönstret i Karbon</caption>
       <caption xml:lang="tr">Karbon’un ana penceresi</caption>
+      <caption xml:lang="ug">Karbon نىڭ ئاساسىي كۆزنىكى</caption>
       <caption xml:lang="uk">Головне вікно Karbon</caption>
       <caption xml:lang="zh-CN">Karbon 主窗口</caption>
       <caption xml:lang="zh-TW">Karbon 的主視窗</caption>

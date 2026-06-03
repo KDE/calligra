@@ -36,6 +36,7 @@
   <name xml:lang="sl">Calligra Sheets</name>
   <name xml:lang="sv">Calligra Sheets</name>
   <name xml:lang="tr">Calligra Tablolar</name>
+  <name xml:lang="ug">Calligra ۋاراقلار</name>
   <name xml:lang="uk">Calligra Sheets</name>
   <name xml:lang="zh-CN">Calligra Sheets</name>
   <name xml:lang="zh-TW">Calligra Sheets</name>
@@ -75,6 +76,7 @@
   <summary xml:lang="sl">Preglednica</summary>
   <summary xml:lang="sv">Kalkylark</summary>
   <summary xml:lang="tr">Hesap Tablosu</summary>
+  <summary xml:lang="ug">ئېلېكترونلۇق جەدۋەل</summary>
   <summary xml:lang="uk">Електронні таблиці</summary>
   <summary xml:lang="zh-CN">电子表格处理软件</summary>
   <summary xml:lang="zh-TW">工作表</summary>
@@ -156,6 +158,7 @@
     <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
+    <p xml:lang="ug">ئىقتىدار:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="zh-CN">程序功能：</p>
     <p xml:lang="zh-TW">功能：</p>

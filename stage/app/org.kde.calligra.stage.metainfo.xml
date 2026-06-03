@@ -75,6 +75,7 @@
   <summary xml:lang="sl">Predstavitev</summary>
   <summary xml:lang="sv">Presentation</summary>
   <summary xml:lang="tr">Sunum</summary>
+  <summary xml:lang="ug">كۆرسەتمە</summary>
   <summary xml:lang="uk">Презентації</summary>
   <summary xml:lang="zh-CN">演示文稿制作软件</summary>
   <summary xml:lang="zh-TW">簡報</summary>
@@ -155,6 +156,7 @@
     <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
+    <p xml:lang="ug">ئىقتىدار:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="zh-CN">程序功能：</p>
     <p xml:lang="zh-TW">功能：</p>
@@ -351,6 +353,7 @@
       <caption xml:lang="sl">Glavno okno Calligra Stage</caption>
       <caption xml:lang="sv">Calligra Stage huvudfönster</caption>
       <caption xml:lang="tr">Calligra Sahne ana penceresi</caption>
+      <caption xml:lang="ug">Calligra Stage ئاساسىي كۆزنىكى</caption>
       <caption xml:lang="uk">Головне вікно Calligra Stage</caption>
       <caption xml:lang="zh-CN">Calligra Stage 主窗口</caption>
       <caption xml:lang="zh-TW">Calligra Stage 主視窗</caption>

@@ -30,6 +30,7 @@
   <name xml:lang="sl">Calligra</name>
   <name xml:lang="sv">Calligra</name>
   <name xml:lang="tr">Calligra</name>
+  <name xml:lang="ug">Calligra</name>
   <name xml:lang="uk">Calligra</name>
   <name xml:lang="zh-CN">Calligra</name>
   <name xml:lang="zh-TW">Calligra</name>
@@ -295,6 +296,7 @@
       <caption xml:lang="sl">Glavno okno Calligra Sheets</caption>
       <caption xml:lang="sv">Calligra Sheets huvudfönster</caption>
       <caption xml:lang="tr">Calligra Tablolar ana penceresi</caption>
+      <caption xml:lang="ug">Calligra Sheets ئاساسىي كۆزنىكى</caption>
       <caption xml:lang="uk">Головне вікно Calligra</caption>
       <caption xml:lang="zh-CN">Calligra Sheets 主窗口</caption>
       <caption xml:lang="zh-TW">Calligra Sheets 主視窗</caption>
@@ -328,6 +330,7 @@
       <caption xml:lang="sl">Glavno okno Calligra Stage</caption>
       <caption xml:lang="sv">Calligra Stage huvudfönster</caption>
       <caption xml:lang="tr">Calligra Sahne ana penceresi</caption>
+      <caption xml:lang="ug">Calligra Stage ئاساسىي كۆزنىكى</caption>
       <caption xml:lang="uk">Головне вікно Calligra Stage</caption>
       <caption xml:lang="zh-CN">Calligra Stage 主窗口</caption>
       <caption xml:lang="zh-TW">Calligra Stage 主視窗</caption>
@@ -361,6 +364,7 @@
       <caption xml:lang="sl">Glavno okno Karbon</caption>
       <caption xml:lang="sv">Huvudfönstret i Karbon</caption>
       <caption xml:lang="tr">Karbon ana penceresi</caption>
+      <caption xml:lang="ug">Karbon نىڭ ئاساسىي كۆزنىكى</caption>
       <caption xml:lang="uk">Головне вікно Karbon</caption>
       <caption xml:lang="zh-CN">Karbon 主窗口</caption>
       <caption xml:lang="zh-TW">Karbon 的主視窗</caption>
