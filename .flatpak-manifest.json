@@ -150,8 +150,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/kirigami-addons/kirigami-addons-1.10.0.tar.xz",
-                    "sha256": "c98f92bf7c452e12f6dc403404215413db3959fe904ad830ead0db6bb09b3d11",
+                    "url": "https://download.kde.org/stable/kirigami-addons/kirigami-addons-1.12.1.tar.xz",
+                    "sha256": "c543a493ce5875f405fb1c9ff6d531060ed082cc6d710e56d46ac42d164207bb",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 242933,
@@ -174,8 +174,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/mm2/Little-CMS/releases/download/lcms2.17/lcms2-2.17.tar.gz",
-                    "sha256": "d11af569e42a1baa1650d20ad61d12e41af4fead4aa7964a01f93b08b53ab074",
+                    "url": "https://github.com/mm2/Little-CMS/releases/download/lcms2.19.1/lcms2-2.19.1.tar.gz",
+                    "sha256": "bfc54f7bab59fbc921012014a8032e4cba4abd46db47d46b76416a8c0b2815c8",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 9815,
@@ -229,7 +229,7 @@
                     }
                 },
                 {
-		    "type": "patch",
+                    "type": "patch",
                     "path": "includes.patch"
                 }
             ]
@@ -245,8 +245,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://dev-www.libreoffice.org/src/libvisio/libvisio-0.1.10.tar.xz",
-                    "sha256": "9e9eff75112d4d92d92262ad7fc2599c21e26f8fc5ba54900efdc83c0501e472",
+                    "url": "https://dev-www.libreoffice.org/src/libvisio/libvisio-0.1.11.tar.xz",
+                    "sha256": "2a6efd40b6d9dbcb70fba3be53112366882ba97b57151df3698dfa478c8d8dd3",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 1757,
