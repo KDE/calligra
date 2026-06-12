@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-14 20:57+0300\n"
+"PO-Revision-Date: 2026-06-09 09:23+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.04.1\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -9462,9 +9462,9 @@ msgid "PEARSON(range1; range2)"
 msgstr "PEARSON(טווח2 ;טווח1)"
 
 #: functions/statistical.xml:923
-#, fuzzy, kde-format
+#, kde-format
 msgid "PEARSON(A1:A3; B1:B3)"
-msgstr "(COVAR(A1:A3; B1:B3"
+msgstr "PEARSON(A1:A3; B1:B3)"
 
 #: functions/statistical.xml:936
 #, kde-format
@@ -9513,14 +9513,14 @@ msgid "PERMUTATIONA(total;chosen)"
 msgstr "COMBIN(נבחרים;סה\"כ)"
 
 #: functions/statistical.xml:961
-#, fuzzy, kde-format
+#, kde-format
 msgid "PERMUTATIONA(2,3) returns 8"
-msgstr "(MINA(12;5; 7 מחזירה 5"
+msgstr "PERMUTATIONA(2,3) מחזירה 8"
 
 #: functions/statistical.xml:962
-#, fuzzy, kde-format
+#, kde-format
 msgid "PERMUTATIONA(0,0) returns 1"
-msgstr "(FACT(0 מחזירה 1"
+msgstr "PERMUTATIONA(0,0) מחזירה 1"
 
 #: functions/statistical.xml:970
 #, kde-format
@@ -9604,14 +9604,14 @@ msgid "POISSON(60;50;1) equals 0.927840"
 msgstr "(POISSON(60;50;1 שווה ל־0.927840"
 
 #: functions/statistical.xml:1032
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data (array)"
-msgstr "ערך (מערך)"
+msgstr "נתונים (מערך)"
 
 #: functions/statistical.xml:1036
-#, fuzzy, kde-format
+#, kde-format
 msgid "Order"
-msgstr "&מסגרת"
+msgstr "סדר"
 
 #: functions/statistical.xml:1040
 #, fuzzy, kde-format
