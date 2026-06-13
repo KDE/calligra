@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-06-03 08:55+0200\n"
+"PO-Revision-Date: 2026-06-11 16:14+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1082,7 +1082,7 @@ msgstr "Words de Calligra"
 #: part/KWAboutData.h:20
 #, kde-format
 msgid "Word processor"
-msgstr "Processador de text"
+msgstr "Processador de textos"
 
 #: part/KWAboutData.h:22
 #, kde-format
@@ -1430,7 +1430,7 @@ msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
 "the appropriate application."
 msgstr ""
-"Este no és un document de processador de text, sinó %1. Proveu d'obrir-lo "
+"Este no és un document de processador de textos, sinó %1. Proveu d'obrir-lo "
 "amb l'aplicació apropiada."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
