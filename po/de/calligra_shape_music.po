@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2007, 2008 Jannick Kuhr <opensource@kuhr.org>
-# SPDX-FileCopyrightText: 2007, 2011, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2007, 2011, 2014-2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2007-2008 Jannick Kuhr <opensource@kuhr.org>
 # SPDX-FileCopyrightText: 2012 Markus Slopianka <markus.s@kdemail.net>
 # SPDX-FileCopyrightText: 2013 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
