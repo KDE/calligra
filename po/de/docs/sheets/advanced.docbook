@@ -63,7 +63,7 @@
 <title
 >Reihen</title>
 <para
->Wenn Sie eine Tabelle erstellen, müssen Sie häufig eine Reihe von Werten, wie z.B. 10, 11, 12, ... in einer Zeile oder in einer Spalte eingeben. Es gibt verschiedene Möglichkeiten, wie Sie dies in &sheets; tun können.</para>
+>Wenn Sie eine Tabelle erstellen, müssen Sie häufig eine Reihe von Werten, wie z. B. 10, 11, 12, ... in einer Zeile oder in einer Spalte eingeben. Es gibt verschiedene Möglichkeiten, wie Sie dies in &sheets; tun können.</para>
 <para
 >Für eine einfache kurze Reihe wie 5, 6, 7, 8, ... ist die <quote
 >Ziehen und Kopieren</quote
@@ -94,7 +94,7 @@
 ><guimenuitem
 >Benutzerdefinierte Listen ...</guimenuitem
 ></menuchoice
-> um zu sehen, welche besonderen Reihen verfügbar sind, und welche Sie vielleicht selbst erstellen wollen.</para>
+> um zu sehen, welche besonderen Reihen verfügbar sind, und welche Sie vielleicht selbst erstellen möchten.</para>
 
 <para
 >Wenn Sie eine Zelle auswählen und <guimenuitem
@@ -105,7 +105,7 @@
 >Reihe</guilabel
 >. Dieses ist nützlich für das Erzeugen von Reihen, die zu lang sind, um mit der Ziehen-und-Kopieren-Methode erstellt zu werden, oder für das Erzeugen geometrischer Reihen wie 1, 1,5, 2,25, 3,375, ..., wo der Schrittwert, 1,5 in diesem Fall, als Multiplikator verwendet wird.</para>
 <para
->Wenn die gewünschte Art der Reihe für die vorhergehenden Methoden zu schwierig ist, verwenden Sie eine Formel und ziehen und kopieren Sie diese. Z. B., um eine Reihe mit den Werten 2, 4, 16, 256, ... zu erzeugen, geben Sie <userinput
+>Wenn die gewünschte Art der Reihe für die vorhergehenden Methoden zu schwierig ist, verwenden Sie eine Formel und ziehen und kopieren Sie diese. z. B., um eine Reihe mit den Werten 2, 4, 16, 256, ... zu erzeugen, geben Sie <userinput
 >2</userinput
 > in A1 und <userinput
 >= A1*A1</userinput
@@ -355,7 +355,7 @@
 <para
 ><link linkend="namedareas"
 >Benannte Zellenbereiche</link
-> können in einer ähnlichen Weise benutzt werden, um feste Zellenverweise in eine Formel einzugeben. </para>
+> können in einer ähnlichen Weise verwendet werden, um feste Zellenverweise in eine Formel einzugeben. </para>
 </sect2>
 </sect1>
 
@@ -365,13 +365,13 @@
 >Einfügen Spezial</quote
 ></title>
 <para
->Vielleicht wollen Sie manchmal einen einzelnen Wert zu einer Anzahl von Zellen addieren oder von ihnen subtrahieren, oder Zellen mit einem Wert multiplizieren oder sie alle durch einen einzelnen Wert teilen. Die Funktion <guimenuitem
+>Vielleicht möchten Sie manchmal einen einzelnen Wert zu einer Anzahl von Zellen addieren oder von ihnen subtrahieren, oder Zellen mit einem Wert multiplizieren oder sie alle durch einen einzelnen Wert teilen. Die Funktion <guimenuitem
 >Einfügen spezial ...</guimenuitem
 > lässt Sie das schnell und einfach tun.</para>
 <para
->Zuerst tragen Sie den Wert, mit dem Sie eine Berechnung auf dem Zellenbereich durchführen wollen, in eine freie Zelle in ihrer Tabelle ein und <guimenuitem
+>Zuerst tragen Sie den Wert, mit dem Sie eine Berechnung auf dem Zellenbereich durchführen möchten, in eine freie Zelle in ihrer Tabelle ein und <guimenuitem
 >kopieren</guimenuitem
-> ihn. Wählen Sie dann den Bereich der Zellen aus, die Sie ändern wollen und wählen Sie <guimenuitem
+> ihn. Wählen Sie dann den Bereich der Zellen aus, die Sie ändern möchten und wählen Sie <guimenuitem
 >Einfügen spezial ...</guimenuitem
 > aus dem Menü <guimenu
 >Bearbeiten</guimenu
@@ -391,7 +391,7 @@
 <para
 >Sie können auch unterschiedliche Modifikationswerte auf unterschiedliche Zeilen oder Spalten des Zielbereichs anwenden, indem Sie einen Bereich, der die gewünschten Modifikationsfaktoren enthält, kopieren, bevor Sie den Zielbereich auswählen und <guimenuitem
 >Einfügen spezial ...</guimenuitem
-> ausführen. Z. B. wenn Sie <userinput
+> ausführen. z. B. wenn Sie <userinput
 >5</userinput
 > in Zelle A1 und <userinput
 >10</userinput
@@ -412,7 +412,7 @@
 <title
 >Feldformeln</title>
 <para
->&sheets; erlaubt die Benutzung von Formeln, deren Ergebnis eine Matrix oder ein Bereich von Werten ist. Normalerweise wird nur der erste Wert in einer Zelle angezeigt. Wenn Sie die gesamte Matrix dargestellt werden soll, benutzen Sie den Kurzbefehl <keycombo
+>&sheets; erlaubt die Benutzung von Formeln, deren Ergebnis eine Matrix oder ein Bereich von Werten ist. Normalerweise wird nur der erste Wert in einer Zelle angezeigt. Wenn Sie die gesamte Matrix dargestellt werden soll, verwenden Sie den Kurzbefehl <keycombo
 >&Ctrl;&Alt;&Enter;</keycombo
 > bei der Bearbeitung einer Formel. Dann wird die Formel in eine Feldformel umgewandelt und die benachbarten Zellen werden, soweit erforderlich, belegt.</para>
 <para
@@ -615,7 +615,7 @@
 >Tabelle entfernen</guimenuitem
 > im Kontextmenü, das Sie mit einem Klick der <mousebutton
 >rechten</mousebutton
-> Maustaste auf den Karteireiter der Tabelle, die Sie entfernen wollen, öffnen.</para>
+> Maustaste auf den Karteireiter der Tabelle, die Sie entfernen möchten, öffnen.</para>
 <para
 >Andere Eintragungen im <menuchoice
 ><guimenu
@@ -625,7 +625,7 @@
 ></menuchoice
 >-Untermenü erlauben Ihnen, ein Blatt auf beinahe gleiche Art und Weise anzuzeigen oder auszublenden, wie Zeilen und Spalten angezeigt und ausgeblendet werden können.</para>
 <para
->Wenn Sie in einer Formel in einer Tabelle einen Verweis auf eine Zelle in einer anderen Tabelle eingeben wollen, muss der Zellenverweis mit dem Tabellennamen beginnen, gefolgt von einem Ausrufezeichen (<keysym
+>Wenn Sie in einer Formel in einer Tabelle einen Verweis auf eine Zelle in einer anderen Tabelle eingeben möchten, muss der Zellenverweis mit dem Tabellennamen beginnen, gefolgt von einem Ausrufezeichen (<keysym
 >!</keysym
 >).Wenn Sie zum Beispiel <userinput
 >=Tabelle2!A2</userinput
@@ -636,7 +636,7 @@
 <title
 >Daten zusammenfassen</title>
 <para
->Angenommen Sie haben ein Dokument aus mehreren Tabellen mit ähnlichen Daten, aber zum Beispiel für verschiedene Monate eines Jahres und wollen in einer zusätzlichen Tabelle die zusammengehörenden Werte aus den anderen Tabellen zusammenfassen (z. B. Summe oder Durchschnitt ermitteln).</para>
+>Angenommen Sie haben ein Dokument aus mehreren Tabellen mit ähnlichen Daten, aber zum Beispiel für verschiedene Monate eines Jahres und möchten in einer zusätzlichen Tabelle die zusammengehörenden Werte aus den anderen Tabellen zusammenfassen (z. B. Summe oder Durchschnitt ermitteln).</para>
 <para
 >Diese Aufgabe durch die Funktion <guimenuitem
 >Zusammenfassen ...</guimenuitem
@@ -654,7 +654,7 @@
 >Hinzufügen</guibutton
 >, dadurch wird der Verweis in die Liste  <guilabel
 >Eingegebene Verweise</guilabel
-> aufgenommen. Der Verweis sollte den Namen der Tabelle mit den Quelldaten enthalten, wie z. B. <userinput
+> aufgenommen. Der Verweis sollte den Namen der Tabelle mit den Quelldaten enthalten, wie z. B. <userinput
 >Januar!A1:A10</userinput
 >, und kann automatisch eingegeben werden, indem Sie den gewünschten Bereich in der entsprechenden Tabelle auswählen.</para>
 <para
@@ -699,7 +699,7 @@
 >Diagramm-Einstellungen</guilabel
 >.</para>
 <para
->Im Datenbereich ist bereits die ausgewählte Zellenbereich eingetragen. Sie können nun die erste Zeile oder Spalte als Beschriftung angeben und die Datensätze zeilenweise oder spaltenweise benutzen. Wenn Sie den Knopf <guibutton
+>Im Datenbereich ist bereits die ausgewählte Zellenbereich eingetragen. Sie können nun die erste Zeile oder Spalte als Beschriftung angeben und die Datensätze zeilenweise oder spaltenweise verwenden. Wenn Sie den Knopf <guibutton
 >OK</guibutton
 > betätigen, verschwindet der Dialog und Sie sehen das Diagramm einbettet in der Tabelle. </para>
 <para
@@ -736,7 +736,7 @@
 <para
 >Um das Diagramm zu verschieben, bewegen Sie den Cursor hinein. Der Cursor wird zu einem Kreuz, halten Sie jetzt die <mousebutton
 > linke </mousebutton
-> Maustaste gedrückt und Sie können das Diagramm dorthin bewegen, wo Sie es haben wollen.</para>
+> Maustaste gedrückt und Sie können das Diagramm dorthin bewegen, wo Sie es haben möchten.</para>
 <para
 >Um das Aussehen des Diagramms wieder zu normalisieren, klicken Sie einfach irgendwo außerhalb des Diagramms in die Tabelle.</para>
 <para
@@ -751,7 +751,7 @@
 <title
 >Externe Daten einfügen</title>
 <para
->Sie können Daten aus einer Textdatei oder aus der Zwischenablage in eine Tabelle einfügen, indem Sie zuerst die Zelle auswählen, in der Sie das obere linke Element der einzufügenden Daten einfügen wollen und dann <guimenuitem
+>Sie können Daten aus einer Textdatei oder aus der Zwischenablage in eine Tabelle einfügen, indem Sie zuerst die Zelle auswählen, in der Sie das obere linke Element der einzufügenden Daten einfügen möchten und dann <guimenuitem
 >Aus Textdatei ...</guimenuitem
 > oder <guimenuitem
 >Aus Zwischenablage ...</guimenuitem
@@ -786,7 +786,7 @@
 <para
 >Eine Tabellenzelle kann mit einer Aktion verknüpft werden, damit das <mousebutton
 >linke</mousebutton
-> Klicken auf der Zelle z. B. Ihren Webbrowser öffnet. Damit eine Zelle auf diese Weise funktioniert, wählen Sie <menuchoice
+> Klicken auf der Zelle z. B. Ihren Webbrowser öffnet. Damit eine Zelle auf diese Weise funktioniert, wählen Sie <menuchoice
 ><guimenu
 >Einfügen</guimenu
 ><guimenuitem
@@ -921,7 +921,7 @@
 </mediaobject>
 </para>
 <para
->Diese Passwort brauchen Sie, um den Schutz des Dokuments wieder aufzuheben.</para>
+>Diese Passwort benötigen Sie, um den Schutz des Dokuments wieder aufzuheben.</para>
 <para>
 <mediaobject>
 <imageobject>
@@ -985,7 +985,7 @@
 >Passwortstärkeanzeiger</guilabel
 > zeigt Ihnen, ob Ihr Passwort sicher genug ist. Je länger der angezeigte Balken, desto sicherer ist das Passwort.</para>
 <para
->Diese Passwort brauchen Sie, um den Schutz der Tabelle wieder aufzuheben.</para>
+>Diese Passwort benötigen Sie, um den Schutz der Tabelle wieder aufzuheben.</para>
 <para
 >Wenn eine Tabelle geschützt ist, können Sie nicht:</para>
 <itemizedlist>
@@ -1025,7 +1025,7 @@
 >Zellenschutz ist in der Voreinstellung für alle Zellen eingeschaltet und wird dann wirksam, wenn Sie die Tabelle schützen. Wenn Sie die Voreinstellung nicht ändern und die Tabelle schützen, sind alle Zellen geschützt.</para
 ></warning>
 <para
->Wollen Sie nur bestimmte Zellen schützen, muss der als Standard eingestellte Schutz für alle anderen Zellen ausgeschaltet werden. Wollen Sie den Benutzern zum Beispiel die Eingabe in die meisten Zellen erlauben, müssen Sie die Eigenschaft <guilabel
+>Möchten Sie nur bestimmte Zellen schützen, muss der als Standard eingestellte Schutz für alle anderen Zellen ausgeschaltet werden. Möchten Sie den Benutzern zum Beispiel die Eingabe in die meisten Zellen erlauben, müssen Sie die Eigenschaft <guilabel
 >Geschützt</guilabel
 > für diese Zellen ausschalten und für die übrigen Zellen, die nicht geändert werden sollen, den Zellenschutz einschalten. Das erfordert drei Schritte: Schutz für alle Zellen aufheben, die zu schützenden Zellen auswählen und dafür den Schutz aktivieren und dann die gesamte Tabelle schützen.</para>
 <para
@@ -1065,7 +1065,7 @@
 <itemizedlist>
 <listitem
 ><para
->Wählen einen Bereich von Zellen, die geschützt werden sollen, oder benutzen Sie die Taste <keycombo action="simul"
+>Wählen einen Bereich von Zellen, die geschützt werden sollen, oder verwenden Sie die Taste <keycombo action="simul"
 >&Ctrl;</keycombo
 >, um nicht-zusammenhängende Zellen auszuwählen. </para
 ></listitem>
@@ -1204,7 +1204,7 @@
 </mediaobject>
 </para>
 <para
->Denken Sie daran, das es sehr leicht ist, das Passwort für eine geschützte Tabelle zu knacken, für wirkliche Sicherheit brauchen Sie ein besseres Konzept.</para>
+>Denken Sie daran, das es sehr leicht ist, das Passwort für eine geschützte Tabelle zu knacken, für wirkliche Sicherheit benötigen Sie ein besseres Konzept.</para>
 </sect2>
 
 <sect2 id="hide-all">
@@ -1344,7 +1344,7 @@ Remove View</guimenuitem
 >absoluten Zellenverweisen</link
 >, da die Namen anstatt der normalen Zellenverweise verwendet werden können und nicht geändert werden, wenn die Zelle, die die Formel enthält, kopiert wird. Wenn ein Name auf diese Art verwendet wird, sollte er in einfachen Anführungszeichen eingeschlossen werden.</para>
 <para
->Z. B. wenn Sie Zelle A1 den Namen <userinput
+>z. B. wenn Sie Zelle A1 den Namen <userinput
 >Fred</userinput
 > gegeben haben, dann können Sie eine Formel wie <userinput
 >= 'Fred' + 2</userinput

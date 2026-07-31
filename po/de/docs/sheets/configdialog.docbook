@@ -140,7 +140,7 @@
 ></term>
 <listitem
 ><para
->Alle Navigationstasten, &ie; die Cursor-Tasten. die Tasten Bild ab/auf, die Tabulatortaste und die Rückschritttaste werden beim Editieren direkt in einer Zelle für die Bearbeitung benutzt. Ist diese Einstellung aktiviert, werden diese Tasten für die Navigation im Editor verwendet. Ist diese Einstellung abgeschaltet, werden die Tasten für die Zellennavigation verwendet.</para>
+>Alle Navigationstasten, &ie; die Cursor-Tasten. die Tasten Bild ab/auf, die Tabulatortaste und die Rückschritttaste werden beim Editieren direkt in einer Zelle für die Bearbeitung verwendet. Ist diese Einstellung aktiviert, werden diese Tasten für die Navigation im Editor verwendet. Ist diese Einstellung abgeschaltet, werden die Tasten für die Zellennavigation verwendet.</para>
 </listitem>
 </varlistentry>
 
@@ -578,7 +578,7 @@ the title case, for example My Own Spreadsheet or My own spreadsheet. If this is
 <para
 >Wählen Sie aus dem Auswahlfeld eine Autorprofil für Ihr Dokument. </para>
 <para
->Um neue Profile hinzuzufügen oder vorhandene zu löschen, benutzen Sie die Knöpfe rechts neben dem Auswahlfeld mit den Autorprofilen. </para>
+>Um neue Profile hinzuzufügen oder vorhandene zu löschen, verwenden Sie die Knöpfe rechts neben dem Auswahlfeld mit den Autorprofilen. </para>
 </sect1>
 </chapter>
 

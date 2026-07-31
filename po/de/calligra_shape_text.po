@@ -992,7 +992,7 @@ msgstr "Aus dem Dokument:"
 #: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Used Styles"
-msgstr "Benutzte Stile"
+msgstr "Verwendete Stile"
 
 #: dialogs/DockerStylesComboModel.cpp:67
 #, kde-format
@@ -2236,7 +2236,7 @@ msgstr ""
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Durch das Übernehmen einer "
 "Stiländerung wird jeder Text neu formatiert, dem vorher dieser Stil "
-"zugewiesen wurde. Benutzen Sie den Stil-Docker, um Texten einen Stil "
+"zugewiesen wurde. Verwenden Sie den Stil-Docker, um Texten einen Stil "
 "zuzuweisen.</p></body></html>"
 
 #: dialogs/StylesComboPreview.cpp:68

@@ -1659,7 +1659,7 @@ msgid ""
 "being displayed.</p>"
 msgstr ""
 "Die Lineale erscheinen oben und links vom Dokument. Sie zeigen die Größe "
-"bzw. Postion von Seiten bzw. Rahmen an und lassen sich u. a. zur "
+"bzw. Postion von Seiten bzw. Rahmen an und lassen sich u. a. zur "
 "Positionierung von Tabulatoren verwenden.<p>Deaktivieren Sie diese Option, "
 "wenn Sie die Lineale ausblenden möchten.</p>"
 
@@ -1704,7 +1704,7 @@ msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
-"Stilvorlagen werden benutzt, um Informationen, die in RDF gespeichert "
+"Stilvorlagen werden verwendet, um Informationen, die in RDF gespeichert "
 "werden, zu formatieren."
 
 #: part/KWView.cpp:418

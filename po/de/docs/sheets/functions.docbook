@@ -89,7 +89,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -116,13 +116,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Erste Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Zweite Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -166,7 +166,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -193,13 +193,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Erste Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl, um die nach links verschoben werden soll</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -231,7 +231,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -258,13 +258,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Erste Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Zweite Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -308,7 +308,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -335,13 +335,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Erste Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl, um die nach rechts verschoben werden soll</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -373,7 +373,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -400,13 +400,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Erste Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Zweite Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -455,7 +455,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -557,7 +557,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Die zu konvertierenden ASCII-Werte</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -593,7 +593,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -917,7 +917,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -1070,7 +1070,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Zu konvertierender ganzzahliger Wert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -1423,13 +1423,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Format</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -1504,19 +1504,19 @@ all changes will be overwritten on the next script run
 ><seg
 >Stunden</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Minuten</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Sekunden</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2746,19 +2746,19 @@ all changes will be overwritten on the next script run
 ><seg
 >Jahr</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Monat</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Tag</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -2788,7 +2788,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -2845,7 +2845,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -2921,7 +2921,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -2988,7 +2988,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3094,7 +3094,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Nummer des Wochentags (1..7)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -3134,7 +3134,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3161,19 +3161,19 @@ all changes will be overwritten on the next script run
 ><seg
 >Jahr</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Monat</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Tag</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -3209,7 +3209,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3270,7 +3270,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3361,7 +3361,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3388,13 +3388,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Jahr</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Monat</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -3422,7 +3422,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3449,7 +3449,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Jahr</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -3504,7 +3504,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Jahr</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -3565,7 +3565,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Monate</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -3650,7 +3650,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Monate</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -3710,7 +3710,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3789,7 +3789,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3871,7 +3871,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Jahr</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -3899,7 +3899,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -3966,7 +3966,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4045,7 +4045,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4100,7 +4100,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4206,7 +4206,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Nummer des Monats (1..12)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -4234,7 +4234,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4273,7 +4273,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Berechnungsmodus</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -4311,7 +4311,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4413,7 +4413,7 @@ all changes will be overwritten on the next script run
 >Beispiele</term>
 <listitem
 ><para
->NOW() ergibt z. B. „Samstag, 13. April 2002 19:12:01“</para
+>NOW() ergibt z. B. „Samstag, 13. April 2002 19:12:01“</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -4446,7 +4446,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4525,7 +4525,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4607,19 +4607,19 @@ all changes will be overwritten on the next script run
 ><seg
 >Stunden</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Minuten</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Sekunden</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -4818,7 +4818,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Unix-Zeit</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -4846,7 +4846,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4879,7 +4879,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Berechnungsmethode (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -4919,7 +4919,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -4952,7 +4952,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Berechnungsmethode (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5000,7 +5000,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -5039,7 +5039,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Berechnungsmodus</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5075,7 +5075,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -5102,7 +5102,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Jahr</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5165,7 +5165,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Arbeitstage</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -5199,7 +5199,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -5280,7 +5280,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -5339,7 +5339,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -5378,7 +5378,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Berechnungsmodus</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5452,13 +5452,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >MinLänge</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5519,7 +5519,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Reihenfolge der Funktion</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5600,7 +5600,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Reihenfolge der Funktion</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5681,7 +5681,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Reihenfolge der Funktion</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5762,7 +5762,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Reihenfolge der Funktion</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5811,7 +5811,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -5838,7 +5838,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Der zu konvertierende Wert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5907,7 +5907,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Die minimale Länge der Ausgabe</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -5976,7 +5976,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Die minimale Länge der Ausgabe</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -6215,13 +6215,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Der zu konvertierende Wert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Die minimale Länge der Ausgabe</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -6284,13 +6284,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Der zu konvertierende Wert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Die minimale Länge der Ausgabe</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -6353,13 +6353,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Der zu konvertierende Wert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Die minimale Länge der Ausgabe</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -6766,7 +6766,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -7816,7 +7816,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Potenz</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -8634,7 +8634,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Die minimale Länge der Ausgabe</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -8670,7 +8670,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -8767,7 +8767,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Die minimale Länge der Ausgabe</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -8871,7 +8871,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis der Tageszählung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -8962,7 +8962,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis der Tageszählung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -9120,7 +9120,7 @@ all changes will be overwritten on the next script run
 ><seg
 >P</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -9369,7 +9369,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis der Tageszählung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -9442,19 +9442,19 @@ all changes will be overwritten on the next script run
 ><seg
 >Start</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Ende</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Typ</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -9543,19 +9543,19 @@ all changes will be overwritten on the next script run
 ><seg
 >Start</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Ende</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Typ</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -9844,7 +9844,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis der Tageszählung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -9917,7 +9917,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Teiler</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -9994,7 +9994,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Teiler</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -10178,7 +10178,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -10716,7 +10716,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis der Tageszählung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -10815,7 +10815,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Typ (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -10969,13 +10969,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Periode</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der Perioden</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -11173,7 +11173,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -11416,7 +11416,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Typ (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -11636,7 +11636,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -11733,7 +11733,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -11824,7 +11824,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Typ (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -11946,7 +11946,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Typ (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -12063,7 +12063,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -12084,7 +12084,7 @@ all changes will be overwritten on the next script run
 <title
 >PV</title>
 <para
->Die Funktion PV() gibt den Barwert einer Anlage zurück. Das ist der heutige Wert einer Geldsumme in der Zukunft bei einem bestimmten Zinssatz bzw. einer bestimmten Inflationsrate. Wenn Sie z. B. 1166,40 EUR für einen neuen Computer benötigen, welchen Sie in zwei Jahren kaufen möchten, benötigen Sie bei einem Zinssatz von 8 % jetzt PV(1166,4;0,08;2) oder 1000 EUR.</para>
+>Die Funktion PV() gibt den Barwert einer Anlage zurück. Das ist der heutige Wert einer Geldsumme in der Zukunft bei einem bestimmten Zinssatz bzw. einer bestimmten Inflationsrate. Wenn Sie z. B. 1166,40 EUR für einen neuen Computer benötigen, welchen Sie in zwei Jahren kaufen möchten, benötigen Sie bei einem Zinssatz von 8 % jetzt PV(1166,4;0,08;2) oder 1000 EUR.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -12361,7 +12361,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -12416,7 +12416,7 @@ all changes will be overwritten on the next script run
 ><seg
 >P</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -12956,7 +12956,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -13193,7 +13193,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -13278,7 +13278,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Basis</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -13391,7 +13391,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -13710,7 +13710,7 @@ all changes will be overwritten on the next script run
 <title
 >ISERR</title>
 <para
->Die Funktion ISERR() gibt Wahr zurück, wenn der Parameter ein anderer Fehler als „N/A“ ist. Ansonsten gibt sie Falsch zurück. Wenn „N/A“ ebenfalls behandelt werden soll, müssen Sie die Funktion ISERROR() benutzen.</para>
+>Die Funktion ISERR() gibt Wahr zurück, wenn der Parameter ein anderer Fehler als „N/A“ ist. Ansonsten gibt sie Falsch zurück. Wenn „N/A“ ebenfalls behandelt werden soll, müssen Sie die Funktion ISERROR() verwenden.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -14632,7 +14632,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -14750,7 +14750,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -15639,19 +15639,19 @@ all changes will be overwritten on the next script run
 ><seg
 >Zeilennummer</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Spaltennummer</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Absolute Zahl (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -15723,7 +15723,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -15890,7 +15890,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Index</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -15932,7 +15932,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16011,7 +16011,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16131,7 +16131,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Zeile</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -16157,7 +16157,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16190,13 +16190,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Zeile</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Spalte</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -16232,7 +16232,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16303,7 +16303,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16370,7 +16370,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16409,7 +16409,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Art der Übereinstimmung (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -16422,7 +16422,7 @@ all changes will be overwritten on the next script run
 <title
 >MULTIPLE.OPERATIONS</title>
 <para
->MULTIPLE.OPERATIONS führt den Formelausdruck in der Formelzelle und alle darauf verweisenden Formelausdrücke. Dabei werden alle Verweise auf Zeilenzelle mit Verweisen auf Zeilenersatz und entsprechend alle Verweise auf Spaltenzelle mit Verweisen auf Spaltenersatz ersetzt. Diese Funktion kann dazu benutzt werden, Tabellen mit Ausdrücken zu erstellen, die von zwei Eingabeparametern abhängen.</para>
+>MULTIPLE.OPERATIONS führt den Formelausdruck in der Formelzelle und alle darauf verweisenden Formelausdrücke. Dabei werden alle Verweise auf Zeilenzelle mit Verweisen auf Zeilenersatz und entsprechend alle Verweise auf Spaltenzelle mit Verweisen auf Spaltenersatz ersetzt. Diese Funktion kann dazu verwendet werden, Tabellen mit Ausdrücken zu erstellen, die von zwei Eingabeparametern abhängen.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -16533,25 +16533,25 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der zu versetzenden Reihen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der zu versetzenden Spalten</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Höhe des Versatzbereichs (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Breite des Versatzbereichs (optional)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -16571,7 +16571,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16650,7 +16650,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16729,7 +16729,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16792,7 +16792,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -16880,7 +16880,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Spalte</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -17252,7 +17252,7 @@ all changes will be overwritten on the next script run
 <title
 >COUNTA</title>
 <para
->Diese Funktion gibt die Anzahl aller nicht leeren Argumente zurück. Sie können auch einem Zellbereich zählen. COUNTA(A1:B5) oder benutzen Sie eine Liste von Werten wie COUNTA(12;5;12,5).</para>
+>Diese Funktion gibt die Anzahl aller nicht leeren Argumente zurück. Sie können auch einem Zellbereich zählen. COUNTA(A1:B5) oder verwenden Sie eine Liste von Werten wie COUNTA(12;5;12,5).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -17413,7 +17413,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -18227,7 +18227,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -18381,7 +18381,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -19752,7 +19752,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -19779,13 +19779,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Fließkommawert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Fließkommawert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -20081,7 +20081,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Dimension</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -20445,7 +20445,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -20544,7 +20544,7 @@ all changes will be overwritten on the next script run
 >Beispiele</term>
 <listitem
 ><para
->RAND() ergibt z. B. 0,78309922...</para
+>RAND() ergibt z. B. 0,78309922...</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -20678,13 +20678,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Unterer Wert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Oberer Wert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -20695,7 +20695,7 @@ all changes will be overwritten on the next script run
 >Beispiele</term>
 <listitem
 ><para
->RANDBETWEEN(12;78) ergibt z. B. 61,0811...</para
+>RANDBETWEEN(12;78) ergibt z. B. 61,0811...</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -20757,7 +20757,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Versuche (größer 0)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -20901,7 +20901,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Fehler (größer 0)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -21124,7 +21124,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Wert</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -21197,7 +21197,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Ziffern</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -21310,7 +21310,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Ziffern</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -21411,7 +21411,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Ziffern</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -21552,7 +21552,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -21780,7 +21780,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Funktion</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -22317,7 +22317,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Genauigkeit</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -22826,13 +22826,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Versuche</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl erfolgreicher Versuche</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -22901,7 +22901,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Freiheitsgrade</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -22929,7 +22929,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -22956,13 +22956,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Elemente</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der auszuwählenden Elemente</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -22998,7 +22998,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -23025,13 +23025,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Elemente</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der auszuwählenden Elemente</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -23108,7 +23108,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Größe der ganzen Population</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -23400,7 +23400,7 @@ all changes will be overwritten on the next script run
 ><seg
 >0 = Dichte, 1 = Verteilung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -23469,13 +23469,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Freiheitsgrade 1</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Freiheitsgrade 2</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -23536,13 +23536,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Zahl r1</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Zahl r2</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -23801,7 +23801,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Kumuliert-Schalter</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -24248,25 +24248,25 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Erfolge in der Probe</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der Versuche</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der Erfolge insgesamt</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Populationsgröße</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -24374,13 +24374,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Versuche</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Zahl der Misserfolge</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -24645,7 +24645,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Position (von dem größten)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -24707,13 +24707,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Freiheitsgrade 1</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Freiheitsgrade 2</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -25062,13 +25062,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Zahl der Misserfolge</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl erfolgreicher Versuche</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -25156,7 +25156,7 @@ all changes will be overwritten on the next script run
 ><seg
 >0 = Dichte, 1 = Verteilung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -25507,7 +25507,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -25534,13 +25534,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Elemente</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der Elemente zum Permutieren</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -25576,7 +25576,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -25603,13 +25603,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Elemente</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der auszuwählenden Elemente</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -25743,7 +25743,7 @@ all changes will be overwritten on the next script run
 ><seg
 >0 = Dichte, 1 = Verteilung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -26163,7 +26163,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Position (von dem kleinsten Wert)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -27021,13 +27021,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Freiheitsgrade für die t-Verteilung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Modus (1 oder 2)</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -27214,13 +27214,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Typ</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Modus</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -27872,7 +27872,7 @@ all changes will be overwritten on the next script run
 ><seg
 >0 = Dichte, 1 = Verteilung</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -27903,7 +27903,7 @@ all changes will be overwritten on the next script run
 <para
 >Die Funktion ZTEST() berechnet die zweiseitige Wahrscheinlichkeit eines z-Tests mit Normalverteilung.</para>
 <para
->Führt einen Test der Null-Hypothese durch, dass x ein Beispiel einer normal verteilten Zufallsprobe mit der dem angegebenen Mittelwert und der angegebenen  Standardabweichung. Ein Rückgabewert von 1 bedeutet, das die Null-Hypothese zurückgewiesen wurde, d. h. x ist keine zufällige Probe einer Normalverteilung.  Wenn die Standardabweichung nicht angegeben ist, wird sie mit der Funktion STDEV aus der Probe x ermittelt. </para>
+>Führt einen Test der Null-Hypothese durch, dass x ein Beispiel einer normal verteilten Zufallsprobe mit der dem angegebenen Mittelwert und der angegebenen  Standardabweichung. Ein Rückgabewert von 1 bedeutet, das die Null-Hypothese zurückgewiesen wurde, d. h. x ist keine zufällige Probe einer Normalverteilung.  Wenn die Standardabweichung nicht angegeben ist, wird sie mit der Funktion STDEV aus der Probe x ermittelt. </para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28060,7 +28060,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Zahl</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -28115,7 +28115,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Zeichen-Code</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -28211,7 +28211,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -28278,7 +28278,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -28485,7 +28485,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Dezimalstellen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -28606,7 +28606,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -28645,7 +28645,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Gibt den Index an, an dem die Suche beginnt</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -28719,7 +28719,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -28758,7 +28758,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Gibt die Byteposition an, an der die Suche beginnt</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -28839,7 +28839,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Dezimalstellen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -28981,7 +28981,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl an Zeichen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -29082,7 +29082,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Bytelänge</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -29126,7 +29126,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -29201,7 +29201,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -29360,13 +29360,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Position</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Länge</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -29463,13 +29463,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Byteposition</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Bytelänge</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -29758,13 +29758,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Position des ersten zu ersetzenden Zeichens</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Anzahl der zu ersetzenden Zeichen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -29863,13 +29863,13 @@ all changes will be overwritten on the next script run
 ><seg
 >Byteposition des ersten zu ersetzenden Zeichens</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
 >Bytelänge der zu ersetzenden Zeichen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem>
 <seglistitem
 ><seg
@@ -29952,7 +29952,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Wiederholungen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -30021,7 +30021,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl an Zeichen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -30122,7 +30122,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Bytelänge</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -30235,7 +30235,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -30274,7 +30274,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Startposition für die Suche</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -30334,7 +30334,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -30373,7 +30373,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Angegebene Byteposition für der Start der Suche</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -30525,7 +30525,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Anzahl der Ersetzungen</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -30888,7 +30888,7 @@ all changes will be overwritten on the next script run
 ><seg
 >Zeichen-Code</seg
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para
@@ -30932,7 +30932,7 @@ all changes will be overwritten on the next script run
 >Rückgabetyp</segtitle>
 <seglistitem
 ><seg
->Ganze Zahl (z. B. 1, 132, 2344)</seg
+>Ganze Zahl (z. B. 1, 132, 2344)</seg
 ></seglistitem
 ></segmentedlist
 ></para>
@@ -31570,7 +31570,7 @@ all changes will be overwritten on the next script run
 <title
 >ATAN2</title>
 <para
->Diese Funktion berechnet den Arcustangens der beiden Variablen x und y. Es ist ähnlich dazu, den Arcustangens von y/x auszurechnen, nur dass die Vorzeichen der beiden Argumente dazu benutzt werden, den Quadranten des Ergebnisses zu bestimmen.</para>
+>Diese Funktion berechnet den Arcustangens der beiden Variablen x und y. Es ist ähnlich dazu, den Arcustangens von y/x auszurechnen, nur dass die Vorzeichen der beiden Argumente dazu verwendet werden, den Quadranten des Ergebnisses zu bestimmen.</para>
 <para
 ><segmentedlist
 ><segtitle

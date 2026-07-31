@@ -232,7 +232,7 @@
 >Prozent</guiicon
 > in der Werkzeugleiste <guilabel
 >Format</guilabel
-> benutzen. <inlinemediaobject
+> verwenden. <inlinemediaobject
 ><imageobject>
 <imagedata fileref="percent.png" format="PNG"/>
 </imageobject
@@ -263,7 +263,7 @@
 >Währungsformat</guiicon
 > in der Werkzeugleiste <guilabel
 >Format</guilabel
-> benutzen, um als Zellenformat die aktuelle Währung einzustellen. <inlinemediaobject
+> verwenden, um als Zellenformat die aktuelle Währung einzustellen. <inlinemediaobject
 ><imageobject>
 <imagedata fileref="hi22-action-money.png" format="PNG"/>
 </imageobject
@@ -763,7 +763,7 @@ better-->
 >Zellenschutz</guilabel
 > ein.</para>
 <para
->Alle Zellen sind in der Standardeinstellung geschützt, d. h. der Inhalt kann nicht geändert werden. Damit dieser Schutz wirksam wird, müssen Sie zusätzlich noch den Schutz der Tabelle mit <menuchoice
+>Alle Zellen sind in der Standardeinstellung geschützt, d. h. der Inhalt kann nicht geändert werden. Damit dieser Schutz wirksam wird, müssen Sie zusätzlich noch den Schutz der Tabelle mit <menuchoice
 ><guimenu
 >Extras</guimenu
 > <guimenuitem
@@ -846,7 +846,7 @@ better-->
 <title
 >Bedingte Zellenattribute</title>
 <para
->Sie können das Darstellung der Werte in einer Zelle abhängig von dem darin enthaltenen Wert ändern lassen. Das ist z. B. nützlich, wenn Sie &sheets; verwenden, um die Übersicht über Ihre Haushaltungskosten zu behalten und alle Einzelposten größer als tausend Euro hervorheben wollen.</para>
+>Sie können das Darstellung der Werte in einer Zelle abhängig von dem darin enthaltenen Wert ändern lassen. Das ist z. B. nützlich, wenn Sie &sheets; verwenden, um die Übersicht über Ihre Haushaltungskosten zu behalten und alle Einzelposten größer als tausend Euro hervorheben möchten.</para>
 <para
 >Dazu wählen Sie die zunächst die Zellen aus, dann <guimenuitem
 >Bedingte Stile ...</guimenuitem
@@ -1085,7 +1085,7 @@ better-->
 ></term>
 <listitem
 ><para
->Ist diese Einstellung aktiviert, wird der Zellenverweis am linken Ende der Formelleiste im LC-Modus (z. B. L2C3) und nicht in seiner normalen Form angezeigt. Diese Einstellung wird selten verwendet.</para>
+>Ist diese Einstellung aktiviert, wird der Zellenverweis am linken Ende der Formelleiste im LC-Modus (z. B. L2C3) und nicht in seiner normalen Form angezeigt. Diese Einstellung wird selten verwendet.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -1115,7 +1115,7 @@ better-->
 ></term>
 <listitem
 ><para
->Ist diese Einstellung aktiviert, werden die Seitenränder in Ihrer aktuellen Tabelle angezeigt. Standardmäßig sind sie ausgeblendet. Das Anzeigen der Seitenränder ist nützlich, wenn Sie Ihre Tabelle drucken wollen.</para>
+>Ist diese Einstellung aktiviert, werden die Seitenränder in Ihrer aktuellen Tabelle angezeigt. Standardmäßig sind sie ausgeblendet. Das Anzeigen der Seitenränder ist nützlich, wenn Sie Ihre Tabelle drucken möchten.</para>
 </listitem>
 </varlistentry>
 <varlistentry>

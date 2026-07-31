@@ -150,7 +150,7 @@
 </itemizedlist>
 
 <para
->Die einzelnen Programme benutzen die Flake-Technologie und wurden mit dem Ziel entwickelt, zusammen in Dokumenten benutzt zu werden. Jede &calligra;-Komponente kann in ein beliebiges &calligra;-Dokument eingebettet werden. Sie können z. B. eine in &sheets; erstellte Tabelle direkt in ein &words;-Dokument einfügen. Damit ist es möglich, mit den &calligra;-Programmen komplexe zusammengesetzte Dokumente zu erstellen. </para>
+>Die einzelnen Programme verwenden die Flake-Technologie und wurden mit dem Ziel entwickelt, zusammen in Dokumenten verwendet zu werden. Jede &calligra;-Komponente kann in ein beliebiges &calligra;-Dokument eingebettet werden. Sie können z. B. eine in &sheets; erstellte Tabelle direkt in ein &words;-Dokument einfügen. Damit ist es möglich, mit den &calligra;-Programmen komplexe zusammengesetzte Dokumente zu erstellen. </para>
 
 <para
 >Durch das Einbinden von Modulen können Sie die Fähigkeiten von &calligra; erweitern. Sie finden viele Module in den einzelnen Programmen und können sehr leicht lernen, eigene Module zu entwickeln. </para>
@@ -191,7 +191,7 @@
 <para
 >Es ist für einen Sammlung von Büroprogrammen sehr wichtig, sich an weit verbreitete Standards zu halten. Das gilt besonders für die Dateiformate, damit Dokumente problemlos mit anderen Büroprogrammen bearbeitet werden können. Damit verringert sich die Abhängigkeit von Softwareherstellern, besonders wichtig für Firmen und auch für Privatleute. </para>
 <para
->Aus diesem Grund benutzt &calligra; das OASIS-OpenDocument-Format als Standardformat.  </para>
+>Aus diesem Grund verwendet &calligra; das OASIS-OpenDocument-Format als Standardformat.  </para>
 </sect2>
 <sect2 id="featurekde">
 <title
@@ -219,7 +219,7 @@
 >Obwohl die Oberfläche (&GUI;) von &calligra; in der Standardeinstellung sinnvoll vorkonfiguriert ist, gibt es Möglichkeiten, das Erscheinungsbild der Programme an die eigenen Vorstellungen anzupassen. </para>
 
 <para
->Um z. B. die Funktionen, die durch Knöpfe und Menüeinträge sichtbar sind, auf ein Minimum zu reduzieren, können Sie das &GUI; von &calligra; entsprechend anpassen. Falls Sie z. B. nur einfache Briefe schreiben möchten, benötigen Sie nicht viel mehr Funktionen als speichern, laden, drucken &etc; </para>
+>Um z. B. die Funktionen, die durch Knöpfe und Menüeinträge sichtbar sind, auf ein Minimum zu reduzieren, können Sie das &GUI; von &calligra; entsprechend anpassen. Falls Sie z. B. nur einfache Briefe schreiben möchten, benötigen Sie nicht viel mehr Funktionen als speichern, laden, drucken &etc; </para>
 
 <para
 >Mit Hilfe des <quote

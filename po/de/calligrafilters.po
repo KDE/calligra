@@ -618,7 +618,7 @@ msgid ""
 msgstr ""
 "Dieses Dokument wird als LaTeX-Dokument erstellt, das Teil eines "
 "übergreifenden Hauptdokuments sein muss. Das ermöglicht Ihnen die Erstellung "
-"mehrerer kleiner Dateien, die z. B. einzelne Kapitel enthalten."
+"mehrerer kleiner Dateien, die z. B. einzelne Kapitel enthalten."
 
 #. i18n: ectx: property (text), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:97
