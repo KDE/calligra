@@ -193,7 +193,7 @@ msgstr "Text"
 #: engine/FunctionDescription.cpp:39
 #, kde-format
 msgid "Whole number (like 1, 132, 2344)"
-msgstr "Ganze Zahl (z. B. 1, 132, 2344)"
+msgstr "Ganze Zahl (z. B. 1, 132, 2344)"
 
 #: engine/FunctionDescription.cpp:41
 #, kde-format
@@ -2116,7 +2116,7 @@ msgstr "NOW()"
 #: functions/datetime.xml:544
 #, kde-format
 msgid "NOW() returns \"Saturday 13 April 2002 19:12:01\""
-msgstr "NOW() ergibt z. B. „Samstag, 13. April 2002 19:12:01“"
+msgstr "NOW() ergibt z. B. „Samstag, 13. April 2002 19:12:01“"
 
 #: functions/datetime.xml:554
 #, kde-format
@@ -5173,7 +5173,7 @@ msgid ""
 msgstr ""
 "Die Funktion PV() gibt den Barwert einer Anlage zurück. Das ist der heutige "
 "Wert einer Geldsumme in der Zukunft bei einem bestimmten Zinssatz bzw. einer "
-"bestimmten Inflationsrate. Wenn Sie z. B. 1166,40 EUR für einen neuen "
+"bestimmten Inflationsrate. Wenn Sie z. B. 1166,40 EUR für einen neuen "
 "Computer benötigen, welchen Sie in zwei Jahren kaufen möchten, benötigen Sie "
 "bei einem Zinssatz von 8 % jetzt PV(1166,4;0,08;2) oder 1000 EUR."
 
@@ -6033,7 +6033,7 @@ msgid ""
 msgstr ""
 "Die Funktion ISERR() gibt Wahr zurück, wenn der Parameter ein anderer Fehler "
 "als „N/A“ ist. Ansonsten gibt sie Falsch zurück. Wenn „N/A“ ebenfalls "
-"behandelt werden soll, müssen Sie die Funktion ISERROR() benutzen."
+"behandelt werden soll, müssen Sie die Funktion ISERROR() verwenden."
 
 #: functions/information.xml:270
 #, kde-format
@@ -6877,7 +6877,7 @@ msgid ""
 "COUNTA(12;5;12.5)."
 msgstr ""
 "Diese Funktion gibt die Anzahl aller nicht leeren Argumente zurück. Sie "
-"können auch einem Zellbereich zählen. COUNTA(A1:B5) oder benutzen Sie eine "
+"können auch einem Zellbereich zählen. COUNTA(A1:B5) oder verwenden Sie eine "
 "Liste von Werten wie COUNTA(12;5;12,5)."
 
 #: functions/math.xml:315
@@ -7791,7 +7791,7 @@ msgstr "RAND()"
 #: functions/math.xml:950
 #, kde-format
 msgid "RAND() equals for example 0.78309922..."
-msgstr "RAND() ergibt z. B. 0,78309922..."
+msgstr "RAND() ergibt z. B. 0,78309922..."
 
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
@@ -7965,7 +7965,7 @@ msgstr "RANDBETWEEN(Unterer;Oberer)"
 #: functions/math.xml:1082
 #, kde-format
 msgid "RANDBETWEEN(12;78) equals for example 61.0811..."
-msgstr "RANDBETWEEN(12;78) ergibt z. B. 61,0811..."
+msgstr "RANDBETWEEN(12;78) ergibt z. B. 61,0811..."
 
 #: functions/math.xml:1094
 #, kde-format
@@ -8230,7 +8230,7 @@ msgid ""
 "just Enter) to display the array elements in separate cells."
 msgstr ""
 "Da das Ergebnis ein Feld ist, müssen Sie Ctrl+Alt+Eingabetaste anstatt nur "
-"Eingabetaste benutzen, um die Feldelemente in getrennten Zellen anzuzeigen."
+"Eingabetaste verwenden, um die Feldelemente in getrennten Zellen anzuzeigen."
 
 #: functions/math.xml:1240
 #, kde-format
@@ -8853,8 +8853,8 @@ msgstr ""
 "darauf verweisenden Formelausdrücke. Dabei werden alle Verweise auf "
 "Zeilenzelle mit Verweisen auf Zeilenersatz und entsprechend alle Verweise "
 "auf Spaltenzelle mit Verweisen auf Spaltenersatz ersetzt. Diese Funktion "
-"kann dazu benutzt werden, Tabellen mit Ausdrücken zu erstellen, die von zwei "
-"Eingabeparametern abhängen."
+"kann dazu verwendet werden, Tabellen mit Ausdrücken zu erstellen, die von "
+"zwei Eingabeparametern abhängen."
 
 #: functions/reference.xml:331
 #, kde-format
@@ -9598,7 +9598,7 @@ msgid ""
 msgstr ""
 "Beachten Sie , dass die Daten in Spalten vorliegen müssen und da das "
 "Ergebnis ein Feld ist, müssen Sie Ctrl+Alt+Eingabetaste anstatt nur "
-"Eingabetaste benutzen, um die Feldelemente in getrennten Zellen anzuzeigen. "
+"Eingabetaste verwenden, um die Feldelemente in getrennten Zellen anzuzeigen. "
 
 #: functions/statistical.xml:422
 #, kde-format
@@ -10822,8 +10822,8 @@ msgid ""
 "Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to "
 "display the values in separate cells."
 msgstr ""
-"Da das Ergebnis ein Feld ist, benutzen Sie Ctrl+Alt+Eingabetaste anstatt nur "
-"Eingabetaste, um die Feldelemente in getrennten Zellen anzuzeigen."
+"Da das Ergebnis ein Feld ist, verwenden Sie Ctrl+Alt+Eingabetaste anstatt "
+"nur Eingabetaste, um die Feldelemente in getrennten Zellen anzuzeigen."
 
 #: functions/statistical.xml:1437
 #, kde-format
@@ -10952,7 +10952,7 @@ msgid ""
 "number of cells."
 msgstr ""
 "Abhängige Tests (Paardifferenzentest) sind nur dann passend, wenn beide "
-"Sätze von Datenwerten aus der gleichen  Quelle bezogen werden, d. h. jede "
+"Sätze von Datenwerten aus der gleichen  Quelle bezogen werden, d. h. jede "
 "Datenquelle hat ein Datenelement sowohl im ersten als auch im zweiten "
 "Datenbereich. Im Beispiel mit den laufenden Personen kann dieser Test nicht "
 "angewendet werden, da eine Person nicht gleichzeitig klein oder groß sein "
@@ -10976,7 +10976,7 @@ msgstr ""
 "Werden die Datensätze nicht aus der gleichen Quelle bezogen, dann hängt die "
 "Auswahl des passenden Typs des abhängigen Test von der Varianz in jeder der "
 "beiden Datensätze ab. Wenn die Varianz der beiden Datensätze ähnlich ist, "
-"kann unabhängiger t-Test für Daten mit ähnlicher Varianz (Typ = 2) benutzt "
+"kann unabhängiger t-Test für Daten mit ähnlicher Varianz (Typ = 2) verwendet "
 "werden. Wenn die Varianzen nicht genügend ähnlich sind, muss ein "
 "unabhängiger t-Test für Daten mit verschiedener Varianz (Typ = 3) eingesetzt "
 "werden."
@@ -11201,7 +11201,7 @@ msgstr ""
 "Führt einen Test der Null-Hypothese durch, dass x ein Beispiel einer normal "
 "verteilten Zufallsprobe mit der dem angegebenen Mittelwert und der "
 "angegebenen Standardabweichung ist. Ein Rückgabewert von 1 bedeutet, dass "
-"die Null-Hypothese zurückgewiesen wurde, d. h. x ist keine zufällige Probe "
+"die Null-Hypothese zurückgewiesen wurde, d. h. x ist keine zufällige Probe "
 "einer Normalverteilung. Wenn die Standardabweichung nicht angegeben ist, "
 "wird sie mit der Funktion STDEV aus der Probe x ermittelt."
 
@@ -12884,7 +12884,7 @@ msgid ""
 msgstr ""
 "Diese Funktion berechnet den Arcustangens der beiden Variablen x und y. Es "
 "ist ähnlich dazu, den Arcustangens von y/x auszurechnen, nur dass die "
-"Vorzeichen der beiden Argumente dazu benutzt werden, den Quadranten des "
+"Vorzeichen der beiden Argumente dazu verwendet werden, den Quadranten des "
 "Ergebnisses zu bestimmen."
 
 #: functions/trig.xml:229
@@ -13620,7 +13620,7 @@ msgstr "&Gitterfarbe:"
 msgid ""
 "Click here to change the grid color ie the color of the borders of each cell."
 msgstr ""
-"Klicken Sie hier, um die Farbe der Gitterlinien, z. B. die Umrandungen der "
+"Klicken Sie hier, um die Farbe der Gitterlinien, z. B. die Umrandungen der "
 "Zellen, zu ändern."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -14030,8 +14030,8 @@ msgid ""
 "normal form B3. This does not seem to be of much use at the moment."
 msgstr ""
 "Wenn diese Einstellung aktiv ist, wird der Zellverweis am linken Ende der "
-"Formelleiste im LC-Modus (z. B. L2C3) und nicht in seiner normalen Form (z. "
-"B. B3) angezeigt. Derzeit scheint dies nicht von großem Nutzen zu sein."
+"Formelleiste im LC-Modus (z. B. L2C3) und nicht in seiner normalen Form "
+"(z. B. B3) angezeigt. Derzeit scheint dies nicht von großem Nutzen zu sein."
 
 #. i18n: ectx: property (text), widget (QCheckBox, useLCModeCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:123
@@ -18395,7 +18395,7 @@ msgstr ""
 "Wählen Sie den Schriftstil für die aktuell ausgewählten Zellen. Wenn mehrere "
 "Zellen mit unterschiedlichem Stil ausgewählt sind, wird die Anzeige auf "
 "„Unterschiedlich (Keine Änderung)“ gesetzt. Belassen Sie diese Einstellung, "
-"werden keine Änderungen durchgeführt. Ändern Sie sie hingegen z. B. auf "
+"werden keine Änderungen durchgeführt. Ändern Sie sie hingegen z. B. auf "
 "„Roman“, wird der Textstil für alle ausgewählten Zellen auf „Roman“ geändert."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
@@ -18427,7 +18427,7 @@ msgstr ""
 "mehrere Zellen mit unterschiedlicher Stärke ausgewählt sind, wird die "
 "Anzeige auf „Unterschiedlich (Keine Änderung)“ gesetzt. Belassen Sie diese "
 "Einstellung, werden keine Änderungen durchgeführt. Ändern Sie sie hingegen "
-"z. B. auf „Fett“, wird die Schriftstärke für alle ausgewählten Zellen auf "
+"z. B. auf „Fett“, wird die Schriftstärke für alle ausgewählten Zellen auf "
 "„Fett“ geändert."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
@@ -18613,7 +18613,7 @@ msgid ""
 msgstr ""
 "Wenn Sie in der aktuellen Zelle eine Zahl haben und das Zellenformat von "
 "Allgemein auf Prozent umstellen, wird die Zahl mit 100% multipliziert.\n"
-"Wenn Sie z. B. 12 eingeben und das Zellenformat auf Prozent umstellen, wird "
+"Wenn Sie z. B. 12 eingeben und das Zellenformat auf Prozent umstellen, wird "
 "die Zahl zu 1200%. Wenn Sie das Zellenformat wieder auf Allgemein "
 "zurückstellen, wird die Zahl wieder 12.\n"
 "Sie können alternativ auch das Prozent-Symbol in der Format-Werkzeugleiste "

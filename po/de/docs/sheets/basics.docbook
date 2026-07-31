@@ -64,7 +64,7 @@
 >Tabellenkalkulation für Anfänger</title>
 
 <para
->Dieser Abschnitt versucht beispielhaft zu erklären, was ein Tabellenkalkulationsprogramm wie &sheets; tatsächlich tut und warum es in jeder Situation, in der Sie mit Zahlen umgehen müssen, ein so nützliches Werkzeug ist. Wenn Sie schon ein Tabellenkalkulationsprogramm benutzt haben können Sie im nächsten Abschnitt weiterlesen.</para>
+>Dieser Abschnitt versucht beispielhaft zu erklären, was ein Tabellenkalkulationsprogramm wie &sheets; tatsächlich tut und warum es in jeder Situation, in der Sie mit Zahlen umgehen müssen, ein so nützliches Werkzeug ist. Wenn Sie schon ein Tabellenkalkulationsprogramm verwendet haben können Sie im nächsten Abschnitt weiterlesen.</para>
 
 <para
 >Zuerst müssen Sie &sheets; starten, indem Sie mit der <mousebutton
@@ -111,7 +111,7 @@
 >linken</mousebutton
 > Maustaste in die Zelle klicken. Dann geben Sie in die Zelle beliebige Werte oder Texte ein. Danach drücken Sie die Taste &Enter; oder wählen Sie mit den Pfeiltasten eine andere Zelle aus. </para>
 <para
->Was bis jetzt eingetragen ist könnte ein kleiner Haushaltsplan für die nächsten zwei Monate sein, der auflistet wieviel Sie für Nahrungsmittel, Miete, Kleidung und irgendwelche andere Ausgaben ausgeben wollen. Wählen Sie jetzt die Zelle B7 (Spalte B, Zeile 7) aus und tippen Sie <userinput
+>Was bis jetzt eingetragen ist könnte ein kleiner Haushaltsplan für die nächsten zwei Monate sein, der auflistet wieviel Sie für Nahrungsmittel, Miete, Kleidung und irgendwelche andere Ausgaben ausgeben möchten. Wählen Sie jetzt die Zelle B7 (Spalte B, Zeile 7) aus und tippen Sie <userinput
 >=B2+B3+B4+B5</userinput
 > ein. Danach bestätigen Sie die Eingabe mit der Taste &Enter;. Weil die Eingabe mit dem Symbol <keycap
 >=</keycap
@@ -253,7 +253,7 @@
 ><para
 >Uhrzeiten sollten ebenfalls im <quote
 >System</quote
->-Format eingegeben werden. Wenn Sie eine 12-Stunden-Uhr benutzen, geben Sie Zeiten im Format HH:MIN am|pm oder HH:MIN:SS am|pm ein, wie z. B. <userinput
+>-Format eingegeben werden. Wenn Sie eine 12-Stunden-Uhr verwenden, geben Sie Zeiten im Format HH:MIN am|pm oder HH:MIN:SS am|pm ein, wie z. B. <userinput
 >9:42 am</userinput
 > oder <userinput
 >10:30:52 pm</userinput
@@ -288,7 +288,7 @@
 <para
 >&sheets; verwendet als Standard das Zellenformat <quote
 >Allgemein</quote
->. Für Zellen in diesem Format bestimmt &sheets; automatisch den Datentyp aus dem Zelleninhalt. Wenn Sie zum Beispiel Text in eine Zelle eingeben und später eine Zahl in dieselbe Zelle, betrachtet &sheets; die neuen Daten automatisch als Zahl. Wenn Sie den Datentyp einer Zelle direkt festlegen wollen, stellen Sie das Format im Dialog <link linkend="formatdata"
+>. Für Zellen in diesem Format bestimmt &sheets; automatisch den Datentyp aus dem Zelleninhalt. Wenn Sie zum Beispiel Text in eine Zelle eingeben und später eine Zahl in dieselbe Zelle, betrachtet &sheets; die neuen Daten automatisch als Zahl. Wenn Sie den Datentyp einer Zelle direkt festlegen möchten, stellen Sie das Format im Dialog <link linkend="formatdata"
 >Zellenformat</link
 > ein. Sie können ein Zellenformat jederzeit wieder auf <quote
 >Allgemein</quote
@@ -339,7 +339,7 @@
 >Kopieren</guimenuitem
 > und <guimenuitem
 >Einfügen</guimenuitem
-> so geändert, dass er auf die Zelle zeigt, die in der gleichen relativen Position zur Einfügezelle steht, wie die Zelle, auf die in der ausgeschnittenen oder kopierten Zelle verwiesen wird. Wenn z. B. Zelle A2 die Formel <userinput
+> so geändert, dass er auf die Zelle zeigt, die in der gleichen relativen Position zur Einfügezelle steht, wie die Zelle, auf die in der ausgeschnittenen oder kopierten Zelle verwiesen wird. Wenn z. B. Zelle A2 die Formel <userinput
 >=B3</userinput
 > enthält und nach C4 kopiert wird, enthält Zelle C4 <userinput
 >=D5</userinput
@@ -347,7 +347,7 @@
 <para
 >Das kann als eine ziemlich merkwürdige Art des Kopierens erscheinen, aber in 99 Prozent der Fälle ist es genau das, was gewünscht wird (wenn Sie es in einem Fall nicht wünschen, dann lesen den Abschnitt über <link linkend="absolute"
 >absolute Zellenverweise</link
->. Z. B. in der einfachen Einkaufsliste, die unten gezeigt wird, soll Zelle D2 <userinput
+>. z. B. in der einfachen Einkaufsliste, die unten gezeigt wird, soll Zelle D2 <userinput
 >=B2*C2</userinput
 > enthalten, D3 soll <userinput
 >=B3*C3</userinput
@@ -372,7 +372,7 @@
 <para
 >Ein rechteckiger Bereich von Zellen kann in einem Schritt ausgeschnitten oder kopiert werden, indem man den Bereich auswählt, bevor man ihn ausschneidet oder kopiert. Wählen Sie dann die obere linke Eckzelle des Bereichs aus, in den eingefügt werden soll, bevor Sie den Bereich einfügen.</para>
 <para
->Wenn Sie einen rechteckigen Bereich von Zellen ausschneiden oder kopieren, z. B. B2:C3 und Sie ihn in einen größeren Bereich, wie z. B. A10:D13 einfügen, wird der ursprüngliche Block von Zellen regelmäßig wiederholt, um den Zielbereich zu füllen.</para>
+>Wenn Sie einen rechteckigen Bereich von Zellen ausschneiden oder kopieren, z. B. B2:C3 und Sie ihn in einen größeren Bereich, wie z. B. A10:D13 einfügen, wird der ursprüngliche Block von Zellen regelmäßig wiederholt, um den Zielbereich zu füllen.</para>
 <para
 >Im &sheets; können Sie auch den Inhalt von Zellen mit <quote
 >Ziehen und Kopieren</quote
@@ -432,7 +432,7 @@
 ><guimenuitem
 >Inhalt</guimenuitem
 ></menuchoice
->, um den Text, den Wert oder die Formel in den ausgewählten Zellen, Zeile(n) oder Spalte(n) zu entfernen, ohne etwas anderes, wie z. B. Formatierungen, zu beeinflussen.</para>
+>, um den Text, den Wert oder die Formel in den ausgewählten Zellen, Zeile(n) oder Spalte(n) zu entfernen, ohne etwas anderes, wie z. B. Formatierungen, zu beeinflussen.</para>
 
 <para
 >Um alles in den ausgewählten Zellen, Zeilen oder Spalten, einschließlich der Kommentare und speziellen Formatierung, zu löschen, wählen Sie <guimenuitem
@@ -445,7 +445,7 @@
 ></menuchoice
 > oder aus dem Kontextmenü, das Sie durch Klicken mit der &LMBn; auf eine Zelle oder ausgewählten Bereich öffnen. </para>
 <para
->Um markierte Zeilen oder Spalten komplett aus der Tabelle zu entfernen, benutzen Sie <guimenuitem
+>Um markierte Zeilen oder Spalten komplett aus der Tabelle zu entfernen, verwenden Sie <guimenuitem
 >Zeilen löschen</guimenuitem
 > oder <guimenuitem
 >Spalten löschen</guimenuitem
@@ -459,7 +459,7 @@
 >rechten</mousebutton
 > Maustasten wählen, können Sie eingeben, ob andere Zellen von unten in der Tabelle nach oben oder von rechts nach links verschoben werden, um den Bereich der gelöschten Zellen auszufüllen.</para>
 <para
->Wenn Sie neue leere Zeilen oder Spalten in die Tabelle einfügen wollen, markieren Sie die Spalte oder Zeile, in der die neuen Zeilen oder Spalten eingefügt werden sollen und wählen Sie <guimenuitem
+>Wenn Sie neue leere Zeilen oder Spalten in die Tabelle einfügen möchten, markieren Sie die Spalte oder Zeile, in der die neuen Zeilen oder Spalten eingefügt werden sollen und wählen Sie <guimenuitem
 >Zeilen einfügen</guimenuitem
 > oder <guimenuitem
 >Spalten einfügen</guimenuitem
@@ -481,7 +481,7 @@
 <para
 >Wenn der erste Buchstabe in einer Zelle ein Gleichheitszeichen (<keycap
 >=</keycap
->) ist, erkennt &sheets; den Zelleninhalt als eine Formel, die berechnet werden soll. Das Resultat der Berechnung wird in der Zelle anstatt der Formel selbst angezeigt. Z. B. tragen Sie <userinput
+>) ist, erkennt &sheets; den Zelleninhalt als eine Formel, die berechnet werden soll. Das Resultat der Berechnung wird in der Zelle anstatt der Formel selbst angezeigt. z. B. tragen Sie <userinput
 >=2+3</userinput
 > in eine Zelle ein, sollte sie <emphasis
 >5</emphasis
@@ -572,7 +572,7 @@
 > </keycombo
 > oder <keysym
 >F9</keysym
-> benutzen.</para>
+> verwenden.</para>
 </sect2>
 </sect1>
 
@@ -770,7 +770,7 @@ selected area. For more complex sorting select <menuchoice
 <para
 >&sheets; speichert das gesamte Dokument, das mehr als eine Tabelle enthalten kann, in einer einzigen Datei.</para>
 <para
->Wenn Sie eine neues Dokument erstellt haben oder ein Dokument unter einem anderem Namen speichern wollen, verwenden Sie <menuchoice
+>Wenn Sie eine neues Dokument erstellt haben oder ein Dokument unter einem anderem Namen speichern möchten, verwenden Sie <menuchoice
 ><guimenu
 >Datei</guimenu
 ><guimenuitem
@@ -845,7 +845,7 @@ selected area. For more complex sorting select <menuchoice
 > <guimenuitem
 >Neu</guimenuitem
 ></menuchoice
-> mit einen neuen Dokument beginnen, können Sie im Startdialog Ihre Vorlage für das neue Dokument benutzen.</para>
+> mit einen neuen Dokument beginnen, können Sie im Startdialog Ihre Vorlage für das neue Dokument verwenden.</para>
 <para
 >Im Dialog <guilabel
 >Vorlage erstellen</guilabel
@@ -909,7 +909,7 @@ selected area. For more complex sorting select <menuchoice
 <para
 >Sie können auch den Dialog <guilabel
 >Seitenlayout</guilabel
-> benutzen, indem Sie <menuchoice
+> verwenden, indem Sie <menuchoice
 ><guimenu
 >Format</guimenu
 > <guimenuitem

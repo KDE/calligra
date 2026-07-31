@@ -151,7 +151,7 @@
 <listitem
 ><para
 ><action
->Speichert das aktuelle Dokument unter einem neuen Namen und in einem anderen Format. Möchten Sie mit dem aktuellen Dokument weiterarbeiten und dabei den Namen und das Format beibehalten, benutzen Sie den Menüeintrag <guimenuitem
+>Speichert das aktuelle Dokument unter einem neuen Namen und in einem anderen Format. Möchten Sie mit dem aktuellen Dokument weiterarbeiten und dabei den Namen und das Format beibehalten, verwenden Sie den Menüeintrag <guimenuitem
 >Exportieren ...</guimenuitem
 >.</action>
 </para
@@ -207,7 +207,7 @@
 >Importiert andere Dokumente.</action>
 </para>
 <para
->Tabellen mit Daten werden häufig in Textdateien gespeichert. Die Werte stehen dann in diesen Dateien durch Komma, Leerzeichen, Tabulator oder andere Buchstaben getrennt in einer Zeile, z. B. <emphasis
+>Tabellen mit Daten werden häufig in Textdateien gespeichert. Die Werte stehen dann in diesen Dateien durch Komma, Leerzeichen, Tabulator oder andere Buchstaben getrennt in einer Zeile, z. B. <emphasis
 >123, 456, 789, abcd, efgh</emphasis
 >. Solche Dateien werden gewöhnlich <quote
 ><acronym
@@ -217,7 +217,7 @@
 <para
 >Wenn Sie mit &sheets; eine Textdatei öffnen, wird angenommen, dass die Datei im <acronym
 >CSV</acronym
->-Format ist. Ein Dialog wird angezeigt, in dem Sie den Begrenzer (trennendes Zeichen) angeben können, der in der Datei benutzt wird. Es wird auch angezeigt, wie die Daten auf verschiedene Tabellenzellen verteilt werden.</para>
+>-Format ist. Ein Dialog wird angezeigt, in dem Sie den Begrenzer (trennendes Zeichen) angeben können, der in der Datei verwendet wird. Es wird auch angezeigt, wie die Daten auf verschiedene Tabellenzellen verteilt werden.</para>
 <para
 >Mit anderen Optionen in diesem Dialog können Sie das <guilabel
 >Format</guilabel
@@ -518,7 +518,7 @@
 <listitem
 ><para
 ><action
->Fügt Daten (z. B. Zelleninhalte) aus der Zwischenablage in die ausgewählten Zellen ein.</action>
+>Fügt Daten (z. B. Zelleninhalte) aus der Zwischenablage in die ausgewählten Zellen ein.</action>
 </para
 ></listitem>
 </varlistentry>

@@ -1796,7 +1796,7 @@ without leaving the dialog.</para>
 ></term>
 <listitem>
 <para
->Hier können Sie einige Einstellungen zur Seitengröße vorgenehmen. Sie können die Ränder, die Orientierung (Hochformat oder Querformat), und die Seitengröße bestimmen. Dazu gibt es viele Vorlagen wie z.B. DIN A4 oder US Legal.</para>
+>Hier können Sie einige Einstellungen zur Seitengröße vorgenehmen. Sie können die Ränder, die Orientierung (Hochformat oder Querformat), und die Seitengröße bestimmen. Dazu gibt es viele Vorlagen wie z. B. DIN A4 oder US Legal.</para>
 </listitem>
 </varlistentry>
 <!--
@@ -2622,7 +2622,7 @@ transition <emphasis
 </screenshot>
 
 <para
->Falls Sie einen bereits verwendeten Kurzbefehl neu zuordnen wollen, erhalten Sie einen Warnhinweis. Wählen Sie den gewünschten Eintrag aus (im Bild der Kurzbefehl für <guilabel
+>Falls Sie einen bereits verwendeten Kurzbefehl neu zuordnen möchten, erhalten Sie einen Warnhinweis. Wählen Sie den gewünschten Eintrag aus (im Bild der Kurzbefehl für <guilabel
 >Über KDE</guilabel
 >).</para>
 
@@ -2679,7 +2679,7 @@ transition <emphasis
 >Datei</guilabel
 > ausgewählt. Wenn Sie das Symbol <guiicon
 >Rechtschreibung</guiicon
-> zu dieser Werkzeugleiste hinzugefügen wollen, klicken Sie auf diesen Eintrag in der linken Liste. Dadurch wird das Symbol <guiicon
+> zu dieser Werkzeugleiste hinzugefügen möchten, klicken Sie auf diesen Eintrag in der linken Liste. Dadurch wird das Symbol <guiicon
 >Pfeil rechts</guiicon
 > aktiviert. Durch Klicken auf diesen Pfeil wird <guiicon
 >Andockbare Dialoge</guiicon

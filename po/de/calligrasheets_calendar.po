@@ -57,7 +57,7 @@ msgid ""
 "Creating a calendar for a longer period than a year can take up a lot of "
 "space, do you want to continue?"
 msgstr ""
-"Ein Kalender für einen längeren Zeitraum als ein Jahr braucht sehr viel "
+"Ein Kalender für einen längeren Zeitraum als ein Jahr benötigt sehr viel "
 "Speicher, möchten Sie dennoch fortfahren?"
 
 #: CalendarTool.cpp:109

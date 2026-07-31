@@ -53,7 +53,7 @@ msgstr "Navigationselemente"
 #: KoRdfLocationEditWidgetMarble.ui:43
 #, kde-format
 msgid "Use this control to navigate."
-msgstr "Benutzen Sie dieses Kontrollelement zur Navigation."
+msgstr "Verwenden Sie dieses Kontrollelement zur Navigation."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: KoRdfLocationEditWidgetMarble.ui:50
