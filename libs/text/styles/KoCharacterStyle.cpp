@@ -463,6 +463,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) cons
                     clearProperty.append(KoCharacterStyle::FontCharset);
                 }
                 format.setProperty(it.key(), it.value());
+                format.setProperty(QTextFormat::FontFamilies, QStringList(it.value().toString()));
             } else {
                 format.setProperty(it.key(), it.value());
             }
