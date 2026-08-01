@@ -20,10 +20,12 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
-#include "TextDocumentRtfOutput.h"
-#include "rtfreader.h"
+#include <QFile>
 #include <QTextDocument>
 #include <QTextDocumentWriter>
+
+#include <QRtfReader/Reader>
+#include <QRtfReader/TextDocumentRtfOutput>
 
 K_PLUGIN_FACTORY_WITH_JSON(RTFImportFactory, "calligra_filter_rtf2odt.json", registerPlugin<RTFImport>();)
 
@@ -47,7 +49,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray &from, const QByt
     // Open input file
     QString inFileName = m_chain->inputFile();
 
-    RtfReader::Reader reader;
+    QRtfReader::Reader reader;
     if (!reader.open(inFileName)) {
         if (!batch) {
             KMessageBox::error(nullptr,
@@ -59,7 +61,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray &from, const QByt
     }
 
     QTextDocument doc;
-    RtfReader::TextDocumentRtfOutput output(&doc);
+    QRtfReader::TextDocumentRtfOutput output(&doc);
     reader.parseTo(&output);
 
     QFile saveFile(m_chain->outputFile());

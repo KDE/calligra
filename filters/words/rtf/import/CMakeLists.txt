@@ -1,12 +1,6 @@
-add_subdirectory(3rdparty)
-
-include_directories(
-    3rdparty/rtf-qt/src/
-)
-
 set(rtf2odt_PART_SRCS rtfimport.cpp )
 add_library(calligra_filter_rtf2odt MODULE ${rtf2odt_PART_SRCS})
-target_link_libraries(calligra_filter_rtf2odt RtfReader komain)
+target_link_libraries(calligra_filter_rtf2odt QRtfReader komain)
 
 install(TARGETS calligra_filter_rtf2odt  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
