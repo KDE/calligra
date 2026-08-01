@@ -268,6 +268,10 @@ endif ()
 ############################
 ###########################
 
+find_package(QRtfReader)
+set_package_properties(QRtfReader PROPERTIES DESCRIPTION "A RTF reading library"
+                       URL "https://invent.kde.org/libraries/qrtfreader" TYPE OPTIONAL
+                       PURPOSE "Support for RTF import")
 
 ##
 ## Check for OpenEXR
@@ -317,7 +321,7 @@ set_package_properties(Phonon4Qt6 PROPERTIES
 #     PURPOSE "Optionally used by semantic item Event"
 #     TYPE OPTIONAL
 #     )
-# 
+#
 ##
 ## Test for KF6Contacts
 ##
@@ -328,7 +332,7 @@ set_package_properties(Phonon4Qt6 PROPERTIES
 #     PURPOSE "Optionally used by semantic item Contact"
 #     TYPE OPTIONAL
 #     )
-# 
+#
 ##
 ## Test for KPim6AkonadiCore
 ##
@@ -339,7 +343,7 @@ set_package_properties(Phonon4Qt6 PROPERTIES
 #     PURPOSE "Optionally used by semantic items Event and Contact"
 #     TYPE OPTIONAL
 #     )
-# 
+#
 ##
 ## Test for KChart
 ##
@@ -673,7 +677,7 @@ include(MacroCalligraAddBenchmark)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
 
-set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 
+set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version
     ${CMAKE_BINARY_DIR}/libs/version
     )
 
@@ -752,7 +756,7 @@ set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
 
 
 # komain depends on kotext & flake
-set(KOMAIN_INCLUDES 
+set(KOMAIN_INCLUDES
     ${KOWIDGETS_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/main
