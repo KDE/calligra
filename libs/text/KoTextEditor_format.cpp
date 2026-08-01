@@ -297,6 +297,7 @@ void KoTextEditor::setFontFamily(const QString &font)
     d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Set Font"));
     QTextCharFormat format;
     format.setFontFamily(font);
+    format.setProperty(QTextFormat::FontFamily, font);
     mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
 }
