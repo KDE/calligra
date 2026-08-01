@@ -1910,7 +1910,7 @@ void TextTool::updateActions()
     m_actionFormatSuper->setChecked(super);
     m_actionFormatSub->setChecked(sub);
     m_actionFormatFontSize->setFontSize(cf.font().pointSizeF());
-    m_actionFormatFontFamily->setFont(cf.font().family());
+    m_actionFormatFontFamily->setFont(cf.hasProperty(QTextFormat::FontFamily) ? cf.property(QTextFormat::FontFamily).toString() : cf.font().family());
 
     KoTextShapeData::ResizeMethod resizemethod = KoTextShapeData::AutoResize;
     if (m_textShapeData) {
