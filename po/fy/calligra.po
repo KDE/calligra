@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2008-05-07 17:08+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -4446,40 +4446,40 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Punttype ynstelle"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 #, fuzzy
 #| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Punttype ynstelle"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 #| msgid "Set background"
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Eftergrûn ynstelle"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr ""
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 #| msgid "Set Character Style"
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Tekensetstyl ynstelle"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 #| msgid "Set Paragraph Style"
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Alineastyl ynstelle"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"

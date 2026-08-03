@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2026-03-03 14:45+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -3979,32 +3979,32 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Establecer el tipo de letra"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Establecer el tamaño del tipo de letra"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Establecer el color de fondo"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Establecer el color del texto"
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Establecer el estilo de los caracteres"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Establecer el estilo del párrafo"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Formato"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2025-05-19 22:49+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -3928,32 +3928,32 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "設定字型"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "設定字型大小"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "設定背景顏色"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "設定文字顏色"
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "設定字元樣式"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "設定段落樣式"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "格式"

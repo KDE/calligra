@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -4261,24 +4261,24 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "फॉन्ट निश्चित करा"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "फॉन्ट आकार निश्चित करा"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 #| msgid "Background Color"
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "पार्श्वभूमीचा रंग"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr ""
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Styles"
@@ -4286,7 +4286,7 @@ msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "शैली बदला"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "New Paragraph"
@@ -4294,7 +4294,7 @@ msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "नवीन परिच्छेद"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "फॉर्मेटिंग"

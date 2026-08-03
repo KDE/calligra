@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2025-11-30 15:16+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
@@ -4281,39 +4281,39 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "எழுத்துருவை தேர்"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "எழுத்துருவை தேர்"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "நொடி"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 #, fuzzy
 #| msgid "More Text Colors..."
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "அதிக உரை நிறங்கள்..."
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "புது பாணியை உருவாக்கு"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "சாதாரண பத்தி உரை"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Formatting"

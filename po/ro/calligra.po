@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2025-09-29 00:08+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -4148,42 +4148,42 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Setează font"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 #, fuzzy
 #| msgid "Set Font Size"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Setează dimensiune font"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 #| msgid "Set Background Color"
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Setează culoare fundal"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 #, fuzzy
 #| msgid "Set Text Color"
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Setează culoare text"
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 #| msgid "Set Character Style"
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Setează stil caracter"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 #| msgid "Set Paragraph Style"
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Setează stil paragraf"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"

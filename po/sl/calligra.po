@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1731365 2026-03-04 01:29:54Z scripty $
+# $Id: calligra.po 1742885 2026-08-03 01:27:00Z scripty $
 # $Source$
 #
 #
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2026-03-03 07:30+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -4003,32 +4003,32 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Nastavi pisavo"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Nastavi velikost pisave"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Nastavi barvo ozadja"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Nastavi barvo besedila"
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Nastavi slog znakov"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Nastavi slog odstavka"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr "Oblikovanje"

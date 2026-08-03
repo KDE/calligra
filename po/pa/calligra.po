@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -4310,40 +4310,40 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 #, fuzzy
 #| msgid "Insert Page"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 #| msgid "Background Color"
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr ""
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 #| msgid "Line Style"
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 #| msgid "Line Style"
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr ""

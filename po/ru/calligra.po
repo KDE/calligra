@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2022-03-14 15:24+0300\n"
 "Last-Translator: Мария Шикунова <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -4259,42 +4259,42 @@ msgstr ""
 "Выбор шрифта\n"
 "выбор шрифта"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr ""
 "Выбор размера шрифта\n"
 "выбор размера шрифта"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr ""
 "Выбор цвета фона\n"
 "выбор цвета фона"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr ""
 "Выбор цвета текста\n"
 "выбор цвета текста"
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr ""
 "Выбор символьного стиля\n"
 "выбор символьного стиля"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr ""
 "Выбор стиля абзаца\n"
 "выбор стиля абзаца"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 msgctxt "(qtundo-format)"
 msgid "Formatting"
 msgstr ""

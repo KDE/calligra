@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -4338,40 +4338,40 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Format"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 #, fuzzy
 #| msgid "Opacity"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Opacitat"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 #| msgid "&Background color:"
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Color de &fons :"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr ""
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 #| msgid "Insert Break"
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Inserir un saut"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 #| msgid "Insert Break"
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Inserir un saut"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2002-09-27 16:44+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -4174,38 +4174,38 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Kies Skrif tipe"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Kies Skrif tipe"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Tweede"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Verstek Kleur"
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Skep Nuwe Styl"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Normale paragraaf teks"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Formatting"

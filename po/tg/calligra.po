@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2019-09-29 12:43+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik <kde-i18n-doc@kde.org>\n"
@@ -4279,38 +4279,38 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Интихоби ҳарф"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Интихоби ҳарф"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Сония"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Ранги пешфарзӣ"
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Эҷоди услуб"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Матни оддии абзас"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Formatting"

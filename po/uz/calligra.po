@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-03 00:46+0000\n"
+"POT-Creation-Date: 2026-08-03 00:42+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -4278,39 +4278,39 @@ msgctxt "(qtundo-format)"
 msgid "Set Font"
 msgstr "Shriftni tanlash"
 
-#: text/KoTextEditor_format.cpp:310
+#: text/KoTextEditor_format.cpp:311
 #, fuzzy
 #| msgid "Select Font"
 msgctxt "(qtundo-format)"
 msgid "Set Font Size"
 msgstr "Shriftni tanlash"
 
-#: text/KoTextEditor_format.cpp:323
+#: text/KoTextEditor_format.cpp:324
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
 msgstr "Soniya"
 
-#: text/KoTextEditor_format.cpp:336
+#: text/KoTextEditor_format.cpp:337
 #, fuzzy
 #| msgid "Text Color"
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
 msgstr "Matnning rangi"
 
-#: text/KoTextEditor_format.cpp:364 text/KoTextEditor_format.cpp:403
+#: text/KoTextEditor_format.cpp:365 text/KoTextEditor_format.cpp:404
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
 msgstr "Yangi uslubni yaratish"
 
-#: text/KoTextEditor_format.cpp:469
+#: text/KoTextEditor_format.cpp:470
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Paragraph Style"
 msgstr "Oddiy paragraf matni"
 
-#: text/KoTextEditor_format.cpp:531
+#: text/KoTextEditor_format.cpp:532
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Formatting"
