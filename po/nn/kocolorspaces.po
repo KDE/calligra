@@ -1,5 +1,6 @@
 # Translation of kocolorspaces to Norwegian Nynorsk
 #
+# Karl Ove Hufthammer <karl@huftis.org>, 2019, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"

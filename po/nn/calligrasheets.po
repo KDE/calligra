@@ -2,6 +2,7 @@
 #
 # Gaute Hvoslef Kvalnes <gaute@verdsveven.com>, 1999, 2000, 2002, 2003, 2004, 2005.
 # Håvard Korsvoll <korsvoll@skulelinux.no>, 2003, 2004.
+# Karl Ove Hufthammer <karl@huftis.org>, 2004, 2008, 2016, 2019, 2020, 2021, 2022, 2024, 2026.
 # Axel Bojer <fri_programvare@bojer.no>, 2005.
 # Cecilie Wian <likevel.katla@gmail.com>, 2005.
 msgid ""
