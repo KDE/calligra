@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2024 Carl Schwan <carl@carlschwan.eu>
-# SPDX-License-Identifier: BSD-3-Clauses
+# SPDX-License-Identifier: BSD-3-Clause
 
 add_executable(calligralauncher main.cpp helper.cpp helper.h)
 
