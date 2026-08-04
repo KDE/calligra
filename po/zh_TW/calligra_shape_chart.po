@@ -3,20 +3,20 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2011.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
-# SPDX-FileCopyrightText: 2023, 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023-2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-09-25 01:55+0900\n"
+"PO-Revision-Date: 2026-08-04 05:39+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.11.70\n"
+"X-Generator: Lokalize 26.11.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -406,15 +406,14 @@ msgid "Filled radar chart"
 msgstr "填滿式雷達圖"
 
 #: ChartShapeFactory.cpp:242
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "Candle Stick Stock Chart"
-msgstr "股票圖"
+msgstr "K 線股票圖"
 
 #: ChartShapeFactory.cpp:243
 #, kde-format
 msgid "Japanese candle stick stock chart"
-msgstr ""
+msgstr "日式 K 線股票圖"
 
 #: ChartShapeFactory.cpp:253
 #, kde-format
@@ -424,7 +423,7 @@ msgstr "OHLC 股票圖"
 #: ChartShapeFactory.cpp:254
 #, kde-format
 msgid "Open High Low Close stock chart"
-msgstr ""
+msgstr "美國線 - OHLC（開盤-最高-最低-收盤）股票圖"
 
 #: ChartShapeFactory.cpp:264
 #, kde-format
@@ -434,7 +433,7 @@ msgstr "HLC 股票圖"
 #: ChartShapeFactory.cpp:265
 #, kde-format
 msgid "High Low Close stock chart"
-msgstr ""
+msgstr "美國線 - HLC（最高-最低-收盤）股票圖"
 
 #: ChartShapeFactory.cpp:358 ChartShapeFactory.cpp:548
 #: ChartShapeFactory.cpp:631
@@ -840,18 +839,14 @@ msgid "Set Dataset Axis"
 msgstr "顯示資料集軸線"
 
 #: commands/GapCommand.cpp:58
-#, fuzzy
-#| msgid "Gap Between Bars"
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
-msgstr "長條間隔"
+msgstr "設定長條之間的間隔"
 
 #: commands/GapCommand.cpp:65
-#, fuzzy
-#| msgid "Gap Between Sets"
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
-msgstr "集合間隔"
+msgstr "設定集合之間的間隔"
 
 #: commands/LegendCommand.cpp:73
 msgctxt "(qtundo-format)"
@@ -938,17 +933,17 @@ msgstr "股票圖"
 #: DataSetConfigWidget.cpp:222 PlotAreaConfigWidget.cpp:270
 #, kde-format
 msgid "Candlestick"
-msgstr ""
+msgstr "K 線"
 
 #: DataSetConfigWidget.cpp:223 PlotAreaConfigWidget.cpp:271
 #, kde-format
 msgid "OpenHighLowClose"
-msgstr ""
+msgstr "OHLC"
 
 #: DataSetConfigWidget.cpp:224 PlotAreaConfigWidget.cpp:272
 #, kde-format
 msgid "HighLowClose"
-msgstr ""
+msgstr "HLC"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: DataSetConfigWidget.cpp:242 DataSetConfigWidget.cpp:379
@@ -1002,7 +997,7 @@ msgstr "選擇資料集"
 #: DataSetConfigWidget.ui:33
 #, kde-format
 msgid "Use Plot Type"
-msgstr ""
+msgstr "使用圖表類型"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
@@ -1159,7 +1154,7 @@ msgstr "在所選欄位之前插入資料欄位"
 #: dialogs/StockDataEditor.ui:61 dialogs/StockDataEditor.ui:80
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowBelow)
 #: dialogs/BubbleDataEditor.ui:59 dialogs/ChartTableEditor.ui:52
@@ -1268,7 +1263,7 @@ msgstr "預設文字標籤：%1"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "X-Values cell region: %1"
-msgstr ""
+msgstr "X 值儲存格區域：%1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:158
 #: dialogs/BubbleDataSetTableModel.cpp:165
@@ -1285,13 +1280,13 @@ msgstr "所使用的預設數值"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Y-Values cell region: %1"
-msgstr ""
+msgstr "Y 值儲存格區域：%1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Bubble size cell region: %1"
-msgstr ""
+msgstr "泡泡大小儲存格區域：%1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/CellRegionDialog.ui:49
@@ -1351,17 +1346,15 @@ msgstr "資料編輯器"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
-#, fuzzy, kde-format
-#| msgid "Data sets in rows"
+#, kde-format
 msgid "&Data sets in rows"
-msgstr "列的資料集"
+msgstr "列的資料集(&D)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInColumns)
 #: dialogs/ChartTableEditor.ui:36
-#, fuzzy, kde-format
-#| msgid "Data sets in columns"
+#, kde-format
 msgid "Data sets in &columns"
-msgstr "欄的資料集"
+msgstr "欄的資料集(&C)"
 
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
@@ -1459,7 +1452,7 @@ msgstr "負數"
 #: dialogs/FormatErrorBarDialog.ui:207
 #, kde-format
 msgid "Same for both"
-msgstr ""
+msgstr "兩者皆相同"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:37
@@ -1707,10 +1700,9 @@ msgstr "%1 資料點"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
-#, fuzzy, kde-format
-#| msgid "Explode Factor"
+#, kde-format
 msgid "E&xplode Factor"
-msgstr "觸發因數"
+msgstr "觸發因數(&X)"
 
 #: PlotAreaConfigWidget.cpp:275
 #, kde-format
@@ -1778,13 +1770,13 @@ msgstr "範圍線"
 #: StockConfigWidget.ui:47
 #, kde-format
 msgid "Gain marker"
-msgstr ""
+msgstr "利益標記"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel_2)
 #: StockConfigWidget.ui:73
 #, kde-format
 msgid "Loss marker"
-msgstr ""
+msgstr "虧損標記"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
@@ -1807,42 +1799,42 @@ msgstr "分類"
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
 msgid "Butt cap"
-msgstr ""
+msgstr "分叉線頭"
 
 #: widgets/StrokeConfigWidget.cpp:98
 #, kde-format
 msgid "Round cap"
-msgstr ""
+msgstr "圓形線頭"
 
 #: widgets/StrokeConfigWidget.cpp:105
 #, kde-format
 msgid "Square cap"
-msgstr ""
+msgstr "方形線頭"
 
 #: widgets/StrokeConfigWidget.cpp:116
 #, kde-format
 msgid "Miter join"
-msgstr ""
+msgstr "斜角連結"
 
 #: widgets/StrokeConfigWidget.cpp:123
 #, kde-format
 msgid "Round join"
-msgstr ""
+msgstr "圓角連結"
 
 #: widgets/StrokeConfigWidget.cpp:130
 #, kde-format
 msgid "Bevel join"
-msgstr ""
+msgstr "斜切連結"
 
 #: widgets/StrokeConfigWidget.cpp:140
 #, kde-format
 msgid "Miter limit"
-msgstr ""
+msgstr "斜接限制"
 
 #: widgets/StrokeConfigWidget.cpp:196
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr ""
+msgstr "設定實際選取的線條寬度"
 
 #: widgets/StrokeConfigWidget.cpp:210
 #, kde-format

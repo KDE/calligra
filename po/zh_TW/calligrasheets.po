@@ -10,20 +10,20 @@
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007.
 # pan93412 <pan93412@gmail.com>, 2019.
-# SPDX-FileCopyrightText: 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2025-2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2025-11-24 20:51+0900\n"
+"PO-Revision-Date: 2026-08-04 05:25+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.03.70\n"
+"X-Generator: Lokalize 26.11.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. i18n:
@@ -1184,7 +1184,7 @@ msgstr "DVARP(A1:C5; \"Salary\"; A9:A11)"
 #: functions/database.xml:284
 #, kde-format
 msgid "Range containing the pivot table"
-msgstr "包含數據透視表（pivot table）的範圍"
+msgstr "包含資料透視表（pivot table）的範圍"
 
 #: functions/database.xml:288
 #, kde-format
@@ -1194,7 +1194,7 @@ msgstr "您要加總資料的欄位名稱"
 #: functions/database.xml:291
 #, kde-format
 msgid "Fetches summary data from a pivot table."
-msgstr "從數據透視表（pivot table）中抓取總和資料。"
+msgstr "從資料透視表（pivot table）中抓取總和資料。"
 
 #: functions/database.xml:292
 #, kde-format
@@ -3669,10 +3669,9 @@ msgstr ""
 "$1000 ,利率 10%, 1 年後變成 CONTINUOUS(1000;.1;1) 或 $1105.17 。"
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
-msgstr "CONTINOUS(principal;interest;years)"
+msgstr "CONTINUOUS(principal;interest;years)"
 
 #: functions/financial.xml:173
 #, kde-format
@@ -7568,6 +7567,8 @@ msgid ""
 "Since the result is an array, you need to use Ctrl+Alt+Enter (instead of "
 "just Enter) to display the array elements in separate cells."
 msgstr ""
+"因為結果是陣列，您會需要用 Ctrl+Alt+Enter（而不是只用 Enter）來在分別的儲存格"
+"裡顯示陣列元素。"
 
 #: functions/math.xml:1240
 #, kde-format
@@ -8836,6 +8837,8 @@ msgid ""
 "array, use Ctrl+Alt+Enter (instead of just Enter) to display the array "
 "elements in separate cells. "
 msgstr ""
+"請注意，資料必須是欄狀，另外因為結果是欄位陣列，您會需要用 Ctrl+Alt+Enter（而"
+"不是只用 Enter）來在分別的儲存格裡顯示陣列元素。"
 
 #: functions/statistical.xml:422
 #, kde-format
@@ -9471,7 +9474,7 @@ msgstr "數值的範圍"
 #: functions/statistical.xml:974
 #, kde-format
 msgid "The percentile value between 0 and 1, inclusive."
-msgstr "一個到百分位的數值（介於 0 與 1 之間，包含 0 跟 1）"
+msgstr "介於 0 與 1 之間的百分位數（包含 0 跟 1）。"
 
 #: functions/statistical.xml:978
 #, no-c-format, kde-format
@@ -9985,6 +9988,8 @@ msgid ""
 "Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to "
 "display the values in separate cells."
 msgstr ""
+"因為結果是陣列，請使用 Ctrl+Alt+Enter（而不是只用 Enter）來在分別的儲存格裡顯"
+"示數值。"
 
 #: functions/statistical.xml:1437
 #, kde-format
@@ -10021,19 +10026,19 @@ msgstr "TRIMMEAN(dataSet; cutOffFraction)"
 #: functions/statistical.xml:1468
 #, kde-format
 msgid "x (array) The set of observed data for the first condition."
-msgstr ""
+msgstr "x（陣列）第一個條件的觀察值資料集。"
 
 #: functions/statistical.xml:1472
 #, kde-format
 msgid "y (array) The set of observed data for the second condition."
-msgstr ""
+msgstr "y（陣列）第二個條件的觀察值資料集。"
 
 #: functions/statistical.xml:1476
 #, kde-format
 msgid ""
 "mode Whether to look up 1-tailed (mode = 1) or 2-tailed (mode = 2) "
 "probability for t."
-msgstr ""
+msgstr "mode 要為 t 查詢單尾 (mode = 1) 或是雙尾 (mode = 2) 的機率。"
 
 #: functions/statistical.xml:1480
 #, kde-format
@@ -10041,14 +10046,15 @@ msgid ""
 "type The type of t-test to perform. Set this to 1 for a paired t-test, 2 or "
 "3 for an unpaired t-test."
 msgstr ""
+"type 要進行的 t 檢定的類型。設為 1 來進行成對 t 檢定，設為 2 或 3 來進行非成"
+"對 t 檢定。"
 
 #: functions/statistical.xml:1484
-#, fuzzy, kde-format
-#| msgid "The TTEST() function calculates the probability of a t-test."
+#, kde-format
 msgid ""
 "The TTEST() function calculates the probability of a t-test given two ranges "
 "of data to compare."
-msgstr "TTEST() 函數計算 T-test 的機率。"
+msgstr "TTEST() 函數為兩個要比對的資料範圍計算一個 t 檢定的機率。"
 
 #: functions/statistical.xml:1485
 #, kde-format
@@ -10060,6 +10066,10 @@ msgid ""
 "can run, a t-test can tell you how likely it is that any speed difference "
 "between the two groups of people is due to their height."
 msgstr ""
+"「t 檢定」會比對兩組資料，提供兩者之間的任何差異是因為某變數的效果而出現的機"
+"率。舉例來說，假設有兩組資料，一組是 30 個身高較高的人的跑步速度，另外一組是 "
+"30 個身高較低的人的跑步速度，t 檢定會告訴您這兩組人之間的速度差異是源自於身高"
+"差異的機率。"
 
 #: functions/statistical.xml:1486
 #, kde-format
@@ -10072,6 +10082,10 @@ msgid ""
 "which one will actually be fastest, we would use a two-tailed test (mode = "
 "2)."
 msgstr ""
+"mode 參數用來指定您是否需要兩組資料的差異是否要有某個方向。舉例來說，如果我們"
+"預測身高較高的人跑得比身高較低的人快，我們可以使用單尾檢定 (mode = 1)；檔案如"
+"果我們只是預測有一組會比另一組快而沒有預測是哪一組比較快，我們則可以使用雙尾"
+"檢定 (mode = 2)。"
 
 #: functions/statistical.xml:1487
 #, kde-format
@@ -10087,6 +10101,11 @@ msgid ""
 "sized; for paired t-tests the two ranges are required to contain the same "
 "number of cells."
 msgstr ""
+"成對檢定 (type = 1，請見下方語法說明) 只適合兩組資料來自同樣來源時（也就是每"
+"個資料來源都為兩個資料範圍各提供了一個項目）。在跑步速度範例裡這是不可能的，"
+"因為同一個人沒辦法同時又高又低：每個人只能提供資料給一組。這種情況下，各個資"
+"料集的值來自於不同的來源，因此適合非成對檢定（type = 2 或 type = 3）。非成對"
+"檢定的兩個資料範圍大小不需要一致；成對檢定則需要兩個範圍包含一樣多的儲存格。"
 
 #: functions/statistical.xml:1488
 #, kde-format
@@ -10098,18 +10117,20 @@ msgid ""
 "where the variances are not sufficiently similar you must use an unpaired t-"
 "test for samples with differing variances (type = 3)."
 msgstr ""
+"當您的資料值不是來自同樣來源時，需要依您的樣本變異數的狀況來決定要用 type = "
+"2 還是 type = 3 的非成對檢定。兩組樣本變異數相似時請使用 type = 2（近似變異數"
+"樣本用的非成對 t 檢定）；變異數不夠類似時則必須使用 type = 3（不同變異數樣本"
+"用的非成對 t 檢定）。"
 
 #: functions/statistical.xml:1489
-#, fuzzy, kde-format
-#| msgid "TTEST(x; y; type; mode)"
+#, kde-format
 msgid "TTEST(x; y; mode; type)"
-msgstr "TTEST(x; y; type; mode)"
+msgstr "TTEST(x; y; mode; type)"
 
 #: functions/statistical.xml:1518
-#, fuzzy, kde-format
-#| msgid "The VARA() function calculates the variance based on a sample."
+#, kde-format
 msgid "The VAR() function calculates the variance based on a sample."
-msgstr "VARA() 函數計算基於樣本的變異數。"
+msgstr "VAR() 函數計算基於樣本的變異數。"
 
 #: functions/statistical.xml:1519
 #, kde-format
@@ -10132,13 +10153,7 @@ msgid "VAR(6;7;8) equals 1"
 msgstr "VAR(6;7;8) 等於 1"
 
 #: functions/statistical.xml:1554
-#, fuzzy, kde-format
-#| msgid ""
-#| "The AVERAGEA() calculates the average of the given arguments. Numbers, "
-#| "text and logical values are included in the calculation too. If the cell "
-#| "contains text or the argument evaluates to FALSE, it is counted as value "
-#| "zero (0). If the argument evaluates to TRUE, it is counted as one (1). "
-#| "Note that empty cells are not counted."
+#, kde-format
 msgid ""
 "The VARA() function calculates the variance based on a sample allowing "
 "numbers, text and logical values to be included in the calculation, too. If "
@@ -10146,9 +10161,9 @@ msgid ""
 "value zero (0). If the argument evaluates to TRUE, it is counted as one (1). "
 "Note that empty cells are not counted."
 msgstr ""
-"AVERAGEA() 計算所給參數的平均。數字、文字和邏輯值也包含在計算範圍內。如果儲存"
-"格包含文字或參數評估為 FALSE ，它會記為零值 (0) 。如果參數評估為 TRUE ，它會"
-"記為一 (1) 。注意空的儲存格不會被算進去。"
+"VARA() 計算某組樣本資料的變異數，資料可包含數字、文字或邏輯值。如果儲存格包含"
+"文字或參數評估為 FALSE ，它會記為零值 (0) 。如果參數評估為 TRUE ，它會記為一 "
+"(1) 。注意空的儲存格不會被算進去。"
 
 #: functions/statistical.xml:1555
 #, kde-format
@@ -10171,14 +10186,11 @@ msgid "VARA(6;7;8) equals 1"
 msgstr "VARA(6;7;8) 等於 1"
 
 #: functions/statistical.xml:1589
-#, fuzzy, kde-format
-#| msgid ""
-#| "The VARIANCE() function calculates the estimates variance based on a "
-#| "sample. It's the same as the VAR function."
+#, kde-format
 msgid ""
 "The VARIANCE() function calculates the variance based on a sample. It is the "
 "same as the VAR function."
-msgstr "VARIANCE() 函數計算樣本的估計變異數。跟 VAR() 一樣。"
+msgstr "VARIANCE() 函數計算樣本的變異數。跟 VAR() 一樣。"
 
 #: functions/statistical.xml:1590
 #, kde-format
@@ -13810,10 +13822,9 @@ msgid "Show hidden rows in the selection"
 msgstr "顯示選擇區中隱藏的列"
 
 #: ui/actions/AdjustRowCol.cpp:111
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Hide the selected rows"
-msgstr "合併所選取的區域"
+msgstr "隱藏所選取的列"
 
 #: ui/actions/AdjustRowCol.cpp:114
 #, kde-format
@@ -13821,10 +13832,9 @@ msgid "Show hidden columns in the selection"
 msgstr "顯示選擇區中隱藏的欄"
 
 #: ui/actions/AdjustRowCol.cpp:116
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Hide the selected columns"
-msgstr "合併所選取的區域"
+msgstr "隱藏所選取的欄"
 
 #: ui/actions/AdjustRowCol.cpp:182
 #, kde-format
@@ -13867,16 +13877,14 @@ msgid "Adjusts row/column size so that the contents will fit"
 msgstr "調整列/欄的大小以符合內容"
 
 #: ui/actions/AdjustRowCol.cpp:270
-#, fuzzy, kde-format
-#| msgid "Adjusts row/column size so that the contents will fit"
+#, kde-format
 msgid "Adjusts row size so that the contents will fit"
-msgstr "調整列/欄的大小以符合內容"
+msgstr "調整列的大小以符合內容"
 
 #: ui/actions/AdjustRowCol.cpp:272
-#, fuzzy, kde-format
-#| msgid "Adjusts row/column size so that the contents will fit"
+#, kde-format
 msgid "Adjusts column size so that the contents will fit"
-msgstr "調整列/欄的大小以符合內容"
+msgstr "調整欄的大小以符合內容"
 
 #: ui/actions/AdjustRowCol.cpp:292
 #, kde-format
@@ -14060,10 +14068,9 @@ msgid "Auto-Filter"
 msgstr "自動過濾"
 
 #: ui/actions/AutoFormat.cpp:31
-#, fuzzy, kde-format
-#| msgid "Apply a predefined style to the selected cells"
+#, kde-format
 msgid "Apply pre-defined formatting to a range of cells."
-msgstr "對所選取的儲存格套用預先定義的樣式"
+msgstr "對儲存格範圍套用預先定義的樣式。"
 
 #: ui/actions/AutoFormat.cpp:31
 #, kde-format
@@ -14096,8 +14103,6 @@ msgid "Insert the 'sum' function"
 msgstr "插入“sum”函數"
 
 #: ui/actions/AutoSum.cpp:62
-#, fuzzy
-#| msgid "Autosum"
 msgctxt "(qtundo-format)"
 msgid "Auto Sum"
 msgstr "自動加總"
@@ -14346,10 +14351,9 @@ msgid "Move the cell object to the clipboard"
 msgstr "將儲存格物件移動到剪貼簿"
 
 #: ui/actions/CSVActions.cpp:38
-#, fuzzy, kde-format
-#| msgid "From &Text File..."
+#, kde-format
 msgid "Insert From &Text File..."
-msgstr "從文字檔案(&T)..."
+msgstr "從文字檔案插入(&T)..."
 
 #: ui/actions/CSVActions.cpp:40
 #, kde-format
@@ -14364,41 +14368,38 @@ msgstr "文字檔案"
 #: ui/actions/CSVActions.cpp:62
 #, kde-format
 msgid "Import CSV Data File"
-msgstr ""
+msgstr "匯入 CSV 資料檔案"
 
 #: ui/actions/CSVActions.cpp:63
 #, kde-format
 msgid "CSV data files (*.csv)"
-msgstr ""
+msgstr "CSV 資料檔案 (*.csv)"
 
 #: ui/actions/CSVActions.cpp:69
 #, kde-format
 msgid "Cannot open input file."
-msgstr "不能開啟輸入的檔案。"
+msgstr "無法開啟輸入檔案。"
 
 #: ui/actions/CSVActions.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Inserting Text File"
+#, kde-format
 msgid "Inserting Text File"
-msgstr "插入文字檔案"
+msgstr "正在插入文字檔案"
 
 #: ui/actions/CSVActions.cpp:101
 msgctxt "(qtundo-format)"
 msgid "Inserting Text File"
-msgstr "插入文字檔案"
+msgstr "正在插入文字檔案"
 
 #: ui/actions/CSVActions.cpp:121
-#, fuzzy, kde-format
-#| msgid "Inserting From Clipboard"
+#, kde-format
 msgid "Insert From &Clipboard..."
-msgstr "從剪貼簿插入"
+msgstr "從剪貼簿插入(&C)..."
 
 #: ui/actions/CSVActions.cpp:123
 #, kde-format
 msgid ""
 "Insert CSV data from the clipboard to the current cursor position/selection"
-msgstr "插入剪貼簿的 csv 資料到目前游標位置/選擇區"
+msgstr "插入剪貼簿的 CSV 資料到目前游標位置/選擇區"
 
 #: ui/actions/CSVActions.cpp:138
 #, kde-format
@@ -14477,9 +14478,7 @@ msgid "Angle:"
 msgstr "角度："
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Auto-Format"
+#, kde-format
 msgid "Automatic Format"
 msgstr "自動格式化"
 
@@ -14640,7 +14639,7 @@ msgstr "您必須定義至少一個來源範圍。"
 #: ui/actions/dialogs/ConsolidateDialog.cpp:141
 #, kde-format
 msgid "%1 is not a valid cell range."
-msgstr "%1 不是一個合法的儲存格範圍。"
+msgstr "%1 不是一個有效的儲存格範圍。"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:146
 #, kde-format
@@ -14688,7 +14687,7 @@ msgstr "從資料庫插入資料"
 #: ui/actions/dialogs/DatabaseDialog.cpp:59
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "完成"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:74
 #, kde-format
@@ -14885,12 +14884,12 @@ msgstr "您不能在這裡指定表格。"
 #: ui/actions/dialogs/DatabaseDialog.cpp:505
 #, kde-format
 msgid "You have to specify a valid region."
-msgstr "您必須指定一個合法的範圍。"
+msgstr "您必須指定一個有效的範圍。"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:525
 #, kde-format
 msgid "You have to specify a valid cell."
-msgstr "您必須指定合法的儲存格。"
+msgstr "您必須指定一個有效的儲存格。"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:537
 #, kde-format
@@ -14955,15 +14954,13 @@ msgid ""
 "'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
 "or '_'. Do you want to replace them?"
 msgstr ""
-"'*' 或 '?' 在 SQL 中不是合法的萬用字元。正確的替代品是 '%' 和 '_'。 您是否要"
+"'*' 或 '?' 在 SQL 中不是有效的萬用字元。正確的替代品是 '%' 和 '_'。 您是否要"
 "更換它們？"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:839
 #: ui/actions/dialogs/DatabaseDialog.cpp:854
 #: ui/actions/dialogs/DatabaseDialog.cpp:869
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
 msgstr "取代"
@@ -14974,71 +14971,64 @@ msgid "Document Settings"
 msgstr "文件設定"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Calculation mode"
+#, kde-format
 msgid "Calculation"
-msgstr "計算模式"
+msgstr "計算"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:69
 #, kde-format
 msgid "Locale"
-msgstr ""
+msgstr "地域"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:91
-#, fuzzy, kde-format
-#| msgid "Case Insensitive"
+#, kde-format
 msgid "Case sensitive"
 msgstr "區分大小寫"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "Precision"
+#, kde-format
 msgid "Precision as shown"
-msgstr "精確度"
+msgstr "所顯示的精確度"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:97
 #, kde-format
 msgid "Search criteria must apply to whole cell"
-msgstr ""
+msgstr "搜尋條件必須套用到整個儲存格"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgid "Automatic find labels"
-msgstr "自動"
+msgstr "自動尋找標籤"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "String to compare with"
+#, kde-format
 msgid "String comparison:"
-msgstr "要比較的字串"
+msgstr "字串比較："
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Regular expression"
+#, kde-format
 msgid "Regular Expressions"
-msgstr "正規表示式"
+msgstr "正則表達式"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:112
 #, kde-format
 msgid "Wildcards"
-msgstr ""
+msgstr "萬用字元"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:118
 #, kde-format
 msgid "Null Year:"
-msgstr ""
+msgstr "第零年："
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:157
 #, kde-format
 msgid "&Use System's Locale Settings"
-msgstr "使用系統區域化設定(&U)"
+msgstr "使用系統地域設定(&U)"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:185
-#, fuzzy, kde-format
-#| msgid "Language: %1"
+#, kde-format
 msgid "Language: %1 (%2)"
-msgstr "語言：%1"
+msgstr "語言：%1（%2）"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:186
 #, kde-format
@@ -15112,10 +15102,9 @@ msgid "Fewer Options"
 msgstr "較少選項"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:52
-#, fuzzy, kde-format
-#| msgid "Function"
+#, kde-format
 msgid "Set Function"
-msgstr "函數"
+msgstr "設定函數"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:114
 #, kde-format
@@ -15303,11 +15292,9 @@ msgid "Custom Lists"
 msgstr "自訂清單"
 
 #: ui/actions/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Case"
+#, kde-format
 msgid "Save Changes"
-msgstr "變更大小寫"
+msgstr "儲存變更"
 
 #: ui/actions/dialogs/ListDialog.cpp:54
 #, kde-format
@@ -15395,15 +15382,14 @@ msgid "&Remove"
 msgstr "移除(&R)"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Open/Save"
+#, kde-format
 msgid "Save"
-msgstr "開啟/儲存"
+msgstr "儲存"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:131
 #, kde-format
 msgid "(new area)"
-msgstr ""
+msgstr "(新區域)"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:192
 #, kde-format
@@ -15416,10 +15402,9 @@ msgid "Remove Named Area"
 msgstr "移除命名區域"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:219
-#, fuzzy, kde-format
-#| msgid "Cell reference is invalid."
+#, kde-format
 msgid "The provided region is not valid."
-msgstr "儲存格參照是不合法的。"
+msgstr "提供的範圍是無效的。"
 
 #: ui/actions/dialogs/PasteInsertDialog.cpp:26
 #, kde-format
@@ -15427,27 +15412,24 @@ msgid "Paste Inserting Cells"
 msgstr "貼上插入儲存格"
 
 #: ui/actions/dialogs/pivot.cpp:29
-#, fuzzy, kde-format
-#| msgid "Select Character"
+#, kde-format
 msgid "Select Source"
-msgstr "選擇字元"
+msgstr "選擇來源"
 
 #: ui/actions/dialogs/pivotmain.cpp:47
 #, kde-format
 msgid "Pivot Table Configuration Window"
-msgstr ""
+msgstr "資料透視表設定視窗"
 
 #: ui/actions/dialogs/pivotmain.cpp:51
-#, fuzzy, kde-format
-#| msgid "Filter"
+#, kde-format
 msgid "Add Filter"
-msgstr "過濾器"
+msgstr "新增過濾器"
 
 #: ui/actions/dialogs/pivotoptions.cpp:28
-#, fuzzy, kde-format
-#| msgid "Bit Operations"
+#, kde-format
 msgid "Pivot Options"
-msgstr "位元操作"
+msgstr "透視表選項"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:31
 #, kde-format
@@ -15475,9 +15457,7 @@ msgid "Series"
 msgstr "級數"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Series"
+#, kde-format
 msgid "Insert Series"
 msgstr "插入級數"
 
@@ -15638,7 +15618,7 @@ msgstr "特定貼上"
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:20
 #, kde-format
 msgid "Paste"
-msgstr ""
+msgstr "貼上"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:32
 #, kde-format
@@ -15842,15 +15822,14 @@ msgid "Entries:"
 msgstr "項目："
 
 #: ui/actions/dialogs/ValidityDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "&Error Alert"
+#, kde-format
 msgid "Error Alert"
-msgstr "錯誤警告(&E)"
+msgstr "錯誤警告"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:140
 #, kde-format
 msgid "Show error message when invalid values are entered"
-msgstr "當輸入不合法的值時顯示錯誤訊息"
+msgstr "輸入無效值時顯示錯誤訊息"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:145
 #, kde-format
@@ -15896,19 +15875,19 @@ msgstr "選擇儲存格式顯示輸入說明"
 #: ui/actions/dialogs/ValidityDialog.cpp:477
 #, kde-format
 msgid "This is not a valid value."
-msgstr "這不是一個合法的數值。"
+msgstr "這不是一個有效的數值。"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:483
 #: ui/actions/dialogs/ValidityDialog.cpp:488
 #, kde-format
 msgid "This is not a valid time."
-msgstr "這不是一個合法的時間。"
+msgstr "這不是一個有效的時間。"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:494
 #: ui/actions/dialogs/ValidityDialog.cpp:499
 #, kde-format
 msgid "This is not a valid date."
-msgstr "這不是一個合法的日期。"
+msgstr "這不是一個有效的日期。"
 
 #: ui/actions/DocumentSettings.cpp:22
 #, kde-format
@@ -15943,25 +15922,22 @@ msgstr "在游標處排列參考定位"
 #: ui/actions/Fill.cpp:64
 #, kde-format
 msgid "Fill &Up"
-msgstr ""
+msgstr "填滿向上(&U)"
 
 #: ui/actions/Fill.cpp:66
-#, fuzzy, kde-format
-#| msgid "&Down"
+#, kde-format
 msgid "Fill &Down"
-msgstr "下(&D)"
+msgstr "填滿向下(&D)"
 
 #: ui/actions/Fill.cpp:68
-#, fuzzy, kde-format
-#| msgid "&Left"
+#, kde-format
 msgid "Fill &Left"
-msgstr "左(&L)"
+msgstr "填滿向左(&L)"
 
 #: ui/actions/Fill.cpp:70
-#, fuzzy, kde-format
-#| msgid "&Right"
+#, kde-format
 msgid "Fill &Right"
-msgstr "右(&R)"
+msgstr "填滿向右(&R)"
 
 #: ui/actions/Fill.cpp:79
 msgctxt "(qtundo-format)"
@@ -15979,10 +15955,9 @@ msgid "Select Font..."
 msgstr "選擇字型..."
 
 #: ui/actions/Font.cpp:30
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell font"
-msgstr "設定儲存格格式"
+msgstr "設定儲存格字型"
 
 #: ui/actions/Font.cpp:59 ui/actions/Font.cpp:106 ui/actions/Style.cpp:93
 #: ui/actions/Style.cpp:129 ui/actions/Style.cpp:165 ui/actions/Style.cpp:194
@@ -15997,10 +15972,9 @@ msgid "Select Font Size"
 msgstr "選擇字型大小"
 
 #: ui/actions/Font.cpp:77
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell font size"
-msgstr "設定儲存格格式"
+msgstr "設定儲存格字型大小"
 
 #: ui/actions/Font.cpp:86
 #, kde-format
@@ -16055,12 +16029,12 @@ msgstr "重複計算以找尋指定的數值"
 #: ui/actions/GoalSeek.cpp:59 ui/actions/GoalSeek.cpp:66
 #, kde-format
 msgid "Cell reference is invalid."
-msgstr "儲存格參照是不合法的。"
+msgstr "儲存格參照是無效的。"
 
 #: ui/actions/GoalSeek.cpp:75
 #, kde-format
 msgid "Target value is invalid."
-msgstr "目標值是不合法的。"
+msgstr "目標值是無效的。"
 
 #: ui/actions/GoalSeek.cpp:84
 #, kde-format
@@ -16075,13 +16049,12 @@ msgstr "目標儲存格必須包含公式。"
 #: ui/actions/GoalSeek.cpp:95
 #, kde-format
 msgid "Solving ..."
-msgstr ""
+msgstr "解決中 ..."
 
 #: ui/actions/GoalSeek.cpp:169
-#, fuzzy, kde-format
-#| msgid "Goal seeking with cell %1 found a solution:"
+#, kde-format
 msgid "Goal seeking with cell %1 found a solution."
-msgstr "以儲存格 %1 進行目標搜索找到一個解："
+msgstr "以儲存格 %1 進行目標搜索找到一個解。"
 
 #: ui/actions/GoalSeek.cpp:179
 #, kde-format
@@ -16104,10 +16077,9 @@ msgid "Goto"
 msgstr "移至"
 
 #: ui/actions/Goto.cpp:44
-#, fuzzy, kde-format
-#| msgid "This is not a valid time."
+#, kde-format
 msgid "That is not a valid cell."
-msgstr "這不是一個合法的時間。"
+msgstr "那不是一個有效的儲存格。"
 
 #: ui/actions/Indent.cpp:26
 #, kde-format
@@ -16150,14 +16122,12 @@ msgid "Insert data from a SQL database"
 msgstr "插入 SQL 資料庫的資料"
 
 #: ui/actions/InsertFromDatabase.cpp:45
-#, fuzzy, kde-format
-#| msgid ""
-#| "No database drivers available.  To use this feature you need to install "
-#| "the necessary Qt 3 database drivers."
+#, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
-msgstr "沒有可用的資料庫驅動程式。您必須以必要的驅動程式編譯 Qt。"
+msgstr ""
+"沒有可用的資料庫驅動程式。要使用此功能您必須安裝需要的 Qt 資料庫驅動程式。"
 
 #: ui/actions/InsertSeries.cpp:27
 #, kde-format
@@ -16359,16 +16329,14 @@ msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "將儲存格自剪貼簿插入工作表中"
 
 #: ui/actions/Pivot.cpp:18
-#, fuzzy, kde-format
-#| msgid "&Subtotals..."
+#, kde-format
 msgid "&Pivot Tables..."
-msgstr "小計(&S)..."
+msgstr "資料透視表(&P)..."
 
 #: ui/actions/Pivot.cpp:18
-#, fuzzy, kde-format
-#| msgid "&Subtotals..."
+#, kde-format
 msgid "Create Pivot Tables"
-msgstr "小計(&S)..."
+msgstr "建立資料透視表"
 
 #: ui/actions/Pivot.cpp:29
 #, kde-format
@@ -16426,11 +16394,10 @@ msgid "Do you want to check the spelling in the next sheet?"
 msgstr "您是否要檢查下個表格的拼字？"
 
 #: ui/actions/SpellCheck.cpp:88
-#, fuzzy, kde-format
-#| msgid "Move to the next sheet"
+#, kde-format
 msgctxt "@action:button"
 msgid "Check next sheet"
-msgstr "移至下一個工作表"
+msgstr "檢查下一個工作表"
 
 #: ui/actions/SpellCheck.cpp:237
 #, kde-format
@@ -16506,37 +16473,29 @@ msgid "Vertical Text"
 msgstr "垂直文字"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Number Format"
+#, kde-format
 msgid "Number Format"
 msgstr "數字格式"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a number"
-msgstr "設定儲存格格式"
+msgstr "設定儲存格格式為數字格式"
 
 #: ui/actions/Style.cpp:291
-#, fuzzy
-#| msgid "First number"
 msgctxt "(qtundo-format)"
 msgid "Format Number"
-msgstr "第一數字"
+msgstr "格式化數字"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scientific Format"
+#, kde-format
 msgid "Scientific Format"
 msgstr "科學格式"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting to look like a percentage"
+#, kde-format
 msgid "Set the cell formatting to a scientific format"
-msgstr "設定儲存格格式以便看起來像百分比"
+msgstr "設定儲存格格式為科學格式"
 
 #: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
@@ -16544,11 +16503,9 @@ msgid "Scientific"
 msgstr "科學的"
 
 #: ui/actions/Style.cpp:324
-#, fuzzy
-#| msgid "Scientific"
 msgctxt "(qtundo-format)"
 msgid "Format Scientific"
-msgstr "科學的"
+msgstr "格式化科學格式"
 
 #: ui/actions/Style.cpp:342
 #, kde-format
@@ -16591,54 +16548,44 @@ msgid "Format Money"
 msgstr "格式化金錢"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Date Format"
+#, kde-format
 msgid "Date Format"
 msgstr "日期格式"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a date"
-msgstr "設定儲存格格式"
+msgstr "設定儲存格格式為日期"
 
 #: ui/actions/Style.cpp:431
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format Date"
-msgstr "格式"
+msgstr "格式化日期"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a time"
-msgstr "設定儲存格格式"
+msgstr "設定儲存格格式為時間"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Time Format"
+#, kde-format
 msgid "Time Format"
 msgstr "時間格式"
 
 #: ui/actions/Style.cpp:464
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format Time"
-msgstr "格式"
+msgstr "格式化時間"
 
 #: ui/actions/Style.cpp:480
 #, kde-format
 msgid "Increase Font Size"
-msgstr "遞增字型大小"
+msgstr "提高字型大小"
 
 #: ui/actions/Style.cpp:504
 #, kde-format
 msgid "Decrease Font Size"
-msgstr "遞減字型大小"
+msgstr "降低字型大小"
 
 #: ui/actions/Style.cpp:530
 #, kde-format
@@ -16676,11 +16623,9 @@ msgid "Resets to the default format"
 msgstr "重置為預設格式。"
 
 #: ui/actions/Style.cpp:613
-#, fuzzy
-#| msgid "Sheet Style"
 msgctxt "(qtundo-format)"
 msgid "Set Default Style"
-msgstr "工作表樣式"
+msgstr "設定預設樣式"
 
 #: ui/actions/Style.cpp:622
 #, kde-format
@@ -16748,8 +16693,6 @@ msgid "Create different kind of subtotals to a list or database"
 msgstr "建立不同種類的小計到清單或資料庫中"
 
 #: ui/actions/Subtotals.cpp:118
-#, fuzzy
-#| msgid "Subtotals"
 msgctxt "(qtundo-format)"
 msgid "Subtotals"
 msgstr "小計"
@@ -16822,7 +16765,7 @@ msgstr "變更大小寫"
 #: ui/actions/Validity.cpp:21
 #, kde-format
 msgid "Set tests to confirm cell data is valid"
-msgstr "設定測試以確認儲存格資料是合法的"
+msgstr "設定測試以確認儲存格資料是有效的"
 
 #: ui/actions/Validity.cpp:21
 #, kde-format
