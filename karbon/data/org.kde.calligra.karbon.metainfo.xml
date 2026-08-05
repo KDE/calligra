@@ -317,6 +317,7 @@
       <li xml:lang="tr">Önizleme küçük görselleri, sürükle ve bırak yoluyla şekilleri gruplandırma desteği, şekillerin görünürlüğünü denetleme veya kilitleme içerilmek üzere karmaşık belgelerin kolay kullanımı için katman rıhtımı</li>
       <li xml:lang="uk">Панель шарів для полегшення обробки складних документів з мініатюрами об’єктів, підтримка групування форм перетягуванням зі скиданням, керування показом форм та блокуванням.</li>
       <li xml:lang="zh-CN">图层面板可用于处理复杂的图形，支持缩略图预览、拖拽组合形状、显示/隐藏或者锁定形状</li>
+      <li xml:lang="zh-TW">圖層工具面板讓複雜文件可以更容易處理，提供預覽縮圖、拖放物件以將其群組化、控制物件是否可見與是否鎖定的功能</li>
       <li>
         Advanced path editing tool with great on-canvas editing capabilities
       </li>
@@ -352,6 +353,7 @@
       <li xml:lang="tr">Harika tuval üzerinde düzenleme özelliklerine sahip gelişmiş yol düzenleme aracı</li>
       <li xml:lang="uk">Інструмент редагування контурів з чудовими можливостями редагування безпосередньо на полотні.</li>
       <li xml:lang="zh-CN">高级路径编辑工具可直接在画布上对图形进行深度操作</li>
+      <li xml:lang="zh-TW">進階路徑編輯工具，能夠有效地在畫布上進行編輯</li>
       <li>
         Various drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing tool
       </li>
@@ -387,6 +389,7 @@
       <li xml:lang="tr">Yol çizme aracı, kurşun kalem aracı ve hat çizim aracı dahil olmak üzere yol şekilleri oluşturmak için çeşitli çizim araçları</li>
       <li xml:lang="uk">Різноманітні інструменти малювання для створення контурів, зокрема інструмент малювання контуру, олівець та інструмент каліграфічного малювання.</li>
       <li xml:lang="zh-CN">多种绘图工具可用于创建路径形状，包括路径绘制工具、铅笔工具和西文书法工具等</li>
+      <li xml:lang="zh-TW">許多用來建立路徑物件的繪圖工具，包含繪製路徑工具、鉛筆工具、以及西文書法工具</li>
       <li>
         Gradient and pattern tools for easy on-canvas editing of gradient and pattern styles
       </li>
@@ -422,6 +425,7 @@
       <li xml:lang="tr">Gradyan ve desen stillerinin tuval üzerinde kolay düzenlenmesi için gradyan ve desen araçları</li>
       <li xml:lang="uk">Інструменти градієнта і візерунка для полегшення редагування на полотні областей з заповненням градієнтом і візерунком.</li>
       <li xml:lang="zh-CN">渐变和图案工具可以轻松地在画布上编辑渐变和图案样式</li>
+      <li xml:lang="zh-TW">漸層與圖樣工具，幫助輕易在畫布上編輯漸層與圖樣的樣式</li>
       <li>
         Top notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes,
         orthogonal positions, intersections of path shapes or extensions of lines and paths)
@@ -458,6 +462,7 @@
       <li xml:lang="tr">Kılavuzlu çizim ve düzenleme için birinci sınıf yapıştırma olanakları (örneğin ızgaraya, kılavuz çizgilere, yol düğümlerine, sınırlayıcı kutulara, ortogonal konumlara, yol şekillerinin kesişimlerine veya çizgilerin ve yolların uzantılarına yapıştırma)</li>
       <li xml:lang="uk">Можливості використання прилипання та малювання за напрямними (прилипання до сітки, напрямні, вузли контурів, обмежувальні рамки, ортогональне розташування, перетини та розширення ліній і контурів).</li>
       <li xml:lang="zh-CN">强大的吸附功能，可用于辅助绘制和编辑 (例如吸附到网格、参考线、路径节点、外框、正交位置、路径交点或线段的延长线等)</li>
+      <li xml:lang="zh-TW">非常好用的貼齊工具，來利用導線繪圖或編輯（例如：貼齊格線、導線、路徑節點、邊界方框、正交位置、路徑物件的相交，或是線條與路徑的擴充）</li>
       <li>
         Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image
       </li>
@@ -699,6 +704,7 @@
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
         <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
+        <p xml:lang="zh-TW">這個版本為 Calligra 辦公軟體新增 Flatpak 支援。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -723,6 +729,7 @@
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
+        <p xml:lang="zh-TW">最大的變更是 Calligra 已完全移植到 Qt6 與 KF6，同時大幅更新使用者介面。</p>
         <p>Karbon didn’t received much change outside of the one affecting the whole platform.</p>
         <p xml:lang="ar">لم تشهد كربون تغييرات كبيرة باستثناء التغيير الذي أثر على المنصة بأكملها.</p>
         <p xml:lang="ca">El Karbon no rebut gaires canvis fora del que afectava tota la plataforma.</p>
@@ -742,6 +749,7 @@
         <p xml:lang="tr">Karbon, diğer tüm paketi de etkileyen bir değişiklik dışında pek bir değişikliğe uğramadı.</p>
         <p xml:lang="uk">Karbon не зазнав значних змін, окрім тих, які стосуються усієї платформи.</p>
         <p xml:lang="zh-CN">除了那个影响整个平台的变化以外，Karbon 没有受到太多的改变。</p>
+        <p xml:lang="zh-TW">Karbon 除了影響整個平台的改變以外沒有什麼變更。</p>
       </description>
     </release>
   </releases>

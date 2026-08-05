@@ -219,6 +219,7 @@
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
         <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
+        <p xml:lang="zh-TW">這個版本為 Calligra 辦公軟體新增 Flatpak 支援。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -244,6 +245,7 @@
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
+        <p xml:lang="zh-TW">最大的變更是 Calligra 已完全移植到 Qt6 與 KF6，同時大幅更新使用者介面。</p>
       </description>
     </release>
   </releases>
