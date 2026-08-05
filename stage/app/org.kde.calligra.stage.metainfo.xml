@@ -415,6 +415,7 @@
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler. Ayrıca slaytlar listesine ufak grafiksel değişiklikler yapıldı ve canlandırmaların otomatik önizlemesi onarıldı.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office. Також було реалізовано незначні графічні зміни для слайдів та виправлено автоматичний перегляд анімацій.</p>
         <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
+        <p xml:lang="zh-TW">這個版本為 Calligra 辦公軟體新增 Flatpak 支援。這個版本也稍微改變了投影片清單的顯示，並修正動畫的自動預覽。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -439,6 +440,7 @@
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
+        <p xml:lang="zh-TW">最大的變更是 Calligra 已完全移植到 Qt6 與 KF6，同時大幅更新使用者介面。</p>
         <p>Stage didn’t really change aside of the sidebar redesign. The tooltip for the slides are also now compatible with Wayland.</p>
         <p xml:lang="ar">لم يتغير المسرح كثيرًا باستثناء إعادة تصميم الشريط الجانبي. أصبحت تلميحات الأدوات الخاصة بالشرائح متوافقة الآن مع ويلاند.</p>
         <p xml:lang="ca">L'Stage no ha canviat realment a part del redisseny de la barra lateral. El consell d'eina per a les diapositives ara també és compatible amb el Wayland.</p>
@@ -458,6 +460,7 @@
         <p xml:lang="tr">Sahne, kenar çubuğu tasarımı dışında pek değişikliğe uğramadı. Slaytlar için olan araç ipuçları artık Wayland ile uyumlu.</p>
         <p xml:lang="uk">Окрім редизайну бічної панелі, Stage практично не змінився. Підказки для слайдів тепер також сумісні з Wayland.</p>
         <p xml:lang="zh-CN">除了侧边栏重新设计以外，Stage实际上没有变。幻灯片的工具提示现在也兼容 Wayland。</p>
+        <p xml:lang="zh-TW">Stage 除了新的側邊欄設計以外沒有什麼改變。這個版本也讓投影片的工具提示與 Wayland 相容。</p>
       </description>
     </release>
   </releases>

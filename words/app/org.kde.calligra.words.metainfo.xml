@@ -471,6 +471,7 @@
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
         <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
+        <p xml:lang="zh-TW">這個版本為 Calligra 辦公軟體新增 Flatpak 支援。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -495,6 +496,7 @@
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
+        <p xml:lang="zh-TW">最大的變更是 Calligra 已完全移植到 Qt6 與 KF6，同時大幅更新使用者介面。</p>
         <p>Word now features the new sidebar design, and the main view uses a shadow to define the document borders. The Style Manager and Page Layout dialog were also updated with a new design.</p>
         <p xml:lang="ar">يتميز وورد الآن بتصميم جديد للشريط الجانبي، ويستخدم العرض الرئيسي ظلًا لتحديد حدود المستند. كما حُدث مربع حوار ”مدير الأنماط“ و”تخطيط الصفحة“ بتصميم جديد.</p>
         <p xml:lang="ca">El Word ara presenta el disseny nou de la barra lateral, i la vista principal utilitza una ombra per a definir les vores del document. El diàleg del gestor d'estils i la disposició de pàgines també s'han actualitzat amb un disseny nou.</p>
@@ -514,6 +516,7 @@
         <p xml:lang="tr">Sözcükler artık yeni bir kenar çubuğu tasarımı kullanıyor ve ana görünüm belge kenarlıklarını göstermek için gölge yapıyor. Biçem Yöneticisi ve Sayfa Yerleşimi iletişim kutuları da yeni bir tasarıma geçtiler.</p>
         <p xml:lang="uk">У Word оновлено дизайн бічної панелі, а на головній панелі перегляду використано тінь для визначення меж документа. Диспетчер стилів і діалогове вікно «Компонування сторінки» також отримали новий дизайн.</p>
         <p xml:lang="zh-CN">单词现在具有新的侧边栏设计，主视图使用阴影来定义文件边界。样式管理器和页面布局对话框也更新了，设计改了。</p>
+        <p xml:lang="zh-TW">Word 現在使用新的側邊欄設計，並讓主檢視用陰影來顯示文件邊框。樣式管理者與頁面佈局對話框也更新成新的設計。</p>
       </description>
     </release>
   </releases>

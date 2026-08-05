@@ -426,6 +426,7 @@
         <p xml:lang="tr">Bu yayım, Calligra ofis paketine Flatpak desteği ekler.</p>
         <p xml:lang="uk">У цьому випуску додано підтримку flatpak для усього комплекту програм Calligra Office.</p>
         <p xml:lang="zh-CN">这个版本为 Calligra Office 套件添加了 flatpak 支持。</p>
+        <p xml:lang="zh-TW">這個版本為 Calligra 辦公軟體新增 Flatpak 支援。</p>
       </description>
     </release>
     <release version="4.0.0" date="2024-08-27">
@@ -451,6 +452,7 @@
         <p xml:lang="tr">En önemli değişikliklerden biri, Calligra’nın artık Qt6’ya ve KF6’ya tümüyle geçmiş olması ve kullanıcı arayüzünün tümüyle elden geçirilmesidir.</p>
         <p xml:lang="uk">Найбільш суттєвими змінами є повний перехід Calligra на Qt6 та KF6, а також значний перегляд інтерфейсу користувача.</p>
         <p xml:lang="zh-CN">最重要的变化是 Calligra 已经完全过渡到 Qt6 和 KF6，同时对其用户界面进行了大修。</p>
+        <p xml:lang="zh-TW">最大的變更是 Calligra 已完全移植到 Qt6 與 KF6，同時大幅更新使用者介面。</p>
         <p>Words, Sheets, and Stage now feature a new sidebar design. The “Custom Shape” docker has been removed, and custom shapes are now accessible through a popup menu in the toolbar across all Calligra applications. We simplified the toolbar and removed the basic copy, paste and cut actions.</p>
         <p xml:lang="ar">تتميز كلمات وأوراق ومرحلة الآن بتصميم جديد للشريط الجانبي. أُزيلت أداة ”الشكل المخصص“ وأصبح من الممكن الآن الوصول إلى الأشكال المخصصة من خلال قائمة منبثقة في شريط الأدوات في جميع تطبيقات كاليغرا. قمنا بتبسيط شريط الأدوات وأزلنا إجراءات النسخ واللصق والقص الأساسية.</p>
         <p xml:lang="ca">El Words, el Sheets i l'Stage ara compten amb un disseny nou de barra lateral. S'ha eliminat l'acoblador de «forma personalitzada», i ara es pot accedir a formes personalitzades a través d'un menú emergent a la barra d'eines a través de totes les aplicacions del Calligra. S'ha simplificat la barra d'eines i s'han eliminat les accions bàsiques de còpia, enganxa i retalla.</p>
@@ -470,6 +472,7 @@
         <p xml:lang="tr">Sözcükler, Tablolar ve Sahne artık yeni bir kenar çubuğu tasarımı sunuyor. “Özel Şekil” paneli kaldırıldı ve özel şekillere artık tüm Calligra uygulamalarında araç çubuğundaki bir açılır menüden erişilebiliyor. Araç çubuğunu basitleştirdik ve temel Kes, Kopyala, Yapıştır eylemlerini çıkardık.</p>
         <p xml:lang="uk">У Words, Sheets та Stage представлено новий дизайн бічної панелі. Бічну панель «Нетипова форма» було вилучено, а доступ до нетипових форм здійснюється через контекстне меню на панелі інструментів у всіх програмах Calligra. Ми спростили панель інструментів і вилучили базові дії копіювання, вставляння та вирізання.</p>
         <p xml:lang="zh-CN">Words, Sheets 和 Stage 现在有了一个新的侧边栏设计。“自定义形状”面板已被移除，现在所有的 Calligra 应用程序都可以通过工具栏中的弹出菜单使用自定义形状。我们简化了工具栏，删除了基础拷贝、粘贴和剪切操作。</p>
+        <p xml:lang="zh-TW">更新了 Words、Sheets 和 Stage 的側邊欄設計。「自訂元件」工具面板已移除，自訂元件現在則可在各個 Calligra 應用程式的工具列中透過彈出選單使用。我們也簡化了工具列，從工具列移除了基礎的複製、貼上與剪下動作。</p>
       </description>
     </release>
   </releases>
