@@ -7,19 +7,20 @@
 # Alexander Potashev <aspotashev@gmail.com>, 2010, 2015, 2018, 2019.
 # Georgiy Syptchenko <superzhook@gmail.com>, 2014.
 # Alexander Yavorsky <kekcuha@gmail.com>, 2022.
+# SPDX-FileCopyrightText: 2026 Olesya Gerasimenko <goa@altlinux.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2022-05-11 21:25+0300\n"
-"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
-"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"PO-Revision-Date: 2026-08-04 17:13+0300\n"
+"Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
+"Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -1777,18 +1778,16 @@ msgid "Browse..."
 msgstr "Обзор..."
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "Цвет фона"
+msgstr "Сбросить цвет фона"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Reset background color"
-msgstr "Цвет фона"
+msgstr "Сбросить цвет фона"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1797,10 +1796,9 @@ msgstr "Целое слово"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
-#, fuzzy, kde-format
-#| msgid "Drop caps:"
+#, kde-format
 msgid "Enable drop caps"
-msgstr "Буквица:"
+msgstr "Включить буквицу"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1884,24 +1882,21 @@ msgstr "Не менее"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:22
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Left Indent:"
-msgstr "Отступ"
+msgstr "Отступ слева:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Right Indent:"
-msgstr "Отступ"
+msgstr "Отступ справа:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
-#, fuzzy, kde-format
-#| msgid "First Line:"
+#, kde-format
 msgid "First Line Indent:"
-msgstr "Первая строка:"
+msgstr "Отступ первой строки:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:66
@@ -1911,10 +1906,9 @@ msgstr "Автоматически определять по размеру те
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
-#, fuzzy, kde-format
-#| msgid "Line Spacing"
+#, kde-format
 msgid "Line Spacing:"
-msgstr "Межстрочный интервал"
+msgstr "Межстрочный интервал:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
@@ -1924,24 +1918,21 @@ msgstr " %"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useFont)
 #: dialogs/ParagraphIndentSpacing.ui:129
-#, fuzzy, kde-format
-#| msgid "Use Font Metrics:"
+#, kde-format
 msgid "Use Font Metrics"
-msgstr "Использовать метрику шрифта:"
+msgstr "Использовать метрику шрифта"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space Before:"
-msgstr "Интервал между абзацами"
+msgstr "Интервал между абзацами до:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space After:"
-msgstr "Интервал между абзацами"
+msgstr "Интервал между абзацами после:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
 #: dialogs/ParagraphLayout.ui:43
@@ -1951,10 +1942,9 @@ msgstr "По ширине"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
-#, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
+#, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "Поведение конца врезки/страницы"
+msgstr "Поведение в конце врезки и страницы:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57
@@ -3142,1547 +3132,1276 @@ msgstr "Редактирование текста"
 #~ msgstr "Открыть ссылку?"
 
 #, fuzzy
-#~| msgid "Quick search:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Quick search:"
 #~ msgstr "Быстрый поиск:"
 
 #, fuzzy
-#~| msgid "Insert a table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Note"
 #~ msgstr "Добавить таблицу"
 
 #, fuzzy
-#~| msgid "<<Remove"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove Note"
 #~ msgstr "<< Удалить"
 
 #, fuzzy
-#~| msgid "..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "..."
 #~ msgstr "..."
 
 #, fuzzy
-#~| msgid "Dialog"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Dialog"
 #~ msgstr "Диалог"
 
 #, fuzzy
-#~| msgid "Accept"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Accept"
 #~ msgstr "Принять"
 
 #, fuzzy
-#~| msgid "Reject"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reject"
 #~ msgstr "Отклонить"
 
 #, fuzzy
-#~| msgid "Cancel"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cancel"
 #~ msgstr "Отменить"
 
 #, fuzzy
-#~| msgid "Change Log"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Log"
 #~ msgstr "Список изменений"
 
 #, fuzzy
-#~| msgid "Author"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Author"
 #~ msgstr "Автор"
 
 #, fuzzy
-#~| msgid "Date"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Date"
 #~ msgstr "Дата"
 
 #, fuzzy
-#~| msgid "Type"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Type"
 #~ msgstr "Тип"
 
 #, fuzzy
-#~| msgid "Start at:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Start at:"
 #~ msgstr "Начать с:"
 
 #, fuzzy
-#~| msgid "Alignment:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Alignment:"
 #~ msgstr "Выравнивание:"
 
 #, fuzzy
-#~| msgid "Prefix:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Prefix:"
 #~ msgstr "Префикс:"
 
 #, fuzzy
-#~| msgid "Suffix:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Suffix:"
 #~ msgstr "Суффикс:"
 
 #, fuzzy
-#~| msgid "Depth:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Depth:"
 #~ msgstr "Глубина:"
 
 #, fuzzy
-#~| msgid "Display Levels:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Display Levels:"
 #~ msgstr "Уровней:"
 
 #, fuzzy
-#~| msgid "Bullet/Number followed by"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bullet/Number followed by"
 #~ msgstr "Добавлять после метки или цифры"
 
 #, fuzzy
-#~| msgid " cm"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " cm"
 #~ msgstr " см"
 
 #, fuzzy
-#~| msgid "Paste"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "at"
 #~ msgstr "вставку"
 
 #, fuzzy
-#~| msgid "Alignment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Aligned at"
 #~ msgstr "Выравнивание"
 
 #, fuzzy
-#~| msgid "Indent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Indented at"
 #~ msgstr "Отступ"
 
 #, fuzzy
-#~| msgid "Custom character:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Custom character:"
 #~ msgstr "Особый символ:"
 
 #, fuzzy
-#~| msgid "Restart numbering at this paragraph"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Restart numbering at this paragraph"
 #~ msgstr "Начать нумерацию с начала в этом абзаце"
 
 #, fuzzy
-#~| msgid "Insert Index"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Image"
 #~ msgstr "Вставить указатель"
 
 #, fuzzy
-#~| msgid "Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Height"
 #~ msgstr "Справа"
 
 #, fuzzy
-#~| msgid "Alignment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Alignment"
 #~ msgstr "Выравнивание"
 
 #, fuzzy
-#~| msgid "Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Left"
 #~ msgstr "Слева"
 
 #, fuzzy
-#~| msgid "Center"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Center"
 #~ msgstr "По центру"
 
 #, fuzzy
-#~| msgid "Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Right"
 #~ msgstr "Справа"
 
 #, fuzzy
-#~| msgid "Justify"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Justify"
 #~ msgstr "По ширине"
 
 #, fuzzy
-#~| msgid "Behavior at End of Frame/Page"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Behavior at End of Frame/Page"
 #~ msgstr "Поведение конца врезки/страницы"
 
 #, fuzzy
-#~| msgid "Keep lines together"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Keep lines together"
 #~ msgstr "Не разрывать абзац"
 
 #, fuzzy
-#~| msgid "Insert break before paragraph"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert break before paragraph"
 #~ msgstr "Вставить разрыв перед абзацем"
 
 #, fuzzy
-#~| msgid "Insert break after paragraph"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert break after paragraph"
 #~ msgstr "Вставить разрыв после абзаца"
 
 #, fuzzy
-#~| msgid "&Rename"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Rename"
 #~ msgstr "Пе&реименовать"
 
 #, fuzzy
-#~| msgid "&Delete"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Delete"
 #~ msgstr "&Удалить"
 
 #, fuzzy
-#~| msgctxt "Line spacing type"
-#~| msgid "Additional"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add caption"
 #~ msgstr "Дополнительный"
 
 #, fuzzy
-#~| msgid "General"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "General"
 #~ msgstr "Общие"
 
 #, fuzzy
-#~| msgid "Name:"
 #~ msgctxt "(qtundo-format) Name of the style"
 #~ msgid "Name:"
 #~ msgstr "Название:"
 
 #, fuzzy
-#~| msgid "Next style:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Next style:"
 #~ msgstr "Следующий стиль:"
 
 #, fuzzy
-#~| msgid "Next style:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Parent style:"
 #~ msgstr "Следующий стиль:"
 
 #, fuzzy
-#~| msgid "Tab 1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tab 1"
 #~ msgstr "Вкладка 1"
 
 #, fuzzy
-#~| msgid "Tab 2"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tab 2"
 #~ msgstr "Вкладка 2"
 
 #, fuzzy
-#~| msgid "Text color:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text color:"
 #~ msgstr "Цвет текста:"
 
 #, fuzzy
-#~| msgid "Background color:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Background color:"
 #~ msgstr "Цвет фона:"
 
 #, fuzzy
-#~| msgid "Underlining:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Underlining:"
 #~ msgstr "Подчёркивание:"
 
 #, fuzzy
-#~| msgid "Strikethrough:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Strikethrough:"
 #~ msgstr "Зачёркивание:"
 
 #, fuzzy
-#~| msgid "Capitalization"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Capitalization:"
 #~ msgstr "Регистр"
 
 #, fuzzy
-#~| msgid "Position"
 #~ msgctxt "(qtundo-format) Character position"
 #~ msgid "Position:"
 #~ msgstr "Расположение"
 
 #, fuzzy
-#~| msgid "Insert Bibliography entry"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Bibliography entry"
 #~ msgstr "Вставка библиографических записей"
 
 #, fuzzy
-#~| msgid "Insert Bibliography Entry Details"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Bibliography Entry Details"
 #~ msgstr "Подробности вставки библиографических записей"
 
 #, fuzzy
-#~| msgid "Short Name:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Short Name:"
 #~ msgstr "Короткое название:"
 
 #, fuzzy
-#~| msgid "Source:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Source:"
 #~ msgstr "Источник:"
 
 #, fuzzy
-#~| msgid "Article"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Article"
 #~ msgstr "Статья"
 
 #, fuzzy
-#~| msgid "Book"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Book"
 #~ msgstr "Книга"
 
 #, fuzzy
-#~| msgid "Booklet"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Booklet"
 #~ msgstr "Буклет"
 
 #, fuzzy
-#~| msgid "Conference"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Conference"
 #~ msgstr "Совещание"
 
 #, fuzzy
-#~| msgid "Email"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Email"
 #~ msgstr "Электронная почта"
 
 #, fuzzy
-#~| msgid "Insertion"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Incollection"
 #~ msgstr "Вставка текста"
 
 #, fuzzy
-#~| msgid "Journal"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Journal"
 #~ msgstr "Журнал"
 
 #, fuzzy
-#~| msgid "Manual"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Manual"
 #~ msgstr "Справочник"
 
 #, fuzzy
-#~| msgid "Masters thesis"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Masters thesis"
 #~ msgstr "Диссертация"
 
 #, fuzzy
-#~| msgid "Misc"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Misc"
 #~ msgstr "Прочее"
 
 #, fuzzy
-#~| msgid "PhD thesis"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "PhD thesis"
 #~ msgstr "Кандидатская диссертация"
 
 #, fuzzy
-#~| msgid "Proceedings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Proceedings"
 #~ msgstr "Судебные протоколы"
 
 #, fuzzy
-#~| msgid "Tech Report"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tech Report"
 #~ msgstr "Технический отчёт"
 
 #, fuzzy
-#~| msgid "Unpublished"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unpublished"
 #~ msgstr "Неопубликованный"
 
 #, fuzzy
-#~| msgid "WWW"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "WWW"
 #~ msgstr "Интернет"
 
 #, fuzzy
-#~| msgid "custom 1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom 1"
 #~ msgstr "Другой 1"
 
 #, fuzzy
-#~| msgid "custom 2"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom 2"
 #~ msgstr "Другой 2"
 
 #, fuzzy
-#~| msgid "custom 3"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom 3"
 #~ msgstr "Другой 3"
 
 #, fuzzy
-#~| msgid "custom 4"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom 4"
 #~ msgstr "Другой 4"
 
 #, fuzzy
-#~| msgid "custom 5"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom 5"
 #~ msgstr "Другой 5"
 
 #, fuzzy
-#~| msgid "Author:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Author:"
 #~ msgstr "Автор:"
 
 #, fuzzy
-#~| msgid "Title:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Title:"
 #~ msgstr "Заголовок:"
 
 #, fuzzy
-#~| msgid "Year:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Year:"
 #~ msgstr "Год:"
 
 #, fuzzy
-#~| msgid "Publisher:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Publisher:"
 #~ msgstr "Издатель:"
 
 #, fuzzy
-#~| msgid "Address:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Address:"
 #~ msgstr "Адрес:"
 
 #, fuzzy
-#~| msgid "ISBN:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "ISBN:"
 #~ msgstr "Международный номер (ISBN):"
 
 #, fuzzy
-#~| msgid "Chapter:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Chapter:"
 #~ msgstr "Глава:"
 
 #, fuzzy
-#~| msgid "ISSN:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "ISSN:"
 #~ msgstr "Международный серийный номер (ISSN):"
 
 #, fuzzy
-#~| msgid "Editor:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Editor:"
 #~ msgstr "Редактор:"
 
 #, fuzzy
-#~| msgid "Page(s):"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page(s):"
 #~ msgstr "Страниц:"
 
 #, fuzzy
-#~| msgid "Book title:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Book title:"
 #~ msgstr "Название книги:"
 
 #, fuzzy
-#~| msgid "Edition:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Edition:"
 #~ msgstr "Редакция:"
 
 #, fuzzy
-#~| msgid "Publication:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Publication:"
 #~ msgstr "Издание:"
 
 #, fuzzy
-#~| msgid "Volume:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Volume:"
 #~ msgstr "Том:"
 
 #, fuzzy
-#~| msgid "Institution:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Institution:"
 #~ msgstr "Учреждение:"
 
 #, fuzzy
-#~| msgid "Organisation:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Organisation:"
 #~ msgstr "Организация:"
 
 #, fuzzy
-#~| msgid "Type of Report:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Type of Report:"
 #~ msgstr "Тип отчёта:"
 
 #, fuzzy
-#~| msgid "University:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "University:"
 #~ msgstr "Университет:"
 
 #, fuzzy
-#~| msgid "Journal:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Journal:"
 #~ msgstr "Журнал:"
 
 #, fuzzy
-#~| msgid "Month:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Month:"
 #~ msgstr "Месяц:"
 
 #, fuzzy
-#~| msgid "Number of rows:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number:"
 #~ msgstr "Количество строк:"
 
 #, fuzzy
-#~| msgid "Note:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Note:"
 #~ msgstr "Примечание:"
 
 #, fuzzy
-#~| msgid "Annotation:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Annotation:"
 #~ msgstr "Аннотация:"
 
 #, fuzzy
-#~| msgid "URL:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "URL:"
 #~ msgstr "Адрес:"
 
 #, fuzzy
-#~| msgid "User-defined 1:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "User-defined 1:"
 #~ msgstr "Пользовательский 1:"
 
 #, fuzzy
-#~| msgid "User-defined 3:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "User-defined 3:"
 #~ msgstr "Пользовательский 2:"
 
 #, fuzzy
-#~| msgid "User-defined 2:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "User-defined 2:"
 #~ msgstr "Пользовательский 3:"
 
 #, fuzzy
-#~| msgid "User-defined 4:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "User-defined 4:"
 #~ msgstr "Пользовательский 4:"
 
 #, fuzzy
-#~| msgid "User-defined 5:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "User-defined 5:"
 #~ msgstr "Пользовательский 5:"
 
 #, fuzzy
-#~| msgid "OR"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "OR"
 #~ msgstr "ИЛИ"
 
 #, fuzzy
-#~| msgid "From the document:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "From the document:"
 #~ msgstr "Из документа:"
 
 #, fuzzy
-#~| msgid "Background color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Background color"
 #~ msgstr "Цвет фона"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert citation at current position"
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Configure Change Tracking"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure bibliography"
 #~ msgstr "Настроить отслеживание изменений"
 
 # https://bugs.kde.org/show_bug.cgi?id=253461
 #, fuzzy
-#~| msgid "Configure Change Tracking"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure Bibliography"
 #~ msgstr "Настроить отслеживание изменений"
 
 #, fuzzy
-#~| msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
 #~ msgstr ""
 #~ "<p><ul><li><b>Одинарный</b>: Обычный межстрочный интервал</li></ul></p> "
 
 #, fuzzy
-#~| msgctxt "Line spacing type"
-#~| msgid "Additional"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add tab stop"
 #~ msgstr "Дополнительный"
 
 #, fuzzy
-#~| msgid "Character"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tab character"
 #~ msgstr "Символ"
 
 #, fuzzy
-#~| msgid "Special Characters"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Space character"
 #~ msgstr "Специальные символы"
 
 #, fuzzy
-#~| msgctxt "None"
-#~| msgid "Nothing"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Nothing"
 #~ msgstr "Ничего"
 
 #, fuzzy
-#~| msgid "Number of rows:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number"
 #~ msgstr "Количество строк:"
 
 #, fuzzy
-#~| msgid " Format:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Format:"
 #~ msgstr " Формат:"
 
 #, fuzzy
-#~| msgid "Display Levels:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Display levels above:"
 #~ msgstr "Уровней:"
 
 #, fuzzy
-#~| msgid "No Bullet"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bullet"
 #~ msgstr "Без метки"
 
 # https://bugs.kde.org/show_bug.cgi?id=253461
 #, fuzzy
-#~| msgid "Configure Change Tracking"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure Change Tracking"
 #~ msgstr "Настройка отслеживания изменений"
 
 #, fuzzy
-#~| msgid "General Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "General Settings"
 #~ msgstr "Основные параметры"
 
 #, fuzzy
-#~| msgid "Saving Format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Saving Format"
 #~ msgstr "Формат для хранения"
 
 #, fuzzy
-#~| msgid "ODF 1.2"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "ODF 1.2"
 #~ msgstr "ODF 1.2"
 
 #, fuzzy
-#~| msgid "DeltaXML (Experimental)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "DeltaXML (Experimental)"
 #~ msgstr "DeltaXML (экспериментально)"
 
 #, fuzzy
-#~| msgid "Author Name"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Author Name"
 #~ msgstr "Имя автора"
 
 #, fuzzy
-#~| msgid "Change Visualization Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Visualization Settings"
 #~ msgstr "Настройка отображения изменений"
 
 #, fuzzy
-#~| msgid "Insertions"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insertions"
 #~ msgstr "Добавление"
 
 #, fuzzy
-#~| msgid "Background Color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Background Color"
 #~ msgstr "Цвет фона"
 
 #, fuzzy
-#~| msgid "Deletions"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Deletions"
 #~ msgstr "Удаление"
 
 #, fuzzy
-#~| msgid "Format Changes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Format Changes"
 #~ msgstr "Редактирование"
 
 #, fuzzy
-#~| msgid "Link"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Link"
 #~ msgstr "Ссылка"
 
 #, fuzzy
-#~| msgid "Web Link"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Web Link"
 #~ msgstr "Веб-ссылка"
 
 #, fuzzy
-#~| msgid " URL:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " URL:"
 #~ msgstr " Адрес:"
 
 # ?
 #, fuzzy
-#~| msgid " Text:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " Text:"
 #~ msgstr " Текст:"
 
 #, fuzzy
-#~| msgid " Name:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " Name:"
 #~ msgstr "Название:"
 
 #, fuzzy
-#~| msgid "Insertion"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "In collection"
 #~ msgstr "Вставка текста"
 
 #, fuzzy
-#~| msgid "Tech report"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tech report"
 #~ msgstr "Технический отчёт"
 
 #, fuzzy
-#~| msgid "Custom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom1"
 #~ msgstr "Другое"
 
 #, fuzzy
-#~| msgid "Custom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom2"
 #~ msgstr "Другое"
 
 #, fuzzy
-#~| msgid "Custom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom3"
 #~ msgstr "Другое"
 
 #, fuzzy
-#~| msgid "Custom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom4"
 #~ msgstr "Другое"
 
 #, fuzzy
-#~| msgid "Custom"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "custom5"
 #~ msgstr "Другое"
 
 #, fuzzy
-#~| msgid "Available fields "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Available fields "
 #~ msgstr "Доступные поля "
 
 #, fuzzy
-#~| msgid "Add >>"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add >>"
 #~ msgstr "Добавить >>"
 
 #, fuzzy
-#~| msgid "<<Remove"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<<Remove"
 #~ msgstr "<< Удалить"
 
 #, fuzzy
-#~| msgid "Endnote"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Endnote"
 #~ msgstr "Концевая сноска"
 
 #, fuzzy
-#~| msgid "Footnote"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Footnote"
 #~ msgstr "Подстрочная сноска"
 
 #, fuzzy
-#~| msgid "&New"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&New"
 #~ msgstr "С&оздать"
 
 #, fuzzy
-#~| msgid "Change Tracking Options"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Tracking Options"
 #~ msgstr "Параметры отслеживания изменений"
 
 #, fuzzy
-#~| msgid "Configure Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure Settings"
 #~ msgstr "Настроить параметры"
 
 #, fuzzy
-#~| msgid "Record Changes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Record Changes"
 #~ msgstr "Запись изменений"
 
 #, fuzzy
-#~| msgid "Colors"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Colors"
 #~ msgstr "Цвета"
 
 #, fuzzy
-#~| msgid "Text Shadow"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text Shadow"
 #~ msgstr "Тень текста"
 
 #, fuzzy
-#~| msgid "Color:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Color:"
 #~ msgstr "Цвет:"
 
 #, fuzzy
-#~| msgid "Distance:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Distance:"
 #~ msgstr "Расстояние:"
 
 #, fuzzy
-#~| msgid "Position"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Position"
 #~ msgstr "Расположение"
 
 #, fuzzy
-#~| msgid "Automatic hyphenation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Automatic hyphenation"
 #~ msgstr "Автоматический перенос слов"
 
 #, fuzzy
-#~| msgid "TextLabel"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "TextLabel"
 #~ msgstr "Текстовая метка"
 
 #, fuzzy
-#~| msgid "Paragraph..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Distance to paragraph:"
 #~ msgstr "Абзац..."
 
 #, fuzzy
-#~| msgid "Number of rows:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number of characters:"
 #~ msgstr "Количество строк:"
 
 #, fuzzy
-#~| msgid "Number of columns:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number of lines it covers:"
 #~ msgstr "Количество столбцов:"
 
 #, fuzzy
-#~| msgid "Columns and rows"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Columns and rows"
 #~ msgstr "Столбцы и строки"
 
 #, fuzzy
-#~| msgid "Number of columns:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number of columns:"
 #~ msgstr "Количество столбцов:"
 
 #, fuzzy
-#~| msgid "Number of rows:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number of rows:"
 #~ msgstr "Количество строк:"
 
 #, fuzzy
-#~| msgid "Width strategy"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Width strategy"
 #~ msgstr "Стратегия ширины"
 
 #, fuzzy
-#~| msgid "Fixed column width:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fixed column width:"
 #~ msgstr "Фиксированная ширина столбца:"
 
 #, fuzzy
-#~| msgid "Number of rows:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Number entries"
 #~ msgstr "Количество строк:"
 
 #, fuzzy
-#~| msgid "Sort"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sort"
 #~ msgstr "Упорядочить"
 
 #, fuzzy
-#~| msgid "Short Name:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sort keys"
 #~ msgstr "Короткое имя:"
 
 #, fuzzy
-#~| msgid "Name:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sort algorithm:"
 #~ msgstr "Название:"
 
 #, fuzzy
-#~| msgid "Indent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Indent"
 #~ msgstr "Отступ"
 
 #, fuzzy
-#~| msgid "Left:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Left:"
 #~ msgstr "Слева:"
 
 #, fuzzy
-#~| msgid "Right:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Right:"
 #~ msgstr "Справа:"
 
 #, fuzzy
-#~| msgid "First Line:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "First Line:"
 #~ msgstr "Первая строка:"
 
 #, fuzzy
-#~| msgid "Auto-infer from text size"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Auto-infer from text size"
 #~ msgstr "Автоматически определять по размеру текста"
 
 #, fuzzy
-#~| msgid "Line Spacing"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Line Spacing"
 #~ msgstr "Межстрочный интервал"
 
 #, fuzzy
-#~| msgid " %"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " %"
 #~ msgstr " %"
 
 #, fuzzy
-#~| msgid "Use Font Metrics:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Use Font Metrics:"
 #~ msgstr "Использовать метрику шрифта:"
 
 #, fuzzy
-#~| msgid "Paragraph Space"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Paragraph Space"
 #~ msgstr "Интервал между абзацами"
 
 #, fuzzy
-#~| msgid "Before:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Before:"
 #~ msgstr "Перед:"
 
 #, fuzzy
-#~| msgid "After:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "After:"
 #~ msgstr "После:"
 
 #, fuzzy
-#~| msgid "Split Cells"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Split sections"
 #~ msgstr "Разделить ячейки"
 
 #, fuzzy
-#~| msgid "Paragraph..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert paragraph..."
 #~ msgstr "Абзац..."
 
 #, fuzzy
-#~| msgid "Insert Citation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "after end of section:"
 #~ msgstr "Вставка цитаты"
 
 #, fuzzy
-#~| msgid "Autonumbering"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Automatic Numbering:"
 #~ msgstr "Автоматическая нумерация"
 
 #, fuzzy
-#~| msgid " Prefix:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " Prefix:"
 #~ msgstr "Префикс:"
 
 #, fuzzy
-#~| msgid "Start at:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " Start at:"
 #~ msgstr "Начать с:"
 
 #, fuzzy
-#~| msgid " Format:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " Format:"
 #~ msgstr " Формат:"
 
 #, fuzzy
-#~| msgid " Suffix:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid " Suffix:"
 #~ msgstr " Суффикс:"
 
 #, fuzzy
-#~| msgid "Start at:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Starts over at:"
 #~ msgstr "Начать с:"
 
 #, fuzzy
-#~| msgid "Page"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page"
 #~ msgstr "Страницу"
 
 #, fuzzy
-#~| msgid "Chapter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Chapter"
 #~ msgstr "Главу"
 
 #, fuzzy
-#~| msgid "Document"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document"
 #~ msgstr "Документ"
 
 #, fuzzy
-#~| msgid "1, 2, 3, ..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "1, 2, 3, ..."
 #~ msgstr "1, 2, 3, ..."
 
 #, fuzzy
-#~| msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
 #~ msgstr "a, b, c, ..., aa, ab, ..., ba, bb, ..."
 
 #, fuzzy
-#~| msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
 #~ msgstr "A, B, C, ..., AA, AB, ..., BA, BB, ..."
 
 #, fuzzy
-#~| msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
 #~ msgstr "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
 
 #, fuzzy
-#~| msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
 #~ msgstr "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
 
 #, fuzzy
-#~| msgid "i, ii, iii, ..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "i, ii, iii, ..."
 #~ msgstr "i, ii, iii, ..."
 
 #, fuzzy
-#~| msgid "I,II,III, ..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "I,II,III, ..."
 #~ msgstr "I,II,III, ..."
 
 #, fuzzy
-#~| msgid "Continuation Notice"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Continuation Notice:"
 #~ msgstr "Уведомление о продолжении"
 
 #, fuzzy
-#~| msgid "Annotation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Annotation"
 #~ msgstr "Аннотация"
 
 #, fuzzy
-#~| msgid "Annotation Shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Annotation Shape"
 #~ msgstr "Форма аннотации"
 
 #, fuzzy
-#~| msgctxt "Disable Shrink To Fit"
-#~| msgid "Disable"
 #~ msgctxt "(qtundo-format) Disable Shrink To Fit"
 #~ msgid "Disable"
 #~ msgstr "Отключить"
 
 #, fuzzy
-#~| msgctxt "Enable Shrink To Fit"
-#~| msgid "Enable"
 #~ msgctxt "(qtundo-format) Enable Shrink To Fit"
 #~ msgid "Enable"
 #~ msgstr "Включить"
 
 #, fuzzy
-#~| msgid "Proceedings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Ascending"
 #~ msgstr "Судебные протоколы"
 
 # https://bugs.kde.org/show_bug.cgi?id=253461
 #, fuzzy
-#~| msgid "Configure Change Tracking"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bibliography"
 #~ msgstr "Настроить отслеживание изменений"
 
 #, fuzzy
-#~| msgid "References"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "References"
 #~ msgstr "Ссылки"
 
 #, fuzzy
-#~| msgid "This is a line of inserted text."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "This is a line of inserted text."
 #~ msgstr "Это строка вставленного фрагмента текста."
 
 #, fuzzy
-#~| msgid "This is a line of deleted text."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "This is a line of deleted text."
 #~ msgstr "Это строка удалённого фрагмента текста."
 
 #, fuzzy
-#~| msgid "This is a line of text whose format has been changed."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "This is a line of text whose format has been changed."
 #~ msgstr "Это строка фрагмента текста, формат которого был изменен."
 
 #, fuzzy
-#~| msgid "Normal"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Normal"
 #~ msgstr "Обычный"
 
 #, fuzzy
-#~| msgid "Small Caps"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Small Caps"
 #~ msgstr "Малые прописные"
 
 #, fuzzy
-#~| msgid "Uppercase"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Uppercase"
 #~ msgstr "ВЕРХНИЙ РЕГИСТР"
 
 #, fuzzy
-#~| msgid "Lowercase"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Lowercase"
 #~ msgstr "нижний регистр"
 
 #, fuzzy
-#~| msgid "Capitalize"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Capitalize"
 #~ msgstr "Начинать с прописной буквы"
 
 #, fuzzy
-#~| msgid "Superscript"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Superscript"
 #~ msgstr "Верхний индекс"
 
 #, fuzzy
-#~| msgid "Subscript"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Subscript"
 #~ msgstr "Нижний индекс"
 
 #, fuzzy
-#~| msgid "Select Font"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select"
 #~ msgstr "Выбрать шрифт"
 
 #, fuzzy
-#~| msgid "Short name%1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Short name%1"
 #~ msgstr "Короткое название%1"
 
 #, fuzzy
-#~| msgid "Use styles"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Used Styles"
 #~ msgstr "Использовать стиль"
 
 #, fuzzy
-#~| msgid "Use styles"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unused Styles"
 #~ msgstr "Использовать стиль"
 
 #, fuzzy
-#~| msgid "Select Font"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select Font"
 #~ msgstr "Выбрать шрифт"
 
 #, fuzzy
-#~| msgid "Special Characters"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Special Characters"
 #~ msgstr "Специальные символы"
 
 #, fuzzy
-#~| msgid "Insert"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert"
 #~ msgstr "Вставить"
 
 #, fuzzy
-#~| msgctxt "Close dialog"
-#~| msgid "Close"
 #~ msgctxt "(qtundo-format) Close dialog"
 #~ msgid "Close"
 #~ msgstr "Закрыть"
 
 #, fuzzy
-#~| msgid "Bookmark..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Rename Bookmark"
 #~ msgstr "Закладка..."
 
 #, fuzzy
-#~| msgid "Insert Index"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Bookmark"
 #~ msgstr "Вставить указатель"
 
 #, fuzzy
-#~| msgid "Manage Bookmarks"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Manage Bookmarks"
 #~ msgstr "Изменить закладки..."
 
 #, fuzzy
-#~| msgid "Footnotes/Endnotes Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Footnote Settings"
 #~ msgstr "Параметры сносок"
 
 #, fuzzy
-#~| msgid "Footnotes/Endnotes Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Endnote Settings"
 #~ msgstr "Параметры сносок"
 
 #, fuzzy
-#~| msgctxt "Automatic horizontal alignment"
-#~| msgid "Auto"
 #~ msgctxt "(qtundo-format) Automatic horizontal alignment"
 #~ msgid "Auto"
 #~ msgstr "Автоопределение"
 
 #, fuzzy
-#~| msgid "Left"
 #~ msgctxt "(qtundo-format) Text alignment"
 #~ msgid "Left"
 #~ msgstr "Слева"
 
 #, fuzzy
-#~| msgid "Right"
 #~ msgctxt "(qtundo-format) Text alignment"
 #~ msgid "Right"
 #~ msgstr "Справа"
 
 #, fuzzy
-#~| msgctxt "Text alignment"
-#~| msgid "Centered"
 #~ msgctxt "(qtundo-format) Text alignment"
 #~ msgid "Centered"
 #~ msgstr "По центру"
 
 #, fuzzy
-#~| msgctxt "Tab follows the bullet or number"
-#~| msgid "Tab Stop"
 #~ msgctxt "(qtundo-format) Tab follows the bullet or number"
 #~ msgid "Tab Stop"
 #~ msgstr "Табуляцию"
 
 #, fuzzy
-#~| msgctxt "Space"
-#~| msgid "Space"
 #~ msgctxt "(qtundo-format) Space"
 #~ msgid "Space"
 #~ msgstr "Пробел"
 
 #, fuzzy
-#~| msgctxt "None"
-#~| msgid "Nothing"
 #~ msgctxt "(qtundo-format) None"
 #~ msgid "Nothing"
 #~ msgstr "Ничего"
 
 #, fuzzy
-#~| msgid "Indent/Spacing"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Indent/Spacing"
 #~ msgstr "Отступы и интервал"
 
 #, fuzzy
-#~| msgid "General Layout"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "General Layout"
 #~ msgstr "Основная разметка"
 
 #, fuzzy
-#~| msgid "Bullets/Numbers"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bullets/Numbers"
 #~ msgstr "Метки и нумерация"
 
 #, fuzzy
-#~| msgid "Decorations"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Decorations"
 #~ msgstr "Оформление"
 
 #, fuzzy
-#~| msgctxt "Line spacing value"
-#~| msgid "Single"
 #~ msgctxt "(qtundo-format) Line spacing value"
 #~ msgid "Single"
 #~ msgstr "Одинарный"
 
 #, fuzzy
-#~| msgctxt "Line spacing value"
-#~| msgid "1.5 Lines"
 #~ msgctxt "(qtundo-format) Line spacing value"
 #~ msgid "1.5 Lines"
 #~ msgstr "Полуторный"
 
 #, fuzzy
-#~| msgctxt "Line spacing value"
-#~| msgid "Double"
 #~ msgctxt "(qtundo-format) Line spacing value"
 #~ msgid "Double"
 #~ msgstr "Двойной"
 
 #, fuzzy
-#~| msgctxt "Line spacing type"
-#~| msgid "Proportional"
 #~ msgctxt "(qtundo-format) Line spacing type"
 #~ msgid "Proportional"
 #~ msgstr "Пропорциональный"
 
 #, fuzzy
-#~| msgctxt "Line spacing type"
-#~| msgid "Additional"
 #~ msgctxt "(qtundo-format) Line spacing type"
 #~ msgid "Additional"
 #~ msgstr "Дополнительный"
 
 #, fuzzy
-#~| msgctxt "Line spacing type"
-#~| msgid "Fixed"
 #~ msgctxt "(qtundo-format) Line spacing type"
 #~ msgid "Fixed"
 #~ msgstr "Фиксированный"
 
 #, fuzzy
-#~| msgid "Paragraph Format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Paragraph Format"
 #~ msgstr "Формат абзаца"
 
 #, fuzzy
-#~| msgid "Insert a table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a table"
 #~ msgstr "Добавить таблицу"
 
 #, fuzzy
-#~| msgid "Configure Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure sections"
 #~ msgstr "Настроить параметры"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Inserts a footnote at the current cursor position"
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Inserts an endnote at the current cursor position"
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Paragraph Format"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change paragraph format"
 #~ msgstr "Формат абзаца"
@@ -4695,7 +4414,6 @@ msgstr "Редактирование текста"
 #~ "удаление"
 
 #, fuzzy
-#~| msgid "Text Color..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Set Border Color..."
 #~ msgstr "Цвет текста..."
@@ -4706,27 +4424,22 @@ msgstr "Редактирование текста"
 #~ msgstr "Не используется"
 
 #, fuzzy
-#~| msgid "No Border"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "No Border"
 #~ msgstr "Без полей"
 
 #, fuzzy
-#~| msgid "New Style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "New Style"
 #~ msgstr "Новый стиль"
 
 #, fuzzy
-#~| msgid "Style Manager"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Style Manager"
 #~ msgstr "Управление стилями"
 
 # https://bugs.kde.org/show_bug.cgi?id=253458
 #, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Hide Changes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Save Changes"
 #~ msgstr ""
@@ -4734,7 +4447,6 @@ msgstr "Редактирование текста"
 #~ "скрытие изменений"
 
 #, fuzzy
-#~| msgid "New style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "New style"
 #~ msgstr "Новый стиль"
@@ -4745,461 +4457,384 @@ msgstr "Редактирование текста"
 #~ msgstr "Не используется"
 
 #, fuzzy
-#~| msgid "Insert Table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Table"
 #~ msgstr "Вставить таблицу"
 
 #, fuzzy
-#~| msgid "Table Title"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Table Title"
 #~ msgstr "Заголовок таблицы"
 
 #, fuzzy
-#~| msgid "Use outline"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Use outline"
 #~ msgstr "Использовать контур"
 
 #, fuzzy
-#~| msgid "Use styles"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Use styles"
 #~ msgstr "Использовать стиль"
 
 # https://bugs.kde.org/show_bug.cgi?id=253461
 #, fuzzy
-#~| msgid "Configure"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure"
 #~ msgstr "Настроить"
 
 #, fuzzy
-#~| msgid "Index"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Index"
 #~ msgstr "Индекс"
 
 #, fuzzy
-#~| msgid "Styles"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Styles"
 #~ msgstr "Стили"
 
 #, fuzzy
-#~| msgid "Title"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Title"
 #~ msgstr "Заголовок"
 
 #, fuzzy
-#~| msgid "Level %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Level %1"
 #~ msgstr "Уровень %1"
 
 #, fuzzy
-#~| msgid "Level"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Level"
 #~ msgstr "Уровень"
 
 #, fuzzy
-#~| msgid "Style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Style"
 #~ msgstr "Стиль"
 
 #, fuzzy
-#~| msgid "Styles available"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Styles available"
 #~ msgstr "Доступные стили"
 
 #, fuzzy
-#~| msgid "Disabled"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Disabled"
 #~ msgstr "Отключено"
 
 #, fuzzy
-#~| msgid "Contents"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Contents"
 #~ msgstr "Содержание"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a Table of Contents into the document."
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Insert Table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Custom..."
 #~ msgstr "Вставить таблицу"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a custom Table of Contents into the document."
 #~ msgstr "Вставить в документ таблицу."
 
 # https://bugs.kde.org/show_bug.cgi?id=253461
 #, fuzzy
-#~| msgid "Configure..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure..."
 #~ msgstr "Настроить..."
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert footnote with auto number"
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Insert Table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Labeled Footnote"
 #~ msgstr "Вставить таблицу"
 
 #, fuzzy
-#~| msgid "Insert a table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert with label:"
 #~ msgstr "Добавить таблицу"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert endnote with auto number"
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Insert Table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Labeled Endnote"
 #~ msgstr "Вставить таблицу"
 
 #, fuzzy
-#~| msgid "Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Settings..."
 #~ msgstr "Параметры"
 
 #, fuzzy
-#~| msgid "Insert Citation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Citation"
 #~ msgstr "Вставить цитирование"
 
 #, fuzzy
-#~| msgid "Insert a citation into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a citation into the document."
 #~ msgstr "Вставить цитирование в документ."
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a bibliography into the document."
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Insert Bibliography entry"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Custom Bibliography"
 #~ msgstr "Вставка библиографических записей"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a custom Bibliography into the document."
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Configure the bibliography"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure the bibliography"
 #~ msgstr "Настроить библиографию"
 
 #, fuzzy
-#~| msgid "Insert Link"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Link"
 #~ msgstr "Вставить ссылку"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a weblink or link to a bookmark."
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Bookmark..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add Bookmark"
 #~ msgstr "Закладка..."
 
 #, fuzzy
-#~| msgid "Add Bookmark :"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add Bookmark :"
 #~ msgstr "Добавить закладку:"
 
 #, fuzzy
-#~| msgid "Bookmark..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bookmarks"
 #~ msgstr "Закладка..."
 
 #, fuzzy
-#~| msgid "Footnotes/Endnotes Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Footnotes and Endnotes"
 #~ msgstr "Параметры сносок"
 
 #, fuzzy
-#~| msgid "Citations and Bibliography"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Citations and Bibliography"
 #~ msgstr "Цитирования и библиография"
 
 #, fuzzy
-#~| msgid "Links and Bookmarks"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Links and Bookmarks"
 #~ msgstr "Ссылки и закладки"
 
 #, fuzzy
-#~| msgid "Bookmark cannot be empty"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bookmark cannot be empty"
 #~ msgstr "Название закладки не может быть пустым"
 
 #, fuzzy
-#~| msgid "Duplicate Name. Click \"Manage Bookmarks\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Duplicate Name. Click \"Manage Bookmarks\""
 #~ msgstr "Закладка с таким названием уже есть. Нажмите «Изменить"
 
 #, fuzzy
-#~| msgid "to Rename or Delete Bookmarks"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "to Rename or Delete Bookmarks"
 #~ msgstr "закладки...», чтобы переименовать или удалить закладки."
 
 #, fuzzy
-#~| msgid "Remove Comment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove Comment"
 #~ msgstr "Удалить примечание"
 
 #, fuzzy
-#~| msgid "Spell check"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Spell check"
 #~ msgstr "Проверка орфографии"
 
 #, fuzzy
-#~| msgid "Comments"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Comments"
 #~ msgstr "Примечания"
 
 #, fuzzy
-#~| msgid "Review"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Review"
 #~ msgstr "Просмотр"
 
 # ?
 #, fuzzy
-#~| msgid "Text"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text"
 #~ msgstr "Текст"
 
 #, fuzzy
-#~| msgid "A shape that shows text"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "A shape that shows text"
 #~ msgstr "Объект текста"
 
 #, fuzzy
-#~| msgid "Text Shape"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text Shape"
 #~ msgstr "Объект текста"
 
 #, fuzzy
-#~| msgid "Configure Settings"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Configure current section"
 #~ msgstr "Настроить параметры"
 
 #, fuzzy
-#~| msgid "Insert Citation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert new section"
 #~ msgstr "Вставка цитаты"
 
 #, fuzzy
-#~| msgid "Insert Citation"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert paragraph between sections"
 #~ msgstr "Вставка цитаты"
 
 #, fuzzy
-#~| msgid "Paste As Text"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Paste As Text"
 #~ msgstr "Вставить как текст"
 
 #, fuzzy
-#~| msgid "Bold"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Bold"
 #~ msgstr "Полужирный"
 
 #, fuzzy
-#~| msgid "Italic"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Italic"
 #~ msgstr "Курсив"
 
 #, fuzzy
-#~| msgctxt "Text formatting"
-#~| msgid "Underline"
 #~ msgctxt "(qtundo-format) Text formatting"
 #~ msgid "Underline"
 #~ msgstr "Подчёркнутый"
 
 #, fuzzy
-#~| msgid "Strikethrough:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Strikethrough"
 #~ msgstr "Зачёркивание:"
 
 #, fuzzy
-#~| msgid "Align Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Left"
 #~ msgstr "Выравнивание по левому краю"
 
 #, fuzzy
-#~| msgid "Align Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Right"
 #~ msgstr "Выравнивание по правому краю"
 
 #, fuzzy
-#~| msgid "Align Center"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Center"
 #~ msgstr "Выравнивание по центру"
 
 #, fuzzy
-#~| msgid "Align Block"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Align Block"
 #~ msgstr "Выравнивание по ширине"
 
 #, fuzzy
-#~| msgid "Change Tracking Options"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change writing direction"
 #~ msgstr "Параметры отслеживания изменений"
 
 #, fuzzy
-#~| msgid "Increase Indent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Increase Indent"
 #~ msgstr "Увеличить отступ"
 
 #, fuzzy
-#~| msgid "Decrease Indent"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Decrease Indent"
 #~ msgstr "Уменьшить отступ"
 
 #, fuzzy
-#~| msgid "Increase Font Size"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Increase Font Size"
 #~ msgstr "Увеличить размер шрифта"
 
 #, fuzzy
-#~| msgid "Decrease Font Size"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Decrease Font Size"
 #~ msgstr "Уменьшить размер шрифта"
 
 #, fuzzy
-#~| msgid "Layout"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Font Family"
 #~ msgstr "Расположение"
 
 #, fuzzy
-#~| msgid "Variable"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Variable"
 #~ msgstr "Переменная"
 
 #, fuzzy
-#~| msgid "Insert Non-Breaking Space"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Non-Breaking Space"
 #~ msgstr "Вставить неразрывный пробел"
 
 #, fuzzy
-#~| msgid "Insert Non-Breaking Hyphen"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Non-Breaking Hyphen"
 #~ msgstr "Вставить неразрывный дефис"
 
 #, fuzzy
-#~| msgid "Insert Index"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Index"
 #~ msgstr "Вставить указатель"
 
 #, fuzzy
-#~| msgid "Insert Soft Hyphen"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Soft Hyphen"
 #~ msgstr "Вставить мягкий перенос"
 
 #, fuzzy
-#~| msgid "Line Break"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Line Break"
 #~ msgstr "Перенос строки"
 
 #, fuzzy
-#~| msgid "Line Break"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page Break"
 #~ msgstr "Перенос строки"
 
 #, fuzzy
-#~| msgid "Insert a table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a page break"
 #~ msgstr "Добавить таблицу"
 
 #, fuzzy
-#~| msgid "Font..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Font..."
 #~ msgstr "Шрифт..."
 
 #, fuzzy
-#~| msgid "Change character size, font, boldface, italics etc."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change character size, font, boldface, italics etc."
 #~ msgstr ""
@@ -5207,117 +4842,97 @@ msgstr "Редактирование текста"
 #~ "прочего."
 
 #, fuzzy
-#~| msgid "Change the attributes of the currently selected characters."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change the attributes of the currently selected characters."
 #~ msgstr "Изменение атрибутов выбранных символов."
 
 #, fuzzy
-#~| msgid "Font Size"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Font Size"
 #~ msgstr "Размер шрифта"
 
 #, fuzzy
-#~| msgid "Text Color..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text Color..."
 #~ msgstr "Цвет текста..."
 
 #, fuzzy
-#~| msgid "Text Color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text Color"
 #~ msgstr "Цвет текста"
 
 #, fuzzy
-#~| msgid "Background Color..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Background Color..."
 #~ msgstr "Цвет фона..."
 
 #, fuzzy
-#~| msgid "Background"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Background"
 #~ msgstr "Фон"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert a table into the document."
 #~ msgstr "Вставить в документ таблицу."
 
 #, fuzzy
-#~| msgid "Insert Table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Row Above"
 #~ msgstr "Вставить таблицу"
 
 #, fuzzy
-#~| msgid "Align Left"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Column Left"
 #~ msgstr "Выравнивание по левому краю"
 
 #, fuzzy
-#~| msgid "Insert Table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Column Left"
 #~ msgstr "Вставить таблицу"
 
 #, fuzzy
-#~| msgid "Align Right"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Column Right"
 #~ msgstr "Выравнивание по правому краю"
 
 #, fuzzy
-#~| msgid "Column"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Column"
 #~ msgstr "Столбец"
 
 #, fuzzy
-#~| msgid "Deletion"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete Column"
 #~ msgstr "Удаление текста"
 
 #, fuzzy
-#~| msgid "Row"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Row"
 #~ msgstr "Строка"
 
 # https://bugs.kde.org/show_bug.cgi?id=253454
 #, fuzzy
-#~| msgid "Delete"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete Row"
 #~ msgstr "Удаление"
 
 #, fuzzy
-#~| msgid "Merge Cells"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Merge Cells"
 #~ msgstr "Объединить ячейки"
 
 #, fuzzy
-#~| msgid "Split Cells"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Split Cells"
 #~ msgstr "Разделить ячейки"
 
 #, fuzzy
-#~| msgid "Paragraph..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Paragraph..."
 #~ msgstr "Абзац..."
 
 #, fuzzy
-#~| msgid ""
-#~| "Change paragraph margins, text flow, borders, bullets, numbering etc."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
@@ -5326,11 +4941,6 @@ msgstr "Редактирование текста"
 #~ "нумерации и т.д."
 
 #, fuzzy
-#~| msgid ""
-#~| "Change paragraph margins, text flow, borders, bullets, numbering etc."
-#~| "<p>Select text in multiple paragraphs to change the formatting of all "
-#~| "selected paragraphs.<p>If no text is selected, the paragraph where the "
-#~| "cursor is located will be changed.</p>"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
@@ -5344,21 +4954,16 @@ msgstr "Редактирование текста"
 #~ "котором находится курсор.</p>"
 
 #, fuzzy
-#~| msgid "Style Manager..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Style Manager..."
 #~ msgstr "Управление стилями..."
 
 #, fuzzy
-#~| msgid "Change attributes of styles"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change attributes of styles"
 #~ msgstr "Изменение атрибутов стиля"
 
 #, fuzzy
-#~| msgid ""
-#~| "Change font and paragraph attributes of styles.<p>Multiple styles can be "
-#~| "changed using the dialog box."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles "
@@ -5368,90 +4973,73 @@ msgstr "Редактирование текста"
 #~ "можно изменить несколько стилей."
 
 #, fuzzy
-#~| msgid "Special Character..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Special Character..."
 #~ msgstr "Специальный символ..."
 
 #, fuzzy
-#~| msgid "Insert one or more symbols or characters not found on the keyboard"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert one or more symbols or characters not found on the keyboard"
 #~ msgstr ""
 #~ "Введите один или несколько символов или букв, отсутствующих на клавиатуре"
 
 #, fuzzy
-#~| msgid "Insert one or more symbols or characters not found on the keyboard."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert one or more symbols or characters not found on the keyboard."
 #~ msgstr ""
 #~ "Введите один или несколько символов или букв, отсутствующих на клавиатуре."
 
 #, fuzzy
-#~| msgid "Repaint"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Repaint"
 #~ msgstr "Перерисовать"
 
 #, fuzzy
-#~| msgid "Insert Comment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insert Comment"
 #~ msgstr "Вставить примечание"
 
 #, fuzzy
-#~| msgid "Insertion"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Insertion"
 #~ msgstr "Вставка текста"
 
 #, fuzzy
-#~| msgid "Deletion"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Deletion"
 #~ msgstr "Удаление текста"
 
 #, fuzzy
-#~| msgid "Formatting"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Formatting"
 #~ msgstr "Форматирование"
 
 #, fuzzy
-#~| msgid "Character"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Character"
 #~ msgstr "Символ"
 
 #, fuzzy
-#~| msgid "Paragraph"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Paragraph"
 #~ msgstr "Абзац"
 
 #, fuzzy
-#~| msgid "Table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Table"
 #~ msgstr "Таблица"
 
 #, fuzzy
-#~| msgid "Autocorrection"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Autocorrection"
 #~ msgstr "Автоисправление"
 
 #, fuzzy
-#~| msgid "Key Press"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Key Press"
 #~ msgstr "ввод текста"
 
 #, fuzzy
-#~| msgid ""
-#~| "This link points to the program or script '%1'.\n"
-#~| "Malicious programs can harm your computer. Are you sure that you want to "
-#~| "run this program?"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "This link points to the program or script '%1'.\n"
@@ -5463,13 +5051,11 @@ msgstr "Редактирование текста"
 #~ "программу?"
 
 #, fuzzy
-#~| msgid "Open Link?"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Open Link?"
 #~ msgstr "Открыть ссылку?"
 
 #, fuzzy
-#~| msgid "Text editing"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text editing"
 #~ msgstr "Редактирование текста"
@@ -5478,8 +5064,6 @@ msgstr "Редактирование текста"
 #~ msgstr "Особая метка"
 
 #, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Change List Level"
 #~ msgid "Change List Level"
 #~ msgstr ""
 #~ "Изменение уровня списка\n"
@@ -5492,7 +5076,6 @@ msgstr "Редактирование текста"
 #~ msgstr "Нумерованный список"
 
 #, fuzzy
-#~| msgid " Format"
 #~ msgid "Form"
 #~ msgstr " Формат"
 
@@ -5510,12 +5093,10 @@ msgstr "Редактирование текста"
 #~ msgstr "Настройка абзаца"
 
 #, fuzzy
-#~| msgid "Insert Table"
 #~ msgid "Insert Custom ..."
 #~ msgstr "Вставить таблицу"
 
 #, fuzzy
-#~| msgid "Foot Note"
 #~ msgid "Format Notes"
 #~ msgstr "Подстрочное"
 
@@ -5580,28 +5161,22 @@ msgstr "Редактирование текста"
 #~ msgstr "]"
 
 #, fuzzy
-#~| msgid "Author"
 #~ msgid "author"
 #~ msgstr "Автор"
 
 #, fuzzy
-#~| msgctxt "Line spacing type"
-#~| msgid "Additional"
 #~ msgid "edition"
 #~ msgstr "Дополнительный"
 
 #, fuzzy
-#~| msgid "Insertion"
 #~ msgid "institution"
 #~ msgstr "Вставка текста"
 
 #, fuzzy
-#~| msgid "Number of rows:"
 #~ msgid "number"
 #~ msgstr "Количество строк:"
 
 #, fuzzy
-#~| msgid "Decorations"
 #~ msgid "organizations"
 #~ msgstr "Оформление"
 
@@ -5615,13 +5190,11 @@ msgstr "Редактирование текста"
 #~ msgstr "год"
 
 #, fuzzy
-#~| msgid "Insert a table into the document."
 #~ msgid "Insert bibliography at current position"
 #~ msgstr "Вставить в документ таблицу."
 
 # https://bugs.kde.org/show_bug.cgi?id=253461
 #, fuzzy
-#~| msgid "Configure Change Tracking"
 #~ msgid "Configure bibiliography"
 #~ msgstr "Настроить отслеживание изменений"
 
@@ -5666,12 +5239,10 @@ msgstr "Редактирование текста"
 #~ msgstr "Текст"
 
 #, fuzzy
-#~| msgid "Text Shape"
 #~ msgid "Label"
 #~ msgstr "Объект текста"
 
 #, fuzzy
-#~| msgid "Capitalization"
 #~ msgid "Citation"
 #~ msgstr "Регистр"
 
@@ -5694,7 +5265,6 @@ msgstr "Редактирование текста"
 #~ "вставку"
 
 #, fuzzy
-#~| msgid "Capitalization"
 #~ msgid "Captions"
 #~ msgstr "Регистр"
 
@@ -5718,12 +5288,10 @@ msgstr "Редактирование текста"
 #~ msgstr "Большие римские"
 
 #, fuzzy
-#~| msgid "Ballot X Bullet"
 #~ msgid "Small Bullet"
 #~ msgstr "Крестики"
 
 #, fuzzy
-#~| msgid "Square Bullet"
 #~ msgid "Large Bullet"
 #~ msgstr "Квадраты"
 
@@ -5829,21 +5397,17 @@ msgstr "Редактирование текста"
 #~ msgstr "Не используется"
 
 #, fuzzy
-#~| msgid "Alignment:"
 #~ msgid "Align:"
 #~ msgstr "Выравнивание:"
 
 #, fuzzy
-#~| msgid "Paragraph"
 #~ msgid "Paragraph Style:"
 #~ msgstr "Абзац"
 
 #, fuzzy
-#~| msgid "Font"
 #~ msgid "Font:"
 #~ msgstr "Шрифт"
 
 #, fuzzy
-#~| msgid "Colors"
 #~ msgid "Colors:"
 #~ msgstr "Цвета"
