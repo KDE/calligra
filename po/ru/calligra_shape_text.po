@@ -7,19 +7,20 @@
 # Alexander Potashev <aspotashev@gmail.com>, 2010, 2015, 2018, 2019.
 # Georgiy Syptchenko <superzhook@gmail.com>, 2014.
 # Alexander Yavorsky <kekcuha@gmail.com>, 2022.
+# SPDX-FileCopyrightText: 2026 Olesya Gerasimenko <goa@altlinux.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2022-05-11 21:25+0300\n"
-"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
-"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"PO-Revision-Date: 2026-08-04 17:13+0300\n"
+"Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
+"Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -1777,18 +1778,16 @@ msgid "Browse..."
 msgstr "Обзор..."
 
 #: dialogs/ParagraphDecorations.cpp:18
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgctxt "@action:button"
 msgid "Reset background color"
-msgstr "Цвет фона"
+msgstr "Сбросить цвет фона"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, resetBackgroundColor)
 #: dialogs/ParagraphDecorations.ui:36
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Reset background color"
-msgstr "Цвет фона"
+msgstr "Сбросить цвет фона"
 
 #: dialogs/ParagraphDropCaps.cpp:22
 #, kde-format
@@ -1797,10 +1796,9 @@ msgstr "Целое слово"
 
 #. i18n: ectx: property (text), widget (QCheckBox, capsState)
 #: dialogs/ParagraphDropCaps.ui:15
-#, fuzzy, kde-format
-#| msgid "Drop caps:"
+#, kde-format
 msgid "Enable drop caps"
-msgstr "Буквица:"
+msgstr "Включить буквицу"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #. i18n: ectx: property (text), widget (QLabel, charactersLabel)
@@ -1884,24 +1882,21 @@ msgstr "Не менее"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:22
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Left Indent:"
-msgstr "Отступ"
+msgstr "Отступ слева:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:35
-#, fuzzy, kde-format
-#| msgid "Indent"
+#, kde-format
 msgid "Right Indent:"
-msgstr "Отступ"
+msgstr "Отступ справа:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:48
-#, fuzzy, kde-format
-#| msgid "First Line:"
+#, kde-format
 msgid "First Line Indent:"
-msgstr "Первая строка:"
+msgstr "Отступ первой строки:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:66
@@ -1911,10 +1906,9 @@ msgstr "Автоматически определять по размеру те
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
-#, fuzzy, kde-format
-#| msgid "Line Spacing"
+#, kde-format
 msgid "Line Spacing:"
-msgstr "Межстрочный интервал"
+msgstr "Межстрочный интервал:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, percentPage)
 #: dialogs/ParagraphIndentSpacing.ui:107
@@ -1924,24 +1918,21 @@ msgstr " %"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useFont)
 #: dialogs/ParagraphIndentSpacing.ui:129
-#, fuzzy, kde-format
-#| msgid "Use Font Metrics:"
+#, kde-format
 msgid "Use Font Metrics"
-msgstr "Использовать метрику шрифта:"
+msgstr "Использовать метрику шрифта"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space Before:"
-msgstr "Интервал между абзацами"
+msgstr "Интервал между абзацами до:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:146
-#, fuzzy, kde-format
-#| msgid "Paragraph Space"
+#, kde-format
 msgid "Paragraph Space After:"
-msgstr "Интервал между абзацами"
+msgstr "Интервал между абзацами после:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
 #: dialogs/ParagraphLayout.ui:43
@@ -1951,10 +1942,9 @@ msgstr "По ширине"
 
 #. i18n: ectx: property (text), widget (QLabel, distanceLabel)
 #: dialogs/ParagraphLayout.ui:50
-#, fuzzy, kde-format
-#| msgid "Behavior at End of Frame/Page"
+#, kde-format
 msgid "Behavior at end of frame and page:"
-msgstr "Поведение конца врезки/страницы"
+msgstr "Поведение в конце врезки и страницы:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:57
