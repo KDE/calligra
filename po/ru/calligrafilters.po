@@ -9,19 +9,20 @@
 # Yuri Efremov <yur.arh@gmail.com>, 2011.
 # Georgiy Syptchenko <superzhook@gmail.com>, 2014.
 # Alexander Yavorsky <kekcuha@gmail.com>, 2022.
+# SPDX-FileCopyrightText: 2026 Olesya Gerasimenko <goa@altlinux.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-19 00:46+0000\n"
-"PO-Revision-Date: 2022-05-11 21:27+0300\n"
-"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
-"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"PO-Revision-Date: 2026-08-05 10:05+0300\n"
+"Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
+"Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -248,19 +249,17 @@ msgid "<SHEETNAME>"
 msgstr "<SHEETNAME>"
 
 #: sheets/csv/csvexportdialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Export to Image"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Export to CVS"
-msgstr "Экспорт изображения"
+msgstr "Экспорт в CVS"
 
 #: sheets/csv/csvexportdialog.cpp:46
 #: sheets/latex/export/latexexportdialog.cc:152
-#, fuzzy, kde-format
-#| msgid "EPS Export"
+#, kde-format
 msgctxt "@action:button"
 msgid "Export"
-msgstr "Экспорт в EPS"
+msgstr "Экспорт"
 
 #: sheets/csv/csvimport.cc:74
 #, kde-format
@@ -275,10 +274,9 @@ msgstr "Перевод строки"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:56
-#, fuzzy, kde-format
-#| msgid "End of Line"
+#, kde-format
 msgid "End of Line:"
-msgstr "Перевод строки"
+msgstr "Конец строки:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
 #: sheets/csv/exportdialogui.ui:63
@@ -342,10 +340,9 @@ msgstr "Ячейки"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/csv/exportdialogui.ui:182
-#, fuzzy, kde-format
-#| msgid "Delimiter"
+#, kde-format
 msgid "Delimiter:"
-msgstr "Разделитель"
+msgstr "Разделитель:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
 #: sheets/csv/exportdialogui.ui:189
@@ -552,10 +549,9 @@ msgstr "Документ"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Document Style"
+#, kde-format
 msgid "Document style:"
-msgstr "Стиль документа"
+msgstr "Стиль документа:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51
@@ -571,10 +567,9 @@ msgstr "Стиль Words"
 
 #. i18n: ectx: property (text), widget (QLabel, groupBox)
 #: sheets/latex/export/latexexportwidget.ui:68
-#, fuzzy, kde-format
-#| msgid "Document Type"
+#, kde-format
 msgid "Document type:"
-msgstr "Тип документа"
+msgstr "Тип документа:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:75
@@ -681,10 +676,9 @@ msgstr "Язык"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: sheets/latex/export/latexexportwidget.ui:244
-#, fuzzy, kde-format
-#| msgid "E&ncoding:"
+#, kde-format
 msgid "Encoding:"
-msgstr "Кодиров&ка:"
+msgstr "Кодировка:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
 #: sheets/latex/export/latexexportwidget.ui:289
@@ -995,69 +989,56 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "QXml"
 
 #, fuzzy
-#~| msgid "Size in Pixels"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Size in Pixels"
 #~ msgstr "Размер в пикселах"
 
 #, fuzzy
-#~| msgid "Image width:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Image width:"
 #~ msgstr "Ширина:"
 
 #, fuzzy
-#~| msgid "Image height:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Image height:"
 #~ msgstr "Высота:"
 
 #, fuzzy
-#~| msgid "Size in Units"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Size in Units"
 #~ msgstr "Размер в единицах"
 
 #, fuzzy
-#~| msgid "Resolution:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Resolution:"
 #~ msgstr "Разрешение:"
 
 #, fuzzy
-#~| msgid "Unit:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unit:"
 #~ msgstr "Единица:"
 
 #, fuzzy
-#~| msgid "Background Color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Background Color"
 #~ msgstr "Цвет фона"
 
 #, fuzzy
-#~| msgid "Color"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Color"
 #~ msgstr "Цвет"
 
 #, fuzzy
-#~| msgid "Opacity"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Opacity"
 #~ msgstr "Прозрачность"
 
 #, fuzzy
-#~| msgid "En&coding:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "En&coding:"
 #~ msgstr "&Кодировка:"
 
 #, fuzzy
-#~| msgid ""
-#~| "With this option you can define the encoding of the HTML file. The "
-#~| "recommended encoding (UTF8) is selected as default."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "With this option you can define the encoding of the HTML file. The "
@@ -1065,34 +1046,26 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Здесь вы можете выбрать кодировку файла HTML. По умолчанию - UTF8."
 
 #, fuzzy
-#~| msgid "Sheet Selection"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sheet Selection"
 #~ msgstr "Выбор листов"
 
 #, fuzzy
-#~| msgid "Click here to select all sheets in the list."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Click here to select all sheets in the list."
 #~ msgstr "Выделить все листы из списка."
 
 #, fuzzy
-#~| msgid "Select &All"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select &All"
 #~ msgstr "Выделить &все"
 
 #, fuzzy
-#~| msgid "Desele&ct All"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Desele&ct All"
 #~ msgstr "Снять &выбор"
 
 #, fuzzy
-#~| msgid ""
-#~| "This option will make the HTML export filter generate a new page for "
-#~| "each sheet. If you disable this option, all sheets are written on one "
-#~| "page."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "This option will make the HTML export filter generate a new page for each "
@@ -1101,35 +1074,27 @@ msgstr "Невозможно загрузить файл."
 #~ "Отдельный HTML-файл для каждой таблицы. Иначе они помещаются в один файл."
 
 #, fuzzy
-#~| msgid "Use &separate files for each table"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Use &separate files for each table"
 #~ msgstr "&Отдельный файл для каждой таблицы"
 
 #, fuzzy
-#~| msgid "Style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Style"
 #~ msgstr "Стиль"
 
 #, fuzzy
-#~| msgid ""
-#~| "Select this option to use the default fonts and colors for the HTML page."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "Select this option to use the default fonts and colors for the HTML page."
 #~ msgstr "Использовать стандартные шрифт и цвета."
 
 #, fuzzy
-#~| msgid "Use &default style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Use &default style"
 #~ msgstr "&Стиль по умолчанию"
 
 #, fuzzy
-#~| msgid ""
-#~| "Select this option to specify a separate stylesheet for the HTML page. "
-#~| "You can select or type on in the field below."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "Select this option to specify a separate stylesheet for the HTML page. "
@@ -1137,15 +1102,11 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Файл таблицы стилей, на который будет ссылаться HTML-страница."
 
 #, fuzzy
-#~| msgid "Use &external stylesheet:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Use &external stylesheet:"
 #~ msgstr "&Внешняя таблица стилей:"
 
 #, fuzzy
-#~| msgid ""
-#~| "In this field you can enter an URL for your stylesheet. It is possible "
-#~| "to point to a stylesheet on disk, or to somewhere on the Internet."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "In this field you can enter an URL for your stylesheet. It is possible to "
@@ -1155,27 +1116,21 @@ msgstr "Невозможно загрузить файл."
 #~ "локально, так и удалённо."
 
 #, fuzzy
-#~| msgid "Layout"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Layout"
 #~ msgstr "Размещение"
 
 #, fuzzy
-#~| msgid "Use this option to enable or disable borders around the cells."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Use this option to enable or disable borders around the cells."
 #~ msgstr "Рисовать ли границы ячеек"
 
 #, fuzzy
-#~| msgid "Use &borders"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Use &borders"
 #~ msgstr "&Границы"
 
 #, fuzzy
-#~| msgid ""
-#~| "Use this option to define how many pixels there should be between the "
-#~| "cells. This effect is better visible if you check <b>Use borders</b> too."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "Use this option to define how many pixels there should be between the "
@@ -1185,52 +1140,41 @@ msgstr "Невозможно загрузить файл."
 #~ "<b>Границы</b>."
 
 #, fuzzy
-#~| msgid "Pi&xels between cells:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pi&xels between cells:"
 #~ msgstr "&Расстояние между ячейками:"
 
 #, fuzzy
-#~| msgid "Document"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document"
 #~ msgstr "Документ"
 
 #, fuzzy
-#~| msgid "Document Style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document Style"
 #~ msgstr "Стиль документа"
 
 #, fuzzy
-#~| msgid "Latex style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Latex style"
 #~ msgstr "Стиль Latex"
 
 #, fuzzy
-#~| msgid "Words style"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Words style"
 #~ msgstr "Стиль Words"
 
 #, fuzzy
-#~| msgid "Document Type"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document Type"
 #~ msgstr "Тип документа"
 
 #, fuzzy
-#~| msgid "The document will be able to be compiled alone"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "The document will be able to be compiled alone"
 #~ msgstr "Документ можно будет скомпилировать отдельно"
 
 #, fuzzy
-#~| msgid ""
-#~| "The document will be generated as a full latex document since all the "
-#~| "include will be generated before the \\begin[document} and "
-#~| "\\end{document} commands."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The document will be generated as a full latex document since all the "
@@ -1241,22 +1185,16 @@ msgstr "Невозможно загрузить файл."
 #~ "всех данных между командами \\begin[document} и \\end{document}."
 
 #, fuzzy
-#~| msgid "Independent document"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Independent document"
 #~ msgstr "Независимый документ"
 
 #, fuzzy
-#~| msgid "Do not generate either the latex header or the document environment"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Do not generate either the latex header or the document environment"
 #~ msgstr "Не генерировать заголовок и среду документа LaTeX."
 
 #, fuzzy
-#~| msgid ""
-#~| "The document will be generated as a latex document which will have to be "
-#~| "included in a main latex document. It will allow you to generate several "
-#~| "little files for each chapter of your document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The document will be generated as a latex document which will have to be "
@@ -1268,480 +1206,397 @@ msgstr "Невозможно загрузить файл."
 #~ "файлов для каждой главы документа."
 
 #, fuzzy
-#~| msgid "Document to include"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document to include"
 #~ msgstr "Включаемый документ"
 
 #, fuzzy
-#~| msgid "Document class:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Document class:"
 #~ msgstr "Класс документа:"
 
 #, fuzzy
-#~| msgid "Quality:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Quality:"
 #~ msgstr "Качество:"
 
 #, fuzzy
-#~| msgid "Final"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Final"
 #~ msgstr "Окончательный вариант"
 
 #, fuzzy
-#~| msgid "Draft"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Draft"
 #~ msgstr "Черновик"
 
 #, fuzzy
-#~| msgid "Default font size:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Default font size:"
 #~ msgstr "Размер шрифта по умолчанию:"
 
 #, fuzzy
-#~| msgid "Pictures"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pictures"
 #~ msgstr "Рисунки"
 
 #, fuzzy
-#~| msgid "Convert the pictures:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Convert the pictures:"
 #~ msgstr "Преобразовать картинки:"
 
 #, fuzzy
-#~| msgid "Pictures directory:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pictures directory:"
 #~ msgstr "Каталог рисунков:"
 
 #, fuzzy
-#~| msgid "Language"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Language"
 #~ msgstr "Язык"
 
 #, fuzzy
-#~| msgid "Encoding"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Encoding"
 #~ msgstr "Кодировка"
 
 #, fuzzy
-#~| msgid "Add"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add"
 #~ msgstr "Добавить"
 
 #, fuzzy
-#~| msgid "Remove"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Remove"
 #~ msgstr "Удалить"
 
 #, fuzzy
-#~| msgid "Contents"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Contents"
 #~ msgstr "Содержимое"
 
 #, fuzzy
-#~| msgid "Export information about author:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export information about author:"
 #~ msgstr "Экспортировать информацию об авторе:"
 
 #, fuzzy
-#~| msgid "Add a table of content:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add a table of content:"
 #~ msgstr "Добавить содержание:"
 
 #, fuzzy
-#~| msgid "Notes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Notes"
 #~ msgstr "Примечания"
 
 #, fuzzy
-#~| msgid "Don't export"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Don't export"
 #~ msgstr "Не экспортировать"
 
 #, fuzzy
-#~| msgid "Export notes in margin notes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export notes in margin notes"
 #~ msgstr "Экспортировать примечания в примечаниях Latex"
 
 #, fuzzy
-#~| msgid "Export notes in comments"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export notes in comments"
 #~ msgstr "Экспортировать примечания в комментариях"
 
 #, fuzzy
-#~| msgid "E&ncoding:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "E&ncoding:"
 #~ msgstr "Кодиров&ка:"
 
 #, fuzzy
-#~| msgid "End of Line"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "End of Line"
 #~ msgstr "Перевод строки"
 
 #, fuzzy
-#~| msgid "&UNIX style (recommended; line feed only)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&UNIX style (recommended; line feed only)"
 #~ msgstr "Стиль &UNIX (рекомендуется, только перенос строки)"
 
 #, fuzzy
-#~| msgid "&Windows style (carriage return and line feed)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Windows style (carriage return and line feed)"
 #~ msgstr "Стиль &Windows (возврат каретки и перенос строки)"
 
 #, fuzzy
-#~| msgid "&MacOS style (carriage return only)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&MacOS style (carriage return only)"
 #~ msgstr "Стиль &Macintosh (только возврат каретки)"
 
 #, fuzzy
-#~| msgid "Sheets"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sheets"
 #~ msgstr "Листы"
 
 #, fuzzy
-#~| msgid "Select sheets to export:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select sheets to export:"
 #~ msgstr "Выберите листы для экспорта:"
 
 #, fuzzy
-#~| msgid "Delimiter Line"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delimiter Line"
 #~ msgstr "Разделительная строка"
 
 #, fuzzy
-#~| msgid "********<SHEETNAME>********"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "********<SHEETNAME>********"
 #~ msgstr "********<SHEETNAME>********"
 
 #, fuzzy
-#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
 #~ msgstr "<SHEETNAME> заменяется именем следующего листа."
 
 #, fuzzy
-#~| msgid "Print delimiter line above every sheet"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Print delimiter line above every sheet"
 #~ msgstr "Печатать разделительную строку над каждым листом"
 
 #, fuzzy
-#~| msgid "Cells"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cells"
 #~ msgstr "Ячейки"
 
 #, fuzzy
-#~| msgid "Delimiter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delimiter"
 #~ msgstr "Разделитель"
 
 #, fuzzy
-#~| msgid "Comma"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Comma"
 #~ msgstr "запятая"
 
 #, fuzzy
-#~| msgid "Semicolon"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Semicolon"
 #~ msgstr "точка с запятой"
 
 #, fuzzy
-#~| msgid "Tabulator"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Tabulator"
 #~ msgstr "табуляция"
 
 #, fuzzy
-#~| msgid "Space"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Space"
 #~ msgstr "пробел"
 
 #, fuzzy
-#~| msgid "Other:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Other:"
 #~ msgstr "другой:"
 
 #, fuzzy
-#~| msgid "Quotes:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Quotes:"
 #~ msgstr "Текст в кавычках:"
 
 #, fuzzy
-#~| msgid "\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "\""
 #~ msgstr "\""
 
 #, fuzzy
-#~| msgid "'"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "'"
 #~ msgstr "'"
 
 #, fuzzy
-#~| msgid "Export selection only"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export selection only"
 #~ msgstr "Экспортировать только выделенные ячейки"
 
 #, fuzzy
-#~| msgid "Page:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page:"
 #~ msgstr "Страница:"
 
 #, fuzzy
-#~| msgid "Complete Page"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Complete Page"
 #~ msgstr "Страница целиком"
 
 #, fuzzy
-#~| msgid "Area of Objects on Page"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Area of Objects on Page"
 #~ msgstr "Область объектов на странице"
 
 #, fuzzy
-#~| msgid "Area to export:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Area to export:"
 #~ msgstr "Выберите область для экспорта:"
 
 #, fuzzy
-#~| msgid "Custom size (in pixels):"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Custom size (in pixels):"
 #~ msgstr "Другой размер (в пикселах):"
 
 #, fuzzy
-#~| msgid "Height:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Height:"
 #~ msgstr "Высота:"
 
 #, fuzzy
-#~| msgid "Width:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Width:"
 #~ msgstr "Ширина:"
 
 #, fuzzy
-#~| msgid "Margin:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Margin:"
 #~ msgstr "Граница:"
 
 #, fuzzy
-#~| msgid "Plain Text Import Dialog"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Plain Text Import Dialog"
 #~ msgstr "Диалог импорта из текстового файла"
 
 #, fuzzy
-#~| msgid "End of Paragraph"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "End of Paragraph"
 #~ msgstr "Конец абзаца"
 
 #, fuzzy
-#~| msgid "&As is: At the end of line"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&As is: At the end of line"
 #~ msgstr "&Как есть: конец строки"
 
 #, fuzzy
-#~| msgid "&Sentence: If the end of line is the end of a sentence"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Sentence: If the end of line is the end of a sentence"
 #~ msgstr "&Предложение: конец строки является концом предложения"
 
 #, fuzzy
-#~| msgid "&Empty Line: If the line is empty"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Empty Line: If the line is empty"
 #~ msgstr "П&устая строка: если строка пуста"
 
 #, fuzzy
-#~| msgid "Export Error"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export Error"
 #~ msgstr "Ошибка экспорта"
 
 #, fuzzy
-#~| msgid "Failed to read data."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Failed to read data."
 #~ msgstr "Ошибка чтения данных."
 
 #, fuzzy
-#~| msgid "Malformed XML data."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Malformed XML data."
 #~ msgstr "Неверный формат XML."
 
 #, fuzzy
-#~| msgid "Export to Image"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export to Image"
 #~ msgstr "Экспорт изображения"
 
 #, fuzzy
-#~| msgid "PNG Export Options"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "PNG Export Options"
 #~ msgstr "Настройка экспорта в PNG"
 
 #, fuzzy
-#~| msgid "Namespace \"%1\" not found"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Namespace \"%1\" not found"
 #~ msgstr "Пространства имён «%1» не найдено"
 
 #, fuzzy
-#~| msgid "Could not open the requested file %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not open the requested file %1"
 #~ msgstr "Не удалось открыть требуемый файл %1"
 
 #, fuzzy
-#~| msgid "Could not read ZIP directory of the requested file %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not read ZIP directory of the requested file %1"
 #~ msgstr "Не удалось прочитать каталог ZIP требуемого файла %1"
 
 #, fuzzy
-#~| msgid "Enter password"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Enter password"
 #~ msgstr "Введите пароль"
 
 #, fuzzy
-#~| msgid ""
-#~| "This document is encrypted, please enter the password to decrypt it:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "This document is encrypted, please enter the password to decrypt it:"
 #~ msgstr "Этот документ зашифрован, введите пароль для его расшифровки:"
 
 #, fuzzy
-#~| msgid ""
-#~| "Incorrect password, please enter the password to decrypt this document:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "Incorrect password, please enter the password to decrypt this document:"
 #~ msgstr "Неверный пароль, введите пароль для расшифровки документа:"
 
 #, fuzzy
-#~| msgid "Could not find path for type %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not find path for type %1"
 #~ msgstr "Не удалось найти путь для типа %1"
 
 #, fuzzy
-#~| msgid "%1 (line %2, column %3)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "%1 (line %2, column %3)"
 #~ msgstr "%1 (строка %2, позиция %3)"
 
 #, fuzzy
-#~| msgid "%1 (%2, line %3, column %4)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "%1 (%2, line %3, column %4)"
 #~ msgstr "%1 (%2, строка %3, позиция %4)"
 
 #, fuzzy
-#~| msgid "Element \"%1\" not found"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Element \"%1\" not found"
 #~ msgstr "Элемент «%1» не найден"
 
 #, fuzzy
-#~| msgid "Attribute \"%1\" not found"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Attribute \"%1\" not found"
 #~ msgstr "Параметр «%1» не найден"
 
 #, fuzzy
-#~| msgid "Unexpected value \"%1\" of attribute \"%2\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unexpected value \"%1\" of attribute \"%2\""
 #~ msgstr "Неожиданное значение «%1» параметра «%2»"
 
 #, fuzzy
-#~| msgid "Unexpected second occurrence of \"%1\" element"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unexpected second occurrence of \"%1\" element"
 #~ msgstr "Неожиданное повторное вхождение элемента «%1»"
 
 #, fuzzy
-#~| msgid "Expected closing of element \"%1\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Expected closing of element \"%1\""
 #~ msgstr "Ожидалось завершение элемента «%1»"
 
 #, fuzzy
-#~| msgid "None of expected elements found: %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "None of expected elements found: %1"
 #~ msgstr "Не найдено ни одного из требуемых элементов: %1"
 
 #, fuzzy
-#~| msgid "Could not find target for id \"%1\" in file \"%2\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not find target for id \"%1\" in file \"%2\""
 #~ msgstr "Не удалось найти назначение для идентификатора «%1» в файле «%2»"
 
 #, fuzzy
-#~| msgid "Could not find relationships file \"%1\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not find relationships file \"%1\""
 #~ msgstr "Не удалось найти файл связей «%1»"
 
 #, fuzzy
-#~| msgid "Could not find target for relationship \"%1\" in file \"%2\""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
 #~ msgstr "Не удалось найти назначения для связи «%1» в файле «%2»"
 
 #, fuzzy
-#~| msgid ""
-#~| "Parsing error in the main document at line %1, column %2.\n"
-#~| "Error message: %3"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "Parsing error in the main document at line %1, column %2.\n"
@@ -1751,140 +1606,111 @@ msgstr "Невозможно загрузить файл."
 #~ "Сообщение об ошибке: %3"
 
 #, fuzzy
-#~| msgid "QXml"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "QXml"
 #~ msgstr "QXml"
 
 #, fuzzy
-#~| msgid "Entry '%1' not found."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Entry '%1' not found."
 #~ msgstr "Объект «%1» не найден."
 
 #, fuzzy
-#~| msgid "Entry '%1' is not a file."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Entry '%1' is not a file."
 #~ msgstr "Объект «%1» не является файлом."
 
 #, fuzzy
-#~| msgid "Could not open entry \"%1\" for writing."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not open entry \"%1\" for writing."
 #~ msgstr "Не удалось открыть объект «%1» для записи."
 
 #, fuzzy
-#~| msgid "Could not write block"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not write block"
 #~ msgstr "Не удалось записать блок"
 
 #, fuzzy
-#~| msgid "<SHEETNAME>"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "<SHEETNAME>"
 #~ msgstr "<SHEETNAME>"
 
 #, fuzzy
-#~| msgctxt "Descriptive encoding name"
-#~| msgid "Recommended ( %1 )"
 #~ msgctxt "(qtundo-format) Descriptive encoding name"
 #~ msgid "Recommended ( %1 )"
 #~ msgstr "Рекомендуемая ( %1 )"
 
 #, fuzzy
-#~| msgctxt "Descriptive encoding name"
-#~| msgid "Locale ( %1 )"
 #~ msgctxt "(qtundo-format) Descriptive encoding name"
 #~ msgid "Locale ( %1 )"
 #~ msgstr "Локаль ( %1 )"
 
 #, fuzzy
-#~| msgctxt "Descriptive encoding name"
-#~| msgid "Other ( %1 )"
 #~ msgctxt "(qtundo-format) Descriptive encoding name"
 #~ msgid "Other ( %1 )"
 #~ msgstr "Другая ( %1 )"
 
 #, fuzzy
-#~| msgid "Cannot find encoding: %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Cannot find encoding: %1"
 #~ msgstr "Не удалось найти кодировку: %1"
 
 #, fuzzy
-#~| msgid "CSV filter cannot open input file - please report."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "CSV filter cannot open input file - please report."
 #~ msgstr "Не удаётся открыть файл CSV."
 
 #, fuzzy
-#~| msgid "File format is not supported."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "File format is not supported."
 #~ msgstr "Формат файла не поддерживается."
 
 #, fuzzy
-#~| msgid "Could not read from file."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Could not read from file."
 #~ msgstr "Не удаётся прочитать файл."
 
 #, fuzzy
-#~| msgid "Export Sheet to HTML"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Export Sheet to HTML"
 #~ msgstr "Экспорт листа в HTML"
 
 #, fuzzy
-#~| msgid "Recommended: UTF-8"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Recommended: UTF-8"
 #~ msgstr "Рекомендуемая: UTF-8"
 
 #, fuzzy
-#~| msgid "Locale (%1)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Locale (%1)"
 #~ msgstr "Системная (%1)"
 
 #, fuzzy
-#~| msgid "Top"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Top"
 #~ msgstr "Сверху"
 
 #, fuzzy
-#~| msgid "Latex Export Filter Configuration"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Latex Export Filter Configuration"
 #~ msgstr "Настройка экспорта в Latex"
 
 #, fuzzy
-#~| msgid "Page "
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Page "
 #~ msgstr "Лист"
 
 #, fuzzy
-#~| msgid "The file seems to be corrupt. Skipping a table."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "The file seems to be corrupt. Skipping a table."
 #~ msgstr "Возможно, файл повреждён. Лист будет пропущен."
 
 #, fuzzy
-#~| msgid "Skipping a table."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Skipping a table."
 #~ msgstr "Пропуск листа."
 
 #, fuzzy
-#~| msgid ""
-#~| "This document was created with OpenOffice.org version '%1'. This filter "
-#~| "was written for version 1.0. Reading this file could cause strange "
-#~| "behavior, crashes or incorrect display of the data. Do you want to "
-#~| "continue converting the document?"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "This document was created with OpenOffice.org version '%1'. This filter "
@@ -1898,21 +1724,16 @@ msgstr "Невозможно загрузить файл."
 #~ "продолжить открытие этого документа?"
 
 #, fuzzy
-#~| msgid "Unsupported document version"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unsupported document version"
 #~ msgstr "Неподдерживаемая версия документа"
 
 #, fuzzy
-#~| msgid "QPRO filter cannot open input file - please report."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "QPRO filter cannot open input file - please report."
 #~ msgstr "Не удаётся открыть файл электронной таблицы QPro."
 
 #, fuzzy
-#~| msgid ""
-#~| "Unable to open password protected files.\n"
-#~| "The password algorithm has not been published"
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "Unable to open password protected files.\n"
@@ -1922,39 +1743,31 @@ msgstr "Невозможно загрузить файл."
 #~ "Алгоритм шифрования является закрытым."
 
 #, fuzzy
-#~| msgid "Unable to find part for type %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Unable to find part for type %1"
 #~ msgstr "Не удалось найти компонент для типа %1"
 
 #, fuzzy
-#~| msgid "Declared number of shared strings too small (%1)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Declared number of shared strings too small (%1)"
 #~ msgstr "Заявленное количество общих строк слишком мало  (%1)"
 
 #, fuzzy
-#~| msgid "Declared number of font styles too small (%1)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Declared number of font styles too small (%1)"
 #~ msgstr "Заявленное количество гарнитур шрифтов слишком мало (%1)"
 
 #, fuzzy
-#~| msgid "Declared number of cell formats too small (%1)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Declared number of cell formats too small (%1)"
 #~ msgstr "Заявленное количество форматов ячеек слишком мало (%1)"
 
 #, fuzzy
-#~| msgid "Declared number of fill styles too small (%1)"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Declared number of fill styles too small (%1)"
 #~ msgstr "Заявленное количество стилей заливок слишком мало (%1)"
 
 #, fuzzy
-#~| msgid ""
-#~| "The data could not be loaded completely because the maximum size of "
-#~| "sheet was exceeded."
 #~ msgctxt "(qtundo-format)"
 #~ msgid ""
 #~ "The data could not be loaded completely because the maximum size of sheet "
@@ -1964,91 +1777,76 @@ msgstr "Невозможно загрузить файл."
 #~ "максимальный размер листа."
 
 #, fuzzy
-#~| msgid "Expected integer or floating point number"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Expected integer or floating point number"
 #~ msgstr "Ожидаемое целое или с плавающей запятой число"
 
 #, fuzzy
-#~| msgid "Slide layout \"%1\" not found"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Slide layout \"%1\" not found"
 #~ msgstr "Не найдена разметка слайдов «%1»"
 
 #, fuzzy
-#~| msgid "Slide %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Slide %1"
 #~ msgstr "Слайд %1"
 
 #, fuzzy
-#~| msgid "Words's Plain Text Import Filter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Words's Plain Text Import Filter"
 #~ msgstr "Фильтр импорта текстового документа"
 
 #, fuzzy
-#~| msgid "End notes"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "End notes"
 #~ msgstr "Перевод строки"
 
 #, fuzzy
-#~| msgid "Even Pages Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Even Pages Header"
 #~ msgstr "Верхний колонтитул чётных страниц"
 
 #, fuzzy
-#~| msgid "Odd Pages Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Odd Pages Header"
 #~ msgstr "Верхний колонтитул нечётных страниц"
 
 #, fuzzy
-#~| msgid "Even Pages Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Even Pages Footer"
 #~ msgstr "Нижний колонтитул чётных страниц"
 
 #, fuzzy
-#~| msgid "Odd Pages Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Odd Pages Footer"
 #~ msgstr "Нижний колонтитул нечётных страниц"
 
 #, fuzzy
-#~| msgid "First Page Header"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "First Page Header"
 #~ msgstr "Верхний колонтитул первой страницы"
 
 #, fuzzy
-#~| msgid "First Page Footer"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "First Page Footer"
 #~ msgstr "Нижний колонтитул первой страницы"
 
 #, fuzzy
-#~| msgid "Table %1"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Table %1"
 #~ msgstr "Таблица %1"
 
 #, fuzzy
-#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
 #~ msgstr "Невозможно открыть файл. Похоже, он не является документом RTF."
 
 #, fuzzy
-#~| msgid "Words's RTF Import Filter"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Words's RTF Import Filter"
 #~ msgstr "Фильтр импорта документов RTF"
 
 #, fuzzy
-#~| msgid "The file cannot be loaded."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "The file cannot be loaded."
 #~ msgstr "Невозможно загрузить файл."
@@ -2492,12 +2290,10 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Доступные листы"
 
 #, fuzzy
-#~| msgid "Endnote %1"
 #~ msgid "Endnote \"%1\" not found"
 #~ msgstr "Концевая сноска %1"
 
 #, fuzzy
-#~| msgid "Footnote %1"
 #~ msgid "Footnote \"%1\" not found"
 #~ msgstr "Сноска %1"
 
@@ -2546,13 +2342,11 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Размеры"
 
 #, fuzzy
-#~| msgid "Vertical:"
 #~ msgctxt "vertical resolution"
 #~ msgid "Vertical:"
 #~ msgstr "вертикальное:"
 
 #, fuzzy
-#~| msgid "Horizontal:"
 #~ msgctxt "horizontal resolution"
 #~ msgid "Horizontal:"
 #~ msgstr "горизонтальное:"
@@ -2580,13 +2374,11 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Сжатие:"
 
 #, fuzzy
-#~| msgid "Fast"
 #~ msgctxt "The file will save fast but will not be compressed a lot"
 #~ msgid "Fast"
 #~ msgstr "Быстро"
 
 #, fuzzy
-#~| msgid "Small"
 #~ msgctxt "the file will be small"
 #~ msgid "Small"
 #~ msgstr "Меньше"
@@ -2630,12 +2422,10 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Сохранить альфа-канал (прозрачность)"
 
 #, fuzzy
-#~| msgid "Size:"
 #~ msgid "Size: 100KB"
 #~ msgstr "Размер:"
 
 #, fuzzy
-#~| msgid "Small"
 #~ msgctxt ""
 #~ "the file will be much compressed, thus small, but quality will be bad"
 #~ msgid "Small"
@@ -2648,18 +2438,15 @@ msgstr "Невозможно загрузить файл."
 #~ "сжатия"
 
 #, fuzzy
-#~| msgid "Pr&ogressive"
 #~ msgctxt "A progressive jpeg file can be displayed while loading."
 #~ msgid "Progressive"
 #~ msgstr "П&рогрессивное сжатие"
 
 #, fuzzy
-#~| msgid "&Advanced"
 #~ msgid "Advanced quality"
 #~ msgstr "&Дополнительно"
 
 #, fuzzy
-#~| msgid "&Format:"
 #~ msgid "Formats:"
 #~ msgstr "&Формат:"
 
@@ -2710,25 +2497,21 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Лучшее качество"
 
 #, fuzzy
-#~| msgid "Fast"
 #~ msgctxt "save the file quickly, but do not compress very well"
 #~ msgid "Fast"
 #~ msgstr "Быстро"
 
 #, fuzzy
-#~| msgid "Small"
 #~ msgctxt "make the file small, at the price of a longer saving time"
 #~ msgid "Small"
 #~ msgstr "Меньше"
 
 #, fuzzy
-#~| msgid "Fast"
 #~ msgctxt "save quickly, but do not compress a lot"
 #~ msgid "Fast"
 #~ msgstr "Быстро"
 
 #, fuzzy
-#~| msgid "Small"
 #~ msgctxt "make a very small file, but take a long time saving"
 #~ msgid "Small"
 #~ msgstr "Меньше"
@@ -2885,19 +2668,16 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Использовать цвета камеры, а не sRGB"
 
 #, fuzzy
-#~| msgid "None"
 #~ msgctxt "do not compress the file at all"
 #~ msgid "None"
 #~ msgstr "Нет"
 
 #, fuzzy
-#~| msgid "None"
 #~ msgctxt "do not use any predictor"
 #~ msgid "None"
 #~ msgstr "Нет"
 
 #, fuzzy
-#~| msgid "Fast"
 #~ msgctxt "save the file quickly, but don't compress very well"
 #~ msgid "Fast"
 #~ msgstr "Быстро"
@@ -2945,7 +2725,6 @@ msgstr "Невозможно загрузить файл."
 #~ msgstr "Открытие..."
 
 #, fuzzy
-#~| msgid "&Format:"
 #~ msgid "Form"
 #~ msgstr "&Формат:"
 

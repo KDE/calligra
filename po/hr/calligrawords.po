@@ -141,7 +141,8 @@ msgid "Character"
 msgstr "Napravi"
 
 #: part/dialogs/KWAnchoringProperties.cpp:416
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Row"
 msgid "Row"
 msgstr "Redak"
 
@@ -293,7 +294,8 @@ msgid "Configure"
 msgstr "&Podešavanje..."
 
 #: part/dialogs/KWConfigureDialog.cpp:33 part/dialogs/KWConfigureDialog.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Misc"
 msgid "Misc"
 msgstr "Razno"
 
@@ -309,7 +311,8 @@ msgid "Document"
 msgstr "Dokument"
 
 #: part/dialogs/KWConfigureDialog.cpp:46
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Document Settings"
 msgid "Document Settings"
 msgstr "Postavke okvira"
 
@@ -785,8 +788,7 @@ msgstr "&Formatiranje znakova"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_words)
 #: part/dockers/StatisticsPreferencesPopup.ui:17
-#, fuzzy, kde-format
-#| msgid "Words"
+#, kde-format
 msgid "Words"
 msgstr "Riječi"
 

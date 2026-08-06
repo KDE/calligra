@@ -4963,7 +4963,8 @@ msgid "Change the filling pattern"
 msgstr "&Boja..."
 
 #: widgets/KoGradientEditWidget.cpp:148
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Target:"
 msgid "Target:"
 msgstr "Cilj:"
 

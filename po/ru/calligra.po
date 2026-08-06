@@ -9,19 +9,20 @@
 # Yuri Efremov <yur.arh@gmail.com>, 2011, 2012.
 # Georgiy Syptchenko <superzhook@gmail.com>, 2014, 2015.
 # Мария Шикунова <translation-team@basealt.ru>, 2021, 2022.
+# SPDX-FileCopyrightText: 2026 Olesya Gerasimenko <goa@altlinux.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-03 00:42+0000\n"
-"PO-Revision-Date: 2022-03-14 15:24+0300\n"
-"Last-Translator: Мария Шикунова <translation-team@basealt.ru>\n"
-"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"PO-Revision-Date: 2026-08-05 17:10+0300\n"
+"Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
+"Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.1\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -32,14 +33,15 @@ msgstr ""
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
-"Виталий Лопатин,Андрей Черепанов,Николай Шафоростов,Zumus,Мария Шикунова"
+"Виталий Лопатин,Андрей Черепанов,Николай Шафоростов,Zumus,Мария Шикунова,"
+"Олеся Герасименко"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 "vitls@chat.ru,sibskull@mail.ru,shafff@ukr.net,zumus@mail.ru,translation-"
-"team@basealt.ru"
+"team@basealt.ru,goa@altlinux.org"
 
 #: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
 #, kde-format
@@ -837,24 +839,21 @@ msgid "Create backup file:"
 msgstr "Создавать резервную копию:"
 
 #: main/config/KoConfigGridPage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Show grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show grid"
-msgstr "Показывать сетку:"
+msgstr "Показывать сетку"
 
 #: main/config/KoConfigGridPage.cpp:59
-#, fuzzy, kde-format
-#| msgid "Snap to grid:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Snap to grid"
-msgstr "Прилипание к сетке:"
+msgstr "Прилипать к сетке"
 
 #: main/config/KoConfigGridPage.cpp:63
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgid "Grid:"
-msgstr "Сетка"
+msgstr "Сетка:"
 
 #: main/config/KoConfigGridPage.cpp:65
 #, kde-format
@@ -894,11 +893,10 @@ msgid "Paste offset:"
 msgstr "Отступ вставки:"
 
 #: main/config/KoConfigMiscPage.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste at Cursor:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste at Cursor"
-msgstr "Вставить под курсором:"
+msgstr "Вставить под курсором"
 
 #: main/KoApplication.cpp:194
 #, kde-format
@@ -971,7 +969,7 @@ msgstr ""
 #: main/KoApplication.cpp:260
 #, kde-format
 msgid "%1: Critical Error"
-msgstr "%1: Критическая ошибка"
+msgstr "%1: критическая ошибка"
 
 #: main/KoApplication.cpp:261
 #, kde-format
@@ -1002,7 +1000,7 @@ msgstr "Ошибка открытия шаблона %1."
 #: main/KoApplication.cpp:530
 #, kde-format
 msgid "No template found at: %1"
-msgstr "Не найдено шаблонов в: %1"
+msgstr "Не найдено шаблонов по адресу %1"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:158
 #, kde-format
@@ -1011,10 +1009,9 @@ msgid "Recover Files"
 msgstr "Восстановление файлов"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Disc Bullet"
+#, kde-format
 msgid "Discard All"
-msgstr "Дисковый маркер"
+msgstr "Отменить все"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:165
 #, kde-format
@@ -1283,7 +1280,7 @@ msgid ""
 "parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
-"Ошибка обработки данных файла в строке %1, колонке %2\n"
+"Ошибка обработки данных основного документа в строке %1, позиции %2\n"
 "Сообщение об ошибке: %3"
 
 #: main/KoDocument.cpp:1755
@@ -1561,7 +1558,7 @@ msgid ""
 "want to export to this format?</qt>"
 msgstr ""
 "<qt>Экспорт в формат %1 может привести к частичной потере форматирования. "
-"<p>Вы хотите экспортировать в этот формат?</qt>"
+"<p>Всё равно экспортировать в этот формат?</qt>"
 
 #: main/KoMainWindow.cpp:833
 #, kde-format
@@ -1698,7 +1695,6 @@ msgstr "По умолчанию"
 
 #: main/KoShapeCollectionMenu.cpp:358
 #, fuzzy, kde-format
-#| msgid "Geometric Mean"
 msgid "Geometrics"
 msgstr "Cреднее геометрическое"
 
@@ -1876,7 +1872,6 @@ msgstr "Дата: %1"
 
 #: main/KoView.cpp:347
 #, fuzzy, kde-format
-#| msgid "Add Space"
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
 msgstr "Добавить разделитель"
@@ -2350,17 +2345,23 @@ msgstr "Фигура"
 #: pageapp/KoPADocumentModel.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
-msgstr "Переименовать слайд"
+msgstr ""
+"Переименование слайда\n"
+"переименование слайда"
 
 #: pageapp/KoPADocumentModel.cpp:270
 msgctxt "(qtundo-format)"
 msgid "Rename Page"
-msgstr "Переименовать страницу"
+msgstr ""
+"Переименование страницы\n"
+"переименование страницы"
 
 #: pageapp/KoPADocumentModel.cpp:273
 msgctxt "(qtundo-format)"
 msgid "Rename Layer"
-msgstr "Переименовать слой"
+msgstr ""
+"Переименование слоя\n"
+"переименование слоя"
 
 #: pageapp/KoPADocumentModel.cpp:309
 #: pageapp/KoPADocumentStructureDocker.cpp:109
@@ -2407,7 +2408,6 @@ msgstr "Добавить новый слайд или слой"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:99
 #, fuzzy, kde-format
-#| msgid "Slide"
 msgid "Slides"
 msgstr "Слайд"
 
@@ -3756,8 +3756,7 @@ msgstr ""
 "правильность может быть не проверена."
 
 #: store/KoEncryptedStore.cpp:245
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Предупреждение"
@@ -3773,8 +3772,7 @@ msgstr ""
 
 #: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
 #: store/KoEncryptedStore.cpp:309
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Предупреждение"
@@ -4101,11 +4099,12 @@ msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "Добавить закладку"
 
-# annotation: may be "примечание", "комментарий"? --aspotashev
 #: text/KoTextEditor.cpp:489
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
-msgstr "Добавить аннотацию"
+msgstr ""
+"Добавление комментария\n"
+"добавление комментария"
 
 #: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
@@ -4745,7 +4744,7 @@ msgstr "Последнее сохранение"
 #: widgets/KoDocumentInfoDlg.cpp:175
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
-msgstr "Использовать «;» (Например: Office;KDE;Calligra)"
+msgstr "Использовать «;» (например: Office;KDE;Calligra)"
 
 #: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
@@ -4791,13 +4790,13 @@ msgstr "Этот документ не поддерживает шифрован
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
-msgstr ""
+msgstr "Не задано"
 
 #: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
 #, kde-format
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: widgets/KoDocumentInfoDlg.cpp:337
 #, kde-format
@@ -4834,17 +4833,13 @@ msgid "Save Document"
 msgstr "Сохранить документ"
 
 #: widgets/KoDocumentInfoDlg.cpp:356
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Документ был изменён с момента его открытия. Чтобы завершить "
-"рамшифровку, документ требуется сохранить.<p>Сохранить документ?</qt>"
+"<qt>Чтобы завершить расшифровку, документ требуется сохранить.<p>Сохранить "
+"документ?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
@@ -5060,7 +5055,6 @@ msgstr "Только значок"
 
 #: widgets/KoModeBox.cpp:505
 #, fuzzy, kde-format
-#| msgid "Single sided"
 msgid "Sidebar side"
 msgstr "Одиночная"
 
@@ -5085,30 +5079,26 @@ msgid "Apply to document"
 msgstr "Применить к документу"
 
 #: widgets/KoPageLayoutWidget.cpp:180
-#, fuzzy, kde-format
-#| msgid "Left Margin"
+#, kde-format
 msgid "Left Edge Margin:"
-msgstr "Левое поле"
+msgstr "Поле по левому краю:"
 
 #: widgets/KoPageLayoutWidget.cpp:181
-#, fuzzy, kde-format
-#| msgid "Right Margin"
+#, kde-format
 msgid "Right Edge Margin:"
-msgstr "Правое поле"
+msgstr "Поле по правому краю:"
 
 #. i18n: ectx: property (text), widget (QLabel, leftLabel)
 #: widgets/KoPageLayoutWidget.cpp:183 widgets/KoPageLayoutWidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Binding Edge:"
+#, kde-format
 msgid "Binding Edge Margin:"
-msgstr "Край переплёта:"
+msgstr "Поле по краю переплёта:"
 
 #. i18n: ectx: property (text), widget (QLabel, rightLabel)
 #: widgets/KoPageLayoutWidget.cpp:184 widgets/KoPageLayoutWidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Page Edge:"
+#, kde-format
 msgid "Page Edge Margin:"
-msgstr "Край страницы:"
+msgstr "Поле по краю страницы:"
 
 #: widgets/KoPageLayoutWidget.cpp:286
 #, kde-format
@@ -5217,17 +5207,15 @@ msgstr "Справа налево"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: widgets/KoPageLayoutWidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Top Margin"
+#, kde-format
 msgid "Top Margin:"
-msgstr "Верхнее поле"
+msgstr "Верхнее поле:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: widgets/KoPageLayoutWidget.ui:262
-#, fuzzy, kde-format
-#| msgid "Bottom Margin"
+#, kde-format
 msgid "Bottom Margin:"
-msgstr "Нижнее поле"
+msgstr "Нижнее поле:"
 
 #: widgets/KoResourceItemChooser.cpp:138
 #, kde-format
@@ -5284,8 +5272,8 @@ msgid ""
 "<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
 "enter a new, unique name for it.</qt>"
 msgstr ""
-"<qt>Метка, которую вы пытаетесь восстановить, уже есть в списке.<br>Введите "
-"другое имя для неё.</qt>"
+"<qt>Метка, попытка восстановить которую выполняется, уже есть в списке."
+"<br>Введите другое имя для неё.</qt>"
 
 #: widgets/KoResourceTaggingManager.cpp:140
 #, kde-format
@@ -5328,14 +5316,13 @@ msgstr "Расстояние:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Shape Properties"
-msgstr ""
+msgstr "Свойства объекта"
 
 #: widgets/KoShapePropertyWidget.cpp:57
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No properties available"
-msgstr "Нет доступных рисунков."
+msgstr "Нет доступных свойств"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5516,32 +5503,28 @@ msgid "Icon Size"
 msgstr "Размер значков"
 
 #: widgets/KoToolBoxDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Размещение"
 
 #: widgets/KoToolBoxDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Автоматическое"
+msgstr "&Автоматическое"
 
 #: widgets/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Слева направо"
+msgstr "&Слева направо"
 
 #: widgets/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Справа налево"
+msgstr "Справа &налево"
 
 #: widgets/KoToolDocker.cpp:117
 #, kde-format
@@ -5596,10 +5579,9 @@ msgid "Zoom to All"
 msgstr "Вместить весь сигнал в окно"
 
 #: widgetutils/KoFileDialog.cpp:394
-#, fuzzy, kde-format
-#| msgid "All Presets"
+#, kde-format
 msgid "All files"
-msgstr "Все профили"
+msgstr "Все файлы"
 
 #: widgetutils/KoFileDialog.cpp:397
 #, kde-format
