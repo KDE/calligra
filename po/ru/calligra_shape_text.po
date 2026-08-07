@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-08-04 17:13+0300\n"
+"PO-Revision-Date: 2026-08-06 10:13+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -1256,8 +1256,8 @@ msgid ""
 "link,\n"
 " or just enter the URL and hit \"Fetch the title from URL\""
 msgstr ""
-"Вставьте ссылки на веб-документы. Возможно ввести ссылку и её название,\n"
-"либо просто ввести адрес и нажать «Получить название ссылки по адресу»"
+"Вставьте ссылки на веб-документы. Возможно ввести ссылку и её название\n"
+"или просто ввести адрес и нажать «Получить название ссылки по адресу»"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:42
@@ -1508,12 +1508,12 @@ msgstr "Изменить закладки..."
 #: dialogs/NotesConfigurationDialog.cpp:24
 #, kde-format
 msgid "Footnote Settings"
-msgstr "Параметры сносок"
+msgstr "Параметры подстрочных сносок"
 
 #: dialogs/NotesConfigurationDialog.cpp:27
 #, kde-format
 msgid "Endnote Settings"
-msgstr "Параметры примечаний"
+msgstr "Параметры концевых сносок"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: dialogs/NotesConfigurationDialog.ui:54
@@ -2070,12 +2070,12 @@ msgstr "Настроить список литературы"
 #: dialogs/SimpleFootEndNotesWidget.cpp:26
 #, kde-format
 msgid "Inserts a footnote at the current cursor position"
-msgstr "Вставить сноску в текущем положении курсора"
+msgstr "Вставить подстрочную сноску в текущей позиции курсора"
 
 #: dialogs/SimpleFootEndNotesWidget.cpp:31
 #, kde-format
 msgid "Inserts an endnote at the current cursor position"
-msgstr "Вставить примечание в текущей позиции курсора"
+msgstr "Вставить концевую сноску в текущей позиции курсора"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addEndnote)
 #: dialogs/SimpleFootEndNotesWidget.ui:29
@@ -2473,12 +2473,12 @@ msgstr "Настроить Содержание"
 #: ReferencesTool.cpp:127
 #, kde-format
 msgid "Insert footnote with auto number"
-msgstr "Вставить сноску с автоматическим номером"
+msgstr "Вставить подстрочную сноску с автоматическим номером"
 
 #: ReferencesTool.cpp:132
 #, kde-format
 msgid "Insert Labeled Footnote"
-msgstr "Вставить сноску с названием"
+msgstr "Вставить подстрочную сноску с названием"
 
 #: ReferencesTool.cpp:133 ReferencesTool.cpp:144
 #, kde-format
@@ -2488,12 +2488,12 @@ msgstr "Вставить с заголовком:"
 #: ReferencesTool.cpp:138
 #, kde-format
 msgid "Insert endnote with auto number"
-msgstr "Вставить примечание с автономером"
+msgstr "Вставить концевую сноску с автоматическим номером"
 
 #: ReferencesTool.cpp:143
 #, kde-format
 msgid "Insert Labeled Endnote"
-msgstr "Вставить примечание с названием"
+msgstr "Вставить концевую сноску с названием"
 
 #: ReferencesTool.cpp:149 ReferencesTool.cpp:153
 #, kde-format
@@ -2580,7 +2580,7 @@ msgstr "Таблицы, списки и указатели"
 #: ReferencesTool.cpp:233
 #, kde-format
 msgid "Footnotes and Endnotes"
-msgstr "Сноски и примечания"
+msgstr "Подстрочные сноски и концевые сноски"
 
 #: ReferencesTool.cpp:236
 #, kde-format
