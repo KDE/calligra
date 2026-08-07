@@ -117,6 +117,7 @@
     <p xml:lang="pl">Braindump jest narzędziem do zrzucania i porządkowania zawartości twojego umysłu (pomysły, rysunki, obrazy, teksty...) na komputer. Działa przez umożliwianie tworzenia i edytowania białych tablic, które są bezgranicznym płótnem, na które można dodawać teksty, obrazy, wykresy, rysunki, itp.</p>
     <p xml:lang="pt">O Braindump é uma ferramenta para descarregar e organizar o conteúdo do seu cérebro (ideias, desenhos, imagens, textos, ...) para o seu computador. Permite criar e editar quadros, que são uma "tela" infinita onde poderá adicionar textos, imagens, gráficos, desenhos, etc.</p>
     <p xml:lang="pt-BR">Braindump é uma ferramenta para descarregar e organizar o conteúdo do seu cérebro (ideias, desenhos, imagens, textos, …) para o seu computador. Permite-lhe criar e editar quadros, que são uma espécie de "tela infinita" onde poderá adicionar textos, imagens, gráficos, desenhos, etc.</p>
+    <p xml:lang="ru">Braindump — это утилита для сохранения и организации мыслей (идей, рисунков, изображений, фрагментов…) с помощью компьютера. Программа позволяет создавать и редактировать так называемые «доски» — бесконечные полотна, на которые можно добавлять фрагменты текста, изображения, диаграммы, рисунки и так далее.</p>
     <p xml:lang="sa">Braindump इति भवतः मस्तिष्कस्य सामग्रीं (विचाराः, रेखाचित्रं, चित्राणि, पाठाः…) भवतः सङ्गणके डम्प् कृत्वा व्यवस्थितं कर्तुं एकं साधनम् अस्ति । इदं श्वेतफलकानां निर्माणं सम्पादनं च कर्तुं अनुमतिं दत्त्वा कार्यं करोति, ये अनन्ताः कैनवासाः सन्ति यस्मिन् भवान् पाठाः, चित्राणि, चार्ट्स्, रेखाचित्रम् इत्यादीन् योजयितुं शक्नोति ।</p>
     <p xml:lang="sk">Braindump je nástroj na prenos a organizáciu obsahu vášho mozgu (nápady, kresby, obrázky, texty...) do vášho počítača. Umožňuje vytvárať a upravovať tabule, ktoré sú neurčitým plátnom, kam môžete pridávať texty, obrázky, grafy, kresby atď.</p>
     <p xml:lang="sl">Braindump je orodje za zajem in organiziranje vsebine vaših možganov (ideje, risbe, slike, besedila…) v računalnik. Deluje tako, da omogoča ustvarjanje in ureditev tabel, ki so neskončno platno, na katerega lahko dodate besedila, slike, grafikone, risbe itd.</p>
@@ -152,6 +153,7 @@
       <caption xml:lang="nl">Hoofdvenster van Braindump die een muziekpartitie en vele andere vormen toont</caption>
       <caption xml:lang="pl">Główne okno Braindump, pokazujące partyturę muzyczną i wiele innych kształtów</caption>
       <caption xml:lang="pt-BR">Janela principal do Braindump mostrando uma partitura musical e muitas outras formas</caption>
+      <caption xml:lang="ru">Главное окно Braindump с музыкальной партитурой и многими другими объектами</caption>
       <caption xml:lang="sa">Braindump इत्यस्य मुख्यविण्डो यत्र संगीतविभाजनं अन्ये च बहवः आकाराः दृश्यन्ते</caption>
       <caption xml:lang="sk">Hlavné okno Braindump zobrazujúce hudobnú partitúru a mnoho iných tvarov</caption>
       <caption xml:lang="sl">Glavno okno Braindumpa, ki prikazuje glasbeno particijo in številne druge oblike</caption>
@@ -213,6 +215,7 @@
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
+        <p xml:lang="ru">В этом выпуске добавлена поддержка Flatpak для офисного пакета Calligra.</p>
         <p xml:lang="sk">Toto vydanie pridáva podporu flatpak do kancelárskeho balíka Calligra.</p>
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
         <p xml:lang="sv">Den här utgåvan lägger till stöd för flatpak i Calligra-kontorssviten.</p>
@@ -239,6 +242,7 @@
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
+        <p xml:lang="ru">Наиболее значительные изменения: полный перевод Calligra на Qt6 и KF6, а также значительная переработка пользовательского интерфейса.</p>
         <p xml:lang="sk">Najvýznamnejšie zmeny sú, že Calligra bola úplne prevedená na Qt6 a KF6, spolu s výraznou prestavbou používateľského rozhrania.</p>
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
         <p xml:lang="sv">De viktigaste förändringarna är att Calligra har helt övergått till Qt6 och KF6, tillsammans med en större översyn av användargränssnittet.</p>
