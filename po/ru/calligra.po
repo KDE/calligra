@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-08-05 17:10+0300\n"
+"PO-Revision-Date: 2026-08-06 15:53+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -861,16 +861,16 @@ msgid "Grid color:"
 msgstr "Цвет сетки:"
 
 #: main/config/KoConfigGridPage.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Horizontal grid spacing"
 msgid "Horizontal spacing:"
-msgstr "&Горизонтальный"
+msgstr "Горизонтальный интервал:"
 
 #: main/config/KoConfigGridPage.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Vertical grid spacing"
 msgid "Vertical spacing:"
-msgstr "&Вертикальный"
+msgstr "Вертикальный интервал:"
 
 #: main/config/KoConfigMiscPage.cpp:76
 #, kde-format
@@ -990,7 +990,7 @@ msgstr "Не найдено шаблонов для %1"
 #: main/KoApplication.cpp:501
 #, kde-format
 msgid "Too many templates found for: %1"
-msgstr "Найдено несколько шаблонов для %1"
+msgstr "Найдено слишком много шаблонов для %1"
 
 #: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
@@ -1030,6 +1030,9 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"При выборе варианта «Отмена» все восстанавливаемые файлы будут сохранены.\n"
+"При нажатии кнопки «OK» выбранные файлы будут восстановлены, не выбранные — "
+"удалены."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -1299,8 +1302,8 @@ msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
-"Документ <i>%1</i> содержит несколько версий. Чтобы открыть старую версию "
-"перейдите к пункту меню «Файл»->«Версии»."
+"Документ <i>%1</i> содержит несколько версий. Чтобы открыть старую версию, "
+"перейдите к пункту меню «Файл -> Версии»."
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
@@ -1694,20 +1697,19 @@ msgid "Default"
 msgstr "По умолчанию"
 
 #: main/KoShapeCollectionMenu.cpp:358
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgid "Geometrics"
-msgstr "Cреднее геометрическое"
+msgstr "Геометрия"
 
 #: main/KoShapeCollectionMenu.cpp:369
 #, kde-format
 msgid "Arrows"
-msgstr ""
+msgstr "Стрелки"
 
 #: main/KoShapeCollectionMenu.cpp:373
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Необычное"
 
 #: main/KoStandardAction.cpp:19
 #, kde-format
@@ -1872,11 +1874,10 @@ msgid "Date: %1"
 msgstr "Дата: %1"
 
 #: main/KoView.cpp:347
-#, fuzzy, kde-format
-#| msgid "Add Space"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Add Shape"
-msgstr "Добавить разделитель"
+msgstr "Добавить объект"
 
 #: main/KoView.cpp:358
 #, kde-format
@@ -2409,10 +2410,9 @@ msgid "Add a new slide or layer"
 msgstr "Добавить новый слайд или слой"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:99
-#, fuzzy, kde-format
-#| msgid "Slide"
+#, kde-format
 msgid "Slides"
-msgstr "Слайд"
+msgstr "Слайды"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:101
 #, kde-format
@@ -2735,8 +2735,8 @@ msgstr "Отображать формы слайда-шаблона"
 msgctxt "(qtundo-format)"
 msgid "Change page background image"
 msgstr ""
-"Изменение изображения фона\n"
-"изменение изображения фона"
+"Изменение изображения фона страницы\n"
+"изменение изображения фона страницы"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:96
 msgctxt "(qtundo-format)"
@@ -3611,6 +3611,15 @@ msgid ""
 "            select ?s ?p ?o\n"
 "            where { ?s ?p ?o }"
 msgstr ""
+"\n"
+"            prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+"            prefix foaf: <http://xmlns.com/foaf/0.1/>\n"
+"            prefix pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/"
+"pkg#>\n"
+"            prefix geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n"
+"\n"
+"            select ?s ?p ?o\n"
+"            where { ?s ?p ?o }"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
 #: rdf/KoDocumentRdfEditWidget.ui:181
@@ -3871,7 +3880,9 @@ msgstr "Удалить"
 #: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Text"
-msgstr "Текст"
+msgstr ""
+"Текст\n"
+"текст"
 
 #: text/commands/DeleteCommand.cpp:56
 msgctxt "(qtundo-format)"
@@ -3898,15 +3909,15 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Insert Footnote"
 msgstr ""
-"Вставка сноски\n"
-"вставку сноски"
+"Вставка подстрочной сноски\n"
+"вставку подстрочной сноски"
 
 #: text/commands/InsertNoteCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Insert Endnote"
 msgstr ""
-"Вставка примечания\n"
-"вставку примечания"
+"Вставка концевой сноски\n"
+"вставку концевой сноски"
 
 #: text/commands/InsertTableColumnCommand.cpp:25
 msgctxt "(qtundo-format)"
@@ -3975,29 +3986,29 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr ""
-"Регулировка высоты ряда\n"
-"регулировку высоты ряда"
+"Регулировка высоты строки\n"
+"регулировку высоты строки"
 
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Split sections startings"
 msgstr ""
-"Разделение начала выделений\n"
-"разделение начала выделений"
+"Отделение начал разделов\n"
+"отделение начал разделов"
 
 #: text/commands/SplitSectionsCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Split sections endings"
 msgstr ""
-"Разделение концов выделений\n"
-"разделение концов выделений"
+"Отделение концов разделов\n"
+"отделение концов разделов"
 
 #: text/commands/TextPasteCommand.cpp:53
 msgctxt "(qtundo-format)"
 msgid "Paste As Text"
 msgstr ""
-"Вставка как текст\n"
-"вставку как текст"
+"Вставка как текста\n"
+"вставку как текста"
 
 #: text/commands/TextPasteCommand.cpp:55
 msgctxt "(qtundo-format)"
@@ -4095,12 +4106,14 @@ msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr ""
 "Новый абзац\n"
-"создание нового абзаца"
+"новый абзац"
 
 #: text/KoTextEditor.cpp:474
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
-msgstr "Добавить закладку"
+msgstr ""
+"Добавление закладки\n"
+"добавление закладки"
 
 #: text/KoTextEditor.cpp:489
 msgctxt "(qtundo-format)"
@@ -4112,23 +4125,31 @@ msgstr ""
 #: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
-msgstr "Вставить указатель"
+msgstr ""
+"Вставка указателя\n"
+"вставку указателя"
 
 #: text/KoTextEditor.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
-msgstr "Вставить переменную"
+msgstr ""
+"Вставка переменной\n"
+"вставку переменной"
 
 #: text/KoTextEditor.cpp:604
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
-msgstr "Вставить разрыв строки"
+msgstr ""
+"Вставка разрыва\n"
+"вставку разрыва"
 
 #: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
 #: text/KoTextEditor.cpp:929
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
-msgstr "Вставить таблицу"
+msgstr ""
+"Вставка таблицу\n"
+"вставку таблицы"
 
 #: text/KoTextEditor.cpp:1069
 msgctxt "(qtundo-format)"
@@ -4147,34 +4168,46 @@ msgstr ""
 #: text/KoTextEditor.cpp:1114
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
-msgstr "Отрегулировать ширину таблицу"
+msgstr ""
+"Регулировка ширины таблицы\n"
+"регулировку ширины таблицы"
 
 #: text/KoTextEditor.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
-msgstr "Изменить форматирование рамки"
+msgstr ""
+"Изменение форматирования рамки\n"
+"изменение форматирования рамки"
 
 #: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
 #: text/KoTextEditor.cpp:1197
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
-msgstr "Вставить содержание"
+msgstr ""
+"Вставка содержания\n"
+"вставку содержания"
 
 #: text/KoTextEditor.cpp:1236
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
-msgstr "Изменить содержание"
+msgstr ""
+"Изменение содержания\n"
+"изменение содержания"
 
 #: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
 #: text/KoTextEditor.cpp:1274
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
-msgstr "Вставить список литературы"
+msgstr ""
+"Вставка списка литературы\n"
+"вставку списка литературы"
 
 #: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
-msgstr "Добавить цитату"
+msgstr ""
+"Добавление цитаты\n"
+"добавление цитаты"
 
 #: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
 #: text/KoTextEditor.cpp:1380
@@ -4202,14 +4235,14 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Underline"
 msgstr ""
-"Подчёркнуть\n"
+"Подчёркивание\n"
 "подчёркивание"
 
 #: text/KoTextEditor_format.cpp:102
 msgctxt "(qtundo-format)"
 msgid "Strike Out"
 msgstr ""
-"Зачеркнуть\n"
+"Зачёркивание\n"
 "зачёркивание"
 
 #: text/KoTextEditor_format.cpp:139 text/KoTextEditor_format.cpp:140
@@ -4306,7 +4339,9 @@ msgstr ""
 #: text/KoTextEditor_p.h:159 text/KoTextEditor_p.h:200
 msgctxt "(qtundo-format)"
 msgid "Format"
-msgstr "Формат"
+msgstr ""
+"Формат\n"
+"формат"
 
 #: widgets/KoColorPopupAction.cpp:82
 #, kde-format
@@ -5057,10 +5092,9 @@ msgid "Icon only"
 msgstr "Только значок"
 
 #: widgets/KoModeBox.cpp:505
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Одиночная"
+msgstr "Сторона боковой панели"
 
 #: widgets/KoModeBox.cpp:514
 #, kde-format
