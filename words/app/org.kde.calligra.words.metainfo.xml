@@ -405,6 +405,7 @@
       <caption xml:lang="nl">Hoofdvenster van Calligra Words</caption>
       <caption xml:lang="pl">Główne okno Słów Calligry</caption>
       <caption xml:lang="pt-BR">Janela principal do Calligra Words</caption>
+      <caption xml:lang="ru">Главное окно Calligra Words</caption>
       <caption xml:lang="sa">Calligra Words मुख्यविण्डो</caption>
       <caption xml:lang="sk">Hlavné okno Calligra Words</caption>
       <caption xml:lang="sl">Glavno okno Calligra Words</caption>
@@ -465,6 +466,7 @@
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
+        <p xml:lang="ru">В этом выпуске добавлена поддержка Flatpak для офисного пакета Calligra.</p>
         <p xml:lang="sk">Toto vydanie pridáva podporu flatpak do kancelárskeho balíka Calligra.</p>
         <p xml:lang="sl">Ta izdaja dodaja podporo za flatpak v paket Calligra Office.</p>
         <p xml:lang="sv">Den här utgåvan lägger till stöd för flatpak i Calligra-kontorssviten.</p>
@@ -490,6 +492,7 @@
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
+        <p xml:lang="ru">Наиболее значительные изменения: полный перевод Calligra на Qt6 и KF6, а также масштабная переработка пользовательского интерфейса.</p>
         <p xml:lang="sk">Najvýznamnejšie zmeny sú, že Calligra bola úplne prevedená na Qt6 a KF6, spolu s výraznou prestavbou používateľského rozhrania.</p>
         <p xml:lang="sl">Najpomembnejše spremembe so, da je bila Calligra v celoti preusmerjena na Qt6 in KF6, skupaj z obsežno prenovo uporabniškega vmesnika.</p>
         <p xml:lang="sv">De viktigaste förändringarna är att Calligra har helt övergått till Qt6 och KF6, tillsammans med en större översyn av användargränssnittet.</p>
@@ -510,6 +513,7 @@
         <p xml:lang="ka">Word-ს ახლა გვერდითი პანელის ახალი დიზაინი აქვს და მთავარი ხედი დოკუმენტის საზღვრებისთვის ჩრდილებს იყენებს. ასევე განახლდა დიზაინი სტილების მენეჯერისა და გვერდის განლაგების დიალოგებისთვის.</p>
         <p xml:lang="nl">Word heeft nu een nieuw ontwerp voor de zijbalk en de hoofdweergave gebruikt een schaduw om de documentranden te definiëren. Het dialoogvenster Stijlbeheer en Pagina-indeling zijn ook bijgewerkt met een nieuw ontwerp.</p>
         <p xml:lang="pt-BR">O Word agora apresenta o novo design da barra lateral, e a visualização principal usa uma sombra para definir as bordas do documento. O Gerenciador de Estilos e a caixa de diálogo Layout da Página também foram atualizados com um novo design.</p>
+        <p xml:lang="ru">Текстовый процессор теперь содержит боковую панель с новым дизайном, а в главном окне для определения границ документа используется тень. Оформление диалоговых окон «Диспетчер стилей» и «Формат страницы» также было обновлено.</p>
         <p xml:lang="sk">Word teraz obsahuje nový dizajn bočného panela a hlavné zobrazenie používa tieň na definovanie okrajov dokumentu. Dialógy Správca štýlov a Rozloženie strany boli výrazne prepracované.</p>
         <p xml:lang="sl">Word zdaj uporablja novo zasnovo stranske vrstice, glavni pogled pa uporablja senco za določanje robov dokumenta. Pogovorno okno Upravitelj slogov in Postavitev strani sta bila prav tako posodobljena z novo zasnovo.</p>
         <p xml:lang="sv">Word har nu den nya sidoradsdesignen, och huvudvyn använder en skugga för att definiera dokumentkanterna. Dialogrutan Stilhanteraren och Sidlayout har också uppdaterats med en ny design.</p>
