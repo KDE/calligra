@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-08-06 17:04+0300\n"
+"PO-Revision-Date: 2026-08-07 16:38+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -852,8 +852,8 @@ msgid ""
 "The SEXDEC() function returns a decimal value. You can also supply a time "
 "value."
 msgstr ""
-"Функция SEXDEC() возвращает десятичное значение. Вы можете указывать как "
-"строку, так и отдельные значения времени."
+"Функция SEXDEC() возвращает десятичное значение. Можно указывать как строку, "
+"так и отдельные значения времени."
 
 #: functions/conversion.xml:215
 #, kde-format
@@ -1290,9 +1290,8 @@ msgid ""
 "for monday, 1 for tuesday,..."
 msgstr ""
 "Функция WEEKDAY() возвращает день недели указанной даты. Если метод равен 1 "
-"(значение по умолчанию), то неделя начинается с воскресенья, если 2, то с "
-"понедельника, если 3 - то неделя начинается с понедельника с порядковым "
-"номером 0. "
+"(значение по умолчанию), то неделя начинается с воскресенья, если 2 — с "
+"понедельника, если 3 — с понедельника с порядковым номером 0."
 
 #: functions/datetime.xml:20
 #, kde-format
@@ -1945,7 +1944,7 @@ msgid ""
 msgstr ""
 "Функция DAYNAME() возвращает название дня недели по его порядковому номеру "
 "(1..7). В некоторых странах первым днем недели является понедельник, в "
-"других - воскресенье."
+"других — воскресенье."
 
 #: functions/datetime.xml:494
 #, kde-format
@@ -2091,9 +2090,9 @@ msgid ""
 "that week which contains the first Thursday of the year."
 msgstr ""
 "Функция ISOWEEKNUM() возвращает номер недели в году, на которую приходится "
-"указанная дата.Примечание: эта функция совместима со стандартом ISO8601 - "
+"указанная дата.Примечание: эта функция совместима со стандартом ISO8601 — "
 "неделя всегда начинается с понедельника и заканчивается в воскресенье. "
-"Первая неделя года - это та неделя, которая содержит первый четверг в году."
+"Первая неделя года — это та неделя, которая содержит первый четверг в году."
 
 #: functions/datetime.xml:593
 #, kde-format
@@ -2506,7 +2505,7 @@ msgid ""
 msgstr ""
 "Единицы измерения энергии: J (Джоуль), e (эрг), c (термодинамическая "
 "калория), cal (IT калория), eV (электрон-вольт), HPh (лошадиная сила-час), "
-"Wh (ватт-час), flb (футо-фунт), BTU (БТУ - Британская тепловая единица)."
+"Wh (ватт-час), flb (футо-фунт), BTU (БТУ — британская тепловая единица)."
 
 #: functions/engineering.xml:135
 #, kde-format
@@ -3842,8 +3841,7 @@ msgstr ""
 "(CONTINUOUS1000;.1;1) or $1105.17."
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINUOUS(капитал;ставка;лет)"
 
@@ -3982,7 +3980,7 @@ msgid ""
 msgstr ""
 "Функция DB() вычисляет амортизацию имущества в данном периоде, используя "
 "равномерный метод списания. Количество месяцев является необязательным "
-"параметром, если не указывается, то принимается равным 12."
+"параметром; если не указывается, то принимается равным 12."
 
 #: functions/financial.xml:306
 #, kde-format
@@ -4013,7 +4011,7 @@ msgid ""
 msgstr ""
 "Функция DDB() вычисляет амортизацию имущества в данном периоде, используя "
 "метод двукратного учёта амортизации или иной явно указанный метод. "
-"Коэффициент является необязательным параметром, по умолчанию его значение - "
+"Коэффициент является необязательным параметром, по умолчанию его значение — "
 "2. Все остальные параметры должны быть больше 0."
 
 #: functions/financial.xml:339
@@ -4090,7 +4088,7 @@ msgstr "DOLLARDE(дробный доллар; знаменатель)"
 #: functions/financial.xml:390
 #, kde-format
 msgid "DOLLARDE(1.02; 16) - stands for 1 and 2/16 - returns 1.125"
-msgstr "DOLLARDE(1.02; 16) - для дроби 1 и 2/16 - возвратит 1.125"
+msgstr "DOLLARDE(1.02; 16) — для дроби 1 и 2/16 — возвратит 1.125"
 
 #: functions/financial.xml:400
 #, kde-format
@@ -4451,19 +4449,19 @@ msgstr ""
 #, kde-format
 msgid "NPER is the total number of periods during which annuity is paid."
 msgstr ""
-"NPER - общее количество периодов, за которые собственность амортизируется "
+"NPER — общее количество периодов, за которые собственность амортизируется "
 "(период амортизации)."
 
 #: functions/financial.xml:662 functions/financial.xml:716
 #: functions/financial.xml:1049
 #, kde-format
 msgid "PV is the present value in the sequence of payments."
-msgstr "PV - начальная стоимость имущества."
+msgstr "PV — начальная стоимость имущества."
 
 #: functions/financial.xml:663 functions/financial.xml:1050
 #, kde-format
 msgid "FV (optional) is the desired (future) value.  default: 0."
-msgstr "FV (необязательный параметр) - остаточная стоимость. По умолчанию: 0 "
+msgstr "FV (необязательный параметр) — остаточная стоимость. По умолчанию: 0."
 
 #: functions/financial.xml:664 functions/financial.xml:1051
 #, kde-format
@@ -4472,7 +4470,7 @@ msgid ""
 "period and 0 (default) for payment at the end of a period."
 msgstr ""
 "Тип (необязательный параметр) определяет дату платежей. 1 означает платёж в "
-"начале периода, 0 (значение по умолчанию) - платёж в конце периода."
+"начале периода, 0 (значение по умолчанию) — платёж в конце периода."
 
 #: functions/financial.xml:665
 #, kde-format
@@ -4481,7 +4479,7 @@ msgid ""
 "The interest rate is 10 percent."
 msgstr ""
 "Пример вычисляет сумму процентов в последний год трёхлетнего кредита. "
-"Процентная ставка - 10% годовых."
+"Процентная ставка — 10% годовых."
 
 #: functions/financial.xml:666
 #, kde-format
@@ -4546,7 +4544,7 @@ msgstr ""
 #, kde-format
 msgid "NPer is the total number of periods during which annuity is paid."
 msgstr ""
-"NPER - общее количество периодов, за которые собственность амортизируется "
+"NPER — общее количество периодов, за которые собственность амортизируется "
 "(период амортизации)."
 
 #: functions/financial.xml:717
@@ -4687,7 +4685,7 @@ msgstr "Платёж"
 #: functions/financial.xml:850 functions/financial.xml:999
 #, kde-format
 msgid "Future value (FV - optional)"
-msgstr "Сумма в будущем (FV - необязательный параметр)"
+msgstr "Сумма в будущем (FV — необязательный параметр)"
 
 #: functions/financial.xml:858
 #, kde-format
@@ -5841,8 +5839,8 @@ msgid ""
 "value is an array. If the cell the value represents contains a formula you "
 "get its return type."
 msgstr ""
-"Функция TYPE() возвращает 1, если значение является числом, 2 - если это "
-"текст, 4 - если это логическое значение, 16 - если ошибка или 64, если "
+"Функция TYPE() возвращает 1 — если значение является числом, 2 — если это "
+"текст, 4 — если это логическое значение, 16 — если ошибка, 64 — если "
 "значение является массивом. Если функции передаётся адрес ячейки с формулой, "
 "будет проанализирован тип возвращаемого значения."
 
@@ -6190,10 +6188,10 @@ msgid ""
 "following numbers: 1 - Average, 2 - Count, 3 - CountA, 4 - Max, 5 - Min, 6 - "
 "Product, 7 - StDev, 8 - StDevP, 9 - Sum, 10 - Var, 11 - VarP."
 msgstr ""
-"Функция SUBTOTAL() возвращает подитоги указанного списка значений, игнорируя "
-"другие значения подитогов в этом списке. Функции подитогов: 1 - Average, 2 - "
-"Count, 3 - CountA, 4 - Max, 5 - Min, 6 - Product, 7 - StDev, 8 - StDevP, 9 - "
-"Sum, 10 - Var, 11 - VarP."
+"Функция SUBTOTAL() возвращает промежуточный итог указанного списка значений, "
+"игнорируя другие значения промежуточных итогов в этом списке. Функции "
+"промежуточных итогов: 1 — Average, 2 — Count, 3 — CountA, 4 — Max, 5 — Min, "
+"6 — Product, 7 — StDev, 8 — StDevP, 9 — Sum, 10 — Var, 11 — VarP."
 
 #: functions/math.xml:20
 #, kde-format
@@ -6335,7 +6333,7 @@ msgid ""
 "digits, roundoff error is inherent (but usually insignificant) in all "
 "calculations."
 msgstr ""
-"Функция EPS() возвращает значение эпсилон - разницу между 1 и максимально "
+"Функция EPS() возвращает значение эпсилон — разницу между 1 и максимально "
 "большим числом с плавающей точкой. Поскольку компьютеры используют "
 "ограниченное количество знаков для представления чисел, округление является "
 "неотъемлемой (однако несущественной) частью вычислений."
@@ -6546,8 +6544,8 @@ msgid ""
 "This function returns -1 if the number is negative, 0 if the number is null "
 "and 1 if the number is positive."
 msgstr ""
-"Функция sign() возвращает -1, если число отрицательное, 0 - если ноль, если "
-"оно положительное."
+"Функция sign() возвращает -1 — если число отрицательное, 0 — если число "
+"равно нулю, 1 — если число положительное."
 
 #: functions/math.xml:265
 #, kde-format
@@ -6602,7 +6600,7 @@ msgid ""
 "COUNT(12;5;12.5)."
 msgstr ""
 "Функция COUNT() подсчитывает количество целых и вещественных чисел в "
-"параметрах. Вы можете передать диапазон COUNT(A1:B5) или список параметров: "
+"параметрах. Можно передать диапазон COUNT(A1:B5) или список параметров: "
 "COUNT(12;5;12.5)."
 
 #: functions/math.xml:297
@@ -6627,8 +6625,8 @@ msgid ""
 "count using a range: COUNTA(A1:B5) or using a list of values like "
 "COUNTA(12;5;12.5)."
 msgstr ""
-"Функция COUNTA() подсчитывает количество непустых параметров. Вы можете "
-"передать диапазон COUNTA(A1:B5) или список параметров: COUNTA(12;5;12.5)."
+"Функция COUNTA() подсчитывает количество непустых параметров. Можно передать "
+"диапазон COUNTA(A1:B5) или список параметров: COUNTA(12;5;12.5)."
 
 #: functions/math.xml:315
 #, kde-format
@@ -6760,7 +6758,7 @@ msgid ""
 "You can calculate the sum of a range SUM(A1:B5) or a list of values like "
 "SUM(12;5;12.5)."
 msgstr ""
-"Функция SUM() возвращает сумму всех указанных значений. Вы можете вычислить "
+"Функция SUM() возвращает сумму всех указанных значений. Можно вычислить "
 "сумму диапазона SUM(A1:B5) или списка параметров как SUM(12;5;12.5)."
 
 #: functions/math.xml:399 functions/math.xml:417
@@ -6854,7 +6852,7 @@ msgid ""
 "list of values like product(12;5;12.5). If no numeric values are found 0 is "
 "returned."
 msgstr ""
-"Функция PRODUCT() возвращает произведение всех указанных значений. Вы можете "
+"Функция PRODUCT() возвращает произведение всех указанных значений. Можно "
 "вычислить произведение диапазона PRODUCT(A1:B5) или списка параметров: "
 "PRODUCT(12;5;12.5)."
 
@@ -6943,7 +6941,7 @@ msgid ""
 "as parameters. You can calculate the sum of a range SUMSQ(A1:B5) or a list "
 "of values like SUMSQ(12;5;12.5)."
 msgstr ""
-"Функция SUMSQ() возвращает сумму квадратов указанных значений. Вы можете "
+"Функция SUMSQ() возвращает сумму квадратов указанных значений. Можно "
 "вычислить сумму диапазона sumsq(A1:B5) или списка параметров как "
 "sumsq(12;5;12.5)."
 
@@ -7087,7 +7085,7 @@ msgid ""
 "You can multiply values given by a range MULTIPLY(A1:B5) or a list of values "
 "like MULTIPLY(12;5;12.5). It's equivalent to PRODUCT."
 msgstr ""
-"Функция MULTIPLY() перемножает все числа, указанные в параметрах. Вы можете "
+"Функция MULTIPLY() перемножает все числа, указанные в параметрах. Можно "
 "указать диапазон MULTIPLY(A1:B5) или список чисел как MULTIPLY(12;5;12.5). "
 "Эквивалент функции PRODUCT."
 
@@ -8087,9 +8085,9 @@ msgid ""
 "= Absolute row, relative column,  3 = Relative row; absolute column and 4 = "
 "Relative."
 msgstr ""
-"Флаг абсолютного адреса задаёт тип ссылки: 1 (или не указано) - "
-"фиксированный адрес, 2 - фиксированная строка, относительный столбец, 3 - "
-"относительная строка, фиксированный столбец и 4 - относительный адрес. "
+"Флаг абсолютного адреса задаёт тип ссылки: 1 (или не указано) — "
+"фиксированный адрес, 2 — фиксированная строка, относительный столбец, 3 — "
+"относительная строка, фиксированный столбец, 4 — относительный адрес."
 
 #: functions/reference.xml:33
 #, kde-format
@@ -8934,7 +8932,7 @@ msgid ""
 "returns an error."
 msgstr ""
 "Функция COMBIN() возвращает количество возможных комбинаций. В первом "
-"параметре указывается общее количество элементов, во втором - количество "
+"параметре указывается общее количество элементов, во втором — количество "
 "объектов в каждой комбинации. Оба параметра должны быть положительными и "
 "второй параметр должен быть меньше первого, в противном случае функция "
 "возвратит ошибку."
@@ -9422,7 +9420,7 @@ msgid ""
 "divided by the sum of the inverses of the data points)."
 msgstr ""
 "Функция HARMEAN() вычисляет среднее гармоническое N точек данных. Среднее "
-"гармоническое - это величина, обратная к среднему арифметическому обратных "
+"гармоническое — это величина, обратная к среднему арифметическому обратных "
 "величин."
 
 #: functions/statistical.xml:550
@@ -9666,10 +9664,10 @@ msgid ""
 "list of values like MEDIAN(12; 5; 12.5). Blank cells will be considered as a "
 "zero, and cells with text will be ignored."
 msgstr ""
-"Функция MEDIAN() возвращает медиану всех указанных значений. Вы можете "
-"вычислить медиану диапазона sum(A1:B5) или списка параметров как median(12; "
-"5; 12.5). Пустые ячейки будут рассмотрены как нулевые, а ячейки с текстом "
-"будут проигнорированы."
+"Функция MEDIAN() возвращает медиану всех указанных значений. Можно вычислить "
+"медиану диапазона sum(A1:B5) или списка параметров как median(12; 5; 12.5). "
+"Пустые ячейки будут рассмотрены как нулевые, а ячейки с текстом будут "
+"проигнорированы."
 
 #: functions/statistical.xml:773
 #, kde-format
@@ -10227,7 +10225,7 @@ msgid ""
 "dispersed from the average value."
 msgstr ""
 "Функция STDEV() возвращает стандартное отклонение по выборке. Стандартное "
-"отклонение - это мера того, насколько широко разбросаны точки данных "
+"отклонение — это мера того, насколько широко разбросаны точки данных "
 "относительно их среднего."
 
 #: functions/statistical.xml:1205
@@ -10250,7 +10248,7 @@ msgid ""
 "is TRUE it is counted as 1."
 msgstr ""
 "Функция STDEVA() возвращает стандартное отклонение по выборке, включая "
-"числа, текст и логические значения. Стандартное отклонение - это мера того, "
+"числа, текст и логические значения. Стандартное отклонение — это мера того, "
 "насколько широко разбросаны точки данных относительно их среднего. Если "
 "ячейка содержит текст или логическое значение FALSE, элемент учитывается как "
 "0. Если логическое значение равно TRUE, элемент учитывается как 1."
@@ -10923,8 +10921,8 @@ msgid ""
 "of trials should be greater than the number of successes and the probability "
 "should be smaller or equal to 1."
 msgstr ""
-"В первом параметре указывается общее количество испытаний, во втором - "
-"количество успешных испытаний и в третьем - вероятность успеха. Общее "
+"В первом параметре указывается общее количество испытаний, во втором — "
+"количество успешных испытаний и в третьем — вероятность успеха. Общее "
 "количество испытаний должно быть больше количества успешных испытаний, а "
 "вероятность должна быть меньше или равна 1."
 
@@ -10974,8 +10972,8 @@ msgid ""
 "smaller or equal to 1."
 msgstr ""
 "Функция INVBINO() возвращает отрицательное биномиальное распределение. В "
-"первом параметре указывается общее количество испытаний, во втором - "
-"количество неудачных испытаний и в третьем - вероятность успеха. Общее "
+"первом параметре указывается общее количество испытаний, во втором — "
+"количество неудачных испытаний и в третьем — вероятность успеха. Общее "
 "количество испытаний должно быть больше или равно количеству неудачных "
 "испытаний, а вероятность меньше или равна 1."
 
@@ -11110,11 +11108,11 @@ msgid ""
 "to replace any text that occurs in a specific location."
 msgstr ""
 "Функция SUBSTITUTE() заменяет одну подстроку другой. Если указан параметр "
-"instance_num, то будет заменена только вхождение подстроки с номером "
-"instance_num. В противном случае, будут заменены все вхождения подстроки. "
-"Используйте функцию SUBSTITUTE, если желаете заменить только одно "
-"определённое вхождение подстроки и функцию REPLACE, если хотите заменить все "
-"вхождения."
+"instance_num, то будет заменено только вхождение подстроки с номером "
+"instance_num. В противном случае будут заменены все вхождения подстроки. "
+"Используйте функцию SUBSTITUTE, если следует заменить только одно "
+"определённое вхождение подстроки, и функцию REPLACE, если следует заменить "
+"все вхождения."
 
 #: functions/text.xml:71
 #, kde-format
@@ -11170,8 +11168,8 @@ msgid ""
 "question mark matches any single character, an asterisk matches any "
 "sequences of characters."
 msgstr ""
-"Вы можете использовать шаблоны для поиска: знак вопроса (?) и звёздочку (*). "
-"Знак вопроса соответствует любому одному символу, а звёздочка - любой "
+"Можно использовать шаблоны для поиска: знак вопроса (?) и звёздочку (*). "
+"Знак вопроса соответствует любому одному символу, а звёздочка — любой "
 "последовательности символов."
 
 #: functions/text.xml:100
@@ -11293,7 +11291,7 @@ msgid ""
 "and the rest of the letters to lowercase."
 msgstr ""
 "Функция PROPER() преобразует первую букву каждого слова в верхний регистр, а "
-"остальные символы - в нижний регистр, как в англо-язычных заголовках."
+"остальные символы — в нижний регистр, как в англоязычных заголовках."
 
 #: functions/text.xml:175
 #, kde-format
@@ -11326,8 +11324,8 @@ msgid ""
 "The COMPARE() function returns 0 if the two strings are equal; -1 if the "
 "first one is lower in value than the second one; otherwise it returns 1."
 msgstr ""
-"Функция COMPARE() возвращает 0, если две строки одинаковы, -1 - если первая "
-"строка меньше второй и 1 - в других случаях."
+"Функция COMPARE() возвращает 0 — если две строки одинаковы, -1 — если первая "
+"строка меньше второй, 1 — в других случаях."
 
 #: functions/text.xml:197
 #, kde-format
@@ -11476,7 +11474,7 @@ msgid ""
 "You can also use function SEARCH, but unlike SEARCH, FIND is case-sensitive "
 "and does not allow wildcard characters."
 msgstr ""
-"Вы можете также использовать функцию SEARCH, но в отличие от неё, FIND "
+"Также можно использовать функцию SEARCH, но FIND, в отличие от неё, — "
 "регистрозависимая функция и не позволяет использовать шаблоны для поиска."
 
 #: functions/text.xml:304
@@ -12053,7 +12051,7 @@ msgstr ""
 #: functions/text.xml:747
 #, kde-format
 msgid "REGEXP(\"Number is   15.\";\"[0-9]+\") = \"15\" "
-msgstr "REGEXP(\"Номер -   15.\";\"[0-9]+\") возвращает \"15\" "
+msgstr "REGEXP(\"Номер —   15.\";\"[0-9]+\") возвращает \"15\" "
 
 #: functions/text.xml:748
 #, kde-format
@@ -12656,10 +12654,9 @@ msgid "Carl Schwan"
 msgstr "Carl Schwan"
 
 #: part/AboutData.h:37
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Maintainer/Port to Qt6"
-msgstr "Сопровождающий"
+msgstr "Сопровождающий, перенос на Qt6"
 
 #: part/AboutData.h:41
 #, kde-format
@@ -12672,10 +12669,9 @@ msgid "Torben Weis"
 msgstr "Torben Weis"
 
 #: part/AboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Maintainer"
+#, kde-format
 msgid "Former Maintainer"
-msgstr "Сопровождающий"
+msgstr "Прежний сопровождающий"
 
 #: part/AboutData.h:42
 #, kde-format
@@ -13102,8 +13098,8 @@ msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
 "> Open Recent."
 msgstr ""
-"Устанавливает максимальное количество последних файлов в меню Файл -> "
-"Последние файлы."
+"Устанавливает максимальное количество последних файлов в меню «Файл -> "
+"Последние файлы»."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/FileOptionsWidget.ui:41
@@ -13212,8 +13208,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: part/dialogs/InterfaceOptionsWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "&Grid color:"
+#, kde-format
 msgid "&Grid Color:"
 msgstr "&Цвет сетки:"
 
@@ -13226,10 +13221,9 @@ msgstr "Выбор цвета границ ячейки."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:104
-#, fuzzy, kde-format
-#| msgid "Page Out&line:"
+#, kde-format
 msgid "Page Out&line Color:"
-msgstr "Г&раницы страниц:"
+msgstr "Цвет г&раниц страниц:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:114
@@ -13745,7 +13739,7 @@ msgid ""
 "If unchecked, the grid will be hidden."
 msgstr ""
 "При включении этого параметра на листе будет показана сетка, показывающая "
-"границы ячеек. Это поведение по умолчанию. При выключении параметра сетка "
+"границы ячеек. Это поведение по умолчанию. При отключении параметра сетка "
 "будет скрыта."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
@@ -13762,8 +13756,8 @@ msgid ""
 "the value of any cell they refer to changes."
 msgstr ""
 "При включении этого параметра формулы на листе будут автоматически "
-"пересчитываться при каждом изменении. Если вы выключите этот параметр, вам "
-"нужно вызвать перерасчёт вручную."
+"пересчитываться при каждом изменении. Если отключить этот параметр, "
+"перерасчёт потребуется вызвать вручную."
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoCalcCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:203
@@ -13838,7 +13832,7 @@ msgid ""
 msgstr ""
 "<b>Список листов для печати.</b><br>\n"
 "Листы в этом списке будут распечатаны в указанном порядке.<br>\n"
-"Вы можете распечатать любой лист несколько раз."
+"Можно распечатать любой лист несколько раз."
 
 #. i18n: ectx: property (text), widget (QListWidget, ListViewSelected)
 #: part/dialogs/SheetSelectWidget.ui:124
@@ -14487,10 +14481,9 @@ msgid "Show hidden rows in the selection"
 msgstr "Показать скрытые строки в выделенном диапазоне"
 
 #: ui/actions/AdjustRowCol.cpp:111
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Hide the selected rows"
-msgstr "Объединить ячейки выделенного диапазона в одну большую ячейку"
+msgstr "Скрыть выбранные строки"
 
 #: ui/actions/AdjustRowCol.cpp:114
 #, kde-format
@@ -14498,10 +14491,9 @@ msgid "Show hidden columns in the selection"
 msgstr "Показать скрытые столбцы в выделенном диапазоне"
 
 #: ui/actions/AdjustRowCol.cpp:116
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Hide the selected columns"
-msgstr "Объединить ячейки выделенного диапазона в одну большую ячейку"
+msgstr "Скрыть выбранные столбцы"
 
 #: ui/actions/AdjustRowCol.cpp:182
 #, kde-format
@@ -14546,20 +14538,14 @@ msgstr ""
 "ячеек"
 
 #: ui/actions/AdjustRowCol.cpp:270
-#, fuzzy, kde-format
-#| msgid "Adjusts row/column size so that the contents will fit"
+#, kde-format
 msgid "Adjusts row size so that the contents will fit"
-msgstr ""
-"Подогнать размеры строк и столбцов для отображения полностью содержимого "
-"ячеек"
+msgstr "Подогнать размеры строк для отображения полностью содержимого ячеек"
 
 #: ui/actions/AdjustRowCol.cpp:272
-#, fuzzy, kde-format
-#| msgid "Adjusts row/column size so that the contents will fit"
+#, kde-format
 msgid "Adjusts column size so that the contents will fit"
-msgstr ""
-"Подогнать размеры строк и столбцов для отображения полностью содержимого "
-"ячеек"
+msgstr "Подогнать размеры столбцов для отображения полностью содержимого ячеек"
 
 #: ui/actions/AdjustRowCol.cpp:292
 #, kde-format
@@ -14751,10 +14737,9 @@ msgstr ""
 "автофильтр"
 
 #: ui/actions/AutoFormat.cpp:31
-#, fuzzy, kde-format
-#| msgid "Apply a predefined style to the selected cells"
+#, kde-format
 msgid "Apply pre-defined formatting to a range of cells."
-msgstr "Применить к выделенным ячейкам предопределённый стиль"
+msgstr "Применить предопределённое форматирование к диапазону ячеек."
 
 #: ui/actions/AutoFormat.cpp:31
 #, kde-format
@@ -15055,10 +15040,9 @@ msgid "Move the cell object to the clipboard"
 msgstr "Вырезать объект ячейки в буфер обмена"
 
 #: ui/actions/CSVActions.cpp:38
-#, fuzzy, kde-format
-#| msgid "From &Text File..."
+#, kde-format
 msgid "Insert From &Text File..."
-msgstr "Из &текстового файла"
+msgstr "Вставить из &текстового файла…"
 
 #: ui/actions/CSVActions.cpp:40
 #, kde-format
@@ -15099,10 +15083,9 @@ msgstr ""
 "вставку текстового файла"
 
 #: ui/actions/CSVActions.cpp:121
-#, fuzzy, kde-format
-#| msgid "Inserting From Clipboard"
+#, kde-format
 msgid "Insert From &Clipboard..."
-msgstr "Вставка из буфера обмена"
+msgstr "Вставить из буфера &обмена…"
 
 #: ui/actions/CSVActions.cpp:123
 #, kde-format
@@ -15194,13 +15177,9 @@ msgid "Angle:"
 msgstr "Угол:"
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Auto-Format"
+#, kde-format
 msgid "Automatic Format"
-msgstr ""
-"Автоформат\n"
-"автоформат"
+msgstr "Автоформат"
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:46
 #, kde-format
@@ -15210,7 +15189,7 @@ msgstr "Применить стиль таблицы:"
 #: ui/actions/dialogs/CharacterSelectDialog.cpp:35
 #, kde-format
 msgid "Select Character"
-msgstr "Выберите символ"
+msgstr "Выбор символа"
 
 #: ui/actions/dialogs/CharacterSelectDialog.cpp:56
 #, kde-format
@@ -15411,7 +15390,7 @@ msgstr "Вставить данные из базы данных"
 #: ui/actions/dialogs/DatabaseDialog.cpp:59
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "Готово"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:74
 #, kde-format
@@ -15752,10 +15731,9 @@ msgid "&Use System's Locale Settings"
 msgstr "&Использовать системную локаль"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:185
-#, fuzzy, kde-format
-#| msgid "Language: %1"
+#, kde-format
 msgid "Language: %1 (%2)"
-msgstr "Язык: %1"
+msgstr "Язык: %1 (%2)"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:186
 #, kde-format
@@ -15829,10 +15807,9 @@ msgid "Fewer Options"
 msgstr "Скрыть параметры"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:52
-#, fuzzy, kde-format
-#| msgid "Text Functions"
+#, kde-format
 msgid "Set Function"
-msgstr "Текстовые функции"
+msgstr "Установить функцию"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:114
 #, kde-format
@@ -16020,13 +15997,9 @@ msgid "Custom Lists"
 msgstr "Списки пользователя"
 
 #: ui/actions/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Case"
+#, kde-format
 msgid "Save Changes"
-msgstr ""
-"Изменить регистр\n"
-"изменение регистра"
+msgstr "Сохранить изменения"
 
 #: ui/actions/dialogs/ListDialog.cpp:54
 #, kde-format
@@ -16066,7 +16039,7 @@ msgstr "Скопировать"
 #: ui/actions/dialogs/ListDialog.cpp:240
 #, kde-format
 msgid "Do you really want to remove this list?"
-msgstr "Вы действительно хотите удалить этот список?"
+msgstr "Действительно удалить этот список?"
 
 #: ui/actions/dialogs/ListDialog.cpp:240
 #, kde-format
@@ -16080,7 +16053,7 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 "Диапазон содержит данные.\n"
-"Хотите продолжить?"
+"Продолжить?"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:50 ui/actions/NamedAreas.cpp:91
 #, kde-format
@@ -16114,20 +16087,19 @@ msgid "&Remove"
 msgstr "&Удалить"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Open/Save"
+#, kde-format
 msgid "Save"
-msgstr "Открытие и сохранение"
+msgstr "Сохранить"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:131
 #, kde-format
 msgid "(new area)"
-msgstr ""
+msgstr "(новый диапазон)"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:192
 #, kde-format
 msgid "Do you really want to remove this named area?"
-msgstr "Вы действительно хотите удалить этот именованный диапазон?"
+msgstr "Действительно удалить этот именованный диапазон?"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:193
 #, kde-format
@@ -16135,10 +16107,9 @@ msgid "Remove Named Area"
 msgstr "Удалить именованный диапазон"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:219
-#, fuzzy, kde-format
-#| msgid "Cell reference is invalid."
+#, kde-format
 msgid "The provided region is not valid."
-msgstr "Ссылка на ячейку неверна."
+msgstr "Указанная область неверна."
 
 #: ui/actions/dialogs/PasteInsertDialog.cpp:26
 #, kde-format
@@ -16148,7 +16119,7 @@ msgstr "Вставить ячейки со сдвигом"
 #: ui/actions/dialogs/pivot.cpp:29
 #, kde-format
 msgid "Select Source"
-msgstr "Выберите источник"
+msgstr "Выбор источника"
 
 #: ui/actions/dialogs/pivotmain.cpp:47
 #, kde-format
@@ -16188,16 +16159,12 @@ msgstr "Ширина:"
 #: ui/actions/dialogs/SeriesDialog.cpp:29
 #, kde-format
 msgid "Series"
-msgstr "Настройки ряда"
+msgstr "Параметры ряда"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Series"
+#, kde-format
 msgid "Insert Series"
-msgstr ""
-"Вставить ряд\n"
-"вставку ряда"
+msgstr "Вставить ряд"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:38
 #, kde-format
@@ -16420,7 +16387,7 @@ msgstr "стиль%1"
 #: ui/actions/dialogs/SubtotalDialog.cpp:40
 #, kde-format
 msgid "Subtotals"
-msgstr "Подитоги"
+msgstr "Промежуточные итоги"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:42
 #, kde-format
@@ -16455,7 +16422,8 @@ msgstr "VarP"
 #: ui/actions/dialogs/SubtotalDialog.cpp:144
 #, kde-format
 msgid "You need to select at least one column for adding subtotals."
-msgstr "Необходимо выбрать хотя бы один столбец для добавления подитогов."
+msgstr ""
+"Необходимо выбрать хотя бы один столбец для добавления промежуточных итогов."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:41 ui/actions/Validity.cpp:55
 #, kde-format
@@ -16572,10 +16540,9 @@ msgid "Entries:"
 msgstr "Значения:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "&Error Alert"
+#, kde-format
 msgid "Error Alert"
-msgstr "&Оповещение об ошибке"
+msgstr "Оповещение об ошибке"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:140
 #, kde-format
@@ -16628,19 +16595,19 @@ msgstr ""
 #: ui/actions/dialogs/ValidityDialog.cpp:477
 #, kde-format
 msgid "This is not a valid value."
-msgstr "Это значение неверно."
+msgstr "Недопустимое значение."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:483
 #: ui/actions/dialogs/ValidityDialog.cpp:488
 #, kde-format
 msgid "This is not a valid time."
-msgstr "Это значение времени неверно."
+msgstr "Недопустимое значение времени."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:494
 #: ui/actions/dialogs/ValidityDialog.cpp:499
 #, kde-format
 msgid "This is not a valid date."
-msgstr "Недопустимая дата."
+msgstr "Недопустимое значение даты."
 
 #: ui/actions/DocumentSettings.cpp:22
 #, kde-format
@@ -16675,25 +16642,22 @@ msgstr "Разрешить фиксацию ссылки на текстовом
 #: ui/actions/Fill.cpp:64
 #, kde-format
 msgid "Fill &Up"
-msgstr ""
+msgstr "Заполнить &вверх"
 
 #: ui/actions/Fill.cpp:66
-#, fuzzy, kde-format
-#| msgid "&Down"
+#, kde-format
 msgid "Fill &Down"
-msgstr "В&низ"
+msgstr "Заполнить в&низ"
 
 #: ui/actions/Fill.cpp:68
-#, fuzzy, kde-format
-#| msgid "&Left"
+#, kde-format
 msgid "Fill &Left"
-msgstr "В&лево"
+msgstr "Заполнить в&лево"
 
 #: ui/actions/Fill.cpp:70
-#, fuzzy, kde-format
-#| msgid "&Right"
+#, kde-format
 msgid "Fill &Right"
-msgstr "В&право"
+msgstr "Заполнить в&право"
 
 #: ui/actions/Fill.cpp:79
 msgctxt "(qtundo-format)"
@@ -16712,13 +16676,12 @@ msgstr ""
 #: ui/actions/Font.cpp:30
 #, kde-format
 msgid "Select Font..."
-msgstr "Выберите шрифт..."
+msgstr "Выбрать шрифт..."
 
 #: ui/actions/Font.cpp:30
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell font"
-msgstr "Установить параметры форматирования ячейки"
+msgstr "Установить шрифт ячейки"
 
 #: ui/actions/Font.cpp:59 ui/actions/Font.cpp:106 ui/actions/Style.cpp:93
 #: ui/actions/Style.cpp:129 ui/actions/Style.cpp:165 ui/actions/Style.cpp:194
@@ -16732,13 +16695,12 @@ msgstr ""
 #: ui/actions/Font.cpp:77
 #, kde-format
 msgid "Select Font Size"
-msgstr "Выберите размер шрифта"
+msgstr "Выбрать размер шрифта"
 
 #: ui/actions/Font.cpp:77
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell font size"
-msgstr "Установить параметры форматирования ячейки"
+msgstr "Установить размер шрифта ячейки"
 
 #: ui/actions/Font.cpp:86
 #, kde-format
@@ -16816,10 +16778,9 @@ msgid "Solving ..."
 msgstr "Вычисление…"
 
 #: ui/actions/GoalSeek.cpp:169
-#, fuzzy, kde-format
-#| msgid "Goal seeking with cell %1 found a solution:"
+#, kde-format
 msgid "Goal seeking with cell %1 found a solution."
-msgstr "Во время поиска решения в ячейке %1 найдено решение:"
+msgstr "Во время поиска решения в ячейке %1 найдено решение."
 
 #: ui/actions/GoalSeek.cpp:179
 #, kde-format
@@ -16842,10 +16803,9 @@ msgid "Goto"
 msgstr "Перейти"
 
 #: ui/actions/Goto.cpp:44
-#, fuzzy, kde-format
-#| msgid "This is not a valid time."
+#, kde-format
 msgid "That is not a valid cell."
-msgstr "Это значение времени неверно."
+msgstr "Недопустимая ячейка."
 
 #: ui/actions/Indent.cpp:26
 #, kde-format
@@ -17258,19 +17218,14 @@ msgstr ""
 "текст по вертикали"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Number Format"
+#, kde-format
 msgid "Number Format"
-msgstr ""
-"Численный формат\n"
-"численный формат"
+msgstr "Числовой формат"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a number"
-msgstr "Установить параметры форматирования ячейки"
+msgstr "Установить для ячейки числовой формат"
 
 #: ui/actions/Style.cpp:291
 msgctxt "(qtundo-format)"
@@ -17280,19 +17235,14 @@ msgstr ""
 "числовой формат"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scientific Format"
+#, kde-format
 msgid "Scientific Format"
-msgstr ""
-"Научный формат\n"
-"научный формат"
+msgstr "Научный формат"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting to look like a percentage"
+#, kde-format
 msgid "Set the cell formatting to a scientific format"
-msgstr "Установка процентного форматирования."
+msgstr "Установить для ячейки научный формат"
 
 #: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
@@ -17314,7 +17264,7 @@ msgstr "Процентный формат"
 #: ui/actions/Style.cpp:344
 #, kde-format
 msgid "Set the cell formatting to look like a percentage"
-msgstr "Установка процентного форматирования."
+msgstr "Установить для ячейки процентный формат"
 
 #: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
@@ -17336,7 +17286,7 @@ msgstr "Денежный формат"
 #: ui/actions/Style.cpp:381
 #, kde-format
 msgid "Set the cell formatting to look like your local currency"
-msgstr "Форматирование валютной суммы в соответствии с установками локали"
+msgstr "Установить для ячейки денежный формат (согласно локали)"
 
 #: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
@@ -17351,48 +17301,38 @@ msgstr ""
 "денежный формат"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Date Format"
+#, kde-format
 msgid "Date Format"
-msgstr ""
-"Формат даты\n"
-"формат даты"
+msgstr "Формат даты"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a date"
-msgstr "Установить параметры форматирования ячейки"
+msgstr "Установить для ячейки формат даты"
 
 #: ui/actions/Style.cpp:431
 msgctxt "(qtundo-format)"
 msgid "Format Date"
 msgstr ""
-"Формат — дата\n"
-"установку даты как формата"
+"Формат даты\n"
+"формат даты"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a time"
-msgstr "Установить параметры форматирования ячейки"
+msgstr "Установить для ячейки формат времени"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Time Format"
+#, kde-format
 msgid "Time Format"
-msgstr ""
-"Формат времени\n"
-"формат времени"
+msgstr "Формат времени"
 
 #: ui/actions/Style.cpp:464
 msgctxt "(qtundo-format)"
 msgid "Format Time"
 msgstr ""
-"Формат — время\n"
-"установку времени как формата"
+"Формат времени\n"
+"формат времени"
 
 #: ui/actions/Style.cpp:480
 #, kde-format
@@ -17508,12 +17448,13 @@ msgstr "Применить к выделенным ячейкам предопр
 #: ui/actions/Subtotals.cpp:21
 #, kde-format
 msgid "&Subtotals..."
-msgstr "&Подитоги..."
+msgstr "&Промежуточные итоги..."
 
 #: ui/actions/Subtotals.cpp:21
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
-msgstr "Создание различных видов подитогов для списка или базы данных"
+msgstr ""
+"Создание различных видов промежуточных итогов для списка или базы данных"
 
 #: ui/actions/Subtotals.cpp:118
 msgctxt "(qtundo-format)"
@@ -18128,9 +18069,10 @@ msgid ""
 "The default font is set for all cells in the Format -> Style Manager menu "
 "with the currently used style."
 msgstr ""
-"Здесь вы можете настроить шрифт, его размер и цвет текста. Пример "
-"форматирования показан внизу диалога.\n"
-"Шрифт ячеек по умолчанию настраивается в Менеджере стилей (меню «Формат»)."
+"Здесь можно настроить шрифт, его размер и цвет текста. Пример форматирования "
+"показан внизу диалога.\n"
+"Шрифт ячеек по умолчанию настраивается в разделе «Управление стилями» (меню "
+"«Формат»)."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -18142,7 +18084,7 @@ msgid ""
 "settings for each cell. Changing to Roman for example will change all the "
 "selected cells style text to Roman."
 msgstr ""
-"Здесь вы можете настроить гарнитуру шрифта выбранных ячеек. Если вы выбрали "
+"Здесь можно настроить гарнитуру шрифта выбранных ячеек. Если вы выбрали "
 "ячейки с различными гарнитурами, можете выбрать пункт «Оставить» для того, "
 "чтобы не изменять гарнитуры шрифтов. Например, при указании гарнитуры "
 "«Roman» текст в выделенных ячейках будет показан шрифтом Roman."
@@ -18172,10 +18114,10 @@ msgid ""
 "weight settings for each cell. Changing to Bold for example will change all "
 "the selected cells font weight to Bold."
 msgstr ""
-"Здесь вы можете настроить начертание шрифта. Если вы выбрали ячейки с "
-"различными начертаниями, можете выбрать пункт «Оставить» для того, чтобы не "
-"изменять начертания шрифтов.  Например, при указании полужирного начертания "
-"текст в выделенных ячейках будет показан полужирным."
+"Здесь можно настроить начертание шрифта. Если вы выбрали ячейки с различными "
+"начертаниями, можете выбрать пункт «Оставить» для того, чтобы не изменять "
+"начертания шрифтов.  Например, при указании полужирного начертания текст в "
+"выделенных ячейках будет показан полужирным."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:78
@@ -18276,16 +18218,14 @@ msgid "Cell Format"
 msgstr "Формат ячеек"
 
 #: ui/dialogs/LayoutDialog.cpp:119
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Формат ячеек"
+msgstr "Установить формат ячеек"
 
 #: ui/dialogs/LayoutDialog.cpp:129
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&Общие"
+msgstr "Общие"
 
 #: ui/dialogs/LayoutDialog.cpp:148 ui/dialogs/LayoutPage_Border.cpp:234
 #, kde-format
@@ -18293,16 +18233,14 @@ msgid "Border"
 msgstr "Граница"
 
 #: ui/dialogs/LayoutDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "Фо&н"
+msgstr "Фон"
 
 #: ui/dialogs/LayoutDialog.cpp:156
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "&Защита"
+msgstr "Защита"
 
 #: ui/dialogs/LayoutPage_Border.cpp:259
 #, kde-format
@@ -18362,7 +18300,7 @@ msgstr ""
 "Числа при использовании формата умножаются на 100%. К примеру, если вы ввели "
 "12 и указали процентный формат, будет показано 1.200 %. При переключении на "
 "общий формат будет снова показано 12.\n"
-"Применить процентный формат вы можете, нажав кнопку со знаком % на панели "
+"Применить процентный формат можно по нажатию кнопки со знаком % на панели "
 "инструментов."
 
 #: ui/dialogs/LayoutPage_Float.cpp:78
@@ -18407,13 +18345,13 @@ msgid ""
 msgstr ""
 "Дробный формат показывает число в виде дроби. К примеру, число 0,1 может "
 "быть показано в виде дробей 1/8, 2/16, 1/10 и т.д. Выбрать знаменатель дроби "
-"можно из списка на правой панели. В случае, если для выбранного знаменателя "
-"не получается подобрать целый числитель, будет использовано ближайшее целое "
+"можно из списка на правой панели. Если для выбранного знаменателя не "
+"получается подобрать целый числитель, будет использовано ближайшее целое "
 "значение.\n"
 "Например, вы ввели число 1,5, переключились на дробный формат и использовали "
 "знаменатель 1/16. В ячейке будет показано «1 8/16», что точно соответствует "
 "введённому числу. Если же вы ввели число 1,4 и выбрали знаменатель 1/16, в "
-"ячейке будет показано «1 6/16» - дробь, округлённая до ближайшего целого "
+"ячейке будет показано «1 6/16» — дробь, округлённая до ближайшего целого "
 "числителя."
 
 #: ui/dialogs/LayoutPage_Float.cpp:100
@@ -18450,20 +18388,12 @@ msgstr ""
 "временем, оно будет преобразовано в 00:00."
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
 msgstr "Дата и время"
 
 #: ui/dialogs/LayoutPage_Float.cpp:115
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -18472,10 +18402,12 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Представление даты возможно настроить через Центр управления -> Региональные "
-"и специальные возможности -> Страна/область и язык -> Время и дата. Возможно "
-"выбрать из списка на панели подходящий формат: краткий или полный.\n"
-"Так же, как и для чисел, возможно использовать автозаполнение и для дат."
+"Представление даты и времени возможно настроить через Центр управления -> "
+"Региональные и специальные возможности -> Страна/область и язык -> Время и "
+"дата. Возможно выбрать из списка на панели подходящий формат: краткий или "
+"полный.\n"
+"Так же, как и для чисел, возможно использовать автозаполнение и для дат и "
+"времени."
 
 #: ui/dialogs/LayoutPage_Float.cpp:122
 #, kde-format
@@ -18519,7 +18451,7 @@ msgstr "Список вариантов форматирования дробе�
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
 "content in the checked format."
-msgstr "Здесь вы можете указать суффикс после значений (например, руб.)."
+msgstr "Здесь можно указать суффикс после значений (например, руб.)."
 
 #: ui/dialogs/LayoutPage_Float.cpp:159
 #, kde-format
@@ -18533,7 +18465,7 @@ msgid ""
 "numeric values. This can also be changed using the Increase precision or "
 "Decrease precision icons in the Format toolbar. "
 msgstr ""
-"Показ заданного количества знаков дробной части. Также вы можете изменить "
+"Показ заданного количества знаков дробной части. Также можно изменить "
 "точность кнопками «Увеличить точность» и «Уменьшить точность» на панели "
 "инструментов Формат."
 
@@ -18542,7 +18474,7 @@ msgstr ""
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
 "content in the checked format."
-msgstr "Здесь вы можете указать префикс перед значениями (например, $)."
+msgstr "Здесь можно указать префикс перед значениями (например, $)."
 
 #: ui/dialogs/LayoutPage_Float.cpp:172
 #, kde-format
@@ -18550,8 +18482,8 @@ msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
 "and whether negative values are shown in red."
 msgstr ""
-"Здесь вы можете выбрать как будут показаны положительные и отрицательные "
-"числа: знак и подсветка красным."
+"Здесь можно выбрать как будут показаны положительные и отрицательные числа: "
+"знак и подсветка красным."
 
 #: ui/dialogs/LayoutPage_Float.cpp:178
 #, kde-format
@@ -18679,10 +18611,10 @@ msgid ""
 "the cell.</qt>"
 msgstr ""
 "<qt>Горизонтальное выравнивание текста в ячейке. \n"
-"<b>Обычно</b> - выравнивание по умолчанию в соответствии с текущим стилем. \n"
-"<b>Слева</b> - выравнивание по левому краю.\n"
-"<b>По центру</b> - выравнивание по центру ячейки.\n"
-"<b>Справа</b>- выравнивание по правому краю.</qt>"
+"<b>Обычно</b> — выравнивание по умолчанию в соответствии с текущим стилем. \n"
+"<b>Слева</b> — выравнивание по левому краю.\n"
+"<b>По центру</b> — выравнивание по центру ячейки.\n"
+"<b>Справа</b> — выравнивание по правому краю.</qt>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, standard)
 #: ui/dialogs/PositionWidget.ui:54
@@ -18698,7 +18630,7 @@ msgid ""
 "will move it counter-clockwise and negative values will move it clockwise."
 msgstr ""
 "Текст поворачивается на угол, указанный в этом разделе. Положительные "
-"значения задают поворот по часовой стрелке, отрицательные - против часовой."
+"значения задают поворот по часовой стрелке, отрицательные — против часовой."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
 #: ui/dialogs/PositionWidget.ui:88
@@ -18724,9 +18656,9 @@ msgid ""
 "of the cell.</qt>"
 msgstr ""
 "<qt>Вертикальное выравнивание текста в ячейке. \n"
-"<b>Сверху</b> - выравнивание по верхнему краю.\n"
-"<b>По середине</b> - вертикальное выравнивание по центру ячейки.\n"
-"<b>Снизу</b>- выравнивание по нижнему краю.</qt>"
+"<b>Сверху</b> — выравнивание по верхнему краю.\n"
+"<b>По середине</b> — вертикальное выравнивание по центру ячейки.\n"
+"<b>Снизу</b> — выравнивание по нижнему краю.</qt>"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:165
@@ -18866,7 +18798,7 @@ msgid ""
 msgstr ""
 "При включении этого параметра содержимое ячейки будет защищено. Это "
 "поведение по умолчанию. Чтобы защита отдельных ячеек работала, необходимо "
-"защитить весь лист с помощью функции меню Сервис -> Защитить лист. "
+"защитить весь лист с помощью функции меню «Сервис -> Защитить лист». "
 "Дополнительную информацию о защите возможно найти в руководстве пользователя "
 "Calligra Sheets в главе «Расширенные возможности». Когда ячейка защищена, её "
 "содержимое невозможно изменить."

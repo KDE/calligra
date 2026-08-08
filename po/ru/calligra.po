@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-08-06 15:53+0300\n"
+"PO-Revision-Date: 2026-08-07 10:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -1606,7 +1606,7 @@ msgstr "Документ"
 #: main/KoMainWindow.cpp:1621
 #, kde-format
 msgid "Document - %1"
-msgstr "Документа — %1"
+msgstr "Документ — %1"
 
 #: main/KoMainWindow.cpp:1651
 #, kde-format
