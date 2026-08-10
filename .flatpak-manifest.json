@@ -141,6 +141,23 @@
             ]
         },
         {
+            "name": "qrtfreader",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/qrtfreader/qrtfreader-1.0.0.tar.xz",
+                    "sha256": "274e6fbe882c9ee8eeffac1581b1b4aea7cd26c27b241eec0bea52266fe96f25",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 391692,
+                        "stable-only": true,
+                        "url-template": "https://download.kde.org/stable/qrtfreader/qrtfreader-$version.tar.xz"
+                    }
+                }
+            ]
+        },
+        {
             "name": "lcms2",
             "config-opts": [
                 "-Dutils=FALSE"
