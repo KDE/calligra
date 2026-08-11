@@ -150,7 +150,8 @@ bool OkularOdtGenerator::loadDocument(const QString &fileName, QVector<Okular::P
 
         Okular::DocumentViewport viewport = calculateViewport(block, textDocumentLayout);
 
-        QDomElement item = m_documentSynopsis.createElement(block.text());
+        QDomElement item = m_documentSynopsis.createElement(QStringLiteral("item"));
+        item.setAttribute(QStringLiteral("Title"), block.text());
         item.setAttribute("Viewport", viewport.toString());
 
         // we need a parent, which has to be at a higher heading level than this heading level
