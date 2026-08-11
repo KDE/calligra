@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-08-07 16:38+0300\n"
+"PO-Revision-Date: 2026-08-10 15:37+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -8360,7 +8360,7 @@ msgstr "Функция ROWS() возвращает количество стро
 #: functions/reference.xml:197
 #, kde-format
 msgid "ROWS(reference)"
-msgstr "ROWS(ссылке)"
+msgstr "ROWS(ссылка)"
 
 #: functions/reference.xml:198
 #, kde-format
