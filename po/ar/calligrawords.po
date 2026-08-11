@@ -6,13 +6,13 @@
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
-# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-10-05 12:17+0400\n"
+"PO-Revision-Date: 2026-08-10 14:15+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -522,7 +522,7 @@ msgstr "تجاوز على كلا جانبي هذا الشكل"
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr "تجاوز على الجوانب الأعرض من:"
+msgstr "تجاوز على الجوانب الأعْرض من:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-08-05 12:46+0300\n"
+"PO-Revision-Date: 2026-08-10 16:10+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -146,7 +146,7 @@ msgstr "&Сгладить контур..."
 #: plugins/flattenpath/FlattenPathPlugin.cpp:86
 #, kde-format
 msgid "Flatten Path"
-msgstr "Сгладить контур"
+msgstr "Сглаживание контура"
 
 #: plugins/flattenpath/FlattenPathPlugin.cpp:98
 #: plugins/refinepath/RefinePathPlugin.cpp:93
@@ -201,7 +201,7 @@ msgstr ""
 #: plugins/roundcorners/RoundCornersPlugin.cpp:52
 #, kde-format
 msgid "&Round Corners..."
-msgstr "&Закругление углов..."
+msgstr "&Закруглить углы..."
 
 #: plugins/roundcorners/RoundCornersPlugin.cpp:95
 #, kde-format
