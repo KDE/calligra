@@ -464,7 +464,7 @@ msgstr "شكل svg مضمّن"
 #: flake/tools/KoCreateShapesToolFactory.cpp:16
 #, kde-format
 msgid "Create object"
-msgstr "انشئ كائناً"
+msgstr "انشئ كائنًا"
 
 #: flake/tools/KoPanToolFactory.cpp:17
 #, kde-format
@@ -876,7 +876,7 @@ msgstr "لم يُعثر على قالب ل‍: %1"
 #: main/KoApplication.cpp:501
 #, kde-format
 msgid "Too many templates found for: %1"
-msgstr "عُثر على قوالب كثيرة جداً لأجل: %1"
+msgstr "عُثر على قوالب كثيرة جدًا لأجل: %1"
 
 #: main/KoApplication.cpp:523 main/KoApplication.cpp:540
 #, kde-format
@@ -929,7 +929,7 @@ msgstr "استخدم هذا القالب دائما عند بدء تشغيل ا�
 #: main/KoDetailsPaneBase.ui:100
 #, kde-format
 msgid "Always use this template"
-msgstr "استخدم هذا القالب دائماً"
+msgstr "استخدم هذا القالب دائمًا"
 
 #: main/KoDocument.cpp:548
 #, kde-format
@@ -1149,7 +1149,7 @@ msgstr ""
 #: main/KoDocument.cpp:1677
 #, kde-format
 msgid "%1 is not a file."
-msgstr "%1 ليس ملفاً."
+msgstr "%1 ليس ملفًا."
 
 #: main/KoDocument.cpp:1692
 #, kde-format
@@ -3604,7 +3604,7 @@ msgid ""
 "document will remain unreadable. Please try and save the document again to "
 "prevent losing your work."
 msgstr ""
-"ملف البيان يبدو فاسداً. لا يمكن تعديله والمستنند سيبقى غير قابل للقراءة. يرجى "
+"ملف البيان يبدو فاسدًا. لا يمكن تعديله والمستنند سيبقى غير قابل للقراءة. يرجى "
 "المحاولة وحفظ المستند مجددا لمنع فقدان عملك."
 
 #: store/KoEncryptedStore.cpp:447
@@ -3799,7 +3799,7 @@ msgstr[0] "لم يعثر على تطابق"
 msgstr[1] "عثر على تطابق واحد"
 msgstr[2] "عثر على تطابقان"
 msgstr[3] "عثر على %1 تطابقات"
-msgstr[4] "عثر على %1 تطابقاً"
+msgstr[4] "عثر على %1 تطابقًا"
 msgstr[5] "عثر على %1 تطابق"
 
 #: text/KoFindStrategy.cpp:55
@@ -4571,7 +4571,7 @@ msgid ""
 "to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
 "file to OASIS OpenDocument?</qt>"
 msgstr ""
-"<qt>المستند محفوظ حالياً على أنه %1. يحتاج المستند أن يغير  إلى <b>OASIS "
+"<qt>المستند محفوظ حاليًا على أنه %1. يحتاج المستند أن يغير  إلى <b>OASIS "
 "OpenDocument</b> حتى يعمى.<p>هل تريد تغيير  الملف إلى OASIS OpenDocument؟</"
 "qt>"
 

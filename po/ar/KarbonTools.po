@@ -116,7 +116,7 @@ msgstr "اسم غير صالح."
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
 #, kde-format
 msgid "Sorry, the name you entered is invalid."
-msgstr "عذراً، الاسم الذي أدخلته غير صالح."
+msgstr "عذرًا، الاسم الذي أدخلته غير صالح."
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:225
 #, kde-format
@@ -173,12 +173,12 @@ msgstr "الخط العربي"
 #: filterEffectTool/FilterAddCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Add filter effect"
-msgstr "أضف تأثيراً مُرشِّحاً"
+msgstr "أضف تأثيرًا مُرشِّحًا"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:60
 #, kde-format
 msgid "Add effect to current filter stack"
-msgstr "أضف تأثيراً إلى كومة المرشّحات الحالية"
+msgstr "أضف تأثيرًا إلى كومة المرشّحات الحالية"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, kde-format
@@ -198,7 +198,7 @@ msgstr "اسم التأثير"
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
 msgid "Please enter a name for the filter effect"
-msgstr "رجاءً، أدخل اسماً لتأثير المرشّح"
+msgstr "رجاءً، أدخل اسمًا لتأثير المرشّح"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
 #: filterEffectTool/FilterEffectEditWidget.ui:32
@@ -310,7 +310,7 @@ msgstr "اسحب لتحريك موضع التدرج."
 #: KarbonGradientTool.cpp:208
 #, kde-format
 msgid "Drag to move color stop. Double click to remove color stop."
-msgstr "اسحب لتحريك نقطة توقف اللون. انقر نقراً مزدوجاً لإزالة نقطة توقف اللون."
+msgstr "اسحب لتحريك نقطة توقف اللون. انقر نقرًا مزدوجًا لإزالة نقطة توقف اللون."
 
 #: KarbonGradientTool.cpp:210
 #, kde-format
@@ -320,7 +320,7 @@ msgstr "اسحب لتحريك نقطة توقف اللون."
 #: KarbonGradientTool.cpp:217
 #, kde-format
 msgid "Drag to move gradient position. Double click to insert color stop."
-msgstr "اسحب لتحريك موضع التدرج. انقر نقراً مزدوجاً لإدراج نقطة توقف اللون."
+msgstr "اسحب لتحريك موضع التدرج. انقر نقرًا مزدوجًا لإدراج نقطة توقف اللون."
 
 #: KarbonGradientTool.cpp:493
 #, kde-format

@@ -120,7 +120,7 @@ msgstr "خصائص الصفحة"
 #: part/commands/KWShapeCreateCommand.cpp:42
 msgctxt "(qtundo-format)"
 msgid "Create shape"
-msgstr "أنشئ شكلاً"
+msgstr "أنشئ شكلًا"
 
 #: part/dialogs/KWAnchoringProperties.cpp:412
 #, kde-format
@@ -600,7 +600,7 @@ msgstr "الشكل والنص مفصولان يسارًا بـ:"
 #: part/dialogs/KWRunAroundProperties.ui:129
 #, kde-format
 msgid "Right by:"
-msgstr "يميناً بـ:"
+msgstr "يمينًا بـ:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:142
@@ -1593,7 +1593,7 @@ msgid ""
 "This option is useful to see how the document will appear on the printed "
 "page."
 msgstr ""
-"يمكّن أو يعطل ظهور الحد.<br/><br/>الحدود لا تطبع أبداً هذا الخيار مفيد لرؤية "
+"يمكّن أو يعطل ظهور الحد.<br/><br/>الحدود لا تطبع أبدًا هذا الخيار مفيد لرؤية "
 "كيف سيبدو المستند في الصفحة المطبوعة."
 
 #: part/KWView.cpp:342
@@ -1730,7 +1730,7 @@ msgstr "أنشئ رأسًا"
 #: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
-msgstr "أنشئ تذييلاً"
+msgstr "أنشئ تذييلًا"
 
 #: part/KWView.cpp:447
 #, kde-format
