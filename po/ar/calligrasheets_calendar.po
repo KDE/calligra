@@ -78,7 +78,7 @@ msgstr ""
 #: CalendarTool.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Insert Calendar"
-msgstr "أدرج تقويماً"
+msgstr "أدرج تقويمًا"
 
 #: CalendarTool.cpp:126
 #, kde-format

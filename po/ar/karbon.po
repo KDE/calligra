@@ -414,7 +414,7 @@ msgstr "إدراج رسومات"
 #: ui/KarbonView.cpp:369
 #, kde-format
 msgid "Choose Graphic to Add"
-msgstr "اختر رسماً لإضافته"
+msgstr "اختر رسمًا لإضافته"
 
 #: ui/KarbonView.cpp:405
 #, kde-format
@@ -439,12 +439,12 @@ msgstr "اعكس أفقيًّا"
 #: ui/KarbonView.cpp:638
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
-msgstr "اعكس عمودياً"
+msgstr "اعكس عموديًا"
 
 #: ui/KarbonView.cpp:640
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
-msgstr "اعكس أفقياً وعمودياً"
+msgstr "اعكس أفقيًا وعموديًا"
 
 #: ui/KarbonView.cpp:695
 msgctxt "(qtundo-format)"
@@ -459,7 +459,7 @@ msgstr "وضع &المحيط"
 #: ui/KarbonView.cpp:884
 #, kde-format
 msgid "&Import Graphic..."
-msgstr "&استورد رسماً..."
+msgstr "&استورد رسمًا..."
 
 #: ui/KarbonView.cpp:888
 #, kde-format
@@ -475,12 +475,12 @@ msgstr "&كرّر"
 #: ui/KarbonView.cpp:899
 #, kde-format
 msgid "Distribute Center (Horizontal)"
-msgstr "وزِّع المركز (أفقياً)"
+msgstr "وزِّع المركز (أفقيًا)"
 
 #: ui/KarbonView.cpp:903
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
-msgstr "وزِّع الفجوات (أفقياً)"
+msgstr "وزِّع الفجوات (أفقيًا)"
 
 #: ui/KarbonView.cpp:907
 #, kde-format
@@ -495,12 +495,12 @@ msgstr "وزِّع الحدود اليمنى"
 #: ui/KarbonView.cpp:915
 #, kde-format
 msgid "Distribute Center (Vertical)"
-msgstr "وزِّع المركز (عمودياً)"
+msgstr "وزِّع المركز (عموديًا)"
 
 #: ui/KarbonView.cpp:919
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
-msgstr "وزِّع الفجوات (عمودياً)"
+msgstr "وزِّع الفجوات (عموديًا)"
 
 #: ui/KarbonView.cpp:923
 #, kde-format
@@ -535,7 +535,7 @@ msgstr "&ألغِ قطع الكائنات"
 #: ui/KarbonView.cpp:945
 #, kde-format
 msgid "Mirror Vertically"
-msgstr "اعكس عمودياً"
+msgstr "اعكس عموديًا"
 
 #: ui/KarbonView.cpp:949
 #, kde-format

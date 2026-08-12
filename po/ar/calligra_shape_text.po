@@ -620,7 +620,7 @@ msgstr "اسم قصير%1"
 #: dialogs/CitationInsertionDialog.ui:20
 #, kde-format
 msgid "Insert Bibliography entry"
-msgstr "أدرِج مدخلاً لقائمة المراجع"
+msgstr "أدرِج مدخلًا لقائمة المراجع"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/CitationInsertionDialog.ui:32
@@ -1247,7 +1247,7 @@ msgid ""
 "handled. "
 msgstr ""
 "اضرب هذا الزرّ للحصول على العنوان من مُحدِّد الموارد الموحّد. التحويلات تُعالَج "
-"أيضاً. "
+"أيضًا. "
 
 #. i18n: ectx: property (text), widget (QPushButton, fetchTitleButton)
 #: dialogs/LinkInsertionDialog.ui:61
@@ -1444,7 +1444,7 @@ msgstr "ا&حذف"
 #: dialogs/ManageBookmarkDialog.cpp:68
 #, kde-format
 msgid "Please provide a new name for the bookmark"
-msgstr "من فضلك وفّر اسماً جديداً للعلامة"
+msgstr "من فضلك وفّر اسمًا جديدًا للعلامة"
 
 #: dialogs/ManageBookmarkDialog.cpp:68
 #, kde-format
@@ -1464,7 +1464,7 @@ msgstr "أدرِج علامة"
 #: dialogs/ManageBookmarkDialog.cpp:106
 #, kde-format
 msgid "Please provide a name for the bookmark"
-msgstr "من فضلك وفّر اسماً للعلامة"
+msgstr "من فضلك وفّر اسمًا للعلامة"
 
 #: dialogs/ManageBookmarkDialog.cpp:129 ReferencesTool.cpp:193
 #, kde-format
@@ -1515,7 +1515,7 @@ msgstr "اللاحقة"
 #: dialogs/NotesConfigurationDialog.ui:127
 #, kde-format
 msgid "Starts over at:"
-msgstr "يبدأ مجدداً عند:"
+msgstr "يبدأ مجددًا عند:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
 #: dialogs/NotesConfigurationDialog.ui:144
@@ -1868,7 +1868,7 @@ msgstr "إزاحة السطر الأول:"
 #: dialogs/ParagraphIndentSpacing.ui:66
 #, kde-format
 msgid "Auto-infer from text size"
-msgstr "استنتج آلياً من حجم النص"
+msgstr "استنتج آليًا من حجم النص"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:75
@@ -1922,13 +1922,13 @@ msgstr "أبقِ الأسطر متماسكة"
 #: dialogs/ParagraphLayout.ui:64
 #, kde-format
 msgid "Insert break before paragraph"
-msgstr "أدرِج فاصلاً قبل الفقرة"
+msgstr "أدرِج فاصلًا قبل الفقرة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakAfter)
 #: dialogs/ParagraphLayout.ui:71
 #, kde-format
 msgid "Insert break after paragraph"
-msgstr "أدرِج فاصلاً بعد الفقرة"
+msgstr "أدرِج فاصلًا بعد الفقرة"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ParagraphLayout.ui:78
@@ -1944,7 +1944,7 @@ msgstr "تنسيق الفقرة"
 #: dialogs/QuickTableButton.cpp:147
 #, kde-format
 msgid "Insert a table"
-msgstr "أدرِج جدولاً"
+msgstr "أدرِج جدولًا"
 
 #: dialogs/SectionFormatDialog.cpp:41
 #, kde-format
@@ -2018,13 +2018,13 @@ msgstr "غيّر تنسيق الخط"
 #: dialogs/SimpleCitationBibliographyWidget.ui:26
 #, kde-format
 msgid "Insert citation at current position"
-msgstr "أدرِج اقتباساً في الموضع الحالي"
+msgstr "أدرِج اقتباسًا في الموضع الحالي"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
 #: dialogs/SimpleCitationBibliographyWidget.ui:29 ReferencesTool.cpp:157
 #, kde-format
 msgid "Insert Citation"
-msgstr "أدرِج اقتباساً"
+msgstr "أدرِج اقتباسًا"
 
 #. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
 #: dialogs/SimpleCitationBibliographyWidget.ui:58
@@ -2058,7 +2058,7 @@ msgstr "حاشية"
 #: dialogs/SimpleInsertWidget.ui:20
 #, kde-format
 msgid "Other insertions from \"References\"  below and in \"Add Shape\" docker"
-msgstr "إدراجات أخرى من \"المراجع\" أدناه وفي رصيف \"أضِف شكلاً\""
+msgstr "إدراجات أخرى من \"المراجع\" أدناه وفي رصيف \"أضِف شكلًا\""
 
 #. i18n: ectx: property (text), widget (QToolButton, insertLink)
 #: dialogs/SimpleLinksWidget.ui:34
@@ -2080,7 +2080,7 @@ msgstr "غيّر تنسيق الفقرة"
 #: dialogs/SimpleParagraphWidget.cpp:292
 #, kde-format
 msgid "Recently Used Level Formats"
-msgstr "تنسيقات المستوى المستعملة حديثاً"
+msgstr "تنسيقات المستوى المستعملة حديثًا"
 
 #: dialogs/SimpleParagraphWidget.cpp:297
 #, kde-format
@@ -2145,7 +2145,7 @@ msgstr "بلا حدود"
 #: dialogs/StyleManager.cpp:38
 #, kde-format
 msgid "Create a new style inheriting the current style"
-msgstr "أنشئ نمطاً جديداً يرث النمط الحالي"
+msgstr "أنشئ نمطًا جديدًا يرث النمط الحالي"
 
 #: dialogs/StyleManager.cpp:344 dialogs/StyleManager.cpp:357
 #, kde-format
@@ -2155,7 +2155,7 @@ msgstr "نمط جديد"
 #: dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
-msgstr "نمط آخر بالاسم '%1' موجود بالفعل. من فضلك اختر اسماً آخر."
+msgstr "نمط آخر بالاسم '%1' موجود بالفعل. من فضلك اختر اسمًا آخر."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
 #: dialogs/StyleManager.ui:52 TextTool.cpp:2253
@@ -2224,13 +2224,13 @@ msgstr ""
 "النص وتغيير خصائص النمط لتغيير كل النص الذي يحمل هذا النمط.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">تطبيق تغيير نمط سيعيد "
-"تنسيق كل النص الذي أُسنِدَ إليه النمط المُسمّى سابقاً. استخدِم رصيف الأنماط لتطبيق "
+"تنسيق كل النص الذي أُسنِدَ إليه النمط المُسمّى سابقًا. استخدِم رصيف الأنماط لتطبيق "
 "الأنماط على النص.</p></body></html>"
 
 #: dialogs/StylesComboPreview.cpp:68
 #, kde-format
 msgid "Create a new style with the current properties"
-msgstr "أنشئ نمطاً جديداً بالخصائص الحالية"
+msgstr "أنشئ نمطًا جديدًا بالخصائص الحالية"
 
 #: dialogs/StylesComboPreview.cpp:175
 #, kde-format
@@ -2410,12 +2410,12 @@ msgstr "أدرِج جدول محتويات في المستند."
 #: ReferencesTool.cpp:118 TextTool.cpp:407
 #, kde-format
 msgid "Insert Custom..."
-msgstr "أدرِج مخصصاً..."
+msgstr "أدرِج مخصصًا..."
 
 #: ReferencesTool.cpp:120
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
-msgstr "أدرِج جدول محتويات مخصصاً في المستند."
+msgstr "أدرِج جدول محتويات مخصصًا في المستند."
 
 #: ReferencesTool.cpp:122
 #, kde-format
@@ -2460,7 +2460,7 @@ msgstr "إعدادات..."
 #: ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert a citation into the document."
-msgstr "أدرِج اقتباساً في المستند."
+msgstr "أدرِج اقتباسًا في المستند."
 
 #: ReferencesTool.cpp:164
 #, kde-format
@@ -2603,7 +2603,7 @@ msgstr "اضبط المقطع الحالي"
 #: TextTool.cpp:207
 #, kde-format
 msgid "Insert new section"
-msgstr "أدرِج مقطعاً جديداً"
+msgstr "أدرِج مقطعًا جديدًا"
 
 #: TextTool.cpp:211
 #, kde-format
@@ -2719,7 +2719,7 @@ msgstr "أدرِج واصلة غير فاصلة"
 #: TextTool.cpp:337
 #, kde-format
 msgid "Insert Index"
-msgstr "أدرِج فهرساً"
+msgstr "أدرِج فهرسًا"
 
 #: TextTool.cpp:342
 #, kde-format
@@ -2759,7 +2759,7 @@ msgstr "غيّر حجم الحرف، الخط، الخط العريض، الما
 #: TextTool.cpp:365
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
-msgstr "غيّر سمات الأحرف المحددة حالياً."
+msgstr "غيّر سمات الأحرف المحددة حاليًا."
 
 #: TextTool.cpp:368
 #, kde-format
@@ -2789,7 +2789,7 @@ msgstr "الخلفية"
 #: TextTool.cpp:386
 #, kde-format
 msgid "Auto Resize To Content"
-msgstr "تغيير الحجم آلياً ليناسب المحتوى"
+msgstr "تغيير الحجم آليًا ليناسب المحتوى"
 
 #: TextTool.cpp:391
 #, kde-format
@@ -2809,7 +2809,7 @@ msgstr "تقليص ليناسب"
 #: TextTool.cpp:409
 #, kde-format
 msgid "Insert a table into the document."
-msgstr "أدرِج جدولاً في المستند."
+msgstr "أدرِج جدولًا في المستند."
 
 #: TextTool.cpp:412
 #, kde-format
@@ -2839,7 +2839,7 @@ msgstr "عمود يسار"
 #: TextTool.cpp:423
 #, kde-format
 msgid "Insert Column Left"
-msgstr "أدرِج عموداً إلى اليسار"
+msgstr "أدرِج عمودًا إلى اليسار"
 
 #: TextTool.cpp:427
 #, kde-format
@@ -2905,7 +2905,7 @@ msgid ""
 "cursor is located will be changed.</p>"
 msgstr ""
 "<p>غيّر هوامش الفقرة، تدفق النص، الحدود، العلامات، الترقيم إلخ.</p><p>اختر "
-"نصاً في فقرات متعددة لتغيير تنسيق كل الفقرات المختارة.</p><p>إن لم يُختر نص، "
+"نصًا في فقرات متعددة لتغيير تنسيق كل الفقرات المختارة.</p><p>إن لم يُختر نص، "
 "الفقرة حيث يوجد المؤشر ستُغيَّر.</p>"
 
 #: TextTool.cpp:464
@@ -2935,12 +2935,12 @@ msgstr "رمز خاص..."
 #: TextTool.cpp:478
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
-msgstr "أدرِج رمزاً أو أكثر أو أحرفاً غير موجودة على لوحة المفاتيح"
+msgstr "أدرِج رمزًا أو أكثر أو أحرفًا غير موجودة على لوحة المفاتيح"
 
 #: TextTool.cpp:479
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
-msgstr "أدرِج رمزاً أو أكثر أو أحرفاً غير موجودة على لوحة المفاتيح."
+msgstr "أدرِج رمزًا أو أكثر أو أحرفًا غير موجودة على لوحة المفاتيح."
 
 #: TextTool.cpp:482
 #, kde-format

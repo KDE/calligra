@@ -569,7 +569,7 @@ msgid ""
 "an integer."
 msgstr ""
 "الدالة BOOL2INT() ترجع قيمة عدد صحيح لقيمة منطقية معطاة. هذه الوسيلة موجهة "
-"لاستخدام قيمة منطقية في الوسائل التي تتطلب عدداً صحيحاً."
+"لاستخدام قيمة منطقية في الوسائل التي تتطلب عددًا صحيحًا."
 
 #: functions/conversion.xml:49
 #, kde-format
@@ -1413,7 +1413,7 @@ msgid ""
 "The YEAR functions returns the year of a date. If no parameter is specified "
 "the current year gets returned."
 msgstr ""
-"الدالة YEAR تُرجع السنة من التاريخ. إذا لم يوضع معاملاًت ترجع السنة الحالية."
+"الدالة YEAR تُرجع السنة من التاريخ. إذا لم يوضع معاملًات ترجع السنة الحالية."
 
 #: functions/datetime.xml:134
 #, kde-format
@@ -2036,7 +2036,7 @@ msgid ""
 "that week which contains the first Thursday of the year."
 msgstr ""
 "الدالة ISOWEEKNUM() ترجع رقم الأسبوع الذي به التاريخ. لاحظ أن هذه الدالة "
-"خاضعة لمعيار ISO8601: الأسبوع يبدأ دائماً بالإثنين، وينتهي بالأحد. الأسبوع "
+"خاضعة لمعيار ISO8601: الأسبوع يبدأ دائمًا بالإثنين، وينتهي بالأحد. الأسبوع "
 "الأول من السنة هو المحتوي على أول يوم خميس في السنة."
 
 #: functions/datetime.xml:593
@@ -2860,7 +2860,7 @@ msgstr "عامل تخيلي"
 #: functions/engineering.xml:407
 #, kde-format
 msgid "The COMPLEX(real;imag) returns a complex number of form x+yi."
-msgstr "الدالة COMPLEX(حقيقي;تخيلي) ترجع عدداً مركباً من x+yi."
+msgstr "الدالة COMPLEX(حقيقي;تخيلي) ترجع عددًا مركبًا من x+yi."
 
 #: functions/engineering.xml:408
 #, kde-format
@@ -4737,7 +4737,7 @@ msgstr "وسيلة الحساب القاعدة"
 #: functions/financial.xml:1090
 #, kde-format
 msgid "  0       US method, 12 months, each month with 30 days"
-msgstr "  0       وسيلة الولايات المتحدة، 12 شهرا، كل شهر به 30 يوماً"
+msgstr "  0       وسيلة الولايات المتحدة، 12 شهرا، كل شهر به 30 يومًا"
 
 #: functions/financial.xml:1091
 #, kde-format
@@ -4758,7 +4758,7 @@ msgstr "  4       365 يوما في السنة،  عدد الأيام الفعل
 #: functions/financial.xml:1094
 #, kde-format
 msgid "  5       European method, 12 months, each month has 30 days"
-msgstr "  5       الوسيلة الأوروبية، 12 شهراً، كل شهر به 30 يوماً"
+msgstr "  5       الوسيلة الأوروبية، 12 شهرًا، كل شهر به 30 يومًا"
 
 #: functions/financial.xml:1095
 #, kde-format
@@ -4815,7 +4815,7 @@ msgid ""
 msgstr ""
 "الدالة  PV_ANNUITY() ترجع القيمة الحالية لراتب أو مجرى من الدفعات. على سبيل "
 "المثال: تذكرة  قرعة بقيمة \"مليون دولار\" تدفع $50,000 كل سنة لمدة 20 سنة، "
-"بمعدل فائدة 5%، تساوي فعلياً  PV_ANNUITY(50000;0.05;20) أو $623,111. هذه "
+"بمعدل فائدة 5%، تساوي فعليًا  PV_ANNUITY(50000;0.05;20) أو $623,111. هذه "
 "الدالة تفترض  أن الدفعات تكون عند نهاية كل دورة."
 
 #: functions/financial.xml:1141
@@ -4942,7 +4942,7 @@ msgstr ""
 "الدالة  SYD() سوف تحسب مجموع أرقام السنوات لانخفاض قيمة الموجودات بناء على "
 "تكلفتها، قيمة المتبقي، العمر المتوقع، ودورة معينة. هذه الوسيلة تسرع معدل "
 "انخفاض القيمة، لذلك فإن نفقات انخفاض القيمة تحدث في الدورات المبكرة أكثر من "
-"المتأخرة. تكلفة التالف هي التكلفة الحقيقية مصروحاً منها قيمة المتبقي. عمر "
+"المتأخرة. تكلفة التالف هي التكلفة الحقيقية مصروحًا منها قيمة المتبقي. عمر "
 "الاستفادة هو عدد الدورات  (السنوات التامة) التي خلالها تنخفض قيمة الموجودات."
 
 #: functions/financial.xml:1282
@@ -4962,7 +4962,7 @@ msgid ""
 "maturity date must be after the settlement date but within 365 days."
 msgstr ""
 "الدالة  TBILLEQ تحسب مكافئ السهم لإقرار خزانة. تاريخ الاستحقاق يجب أن يكون "
-"بعد تاريخ التسوية لكن خلال 365 يوماً."
+"بعد تاريخ التسوية لكن خلال 365 يومًا."
 
 #: functions/financial.xml:1306
 #, kde-format
@@ -4982,7 +4982,7 @@ msgid ""
 "days. The discount rate must be positive."
 msgstr ""
 "الدالة TBILLPRICE ترجع السعر لكل $100 قيمة لإقرار خزانة. تاريخ الاستحقاق يجب "
-"أن يكون بعد تاريخ التسوية ولكن خلال 365 يوماً. ومعدل الخصم يجب أن يكون موجباً."
+"أن يكون بعد تاريخ التسوية ولكن خلال 365 يومًا. ومعدل الخصم يجب أن يكون موجبًا."
 
 #: functions/financial.xml:1330
 #, kde-format
@@ -5002,7 +5002,7 @@ msgid ""
 "be positive."
 msgstr ""
 "الدالة TBILLYIELD ترجع الحصيلة لإقرار الخزانة. تاريخ الاستحقاق يجب أن يكون "
-"بعد تاريخ التسوية ولكن خلال 365 يوماً. والسعر يجب أن يكون موجبا."
+"بعد تاريخ التسوية ولكن خلال 365 يومًا. والسعر يجب أن يكون موجبا."
 
 #: functions/financial.xml:1354
 #, kde-format
@@ -5549,7 +5549,7 @@ msgstr "ISFORMULA(x)"
 msgid ""
 "The ISODD() function returns True if the number is odd. Otherwise returns "
 "False."
-msgstr "الدالة ISODD() ترجع صحيح إذا كان الرقم فردياً. غير ذلك ترجع خاطئ."
+msgstr "الدالة ISODD() ترجع صحيح إذا كان الرقم فرديًا. غير ذلك ترجع خاطئ."
 
 #: functions/information.xml:240
 #, kde-format
@@ -5571,7 +5571,7 @@ msgstr "الدالة ISODD(-7) ترجع صحيح"
 msgid ""
 "The ISEVEN() function returns True if the number is even. Otherwise returns "
 "False."
-msgstr "الدالة ISEVEN() ترجع صحيح إذا كان الرقم زوجياً. غير ذلك، ترجع خاطئ."
+msgstr "الدالة ISEVEN() ترجع صحيح إذا كان الرقم زوجيًا. غير ذلك، ترجع خاطئ."
 
 #: functions/information.xml:255
 #, kde-format
@@ -5596,7 +5596,7 @@ msgid ""
 "error as well."
 msgstr ""
 "الدالة ISERR() ترجع صحيح إذا كان معاملها خطأ تنفيذ ليس من نوع N/A. وإلا، "
-"ترجع خاطئ. استخدم ISERROR() إذا أردت تضمين خطأ تنفيذ N/A أيضاً."
+"ترجع خاطئ. استخدم ISERROR() إذا أردت تضمين خطأ تنفيذ N/A أيضًا."
 
 #: functions/information.xml:270
 #, kde-format
@@ -5909,7 +5909,7 @@ msgid ""
 "parameter (which defaults to being false)."
 msgstr ""
 "الدالة IF() هي دالة شرطية. هذه الدالة ترجع المعامل الثاني إذا كان الشرط "
-"صحيحاً. وإلا فإنها ترجع المعامل الثالث (الذي يكون مبدئيا خاطئ)."
+"صحيحًا. وإلا فإنها ترجع المعامل الثالث (الذي يكون مبدئيا خاطئ)."
 
 #: functions/logic.xml:214
 #, kde-format
@@ -6334,8 +6334,8 @@ msgid ""
 "This function returns -1 if the number is negative, 0 if the number is null "
 "and 1 if the number is positive."
 msgstr ""
-"هذه الدالة ترجع -1 إذا كان الرقم سالباً، 0 إذا كان الرقم مهملا و 1 إذا كان "
-"الرقم موجباً."
+"هذه الدالة ترجع -1 إذا كان الرقم سالبًا، 0 إذا كان الرقم مهملا و 1 إذا كان "
+"الرقم موجبًا."
 
 #: functions/math.xml:265
 #, kde-format
@@ -7093,7 +7093,7 @@ msgstr "الدالة LOG2(0) تعادل -inf."
 msgid ""
 "The EXP() function returns the value of e (the base of natural logarithms) "
 "raised to the power of x."
-msgstr "الدالة EXP() ترجع قيمة e (أساس اللوغاريتمات الطبيعية) مرفوعاً للقوة س."
+msgstr "الدالة EXP() ترجع قيمة e (أساس اللوغاريتمات الطبيعية) مرفوعًا للقوة س."
 
 #: functions/math.xml:821
 #, kde-format
@@ -7156,7 +7156,7 @@ msgstr ""
 "الدالة CEILING() تُقرب x صعودًا (بعيدًا عن الصفر) إلى أقرب مضاعف لـ "
 "Significance يكون أكبر من المدخل. القيمة المبدئية لـ Significance هي 1 (أو "
 "-1 إذا كانت القيمة سالبة)، ما يعني التقريب صعودًا إلى أقرب عدد صحيح. إذا كان "
-"المعامل Mode غير صفري، فالدالة تُقرب بعيدًا عن الصفر، بدلاً من التقريب نحو اللا "
+"المعامل Mode غير صفري، فالدالة تُقرب بعيدًا عن الصفر، بدلًا من التقريب نحو اللا "
 "نهاية الموجبة."
 
 #: functions/math.xml:864
@@ -7712,7 +7712,7 @@ msgid ""
 "Since the result is an array, you need to use Ctrl+Alt+Enter (instead of "
 "just Enter) to display the array elements in separate cells."
 msgstr ""
-"بما أن النتيجة هي مصفوفة، تحتاج إلى استخدام Ctrl+Alt+Enter (بدلاً من Enter "
+"بما أن النتيجة هي مصفوفة، تحتاج إلى استخدام Ctrl+Alt+Enter (بدلًا من Enter "
 "فقط) لعرض عناصر المصفوفة في خلايا منفصلة."
 
 #: functions/math.xml:1240
@@ -8226,7 +8226,7 @@ msgid ""
 msgstr ""
 "تبحث عن 'قيمة البحث' في الصف الأول من 'مصدر البيانات'. إذا كانت القيمة "
 "مطابقة، ترجع القيمة في 'الصف' والعمود، والقيمة التي عثر عليها. إذا كان "
-"الخيار 'مفروز' صحيحاً (مبدئي)، فإن الصف الأول يفترض أن يكون مفروزاً. سينتهي "
+"الخيار 'مفروز' صحيحًا (مبدئي)، فإن الصف الأول يفترض أن يكون مفروزًا. سينتهي "
 "البحث، إذا كانت القيمة المبحوثة أقل من القيمة التي تقارن بها حاليا."
 
 #: functions/reference.xml:276
@@ -8254,8 +8254,8 @@ msgid ""
 msgstr ""
 "تبحث عن 'قيمة البحث' في العمود الأول من 'مصدر البيانات'. إذا كانت القيمة "
 "مطابقة، ترجع القيمة في 'العمود' والصف، والقيمة التي عثر عليها. إذا كان "
-"الخيار 'مفروز' صحيحاً (مبدئي)، فإن العمود الأول يفترض أن يكون مفروزاً. سينتهي "
-"البحث، إذا كانت  'قيمة البحث' أقل من القيمة التي تقارن بها حالياً."
+"الخيار 'مفروز' صحيحًا (مبدئي)، فإن العمود الأول يفترض أن يكون مفروزًا. سينتهي "
+"البحث، إذا كانت  'قيمة البحث' أقل من القيمة التي تقارن بها حاليًا."
 
 #: functions/reference.xml:302
 #, kde-format
@@ -8505,7 +8505,7 @@ msgid ""
 "cells are not counted."
 msgstr ""
 "الدالة  AVERAGEA() تحسب متوسط المعطيات المناظرة. الأرقام، النصوص والقيم "
-"المنطقية تكون أيضا مضمنة في الحساب. إذا كانت الخلية تحتوي نصاً أو معطى يؤول "
+"المنطقية تكون أيضا مضمنة في الحساب. إذا كانت الخلية تحتوي نصًا أو معطى يؤول "
 "إلى خاطئ، فإنها تعد على أنها صفر (0). إذا كان المعطى يؤول إلى صحيح، فإنه يعد "
 "على أنه واحد (1). لاحظ أن الخلايا الفارغة لا تعد."
 
@@ -8746,7 +8746,7 @@ msgid ""
 "positive and size must be greater or equal to 1."
 msgstr ""
 "المعامل ألفا يجب أن يكون بين 0 و 1 (غير متضمن)، الانحراف المعياري يجب أن "
-"يكون موجباً والحجم يجب أن يكون أكبر من أو يساوي 1."
+"يكون موجبًا والحجم يجب أن يكون أكبر من أو يساوي 1."
 
 #: functions/statistical.xml:231
 #, kde-format
@@ -8842,7 +8842,7 @@ msgstr "الدالة  EXPONDIST() ترجع التوزيع الأسي."
 #: functions/statistical.xml:321
 #, kde-format
 msgid "The lambda parameter must be positive."
-msgstr "المعامل لامدا يجب أن يكون موجباً."
+msgstr "المعامل لامدا يجب أن يكون موجبًا."
 
 #: functions/statistical.xml:322 functions/statistical.xml:1017
 #: functions/statistical.xml:1693
@@ -9015,7 +9015,7 @@ msgid ""
 "elements in separate cells. "
 msgstr ""
 "لاحظ أن البيانات يجب أن تكون في أعمدة وبما أن النتيجة هي مصفوفة عمودية، "
-"استخدم Ctrl+Alt+Enter (بدلاً من Enter فقط) لعرض عناصر المصفوفة في خلايا "
+"استخدم Ctrl+Alt+Enter (بدلًا من Enter فقط) لعرض عناصر المصفوفة في خلايا "
 "منفصلة. "
 
 #: functions/statistical.xml:422
@@ -9173,7 +9173,7 @@ msgstr "عدد المحاولات"
 #: functions/statistical.xml:569
 #, kde-format
 msgid "Number of success overall"
-msgstr "عدد النجاح كلياً"
+msgstr "عدد النجاح كليًا"
 
 #: functions/statistical.xml:573
 #, kde-format
@@ -9529,7 +9529,7 @@ msgid ""
 "must be positive."
 msgstr ""
 "الدالة  NORMINV() ترجع عكس التوزيع التراكمي الطبيعي. الرقم يجب أن يكون بين 0 "
-"و 1 (غير ضمني) و STD يجب أن يكون موجباً."
+"و 1 (غير ضمني) و STD يجب أن يكون موجبًا."
 
 #: functions/statistical.xml:876
 #, kde-format
@@ -10153,7 +10153,7 @@ msgid ""
 "cell-range of the corresponding X-values. "
 msgstr ""
 "الدالة TREND() تحسب تسلسلًا من قيم Y بناءً على انحدار خطي لأزواج قيم X و Y "
-"المعروفة. لمعاملات الإدخال، يجب على المستخدم أولاً اختيار نطاق خلايا يحتوي "
+"المعروفة. لمعاملات الإدخال، يجب على المستخدم أولًا اختيار نطاق خلايا يحتوي "
 "على قيم Y، يليه نطاق خلايا قيم X المقابلة. "
 
 #: functions/statistical.xml:1432
@@ -10186,7 +10186,7 @@ msgid ""
 "rows, rather than columns."
 msgstr ""
 "لاحظ أنه بما أن نتيجة هذه الدالة هي صف من قيم Y المحسوبة، سيسهل رسم البيانات "
-"إذا كانت قيم X و Y أيضًا في صفوف، بدلاً من أعمدة."
+"إذا كانت قيم X و Y أيضًا في صفوف، بدلًا من أعمدة."
 
 #: functions/statistical.xml:1435
 #, kde-format
@@ -10199,7 +10199,7 @@ msgid ""
 "Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to "
 "display the values in separate cells."
 msgstr ""
-"بما أن النتيجة هي مصفوفة، استخدم Ctrl+Alt+Enter (بدلاً من Enter فقط) لعرض "
+"بما أن النتيجة هي مصفوفة، استخدم Ctrl+Alt+Enter (بدلًا من Enter فقط) لعرض "
 "القيم في خلايا منفصلة."
 
 #: functions/statistical.xml:1437
@@ -10285,7 +10285,7 @@ msgid ""
 msgstr ""
 "يقارن اختبار t مجموعتين من البيانات ويؤسس لاحتمالية أن أي فرق بين الاثنين "
 "ناجم عن تأثير متغير ما. على سبيل المثال، عند إعطاء مجموعتين من البيانات، "
-"إحداهما تحتوي على سرعة ركض 30 شخصًا طويلاً والأخرى تحتوي على سرعة ركض 30 شخصًا "
+"إحداهما تحتوي على سرعة ركض 30 شخصًا طويلًا والأخرى تحتوي على سرعة ركض 30 شخصًا "
 "قصيرًا، يمكن لاختبار t إخبار كم هي احتمالية أن أي فرق في السرعة بين "
 "المجموعتين من الأشخاص يعود إلى طولهم."
 
@@ -10324,7 +10324,7 @@ msgstr ""
 "الاختبارات المُقترِنة (type = 1، انظر الصيغة أدناه) مناسبة فقط عندما يُسحَب كلا "
 "مجموعتي قيم البيانات من نفس المصدر (أي أن كل مصدر بيانات قَدَّم عنصرًا في نطاق "
 "البيانات الأول وعنصرًا في نطاق البيانات الثاني). في مثال سرعة الركض، هذا "
-"مستحيل لأن شخصًا واحدًا لا يمكن أن يكون طويلاً وقصيرًا: يمكن لكل شخص توفير "
+"مستحيل لأن شخصًا واحدًا لا يمكن أن يكون طويلًا وقصيرًا: يمكن لكل شخص توفير "
 "بيانات لمجموعة واحدة فقط أو الأخرى. في مثل هذه الحالات، حيث تُسحَب القيم في كل "
 "مجموعة بيانات من مصادر مختلفة، يكون اختبار t غير المُقترِن مناسبًا (type = 2 أو "
 "type = 3). بالنسبة لاختبارات t غير المُقترِنة، لا يجب أن يكون نطاقا البيانات "
@@ -10507,7 +10507,7 @@ msgid ""
 "must be non-negative."
 msgstr ""
 "المعاملان ألفا وبيتا يجب أن يكونا موجبين، والرقم (المعامل الأول) يجب ألا "
-"يكون سالباً."
+"يكون سالبًا."
 
 #: functions/statistical.xml:1694
 #, kde-format
@@ -10601,7 +10601,7 @@ msgid ""
 "Otherwise this function returns Err."
 msgstr ""
 "الدالة SUMXMY2()  مثل (SUM((X-Y)^2)) ترجع مربع الفروق بين هذه القيم. عدد "
-"القيم في كلا المصفوفتين يجب أن يكون متساوياً. وإلا فإن هذه الدالة ترجع Err."
+"القيم في كلا المصفوفتين يجب أن يكون متساويًا. وإلا فإن هذه الدالة ترجع Err."
 
 #: functions/statistical.xml:1792
 #, kde-format
@@ -10649,7 +10649,7 @@ msgid ""
 "G(x). The number parameter must be positive."
 msgstr ""
 "الدالة GAMMALN() ترجع اللوغاريتم الطبيعي لدالة جاما: G(س). معامل الرقم يجب "
-"أن يكون موجباً."
+"أن يكون موجبًا."
 
 #: functions/statistical.xml:1828
 #, kde-format
@@ -10763,7 +10763,7 @@ msgstr ""
 "الدالة SUBSTITUTE() تضع النص_الجديد بدلا من النص_القديم في سلسلة نص. إذا "
 "حددت رقم_الحالة، فإن تلك الحالة فقط من النص_القديم هي التي تُستبدَل. غير ذلك، "
 "فإن كل وقوع لـ النص_القديم سيتغير إلى النص_الجديد. استخدم SUBSTITUTE إذا "
-"أردت استبدال نصاً محدداً، واستخدم REPLACE عندما تريد استبدال أي نص يقع في مكان "
+"أردت استبدال نصًا محددًا، واستخدم REPLACE عندما تريد استبدال أي نص يقع في مكان "
 "محدد."
 
 #: functions/text.xml:71
@@ -11437,7 +11437,7 @@ msgid ""
 msgstr ""
 "الدالة REPT() تكرر المعامل الأول بعدد المرات التي يحددها المعامل الثاني. "
 "المعامل الثاني يجب ألا يكون سالبا، وهذه الدالة سترجع سلسلة نصية فارغة إذا "
-"كان المعامل الثاني صفراً (أو يقرب للصفر)."
+"كان المعامل الثاني صفرًا (أو يقرب للصفر)."
 
 #: functions/text.xml:576
 #, kde-format
@@ -11664,7 +11664,7 @@ msgid ""
 "string does not match the given regular expression, value specified as "
 "default is returned."
 msgstr ""
-"ترجع الجزء من السلسلة الحرفية الذي يطابق تعبيرا نمطياً. إذا كانت السلسلة "
+"ترجع الجزء من السلسلة الحرفية الذي يطابق تعبيرا نمطيًا. إذا كانت السلسلة "
 "الحرفية لا تطابق التعبير النمطي، فترجع القيمة المحددة كمبدئية."
 
 #: functions/text.xml:744
@@ -13251,7 +13251,7 @@ msgid ""
 "normal form B3. This does not seem to be of much use at the moment."
 msgstr ""
 "عند تعيين هذا الصندوق فإن مرجع الخلية المعروض عند النهاية اليسرى من شريط "
-"الصيغة سيعرض في نمط LC (مثال L2C3) بدلاً من شكلها العادي B3. هذا لا يبدو ذو "
+"الصيغة سيعرض في نمط LC (مثال L2C3) بدلًا من شكلها العادي B3. هذا لا يبدو ذو "
 "فائدة حقيقية مباشرة."
 
 #. i18n: ectx: property (text), widget (QCheckBox, useLCModeCheckBox)
@@ -13458,7 +13458,7 @@ msgstr ""
 "<b>قائمة الأوراق المراد طباعتها.</b><br>\n"
 "فقط الأوراق المسرودة هنا ستطبع في ترتيب السرد. يمكنك تغيير ترتيب الطباعة مع "
 "زري أعلى وأسفل.<br>\n"
-"حتى أنه يمكنك طباعة ورقة أكثر من مرة. فقط أدرج الورقة المرغوبة مجدداً ورتب "
+"حتى أنه يمكنك طباعة ورقة أكثر من مرة. فقط أدرج الورقة المرغوبة مجددًا ورتب "
 "القائمة لتوفي احتياجاتك."
 
 #. i18n: ectx: property (text), widget (QListWidget, ListViewSelected)
@@ -14395,7 +14395,7 @@ msgstr "حد باليسار"
 #: ui/actions/Border.cpp:24
 #, kde-format
 msgid "Set a left border to the selected area"
-msgstr "عين حداً أيسر للمنطقة المنتقاة"
+msgstr "عين حدًا أيسر للمنطقة المنتقاة"
 
 #: ui/actions/Border.cpp:56
 #, kde-format
@@ -14405,7 +14405,7 @@ msgstr "حد باليمين"
 #: ui/actions/Border.cpp:56
 #, kde-format
 msgid "Set a right border to the selected area"
-msgstr "عيّن حداً أيمن للمنطقة المنتقاة"
+msgstr "عيّن حدًا أيمن للمنطقة المنتقاة"
 
 #: ui/actions/Border.cpp:88
 #, kde-format
@@ -14415,7 +14415,7 @@ msgstr "حد بأعلى"
 #: ui/actions/Border.cpp:88
 #, kde-format
 msgid "Set a top border to the selected area"
-msgstr "عيّن حداً علوياً للمنطقة المنتقاة"
+msgstr "عيّن حدًا علويًا للمنطقة المنتقاة"
 
 #: ui/actions/Border.cpp:117
 #, kde-format
@@ -14425,7 +14425,7 @@ msgstr "حد بأسفل"
 #: ui/actions/Border.cpp:117
 #, kde-format
 msgid "Set a bottom border to the selected area"
-msgstr "عيّن حداً سفلياً للمنطقة المنتقاة"
+msgstr "عيّن حدًا سفليًا للمنطقة المنتقاة"
 
 #: ui/actions/Border.cpp:146
 #, kde-format
@@ -14435,7 +14435,7 @@ msgstr "كل الحدود"
 #: ui/actions/Border.cpp:146
 #, kde-format
 msgid "Set a border around all cells in the selected area"
-msgstr "عيّن حداً حول كل الخلايا في المنطقة المنتقاة"
+msgstr "عيّن حدًا حول كل الخلايا في المنطقة المنتقاة"
 
 #: ui/actions/Border.cpp:155 ui/actions/dialogs/FormulaDialog.cpp:82
 #: ui/actions/dialogs/FormulaDialog.cpp:185
@@ -15234,7 +15234,7 @@ msgid ""
 "'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
 "or '_'. Do you want to replace them?"
 msgstr ""
-"'*' أو '?' ليست رموزاً شاملة صالحة في SQL. البدائل اللائقة هي '%' أو '_'. هل "
+"'*' أو '?' ليست رموزًا شاملة صالحة في SQL. البدائل اللائقة هي '%' أو '_'. هل "
 "ترغب باستبدالها؟"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:839
@@ -15744,17 +15744,17 @@ msgstr "أدرج سلسلة"
 #: ui/actions/dialogs/SeriesDialog.cpp:38
 #, kde-format
 msgid "Insert Values"
-msgstr "أدرج قيماً"
+msgstr "أدرج قيمًا"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:41
 #, kde-format
 msgid "Insert the series vertically, one below the other"
-msgstr "أدرج التسلسل رأسياً، واحدة تلو الأخرى"
+msgstr "أدرج التسلسل رأسيًا، واحدة تلو الأخرى"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:43
 #, kde-format
 msgid "Insert the series horizontally, from left to right"
-msgstr "أدرج التسلسل أفقياً، من اليسار لليمين"
+msgstr "أدرج التسلسل أفقيًا، من اليسار لليمين"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:51
 #, kde-format
@@ -15859,7 +15859,7 @@ msgstr ""
 #: ui/actions/dialogs/ShowColRowDialog.cpp:37
 #, kde-format
 msgid "Select hidden rows to show:"
-msgstr "انتق صفوفاً مخفية لعرضها:"
+msgstr "انتق صفوفًا مخفية لعرضها:"
 
 #: ui/actions/dialogs/ShowColRowDialog.cpp:40
 #, kde-format
@@ -16464,7 +16464,7 @@ msgstr "ارتباط"
 #: ui/actions/Link.cpp:65
 #, kde-format
 msgid "Remove a link"
-msgstr "أزل ارتباطاً"
+msgstr "أزل ارتباطًا"
 
 #: ui/actions/Link.cpp:74
 #, kde-format
@@ -16504,7 +16504,7 @@ msgstr "ادمج الخلايا المحددة أفقيًا"
 #: ui/actions/Merge.cpp:36
 #, kde-format
 msgid "Merge the selected region vertically"
-msgstr "ادمج المنطقة المنتقاة رأسياً"
+msgstr "ادمج المنطقة المنتقاة رأسيًا"
 
 #: ui/actions/Merge.cpp:38
 #, kde-format
@@ -16967,7 +16967,7 @@ msgstr "مدير الطُرز..."
 #: ui/actions/Styles.cpp:122
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
-msgstr "طبق أسلوباً محدداً مسبقاً على الخلايا المنتقاة"
+msgstr "طبق أسلوبًا محددًا مسبقًا على الخلايا المنتقاة"
 
 #: ui/actions/Subtotals.cpp:21
 #, kde-format
@@ -17347,7 +17347,7 @@ msgstr "افصل الخلايا"
 #: ui/commands/MergeCommand.cpp:94
 #, kde-format
 msgid "Merging of columns or rows is not supported."
-msgstr "دمج الأعمدة أو الصفوف ليس مدعوماً."
+msgstr "دمج الأعمدة أو الصفوف ليس مدعومًا."
 
 #: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:40
 msgctxt "(qtundo-format)"
@@ -17729,11 +17729,11 @@ msgid ""
 "back to 12.\n"
 "You can also use the Percent icon in the Format Toolbar."
 msgstr ""
-"إذا كان لديك رقماً في الخلية الحالية وقمت بتحويل تنسيق الخلية من شامل إلى "
+"إذا كان لديك رقمًا في الخلية الحالية وقمت بتحويل تنسيق الخلية من شامل إلى "
 "مئوي، فإن رقم الخلية الحالية سيضرب في 100%.\n"
 "على سبيل المثال إذا أدخلت 12 وعينت تنسيق الخلية إلى مئوي، فسيكون الرقم 1,200 "
 "%. بإعادة التحويل إلى تنسيق الخلية الشامل سيعيده إلى 12.\n"
-"يمكنك أيضاً استخدام أيقونة المئوي من شريط الأدوات تنسيق."
+"يمكنك أيضًا استخدام أيقونة المئوي من شريط الأدوات تنسيق."
 
 #: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
@@ -17899,7 +17899,7 @@ msgid ""
 "Decrease precision icons in the Format toolbar. "
 msgstr ""
 "يمكنك التحكم في كم من الأرقام ستُعرض بعد العلامة العشرية للقيم الرقمية. ذلك "
-"يمكن تغييره أيضاً باستخدام رمزي زد الدقة و اخفض الدقة في شريط الأدوات تنسيق. "
+"يمكن تغييره أيضًا باستخدام رمزي زد الدقة و اخفض الدقة في شريط الأدوات تنسيق. "
 
 #: ui/dialogs/LayoutPage_Float.cpp:168
 #, kde-format
@@ -18044,7 +18044,7 @@ msgstr ""
 "<qt>اضبط موضع المحتوى أفقيا في الخلية.\n"
 "<b>قياسي</b> هو المبدئي ويعين من التنسيق الذي تختار.\n"
 "<b>يسار</b> يعني أن المحتوى سيعرض في يسار الخلية.\n"
-"<b>وسط</b> يعني أن المحتوى سيكون في الوسط أفقياً في الخلية.\n"
+"<b>وسط</b> يعني أن المحتوى سيكون في الوسط أفقيًا في الخلية.\n"
 "<b>يمين</b> يعني أن محتوى الخلية سيعرض في يمين الخلية.</qt>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, standard)
@@ -18086,9 +18086,9 @@ msgid ""
 "<b>Bottom</b> means the content of the cell will be displayed at the bottom "
 "of the cell.</qt>"
 msgstr ""
-"<qt>اضبط موضع المحتوى عمودياً في الخلية.\n"
+"<qt>اضبط موضع المحتوى عموديًا في الخلية.\n"
 "<b>أعلى</b> يعني أن المحتوى سيعرض في أعلى الخلية.\n"
-"<b>وسط</b> يعني أن المحتوى سيكون في الوسط عمودياً في الخلية.\n"
+"<b>وسط</b> يعني أن المحتوى سيكون في الوسط عموديًا في الخلية.\n"
 "<b>أسفل</b> يعني أن محتوى الخلية سيعرض في أسفل الخلية.</qt>"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, indentGroup)
@@ -18118,7 +18118,7 @@ msgid ""
 "Vertical text puts your text vertically."
 msgstr ""
 "يكون هذا متاح فقط حين يكون الدوران 0°.\n"
-"لف النص يلف النص فيلائم حجم الخلية السابق. إن لم يكن ذلك معيناً، سيبقى النص "
+"لف النص يلف النص فيلائم حجم الخلية السابق. إن لم يكن ذلك معينًا، سيبقى النص "
 "في سطر واحد وسيعدل حجم الخلية لتحتوي النص.\n"
 "النص العمودي يضع النص لديك عموديا."
 
@@ -18184,7 +18184,7 @@ msgid ""
 "checked (default), the cell content will be printed.\n"
 "Note that you can print it even if the cell is protected"
 msgstr ""
-"حين يعين هذا، فإن محتوى الخلية لن يُطبع. إن لم يكن هذا معيناً (مبدئي)، فإن "
+"حين يعين هذا، فإن محتوى الخلية لن يُطبع. إن لم يكن هذا معينًا (مبدئي)، فإن "
 "محتوى الخلية سيُطبع.\n"
 "لاحظ أن بإمكانك طباعته حتى إذا كانت الخلية محمية"
 
