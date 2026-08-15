@@ -2,20 +2,20 @@
 # Copyright (C) 2008 Free Software Foundation, Inc.
 #
 # Viesturs Zarins <viesturs.zarins@mii.lu.lv>, 2008.
-# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+# SPDX-FileCopyrightText: 2024, 2026 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 00:45+0000\n"
-"PO-Revision-Date: 2024-10-18 19:50+0300\n"
+"PO-Revision-Date: 2026-08-12 00:37+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 26.04.3\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
@@ -3801,8 +3801,7 @@ msgstr ""
 "pelna 10% vienā gadā kļūst CONTINUOUS(1000;.1;1) jeb 1105,17€."
 
 #: functions/financial.xml:172
-#, fuzzy, kde-format
-#| msgid "CONTINOUS(principal;interest;years)"
+#, kde-format
 msgid "CONTINUOUS(principal;interest;years)"
 msgstr "CONTINOUS(pamatsumma;procenti;gadi)"
 
@@ -14318,159 +14317,159 @@ msgid "Change Border"
 msgstr "Mainīt apmali"
 
 #: ui/actions/AdjustRowCol.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Columns"
-msgstr "Ievietot Kolonu(as)"
+msgstr "Ievietot kolonnas"
 
 #: ui/actions/AdjustRowCol.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Rows"
-msgstr "Ievietot Rindu"
+msgstr "Ievietot rindas"
 
 #: ui/actions/AdjustRowCol.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Columns"
-msgstr "Aizvākt kolonu(as)"
+msgstr "Noņemt kolonnas"
 
 #: ui/actions/AdjustRowCol.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Rows"
-msgstr "Aizvākt rindu(as)"
+msgstr "Noņemt rindas"
 
 #: ui/actions/AdjustRowCol.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inserts a new row into the spreadsheet"
-msgstr "Iespraust Tabulu"
+msgstr "Izklājlapā ievietot jaunu rindu"
 
 #: ui/actions/AdjustRowCol.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Removes a row from the spreadsheet"
-msgstr "Iespraust Tabulu"
+msgstr "No izklājlapas izņemt rindu"
 
 #: ui/actions/AdjustRowCol.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inserts a new column into the spreadsheet"
-msgstr "Iespraust Tabulu"
+msgstr "Izklājlapā ievietot jaunu kolonnu"
 
 #: ui/actions/AdjustRowCol.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Removes the selected columns from the spreadsheet"
-msgstr "Iespraust Tabulu"
+msgstr "No izklājlapas izņemt kolonnu"
 
 #: ui/actions/AdjustRowCol.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide Columns"
-msgstr "Slēpt Kolonu"
+msgstr "Slēpt kolonnas"
 
 #: ui/actions/AdjustRowCol.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide Rows"
-msgstr "Slēpt Rindu"
+msgstr "Slēpt rindas"
 
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Columns"
-msgstr "Rādīt Kolonu(as)"
+msgstr "Rādīt kolonnas"
 
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Rows"
-msgstr "Rādīt Rindu(as)"
+msgstr "Rādīt rindas"
 
 #: ui/actions/AdjustRowCol.cpp:109
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show hidden rows in the selection"
-msgstr "Rādīt rindu(as)"
+msgstr "Atlasē rādīt paslēptās rindas"
 
 #: ui/actions/AdjustRowCol.cpp:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide the selected rows"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Paslāpt atlasītās rindas"
 
 #: ui/actions/AdjustRowCol.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show hidden columns in the selection"
-msgstr "Rādīt kolonu(as)"
+msgstr "Atlasē rādīt paslēptās kolonnas"
 
 #: ui/actions/AdjustRowCol.cpp:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide the selected columns"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Paslēpt atlasītās kolonnas"
 
 #: ui/actions/AdjustRowCol.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Equalize Column"
-msgstr "Ekvivalizēt kolonu"
+msgstr "Izlīdzināt kolonnu"
 
 #: ui/actions/AdjustRowCol.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Equalize Row"
-msgstr "Ekvivalizēt rindu"
+msgstr "Izlīdzināt rindu"
 
 #: ui/actions/AdjustRowCol.cpp:196
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resizes selected rows to be the same size"
-msgstr "Iespraust Tabulu"
+msgstr "Mainīt atlasīto rindu platumu, lai tās būtu vienādas"
 
 #: ui/actions/AdjustRowCol.cpp:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resizes selected columns to be the same size"
-msgstr "Iespraust Tabulu"
+msgstr "Mainīt atlasīto kolonnu platumu, lai tās būtu vienādas"
 
 #: ui/actions/AdjustRowCol.cpp:252
 #, kde-format
 msgid "Adjust Column"
-msgstr "Noregulēt Kolonu"
+msgstr "Koriģēt kolonnu"
 
 #: ui/actions/AdjustRowCol.cpp:252
 #, kde-format
 msgid "Adjust Row"
-msgstr "Noregulēt Rindu"
+msgstr "Koriģēt rindu"
 
 #: ui/actions/AdjustRowCol.cpp:252
-#, fuzzy, kde-format
+#, kde-format
 msgid "Adjust Row && Column"
-msgstr "Ieregulēt rindu un kolonu"
+msgstr "Koriģēt rindu un kolonnu"
 
 #: ui/actions/AdjustRowCol.cpp:268
 #, kde-format
 msgid "Adjusts row/column size so that the contents will fit"
-msgstr ""
+msgstr "Koriģē rindas/kolonnas izmēru, lai tajās ietilptu saturs"
 
 #: ui/actions/AdjustRowCol.cpp:270
 #, kde-format
 msgid "Adjusts row size so that the contents will fit"
-msgstr ""
+msgstr "Koriģē rindas izmēru, lai tajā ietilptu saturs"
 
 #: ui/actions/AdjustRowCol.cpp:272
 #, kde-format
 msgid "Adjusts column size so that the contents will fit"
-msgstr ""
+msgstr "Koriģē kolonnas izmēru, lai tajā ietilptu saturs"
 
 #: ui/actions/AdjustRowCol.cpp:292
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Columns..."
-msgstr "Rādīt Kolonu(as)"
+msgstr "Rādīt kolonnas..."
 
 #: ui/actions/AdjustRowCol.cpp:292
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Rows..."
-msgstr "Rādīt Rindu(as)"
+msgstr "Rādīt rindas..."
 
 #: ui/actions/AdjustRowCol.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show hidden columns"
-msgstr "Rādīt kolonu(as)"
+msgstr "Rādīt paslēptās kolonnas"
 
 #: ui/actions/AdjustRowCol.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show hidden rows"
-msgstr "Rādīt rindu(as)"
+msgstr "Rādīt paslēptās rindas"
 
 #: ui/actions/AdjustRowCol.cpp:327 ui/actions/AdjustRowCol.cpp:329
 #, kde-format
 msgid "Column: %1"
-msgstr "Kolona: %1"
+msgstr "Kolonna: %1"
 
 #: ui/actions/AdjustRowCol.cpp:341
 #, kde-format
@@ -14478,76 +14477,75 @@ msgid "Row: %1"
 msgstr "Rinda: %1"
 
 #: ui/actions/AdjustRowCol.cpp:374
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resize Column..."
-msgstr "Mainīt kolonas izmēru..."
+msgstr "Mainīt kolonnas izmēru..."
 
 #: ui/actions/AdjustRowCol.cpp:374
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resize Row..."
-msgstr "Mainīt rūtiņas izmēru..."
+msgstr "Mainīt rindas izmēru..."
 
 #: ui/actions/AdjustRowCol.cpp:376
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change the height of a row"
-msgstr "Mainīt teksta krāsu"
+msgstr "Mainīt rindas augstumu"
 
 #: ui/actions/AdjustRowCol.cpp:376
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change the width of a column"
-msgstr "Mainīt teksta krāsu"
+msgstr "Mainīt kolonnas platumu"
 
 #: ui/actions/Align.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align Left"
-msgstr "Izlīdzināt pa kreisi"
+msgstr "Līdzināt pa kreisi"
 
 #: ui/actions/Align.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left justify the cell contents"
-msgstr "Izņemt komentāru"
+msgstr "Šūnas saturu līdzināt pa kreisi"
 
 #: ui/actions/Align.cpp:36 ui/actions/Align.cpp:68 ui/actions/Align.cpp:100
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Horizontal Alignment"
-msgstr "Apvienot šūnas"
+msgstr "Mainīt horizontālo līdzinājumu"
 
 #: ui/actions/Align.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align Right"
-msgstr "Izlīdzināt pa labi"
+msgstr "Līdzināt pa labi"
 
 #: ui/actions/Align.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right justify the cell contents"
-msgstr "Izņemt komentāru"
+msgstr "Šūnas saturu līdzināt pa labi"
 
 #: ui/actions/Align.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align Center"
-msgstr "Izlīdzināt pa vidu"
+msgstr "Centrēt"
 
 #: ui/actions/Align.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Center the cell contents"
-msgstr "Izņemt komentāru"
+msgstr "Šūnas saturu centrēt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
 #: ui/actions/Align.cpp:92 ui/dialogs/PositionWidget.ui:68
 #, kde-format
 msgid "Center"
-msgstr "Pa vidu"
+msgstr "Centrēt"
 
 #: ui/actions/Align.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align Top"
-msgstr "Izlīdzināt uz augšu"
+msgstr "Līdzināt augšā"
 
 #: ui/actions/Align.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align cell contents along the top of the cell"
-msgstr "Apvienot šūnas"
+msgstr "Šūnas saturu līdzināt tās augšā"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
 #: ui/actions/Align.cpp:124 ui/actions/Border.cpp:97
@@ -14557,20 +14555,19 @@ msgid "Top"
 msgstr "Augšā"
 
 #: ui/actions/Align.cpp:132 ui/actions/Align.cpp:168 ui/actions/Align.cpp:204
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
-msgstr "Apvienot šūnas"
+msgstr "Mainīt vertikālo līdzinājumu"
 
 #: ui/actions/Align.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align Bottom"
-msgstr "Izlīdzināšanas poga"
+msgstr "Līdzināt apakšā"
 
 #: ui/actions/Align.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align cell contents along the bottom of the cell"
-msgstr "Apvienot šūnas"
+msgstr "Šūnas saturu līdzināt tās apakšā"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bottom)
 #: ui/actions/Align.cpp:160 ui/actions/Border.cpp:126
@@ -14580,14 +14577,14 @@ msgid "Bottom"
 msgstr "Apakšā"
 
 #: ui/actions/Align.cpp:185
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align Middle"
-msgstr "Izlīdzināt pa centru"
+msgstr "Līdzināt vidū"
 
 #: ui/actions/Align.cpp:187
-#, fuzzy, kde-format
+#, kde-format
 msgid "Align cell contents centered in the cell"
-msgstr "Apvienot šūnas"
+msgstr "Šūnas saturu līdzināt tās vidū"
 
 #. i18n: ectx: property (text), widget (QRadioButton, middle)
 #: ui/actions/Align.cpp:196 ui/dialogs/PositionWidget.ui:148
@@ -14598,135 +14595,127 @@ msgstr "Vidū"
 #: ui/actions/Angle.cpp:25
 #, kde-format
 msgid "Change Angle..."
-msgstr "Mainīt Leņķi..."
+msgstr "Mainīt leņķi..."
 
 #: ui/actions/Angle.cpp:25
 #, kde-format
 msgid "Change the angle that cell contents are printed"
-msgstr ""
+msgstr "Maina leņķi, kādā tiek parādīts šūnas saturs"
 
 #: ui/actions/Angle.cpp:34
-#, fuzzy, kde-format
-#| msgid "Angle:"
+#, kde-format
 msgid "Angle"
-msgstr "Leņķis:"
+msgstr "Leņķis"
 
 #: ui/actions/Angle.cpp:56
-#, fuzzy
-#| msgid "Change Angle"
 msgctxt "(qtundo-format)"
 msgid "Change Angle"
-msgstr "Mainīt Leņķi"
+msgstr "Mainīt leņķi"
 
 #: ui/actions/AutoFilter.cpp:21
-#, fuzzy, kde-format
-#| msgid "Autofill"
+#, kde-format
 msgid "&Auto-Filter"
-msgstr "Autoaizpildīt"
+msgstr "&Aizpildīt automātiski"
 
 #: ui/actions/AutoFilter.cpp:21
 #, kde-format
 msgid "Add an automatic filter to a cell range"
-msgstr ""
+msgstr "Šūnu diapazonam pievienot automātisku filtru"
 
 #: ui/actions/AutoFilter.cpp:52
-#, fuzzy
-#| msgid "Autofill"
 msgctxt "(qtundo-format)"
 msgid "Auto-Filter"
-msgstr "Autoaizpildīt"
+msgstr "Automātisks filtrs"
 
 #: ui/actions/AutoFormat.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply pre-defined formatting to a range of cells."
-msgstr "Pārvietoties pa kreisi"
+msgstr "Šūnu diapazonam pielietot iepriekš definētu formatējumu."
 
 #: ui/actions/AutoFormat.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Auto-Format..."
-msgstr "Rūtiņas Formāts..."
+msgstr "Automātiski formatēt..."
 
 #: ui/actions/AutoFormat.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not find sheet-style XML file '%1'."
-msgstr "Nevar atrast tabulas-stila XML failu '%1'"
+msgstr "Neizdevās atrast loksnes stila XML datni „%1“."
 
 #: ui/actions/AutoFormat.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Parsing error in sheet-style XML file %1."
-msgstr "Parsēšanas kļūda tabulas-stila XML failā %1"
+msgstr "Parsēšanas kļūda loksnes stila XML datnē „%1“."
 
 #: ui/actions/AutoFormat.cpp:133
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
-msgstr "Rūtiņas Formāts..."
+msgstr "Automātiski formatēt"
 
 #: ui/actions/AutoSum.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Autosum"
-msgstr "AutoSumma"
+msgstr "Automātiska summa"
 
 #: ui/actions/AutoSum.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert the 'sum' function"
-msgstr "Iespraust funkciju"
+msgstr "Ievietot „sum“ funkciju"
 
 #: ui/actions/AutoSum.cpp:62
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Auto Sum"
-msgstr "AutoSumma"
+msgstr "Automātiska summa"
 
 #: ui/actions/Border.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Border Left"
 msgstr "Apmale pa kreisi"
 
 #: ui/actions/Border.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a left border to the selected area"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Atlasītās zonas kreisajai pusei pievienot apmali"
 
 #: ui/actions/Border.cpp:56
 #, kde-format
 msgid "Border Right"
-msgstr "Apmale pa Labi"
+msgstr "Apmale pa labi"
 
 #: ui/actions/Border.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a right border to the selected area"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Atlasītās zonas labajai pusei pievienot apmali"
 
 #: ui/actions/Border.cpp:88
 #, kde-format
 msgid "Border Top"
-msgstr "Apmale uz augšu"
+msgstr "Apmale augšā"
 
 #: ui/actions/Border.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a top border to the selected area"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Atlasītās zonas augšpusei pievienot apmali"
 
 #: ui/actions/Border.cpp:117
 #, kde-format
 msgid "Border Bottom"
-msgstr "Apakšējais Rāmis"
+msgstr "Apmale lejā"
 
 #: ui/actions/Border.cpp:117
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a bottom border to the selected area"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Atlasītās zonas apakšpusei pievienot apmali"
 
 #: ui/actions/Border.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "All Borders"
 msgstr "Visas apmales"
 
 #: ui/actions/Border.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a border around all cells in the selected area"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Apkārt visai atlasītajai zonai pievienot apmali"
 
 #: ui/actions/Border.cpp:155 ui/actions/dialogs/FormulaDialog.cpp:82
 #: ui/actions/dialogs/FormulaDialog.cpp:185
@@ -14737,92 +14726,89 @@ msgid "All"
 msgstr "Visas"
 
 #: ui/actions/Border.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "No Borders"
-msgstr "Visas apmales"
+msgstr "Bez apmalēm"
 
 #: ui/actions/Border.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove all borders in the selected area"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Noņemt visas apmales atlasītajā zonā"
 
 #: ui/actions/Border.cpp:213
 #, kde-format
 msgid "Border Outline"
-msgstr "Apmales Aprises"
+msgstr "Apmales robežas"
 
 #: ui/actions/Border.cpp:215
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a border to the outline of the selected area"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Atlasītajai zonai iestatīt apmales robežas"
 
 #: ui/actions/Border.cpp:224
-#, fuzzy, kde-format
-#| msgid "Border Outline"
+#, kde-format
 msgid "Outline"
-msgstr "Apmales Aprises"
+msgstr "Robeža"
 
 #: ui/actions/Border.cpp:247
 #, kde-format
 msgid "Border Color"
-msgstr "Rāmja Krāsa"
+msgstr "Apmales krāsa"
 
 #: ui/actions/Border.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select a new border color"
-msgstr "Mainīt apmales krāsu"
+msgstr "Atlasiet jauno apmales krāsu"
 
 #: ui/actions/Border.cpp:285
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border Color"
 msgstr "Mainīt apmales krāsu"
 
 #: ui/actions/Cells.cpp:20 ui/actions/Cells.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Cells..."
-msgstr "Ievietot Rūtiņu(as)..."
+msgstr "Ievietot šūnas..."
 
 #: ui/actions/Cells.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert a blank cell into the spreadsheet"
-msgstr "Iespraust Tabulu"
+msgstr "Loksnē ievietot tukšu šūnu"
 
 #: ui/actions/Cells.cpp:71 ui/actions/Cells.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Cells..."
-msgstr "Dzēst Rūtiņu(as)..."
+msgstr "Izņemt šūnas..."
 
 #: ui/actions/Cells.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Removes the cells from the spreadsheet"
-msgstr "Iespraust Tabulu"
+msgstr "No loksnes izņemt šūnas"
 
 #: ui/actions/Clear.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear All"
-msgstr "Dzēst Visu"
+msgstr "Dzēst visu"
 
 #: ui/actions/Clear.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear all contents and formatting of the current cell"
-msgstr "Izņemt komentāru"
+msgstr "No pašreizējās šūnas izņemt saturu un formatējumu"
 
 #: ui/actions/Clear.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear Contents"
-msgstr "Komentārs"
+msgstr "Notīrīt saturu"
 
 #: ui/actions/Clear.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove the contents of the current cell"
-msgstr "Izņemt komentāru"
+msgstr "Dzēst atlasītās šūnas saturu"
 
 #: ui/actions/Clear.cpp:51
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
-msgstr "Mainīt tekstu"
+msgstr "Notīrīt tekstu"
 
 #: ui/actions/Clear.cpp:64 ui/commands/DeleteCommand.cpp:22
 msgctxt "(qtundo-format)"
@@ -14830,231 +14816,224 @@ msgid "Delete"
 msgstr "Dzēst"
 
 #: ui/actions/Comment.cpp:20
-#, fuzzy, kde-format
-#| msgid "Comment"
+#, kde-format
 msgid "Comment..."
-msgstr "Komentārs"
+msgstr "Komentārs..."
 
 #: ui/actions/Comment.cpp:20
 #, kde-format
 msgid "Edit a comment for this cell"
-msgstr ""
+msgstr "Rediģēt šīs šūnas komentāru"
 
 #: ui/actions/Comment.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear Comment"
-msgstr "Komentārs"
+msgstr "Dzēst komentāru"
 
 #: ui/actions/Comment.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove this cell's comment"
-msgstr "Izņemt komentāru"
+msgstr "Dzēst šīs šūnas komentāru"
 
 #: ui/actions/Comment.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Comment"
-msgstr "&Izmest komentāru"
+msgstr "Dzēst komentāru"
 
 #: ui/actions/Comment.cpp:89
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Comment"
-msgstr "&Izmest komentāru"
+msgstr "Dzēst komentāru"
 
 #: ui/actions/Comment.cpp:91
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Comment"
 msgstr "Pievienot komentāru"
 
 #: ui/actions/Conditional.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Conditional Styles..."
-msgstr "Rūtiņas nosacījuma atribūti..."
+msgstr "Nosacījuma stili..."
 
 #: ui/actions/Conditional.cpp:26
 #, kde-format
 msgid "Set cell style based on certain conditions"
-msgstr ""
+msgstr "Norādiet šūnas stilu, ievērojot noteiktus nosacījumus"
 
 #: ui/actions/Conditional.cpp:88 ui/actions/dialogs/ConditionalDialog.cpp:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "Conditional Styles"
-msgstr "Statusa rūtiņas atribūti"
+msgstr "Nosacījuma stili"
 
 #: ui/actions/Conditional.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove the conditional cell styles"
-msgstr "Izņemt komentāru"
+msgstr "Dzēst nosacījuma šūnas stilus"
 
 #: ui/actions/Conditional.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Conditional Styles"
-msgstr "Izņemt komentāru"
+msgstr "Noņemt nosacījuma stilus"
 
 #: ui/actions/Conditional.cpp:126
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Conditional Formatting"
-msgstr "Izņemt komentāru"
+msgstr "Noņemt nosacījuma formatēšanu"
 
 #: ui/actions/Conditional.cpp:128
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Conditional Formatting"
-msgstr "Izņemt komentāru"
+msgstr "Pievienot nosacījuma formatēšanu"
 
 #: ui/actions/Consolidate.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Consolidate..."
-msgstr "Konsolidēt..."
+msgstr "&Konsolidēt..."
 
 #: ui/actions/Consolidate.cpp:22
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
-msgstr ""
+msgstr "Izveidot kopsavilkuma datu reģionu no līdzīgu reģionu grupas"
 
 #: ui/actions/Consolidate.cpp:68
-#, fuzzy
-#| msgid "Consolidate"
 msgctxt "(qtundo-format)"
 msgid "Consolidate"
-msgstr "Apvienot"
+msgstr "Konsolidēt"
 
 #: ui/actions/Copy.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy the cell object to the clipboard"
-msgstr "Izņemt komentāru"
+msgstr "Kopēt šūnas objektu starpliktuvē"
 
 #: ui/actions/Copy.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move the cell object to the clipboard"
-msgstr "Izņemt komentāru"
+msgstr "Pārvietot šūnas objektu uz starpliktuvi"
 
 #: ui/actions/CSVActions.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert From &Text File..."
-msgstr "Iespraust funkciju"
+msgstr "Ievietot no &teksta datnes..."
 
 #: ui/actions/CSVActions.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert data from a text file to the current cursor position/selection"
-msgstr "Iespraust Tabulu"
+msgstr ""
+"Pašreizējā kursora atrašanās vietā/atlasē ievietot datus no teksta datnes"
 
 #: ui/actions/CSVActions.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text File"
-msgstr "Iespraust funkciju"
+msgstr "Teksta datne"
 
 #: ui/actions/CSVActions.cpp:62
 #, kde-format
 msgid "Import CSV Data File"
-msgstr ""
+msgstr "Importēt CSV datni"
 
 #: ui/actions/CSVActions.cpp:63
 #, kde-format
 msgid "CSV data files (*.csv)"
-msgstr ""
+msgstr "CSV datnes (*.csv)"
 
 #: ui/actions/CSVActions.cpp:69
 #, kde-format
 msgid "Cannot open input file."
-msgstr ""
+msgstr "Neizdodas atvērt ievades datni."
 
 #: ui/actions/CSVActions.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inserting Text File"
-msgstr "Iespraust funkciju"
+msgstr "Ievieto teksta datni"
 
 #: ui/actions/CSVActions.cpp:101
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Inserting Text File"
-msgstr "Iespraust funkciju"
+msgstr "Ievieto teksta datni"
 
 #: ui/actions/CSVActions.cpp:121
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert From &Clipboard..."
-msgstr "Iespraust funkciju"
+msgstr "Ievietot no &starpliktuves..."
 
 #: ui/actions/CSVActions.cpp:123
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Insert CSV data from the clipboard to the current cursor position/selection"
-msgstr "Iespraust Tabulu"
+msgstr ""
+"Pašreizējā kursora atrašanās vietā/atlasē ievietot CSV datus no starpliktuves"
 
 #: ui/actions/CSVActions.cpp:138
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clipboard"
-msgstr "Iespraust funkciju"
+msgstr "Starpliktuve"
 
 #: ui/actions/CSVActions.cpp:146
 #, kde-format
 msgid "There is no data in the clipboard."
-msgstr ""
+msgstr "Starpliktuve datus nesatur."
 
 #: ui/actions/CSVActions.cpp:150
 #, kde-format
 msgid "There is no usable data in the clipboard."
-msgstr ""
+msgstr "Starpliktuvē nav lietojamu datu."
 
 #: ui/actions/CSVActions.cpp:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inserting From Clipboard"
-msgstr "Iespraust funkciju"
+msgstr "Ievieto no starpliktuves"
 
 #: ui/actions/CSVActions.cpp:182
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Inserting From Clipboard"
-msgstr "Iespraust funkciju"
+msgstr "Ievietošana no starpliktuves"
 
 #: ui/actions/CSVActions.cpp:201
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Text to Columns..."
-msgstr "Aizvākt kolonu(as)"
+msgstr "&Teksts uz kolonnām..."
 
 #: ui/actions/CSVActions.cpp:201
 #, kde-format
 msgid "Expand the content of cells to multiple columns"
-msgstr ""
+msgstr "Izvērst šūnu saturu uz vairākām kolonnām"
 
 #: ui/actions/CSVActions.cpp:241
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text to Columns"
-msgstr "Aizvākt kolonu(as)"
+msgstr "Teksts uz kolonnām"
 
 #: ui/actions/CSVActions.cpp:267
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Text to Columns"
-msgstr "Aizvākt kolonu(as)"
+msgstr "Teksts uz kolonnām"
 
 #: ui/actions/CustomLists.cpp:26
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
+"Izveidot pielāgotus sarakstus kārtošanai vai automātiskai aizpildīšanai"
 
 #: ui/actions/CustomLists.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom Lists..."
-msgstr "Kārtot sarakstus..."
+msgstr "Pielāgotie saraksti..."
 
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:25
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Named Area"
-msgstr "Šķirot palielinot"
+msgstr "Pievienot nosauktu apgabalu"
 
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enter the area name:"
-msgstr "Internets"
+msgstr "Norādiet apgabala nosaukumu:"
 
 #: ui/actions/dialogs/AngleDialog.cpp:25 ui/actions/dialogs/AngleDialog.cpp:26
 #, kde-format
 msgid "Change Angle"
-msgstr "Mainīt Leņķi"
+msgstr "Mainīt leņķi"
 
 #: ui/actions/dialogs/AngleDialog.cpp:33
 #, kde-format
@@ -15062,27 +15041,27 @@ msgid "Angle:"
 msgstr "Leņķis:"
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Automatic Format"
-msgstr "Rūtiņas Formāts..."
+msgstr "Automātisks formāts"
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select the sheet style to apply:"
-msgstr "Slēptas tabulas nosaukums:"
+msgstr "Atlasiet pielietojamo loksnes stilu:"
 
 #: ui/actions/dialogs/CharacterSelectDialog.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Character"
-msgstr "Īpaši Ielīmēt..."
+msgstr "Atlasīt rakstzīmi"
 
 #: ui/actions/dialogs/CharacterSelectDialog.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert the selected character in the text"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Ievietot atlasīto rakstzīmi tekstā"
 
 #: ui/actions/dialogs/CommentDialog.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell Comment"
 msgstr "Šūnas komentārs"
 
@@ -15135,28 +15114,28 @@ msgid "between"
 msgstr "starp"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:136
-#, fuzzy, kde-format
+#, kde-format
 msgid "outside range"
-msgstr "Likme"
+msgstr "ārpus diapazona"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:137
 #: ui/actions/dialogs/ValidityDialog.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "different to"
-msgstr "atškirīga no"
+msgstr "atšķirīga no"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "First Condition"
 msgstr "Pirmais nosacījums"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "Second Condition"
 msgstr "Otrais nosacījums"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Third Condition"
 msgstr "Trešais nosacījums"
 
@@ -15170,9 +15149,9 @@ msgstr "Šūna ir"
 #: ui/actions/dialogs/ConditionalDialog.cpp:152
 #: ui/actions/dialogs/ConditionalDialog.cpp:153
 #: ui/actions/dialogs/ConditionalDialog.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell style"
-msgstr "Šūna ir"
+msgstr "Šūnas stils"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:172
 #: ui/actions/dialogs/ConditionalDialog.cpp:191
@@ -15180,50 +15159,51 @@ msgstr "Šūna ir"
 #: ui/actions/dialogs/ValidityDialog.cpp:84
 #, kde-format
 msgid "different from"
-msgstr "atškirīga no"
+msgstr "atšķirīga no"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:390
 #, kde-format
 msgid ""
 "If the first value is a number, the second value also has to be a number."
 msgstr ""
+"Ja pirmā vērtība ir skaitlis, tad arī otrajai vērtībai ir jābūt skaitlim."
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:392
 #, kde-format
 msgid ""
 "If the first value is a string, the second value also has to be a string."
-msgstr ""
+msgstr "Ja pirmā vērtība ir teksts, tad arī otrajai vērtībai ir jābūt tekstam."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:48
 #, kde-format
 msgid "Consolidate"
-msgstr "Apvienot"
+msgstr "Konsolidēt"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:70
 #: ui/actions/dialogs/SubtotalDialog.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Product"
-msgstr "Periodi"
+msgstr "Reizinājums"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Standard Deviation"
-msgstr "Standarta"
+msgstr "Standarta novirze"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Variance"
-msgstr "mainīgais"
+msgstr "Novirze"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:126
-#, fuzzy, kde-format
+#, kde-format
 msgid "You have to define at least one source range."
-msgstr "Jūs nevarat noslēpt pēdējo redzamo tabulu."
+msgstr "Jums jādefinē vismaz viens avota diapazons."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 is not a valid cell range."
-msgstr "Šis nav pareizs datums !"
+msgstr "%1 nav derīgs šūnu diapazons."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:146
 #, kde-format
@@ -15248,10 +15228,9 @@ msgstr ""
 "ir par lielu"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:155
-#, fuzzy, kde-format
-#| msgid "The source tables intersect with the destination table"
+#, kde-format
 msgid "The source range intersects the destination range."
-msgstr "Avota tabula pārklājās ar mērķa tabulu"
+msgstr "Avota diapazons pārklājas ar mērķa diapazonu."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:199
 #, kde-format
@@ -15262,32 +15241,32 @@ msgid ""
 msgstr ""
 "Diapazons\n"
 "%1\n"
-" ir izkropļots"
+" ir nepareizs"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Data From Database"
-msgstr "Datums"
+msgstr "Ievietot datus no datubāzes"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:59
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "Pabeigt"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Type:"
-msgstr "Tips"
+msgstr "Tips:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Database name: "
-msgstr "Mainīt tabulas nosaukumu"
+msgstr "Datubāzes nosaukums: "
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "Host:"
-msgstr "Skaitīt"
+msgstr "Resursdators:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:99
 #, kde-format
@@ -15295,6 +15274,8 @@ msgid ""
 "Port:\n"
 "(if necessary)"
 msgstr ""
+"Ports:\n"
+"(ja nepieciešams)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:109
 #, kde-format
@@ -15302,6 +15283,8 @@ msgid ""
 "User name:\n"
 "(if necessary)"
 msgstr ""
+"Lietotājvārds:\n"
+"(ja nepieciešams)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:119
 #, kde-format
@@ -15309,223 +15292,223 @@ msgid ""
 "Password:\n"
 "(if necessary)"
 msgstr ""
+"Parole:\n"
+"(ja nepieciešams)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:162
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select tables:"
-msgstr "Tabulas Stils"
+msgstr "Atlasīt tabulas"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:174
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tables"
-msgstr "Vērtības"
+msgstr "Tabulas"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select columns:"
-msgstr "Dzēst Kolonu(as)"
+msgstr "Atlasiet kolonnas:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:188
-#, fuzzy, kde-format
+#, kde-format
 msgid "Table"
 msgstr "Tabula"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "Columns"
-msgstr "Kolona"
+msgstr "Kolonnas"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:207
 #, kde-format
 msgid "Match all of the following (AND)"
-msgstr ""
+msgstr "Atbilst visiem šiem (AND)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:212
 #, kde-format
 msgid "Match any of the following (OR)"
-msgstr ""
+msgstr "Atbilst jebkuram no šiem (OR)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:219
 #: ui/actions/dialogs/DatabaseDialog.cpp:238
 #: ui/actions/dialogs/DatabaseDialog.cpp:254
-#, fuzzy, kde-format
+#, kde-format
 msgid "equals"
-msgstr "vienāds ar"
+msgstr "ir vienāds ar"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:220
 #: ui/actions/dialogs/DatabaseDialog.cpp:239
 #: ui/actions/dialogs/DatabaseDialog.cpp:255
-#, fuzzy, kde-format
+#, kde-format
 msgid "not equal"
-msgstr "vienāds ar"
+msgstr "nav vienāds ar"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:221
 #: ui/actions/dialogs/DatabaseDialog.cpp:240
 #: ui/actions/dialogs/DatabaseDialog.cpp:256
-#, fuzzy, kde-format
+#, kde-format
 msgid "in"
-msgstr "min"
+msgstr "atrodas"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:222
 #: ui/actions/dialogs/DatabaseDialog.cpp:241
 #: ui/actions/dialogs/DatabaseDialog.cpp:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "not in"
-msgstr "RInda"
+msgstr "neatrodas"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:223
 #: ui/actions/dialogs/DatabaseDialog.cpp:242
 #: ui/actions/dialogs/DatabaseDialog.cpp:258
-#, fuzzy, kde-format
+#, kde-format
 msgid "like"
-msgstr "Mainīt izmēru"
+msgstr "kā"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:224
 #: ui/actions/dialogs/DatabaseDialog.cpp:243
 #: ui/actions/dialogs/DatabaseDialog.cpp:259
-#, fuzzy, kde-format
+#, kde-format
 msgid "greater"
-msgstr "lielāks kā"
+msgstr "lielāks par"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:225
 #: ui/actions/dialogs/DatabaseDialog.cpp:244
 #: ui/actions/dialogs/DatabaseDialog.cpp:260
 #, kde-format
 msgid "lesser"
-msgstr ""
+msgstr "mazāks par"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:226
-#, fuzzy, kde-format
+#, kde-format
 msgid "greater or equal"
-msgstr "lielāks kā"
+msgstr "lielāks vai vienāds"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "less or equal"
-msgstr "lielāks kā"
+msgstr "mazāks vai vienāds"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:267
 #: ui/actions/dialogs/DatabaseDialog.cpp:279
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sorted by"
-msgstr "Šķirot pēc"
+msgstr "Kārtots pēc"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:274
 #: ui/actions/dialogs/DatabaseDialog.cpp:286
 #: ui/actions/dialogs/SortDialog.cpp:490 ui/actions/dialogs/SortDialog.cpp:565
 #, kde-format
 msgid "Ascending"
-msgstr ""
+msgstr "Augoši"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:275
 #: ui/actions/dialogs/DatabaseDialog.cpp:287
 #: ui/actions/dialogs/SortDialog.cpp:486
 #, kde-format
 msgid "Descending"
-msgstr ""
+msgstr "Dilstoši"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:296
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distinct"
-msgstr "Dalīšana"
+msgstr "Atšķirīgs"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:301
-#, fuzzy, kde-format
+#, kde-format
 msgid "Query Options"
-msgstr "Teksta opcija"
+msgstr "Vaicājuma opcijas"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:310
 #, kde-format
 msgid "SQL query:"
-msgstr ""
+msgstr "SQL vaicājums:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:323
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert in region"
-msgstr "Iespraust funkciju"
+msgstr "Ievietot apgabalā"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:330
-#, fuzzy, kde-format
+#, kde-format
 msgid "Starting in cell"
-msgstr "RInda"
+msgstr "Sāk šūnā"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "Result"
-msgstr "Rezultāts Y"
+msgstr "Rezultāts"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:498
 #: ui/actions/dialogs/DatabaseDialog.cpp:518
-#, fuzzy, kde-format
+#, kde-format
 msgid "You cannot specify a table here."
-msgstr "Jūs nevarat dzēst vienīgo kartes tabulu."
+msgstr "Te nevarat norādīt tabulu."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:505
-#, fuzzy, kde-format
+#, kde-format
 msgid "You have to specify a valid region."
-msgstr "Jūs nevarat dzēst vienīgo kartes tabulu."
+msgstr "Jums jānorāda derīgs apgabals."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:525
-#, fuzzy, kde-format
+#, kde-format
 msgid "You have to specify a valid cell."
-msgstr "Jūs nevarat dzēst vienīgo kartes tabulu."
+msgstr "Jums jānorāda derīga šūna."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:537
 #, kde-format
 msgid "Executing query failed."
-msgstr ""
+msgstr "Vaicājuma izpilde neizdevās."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:542
 #, kde-format
 msgid "You did not get any results with this query."
-msgstr ""
+msgstr "Šis vaicājums nenesa nekādus rezultātus."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:591
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Data From Database"
-msgstr "Datums"
+msgstr "Ievietot datus no datubāzes"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:622
-#, fuzzy, kde-format
+#, kde-format
 msgid "The port must be a number"
-msgstr "Šis nav pareizs laiks !"
+msgstr "Portam jābūt skaitlim"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:628
-#, fuzzy, kde-format
-#| msgid "Range marking the database"
+#, kde-format
 msgid "Connecting to database..."
-msgstr "Apgabals, kas norāda datubāzi"
+msgstr "Savienojas ar datubāzi..."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:630
 #, kde-format
 msgid "Connected. Retrieving table information..."
-msgstr ""
+msgstr "Savienojās. Izgūst tabulas informāciju..."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:634
-#, fuzzy, kde-format
+#, kde-format
 msgid "This database contains no tables"
-msgstr "Šajā dokumentā nav tabulas."
+msgstr "Šī datubāze tabulas nesatur"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:670
-#, fuzzy, kde-format
+#, kde-format
 msgid "Driver could not be loaded"
-msgstr "Tabulas nosaukums nevar palikt tukš."
+msgstr "Draiveri neizdevās ielādēt"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:680
 #, kde-format
 msgid "Retrieving meta data of tables..."
-msgstr ""
+msgstr "Izgūst tabulu metadatus..."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:693
-#, fuzzy, kde-format
+#, kde-format
 msgid "You have to select at least one table."
-msgstr "Jūs nevarat noslēpt pēdējo redzamo tabulu."
+msgstr "Jums jāatlasa vismaz viena tabula."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:729
-#, fuzzy, kde-format
+#, kde-format
 msgid "You have to select at least one column."
-msgstr "Jūs nevarat noslēpt pēdējo redzamo tabulu."
+msgstr "Jums jāatlasa vismaz viena kolonna."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:836
 #: ui/actions/dialogs/DatabaseDialog.cpp:851
@@ -15535,167 +15518,167 @@ msgid ""
 "'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
 "or '_'. Do you want to replace them?"
 msgstr ""
+"'*' un '?' nav derīgs SQL aizstājējzīmes. Pareizas aizstājējzīmes ir '%' un "
+"'_'. Vai vēlaties tās aizvietot?"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:839
 #: ui/actions/dialogs/DatabaseDialog.cpp:854
 #: ui/actions/dialogs/DatabaseDialog.cpp:869
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
-msgstr "Septembris"
+msgstr "Aizvietot"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document Settings"
-msgstr "Lokāles Parametri"
+msgstr "Dokumenta iestatījumi"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calculation"
-msgstr "Rēķinu"
+msgstr "Aprēķināšana"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:69
 #, kde-format
 msgid "Locale"
-msgstr ""
+msgstr "Lokāle"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Case sensitive"
-msgstr "Ielīmēt un ievietot"
+msgstr "Reģistrjutīga"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Precision as shown"
-msgstr "Precizitāte"
+msgstr "Precizitāte pēc redzamā"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:97
 #, kde-format
 msgid "Search criteria must apply to whole cell"
-msgstr ""
+msgstr "Meklēšanas kritēriji ir pielietojami visai šūnai"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgid "Automatic find labels"
-msgstr "Automātisks"
+msgstr "Automātiski atrast virsrakstus"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "String comparison:"
-msgstr "Rindu vērtības"
+msgstr "Tekstu salīdzināšana:"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "Regular Expressions"
-msgstr "&Matemātiskā izteiksme..."
+msgstr "Regulārās izteiksmes"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:112
 #, kde-format
 msgid "Wildcards"
-msgstr ""
+msgstr "Aizstājējzīmes"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:118
 #, kde-format
 msgid "Null Year:"
-msgstr ""
+msgstr "Nulles gads:"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Use System's Locale Settings"
-msgstr "Mainīt &uz lokāles sistēmu"
+msgstr "&Lietot sistēmas lokāles iestatījumus"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:185
-#, fuzzy, kde-format
-#| msgid "Language: %1"
+#, kde-format
 msgid "Language: %1 (%2)"
-msgstr "Valoda: %1"
+msgstr "Valoda: %1 (%2)"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default number format: %1"
-msgstr "Datumu Formāts"
+msgstr "Noklusējuma skaitļu formāts: %1"
 
 #. i18ncheckarg
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:187
-#, fuzzy, kde-format
+#, kde-format
 msgid "Long date format: %1"
-msgstr "Datumu Formāts"
+msgstr "Garā datuma formāts: %1"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:188
-#, fuzzy, kde-format
+#, kde-format
 msgid "Short date format: %1"
-msgstr "Īsais datums: %1"
+msgstr "Īsā datuma formāts: %1"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Time format: %1"
-msgstr "Laika Formāts"
+msgstr "Laika formāts: %1"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:190
-#, fuzzy, kde-format
+#, kde-format
 msgid "Currency format: %1"
-msgstr "Esošā vērtība"
+msgstr "Valūtas formāts: %1"
 
 #: ui/actions/dialogs/FindDialog.cpp:23 ui/actions/dialogs/FindDialog.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "More Options"
-msgstr "Teksta opcija"
+msgstr "Vairāk opciju"
 
 #: ui/actions/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Search entire sheet"
-msgstr "Vertikāls teksts"
+msgstr "Meklēt visā loksnē"
 
 #: ui/actions/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Search in:"
-msgstr "Vertikāls teksts"
+msgstr "Meklēšanas vieta:"
 
 #: ui/actions/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell Values"
-msgstr "Vērtības"
+msgstr "Šūnas vērtības"
 
 #: ui/actions/dialogs/FindDialog.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comments"
-msgstr "Komentārs"
+msgstr "Komentāri"
 
 #: ui/actions/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Search direction:"
-msgstr "Otrais nosacījums"
+msgstr "Meklēšanas virziens:"
 
 #: ui/actions/dialogs/FindDialog.cpp:56
 #, kde-format
 msgid "Across then Down"
-msgstr ""
+msgstr "Pāri, tad lejup"
 
 #: ui/actions/dialogs/FindDialog.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Down then Across"
-msgstr "Rādīt rindu(as)"
+msgstr "Lejup, tad pāri"
 
 #: ui/actions/dialogs/FindDialog.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fewer Options"
-msgstr "Teksta opcija"
+msgstr "Mazāk opciju"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set Function"
-msgstr "<h2>Sintakse</h2><ul>"
+msgstr "Iestatīt funkciju"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:114
 #, kde-format
 msgid "Insert function"
-msgstr "Iespraust funkciju"
+msgstr "Ievietot funkciju"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:129
 #, kde-format
 msgid "Help"
-msgstr ""
+msgstr "Palīdzība"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:614
 #, kde-format
@@ -15703,31 +15686,31 @@ msgid "This function has no parameters."
 msgstr "Šī funkcija nesatur parametrus"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:641
-#, fuzzy, kde-format
+#, kde-format
 msgid "Description is not available."
-msgstr "Apraksts Kolonā"
+msgstr "Apraksts nav pieejams"
 
 #: ui/actions/dialogs/GoalSeekDialog.cpp:37
 #: ui/actions/dialogs/GoalSeekDialog.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Goal Seek"
-msgstr "&Sērijas"
+msgstr "Mērķa meklēšana"
 
 #: ui/actions/dialogs/GotoDialog.cpp:27 ui/actions/dialogs/GotoDialog.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Goto Cell"
 msgstr "Iet uz šūnu"
 
 #: ui/actions/dialogs/GotoDialog.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enter cell:"
-msgstr "Internets"
+msgstr "Ievadīt šūnu:"
 
 #: ui/actions/dialogs/InsertDialog.cpp:38
 #: ui/actions/dialogs/PasteInsertDialog.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert"
-msgstr "Internets"
+msgstr "Ievietot"
 
 #: ui/actions/dialogs/InsertDialog.cpp:41
 #: ui/actions/dialogs/PasteInsertDialog.cpp:37
@@ -15739,27 +15722,27 @@ msgstr "Pārvietoties pa labi"
 #: ui/actions/dialogs/PasteInsertDialog.cpp:38
 #, kde-format
 msgid "Move towards bottom"
-msgstr "Pārvietoties uz apakšu"
+msgstr "Pārvietoties lejup"
 
 #: ui/actions/dialogs/InsertDialog.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert rows"
-msgstr "Iespraust rindu(as)"
+msgstr "Ievietot rindas"
 
 #: ui/actions/dialogs/InsertDialog.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert columns"
-msgstr "Iespraust kolonu(as)"
+msgstr "Ievietot kolonnas"
 
 #: ui/actions/dialogs/InsertDialog.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Cells"
-msgstr "Ievietot rūtiņu"
+msgstr "Ievietot šūnas"
 
 #: ui/actions/dialogs/InsertDialog.cpp:47 ui/actions/dialogs/ListDialog.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove"
-msgstr "Izmest rūtiņu"
+msgstr "Dzēst"
 
 #: ui/actions/dialogs/InsertDialog.cpp:48
 #, kde-format
@@ -15769,27 +15752,27 @@ msgstr "Pārvietoties pa kreisi"
 #: ui/actions/dialogs/InsertDialog.cpp:49
 #, kde-format
 msgid "Move towards top"
-msgstr "Pārvietoties uz augšu"
+msgstr "Pārvietoties augšup"
 
 #: ui/actions/dialogs/InsertDialog.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove rows"
-msgstr "Aizvākt rindu(as)"
+msgstr "Dzēst rindas"
 
 #: ui/actions/dialogs/InsertDialog.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove columns"
-msgstr "Aizvākt kolonu(as)"
+msgstr "Dzēst kolonnas"
 
 #: ui/actions/dialogs/InsertDialog.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Cells"
-msgstr "Izmest rūtiņu"
+msgstr "Dzēst šūnas"
 
 #: ui/actions/dialogs/LinkDialog.cpp:58 ui/actions/dialogs/LinkDialog.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Link"
-msgstr "Iespraust funkciju"
+msgstr "Ievietot saiti"
 
 #: ui/actions/dialogs/LinkDialog.cpp:67
 #, kde-format
@@ -15797,86 +15780,85 @@ msgid "Internet"
 msgstr "Internets"
 
 #: ui/actions/dialogs/LinkDialog.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link to Internet Address"
-msgstr "Interneta Adrese:"
+msgstr "Saite uz interneta adresi"
 
 #: ui/actions/dialogs/LinkDialog.cpp:71 ui/actions/dialogs/LinkDialog.cpp:86
 #: ui/actions/dialogs/LinkDialog.cpp:104 ui/actions/dialogs/LinkDialog.cpp:142
 #, kde-format
 msgid "Text to display:"
-msgstr ""
+msgstr "Parādāmais teksts:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Internet address:"
-msgstr "Interneta Adrese:"
+msgstr "Interneta adrese:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Email:"
+#, kde-format
 msgid "Email"
-msgstr "E-pasts:"
+msgstr "E-pasta adrese"
 
 #: ui/actions/dialogs/LinkDialog.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link to Email Address"
-msgstr "Interneta Adrese:"
+msgstr "Saite uz e-pasta adresi"
 
 #: ui/actions/dialogs/LinkDialog.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Email address:"
-msgstr "Teksta lauks ir tukš!"
+msgstr "E-pasta adrese:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subject:"
-msgstr "&Objekts..."
+msgstr "Temats:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "File"
-msgstr "falšs"
+msgstr "Datne"
 
 #: ui/actions/dialogs/LinkDialog.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link to File"
-msgstr "Šūnas izmērs"
+msgstr "Saite uz datni"
 
 #: ui/actions/dialogs/LinkDialog.cpp:107
 #, kde-format
 msgid "File location:"
-msgstr "Faila atrašanās vieta:"
+msgstr "Datnes atrašanās vieta:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "Recent file:"
-msgstr "Biežāk at&vērto failu skaits:"
+msgstr "Nesena datne:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:132
-#, fuzzy, kde-format
+#, kde-format
 msgid "No Entries"
-msgstr "Ieraksts:"
+msgstr "Nav ierakstu"
 
 #: ui/actions/dialogs/LinkDialog.cpp:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link to Cell"
-msgstr "Šūnas izmērs"
+msgstr "Saite uz šūnu"
 
 #: ui/actions/dialogs/LinkDialog.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell or Named Area:"
-msgstr "Izmest rūtiņu"
+msgstr "Šūna vai nosaukts apgabals:"
 
 #: ui/actions/dialogs/ListDialog.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom Lists"
-msgstr "Kārtot sarakstus..."
+msgstr "Pielāgoti saraksti"
 
 #: ui/actions/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Changes"
-msgstr "Mainīt Leņķi"
+msgstr "Saglabāt izmaiņas"
 
 #: ui/actions/dialogs/ListDialog.cpp:54
 #, kde-format
@@ -15889,10 +15871,9 @@ msgid "Entry:"
 msgstr "Ieraksts:"
 
 #: ui/actions/dialogs/ListDialog.cpp:67
-#, fuzzy, kde-format
-#| msgid "End"
+#, kde-format
 msgid "Add"
-msgstr "Beigas"
+msgstr "Pievienot"
 
 #: ui/actions/dialogs/ListDialog.cpp:71 ui/ExternalEditor.cpp:60
 #, kde-format
@@ -15900,29 +15881,29 @@ msgid "Cancel"
 msgstr "Atcelt"
 
 #: ui/actions/dialogs/ListDialog.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "New"
 msgstr "Jauns"
 
 #: ui/actions/dialogs/ListDialog.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Modify"
-msgstr "&Pievienot/mainīt komentāru..."
+msgstr "Rediģēt"
 
 #: ui/actions/dialogs/ListDialog.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy"
-msgstr "Kopē datus"
+msgstr "Kopēt"
 
 #: ui/actions/dialogs/ListDialog.cpp:240
 #, kde-format
 msgid "Do you really want to remove this list?"
-msgstr "Vai tiešām vēlaties nodzēst šo sarakstu?"
+msgstr "Vai tiešām vēlaties dzēst šo sarakstu?"
 
 #: ui/actions/dialogs/ListDialog.cpp:240
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove List"
-msgstr "Izmest rūtiņu"
+msgstr "Dzēst sarakstu"
 
 #: ui/actions/dialogs/ListDialog.cpp:262
 #, kde-format
@@ -15930,97 +15911,94 @@ msgid ""
 "Entry area is not empty.\n"
 "Do you want to continue?"
 msgstr ""
-"Ievada lauks nav tukš.\n"
+"Ievadīšanas apgabals nav tukšs.\n"
 "Vai vēlaties turpināt?"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:50 ui/actions/NamedAreas.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Named Areas"
-msgstr "Izmest rūtiņu"
+msgstr "Nosauktie apgabali"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:71
 #: ui/actions/dialogs/NamedAreaDialog.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Area: %1"
-msgstr "lauks: %1"
+msgstr "Apgabals: %1"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cells:"
-msgstr "Šūna:"
+msgstr "Šūnas:"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sheet:"
-msgstr "Izvēlēties"
+msgstr "Loksne:"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Area name:"
-msgstr "Lauka Nosaukums"
+msgstr "Apgabala nosaukums:"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Remove"
-msgstr "&Izmest komentāru"
+msgstr "&Dzēst"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Open/Save"
+#, kde-format
 msgid "Save"
-msgstr "Atvērt/saglabāt"
+msgstr "Saglabāt"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:131
 #, kde-format
 msgid "(new area)"
-msgstr ""
+msgstr "(jauns apgabals)"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:192
-#, fuzzy, kde-format
-#| msgid "Do you really want to remove this area name?"
+#, kde-format
 msgid "Do you really want to remove this named area?"
-msgstr "Vai tiešām jūs vēlaties dzēst šo lauka nosaukumu?"
+msgstr "Vai tiešām vēlaties dzēst šo nosaukto apgabalu?"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Named Area"
-msgstr "Izmest rūtiņu"
+msgstr "Dzēst nosaukto apgabalu"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "The provided region is not valid."
-msgstr "Šis nav pareizs laiks !"
+msgstr "Norādītais apgabals nav derīgs."
 
 #: ui/actions/dialogs/PasteInsertDialog.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste Inserting Cells"
-msgstr "Ielīmēt ievietojot rūtiņu(as)"
+msgstr "Ielīmēt šūnu ievietošanu"
 
 #: ui/actions/dialogs/pivot.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Source"
-msgstr "Īpaši Ielīmēt..."
+msgstr "Atlasīt avotu"
 
 #: ui/actions/dialogs/pivotmain.cpp:47
 #, kde-format
 msgid "Pivot Table Configuration Window"
-msgstr ""
+msgstr "Dinamiskās tabulas konfigurācijas logs"
 
 #: ui/actions/dialogs/pivotmain.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Filter"
-msgstr "falšs"
+msgstr "Pievienot filtru"
 
 #: ui/actions/dialogs/pivotoptions.cpp:28
-#, fuzzy, kde-format
-#| msgid "Operation"
+#, kde-format
 msgid "Pivot Options"
-msgstr "Operācija"
+msgstr "Dinamiskās tabulas opcijas"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resize Row"
-msgstr "Izmainīt rindas izmēru"
+msgstr "Mainīt rindas izmēru"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:42
 #, kde-format
@@ -16028,9 +16006,9 @@ msgid "Height:"
 msgstr "Augstums:"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resize Column"
-msgstr "Mainīt kolonas augstumu"
+msgstr "Mainīt kolonnas izmēru"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:89
 #, kde-format
@@ -16043,29 +16021,29 @@ msgid "Series"
 msgstr "Sērijas"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Series"
-msgstr "Iespraust Tabulu"
+msgstr "Ievietot sērijas"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Values"
-msgstr "Iespraust Tabulu"
+msgstr "Ievietot vērtības"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:41
 #, kde-format
 msgid "Insert the series vertically, one below the other"
-msgstr ""
+msgstr "Ievietot sērijas vertikāli — vienu zem otras"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:43
 #, kde-format
 msgid "Insert the series horizontally, from left to right"
-msgstr ""
+msgstr "Ievietojies sērijas horizontāli — no kreisās uz labo pusi"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear (2,4,6,...)"
-msgstr "Ģeometrisks"
+msgstr "Lineāri (2,4,6,...)"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:53
 #, kde-format
@@ -16074,11 +16052,14 @@ msgid ""
 "provided in step. This creates a series where each value is 'step' larger "
 "than the value before it."
 msgstr ""
+"Ģenerēt sērijas no „sākuma“ līdz „beigām“, bet katram solim pievienot solī "
+"parādīto vērtību. Tas veido sērijas, kurās katra vērtība ir par „soli“ "
+"lielāka nekā vērtība pirms tās."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Geometric (2,4,8,...)"
-msgstr "Ģeometrisks"
+msgstr "Ģeometriski (2,4,8,...)"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:58
 #, kde-format
@@ -16088,26 +16069,30 @@ msgid ""
 "25, 125, 625 since 5 multiplied by 5 (step) equals 25, and that multiplied "
 "by 5 equals 125, which multiplied by the same step-value of 5 equals 625."
 msgstr ""
+"Ģenerē sērijas no „sākuma“ līdz „beigām“, bet katrs nākamais solis reizina "
+"iepriekšējā soļa vērtību. Ja solis ir 5, tad saraksts būtu 5, 25, 125, 625, "
+"jo 5 reizināts ar 5 (ar soli) ir vienāds ar 25, kas savukārt reizināts ar 5 "
+"ir 125, kas turpinājumā ir 625."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start value:"
-msgstr "Sākuma vērtība"
+msgstr "Sākuma vērtība:"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stop value:"
-msgstr "Augšējā vērtība"
+msgstr "Beigu vērtība:"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Step value:"
-msgstr "Sākuma vērtība"
+msgstr "Soļa vērtība:"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "End and start value must be positive."
-msgstr "lambda parametrs (vidējā vērtība)"
+msgstr "Beigu un sākuma vērtībai jābūt pozitīvai."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:119
 #, kde-format
@@ -16115,30 +16100,32 @@ msgid ""
 "End value must be greater than the start value or the step must be less than "
 "'1'."
 msgstr ""
+"Beigu vērtībai jābūt lielākai par sākuma vērtību vai arī solim jābūt mazākam "
+"par „1“."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:125
 #, kde-format
 msgid "None of the Start, Stop or Step values may be equal to zero."
-msgstr ""
+msgstr "Sākuma, beigu un soļu vērtības nedrīkst būt nulle."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:130
 #, kde-format
 msgid "Step value must be different from 1"
-msgstr ""
+msgstr "Soļa vērtība nevar būt 1."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:134
-#, fuzzy, kde-format
+#, kde-format
 msgid "Step is negative."
-msgstr "Solis ir negatīvs!"
+msgstr "Solis ir negatīvs."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:142
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The step value must be greater than zero; otherwise, the linear series is "
 "infinite."
 msgstr ""
-"Atvainojiet, bet soļa vērtībai jābūt lielākai par nulli. Citādi lineārās "
-"sērijas ir bezgalīgas!"
+"Soļa vērtībai jābūt lielākai par nulli. Pretējā gadījumā lineārās sērijas ir "
+"bezgalīgas."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:148
 #, kde-format
@@ -16146,27 +16133,30 @@ msgid ""
 "If the start value is greater than the end value the step must be less than "
 "zero."
 msgstr ""
+"Ja sākuma vērtība ir lielāka par beigu vērtību, solim jābūt mazākam par "
+"nulli."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:154
 #, kde-format
 msgid ""
 "If the step is negative, the start value must be greater then the end value."
 msgstr ""
+"Ja solis ir negatīvs, sākuma vērtībai ir jābūt lielākai par beigu vērtību."
 
 #: ui/actions/dialogs/ShowColRowDialog.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select hidden rows to show:"
-msgstr "Slēptas tabulas nosaukums:"
+msgstr "Atlasiet paslēptās rindas, kuras parādīt:"
 
 #: ui/actions/dialogs/ShowColRowDialog.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select hidden columns to show:"
-msgstr "Slēptas tabulas nosaukums:"
+msgstr "Atlasiet paslēptās kolonnas, kuras parādīt:"
 
 #: ui/actions/dialogs/SortDialog.cpp:76 ui/actions/dialogs/SortDialog.cpp:220
 #, kde-format
 msgid "Column %1"
-msgstr "Kolona %1"
+msgstr "Kolonna %1"
 
 #: ui/actions/dialogs/SortDialog.cpp:99 ui/actions/dialogs/SortDialog.cpp:210
 #, kde-format
@@ -16174,39 +16164,39 @@ msgid "Row %1"
 msgstr "Rinda %1"
 
 #: ui/actions/dialogs/SortDialog.cpp:260
-#, fuzzy, kde-format
+#, kde-format
 msgid "&First column contains row headers"
-msgstr "numurs"
+msgstr "&Pirmā kolonna satur rindu nosaukumus"
 
 #: ui/actions/dialogs/SortDialog.cpp:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "&First row contains column headers"
-msgstr "Rādīt K&olonas Galveni"
+msgstr "&Pirmā rinda satur kolonnu nosaukumus"
 
 #: ui/actions/dialogs/SortDialog.cpp:275
 #, kde-format
 msgid "Sort"
-msgstr "Šķirot"
+msgstr "Kārtot"
 
 #: ui/actions/dialogs/SortDialog.cpp:496
-#, fuzzy, kde-format
+#, kde-format
 msgid "Case Insensitive"
-msgstr "Ielīmēt un ievietot"
+msgstr "Nav reģistrjutīgs"
 
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:19
 #, kde-format
 msgid "Special Paste"
-msgstr "Ielīmēt Īpaši"
+msgstr "Ielīmēt norādot"
 
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste"
-msgstr "Bāze"
+msgstr "Ielīmēt"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:32
 #, kde-format
 msgid "Style Manager"
-msgstr ""
+msgstr "Stilu pārvaldnieks"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:43 ui/actions/Styles.cpp:122
 #: ui/dialogs/LayoutPage_General.cpp:42
@@ -16215,80 +16205,80 @@ msgid "Style"
 msgstr "Stils"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "All Styles"
-msgstr "Stils:"
+msgstr "Visi stili"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom Styles"
-msgstr "Kārtot sarakstus..."
+msgstr "Pielāgoti stili"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hierarchical"
-msgstr "Finansu"
+msgstr "Hierarhisks"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "&New..."
-msgstr "Jauns"
+msgstr "&Jauns..."
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Modify..."
-msgstr "&Pievienot/mainīt komentāru..."
+msgstr "&Rediģēt..."
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Delete..."
-msgstr "&Sērijas"
+msgstr "&Dzēst..."
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:168
 #: ui/actions/dialogs/StyleManagerDialog.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgid "style%1"
-msgstr "Stils:"
+msgstr "stils%1"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subtotals"
-msgstr "Šķirot..."
+msgstr "Starpsummas"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove All"
-msgstr "Izmest rūtiņu"
+msgstr "Noņemt visu"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column '%1' "
-msgstr "Kolona %1"
+msgstr "Kolonna „%1“ "
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "StDev"
-msgstr "Solis"
+msgstr "StDev"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "StDevP"
-msgstr "Solis"
+msgstr "StDevP"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Var"
-msgstr "Marts"
+msgstr "Var"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:93
 #, kde-format
 msgid "VarP"
-msgstr ""
+msgstr "VarP"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "You need to select at least one column for adding subtotals."
-msgstr "Jūs nevarat noslēpt pēdējo redzamo tabulu."
+msgstr "Starpsummu saskaitīšanai ir jāpievieno vismaz viena kolonna."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:41 ui/actions/Validity.cpp:55
 #, kde-format
@@ -16296,9 +16286,9 @@ msgid "Validity"
 msgstr "Korektums"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear &All"
-msgstr "Dzēst Visu"
+msgstr "Dzēst &visu"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:54
 #, kde-format
@@ -16308,22 +16298,22 @@ msgstr "Atļaut:"
 #: ui/actions/dialogs/ValidityDialog.cpp:61
 #, kde-format
 msgid "Integer"
-msgstr "Integer"
+msgstr "Vesels skaitlis"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text Length"
 msgstr "Teksta garums"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "List"
-msgstr "Saraksts:"
+msgstr "Saraksts"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:69
 #, kde-format
 msgid "Allow blanks"
-msgstr ""
+msgstr "Atļaut tukšumus"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:73
 #, kde-format
@@ -16335,7 +16325,7 @@ msgstr "Dati:"
 #: ui/actions/dialogs/ValidityDialog.cpp:259
 #: ui/actions/dialogs/ValidityDialog.cpp:275
 #: ui/actions/dialogs/ValidityDialog.cpp:349
-#, fuzzy, kde-format
+#, kde-format
 msgid "Minimum:"
 msgstr "Minimums:"
 
@@ -16344,75 +16334,75 @@ msgstr "Minimums:"
 #: ui/actions/dialogs/ValidityDialog.cpp:260
 #: ui/actions/dialogs/ValidityDialog.cpp:276
 #: ui/actions/dialogs/ValidityDialog.cpp:350
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maximum:"
-msgstr "Maksimums : "
+msgstr "Maksimums:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:107
 #: ui/actions/dialogs/ValidityDialog.cpp:289
 #: ui/actions/dialogs/ValidityDialog.cpp:297
 #: ui/actions/dialogs/ValidityDialog.cpp:340
-#, fuzzy, kde-format
+#, kde-format
 msgid "Date:"
-msgstr "Datums :"
+msgstr "Datums:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:109
 #: ui/actions/dialogs/ValidityDialog.cpp:301
 #: ui/actions/dialogs/ValidityDialog.cpp:355
-#, fuzzy, kde-format
+#, kde-format
 msgid "Date minimum:"
-msgstr "Datuma minimums"
+msgstr "Datuma minimums:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:111
 #: ui/actions/dialogs/ValidityDialog.cpp:302
 #: ui/actions/dialogs/ValidityDialog.cpp:356
-#, fuzzy, kde-format
+#, kde-format
 msgid "Date maximum:"
-msgstr "Datuma maksimums"
+msgstr "Datuma maksimums:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:113
 #: ui/actions/dialogs/ValidityDialog.cpp:312
 #: ui/actions/dialogs/ValidityDialog.cpp:342
-#, fuzzy, kde-format
+#, kde-format
 msgid "Time:"
-msgstr "Laiks :"
+msgstr "Laiks:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:115
 #: ui/actions/dialogs/ValidityDialog.cpp:316
 #: ui/actions/dialogs/ValidityDialog.cpp:358
-#, fuzzy, kde-format
+#, kde-format
 msgid "Time minimum:"
-msgstr "Laika minimums"
+msgstr "Laika minimums:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:117
 #: ui/actions/dialogs/ValidityDialog.cpp:317
 #: ui/actions/dialogs/ValidityDialog.cpp:359
-#, fuzzy, kde-format
+#, kde-format
 msgid "Time maximum:"
-msgstr "Laika maksimums"
+msgstr "Laika maksimums:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:123
 #: ui/actions/dialogs/ValidityDialog.cpp:255
 #: ui/actions/dialogs/ValidityDialog.cpp:271
 #: ui/actions/dialogs/ValidityDialog.cpp:336
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number:"
-msgstr "Skaitlis :"
+msgstr "Skaitlis:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Entries:"
-msgstr "Ieraksts:"
+msgstr "Ieraksti:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:136
-#, fuzzy, kde-format
+#, kde-format
 msgid "Error Alert"
 msgstr "Kļūdas brīdinājums"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:140
 #, kde-format
 msgid "Show error message when invalid values are entered"
-msgstr ""
+msgstr "Rādīt kļūdas ziņojumu, ja ir ierakstītas nederīgas vērtības"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:145
 #, kde-format
@@ -16422,20 +16412,19 @@ msgstr "Darbība:"
 #: ui/actions/dialogs/ValidityDialog.cpp:150
 #, kde-format
 msgid "Stop"
-msgstr ""
+msgstr "Apturēt"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Warning"
-msgstr "RInda"
+msgstr "Brīdinājums"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:156
 #: ui/actions/dialogs/ValidityDialog.cpp:179
-#, fuzzy, kde-format
-#| msgid "Title:"
+#, kde-format
 msgctxt "Title of message"
 msgid "Title:"
-msgstr "Titli:"
+msgstr "Nosaukums:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:163
 #: ui/actions/dialogs/ValidityDialog.cpp:186
@@ -16446,109 +16435,106 @@ msgstr "Ziņojums:"
 #: ui/actions/dialogs/ValidityDialog.cpp:170
 #, kde-format
 msgid "Input Help"
-msgstr ""
+msgstr "Ievades palīdzība"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:174
 #, kde-format
 msgid "Show input help when cell is selected"
-msgstr ""
+msgstr "Kad ir atlasīta šūna, rādīt ievades palīdzību"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:461
 #: ui/actions/dialogs/ValidityDialog.cpp:466
 #: ui/actions/dialogs/ValidityDialog.cpp:472
 #: ui/actions/dialogs/ValidityDialog.cpp:477
-#, fuzzy, kde-format
+#, kde-format
 msgid "This is not a valid value."
-msgstr "Šī nav pareiza vērtība !"
+msgstr "Šī ir nederīga vērtība."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:483
 #: ui/actions/dialogs/ValidityDialog.cpp:488
-#, fuzzy, kde-format
+#, kde-format
 msgid "This is not a valid time."
-msgstr "Šis nav pareizs laiks !"
+msgstr "Šis ir nederīgs laiks."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:494
 #: ui/actions/dialogs/ValidityDialog.cpp:499
-#, fuzzy, kde-format
+#, kde-format
 msgid "This is not a valid date."
-msgstr "Šis nav pareizs datums !"
+msgstr "Šis ir nederīgs datums."
 
 #: ui/actions/DocumentSettings.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document Settings..."
-msgstr "Lokāles Parametri"
+msgstr "Dokumenta iestatījumi..."
 
 #: ui/actions/DocumentSettings.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show document settings dialog"
-msgstr "Rādīt komentāra &indikātoru"
+msgstr "Rādīt dokumenta iestatījumu lodziņu"
 
 #: ui/actions/Editing.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit the highlighted cell"
-msgstr "Mainīt teksta krāsu"
+msgstr "Rediģēt izcelto šūnu"
 
 #: ui/actions/Editing.cpp:20
 #, kde-format
 msgid "Modify Cell"
-msgstr "Mainīt Rūtiņu"
+msgstr "Rediģēt šūnu"
 
 #: ui/actions/Editing.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Permute fixation"
-msgstr "Precizitāte"
+msgstr "Permutāciju fiksēšana"
 
 #: ui/actions/Editing.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Izņemt komentāru"
+msgstr "Atsauces permutāciju fiksēšana pie teksta kursora"
 
 #: ui/actions/Fill.cpp:64
 #, kde-format
 msgid "Fill &Up"
-msgstr ""
+msgstr "&Aizpildīt augšup"
 
 #: ui/actions/Fill.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill &Down"
-msgstr "&Rinda"
+msgstr "Aizpildīt &lejup"
 
 #: ui/actions/Fill.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill &Left"
-msgstr "&Teksts"
+msgstr "Aizpildīt pa &kreisi"
 
 #: ui/actions/Fill.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill &Right"
-msgstr "Svars:"
+msgstr "Aizpildīt pa &labi"
 
 #: ui/actions/Fill.cpp:79
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Fill Selection"
-msgstr "Forrmulas Iezīmējums"
+msgstr "Aizpildīt atlasīto"
 
 #: ui/actions/FindReplace.cpp:124
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
-msgstr "Septembris"
+msgstr "Aizvietot"
 
 #: ui/actions/Font.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Font..."
-msgstr "Izvēlēties Fontu"
+msgstr "Atlasīt fontu..."
 
 #: ui/actions/Font.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell font"
-msgstr "Izņemt komentāru"
+msgstr "Norādīt šūnas fontu"
 
 #: ui/actions/Font.cpp:59 ui/actions/Font.cpp:106 ui/actions/Style.cpp:93
 #: ui/actions/Style.cpp:129 ui/actions/Style.cpp:165 ui/actions/Style.cpp:194
 #: ui/actions/Style.cpp:495 ui/actions/Style.cpp:519
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr "Mainīt fontu"
@@ -16556,48 +16542,47 @@ msgstr "Mainīt fontu"
 #: ui/actions/Font.cpp:77
 #, kde-format
 msgid "Select Font Size"
-msgstr "Fonta Izmēra Izvēle"
+msgstr "Atlasīt fonta izmēru"
 
 #: ui/actions/Font.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell font size"
-msgstr "Izņemt komentāru"
+msgstr "Norādīt šūnas fonta izmēru"
 
 #: ui/actions/Font.cpp:86
-#, fuzzy, kde-format
-#| msgid "Select Font Size"
+#, kde-format
 msgid "Font Size"
-msgstr "Fonta Izmēra Izvēle"
+msgstr "Fonta izmērs"
 
 #: ui/actions/Font.cpp:125
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the text color"
-msgstr "Mainīt pamata krāsu"
+msgstr "Norādīt teksta krāsu"
 
 #: ui/actions/Font.cpp:125
 #, kde-format
 msgid "Text Color"
-msgstr "Teksta Krāsa"
+msgstr "Teksta krāsa"
 
 #: ui/actions/Formula.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Function..."
-msgstr "Funkcija"
+msgstr "&Funkcija..."
 
 #: ui/actions/Formula.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert math expression"
-msgstr "&Matemātiskā izteiksme..."
+msgstr "Ievietot matemātisku izteiksmi"
 
 #: ui/actions/Formula.cpp:51 ui/actions/Formula.cpp:59
 #, kde-format
 msgid "Formula Selection"
-msgstr "Forrmulas Iezīmējums"
+msgstr "Formulas atlase"
 
 #: ui/actions/Formula.cpp:51 ui/actions/Formula.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert a function"
-msgstr "Iespraust funkciju"
+msgstr "Ievietot funkciju"
 
 #: ui/actions/Formula.cpp:61 ui/actions/Formula.cpp:76
 #, kde-format
@@ -16605,111 +16590,109 @@ msgid "Others..."
 msgstr "Citi..."
 
 #: ui/actions/GoalSeek.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Goal Seek..."
-msgstr "&Sērijas"
+msgstr "&Mērķa meklēšana..."
 
 #: ui/actions/GoalSeek.cpp:27
 #, kde-format
 msgid "Repeating calculation to find a specific value"
-msgstr ""
+msgstr "Atkārto aprēķinus, lai atrastu noteiktu vērtību"
 
 #: ui/actions/GoalSeek.cpp:59 ui/actions/GoalSeek.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell reference is invalid."
-msgstr "Šis nav pareizs laiks !"
+msgstr "Šūnas atsauce nav derīga."
 
 #: ui/actions/GoalSeek.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Target value is invalid."
-msgstr "Šis nav pareizs laiks !"
+msgstr "Mērķa vērtība nav derīga."
 
 #: ui/actions/GoalSeek.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Source cell must contain a numeric value."
-msgstr "Dati Y rūtiņā nevar būt formula"
+msgstr "Avota šūnai ir jāsatur skaitliska vērtība."
 
 #: ui/actions/GoalSeek.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "Target cell must contain a formula."
-msgstr "Dati Y rūtiņā nevar būt formula"
+msgstr "Mērķa šūnai ir jāsatur formula."
 
 #: ui/actions/GoalSeek.cpp:95
 #, kde-format
 msgid "Solving ..."
-msgstr ""
+msgstr "Risina..."
 
 #: ui/actions/GoalSeek.cpp:169
 #, kde-format
 msgid "Goal seeking with cell %1 found a solution."
-msgstr ""
+msgstr "Mērķa meklēšana ar šūnu %1 atrada risinājumu."
 
 #: ui/actions/GoalSeek.cpp:179
 #, kde-format
 msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
+msgstr "Mērķa meklēšana ar šūnu %1 NEATRADA risinājumu."
 
 #: ui/actions/Goto.cpp:25
 #, kde-format
 msgid "Goto Cell..."
-msgstr "Iet uz Rūtiņu..."
+msgstr "Iet uz šūnu..."
 
 #: ui/actions/Goto.cpp:25
 #, kde-format
 msgid "Move to a particular cell"
-msgstr ""
+msgstr "Pārvietoties un noteiktu šūnu"
 
 #: ui/actions/Goto.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Goto"
-msgstr "Iet uz šūnu"
+msgstr "Iet uz"
 
 #: ui/actions/Goto.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "That is not a valid cell."
-msgstr "Šis nav pareizs laiks !"
+msgstr "Šī nav derīga šūna."
 
 #: ui/actions/Indent.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Indent"
 msgstr "Samazināt atkāpi"
 
 #: ui/actions/Indent.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Indent"
 msgstr "Palielināt atkāpi"
 
 #: ui/actions/Indent.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease the indentation"
 msgstr "Samazināt atkāpi"
 
 #: ui/actions/Indent.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase the indentation"
 msgstr "Palielināt atkāpi"
 
 #: ui/actions/Indent.cpp:96
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Increase Indentation"
 msgstr "Palielināt atkāpi"
 
 #: ui/actions/Indent.cpp:98
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease Indentation"
 msgstr "Samazināt atkāpi"
 
 #: ui/actions/InsertFromDatabase.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "From &Database..."
-msgstr "Datums"
+msgstr "No &datubāzes..."
 
 #: ui/actions/InsertFromDatabase.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert data from a SQL database"
-msgstr "Datums"
+msgstr "Ievietot datumu no SQL datubāzes"
 
 #: ui/actions/InsertFromDatabase.cpp:45
 #, kde-format
@@ -16717,124 +16700,125 @@ msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
+"Nav atrasts neviens datubāzes draiveris. Lai lietotu šo iespēju, "
+"ieinstalējiet nepieciešamos „Qt“ datubāzes draiverus."
 
 #: ui/actions/InsertSeries.cpp:27
 #, kde-format
 msgid "&Series..."
-msgstr "&Sērijas"
+msgstr "&Sērijas..."
 
 #: ui/actions/InsertSeries.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert a series"
-msgstr "Iespraust Tabulu"
+msgstr "Ievietot sērijas"
 
 #: ui/actions/InsertSeries.cpp:60
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Series"
-msgstr "Iespraust Tabulu"
+msgstr "Ievietot sērijas"
 
 #: ui/actions/InsertSpecialChar.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "S&pecial Character..."
-msgstr "Īpaši Ielīmēt..."
+msgstr "S&peciālā rakstzīme..."
 
 #: ui/actions/InsertSpecialChar.cpp:32
 #, kde-format
 msgid "Insert one or more symbols or letters not found on the keyboard"
 msgstr ""
+"Ievietot vienu vai vairākus simbolus vai burtus, ko nevarat ierakstīt ar "
+"tastatūru"
 
 #: ui/actions/Inspector.cpp:34
 #, kde-format
 msgid "Run Inspector..."
-msgstr ""
+msgstr "Palaist inspektoru..."
 
 #: ui/actions/Link.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Link..."
-msgstr "&Hipersaites"
+msgstr "&Saite..."
 
 #: ui/actions/Link.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert an Internet hyperlink"
-msgstr "Iespraust Tabulu"
+msgstr "Ievietot saiti uz interneta resursu"
 
 #: ui/actions/Link.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link"
-msgstr "Iespraust funkciju"
+msgstr "Saite"
 
 #: ui/actions/Link.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove a link"
-msgstr "Dzēst tabulu"
+msgstr "Dzēst saiti"
 
 #: ui/actions/Link.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Link"
-msgstr "Izmest rūtiņu"
+msgstr "Dzēst saiti"
 
 #: ui/actions/Link.cpp:92
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Link"
-msgstr "Izmest rūtiņu"
+msgstr "Dzēst saiti"
 
 #: ui/actions/Link.cpp:92
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Link"
-msgstr "Iespraust funkciju"
+msgstr "Izveidot saiti"
 
 #: ui/actions/ListChoose.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selection List..."
-msgstr "Iezīmētā saraksts..."
+msgstr "Atlasīšanas saraksts..."
 
 #: ui/actions/Merge.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge Cells Horizontally"
-msgstr "Apvienot šūnas"
+msgstr "Apvienot šūnas horizontāli"
 
 #: ui/actions/Merge.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge Cells Vertically"
-msgstr "Apvienot šūnas"
+msgstr "Apvienot šūnas vertikāli"
 
 #: ui/actions/Merge.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge the selected region horizontally"
-msgstr "Apvienot šūnas"
+msgstr "Apvienot atlasīto apgabalu horizontāli"
 
 #: ui/actions/Merge.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge the selected region vertically"
-msgstr "Apvienot šūnas"
+msgstr "Apvienot atlasīto apgabalu vertikāli"
 
 #: ui/actions/Merge.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge the selected region"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Apvienot atlasīto apgabalu"
 
 #: ui/actions/Merge.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dissociate Cells"
-msgstr "Atsaistīt rūtiņas"
+msgstr "Noņemt šūnu asociācijas"
 
 #: ui/actions/Merge.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unmerge the selected region"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Atcelt atlasītā apgabala apvienošanu"
 
 #: ui/actions/NamedAreas.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Area Name..."
-msgstr "Abgabala nosaukums..."
+msgstr "Apgabala nosaukums..."
 
 #: ui/actions/NamedAreas.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a name for a region of the spreadsheet"
-msgstr "Iespraust Tabulu"
+msgstr "Norādiet izklājlapas apgabala nosaukumu"
 
 #: ui/actions/NamedAreas.cpp:53
 #, kde-format
@@ -16842,170 +16826,169 @@ msgid ""
 "The named area '%1' already exists.\n"
 "Do you want to replace it?"
 msgstr ""
+"Nosauktais apgabals „%1“ jau pastāv.\n"
+"Vai vēlaties to aizvietot?"
 
 #: ui/actions/NamedAreas.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Replace Named Area"
-msgstr "Izmest rūtiņu"
+msgstr "Aizvietot nosaukto apgabalu"
 
 #: ui/actions/NamedAreas.cpp:65
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace Named Area"
-msgstr "Izmest rūtiņu"
+msgstr "Aizvietot nosaukto apgabalu"
 
 #: ui/actions/NamedAreas.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit or select named areas"
-msgstr "Šķirot palielinot"
+msgstr "Rediģēt vai atlasīt nosauktos apgabalus"
 
 #: ui/actions/NamedAreas.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Named Areas..."
-msgstr "Rādīt apgabalu..."
+msgstr "Nosauktie apgabali..."
 
 #: ui/actions/PageBreak.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Break Before Row"
-msgstr "Aizvākt kolonu(as)"
+msgstr "Atdalītājs pirms rindas"
 
 #: ui/actions/PageBreak.cpp:21
 #, kde-format
 msgid "Set a manual page break before the row"
-msgstr ""
+msgstr "Iestatiet manuālu lapas atdalītāju pirms rindas"
 
 #: ui/actions/PageBreak.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row Break"
-msgstr "lielāks kā"
+msgstr "Rindas atdalītājs"
 
 #: ui/actions/PageBreak.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Break Before Column"
-msgstr "Aizvākt kolonu(as)"
+msgstr "Atdalīt pirms kolonnas"
 
 #: ui/actions/PageBreak.cpp:74
 #, kde-format
 msgid "Set a manual page break before the column"
-msgstr ""
+msgstr "Iestatiet manuālu lapas atdalītāju pirms kolonnas"
 
 #: ui/actions/PageBreak.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column Break"
-msgstr "numurs"
+msgstr "Kolonnas atdalītājs"
 
 #: ui/actions/Paste.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
-msgstr "Izņemt komentāru"
+msgstr "Ievietot starpliktuves saturu kursora vietā"
 
 #: ui/actions/Paste.cpp:94
 #, kde-format
 msgid "Special Paste..."
-msgstr "Īpaši Ielīmēt..."
+msgstr "Ielīmēt norādot..."
 
 #: ui/actions/Paste.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste the contents of the clipboard with special options"
-msgstr "Izņemt komentāru"
+msgstr "Ielīmēt starpliktuves saturu ar speciālām opcijām"
 
 #: ui/actions/Paste.cpp:153
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste with Insertion"
-msgstr "Ielīmēt ar ievietošanu..."
+msgstr "Ielīmēt ar ievietošanu"
 
 #: ui/actions/Paste.cpp:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "Iespraust Tabulu"
+msgstr "Ievietot izklājlapā šūnu no starpliktuves"
 
 #: ui/actions/Pivot.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Pivot Tables..."
-msgstr "Šķirot..."
+msgstr "&Dinamiskās tabulas..."
 
 #: ui/actions/Pivot.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Pivot Tables"
-msgstr "Šķirot..."
+msgstr "Izveidot dinamiskās tabulas"
 
 #: ui/actions/Pivot.cpp:29
 #, kde-format
 msgid "You must select multiple cells."
-msgstr "Jums jāiezīmē vairakas rūtiņas."
+msgstr "Jāiezīmē vairākas šūnas."
 
 #: ui/actions/SelectAll.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selects all cells in the current sheet"
-msgstr "Izņemt komentāru"
+msgstr "Atlasa visas šūnas pašreizējā loksnē"
 
 #: ui/actions/ShowTableView.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show QTableView..."
-msgstr "Rādīt &Rindas Galveni"
+msgstr "Rādīt „QTableView“..."
 
 #: ui/actions/Sort.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Sort..."
-msgstr "Šķirot..."
+msgstr "&Kārtot..."
 
 #: ui/actions/Sort.cpp:25
 #, kde-format
 msgid "Sort a group of cells"
-msgstr ""
+msgstr "Kārtot šūnu grupu"
 
 #: ui/actions/Sort.cpp:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sort &Increasing"
-msgstr "Šķirot palielinot"
+msgstr "Kārtot &augošā secībā"
 
 #: ui/actions/Sort.cpp:111
 #, kde-format
 msgid "Sort a group of cells in ascending(first to last) order"
-msgstr ""
+msgstr "Kārtot šūnu grupu augošā (no pirmās līdz pēdējai) secībā"
 
 #: ui/actions/Sort.cpp:143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sort &Decreasing"
-msgstr "Šķirot samazinot"
+msgstr "Kārtot &dilstošā secībā"
 
 #: ui/actions/Sort.cpp:145
 #, kde-format
 msgid "Sort a group of cells in decreasing(last to first) order"
-msgstr ""
+msgstr "Kārtot šūnu grupu dilstošā (no pēdējās līdz pirmajai) secībā"
 
 #: ui/actions/Sort.cpp:183
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Sort Data"
-msgstr "Šķirot palielinot"
+msgstr "Kārtot datus"
 
 #: ui/actions/SpellCheck.cpp:84
 #, kde-format
 msgid "Do you want to check the spelling in the next sheet?"
-msgstr ""
+msgstr "Vai vēlaties pārbaudīt pareizrakstību nākamajā loksnē?"
 
 #: ui/actions/SpellCheck.cpp:88
-#, fuzzy, kde-format
-#| msgid "Move to the next sheet"
+#, kde-format
 msgctxt "@action:button"
 msgid "Check next sheet"
-msgstr "Pārvietot uz nākamo loksni"
+msgstr "Pārbaudīt nākamo loksni"
 
 #: ui/actions/SpellCheck.cpp:237
 #, kde-format
 msgid "Check the spelling"
-msgstr ""
+msgstr "Pārbaudīt pareizrakstību"
 
 #: ui/actions/Style.cpp:29
 #, kde-format
 msgid "Cell Format..."
-msgstr "Rūtiņas Formāts..."
+msgstr "Šūnas formāts..."
 
 #: ui/actions/Style.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting"
-msgstr "Izņemt komentāru"
+msgstr "Norādīt šūnas formatējumu"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #: ui/actions/Style.cpp:76 ui/dialogs/FontWidget.ui:83
@@ -17017,7 +17000,7 @@ msgstr "Treknraksts"
 #: ui/actions/Style.cpp:112 ui/dialogs/FontWidget.ui:58
 #, kde-format
 msgid "Italic"
-msgstr "Kursīvs"
+msgstr "Slīpraksts"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, underline)
 #: ui/actions/Style.cpp:148 ui/dialogs/FontWidget.ui:101
@@ -17026,74 +17009,69 @@ msgid "Underline"
 msgstr "Pasvītrots"
 
 #: ui/actions/Style.cpp:184
-#, fuzzy, kde-format
+#, kde-format
 msgid "Strike Out"
-msgstr "Nostrīpots"
+msgstr "Pārsvītrots"
 
 #: ui/actions/Style.cpp:213
 #, kde-format
 msgid "Make the cell text wrap onto multiple lines"
-msgstr ""
+msgstr "Šūnas tekstu aplauzt vairākās rindiņās"
 
 #: ui/actions/Style.cpp:213
-#, fuzzy, kde-format
+#, kde-format
 msgid "Wrap Text"
-msgstr "Vertikāls teksts"
+msgstr "Aplauzt tekstu"
 
 #: ui/actions/Style.cpp:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "Wrap"
-msgstr "Vertikāls teksts"
+msgstr "Aplauzt"
 
 #: ui/actions/Style.cpp:230
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Wrap Text"
-msgstr "Vertikāls teksts"
+msgstr "Aplauzt tekstu"
 
 #: ui/actions/Style.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgid "Print cell contents vertically"
-msgstr "Apvienot šūnas"
+msgstr "Šūnas saturu drukāt vertikāli"
 
 #: ui/actions/Style.cpp:247
 #, kde-format
 msgid "Vertical Text"
-msgstr "Vertikāls Teksts"
+msgstr "Vertikāls teksts"
 
 #: ui/actions/Style.cpp:257
-#, fuzzy
-#| msgid "Vertical Text"
 msgctxt "(qtundo-format)"
 msgid "Vertical Text"
-msgstr "Vertikāls Teksts"
+msgstr "Vertikāls teksts"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number Format"
-msgstr "Pārbaužu skaits"
+msgstr "Skaitļu formāts"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to a number"
-msgstr "Izņemt komentāru"
+msgstr "Iestatīt šūnas formatējumu uz skaitli"
 
 #: ui/actions/Style.cpp:291
-#, fuzzy
-#| msgid "First number"
 msgctxt "(qtundo-format)"
 msgid "Format Number"
-msgstr "Pirmais skaitlis"
+msgstr "Formatēt skaitli"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scientific Format"
-msgstr "Zinātnisks"
+msgstr "Zinātnisks formāts"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to a scientific format"
-msgstr "Izņemt komentāru"
+msgstr "Iestatiet šūnas formatējumu uz zinātnisku formātu"
 
 #: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
@@ -17101,21 +17079,19 @@ msgid "Scientific"
 msgstr "Zinātnisks"
 
 #: ui/actions/Style.cpp:324
-#, fuzzy
-#| msgid "Scientific"
 msgctxt "(qtundo-format)"
 msgid "Format Scientific"
-msgstr "Zinātnisks"
+msgstr "Formatēt zinātniski"
 
 #: ui/actions/Style.cpp:342
-#, fuzzy, kde-format
+#, kde-format
 msgid "Percent Format"
-msgstr "Procenta formāts"
+msgstr "Procentu formāts"
 
 #: ui/actions/Style.cpp:344
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to look like a percentage"
-msgstr "Izņemt komentāru"
+msgstr "Iestatīt šūnas formatējumu uz procentuālu"
 
 #: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
@@ -17123,20 +17099,19 @@ msgid "Percent"
 msgstr "Procenti"
 
 #: ui/actions/Style.cpp:361
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format Percent"
-msgstr "Noformēt procentu"
+msgstr "Formatēt procentuāli"
 
 #: ui/actions/Style.cpp:379
-#, fuzzy, kde-format
+#, kde-format
 msgid "Money Format"
 msgstr "Naudas formāts"
 
 #: ui/actions/Style.cpp:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to look like your local currency"
-msgstr "Izņemt komentāru"
+msgstr "Iestatīt šūnas formatējumu uz vietējo valūtu"
 
 #: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
@@ -17144,132 +17119,124 @@ msgid "Money"
 msgstr "Nauda"
 
 #: ui/actions/Style.cpp:398
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format Money"
-msgstr "Noformēt naudu"
+msgstr "Formatēt kā naudu"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
+#, kde-format
 msgid "Date Format"
-msgstr "Datumu Formāts"
+msgstr "Datuma formāts"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to a date"
-msgstr "Izņemt komentāru"
+msgstr "Iestatīt šūnas formatējumu uz datumu"
 
 #: ui/actions/Style.cpp:431
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format Date"
-msgstr "Formāts"
+msgstr "Formatēt kā datumu"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to a time"
-msgstr "Izņemt komentāru"
+msgstr "Iestatīt šūnas formatējumu kā laiku"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgid "Time Format"
-msgstr "Laika Formāts"
+msgstr "Laika formāts"
 
 #: ui/actions/Style.cpp:464
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format Time"
-msgstr "Formāts"
+msgstr "Formatēt kā laiku"
 
 #: ui/actions/Style.cpp:480
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Font Size"
 msgstr "Palielināt fonta izmēru"
 
 #: ui/actions/Style.cpp:504
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Font Size"
 msgstr "Samazināt fonta izmēru"
 
 #: ui/actions/Style.cpp:530
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Precision"
 msgstr "Palielināt precizitāti"
 
 #: ui/actions/Style.cpp:532
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
-msgstr ""
+msgstr "Ekrānā parādīt vairāk ciparu aiz komata"
 
 #: ui/actions/Style.cpp:549
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Precision"
 msgstr "Samazināt precizitāti"
 
 #: ui/actions/Style.cpp:551
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
-msgstr ""
+msgstr "Ekrānā parādīt mazāk ciparu aiz komata"
 
 #: ui/actions/Style.cpp:597
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Increase Precision"
 msgstr "Palielināt precizitāti"
 
 #: ui/actions/Style.cpp:599
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease Precision"
 msgstr "Samazināt precizitāti"
 
 #: ui/actions/Style.cpp:603
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resets to the default format"
-msgstr "Izņemt komentāru"
+msgstr "Atiestata uz noklusējuma formātu"
 
 #: ui/actions/Style.cpp:613
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Default Style"
-msgstr "Tabulas Stils"
+msgstr "Iestatīt noklusējuma stilu"
 
 #: ui/actions/Style.cpp:622
 #, kde-format
 msgid "Background Color"
-msgstr "Fona Krāsa"
+msgstr "Fona krāsa"
 
 #: ui/actions/Style.cpp:622
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the background color"
-msgstr "Mainīt pamata krāsu"
+msgstr "Iestatīt fona krāsu"
 
 #: ui/actions/Styles.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Style From Cell..."
-msgstr "Rūtiņas stils"
+msgstr "Izveidot stilu no šūnas..."
 
 #: ui/actions/Styles.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create a new style based on the currently selected cell"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Izveidot jaunu stilu, kas ir balstīts uz pašreiz atlasītās šūnas"
 
 #: ui/actions/Styles.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Style From Cell"
-msgstr "Rūtiņas stils"
+msgstr "Stils no šūnas"
 
 #: ui/actions/Styles.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Style From Cell"
-msgstr "Rūtiņas stils"
+msgstr "izveidot stilu no šūnas"
 
 #: ui/actions/Styles.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "The style name cannot be empty."
-msgstr "Tabulas nosaukums nevar palikt tukš."
+msgstr "Stila nosaukums nevar būt tukšs."
 
 #: ui/actions/Styles.cpp:66 ui/dialogs/LayoutPage_General.cpp:86
 #, kde-format
@@ -17279,108 +17246,102 @@ msgstr "Stils ar šādu nosaukumu jau pastāv."
 #: ui/actions/Styles.cpp:86
 #, kde-format
 msgid "Edit and organize cell styles"
-msgstr ""
+msgstr "Rediģēt un sakārtot šūnu stilus"
 
 #: ui/actions/Styles.cpp:86
 #, kde-format
 msgid "Style Manager..."
-msgstr ""
+msgstr "Stilu pārvaldnieks..."
 
 #: ui/actions/Styles.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply a predefined style to the selected cells"
-msgstr "Pārvietoties pa kreisi"
+msgstr "Atlasītajām šūnām pielietot iepriekš definētu stilu"
 
 #: ui/actions/Subtotals.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Subtotals..."
-msgstr "Šķirot..."
+msgstr "&Starpsummas..."
 
 #: ui/actions/Subtotals.cpp:21
 #, kde-format
 msgid "Create different kind of subtotals to a list or database"
-msgstr ""
+msgstr "Izvaidot atšķirīga veida starpsummas sarakstam vai datubāzei"
 
 #: ui/actions/Subtotals.cpp:118
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtotals"
-msgstr "Šķirot..."
+msgstr "Starpsummas"
 
 #: ui/actions/TextCase.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Upper"
 msgstr "Lielie burti"
 
 #: ui/actions/TextCase.cpp:34
-#, fuzzy, kde-format
-#| msgid "Power"
+#, kde-format
 msgid "Lower"
-msgstr "Pakāpe"
+msgstr "Mazie burti"
 
 #: ui/actions/TextCase.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "First Letter Upper"
-msgstr "Pārvērst pirmo burt&u par lielo"
+msgstr "Pirmie Lielie Burti"
 
 #: ui/actions/TextCase.cpp:50
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Switch to uppercase"
-msgstr "Pārvērst pirmo burt&u par lielo"
+msgstr "Pārslēgties uz lielajiem burtiem"
 
 #: ui/actions/TextCase.cpp:53
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Switch to lowercase"
-msgstr "Pārvērst pirmo burt&u par lielo"
+msgstr "Pārslēgties uz mazajiem burtiem"
 
 #: ui/actions/TextCase.cpp:56
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "First letter uppercase"
-msgstr "Pārvērst pirmo burt&u par lielo"
+msgstr "Pirmais burts ir lielais burts"
 
 #: ui/actions/TextCase.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Upper Case"
 msgstr "Lielie burti"
 
 #: ui/actions/TextCase.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lower Case"
 msgstr "Mazie burti"
 
 #: ui/actions/TextCase.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert First Letter to Upper Case"
-msgstr "Pārvērst pirmo burtu par lielo"
+msgstr "Pārveidot Katra Vārda Pirmo Burtu Pat Lielo"
 
 #: ui/actions/TextCase.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert all letters to upper case"
-msgstr "Pārvērst pirmo burt&u par lielo"
+msgstr "Pārveidot visus burtus par lielajiem"
 
 #: ui/actions/TextCase.cpp:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert all letters to lower case"
-msgstr "Pārvērst pirmo burt&u par lielo"
+msgstr "Pārveidot visus burtus par mazajiem"
 
 #: ui/actions/TextCase.cpp:112
 #, kde-format
 msgid "Capitalize the first letter"
-msgstr ""
+msgstr "Padarīt par lielo tikai pirmo burtu"
 
 #: ui/actions/TextCase.cpp:120
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Case"
-msgstr "Mainīt Leņķi"
+msgstr "Mainīt reģistru"
 
 #: ui/actions/Validity.cpp:21
 #, kde-format
 msgid "Set tests to confirm cell data is valid"
-msgstr ""
+msgstr "Iestatīt testus, lai pārbaudītu šūnas datu derīgumu"
 
 #: ui/actions/Validity.cpp:21
 #, kde-format
@@ -17388,26 +17349,24 @@ msgid "Validity..."
 msgstr "Derīgums..."
 
 #: ui/actions/Validity.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove the validity tests on this cell"
-msgstr "Izņemt komentāru"
+msgstr "Noņemt derīguma testu no šīs šūnas"
 
 #: ui/actions/Validity.cpp:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Validity"
-msgstr "Dzēst tabulu"
+msgstr "Noņemt derīgumu"
 
 #: ui/actions/Validity.cpp:103
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Validity Check"
-msgstr "Dzēst tabulu"
+msgstr "Noņemt derīguma pārbaudi"
 
 #: ui/actions/Validity.cpp:105
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Validity Check"
-msgstr "Korektuma kritēriji :"
+msgstr "Pievienot derīguma pārbaudi"
 
 #: ui/CellToolBase.cpp:813
 #, kde-format
@@ -17418,19 +17377,19 @@ msgstr "Neizdodas atrast darbību „%1“"
 #: ui/CellToolOptionWidgets.xml:21
 #, kde-format
 msgid "Alignment"
-msgstr "Izlīdzinājums"
+msgstr "Līdzinājums"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:42
 #, kde-format
 msgid "Borders"
-msgstr "Apmale"
+msgstr "Apmales"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:58
 #, kde-format
 msgid "Number format"
-msgstr "Skaitļu formatēšana"
+msgstr "Skaitļu formāts"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:68
