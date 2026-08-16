@@ -409,6 +409,7 @@
         <p xml:lang="ga">Cuireann an leagan seo tacaíocht flatpak leis an tsraith Calligra Office. Tá roinnt athruithe beaga grafacha ar an liosta sleamhnán ann freisin agus socraíonn sé réamhamharc uathoibríoch na mbeochana.</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office. Contiene anche alcune piccole modifiche grafiche all'elenco delle diapositive e corregge l'anteprima automatica delle animazioni.</p>
         <p xml:lang="ka">ეს ვერსია Calligra-ის საოფისე პაკეტს flatpak-ის მხარდაჭერას ამატებს. ის ასევე შეიცავს რამდენიმე პატარა გრაფიკულ ცვლილებას სლაიდების სიაში და გასწორდა ანიმაციების ავტომატური მინიატურა.</p>
+        <p xml:lang="lv">Šī relīze „Calligra Office“ svītai pievienot „Flatpak“ atbalstu. Tāpat arī tā satur nelielas grafiskas izmaiņas slaidu sarakstam un labo animāciju automātisko priekšskatījumu.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning van Flatpak toe aan de Calligra kantoorsuite. Het bevat ook enkele kleine grafische wijzigingen in de dia-lijst en lost het probleem op met de automatische preview van de animaties.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte a Flatpak ao pacote Calligra Office. Ela também inclui algumas pequenas alterações gráficas na lista de slides e corrige a pré-visualização automática das animações.</p>
         <p xml:lang="ru">В этом выпуске добавлена поддержка Flatpak для офисного пакета Calligra. Кроме того, выпуск содержит небольшие графические изменения списка слайдов и исправляет автоматический предварительный просмотр анимации.</p>
@@ -435,6 +436,7 @@
         <p xml:lang="ga">Is iad na hathruithe is suntasaí ná gur aistríodh Calligra go hiomlán go Qt6 agus KF6, mar aon le hathchóiriú mór ar a chomhéadan úsáideora.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
+        <p xml:lang="lv">Nozīmīgākās izmaiņas ir tas, ka „Calligra“ tagad pilnībā izmanto „Qt6“ un KF6, kā arī ir pilnīgi pārstrādāta programmas saskarne.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
         <p xml:lang="ru">Наиболее значительные изменения: полный перевод Calligra на Qt6 и KF6, а также масштабная переработка пользовательского интерфейса.</p>
@@ -456,6 +458,7 @@
         <p xml:lang="ga">Níor athraigh Stage i ndáiríre seachas athdhearadh an bharra taoibh. Tá an leid uirlisí do na sleamhnáin comhoiriúnach le Wayland anois freisin.</p>
         <p xml:lang="it">Stage non ha subito grandi cambiamenti, a parte la riprogettazione della barra laterale. Anche i suggerimenti per le diapositive sono ora compatibili con Wayland.</p>
         <p xml:lang="ka">Stage არ შეცვლილა, თუ გვერდითა პანელის დიზაინის ცვლილებას არ ჩავთვლით. სლაიდების მინიშნებები ახლა თავსებადია Wayland-თან.</p>
+        <p xml:lang="lv">„Stage“ nesaskārās ar plašām izmaiņām, neskaitot jaunu sānu joslas dizainu. Slaidu paskaidres tagad ir saderīgas arī ar „Wayland“.</p>
         <p xml:lang="nl">Stage is, afgezien van het herontwerp van de zijbalk, niet echt veranderd. De tekstballon voor de dia's is nu ook compatibel met Wayland.</p>
         <p xml:lang="pt-BR">O Stage não mudou muito além da reformulação da barra lateral. As dicas de ferramentas para os slides agora também são compatíveis com Wayland.</p>
         <p xml:lang="ru">В Calligra Stage нет существенных изменений (не считая переработки боковой панели). Всплывающая подсказка для слайдов теперь совместима с Wayland.</p>

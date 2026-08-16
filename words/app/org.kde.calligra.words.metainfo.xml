@@ -466,6 +466,7 @@
         <p xml:lang="ia">Iste version adde supporto de flatpak al suite de Calligra Office</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office.</p>
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
+        <p xml:lang="lv">Šī relīze „Calligra Office“ svītai pievienot „Flatpak“ atbalstu.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
         <p xml:lang="ru">В этом выпуске добавлена поддержка Flatpak для офисного пакета Calligra.</p>
@@ -492,6 +493,7 @@
         <p xml:lang="ga">Is iad na hathruithe is suntasaí ná gur aistríodh Calligra go hiomlán go Qt6 agus KF6, mar aon le hathchóiriú mór ar a chomhéadan úsáideora.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
+        <p xml:lang="lv">Nozīmīgākās izmaiņas ir tas, ka „Calligra“ tagad pilnībā izmanto „Qt6“ un KF6, kā arī ir pilnīgi pārstrādāta programmas saskarne.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
         <p xml:lang="ru">Наиболее значительные изменения: полный перевод Calligra на Qt6 и KF6, а также масштабная переработка пользовательского интерфейса.</p>
@@ -513,6 +515,7 @@
         <p xml:lang="ga">Tá dearadh nua barra taoibh i Word anois, agus úsáideann an príomhradharc scáth chun teorainneacha an doiciméid a shainiú. Rinneadh an Bainisteoir Stíle agus an dialóg Leagan Amach Leathanaigh a nuashonrú le dearadh nua freisin.</p>
         <p xml:lang="it">Word ora presenta il nuovo aspetto della barra laterale e la vista principale utilizza un'ombra per definire i bordi del documento. Anche la finestra Gestione stili e Impaginazione sono state aggiornate con un nuovo aspetto.</p>
         <p xml:lang="ka">Word-ს ახლა გვერდითი პანელის ახალი დიზაინი აქვს და მთავარი ხედი დოკუმენტის საზღვრებისთვის ჩრდილებს იყენებს. ასევე განახლდა დიზაინი სტილების მენეჯერისა და გვერდის განლაგების დიალოგებისთვის.</p>
+        <p xml:lang="lv">„Word“ tagad ir jauns sānu joslas dizains, bet pamata skatā tiek izmantota ēna, lai stingrāk norādītu uz dokumenta robežām. Tāpat jaunajā dizainā ir atjaunināts stilu pārvaldnieka un lapas izkārtojuma lodziņš.</p>
         <p xml:lang="nl">Word heeft nu een nieuw ontwerp voor de zijbalk en de hoofdweergave gebruikt een schaduw om de documentranden te definiëren. Het dialoogvenster Stijlbeheer en Pagina-indeling zijn ook bijgewerkt met een nieuw ontwerp.</p>
         <p xml:lang="pt-BR">O Word agora apresenta o novo design da barra lateral, e a visualização principal usa uma sombra para definir as bordas do documento. O Gerenciador de Estilos e a caixa de diálogo Layout da Página também foram atualizados com um novo design.</p>
         <p xml:lang="ru">Текстовый процессор теперь содержит боковую панель с новым дизайном, а в главном окне для определения границ документа используется тень. Оформление диалоговых окон «Диспетчер стилей» и «Формат страницы» также было обновлено.</p>

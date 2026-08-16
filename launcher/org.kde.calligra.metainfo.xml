@@ -419,6 +419,7 @@
         <p xml:lang="ia">Iste version adde supporto de flatpak al suite de Calligra Office</p>
         <p xml:lang="it">Questa versione aggiunge il supporto flatpak alla suite Calligra Office.</p>
         <p xml:lang="ka">ეს ვერსია ამატებს flatpak-ის მხარდაჭერა საოფისე პაკეტში Calligra.</p>
+        <p xml:lang="lv">Šī relīze „Calligra Office“ svītai pievienot „Flatpak“ atbalstu.</p>
         <p xml:lang="nl">Deze uitgave voegt ondersteuning voor flatpak toe aan de Calligra kantoorsuite.</p>
         <p xml:lang="pt-BR">Esta versão adiciona suporte ao Flatpak ao pacote Calligra Office.</p>
         <p xml:lang="sk">Toto vydanie pridáva podporu flatpak do kancelárskeho balíka Calligra.</p>
@@ -445,6 +446,7 @@
         <p xml:lang="he">השינויים המשמעותיים ביותר ב־Calligra הם המעבר המלא ל־Qt6 ו־KF6, לרבות מתיחת פנים משמעותית של ממשק המשתמש.</p>
         <p xml:lang="it">Le modifiche più significative riguardano la transizione completa di Calligra a Qt6 e KF6, nonché una revisione radicale della sua interfaccia utente.</p>
         <p xml:lang="ka">ყველაზე მნიშვნელოვანი ცვლილება ისაა, რომ Calligra ახლა სრულადაა გადატანილი Qt6-ზე და KF6-ზე, ინტერფეისის ძირეული ცვლილების ჩათვლით.</p>
+        <p xml:lang="lv">Nozīmīgākās izmaiņas ir tas, ka „Calligra“ tagad pilnībā izmanto „Qt6“ un KF6, kā arī ir pilnīgi pārstrādāta programmas saskarne.</p>
         <p xml:lang="nl">De belangrijkste wijzigingen zijn dat Calligra volledig is overgezet naar Qt6 en KF6, samen met een belangrijke herziening van zijn gebruikersinterface.</p>
         <p xml:lang="pt-BR">As mudanças mais significativas são a transição completa do Calligra para Qt6 e KF6, juntamente com uma grande reformulação de sua interface de usuário.</p>
         <p xml:lang="sk">Najvýznamnejšie zmeny sú, že Calligra bola úplne prevedená na Qt6 a KF6, spolu s výraznou prestavbou používateľského rozhrania.</p>
@@ -465,6 +467,7 @@
         <p xml:lang="ga">Tá dearadh nua barra taoibh ag Words, Sheets, agus Stage anois. Baineadh an dugaire “Cruth Saincheaptha”, agus is féidir cruthanna saincheaptha a rochtain anois trí roghchlár aníos sa bharra uirlisí ar fud gach feidhmchlár Calligra. Rinneamar an barra uirlisí a shimpliú agus bhaineamar na gníomhartha bunúsacha cóipeála, greamaigh agus gearrtha.</p>
         <p xml:lang="it">Words, Sheets e Stage presentano ora una nuova barra laterale. L'area di aggancio «Forma personalizzata» è stata rimossa e le forme personalizzate sono ora accessibili tramite un menu a comparsa nella barra degli strumenti in tutte le applicazioni Calligra. Abbiamo semplificato la barra degli strumenti e rimosso le azioni di base di copia, incolla e taglia.</p>
         <p xml:lang="ka">გახდა ხელმისაწვდომი გვერდითა პანელის ახალი დიზაინი Words, Sheets და Stage აპლიკაციებში. წაიშალა „ნებისმიერი ფორმის“ პანელი, ხოლო ნებისმიერი ფორმები ახლა ხელმისაწვდომია ხელსაწყოების ზოლის ამომხტარი მენიუდან Calligra-ს ყველა აპლიკაციაში. გავამარტივეთ ხელსაწყოების ზოლი და წაიშალა კოპირების, ჩასმისა და ამოჭრის ძირითადი მოქმედებები.</p>
+        <p xml:lang="lv">„Words“, „Sheets“ un „Stage“ tagad ir sānu joslas dizains. „Pielāgotas formas“ piespraužamais logs ir noņemts, bet pielāgojamās formas tagad ir pieejamas caur uzlecošu izvēlni rīkjoslā visās „Calligra“ lietojumprogrammās. Mēs vienkāršojām rīkjoslu un noņēmām pamata kopēšanas, ielīmēšanas un griešanas darbības.</p>
         <p xml:lang="nl">Words, Sheets en Stage hebben nu een nieuw ontwerp voor de zijbalk. Het vastzettermenu 'Aangepaste vorm' is verwijderd en aangepaste vormen zijn nu toegankelijk via een pop-upmenu in de werkbalk in alle Calligra-toepassingen. We hebben de werkbalk vereenvoudigd en de basisfuncties voor kopiëren, plakken en knippen verwijderd.</p>
         <p xml:lang="pt-BR">O Word, o Sheets e o Stage agora apresentam um novo design de barra lateral. O painel de "Formas personalizadas" foi removido e as formas personalizadas agora podem ser acessadas por meio de um menu pop-up na barra de ferramentas em todos os aplicativos do Calligra. Simplificamos a barra de ferramentas e removemos as ações básicas de copiar, colar e recortar.</p>
         <p xml:lang="sk">Words, Sheets a Stage teraz obsahujú nový dizajn bočného panela. Docker "Vlastný tvar" bol odstránený a vlastné tvary sú teraz prístupné cez novú položku menu.</p>
