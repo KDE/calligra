@@ -7,20 +7,21 @@
 # SPDX-FileCopyrightText: 2010 Markus Slopianka <markus.s@kdemail.net>
 # SPDX-FileCopyrightText: 2010-2013, 2016 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2024-2025 Alois.spitzbart <spitz234@hotmail.com>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-03 00:42+0000\n"
-"PO-Revision-Date: 2025-11-22 14:55+0100\n"
-"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2026-08-16 15:36+0200\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -50,7 +51,7 @@ msgstr "Einrastwinkel:"
 #: basicflakes/tools/KoCreatePathTool.cpp:449
 #, kde-format
 msgid "Activate angle snap:"
-msgstr "Winkeleinrasten einschalten:"
+msgstr "Winkeleinrasten aktivieren:"
 
 #: basicflakes/tools/KoCreatePathTool.cpp:457
 #, kde-format
@@ -943,12 +944,12 @@ msgstr "Immer diese Vorlage verwenden"
 #: main/KoDocument.cpp:548
 #, kde-format
 msgid "Making backup..."
-msgstr "Sicherung wird erstellt ..."
+msgstr "Sicherung wird erstellt …"
 
 #: main/KoDocument.cpp:563
 #, kde-format
 msgid "Saving..."
-msgstr "Wird gespeichert ..."
+msgstr "Wird gespeichert …"
 
 #: main/KoDocument.cpp:591
 #, kde-format
@@ -985,7 +986,7 @@ msgstr ""
 #: main/KoDocument.cpp:712
 #, kde-format
 msgid "Autosaving..."
-msgstr "Automatisches Speichern läuft ..."
+msgstr "Automatisches Speichern läuft …"
 
 #: main/KoDocument.cpp:724
 #, kde-format
@@ -1206,8 +1207,8 @@ msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
-"Das Dokument <i>%1</i> enthält mehrere Versionen. Rufen Sie Datei -> "
-"Versionen auf, um eine alte Version zu öffnen. "
+"Das Dokument <i>%1</i> enthält mehrere Versionen. Rufen Sie "
+"Datei → Versionen auf, um eine alte Version zu öffnen. "
 
 #: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
@@ -1363,7 +1364,7 @@ msgstr "%1 nicht gespeichertes Dokument (%2)"
 #: main/KoMainWindow.cpp:259
 #, kde-format
 msgid "Export as PDF..."
-msgstr "Exportieren als PDF ..."
+msgstr "Als PDF exportieren …"
 
 #: main/KoMainWindow.cpp:271
 #, kde-format
@@ -1373,17 +1374,17 @@ msgstr "Erneut laden"
 #: main/KoMainWindow.cpp:275
 #, kde-format
 msgid "Versions..."
-msgstr "Versionen ..."
+msgstr "Versionen …"
 
 #: main/KoMainWindow.cpp:279
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "Vorhandenes Dokument als unbenanntes Dokument öffnen ..."
+msgstr "&Vorhandenes Dokument als unbenanntes Dokument öffnen …"
 
 #: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "E&xport..."
-msgstr "E&xportieren ..."
+msgstr "E&xportieren …"
 
 #: main/KoMainWindow.cpp:287
 #, kde-format
@@ -1646,7 +1647,7 @@ msgstr "Gruppe:"
 #: main/KoTemplateCreateDia.cpp:136
 #, kde-format
 msgid "&Add Group..."
-msgstr "Gruppe &hinzufügen ..."
+msgstr "Gruppe &hinzufügen …"
 
 #: main/KoTemplateCreateDia.cpp:139 main/KoVersionDialog.cpp:60
 #, kde-format
@@ -1671,7 +1672,7 @@ msgstr "Benutzerdefiniert:"
 #: main/KoTemplateCreateDia.cpp:157
 #, kde-format
 msgid "&Select..."
-msgstr "&Auswählen ..."
+msgstr "&Auswählen …"
 
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
@@ -2449,12 +2450,12 @@ msgstr "Aktuelle Seite löschen"
 #: pageapp/KoPAView.cpp:404
 #, kde-format
 msgid "Master Page..."
-msgstr "Folienmaster ..."
+msgstr "Folienmaster …"
 
 #: pageapp/KoPAView.cpp:408
 #, kde-format
 msgid "Page Layout..."
-msgstr "Seitenlayout ..."
+msgstr "Seitenlayout …"
 
 #. i18n: ectx: property (text), widget (QTableWidget, variables)
 #: pageapp/KoPAView.cpp:418 rdf/KoSemanticStylesheetsEditor.ui:57
@@ -2465,12 +2466,12 @@ msgstr "Variable"
 #: pageapp/KoPAView.cpp:423
 #, kde-format
 msgid "Import Document..."
-msgstr "Dokument importieren ..."
+msgstr "Dokument importieren …"
 
 #: pageapp/KoPAView.cpp:427
 #, kde-format
 msgid "Configure..."
-msgstr "Einrichten ..."
+msgstr "Einrichten …"
 
 #: pageapp/KoPAView.cpp:517
 #, kde-format
@@ -2495,7 +2496,7 @@ msgstr "Seitenlayout ändern"
 #: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
 #, kde-format
 msgid "Set image ..."
-msgstr "Bild festlegen ..."
+msgstr "Bild festlegen …"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:86
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
@@ -4041,7 +4042,7 @@ msgstr "Zuletzt verwendet:"
 #: widgets/KoColorSetWidget.cpp:163
 #, kde-format
 msgid "Add / Remove Colors..."
-msgstr "Farben hinzufügen / entfernen ..."
+msgstr "Farben hinzufügen/entfernen …"
 
 #: widgets/KoConfigAuthorPage.cpp:50
 #, kde-format
@@ -4341,7 +4342,7 @@ msgstr "&Detail"
 #: widgets/KoDialog.cpp:971
 #, kde-format
 msgid "Get help..."
-msgstr "Hilfe anfordern ..."
+msgstr "Hilfe erhalten …"
 
 #: widgets/KoDockWidgetTitleBar.cpp:54
 #, kde-format
@@ -4778,10 +4779,9 @@ msgid "Icon only"
 msgstr "Nur Symbol"
 
 #: widgets/KoModeBox.cpp:505
-#, fuzzy, kde-format
-#| msgid "Single sided"
+#, kde-format
 msgid "Sidebar side"
-msgstr "Einseitig"
+msgstr "Seitenleisten-Seite"
 
 #: widgets/KoModeBox.cpp:514
 #, kde-format
@@ -5159,7 +5159,7 @@ msgstr ""
 "Übereinstimmung mit dem vollständigen Namen:<br><icode>\"ExactMatch\"</"
 "icode> or <icode>!\"ExactMatch\"</icode>.</para>Drücken Sie die Taste "
 "<interface>Eingabe</interface> oder den Knopf <interface>Speichern</"
-"interface>, dann werden die Änderungen gespeichert.</qt>"
+"interface>, um die Änderungen zu speichern.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:65
 #, kde-format

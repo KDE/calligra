@@ -7,20 +7,21 @@
 # SPDX-FileCopyrightText: 2010 Markus Slopianka <markus.s@kdemail.net>
 # SPDX-FileCopyrightText: 2010-2012, 2016 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2024-2025 Alois.spitzbart <spitz234@hotmail.com>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-07-18 17:07+0200\n"
-"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2026-08-16 16:11+0200\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -402,7 +403,7 @@ msgstr "Objekteigenschaften ändern"
 #: part/dialogs/KWInsertImage.ui:17
 #, kde-format
 msgid "Anchor to..."
-msgstr "Verankern an ..."
+msgstr "Verankern an …"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
@@ -1082,7 +1083,7 @@ msgstr "Textverarbeitung"
 #: part/KWAboutData.h:22
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "Copyright © 1998–%1, Das Words-Team"
+msgstr "© 1998–%1, Das Words-Team"
 
 #: part/KWAboutData.h:28
 #, kde-format
@@ -1515,7 +1516,7 @@ msgstr "Vollbildmodus beenden"
 #: part/KWView.cpp:278
 #, kde-format
 msgid "Shape Properties..."
-msgstr "Objekteigenschaften ..."
+msgstr "Objekteigenschaften …"
 
 #: part/KWView.cpp:280
 #, kde-format
@@ -1525,7 +1526,7 @@ msgstr "Ändert das Verhalten des Objekts"
 #: part/KWView.cpp:289
 #, kde-format
 msgid "Create Template From Document..."
-msgstr "Vorlage aus Dokument erzeugen ..."
+msgstr "Vorlage aus Dokument erstellen …"
 
 #: part/KWView.cpp:290
 #, kde-format
@@ -1691,7 +1692,7 @@ msgstr "Ansicht im Vollbildmodus einstellen"
 #: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr "Semantische Stilvorlagen ..."
+msgstr "Semantische Stilvorlagen …"
 
 #: part/KWView.cpp:402
 #, kde-format
@@ -1710,12 +1711,12 @@ msgstr ""
 #: part/KWView.cpp:418
 #, kde-format
 msgid "Configure..."
-msgstr "Einrichten ..."
+msgstr "Einrichten …"
 
 #: part/KWView.cpp:427
 #, kde-format
 msgid "Page Layout..."
-msgstr "Seitenlayout ..."
+msgstr "Seitenlayout …"
 
 #: part/KWView.cpp:429
 #, kde-format

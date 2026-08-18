@@ -3,20 +3,21 @@
 # SPDX-FileCopyrightText: 2007-2010 Jannick Kuhr <opensource@kuhr.org>
 # SPDX-FileCopyrightText: 2010, 2012, 2016 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2024-2025 Alois.spitzbart <spitz234@hotmail.com>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_text\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2025-05-03 12:34+0200\n"
-"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2026-08-16 15:36+0200\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -1354,7 +1355,7 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:117
 #, kde-format
 msgid "LABEL"
-msgstr ""
+msgstr "BESCHRIFTUNG"
 
 #. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
 #: dialogs/ListLevelWidget.ui:149
@@ -1430,7 +1431,7 @@ msgstr "Bild"
 #: dialogs/ListLevelWidget.ui:481
 #, kde-format
 msgid "Load Image..."
-msgstr "Bild laden ..."
+msgstr "Bild laden …"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: dialogs/ManageBookmark.ui:20
@@ -1542,43 +1543,43 @@ msgstr "Dokument"
 #: dialogs/NotesConfigurationDialog.ui:233
 #, kde-format
 msgid "1, 2, 3, ..."
-msgstr "1, 2, 3, ..."
+msgstr "1, 2, 3, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:238
 #, kde-format
 msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
-msgstr "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+msgstr "a, b, c, …, aa, ab, …, ba, bb, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:243
 #, kde-format
 msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
-msgstr "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+msgstr "A, B, C, …, AA, AB, …, BA, BB, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:248
 #, kde-format
 msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
-msgstr "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+msgstr "a, b, c, …, aa, bb, …, aaa, bbb, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:253
 #, kde-format
 msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
-msgstr "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+msgstr "A, B, C, …, AA, BB, …, AAA, BBB, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:258
 #, kde-format
 msgid "i, ii, iii, ..."
-msgstr "i, ii, iii, ..."
+msgstr "i, ii, iii, …"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:263
 #, kde-format
 msgid "I,II,III, ..."
-msgstr "I,II,III, ..."
+msgstr "I,II,III, …"
 
 #. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
 #: dialogs/NotesConfigurationDialog.ui:290
@@ -1744,7 +1745,7 @@ msgstr "Höhe"
 #: dialogs/ParagraphBulletsNumbers.ui:284
 #, kde-format
 msgid "Browse..."
-msgstr "Durchsuchen ..."
+msgstr "Durchsuchen …"
 
 #: dialogs/ParagraphDecorations.cpp:18
 #, kde-format
@@ -1982,7 +1983,7 @@ msgstr "Abschnitte teilen"
 #: dialogs/SectionsSplitDialog.ui:12
 #, kde-format
 msgid "Insert paragraph..."
-msgstr "Absatz einfügen ..."
+msgstr "Absatz einfügen …"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/SectionsSplitDialog.ui:23
@@ -2103,7 +2104,7 @@ msgstr "Löschen"
 #: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
 #, kde-format
 msgid "Edit..."
-msgstr "Bearbeiten ..."
+msgstr "Bearbeiten …"
 
 #: dialogs/SimpleParagraphWidget.cpp:312
 #, kde-format
@@ -2135,7 +2136,7 @@ msgstr "Inhalte"
 #: dialogs/SimpleTableWidget.cpp:45
 #, kde-format
 msgid "Set Border Color..."
-msgstr "Farbe der Umrandung setzen ..."
+msgstr "Farbe der Umrandung festlegen …"
 
 #: dialogs/SimpleTableWidget.cpp:173
 #, kde-format
@@ -2305,7 +2306,7 @@ msgstr "An verfügbare Umgebung anpassen "
 #: dialogs/TableOfContentsConfigure.cpp:61
 #, kde-format
 msgid "Table of Contents - Configure"
-msgstr "Inhaltsverzeichnis - Einrichtung"
+msgstr "Inhaltsverzeichnis – Einrichtung"
 
 #: dialogs/TableOfContentsConfigure.cpp:63
 #, kde-format
@@ -2390,7 +2391,7 @@ msgstr "Stil"
 #: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
-msgstr "Inhaltsverzeichnis - Stile einrichten"
+msgstr "Inhaltsverzeichnis – Stile einrichten"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
@@ -2422,7 +2423,7 @@ msgstr "Ein Inhaltsverzeichnis in das Dokument einfügen."
 #: ReferencesTool.cpp:118 TextTool.cpp:407
 #, kde-format
 msgid "Insert Custom..."
-msgstr "Benutzerdefiniert einfügen ..."
+msgstr "Benutzerdefiniert einfügen …"
 
 #: ReferencesTool.cpp:120
 #, kde-format
@@ -2432,7 +2433,7 @@ msgstr "Ein benutzerdefiniertes Inhaltsverzeichnis in das Dokument einfügen."
 #: ReferencesTool.cpp:122
 #, kde-format
 msgid "Configure..."
-msgstr "Einrichten ..."
+msgstr "Einrichten …"
 
 #: ReferencesTool.cpp:124
 #, kde-format
@@ -2467,7 +2468,7 @@ msgstr "Beschriftete Endnote einfügen"
 #: ReferencesTool.cpp:149 ReferencesTool.cpp:153
 #, kde-format
 msgid "Settings..."
-msgstr "Einstellungen ..."
+msgstr "Einstellungen …"
 
 #: ReferencesTool.cpp:159
 #, kde-format
@@ -2765,7 +2766,7 @@ msgstr "Sämtlicher Text nach diesem Punkt fließt auf die nächste Seite."
 #: TextTool.cpp:361
 #, kde-format
 msgid "Font..."
-msgstr "Schriftart ..."
+msgstr "Schriftart …"
 
 #: TextTool.cpp:364
 #, kde-format
@@ -2786,7 +2787,7 @@ msgstr "Schriftgröße"
 #: TextTool.cpp:374
 #, kde-format
 msgid "Text Color..."
-msgstr "Textfarbe ..."
+msgstr "Textfarbe …"
 
 #: TextTool.cpp:375
 #, kde-format
@@ -2796,7 +2797,7 @@ msgstr "Textfarbe"
 #: TextTool.cpp:381
 #, kde-format
 msgid "Background Color..."
-msgstr "Hintergrundfarbe ..."
+msgstr "Hintergrundfarbe …"
 
 #: TextTool.cpp:382
 #, kde-format
@@ -2906,7 +2907,7 @@ msgstr "Wählt einen Randstil und zeichnet diesen Stil in eine Tabelle"
 #: TextTool.cpp:455
 #, kde-format
 msgid "Paragraph..."
-msgstr "Absatz ..."
+msgstr "Absatz …"
 
 #: TextTool.cpp:458
 #, kde-format
@@ -2932,7 +2933,7 @@ msgstr ""
 #: TextTool.cpp:464
 #, kde-format
 msgid "Style Manager..."
-msgstr "Stilverwaltung ..."
+msgstr "Stilverwaltung …"
 
 #: TextTool.cpp:466
 #, kde-format
@@ -2951,7 +2952,7 @@ msgstr ""
 #: TextTool.cpp:474
 #, kde-format
 msgid "Special Character..."
-msgstr "Sonderzeichen ..."
+msgstr "Sonderzeichen …"
 
 #: TextTool.cpp:478
 #, kde-format

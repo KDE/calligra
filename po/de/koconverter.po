@@ -3,19 +3,21 @@
 # SPDX-FileCopyrightText: 2006-2008 Jannick Kuhr <opensource@kuhr.org>
 # SPDX-FileCopyrightText: 2010 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2011-2012, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: koconverter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2015-10-31 20:02+0100\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2026-08-14 20:57+0200\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -95,7 +97,7 @@ msgstr "Die Ausrichtung des Drucks, entweder Hoch- oder Querformat."
 #: calligraconverter.cpp:205
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr "Das Papierformat: A4, Legal, Letter, ..."
+msgstr "Das Papierformat: A4, Legal, Letter, …"
 
 #: calligraconverter.cpp:207
 #, kde-format
