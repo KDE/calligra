@@ -8,20 +8,21 @@
 # SPDX-FileCopyrightText: 2010 Markus Slopianka <markus.s@kdemail.net>
 # SPDX-FileCopyrightText: 2010-2013, 2016 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2024 Alois.spitzbart <spitz234@hotmail.com>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-09-04 09:42+0200\n"
-"Last-Translator: Alois.spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2026-08-16 16:08+0200\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -156,7 +157,7 @@ msgstr "Präsentationswerkzeug"
 #: part/KPrAboutData.h:23
 #, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr "Copyright © 1998–%1, Das Stage-Team"
+msgstr "© 1998–%1, Das Stage-Team"
 
 #: part/KPrAboutData.h:29
 #, kde-format
@@ -495,7 +496,7 @@ msgstr "Folienmaster anzeigen"
 #: part/KPrView.cpp:80
 #, kde-format
 msgid "Import Slideshow..."
-msgstr "Vorführung importieren ..."
+msgstr "Vorführung importieren …"
 
 #: part/KPrView.cpp:81
 #, kde-format
@@ -530,7 +531,7 @@ msgstr "Aktuelle Folie löschen"
 #: part/KPrView.cpp:90
 #, kde-format
 msgid "Master Slide..."
-msgstr "Folienmaster ..."
+msgstr "Folienmaster …"
 
 #: part/KPrView.cpp:91
 #, kde-format
@@ -570,17 +571,17 @@ msgstr "Zur letzten Folie gehen"
 #: part/KPrView.cpp:103
 #, kde-format
 msgid "Configure Stage..."
-msgstr "Stage einrichten ..."
+msgstr "Stage einrichten …"
 
 #: part/KPrView.cpp:238
 #, kde-format
 msgid "Export as HTML..."
-msgstr "Als HTML exportieren ..."
+msgstr "Als HTML exportieren …"
 
 #: part/KPrView.cpp:264
 #, kde-format
 msgid "Insert Pictures as Slides..."
-msgstr "Bilder als Folie einfügen ..."
+msgstr "Bilder als Folie einfügen …"
 
 #: part/KPrView.cpp:273
 #, kde-format
@@ -590,7 +591,7 @@ msgstr "Einblendanimation erstellen"
 #: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
-msgstr "Benutzerdefinierte Vorführungen bearbeiten ..."
+msgstr "Benutzerdefinierte Vorführungen bearbeiten …"
 
 #: part/KPrView.cpp:281
 #, kde-format
@@ -630,27 +631,27 @@ msgstr "Statusleiste anzeigen bzw. ausblenden"
 #: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
-msgstr "Vorführung einrichten ..."
+msgstr "Vorführung einrichten …"
 
 #: part/KPrView.cpp:314
 #, kde-format
 msgid "Configure Presenter View..."
-msgstr "Präsentationsansicht einrichten ..."
+msgstr "Präsentationsansicht einrichten …"
 
 #: part/KPrView.cpp:318
 #, kde-format
 msgid "Draw on the presentation..."
-msgstr "Auf die Präsentation malen ..."
+msgstr "Auf der Präsentation malen …"
 
 #: part/KPrView.cpp:325
 #, kde-format
 msgid "Highlight the presentation..."
-msgstr "Präsentation hervorheben ..."
+msgstr "Präsentation hervorheben …"
 
 #: part/KPrView.cpp:332
 #, kde-format
 msgid "Blackscreen on the presentation..."
-msgstr "Schwarzer Bildschirm auf der Präsentation ..."
+msgstr "Schwarzer Bildschirm auf der Präsentation …"
 
 #: part/KPrViewModeNotes.cpp:36
 #, kde-format
@@ -1072,7 +1073,7 @@ msgstr "Präsentationsfolien"
 #: part/ui/KPrConfigureSlideShow.ui:54
 #, kde-format
 msgid "Edit Custom Slide Shows ..."
-msgstr "Benutzerdefinierte Vorführungen bearbeiten ..."
+msgstr "Benutzerdefinierte Vorführungen bearbeiten …"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
 #: part/ui/KPrHtmlExport.ui:20
@@ -1212,7 +1213,7 @@ msgstr "Keine Klangeffekte"
 #: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:102
 #, kde-format
 msgid "Import..."
-msgstr "Importieren ..."
+msgstr "Importieren …"
 
 #: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:21
 #, kde-format

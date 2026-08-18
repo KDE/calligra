@@ -10,20 +10,21 @@
 # SPDX-FileCopyrightText: 2010 Rolf Eike Beer <kde@opensource.sf-tec.de>
 # SPDX-FileCopyrightText: 2010-2012, 2015-2016, 2022-2023 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2024-2025 Alois.spitzbart <spitz234@hotmail.com>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2025-11-22 15:07+0100\n"
-"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2026-08-16 16:03+0200\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -1330,11 +1331,11 @@ msgid ""
 "2, monday is 1, tuesday 2, ... and if the method is 3 WEEKDAY() returns 0 "
 "for monday, 1 for tuesday,..."
 msgstr ""
-"Die WEEKDAY() Funktion gibt den Wochentag für das angegebene Datum zurück. "
+"Die Funktion WEEKDAY() gibt den Wochentag für das angegebene Datum zurück. "
 "Wenn die Berechnungsmethode 1 ist (Standard), gibt die Funktion 1 für "
-"Sonntag, 2 für Montag, ... usw. zurück. Bei Berechnungsmethode 2 ist Montag "
-"1, Dienstag 2, ... usw. Und bei Berechnungsmethode 3 ist Montag 0, Dienstag "
-"1, ... usw."
+"Sonntag, 2 für Montag, usw. zurück. Die Berechnungsmethode 2 ergibt für "
+"Montag 1, Dienstag 2, usw. Bei Berechnungsmethode 3 ist Montag 0, Dienstag "
+"1, usw."
 
 #: functions/datetime.xml:20
 #, kde-format
@@ -1446,8 +1447,8 @@ msgid ""
 "The EDATE functions returns the date that is specified by a given date and a "
 "number of months before or after that date."
 msgstr ""
-"Die Funktion EDATE gibt das Datum zurück, welches entsteht wenn man von "
-"einem gegebenen Datum eine bestimmte Anzahl Monate addiert oder subtrahiert."
+"Die Funktion EDATE gibt das Datum zurück, das durch Addieren bzw. "
+"Subtrahieren einer bestimmten Anzahl Monate zum bzw. vom Datum entsteht."
 
 #: functions/datetime.xml:95
 #, kde-format
@@ -1828,7 +1829,7 @@ msgstr "Tag"
 msgid ""
 "The DAYOFYEAR() function returns the number of the day in the year (1...365)."
 msgstr ""
-"Die Funktion DAYOFYEAR() gibt die Nummer des Tages im Jahr zurück (1-365)."
+"Die Funktion DAYOFYEAR() gibt die Nummer des Tages im Jahr zurück (1–365)."
 
 #: functions/datetime.xml:331
 #, kde-format
@@ -2194,7 +2195,7 @@ msgstr "ISOWEEKNUM(Datum)"
 #: functions/datetime.xml:594
 #, kde-format
 msgid "ISOWEEKNUM(A1) returns 51 when A1 is \"21st of Dec\"."
-msgstr "ISOWEEKNUM(A1) ergibt 51 wenn A1 „21st of Dec“ enthält."
+msgstr "ISOWEEKNUM(A1) ergibt 51, wenn A1 „21st of Dec“ enthält."
 
 #: functions/datetime.xml:611
 #, kde-format
@@ -3551,7 +3552,7 @@ msgstr ""
 #: functions/engineering.xml:722
 #, kde-format
 msgid "IMSUM(value;value;...)"
-msgstr "IMSUM(Wert;Wert;...)"
+msgstr "IMSUM(Wert;Wert; …)"
 
 # |, no-fancy-quote
 #: functions/engineering.xml:723
@@ -3577,7 +3578,7 @@ msgstr ""
 #: functions/engineering.xml:753
 #, kde-format
 msgid "IMDIV(value;value;...)"
-msgstr "IMDIV(Wert;Wert;...)"
+msgstr "IMDIV(Wert;Wert; …)"
 
 # |, no-fancy-quote
 #: functions/engineering.xml:754
@@ -3602,7 +3603,7 @@ msgstr ""
 #: functions/engineering.xml:785
 #, kde-format
 msgid "IMSUB(value;value;...)"
-msgstr "IMSUB(Wert;Wert;...)"
+msgstr "IMSUB(Wert;Wert; …)"
 
 # |, no-fancy-quote
 #: functions/engineering.xml:786
@@ -3627,7 +3628,7 @@ msgstr ""
 #: functions/engineering.xml:816
 #, kde-format
 msgid "IMPRODUCT(value;value;...)"
-msgstr "IMPRODUCT(Wert;Wert;...)"
+msgstr "IMPRODUCT(Wert;Wert; …)"
 
 # |, no-fancy-quote
 #: functions/engineering.xml:817
@@ -5635,7 +5636,8 @@ msgstr "FORMULA(x)"
 msgid ""
 "FORMULA(A1) returns \"=SUM(1+2)\" if the cell A1 contains such a formula."
 msgstr ""
-"FORMULA(A1) gibt \"=SUM(1+2)\" zurück wenn die Zelle A1 diese Formel enthält."
+"FORMULA(A1) gibt \"=SUM(1+2)\" zurück, wenn die Zelle A1 diese Formel "
+"enthält."
 
 #: functions/information.xml:44
 #, kde-format
@@ -5916,9 +5918,9 @@ msgid ""
 "The ISNONTEXT() function returns True if the parameter is not a string. "
 "Otherwise it returns False. It's the same as ISNOTTEXT."
 msgstr ""
-"Die Funktion ISNONTEXT() ergibt Wahr wenn der Parameter keine Zeichenfolge "
-"ist. Ansonsten ergibt sie Falsch. Sie ist identisch mit der ISNOTTEXT-"
-"Funktion."
+"Die Funktion ISNONTEXT() gibt „Wahr“ zurück, wenn der Parameter keine "
+"Zeichenfolge ist. Ansonsten gibt sie „Falsch“ zurück. Sie ist identisch mit "
+"der ISNOTTEXT-Funktion."
 
 #: functions/information.xml:195
 #, kde-format
@@ -5942,9 +5944,9 @@ msgid ""
 "The ISNOTTEXT() function returns True if the parameter is not a string. "
 "Otherwise it returns False. It's the same as ISNONTEXT."
 msgstr ""
-"Die Funktion ISNOTTEXT() ergibt Wahr wenn der Parameter keine Zeichenfolge "
-"ist. Ansonsten ergibt sie Falsch. Sie ist identisch mit der ISNONTEXT-"
-"Funktion."
+"Die Funktion ISNOTTEXT() gibt „Wahr“ zurück, wenn der Parameter keine "
+"Zeichenfolge ist. Ansonsten gibt sie „Falsch“ zurück. Sie ist identisch mit "
+"der ISNONTEXT-Funktion."
 
 #: functions/information.xml:211
 #, kde-format
@@ -6188,7 +6190,7 @@ msgstr ""
 #: functions/logic.xml:52
 #, kde-format
 msgid "AND(value;value;...)"
-msgstr "AND(Wert;Wert;...)"
+msgstr "AND(Wert;Wert; …)"
 
 #: functions/logic.xml:53
 #, kde-format
@@ -6214,7 +6216,7 @@ msgstr ""
 #: functions/logic.xml:83
 #, kde-format
 msgid "OR(value;value;...)"
-msgstr "OR(Wert;Wert;...)"
+msgstr "OR(Wert;Wert; …)"
 
 #: functions/logic.xml:84
 #, kde-format
@@ -6238,7 +6240,7 @@ msgstr ""
 #: functions/logic.xml:114
 #, kde-format
 msgid "NAND(value;value;...)"
-msgstr "NAND(Wert;Wert;...)"
+msgstr "NAND(Wert;Wert; …)"
 
 #: functions/logic.xml:115
 #, kde-format
@@ -6262,7 +6264,7 @@ msgstr ""
 #: functions/logic.xml:145
 #, kde-format
 msgid "NOR(value;value;...)"
-msgstr "NOR(Wert;Wert;...)"
+msgstr "NOR(Wert;Wert; …)"
 
 #: functions/logic.xml:146
 #, kde-format
@@ -6287,7 +6289,7 @@ msgstr ""
 #: functions/logic.xml:176
 #, kde-format
 msgid "XOR(value;value;...)"
-msgstr "XOR(Wert;Wert;...)"
+msgstr "XOR(Wert;Wert; …)"
 
 #: functions/logic.xml:177
 #, kde-format
@@ -6856,7 +6858,7 @@ msgstr ""
 #: functions/math.xml:297
 #, kde-format
 msgid "COUNT(value;value;value...)"
-msgstr "COUNT(Wert;Wert;...)"
+msgstr "COUNT(Wert;Wert; …)"
 
 # |, no-fancy-quote
 #: functions/math.xml:298
@@ -6883,7 +6885,7 @@ msgstr ""
 #: functions/math.xml:315
 #, kde-format
 msgid "COUNTA(value;value;value...)"
-msgstr "COUNTA(Wert;Wert;Wert ...)"
+msgstr "COUNTA(Wert;Wert;Wert …)"
 
 # |, no-fancy-quote
 #: functions/math.xml:316
@@ -7021,7 +7023,7 @@ msgstr ""
 #: functions/math.xml:399 functions/math.xml:417
 #, kde-format
 msgid "SUM(value;value;...)"
-msgstr "SUM(Wert;Wert;...)"
+msgstr "SUM(Wert;Wert; …)"
 
 #: functions/math.xml:400
 #, kde-format
@@ -7103,8 +7105,8 @@ msgid ""
 "SUMIF(A1:A4;\"=0\";B1:B4) sums all values in range B1:B4 if the "
 "corresponding value in A1:A4 matches =0"
 msgstr ""
-"SUMIF(A1:A4;\"=0\";B1:B4) summiert alle Werte im Bereich B1:B4 wenn der "
-"entsprechende Wert in A1:A4 die Bedingung =0 erfüllt."
+"SUMIF(A1:A4;\"=0\";B1:B4) summiert alle Werte im Bereich B1:B4, wenn der "
+"entsprechende Wert im Bereich A1:A4 gleich „0“ ist"
 
 #: functions/math.xml:458
 #, kde-format
@@ -7122,7 +7124,7 @@ msgstr ""
 #: functions/math.xml:459
 #, kde-format
 msgid "PRODUCT(value;value;...)"
-msgstr "PRODUCT(Wert;Wert;...)"
+msgstr "PRODUCT(Wert;Wert; …)"
 
 #: functions/math.xml:460
 #, kde-format
@@ -7150,7 +7152,7 @@ msgstr ""
 #: functions/math.xml:476
 #, kde-format
 msgid "KPRODUCT(value;value;...)"
-msgstr "KPRODUCT(Wert;Wert;...)"
+msgstr "KPRODUCT(Wert;Wert; …)"
 
 #: functions/math.xml:477
 #, kde-format
@@ -7174,7 +7176,7 @@ msgstr ""
 #: functions/math.xml:494
 #, kde-format
 msgid "G_PRODUCT(value;value;...)"
-msgstr "G_PRODUCT(Wert;Wert;...)"
+msgstr "G_PRODUCT(Wert;Wert; …)"
 
 #: functions/math.xml:507
 #, kde-format
@@ -7186,7 +7188,7 @@ msgstr ""
 #: functions/math.xml:508
 #, kde-format
 msgid "DIV(value;value;...)"
-msgstr "DIV(Wert;Wert;...)"
+msgstr "DIV(Wert;Wert; …)"
 
 #: functions/math.xml:509
 #, kde-format
@@ -7212,7 +7214,7 @@ msgstr ""
 #: functions/math.xml:525
 #, kde-format
 msgid "SUMSQ(value;value;...)"
-msgstr "SUMSQ(Wert;Wert;...)"
+msgstr "SUMSQ(Wert;Wert; …)"
 
 #: functions/math.xml:526
 #, kde-format
@@ -7236,7 +7238,7 @@ msgstr ""
 #: functions/math.xml:542
 #, kde-format
 msgid "MAX(value;value;...)"
-msgstr "MAX(Wert;Wert;...)"
+msgstr "MAX(Wert;Wert; …)"
 
 #: functions/math.xml:543
 #, kde-format
@@ -7266,7 +7268,7 @@ msgstr ""
 #: functions/math.xml:563
 #, kde-format
 msgid "MAXA(value;value;...)"
-msgstr "MAXA(Wert;Wert;...)"
+msgstr "MAXA(Wert;Wert; …)"
 
 #: functions/math.xml:564
 #, kde-format
@@ -7295,7 +7297,7 @@ msgstr ""
 #: functions/math.xml:584
 #, kde-format
 msgid "MIN(value;value;...)"
-msgstr "MIN(Wert;Wert;...)"
+msgstr "MIN(Wert;Wert; …)"
 
 #: functions/math.xml:585
 #, kde-format
@@ -7325,7 +7327,7 @@ msgstr ""
 #: functions/math.xml:605
 #, kde-format
 msgid "MINA(value;value;...)"
-msgstr "MINA(Wert;Wert;...)"
+msgstr "MINA(Wert;Wert; …)"
 
 #: functions/math.xml:606
 #, kde-format
@@ -7357,7 +7359,7 @@ msgstr ""
 #: functions/math.xml:626
 #, kde-format
 msgid "MULTIPLY(value;value;...)"
-msgstr "MULTIPLY(Wert;Wert;...)"
+msgstr "MULTIPLY(Wert;Wert; …)"
 
 #: functions/math.xml:627
 #, kde-format
@@ -7386,7 +7388,7 @@ msgstr "(a+b+c)! / a!b!c!"
 #: functions/math.xml:645
 #, kde-format
 msgid "MULTINOMIAL(value;value;...)"
-msgstr "MULTINOMIAL(Wert;Wert;...)"
+msgstr "MULTINOMIAL(Wert;Wert; …)"
 
 #: functions/math.xml:646
 #, kde-format
@@ -7791,7 +7793,7 @@ msgstr "RAND()"
 #: functions/math.xml:950
 #, kde-format
 msgid "RAND() equals for example 0.78309922..."
-msgstr "RAND() ergibt z. B. 0,78309922..."
+msgstr "RAND() ergibt z. B. 0,78309922…"
 
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
@@ -7965,7 +7967,7 @@ msgstr "RANDBETWEEN(Unterer;Oberer)"
 #: functions/math.xml:1082
 #, kde-format
 msgid "RANDBETWEEN(12;78) equals for example 61.0811..."
-msgstr "RANDBETWEEN(12;78) ergibt z. B. 61,0811..."
+msgstr "RANDBETWEEN(12;78) ergibt z. B. 61,0811…"
 
 #: functions/math.xml:1094
 #, kde-format
@@ -8136,7 +8138,7 @@ msgid ""
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
 "Die Funktion FIB berechnet den n-ten Term einer Fibonacci-Folge (1, 1, 2, 3, "
-"5, 8, 13, 21...). In dieser Folge ist nach den ersten beiden Zahlen jede "
+"5, 8, 13, 21, …). In dieser Folge ist nach den ersten beiden Zahlen jede "
 "Zahl die Summe der beiden direkt vorangegangenen Zahlen. FIB(0) ist als 0 "
 "definiert."
 
@@ -8487,7 +8489,7 @@ msgstr "Gibt den Parameter zurück, der durch den Index angegeben wird."
 #: functions/reference.xml:90
 #, kde-format
 msgid "CHOOSE(index; parameter1; parameter2;...)"
-msgstr "CHOOSE(Index; Parameter1; Parameter2;...)"
+msgstr "CHOOSE(Index; Parameter1; Parameter2; …)"
 
 # |, no-fancy-quote
 #: functions/reference.xml:91
@@ -9010,7 +9012,7 @@ msgstr ""
 #: functions/statistical.xml:32
 #, kde-format
 msgid "AVEDEV(value;value;...)"
-msgstr "AVEDEV(Wert;Wert;...)"
+msgstr "AVEDEV(Wert;Wert; …)"
 
 #: functions/statistical.xml:33
 #, kde-format
@@ -9020,7 +9022,7 @@ msgstr "AVEDEV(11,4;17,3;21,3;25,9;40,1) ergibt 7,84"
 #: functions/statistical.xml:34
 #, kde-format
 msgid "AVEDEV(A1:A5) ..."
-msgstr "AVEDEV(A1:A5) ..."
+msgstr "AVEDEV(A1:A5) …"
 
 #: functions/statistical.xml:62
 #, kde-format
@@ -9036,7 +9038,7 @@ msgstr ""
 #: functions/statistical.xml:63
 #, kde-format
 msgid "AVERAGE(value;value;...)"
-msgstr "AVERAGE(Wert;Wert;...)"
+msgstr "AVERAGE(Wert;Wert; …)"
 
 #: functions/statistical.xml:64
 #, kde-format
@@ -9073,7 +9075,7 @@ msgstr ""
 #: functions/statistical.xml:82
 #, kde-format
 msgid "AVERAGEA(value;value;...)"
-msgstr "AVERAGEA(Wert;Wert;...)"
+msgstr "AVERAGEA(Wert;Wert; …)"
 
 # |, no-fancy-quote
 #: functions/statistical.xml:83
@@ -9389,7 +9391,7 @@ msgstr ""
 #: functions/statistical.xml:298
 #, kde-format
 msgid "DEVSQ(value; value;...)"
-msgstr "DEVSQ(Wert; Wert;...)"
+msgstr "DEVSQ(Wert; Wert; …)"
 
 #: functions/statistical.xml:299
 #, kde-format
@@ -9708,7 +9710,7 @@ msgstr ""
 #: functions/statistical.xml:518
 #, kde-format
 msgid "GEOMEAN(value; value;...)"
-msgstr "GEOMEAN(Wert; Wert;...)"
+msgstr "GEOMEAN(Wert; Wert; …)"
 
 #: functions/statistical.xml:519
 #, kde-format
@@ -9732,7 +9734,7 @@ msgstr ""
 #: functions/statistical.xml:550
 #, kde-format
 msgid "HARMEAN(value; value;...)"
-msgstr "HARMEAN(Wert; Wert;...)"
+msgstr "HARMEAN(Wert; Wert; …)"
 
 #: functions/statistical.xml:551
 #, kde-format
@@ -9821,7 +9823,7 @@ msgstr ""
 #: functions/statistical.xml:625
 #, kde-format
 msgid "KURT(value; value;...)"
-msgstr "KURT(Wert; Wert;...)"
+msgstr "KURT(Wert; Wert; …)"
 
 #: functions/statistical.xml:626
 #, kde-format
@@ -9845,7 +9847,7 @@ msgstr ""
 #: functions/statistical.xml:657
 #, kde-format
 msgid "KURTP(value; value;...)"
-msgstr "KURTP(Wert; Wert;...)"
+msgstr "KURTP(Wert; Wert; …)"
 
 #: functions/statistical.xml:658
 #, kde-format
@@ -9981,7 +9983,7 @@ msgstr ""
 #: functions/statistical.xml:773
 #, kde-format
 msgid "MEDIAN(value;value;...)"
-msgstr "MEDIAN(Wert;Wert;...)"
+msgstr "MEDIAN(Wert;Wert; …)"
 
 #: functions/statistical.xml:774
 #, kde-format
@@ -10015,7 +10017,7 @@ msgstr ""
 #: functions/statistical.xml:800
 #, kde-format
 msgid "MODE(number; number2; ...)"
-msgstr "MODE(Zahl1; Zahl2; ...)"
+msgstr "MODE(Zahl1; Zahl2; …)"
 
 #: functions/statistical.xml:801
 #, kde-format
@@ -10439,7 +10441,7 @@ msgstr ""
 #: functions/statistical.xml:1088
 #, kde-format
 msgid "SKEW(number; number2; ...)"
-msgstr "SKEW(Zahl1; Zahl2; ...)"
+msgstr "SKEW(Zahl1; Zahl2; …)"
 
 #: functions/statistical.xml:1089
 #, kde-format
@@ -10459,7 +10461,7 @@ msgstr "Die Funktion SKEWP() gibt die Grundschräge einer Verteilung zurück"
 #: functions/statistical.xml:1116
 #, kde-format
 msgid "SKEWP(number; number2; ...)"
-msgstr "SKEWP(Zahl1; Zahl2; ...)"
+msgstr "SKEWP(Zahl1; Zahl2; …)"
 
 #: functions/statistical.xml:1117
 #, kde-format
@@ -10547,7 +10549,7 @@ msgstr ""
 #: functions/statistical.xml:1205
 #, kde-format
 msgid "STDEV(value;value;...)"
-msgstr "STDEV(Wert;Wert;...)"
+msgstr "STDEV(Wert;Wert; …)"
 
 #: functions/statistical.xml:1206
 #, kde-format
@@ -10572,7 +10574,7 @@ msgstr ""
 #: functions/statistical.xml:1236
 #, kde-format
 msgid "STDEVA(value;value;...)"
-msgstr "STDEVA(Wert;Wert;...)"
+msgstr "STDEVA(Wert;Wert; …)"
 
 #: functions/statistical.xml:1237
 #, kde-format
@@ -10596,12 +10598,12 @@ msgstr ""
 #: functions/statistical.xml:1269
 #, kde-format
 msgid "STDEVP(value;value;...)"
-msgstr "STDEVP(Wert;Wert;...)"
+msgstr "STDEVP(Wert;Wert; …)"
 
 #: functions/statistical.xml:1270
 #, kde-format
 msgid "STDEVP(6;7;8) equals 0.816497..."
-msgstr "STDEVP(6;7;8) ergibt 0,816497..."
+msgstr "STDEVP(6;7;8) ergibt 0,816497…"
 
 #: functions/statistical.xml:1299
 #, kde-format
@@ -10618,22 +10620,22 @@ msgstr ""
 #: functions/statistical.xml:1300
 #, kde-format
 msgid "STDEVPA(value;value;...)"
-msgstr "STDEVPA(Wert;Wert;...)"
+msgstr "STDEVPA(Wert;Wert; …)"
 
 #: functions/statistical.xml:1301
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty"
-msgstr "STDEVPA(6; 7; A1; 8) ergibt 0,816497..., wenn A1 leer ist"
+msgstr "STDEVPA(6; 7; A1; 8) ergibt 0,816497…, wenn A1 leer ist"
 
 #: functions/statistical.xml:1302
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE"
-msgstr "STDEVPA(6; 7; A1; 8) ergibt 2,69..., wenn A1 Wahr ist."
+msgstr "STDEVPA(6; 7; A1; 8) ergibt 2,69…, wenn A1 WAHR ist."
 
 #: functions/statistical.xml:1303
 #, kde-format
 msgid "STDEVPA(6; 7; A1; 8) equals 3.11..., if A1 is FALSE"
-msgstr "STDEVPA(6; 7; A1; 8) ergibt 3,11..., wenn A1 Falsch ist"
+msgstr "STDEVPA(6; 7; A1; 8) ergibt 3,11…, wenn A1 FALSCH ist"
 
 #: functions/statistical.xml:1321
 #, kde-format
@@ -10994,7 +10996,7 @@ msgstr "Die Funktion VAR() berechnet die Varianz basierend auf einer Probe."
 #: functions/statistical.xml:1519
 #, kde-format
 msgid "VAR(value;value;...)"
-msgstr "VAR(Wert;Wert;...)"
+msgstr "VAR(Wert;Wert; …)"
 
 #: functions/statistical.xml:1520
 #, kde-format
@@ -11004,7 +11006,7 @@ msgstr "VAR(12;5;7) ergibt 13"
 #: functions/statistical.xml:1521
 #, kde-format
 msgid "VAR(15;80;3) equals 1716.333..."
-msgstr "VAR(15;80;3) ergibt 1716,333..."
+msgstr "VAR(15;80;3) ergibt 1716,333…"
 
 #: functions/statistical.xml:1522
 #, kde-format
@@ -11029,7 +11031,7 @@ msgstr ""
 #: functions/statistical.xml:1555
 #, kde-format
 msgid "VARA(value;value;...)"
-msgstr "VARA(Wert;Wert;...)"
+msgstr "VARA(Wert;Wert; …)"
 
 #: functions/statistical.xml:1556
 #, kde-format
@@ -11039,7 +11041,7 @@ msgstr "VARA(12;5;7) ergibt 13"
 #: functions/statistical.xml:1557
 #, kde-format
 msgid "VARA(15;80;3) equals 1716.333..."
-msgstr "VARA(15;80;3) ergibt 1716,333..."
+msgstr "VARA(15;80;3) ergibt 1716,333…"
 
 #: functions/statistical.xml:1558
 #, kde-format
@@ -11058,7 +11060,7 @@ msgstr ""
 #: functions/statistical.xml:1590
 #, kde-format
 msgid "VARIANCE(value;value;...)"
-msgstr "VARIANCE(Wert;Wert;...)"
+msgstr "VARIANCE(Wert;Wert; …)"
 
 #: functions/statistical.xml:1591
 #, kde-format
@@ -11068,7 +11070,7 @@ msgstr "VARIANCE(12;5;7) ergibt 13"
 #: functions/statistical.xml:1592
 #, kde-format
 msgid "VARIANCE(15;80;3) equals 1716.333..."
-msgstr "VARIANCE(15;80;3) ergibt 1716,333..."
+msgstr "VARIANCE(15;80;3) ergibt 1716,333…"
 
 #: functions/statistical.xml:1593
 #, kde-format
@@ -11086,22 +11088,22 @@ msgstr ""
 #: functions/statistical.xml:1626
 #, kde-format
 msgid "VARP(value;value;...)"
-msgstr "VARP(Wert;Wert;...)"
+msgstr "VARP(Wert;Wert; …)"
 
 #: functions/statistical.xml:1627
 #, kde-format
 msgid "VARP(12;5;7) equals 8.666..."
-msgstr "VARP(12;5;7) ergibt 8,666..."
+msgstr "VARP(12;5;7) ergibt 8,666…"
 
 #: functions/statistical.xml:1628
 #, kde-format
 msgid "VARP(15;80;3) equals 1144.22..."
-msgstr "VARP(15;80;3) ergibt 1144,22..."
+msgstr "VARP(15;80;3) ergibt 1144,22…"
 
 #: functions/statistical.xml:1629
 #, kde-format
 msgid "VARP(6;7;8) equals 0.6666667..."
-msgstr "VARP(6;7;8) ergibt 0,6666667..."
+msgstr "VARP(6;7;8) ergibt 0,6666667…"
 
 #: functions/statistical.xml:1660
 #, kde-format
@@ -11118,22 +11120,22 @@ msgstr ""
 #: functions/statistical.xml:1661
 #, kde-format
 msgid "VARPA(value;value;...)"
-msgstr "VARPA(Wert;Wert;...)"
+msgstr "VARPA(Wert;Wert; …)"
 
 #: functions/statistical.xml:1662
 #, kde-format
 msgid "VARPA(12;5;7) equals 8.666..."
-msgstr "VARPA(12;5;7) ergibt 8,666..."
+msgstr "VARPA(12;5;7) ergibt 8,666…"
 
 #: functions/statistical.xml:1663
 #, kde-format
 msgid "VARPA(15;80;3) equals 1144.22..."
-msgstr "VARPA(15;80;3) ergibt 1144,22..."
+msgstr "VARPA(15;80;3) ergibt 1144,22…"
 
 #: functions/statistical.xml:1664
 #, kde-format
 msgid "VARPA(6;7;8) equals 0.6666667..."
-msgstr "VARPA(6;7;8) ergibt 0,6666667..."
+msgstr "VARPA(6;7;8) ergibt 0,6666667…"
 
 #: functions/statistical.xml:1691
 #, kde-format
@@ -11323,7 +11325,7 @@ msgstr ""
 "Die Funktion DOLLAR() konvertiert eine Zahl unter Verwendung des "
 "Währungsformates in eine Zeichenfolge. Die Nachkommastellen werden "
 "entsprechend gerundet. Obwohl der Name der Funktion DOLLAR ist, wird in die "
-"aktuell eingestellte Landeswährung umgewandelt."
+"aktuell festgelegte Landeswährung umgewandelt."
 
 #: functions/text.xml:20
 #, kde-format
@@ -12009,7 +12011,7 @@ msgstr ""
 #: functions/text.xml:468
 #, kde-format
 msgid "CONCATENATE(value;value;...)"
-msgstr "CONCATENATE(Wert;Wert;...)"
+msgstr "CONCATENATE(Wert;Wert; …)"
 
 # |, no-fancy-quote
 #: functions/text.xml:469
@@ -12960,7 +12962,7 @@ msgstr "PI()"
 #: functions/trig.xml:274
 #, kde-format
 msgid "PI() equals 3.141592654..."
-msgstr "PI() ergibt 3,141592654..."
+msgstr "PI() ergibt 3,141592654…"
 
 #: functions/trig.xml:286
 #, kde-format
@@ -12997,7 +12999,7 @@ msgstr "CSCH(Fließkommawert)"
 #: functions/trig.xml:302
 #, kde-format
 msgid "CSCH(PI()/2) equals 0.434537208..."
-msgstr "CSCH(PI()/2) ergibt 0.434537208..."
+msgstr "CSCH(PI()/2) ergibt 0.434537208…"
 
 #: functions/trig.xml:314
 #, kde-format
@@ -13050,7 +13052,7 @@ msgstr "Tabellenkalkulations-Programm"
 #: part/AboutData.h:30
 #, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
-msgstr "Copyright © 1998–%1, Das Calligra-Sheets-Team"
+msgstr "© 1998–%1, Das Team von Calligra Sheets"
 
 #: part/AboutData.h:36
 #, kde-format
@@ -13498,8 +13500,8 @@ msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
 "> Open Recent."
 msgstr ""
-"Diese Einstellung kontrolliert die maximale Anzahl der angezeigten "
-"Dateinamen unter Datei -> Zuletzt geöffnete Dateien."
+"Diese Einstellung legt die maximale Anzahl der angezeigten Dateinamen unter "
+"„Datei → Zuletzt geöffnete Dateien“ fest."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/FileOptionsWidget.ui:41
@@ -13637,9 +13639,9 @@ msgid ""
 "displayed. Click here to choose another color for the borders than the "
 "default red."
 msgstr ""
-"Wenn Ansicht -> Seitenumrandung anzeigen aktiviert ist, werden die "
+"Wenn „Ansicht → Seitenumrandung anzeigen“ aktiviert ist, werden die "
 "Seitenumrandungen angezeigt. Klicken Sie hier, um eine andere Farbe für die "
-"Seitenränder als das standardmäßige rot auszuwählen."
+"Seitenränder als das standardmäßige Rot auszuwählen."
 
 #: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:92
 #: part/dialogs/PageLayoutDialog.cpp:96
@@ -14354,7 +14356,7 @@ msgstr "Nichts zu drucken für Tabelle(n) %1."
 #: part/View.cpp:227
 #, kde-format
 msgid "Sheet Properties..."
-msgstr "Tabelleneigenschaften ..."
+msgstr "Tabelleneigenschaften …"
 
 #: part/View.cpp:230
 #, kde-format
@@ -14394,7 +14396,7 @@ msgstr "Die aktuelle Tabelle entfernen"
 #: part/View.cpp:249
 #, kde-format
 msgid "Rename Sheet..."
-msgstr "Tabelle umbenennen ..."
+msgstr "Tabelle umbenennen …"
 
 #: part/View.cpp:252
 #, kde-format
@@ -14404,7 +14406,7 @@ msgstr "Die aktuelle Tabelle umbenennen"
 #: part/View.cpp:254
 #, kde-format
 msgid "Show Sheet..."
-msgstr "Tabelle anzeigen ..."
+msgstr "Tabelle anzeigen …"
 
 #: part/View.cpp:257
 #, kde-format
@@ -14424,7 +14426,7 @@ msgstr "Die aktuelle Tabelle ausblenden"
 #: part/View.cpp:264
 #, kde-format
 msgid "Page Layout..."
-msgstr "Seitenlayout ..."
+msgstr "Seitenlayout …"
 
 #: part/View.cpp:267
 #, kde-format
@@ -14479,7 +14481,7 @@ msgstr "Den Wert aller Zelle in allen Tabellen neu berechnen"
 #: part/View.cpp:295
 #, kde-format
 msgid "Protect &Sheet..."
-msgstr "&Tabelle schützen ..."
+msgstr "&Tabelle schützen …"
 
 #: part/View.cpp:297
 #, kde-format
@@ -14489,7 +14491,7 @@ msgstr "Die Tabelle vor Veränderungen schützen"
 #: part/View.cpp:300
 #, kde-format
 msgid "Protect &Document..."
-msgstr "&Dokument schützen ..."
+msgstr "&Dokument schützen …"
 
 #: part/View.cpp:302
 #, kde-format
@@ -14499,7 +14501,7 @@ msgstr "Das Dokument vor Veränderungen schützen"
 #: part/View.cpp:307
 #, kde-format
 msgid "&Create Template From Document..."
-msgstr "&Vorlage aus Dokument erstellen ..."
+msgstr "&Vorlage aus Dokument erstellen …"
 
 #: part/View.cpp:311
 #, kde-format
@@ -14969,12 +14971,12 @@ msgstr ""
 #: ui/actions/AdjustRowCol.cpp:292
 #, kde-format
 msgid "Show Columns..."
-msgstr "Spalten anzeigen ..."
+msgstr "Spalten anzeigen …"
 
 #: ui/actions/AdjustRowCol.cpp:292
 #, kde-format
 msgid "Show Rows..."
-msgstr "Zeilen anzeigen ..."
+msgstr "Zeilen anzeigen …"
 
 #: ui/actions/AdjustRowCol.cpp:294
 #, kde-format
@@ -14999,12 +15001,12 @@ msgstr "Zeile: %1"
 #: ui/actions/AdjustRowCol.cpp:374
 #, kde-format
 msgid "Resize Column..."
-msgstr "Spaltenbreite ändern ..."
+msgstr "Spaltenbreite ändern …"
 
 #: ui/actions/AdjustRowCol.cpp:374
 #, kde-format
 msgid "Resize Row..."
-msgstr "Zeilenhöhe ändern ..."
+msgstr "Zeilenhöhe ändern …"
 
 #: ui/actions/AdjustRowCol.cpp:376
 #, kde-format
@@ -15115,7 +15117,7 @@ msgstr "Mitte"
 #: ui/actions/Angle.cpp:25
 #, kde-format
 msgid "Change Angle..."
-msgstr "Winkel ändern ..."
+msgstr "Winkel ändern …"
 
 #: ui/actions/Angle.cpp:25
 #, kde-format
@@ -15156,7 +15158,7 @@ msgstr "Einen vordefinierten Stil auf die ausgewählten Zellen anwenden"
 #: ui/actions/AutoFormat.cpp:31
 #, kde-format
 msgid "Auto-Format..."
-msgstr "Automatische Formatierung ..."
+msgstr "Automatische Formatierung …"
 
 #: ui/actions/AutoFormat.cpp:78
 #, kde-format
@@ -15291,7 +15293,7 @@ msgstr "Farbe der Umrandung ändern"
 #: ui/actions/Cells.cpp:20 ui/actions/Cells.cpp:34
 #, kde-format
 msgid "Insert Cells..."
-msgstr "Zellen einfügen ..."
+msgstr "Zellen einfügen …"
 
 #: ui/actions/Cells.cpp:20
 #, kde-format
@@ -15301,7 +15303,7 @@ msgstr "Eine leere Zelle in die Tabelle einfügen"
 #: ui/actions/Cells.cpp:71 ui/actions/Cells.cpp:85
 #, kde-format
 msgid "Remove Cells..."
-msgstr "Zellen entfernen ..."
+msgstr "Zellen entfernen …"
 
 #: ui/actions/Cells.cpp:71
 #, kde-format
@@ -15341,7 +15343,7 @@ msgstr "Löschen"
 #: ui/actions/Comment.cpp:20
 #, kde-format
 msgid "Comment..."
-msgstr "Kommentar ..."
+msgstr "Kommentar …"
 
 #: ui/actions/Comment.cpp:20
 #, kde-format
@@ -15376,7 +15378,7 @@ msgstr "Kommentar hinzufügen"
 #: ui/actions/Conditional.cpp:26
 #, kde-format
 msgid "Conditional Styles..."
-msgstr "Bedingte Stile ..."
+msgstr "Bedingte Stile …"
 
 #: ui/actions/Conditional.cpp:26
 #, kde-format
@@ -15411,14 +15413,12 @@ msgstr "Bedingte Formatierung hinzufügen"
 #: ui/actions/Consolidate.cpp:22
 #, kde-format
 msgid "&Consolidate..."
-msgstr "&Zusammenfassen ..."
+msgstr "&Konsolidieren …"
 
 #: ui/actions/Consolidate.cpp:22
 #, kde-format
 msgid "Create a region of summary data from a group of similar regions"
-msgstr ""
-"Erstellt aus mehreren gleichartigen Bereichen eine Zusammenfassung in einem "
-"Bereich."
+msgstr "Konsolidiert eine Gruppe aus gleichartigen Bereichen in einem Bereich."
 
 #: ui/actions/Consolidate.cpp:68
 msgctxt "(qtundo-format)"
@@ -15436,10 +15436,9 @@ msgid "Move the cell object to the clipboard"
 msgstr "Zellobjekt in die Zwischenablage verschieben"
 
 #: ui/actions/CSVActions.cpp:38
-#, fuzzy, kde-format
-#| msgid "From &Text File..."
+#, kde-format
 msgid "Insert From &Text File..."
-msgstr "Aus &Textdatei ..."
+msgstr "Aus &Textdatei einfügen …"
 
 #: ui/actions/CSVActions.cpp:40
 #, kde-format
@@ -15469,11 +15468,9 @@ msgid "Cannot open input file."
 msgstr "Die Eingabedatei kann nicht geöffnet werden."
 
 #: ui/actions/CSVActions.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Inserting Text File"
+#, kde-format
 msgid "Inserting Text File"
-msgstr "Textdatei einfügen"
+msgstr "Textdatei wird eingefügt"
 
 #: ui/actions/CSVActions.cpp:101
 msgctxt "(qtundo-format)"
@@ -15481,10 +15478,9 @@ msgid "Inserting Text File"
 msgstr "Textdatei einfügen"
 
 #: ui/actions/CSVActions.cpp:121
-#, fuzzy, kde-format
-#| msgid "Inserting From Clipboard"
+#, kde-format
 msgid "Insert From &Clipboard..."
-msgstr "Einfügen aus der Zwischenablage"
+msgstr "Aus &Zwischenablage einfügen …"
 
 #: ui/actions/CSVActions.cpp:123
 #, kde-format
@@ -15522,7 +15518,7 @@ msgstr "Einfügen aus der Zwischenablage"
 #: ui/actions/CSVActions.cpp:201
 #, kde-format
 msgid "&Text to Columns..."
-msgstr "&Text auf Spalten aufteilen ..."
+msgstr "&Text auf Spalten aufteilen …"
 
 #: ui/actions/CSVActions.cpp:201
 #, kde-format
@@ -15548,7 +15544,7 @@ msgstr ""
 #: ui/actions/CustomLists.cpp:26
 #, kde-format
 msgid "Custom Lists..."
-msgstr "Benutzerdefinierte Listen ..."
+msgstr "Benutzerdefinierte Listen …"
 
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:25
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:26
@@ -15572,9 +15568,7 @@ msgid "Angle:"
 msgstr "Winkel:"
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Auto-Format"
+#, kde-format
 msgid "Automatic Format"
 msgstr "Automatische Formatierung"
 
@@ -15706,13 +15700,13 @@ msgstr ""
 msgid ""
 "If the first value is a string, the second value also has to be a string."
 msgstr ""
-"Wenn der erste Wert eine Zeichenfolge ist, dann muss der zweite auch eine "
+"Wenn der erste Wert eine Zeichenfolge ist, muss der zweite auch eine "
 "Zeichenfolge sein."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:48
 #, kde-format
 msgid "Consolidate"
-msgstr "Zusammenfassen"
+msgstr "Konsolidieren"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:70
 #: ui/actions/dialogs/SubtotalDialog.cpp:88
@@ -16013,12 +16007,12 @@ msgstr "Der Port muss eine Zahl sein."
 #: ui/actions/dialogs/DatabaseDialog.cpp:628
 #, kde-format
 msgid "Connecting to database..."
-msgstr "Verbindung zur Datenbank wird aufgebaut ..."
+msgstr "Verbindung zur Datenbank wird aufgebaut …"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:630
 #, kde-format
 msgid "Connected. Retrieving table information..."
-msgstr "Verbunden. Tabelleninformationen werden geladen ..."
+msgstr "Verbunden. Tabelleninformationen werden geladen …"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:634
 #, kde-format
@@ -16033,7 +16027,7 @@ msgstr "Fehler beim Laden des Treibers"
 #: ui/actions/dialogs/DatabaseDialog.cpp:680
 #, kde-format
 msgid "Retrieving meta data of tables..."
-msgstr "Meta-Daten der Tabellen werden geladen ..."
+msgstr "Metadaten der Tabellen werden geladen …"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:693
 #, kde-format
@@ -16059,9 +16053,7 @@ msgstr ""
 #: ui/actions/dialogs/DatabaseDialog.cpp:839
 #: ui/actions/dialogs/DatabaseDialog.cpp:854
 #: ui/actions/dialogs/DatabaseDialog.cpp:869
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
 msgstr "Ersetzen"
@@ -16203,10 +16195,9 @@ msgid "Fewer Options"
 msgstr "Weniger Einstellungen"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:52
-#, fuzzy, kde-format
-#| msgid "Function"
+#, kde-format
 msgid "Set Function"
-msgstr "Funktion"
+msgstr "Funktion festlegen"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:114
 #, kde-format
@@ -16394,11 +16385,9 @@ msgid "Custom Lists"
 msgstr "Benutzerdefinierte Listen"
 
 #: ui/actions/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Case"
+#, kde-format
 msgid "Save Changes"
-msgstr "Groß-/Kleinschreibung ändern"
+msgstr "Änderungen speichern"
 
 #: ui/actions/dialogs/ListDialog.cpp:54
 #, kde-format
@@ -16486,10 +16475,9 @@ msgid "&Remove"
 msgstr "&Entfernen"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Open/Save"
+#, kde-format
 msgid "Save"
-msgstr "Öffnen/Speichern"
+msgstr "Speichern"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:131
 #, kde-format
@@ -16587,7 +16575,7 @@ msgstr "Fügt die Reihe waagerecht ein, von links nach rechts."
 #: ui/actions/dialogs/SeriesDialog.cpp:51
 #, kde-format
 msgid "Linear (2,4,6,...)"
-msgstr "Linear (2,4,6,...)"
+msgstr "Linear (2,4,6, …)"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:53
 #, kde-format
@@ -16603,7 +16591,7 @@ msgstr ""
 #: ui/actions/dialogs/SeriesDialog.cpp:56
 #, kde-format
 msgid "Geometric (2,4,8,...)"
-msgstr "Geometrisch (2,4,8,...)"
+msgstr "Geometrisch (2,4,8, …)"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:58
 #, kde-format
@@ -16615,8 +16603,8 @@ msgid ""
 msgstr ""
 "Erzeugt eine Reihe von „Anfangswert“ bis „Endwert“ und multipliziert für "
 "jeden Schritt den durch „Schrittweite“ angegebenen Wert. Mit einer "
-"Schrittweite von 5 ergibt sich die folgende Reihe: 5, 25, 125, 625 ... , da "
-"5 multipliziert mit 5 (Schrittweite) gleich 25 ist, und das mit 5 "
+"Schrittweite von 5 ergibt sich die folgende Reihe: 5, 25, 125, 625, …, da 5 "
+"multipliziert mit 5 (Schrittweite) gleich 25 ist, und das mit 5 "
 "multipliziert gleich 125 ist. Dieser Wert multipliziert mit 5 ist dann 625."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:70
@@ -16737,7 +16725,7 @@ msgstr "Einfügen spezial"
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:20
 #, kde-format
 msgid "Paste"
-msgstr ""
+msgstr "Einfügen"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:32
 #, kde-format
@@ -16768,17 +16756,17 @@ msgstr "Hierarchisch"
 #: ui/actions/dialogs/StyleManagerDialog.cpp:57
 #, kde-format
 msgid "&New..."
-msgstr "&Neu ..."
+msgstr "&Neu …"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:59
 #, kde-format
 msgid "&Modify..."
-msgstr "&Ändern ..."
+msgstr "&Ändern …"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:61
 #, kde-format
 msgid "&Delete..."
-msgstr "&Löschen ..."
+msgstr "&Löschen …"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:168
 #: ui/actions/dialogs/StyleManagerDialog.cpp:171
@@ -17014,7 +17002,7 @@ msgstr "Dies ist kein gültiges Datum."
 #: ui/actions/DocumentSettings.cpp:22
 #, kde-format
 msgid "Document Settings..."
-msgstr "Dokumenteinstellungen ..."
+msgstr "Dokumenteinstellungen …"
 
 #: ui/actions/DocumentSettings.cpp:24
 #, kde-format
@@ -17077,7 +17065,7 @@ msgstr "Ersetzen"
 #: ui/actions/Font.cpp:30
 #, kde-format
 msgid "Select Font..."
-msgstr "Schriftart auswählen ..."
+msgstr "Schriftart auswählen …"
 
 #: ui/actions/Font.cpp:30
 #, fuzzy, kde-format
@@ -17121,7 +17109,7 @@ msgstr "Textfarbe"
 #: ui/actions/Formula.cpp:21
 #, kde-format
 msgid "&Function..."
-msgstr "&Funktion ..."
+msgstr "&Funktion …"
 
 #: ui/actions/Formula.cpp:21
 #, kde-format
@@ -17141,12 +17129,12 @@ msgstr "Eine Funktion einfügen"
 #: ui/actions/Formula.cpp:61 ui/actions/Formula.cpp:76
 #, kde-format
 msgid "Others..."
-msgstr "Sonstige ..."
+msgstr "Sonstige …"
 
 #: ui/actions/GoalSeek.cpp:27
 #, kde-format
 msgid "&Goal Seek..."
-msgstr "&Zielwertsuche ..."
+msgstr "&Zielwertsuche …"
 
 #: ui/actions/GoalSeek.cpp:27
 #, kde-format
@@ -17193,7 +17181,7 @@ msgstr "Zielwertsuche mit Zelle %1 fand KEINE Lösung."
 #: ui/actions/Goto.cpp:25
 #, kde-format
 msgid "Goto Cell..."
-msgstr "Gehe zu Zelle ..."
+msgstr "Gehe zu Zelle …"
 
 #: ui/actions/Goto.cpp:25
 #, kde-format
@@ -17206,10 +17194,9 @@ msgid "Goto"
 msgstr "Gehe zu"
 
 #: ui/actions/Goto.cpp:44
-#, fuzzy, kde-format
-#| msgid "This is not a valid time."
+#, kde-format
 msgid "That is not a valid cell."
-msgstr "Dies ist keine gültige Zeit."
+msgstr "Das ist keine gültige Zelle."
 
 #: ui/actions/Indent.cpp:26
 #, kde-format
@@ -17244,7 +17231,7 @@ msgstr "Einzug verkleinern"
 #: ui/actions/InsertFromDatabase.cpp:20
 #, kde-format
 msgid "From &Database..."
-msgstr "Aus &Datenbank ..."
+msgstr "Aus &Datenbank …"
 
 #: ui/actions/InsertFromDatabase.cpp:20
 #, kde-format
@@ -17263,7 +17250,7 @@ msgstr ""
 #: ui/actions/InsertSeries.cpp:27
 #, kde-format
 msgid "&Series..."
-msgstr "&Reihe ..."
+msgstr "&Reihe …"
 
 #: ui/actions/InsertSeries.cpp:27
 #, kde-format
@@ -17278,7 +17265,7 @@ msgstr "Reihe einfügen"
 #: ui/actions/InsertSpecialChar.cpp:30
 #, kde-format
 msgid "S&pecial Character..."
-msgstr "&Sonderzeichen ..."
+msgstr "&Sonderzeichen …"
 
 #: ui/actions/InsertSpecialChar.cpp:32
 #, kde-format
@@ -17289,12 +17276,12 @@ msgstr ""
 #: ui/actions/Inspector.cpp:34
 #, kde-format
 msgid "Run Inspector..."
-msgstr "Prüfung starten ..."
+msgstr "Prüfung starten …"
 
 #: ui/actions/Link.cpp:23
 #, kde-format
 msgid "&Link..."
-msgstr "&Verknüpfung ..."
+msgstr "&Verknüpfung …"
 
 #: ui/actions/Link.cpp:23
 #, kde-format
@@ -17329,7 +17316,7 @@ msgstr "Verknüpfung einfügen"
 #: ui/actions/ListChoose.cpp:28
 #, kde-format
 msgid "Selection List..."
-msgstr "Auswahlliste ..."
+msgstr "Auswahlliste …"
 
 #: ui/actions/Merge.cpp:19
 #, kde-format
@@ -17369,7 +17356,7 @@ msgstr "Den ausgewählten Bereich wieder in einzelne Zellen auftrennen"
 #: ui/actions/NamedAreas.cpp:28
 #, kde-format
 msgid "Area Name..."
-msgstr "Bereichsname ..."
+msgstr "Bereichsname …"
 
 #: ui/actions/NamedAreas.cpp:28
 #, kde-format
@@ -17403,7 +17390,7 @@ msgstr "Benannte Bereiche bearbeiten oder auswählen"
 #: ui/actions/NamedAreas.cpp:81
 #, kde-format
 msgid "Named Areas..."
-msgstr "Benannte Bereiche ..."
+msgstr "Benannte Bereiche …"
 
 #: ui/actions/PageBreak.cpp:21
 #, kde-format
@@ -17443,7 +17430,7 @@ msgstr "Inhalt der Zwischenablage an Cursor-Position einfügen"
 #: ui/actions/Paste.cpp:94
 #, kde-format
 msgid "Special Paste..."
-msgstr "Einfügen spezial ..."
+msgstr "Spezielles Einfügen …"
 
 #: ui/actions/Paste.cpp:96
 #, kde-format
@@ -17463,7 +17450,7 @@ msgstr "Fügt eine Zelle aus der Zwischenablage in die Tabelle ein"
 #: ui/actions/Pivot.cpp:18
 #, kde-format
 msgid "&Pivot Tables..."
-msgstr "&Pivot-Tabellen ..."
+msgstr "&Pivot-Tabellen …"
 
 #: ui/actions/Pivot.cpp:18
 #, kde-format
@@ -17483,12 +17470,12 @@ msgstr "Wählt alle Zellen in der aktuellen Tabelle aus"
 #: ui/actions/ShowTableView.cpp:23
 #, kde-format
 msgid "Show QTableView..."
-msgstr "QTableView anzeigen ..."
+msgstr "QTableView anzeigen …"
 
 #: ui/actions/Sort.cpp:25
 #, kde-format
 msgid "&Sort..."
-msgstr "&Sortieren ..."
+msgstr "&Sortieren …"
 
 #: ui/actions/Sort.cpp:25
 #, kde-format
@@ -17540,7 +17527,7 @@ msgstr "Rechtschreibung prüfen"
 #: ui/actions/Style.cpp:29
 #, kde-format
 msgid "Cell Format..."
-msgstr "Zellenformat ..."
+msgstr "Zellenformat …"
 
 #: ui/actions/Style.cpp:29
 #, kde-format
@@ -17606,9 +17593,7 @@ msgid "Vertical Text"
 msgstr "Senkrechter Text"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Number Format"
+#, kde-format
 msgid "Number Format"
 msgstr "Zahlenformat"
 
@@ -17691,9 +17676,7 @@ msgid "Format Money"
 msgstr "Währungsformat"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Date Format"
+#, kde-format
 msgid "Date Format"
 msgstr "Datumsformat"
 
@@ -17717,9 +17700,7 @@ msgid "Set the cell formatting to a time"
 msgstr "Zellenformat festlegen"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Time Format"
+#, kde-format
 msgid "Time Format"
 msgstr "Zeitformat"
 
@@ -17795,7 +17776,7 @@ msgstr "Hintergrundfarbe einstellen"
 #: ui/actions/Styles.cpp:31
 #, kde-format
 msgid "Create Style From Cell..."
-msgstr "Stil basierend auf dieser Zelle erstellen ..."
+msgstr "Stil basierend auf dieser Zelle erstellen …"
 
 #: ui/actions/Styles.cpp:31
 #, kde-format
@@ -17831,7 +17812,7 @@ msgstr "Zellstile bearbeiten und verwalten"
 #: ui/actions/Styles.cpp:86
 #, kde-format
 msgid "Style Manager..."
-msgstr "Stilverwaltung ..."
+msgstr "Stilverwaltung …"
 
 #: ui/actions/Styles.cpp:122
 #, kde-format
@@ -17841,7 +17822,7 @@ msgstr "Einen vordefinierten Stil auf die ausgewählten Zellen anwenden"
 #: ui/actions/Subtotals.cpp:21
 #, kde-format
 msgid "&Subtotals..."
-msgstr "&Zwischensummen ..."
+msgstr "&Zwischensummen …"
 
 #: ui/actions/Subtotals.cpp:21
 #, kde-format
@@ -17849,8 +17830,6 @@ msgid "Create different kind of subtotals to a list or database"
 msgstr "Verschiedene Zwischensummen in eine Liste oder Datenbank erstellen"
 
 #: ui/actions/Subtotals.cpp:118
-#, fuzzy
-#| msgid "Subtotals"
 msgctxt "(qtundo-format)"
 msgid "Subtotals"
 msgstr "Zwischensummen"
@@ -17928,7 +17907,7 @@ msgstr "Tests festlegen, um die Gültigkeit der Zelldaten sicherzustellen"
 #: ui/actions/Validity.cpp:21
 #, kde-format
 msgid "Validity..."
-msgstr "Gültigkeit ..."
+msgstr "Gültigkeit …"
 
 #: ui/actions/Validity.cpp:55
 #, kde-format
@@ -18379,8 +18358,8 @@ msgstr ""
 "sowie einige zusätzliche Optionen wie „unterstrichen“ oder „durchgestrichen“ "
 "auswählen. Der untere Teil der Seite gibt Ihnen eine Vorschau des "
 "ausgewählten Textformats.\n"
-"Die Standardschrift wird für alle Zellen im Menü „Format -> Stilverwaltung“ "
-"mit dem aktuell verwendeten Stil eingestellt."
+"Die Standardschrift wird für alle Zellen im Menü „Format → Stilverwaltung“ "
+"mit dem aktuell verwendeten Stil festgelegt."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -18596,9 +18575,9 @@ msgid ""
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
 "Die Zahlen-Schreibweise verwendet die Schreibweise, die Sie global in den "
-"Systemeinstellungen unter Allgemeines Erscheinungsbild und Verhalten -> "
-"Regionales -> Land/Region & Sprache -> Zahlen festgelegt haben. Zahlen "
-"werden standardmäßig rechts ausgerichtet."
+"Systemeinstellungen unter „Allgemeines Erscheinungsbild“ und "
+"„Verhalten → Regionales → Land/Region & Sprache → Zahlen“ festgelegt haben. "
+"Zahlen werden standardmäßig rechts ausgerichtet."
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -18630,10 +18609,10 @@ msgid ""
 "formatting to look like your current currency."
 msgstr ""
 "Das Währungsformat konvertiert Ihre Zahl in die Währungs-Schreibweise. Dabei "
-"werden die global in den Systemeinstellungen unter Allgemeines "
-"Erscheinungsbild und Verhalten -> Regionales -> Land/Region & Sprache -> "
-"Währung festgelegten Einstellungen verwendet. Das Währungssymbol und die "
-"entsprechende Anzahl an Dezimalstellen werden angezeigt.\n"
+"werden die global in den Systemeinstellungen unter „Allgemeines "
+"Erscheinungsbild“ und „Verhalten → Regionales → Land/Region & "
+"Sprache → Währung“ festgelegten Einstellungen verwendet. Das Währungssymbol "
+"und die entsprechende Anzahl an Dezimalstellen werden angezeigt.\n"
 "Sie können alternativ auch das Währungs-Symbol in der Format-Werkzeugleiste "
 "verwenden, um das Zellenformat Ihrer aktuellen Währung anzupassen."
 
@@ -18681,9 +18660,9 @@ msgid ""
 "next cells will also get dates."
 msgstr ""
 "Um ein Datum einzugeben, sollten Sie eines der in den Systemeinstellungen "
-"unter Allgemeines Erscheinungsbild und Verhalten -> Regionales -> Land/"
-"Region & Sprache -> Zeit & Datum eingestellten Formate verwenden. Es werden "
-"hier zwei Formate eingestellt: das Datumsformat und Kurzformat für Datum.\n"
+"unter „Allgemeines Erscheinungsbild“ und „Verhalten → Regionales → Land/"
+"Region & Sprache → Zeit & Datum“ festgelegten Formate verwenden. Es werden "
+"hier zwei Formate festgelegt: das Datumsformat und Kurzformat für Datum.\n"
 "Genau wie Sie Zahlen nach unten ziehen können, können sie auch Daten nach "
 "unten ziehen. Die nächsten Zellen enthalten dann die folgenden Daten."
 
@@ -18701,13 +18680,12 @@ msgid ""
 msgstr ""
 "Diese Einstellung formatiert Ihren Zelleninhalt als Uhrzeit. Um eine Uhrzeit "
 "einzugeben, sollten Sie eines der in den Systemeinstellungen unter "
-"Allgemeines Erscheinungsbild und Verhalten -> Regionales -> Land/Region & "
-"Sprache -> Zeit & Datum eingestellten Formate verwenden. Im Menü "
-"Zellenformat können Sie festlegen, wie die Uhrzeit angezeigt werden soll, "
-"indem Sie eines der verfügbaren Formate auswählen. Das Standard-Format ist "
-"das global in den Systemeinstellungen festgelegte. Wenn die Zahl in der "
-"Zelle als Uhrzeit keinen Sinn ergibt, zeigt Calligra Sheets 00:00 im "
-"Standard-Format an."
+"„Allgemeines Erscheinungsbild“ und „Verhalten → Regionales → Land/Region & "
+"Sprache → Zeit & Datum“ festgelegten Formate verwenden. Im Menü Zellenformat "
+"können Sie festlegen, wie die Uhrzeit angezeigt werden soll, indem Sie eines "
+"der verfügbaren Formate auswählen. Das Standard-Format ist das global in den "
+"Systemeinstellungen festgelegte. Wenn die Zahl in der Zelle als Uhrzeit "
+"keinen Sinn ergibt, zeigt Calligra Sheets 00:00 im Standard-Format an."
 
 #: ui/dialogs/LayoutPage_Float.cpp:113
 #, kde-format
@@ -18725,10 +18703,10 @@ msgid ""
 "next cells will also get datetimes."
 msgstr ""
 "Um Datum und Zeit einzugeben, sollten Sie eines der in den "
-"Systemeinstellungen unter Allgemeines Erscheinungsbild und Verhalten -> "
-"Regionales -> Land/Region & Sprache -> Zeit & Datum eingestellten Formate "
-"verwenden. Es werden hier zwei Formate eingestellt: das Datumsformat und "
-"Kurzformat für Datum.\n"
+"Systemeinstellungen unter „Allgemeines Erscheinungsbild“ und "
+"„Verhalten → Regionales → Land/Region & Sprache → Zeit & Datum“ festgelegten "
+"Formate verwenden. Es werden hier zwei Formate festgelegt: das Datumsformat "
+"und Kurzformat für Datum.\n"
 "Genau wie Sie Zahlen nach unten ziehen können, können sie auch Daten nach "
 "unten ziehen. Die nächsten Zellen enthalten dann die folgenden Daten."
 
@@ -19070,11 +19048,11 @@ msgid ""
 "You can learn more about all these settings in the User Manual in the "
 "Advanced Calligra Sheets chapter."
 msgstr ""
-"Dieser Reiter ermöglicht es Ihnen, den Zellenschutz einzustellen. Alle "
-"Zellen werden standardmäßig geschützt. Das bedeutet, dass der Zelleninhalt "
-"nicht geändert werden kann. Damit der Zellenschutz aktiv ist, muss außerdem "
-"die Tabelle mittels des Menüs „Extras -> Tabelle schützen“ mit einem "
-"Passwort geschützt werden.\n"
+"Dieser Reiter ermöglicht es Ihnen, den Zellenschutz festzulegen. Alle Zellen "
+"werden standardmäßig geschützt. Das bedeutet, dass der Zelleninhalt nicht "
+"verändert werden kann. Damit der Zellenschutz aktiv ist, muss außerdem die "
+"Tabelle mittels des Menüs „Extras → Tabelle schützen“ mit einem Passwort "
+"geschützt werden.\n"
 "Sie können außerdem den Zelleninhalt über die Funktion „Alles ausblenden“ "
 "verbergen. Auch dieses erfordert, dass die Tabelle geschützt ist.\n"
 "Im Benutzerhandbuch können Sie mehr über diese Einstellungen erfahren."
@@ -19136,11 +19114,11 @@ msgid ""
 "manual for more details in the Advanced Calligra Sheets chapter. When a cell "
 "is protected, its content cannot be changed."
 msgstr ""
-"Wenn diese Einstellung aktiv ist, wird der Zellinhalt geschützt. Dies ist "
-"die Standardeinstellung. Um den individuellen Zellschutz zu aktivieren, muss "
-"die ganze Tabelle mittels des Menüs „Extras -> Tabelle schützen“ geschützt "
+"Wenn diese Einstellung aktiv ist, wird der Zellinhalt geschützt "
+"(Standardeinstellung). Um den individuellen Zellschutz zu aktivieren, muss "
+"die ganze Tabelle mittels des Menüs „Extras → Tabelle schützen“ geschützt "
 "werden. Im Benutzerhandbuch können Sie mehr über diese Einstellungen "
-"erfahren. Der Inhalt einer geschützten Tabelle kann nicht geändert werden."
+"erfahren. Der Inhalt einer geschützten Tabelle kann nicht verändert werden."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:100
