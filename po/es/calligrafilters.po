@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:46+0000\n"
+"POT-Creation-Date: 2026-08-20 00:44+0000\n"
 "PO-Revision-Date: 2025-07-06 22:18+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -918,18 +918,18 @@ msgstr "Pie de la primera página"
 msgid "Table %1"
 msgstr "Tabla %1"
 
-#: words/rtf/import/rtfimport.cpp:54
+#: words/rtf/import/rtfimport.cpp:56
 #, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
 msgstr "No se puede cargar el archivo porque no parece ser un documento RTF."
 
-#: words/rtf/import/rtfimport.cpp:55 words/rtf/import/rtfimport.cpp:68
-#: words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:57 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:78
 #, kde-format
 msgid "Words's RTF Import Filter"
 msgstr "Filtro de importación de RTF de Words"
 
-#: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:70 words/rtf/import/rtfimport.cpp:78
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "El archivo no se puede cargar."

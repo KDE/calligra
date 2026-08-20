@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:46+0000\n"
+"POT-Creation-Date: 2026-08-20 00:44+0000\n"
 "PO-Revision-Date: 2014-10-04 21:13+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@nuug.no>\n"
@@ -901,18 +901,18 @@ msgstr "Bunntekst på første side"
 msgid "Table %1"
 msgstr "Tabell %1"
 
-#: words/rtf/import/rtfimport.cpp:54
+#: words/rtf/import/rtfimport.cpp:56
 #, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
 msgstr "Fila kan ikke åpnes, siden det ikke ser ut som den er et RTF-dokument."
 
-#: words/rtf/import/rtfimport.cpp:55 words/rtf/import/rtfimport.cpp:68
-#: words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:57 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:78
 #, kde-format
 msgid "Words's RTF Import Filter"
 msgstr "RTF-importfilteret i Words"
 
-#: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:70 words/rtf/import/rtfimport.cpp:78
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "Fila kan ikke lastes inn."

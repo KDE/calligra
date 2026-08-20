@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:46+0000\n"
+"POT-Creation-Date: 2026-08-20 00:44+0000\n"
 "PO-Revision-Date: 2024-08-30 20:17+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -907,18 +907,18 @@ msgstr "Lehen orriaren orri-oina"
 msgid "Table %1"
 msgstr "%1 taula"
 
-#: words/rtf/import/rtfimport.cpp:54
+#: words/rtf/import/rtfimport.cpp:56
 #, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
 msgstr "Fitxategia ezin da kargatu, RTF dokumentua ez dela baitirudi."
 
-#: words/rtf/import/rtfimport.cpp:55 words/rtf/import/rtfimport.cpp:68
-#: words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:57 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:78
 #, kde-format
 msgid "Words's RTF Import Filter"
 msgstr "RTF inportatzeko Words-en iragazkia"
 
-#: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:70 words/rtf/import/rtfimport.cpp:78
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "Fitxategia ezin da kargatu."

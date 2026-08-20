@@ -1,6 +1,6 @@
 # translation of kofficefilters.po to Slovenian
 # Translation of kofficefilters.po to Slovenian
-# $Id: calligrafilters.po 1732631 2026-03-19 01:31:31Z scripty $
+# $Id: calligrafilters.po 1744252 2026-08-20 01:29:32Z scripty $
 # $Source$
 # Gregor Rakar <gregor.rakar@kiss.si>, 2004.
 # Andrej Vernekar <andrej.vernekar@moj.net>, 2005, 2006, 2007, 2012, 2013.
@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:46+0000\n"
+"POT-Creation-Date: 2026-08-20 00:44+0000\n"
 "PO-Revision-Date: 2024-08-23 06:27+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -905,18 +905,18 @@ msgstr "Noga prve strani"
 msgid "Table %1"
 msgstr "Tabela %1"
 
-#: words/rtf/import/rtfimport.cpp:54
+#: words/rtf/import/rtfimport.cpp:56
 #, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
 msgstr "Datoteke ni moč naložiti, videti je namreč, da ni dokument RTF."
 
-#: words/rtf/import/rtfimport.cpp:55 words/rtf/import/rtfimport.cpp:68
-#: words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:57 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:78
 #, kde-format
 msgid "Words's RTF Import Filter"
 msgstr "Wordov uvozni filter za RTF"
 
-#: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:70 words/rtf/import/rtfimport.cpp:78
 #, kde-format
 msgid "The file cannot be loaded."
 msgstr "Datoteke ni moč naložiti."

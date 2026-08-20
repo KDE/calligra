@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:46+0000\n"
+"POT-Creation-Date: 2026-08-20 00:44+0000\n"
 "PO-Revision-Date: 2008-03-26 18:24+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -904,19 +904,19 @@ msgstr "प्रथम पृष्ठ पाद-सूचना"
 msgid "Table %1"
 msgstr "तालिका %1"
 
-#: words/rtf/import/rtfimport.cpp:54
+#: words/rtf/import/rtfimport.cpp:56
 #, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
 msgstr "फ़ाइल को लोड नहीं किया जा सका, चूंकि यह आरटीएफ़ दस्तावेज़ नहीं है."
 
-#: words/rtf/import/rtfimport.cpp:55 words/rtf/import/rtfimport.cpp:68
-#: words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:57 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:78
 #, fuzzy, kde-format
 #| msgid "KWord's RTF Import Filter"
 msgid "Words's RTF Import Filter"
 msgstr "केवर्ड का आरटीएफ़ आयात फ़िल्टर"
 
-#: words/rtf/import/rtfimport.cpp:68 words/rtf/import/rtfimport.cpp:76
+#: words/rtf/import/rtfimport.cpp:70 words/rtf/import/rtfimport.cpp:78
 #, fuzzy, kde-format
 #| msgid "The file cannot be loaded, as it cannot be opened."
 msgid "The file cannot be loaded."
