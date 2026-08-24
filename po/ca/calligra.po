@@ -6,20 +6,20 @@
 # SPDX-FileCopyrightText: 2003, 2006, 2013, 2015, 2020, 2021, 2022, 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
 # SPDX-FileCopyrightText: 2006 Xavier Batlle i Pèlach <tevibp@wanadoo.es>
 # SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011 Rafael Carreras <rcarreras@caliu.cat>
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2026 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2007-2024, 2026 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-03-03 10:24+0100\n"
+"PO-Revision-Date: 2026-08-23 09:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 26.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -1087,7 +1087,7 @@ msgstr "Error d'anàlisi"
 #: main/KoDocument.cpp:1485
 #, kde-format
 msgid "Document is password protected"
-msgstr "El document està protegit per contrasenya"
+msgstr "El document està protegit amb contrasenya"
 
 #: main/KoDocument.cpp:1489
 #, kde-format
@@ -4516,7 +4516,7 @@ msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
 "<p>Do you still want to decrypt the file?</qt>"
 msgstr ""
-"<qt>Desencriptar el document n'eliminarà la protecció per contrasenya."
+"<qt>Desencriptar el document n'eliminarà la protecció amb contrasenya."
 "<p>Encara voleu desencriptar el fitxer?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:339
