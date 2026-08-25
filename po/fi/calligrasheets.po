@@ -14162,67 +14162,80 @@ msgstr ""
 "reunojen muuttaminen"
 
 #: ui/actions/AdjustRowCol.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert Columns"
 msgid "Insert Columns"
 msgstr "Lisää sarakkeita"
 
 #: ui/actions/AdjustRowCol.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert Rows"
 msgid "Insert Rows"
 msgstr "Lisää rivejä"
 
 #: ui/actions/AdjustRowCol.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Columns"
 msgid "Remove Columns"
 msgstr "Poista sarakkeita"
 
 #: ui/actions/AdjustRowCol.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Rows"
 msgid "Remove Rows"
 msgstr "Poista rivejä"
 
 #: ui/actions/AdjustRowCol.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inserts a new row into the spreadsheet"
 msgid "Inserts a new row into the spreadsheet"
 msgstr "Lisää uuden rivin laskentataulukkoon"
 
 #: ui/actions/AdjustRowCol.cpp:50
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Removes a row from the spreadsheet"
 msgid "Removes a row from the spreadsheet"
 msgstr "Poistaa rivin laskentataulukosta"
 
 #: ui/actions/AdjustRowCol.cpp:53
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inserts a new column into the spreadsheet"
 msgid "Inserts a new column into the spreadsheet"
 msgstr "Lisää uuden sarakkeen laskentataulukkoon"
 
 #: ui/actions/AdjustRowCol.cpp:55
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Removes the selected columns from the spreadsheet"
 msgid "Removes the selected columns from the spreadsheet"
 msgstr "Poistaa valitut sarakkeet laskentataulukosta"
 
 #: ui/actions/AdjustRowCol.cpp:93
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hide Columns"
 msgid "Hide Columns"
 msgstr "Piilota sarakkeet"
 
 #: ui/actions/AdjustRowCol.cpp:93
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hide Rows"
 msgid "Hide Rows"
 msgstr "Piilota rivit"
 
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:39
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show Columns"
 msgid "Show Columns"
 msgstr "Näytä sarakkeet"
 
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:36
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show Rows"
 msgid "Show Rows"
 msgstr "Näytä rivit"
 
 #: ui/actions/AdjustRowCol.cpp:109
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show hidden rows in the selection"
 msgid "Show hidden rows in the selection"
 msgstr "Näyttää piilotetut rivit valitulla alueella."
 
@@ -14233,7 +14246,8 @@ msgid "Hide the selected rows"
 msgstr "Yhdistä valittu alue"
 
 #: ui/actions/AdjustRowCol.cpp:114
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show hidden columns in the selection"
 msgid "Show hidden columns in the selection"
 msgstr "Näytä valinnan piilosarakkeet"
 
@@ -14244,42 +14258,50 @@ msgid "Hide the selected columns"
 msgstr "Yhdistä valittu alue"
 
 #: ui/actions/AdjustRowCol.cpp:182
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Equalize Column"
 msgid "Equalize Column"
 msgstr "Muuta sarakkeet yhtä leveiksi"
 
 #: ui/actions/AdjustRowCol.cpp:182
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Equalize Row"
 msgid "Equalize Row"
 msgstr "Muuta rivit saman korkuisiksi"
 
 #: ui/actions/AdjustRowCol.cpp:196
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resizes selected rows to be the same size"
 msgid "Resizes selected rows to be the same size"
 msgstr "Muuttaa valittujen rivien korkeuden samaksi."
 
 #: ui/actions/AdjustRowCol.cpp:198
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resizes selected columns to be the same size"
 msgid "Resizes selected columns to be the same size"
 msgstr "Muuttaa valitut sarakkeet samankokoisiksi"
 
 #: ui/actions/AdjustRowCol.cpp:252
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Adjust Column"
 msgid "Adjust Column"
 msgstr "Sovita sarake"
 
 #: ui/actions/AdjustRowCol.cpp:252
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Adjust Row"
 msgid "Adjust Row"
 msgstr "Sovita rivi"
 
 #: ui/actions/AdjustRowCol.cpp:252
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Adjust Row && Column"
 msgid "Adjust Row && Column"
 msgstr "Sovita rivi ja sarake"
 
 #: ui/actions/AdjustRowCol.cpp:268
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Adjusts row/column size so that the contents will fit"
 msgid "Adjusts row/column size so that the contents will fit"
 msgstr "Muokkaa rivin ja sarakkeen kokoa niin että sisältö mahtuu siihen."
 
@@ -14296,66 +14318,81 @@ msgid "Adjusts column size so that the contents will fit"
 msgstr "Muokkaa rivin ja sarakkeen kokoa niin että sisältö mahtuu siihen."
 
 #: ui/actions/AdjustRowCol.cpp:292
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show Columns..."
 msgid "Show Columns..."
 msgstr "Näytä sarakkeet…"
 
 #: ui/actions/AdjustRowCol.cpp:292
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show Rows..."
 msgid "Show Rows..."
 msgstr "Näytä rivit…"
 
 #: ui/actions/AdjustRowCol.cpp:294
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show hidden columns"
 msgid "Show hidden columns"
 msgstr "Näytä piilosarakkeet"
 
 #: ui/actions/AdjustRowCol.cpp:294
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show hidden rows"
 msgid "Show hidden rows"
 msgstr "Näytä piilotetut rivit"
 
 #: ui/actions/AdjustRowCol.cpp:327 ui/actions/AdjustRowCol.cpp:329
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Column: %1"
 msgid "Column: %1"
 msgstr "Sarake: %1"
 
 #: ui/actions/AdjustRowCol.cpp:341
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Row: %1"
 msgid "Row: %1"
 msgstr "Rivi: %1"
 
 #: ui/actions/AdjustRowCol.cpp:374
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Column..."
 msgid "Resize Column..."
 msgstr "Muuta sarakkeen kokoa…"
 
 #: ui/actions/AdjustRowCol.cpp:374
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Row..."
 msgid "Resize Row..."
 msgstr "Muuta rivin kokoa…"
 
 #: ui/actions/AdjustRowCol.cpp:376
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Change the height of a row"
 msgid "Change the height of a row"
 msgstr "Muuta rivin korkeutta"
 
 #: ui/actions/AdjustRowCol.cpp:376
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Change the width of a column"
 msgid "Change the width of a column"
 msgstr "Muuta sarakkeen leveyttä"
 
 #: ui/actions/Align.cpp:19
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align Left"
 msgid "Align Left"
 msgstr "Tasaa vasemmalle"
 
 #: ui/actions/Align.cpp:19
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Left justify the cell contents"
 msgid "Left justify the cell contents"
 msgstr "Tasaa solun sisältö vasempaan reunaan"
 
 #: ui/actions/Align.cpp:36 ui/actions/Align.cpp:68 ui/actions/Align.cpp:100
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Horizontal Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Horizontal Alignment"
 msgstr ""
@@ -14363,22 +14400,26 @@ msgstr ""
 "vaakatasauksen muuttaminen"
 
 #: ui/actions/Align.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align Right"
 msgid "Align Right"
 msgstr "Tasaa oikealle"
 
 #: ui/actions/Align.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Right justify the cell contents"
 msgid "Right justify the cell contents"
 msgstr "Tasaa solun sisältö oikeaan reunaan"
 
 #: ui/actions/Align.cpp:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align Center"
 msgid "Align Center"
 msgstr "Keskitä vaakasuunnassa"
 
 #: ui/actions/Align.cpp:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Center the cell contents"
 msgid "Center the cell contents"
 msgstr "Keskitä solun sisältö vaakasuunnassa"
 
@@ -14389,12 +14430,14 @@ msgid "Center"
 msgstr "Keskitä"
 
 #: ui/actions/Align.cpp:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align Top"
 msgid "Align Top"
 msgstr "Tasaa ylös"
 
 #: ui/actions/Align.cpp:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align cell contents along the top of the cell"
 msgid "Align cell contents along the top of the cell"
 msgstr "Tasaa solun sisältö solun yläreunaan"
 
@@ -14406,6 +14449,9 @@ msgid "Top"
 msgstr "Ylös"
 
 #: ui/actions/Align.cpp:132 ui/actions/Align.cpp:168 ui/actions/Align.cpp:204
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Vertical Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
 msgstr ""
@@ -14413,12 +14459,14 @@ msgstr ""
 "pystytasauksen muuttaminen"
 
 #: ui/actions/Align.cpp:149
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
 msgid "Align Bottom"
 msgstr "Tasaa alas"
 
 #: ui/actions/Align.cpp:151
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align cell contents along the bottom of the cell"
 msgid "Align cell contents along the bottom of the cell"
 msgstr "Tasaa solun sisältö solun alareunaan"
 
@@ -14430,12 +14478,14 @@ msgid "Bottom"
 msgstr "Alas"
 
 #: ui/actions/Align.cpp:185
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align Middle"
 msgid "Align Middle"
 msgstr "Keskitä pystysuunnassa"
 
 #: ui/actions/Align.cpp:187
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Align cell contents centered in the cell"
 msgid "Align cell contents centered in the cell"
 msgstr "Keskitä solun sisältö pystysuunnassa"
 
@@ -14446,21 +14496,27 @@ msgid "Middle"
 msgstr "Keskitä"
 
 #: ui/actions/Angle.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Change Angle..."
 msgid "Change Angle..."
 msgstr "Muuta kulmaa…"
 
 #: ui/actions/Angle.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Change the angle that cell contents are printed"
 msgid "Change the angle that cell contents are printed"
 msgstr "Muuta kulmaa, jossa solun sisältö tulostetaan"
 
 #: ui/actions/Angle.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Angle"
 msgid "Angle"
 msgstr "Kulma"
 
 #: ui/actions/Angle.cpp:56
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Angle"
 msgctxt "(qtundo-format)"
 msgid "Change Angle"
 msgstr ""
@@ -14468,16 +14524,21 @@ msgstr ""
 "kulman valinta"
 
 #: ui/actions/AutoFilter.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Auto-Filter"
 msgid "&Auto-Filter"
 msgstr "&Automaattisuodatin"
 
 #: ui/actions/AutoFilter.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add an automatic filter to a cell range"
 msgid "Add an automatic filter to a cell range"
 msgstr "Lisää automaattisen suodattimen solualueelle"
 
 #: ui/actions/AutoFilter.cpp:52
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Auto-Filter"
 msgctxt "(qtundo-format)"
 msgid "Auto-Filter"
 msgstr ""
@@ -14491,21 +14552,27 @@ msgid "Apply pre-defined formatting to a range of cells."
 msgstr "Käytä ennalta määriteltyä tyyliä valituille soluille."
 
 #: ui/actions/AutoFormat.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Auto-Format..."
 msgid "Auto-Format..."
 msgstr "Automaattimuotoilu…"
 
 #: ui/actions/AutoFormat.cpp:78
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Could not find sheet-style XML file '%1'."
 msgid "Could not find sheet-style XML file '%1'."
 msgstr "Taulukkotyylistä XML-tiedostoa ”%1” ei löydy."
 
 #: ui/actions/AutoFormat.cpp:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Parsing error in sheet-style XML file %1."
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "Jäsennysvirhe taulukkotyylisessä XML-tiedostossa %1."
 
 #: ui/actions/AutoFormat.cpp:133
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Auto-Format"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr ""
@@ -14513,12 +14580,14 @@ msgstr ""
 "automaattimuotoilu"
 
 #: ui/actions/AutoSum.cpp:22
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Autosum"
 msgid "Autosum"
 msgstr "Automaattisumma"
 
 #: ui/actions/AutoSum.cpp:22
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert the 'sum' function"
 msgid "Insert the 'sum' function"
 msgstr "Summa"
 
@@ -14530,53 +14599,63 @@ msgid "Auto Sum"
 msgstr "Automaattisumma"
 
 #: ui/actions/Border.cpp:24
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Border Left"
 msgid "Border Left"
 msgstr "Vasen reunaviiva"
 
 #: ui/actions/Border.cpp:24
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a left border to the selected area"
 msgid "Set a left border to the selected area"
 msgstr "Aseta valitulle alueelle vasen reunaviiva"
 
 #: ui/actions/Border.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Border Right"
 msgid "Border Right"
 msgstr "Oikea reunaviiva"
 
 # ”Oikea reunaviiva” kuulostaa ”väärän” vastakohdalta, mutta jos tämä esiintyy siinä missä muutkin viiva-asetukset, tulkintavaikeutta ei jääne?
 #: ui/actions/Border.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a right border to the selected area"
 msgid "Set a right border to the selected area"
 msgstr "Aseta valitulle alueelle oikea reunaviiva"
 
 #: ui/actions/Border.cpp:88
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Border Top"
 msgid "Border Top"
 msgstr "Yläreunaviiva"
 
 #: ui/actions/Border.cpp:88
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a top border to the selected area"
 msgid "Set a top border to the selected area"
 msgstr "Aseta valitulle alueelle yläreunaviiva"
 
 #: ui/actions/Border.cpp:117
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Border Bottom"
 msgid "Border Bottom"
 msgstr "Alareunaviiva"
 
 #: ui/actions/Border.cpp:117
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a bottom border to the selected area"
 msgid "Set a bottom border to the selected area"
 msgstr "Aseta valitulle alueelle alareunaviiva"
 
 #: ui/actions/Border.cpp:146
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All Borders"
 msgid "All Borders"
 msgstr "Kaikki reunaviivat"
 
 #: ui/actions/Border.cpp:146
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a border around all cells in the selected area"
 msgid "Set a border around all cells in the selected area"
 msgstr "Aseta reunaviiva valitun solun kaikkien solujen ympärille"
 
@@ -14589,41 +14668,51 @@ msgid "All"
 msgstr "Kaikki"
 
 #: ui/actions/Border.cpp:180
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No Borders"
 msgid "No Borders"
 msgstr "Ei reunoja"
 
 #: ui/actions/Border.cpp:180
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove all borders in the selected area"
 msgid "Remove all borders in the selected area"
 msgstr "Poista valitun alueen kaikki reunaviivat"
 
 #: ui/actions/Border.cpp:213
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Border Outline"
 msgid "Border Outline"
 msgstr "Ulkoreunaviiva"
 
 #: ui/actions/Border.cpp:215
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a border to the outline of the selected area"
 msgid "Set a border to the outline of the selected area"
 msgstr "Aseta valitulle alueelle ulkoreunaviiva"
 
 #: ui/actions/Border.cpp:224
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Outline"
 msgid "Outline"
 msgstr "Ulkoreunaviiva"
 
 #: ui/actions/Border.cpp:247
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Border Color"
 msgid "Border Color"
 msgstr "Reunaväri"
 
 #: ui/actions/Border.cpp:247
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select a new border color"
 msgid "Select a new border color"
 msgstr "Valitse uusi reunaväri"
 
 #: ui/actions/Border.cpp:285
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Border Color"
 msgctxt "(qtundo-format)"
 msgid "Change Border Color"
 msgstr ""
@@ -14631,46 +14720,57 @@ msgstr ""
 "reunaviivan värin vaihto"
 
 #: ui/actions/Cells.cpp:20 ui/actions/Cells.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert Cells..."
 msgid "Insert Cells..."
 msgstr "Lisää soluja…"
 
 #: ui/actions/Cells.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert a blank cell into the spreadsheet"
 msgid "Insert a blank cell into the spreadsheet"
 msgstr "Lisää tyhjän solun laskentataulukkoon"
 
 #: ui/actions/Cells.cpp:71 ui/actions/Cells.cpp:85
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Cells..."
 msgid "Remove Cells..."
 msgstr "Poista soluja…"
 
 #: ui/actions/Cells.cpp:71
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Removes the cells from the spreadsheet"
 msgid "Removes the cells from the spreadsheet"
 msgstr "Poistaa valitut solut laskentataulukosta."
 
 #: ui/actions/Clear.cpp:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clear All"
 msgid "Clear All"
 msgstr "Tyhjennä kaikki"
 
 #: ui/actions/Clear.cpp:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clear all contents and formatting of the current cell"
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Poista nykyisen solun sisältö ja muotoilut"
 
 #: ui/actions/Clear.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clear Contents"
 msgid "Clear Contents"
 msgstr "Poista sisältö"
 
 #: ui/actions/Clear.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove the contents of the current cell"
 msgid "Remove the contents of the current cell"
 msgstr "Poistaa valitun solun sisältö"
 
 #: ui/actions/Clear.cpp:51
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Clear Text"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr ""
@@ -14685,31 +14785,39 @@ msgstr ""
 "poisto"
 
 #: ui/actions/Comment.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Comment..."
 msgid "Comment..."
 msgstr "Kommentti…"
 
 #: ui/actions/Comment.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Edit a comment for this cell"
 msgid "Edit a comment for this cell"
 msgstr "Muokkaa tämän solun kommenttia"
 
 #: ui/actions/Comment.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clear Comment"
 msgid "Clear Comment"
 msgstr "Poista kommentti"
 
 #: ui/actions/Comment.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove this cell's comment"
 msgid "Remove this cell's comment"
 msgstr "Poista tämän solun kommentti"
 
 #: ui/actions/Comment.cpp:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Comment"
 msgid "Remove Comment"
 msgstr "Poista kommentti"
 
 #: ui/actions/Comment.cpp:89
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Remove Comment"
 msgctxt "(qtundo-format)"
 msgid "Remove Comment"
 msgstr ""
@@ -14717,6 +14825,9 @@ msgstr ""
 "kommentin poisto"
 
 #: ui/actions/Comment.cpp:91
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Add Comment"
 msgctxt "(qtundo-format)"
 msgid "Add Comment"
 msgstr ""
@@ -14724,31 +14835,39 @@ msgstr ""
 "kommentin lisäys"
 
 #: ui/actions/Conditional.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Conditional Styles..."
 msgid "Conditional Styles..."
 msgstr "Ehdolliset tyylit…"
 
 #: ui/actions/Conditional.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set cell style based on certain conditions"
 msgid "Set cell style based on certain conditions"
 msgstr "Aseta solun tyyli määräehtojen mukaan"
 
 #: ui/actions/Conditional.cpp:88 ui/actions/dialogs/ConditionalDialog.cpp:227
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Conditional Styles"
 msgid "Conditional Styles"
 msgstr "Ehdolliset tyylit"
 
 #: ui/actions/Conditional.cpp:88
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove the conditional cell styles"
 msgid "Remove the conditional cell styles"
 msgstr "Poista ehdolliset solutyylit"
 
 #: ui/actions/Conditional.cpp:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Conditional Styles"
 msgid "Remove Conditional Styles"
 msgstr "Poista ehdolliset tyylit"
 
 #: ui/actions/Conditional.cpp:126
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Remove Conditional Formatting"
 msgctxt "(qtundo-format)"
 msgid "Remove Conditional Formatting"
 msgstr ""
@@ -14756,6 +14875,9 @@ msgstr ""
 "ehdollisen muotoilun poisto"
 
 #: ui/actions/Conditional.cpp:128
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Add Conditional Formatting"
 msgctxt "(qtundo-format)"
 msgid "Add Conditional Formatting"
 msgstr ""
@@ -14763,17 +14885,22 @@ msgstr ""
 "ehdollisen muotoilun lisäys"
 
 #: ui/actions/Consolidate.cpp:22
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Consolidate..."
 msgid "&Consolidate..."
 msgstr "&Kokoa…"
 
 #: ui/actions/Consolidate.cpp:22
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Create a region of summary data from a group of similar regions"
 msgid "Create a region of summary data from a group of similar regions"
 msgstr ""
 "Luo alueen, jossa on yhteenvetotietoja samankaltaisten alueiden tiedoista"
 
 #: ui/actions/Consolidate.cpp:68
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Consolidate"
 msgctxt "(qtundo-format)"
 msgid "Consolidate"
 msgstr ""
@@ -14781,12 +14908,14 @@ msgstr ""
 "kokoaminen"
 
 #: ui/actions/Copy.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Copy the cell object to the clipboard"
 msgid "Copy the cell object to the clipboard"
 msgstr "Kopio solu leikepöydälle."
 
 #: ui/actions/Copy.cpp:57
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Move the cell object to the clipboard"
 msgid "Move the cell object to the clipboard"
 msgstr "Siirrä solu leikepöydälle."
 
@@ -14797,36 +14926,46 @@ msgid "Insert From &Text File..."
 msgstr "&Tekstitiedostosta…"
 
 #: ui/actions/CSVActions.cpp:40
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Insert data from a text file to the current cursor position/selection"
 msgid "Insert data from a text file to the current cursor position/selection"
 msgstr "Lisää tietoja tekstitiedostosta kohdistimen kohdalle tai valintaan"
 
 #: ui/actions/CSVActions.cpp:55
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text File"
 msgid "Text File"
 msgstr "Tekstitiedosto"
 
 #: ui/actions/CSVActions.cpp:62
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Import CSV Data File"
 msgid "Import CSV Data File"
 msgstr "Tuo CSV-tiedosto"
 
 #: ui/actions/CSVActions.cpp:63
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "CSV data files (*.csv)"
 msgid "CSV data files (*.csv)"
 msgstr "CSV-tiedostot (*.csv)"
 
 #: ui/actions/CSVActions.cpp:69
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cannot open input file."
 msgid "Cannot open input file."
 msgstr "Tuontitiedostoa ei voida avata."
 
 #: ui/actions/CSVActions.cpp:77
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inserting Text File"
 msgid "Inserting Text File"
 msgstr "Tekstitiedoston lisääminen"
 
 #: ui/actions/CSVActions.cpp:101
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Inserting Text File"
 msgctxt "(qtundo-format)"
 msgid "Inserting Text File"
 msgstr ""
@@ -14840,7 +14979,10 @@ msgid "Insert From &Clipboard..."
 msgstr "Lisäys leikepöydältä"
 
 #: ui/actions/CSVActions.cpp:123
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Insert CSV data from the clipboard to the current cursor position/"
+#| "selection"
 msgid ""
 "Insert CSV data from the clipboard to the current cursor position/selection"
 msgstr ""
@@ -14848,26 +14990,33 @@ msgstr ""
 "alueeseen."
 
 #: ui/actions/CSVActions.cpp:138
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clipboard"
 msgid "Clipboard"
 msgstr "Leikepöytä"
 
 #: ui/actions/CSVActions.cpp:146
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "There is no data in the clipboard."
 msgid "There is no data in the clipboard."
 msgstr "Leikepöydällä ei ole tietoa."
 
 #: ui/actions/CSVActions.cpp:150
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "There is no usable data in the clipboard."
 msgid "There is no usable data in the clipboard."
 msgstr "Leikepöydällä ei ole käytettävää tietoa."
 
 #: ui/actions/CSVActions.cpp:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inserting From Clipboard"
 msgid "Inserting From Clipboard"
 msgstr "Lisäys leikepöydältä"
 
 #: ui/actions/CSVActions.cpp:182
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Inserting From Clipboard"
 msgctxt "(qtundo-format)"
 msgid "Inserting From Clipboard"
 msgstr ""
@@ -14875,21 +15024,27 @@ msgstr ""
 "lisäys leikepöydältä"
 
 #: ui/actions/CSVActions.cpp:201
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Text to Columns..."
 msgid "&Text to Columns..."
 msgstr "&Teksti sarakkeisiin…"
 
 #: ui/actions/CSVActions.cpp:201
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Expand the content of cells to multiple columns"
 msgid "Expand the content of cells to multiple columns"
 msgstr "Levittää solujen sisällön useampaan sarakkeeseen "
 
 #: ui/actions/CSVActions.cpp:241
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text to Columns"
 msgid "Text to Columns"
 msgstr "Teksti sarakkeiksi"
 
 #: ui/actions/CSVActions.cpp:267
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Text to Columns"
 msgctxt "(qtundo-format)"
 msgid "Text to Columns"
 msgstr ""
@@ -14897,33 +15052,39 @@ msgstr ""
 "teksti sarakkeiksi"
 
 #: ui/actions/CustomLists.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Create custom lists for sorting or autofill"
 msgid "Create custom lists for sorting or autofill"
 msgstr "Luo omia luetteloita lajittelua ja automaattista täyttöä varten"
 
 #: ui/actions/CustomLists.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Custom Lists..."
 msgid "Custom Lists..."
 msgstr "Omat luettelot…"
 
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:25
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add Named Area"
 msgid "Add Named Area"
 msgstr "Lisää nimetty alue"
 
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Enter the area name:"
 msgid "Enter the area name:"
 msgstr "Syötä alueen nimi:"
 
 #: ui/actions/dialogs/AngleDialog.cpp:25 ui/actions/dialogs/AngleDialog.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Change Angle"
 msgid "Change Angle"
 msgstr "Valitse kulma"
 
 #: ui/actions/dialogs/AngleDialog.cpp:33
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Angle:"
 msgid "Angle:"
 msgstr "Kulma:"
 
@@ -14937,22 +15098,26 @@ msgstr ""
 "automaattimuotoilu"
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:46
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select the sheet style to apply:"
 msgid "Select the sheet style to apply:"
 msgstr "Valitse taulukko, jonka asetuksia muutetaan:"
 
 #: ui/actions/dialogs/CharacterSelectDialog.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select Character"
 msgid "Select Character"
 msgstr "Valitse merkki"
 
 #: ui/actions/dialogs/CharacterSelectDialog.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert the selected character in the text"
 msgid "Insert the selected character in the text"
 msgstr "Lisää valittu merkki tekstiin"
 
 #: ui/actions/dialogs/CommentDialog.cpp:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cell Comment"
 msgid "Cell Comment"
 msgstr "Solun kommentti"
 
@@ -14960,38 +15125,44 @@ msgstr "Solun kommentti"
 #: ui/actions/dialogs/ConditionalDialog.cpp:165
 #: ui/actions/dialogs/ConditionalDialog.cpp:184
 #: ui/actions/dialogs/ConditionalDialog.cpp:203
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<none>"
 msgid "<none>"
 msgstr "<ei mikään>"
 
 #. i18ncheckarg
 #: ui/actions/dialogs/ConditionalDialog.cpp:130
 #: ui/actions/dialogs/ValidityDialog.cpp:78
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "equal to"
 msgid "equal to"
 msgstr "yhtä suuri kuin"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:131
 #: ui/actions/dialogs/ValidityDialog.cpp:79
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "greater than"
 msgid "greater than"
 msgstr "suurempi kuin"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:132
 #: ui/actions/dialogs/ValidityDialog.cpp:80
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "less than"
 msgid "less than"
 msgstr "pienempi kuin"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:133
 #: ui/actions/dialogs/ValidityDialog.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "equal to or greater than"
 msgid "equal to or greater than"
 msgstr "yhtä suuri tai suurempi kuin"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:134
 #: ui/actions/dialogs/ValidityDialog.cpp:82
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "equal to or less than"
 msgid "equal to or less than"
 msgstr "yhtä suuri tai pienempi kuin"
 
@@ -15000,47 +15171,55 @@ msgstr "yhtä suuri tai pienempi kuin"
 #: ui/actions/dialogs/ConditionalDialog.cpp:191
 #: ui/actions/dialogs/ConditionalDialog.cpp:209
 #: ui/actions/dialogs/ValidityDialog.cpp:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "between"
 msgid "between"
 msgstr "välissä"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:136
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "outside range"
 msgid "outside range"
 msgstr "alueen ulkopuolella"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:137
 #: ui/actions/dialogs/ValidityDialog.cpp:85
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "different to"
 msgid "different to"
 msgstr "eri kuin"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:146
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "First Condition"
 msgid "First Condition"
 msgstr "Ensimmäinen ehto"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:147
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Second Condition"
 msgid "Second Condition"
 msgstr "Toinen ehto"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:148
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Third Condition"
 msgid "Third Condition"
 msgstr "Kolmas ehto"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:149
 #: ui/actions/dialogs/ConditionalDialog.cpp:150
 #: ui/actions/dialogs/ConditionalDialog.cpp:151
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cell is"
 msgid "Cell is"
 msgstr "Solu on"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:152
 #: ui/actions/dialogs/ConditionalDialog.cpp:153
 #: ui/actions/dialogs/ConditionalDialog.cpp:154
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cell style"
 msgid "Cell style"
 msgstr "Solun tyyli"
 
@@ -15048,56 +15227,71 @@ msgstr "Solun tyyli"
 #: ui/actions/dialogs/ConditionalDialog.cpp:191
 #: ui/actions/dialogs/ConditionalDialog.cpp:209
 #: ui/actions/dialogs/ValidityDialog.cpp:84
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "different from"
 msgid "different from"
 msgstr "eri kuin"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:390
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If the first value is a number, the second value also has to be a number."
 msgid ""
 "If the first value is a number, the second value also has to be a number."
 msgstr "Jos ensimmäinen arvo on numero, toisenkin arvon täytyy olla numero."
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:392
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If the first value is a string, the second value also has to be a string."
 msgid ""
 "If the first value is a string, the second value also has to be a string."
 msgstr ""
 "Jos ensimmäinen arvo on merkkijono, toisenkin arvon täytyy olla merkkijono."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Consolidate"
 msgid "Consolidate"
 msgstr "Kokoa"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:70
 #: ui/actions/dialogs/SubtotalDialog.cpp:88
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Product"
 msgid "Product"
 msgstr "Tulo"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:71
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Standard Deviation"
 msgid "Standard Deviation"
 msgstr "Keskihajonta"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Variance"
 msgid "Variance"
 msgstr "Varianssi"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:126
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You have to define at least one source range."
 msgid "You have to define at least one source range."
 msgstr "Määritä vähintään yksi lähdealue."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:141
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 is not a valid cell range."
 msgid "%1 is not a valid cell range."
 msgstr "%1 ei ole kelvollinen solualue."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:146
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The range\n"
+#| "%1\n"
+#| "is too small"
 msgid ""
 "The range\n"
 "%1\n"
@@ -15108,7 +15302,11 @@ msgstr ""
 "on liian pieni"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:150
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The range\n"
+#| "%1\n"
+#| "is too large"
 msgid ""
 "The range\n"
 "%1\n"
@@ -15119,12 +15317,17 @@ msgstr ""
 "on liian suuri"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "The source range intersects the destination range."
 msgid "The source range intersects the destination range."
 msgstr "Lähde- ja kohdealueet lomittuvat."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:199
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The range\n"
+#| "%1\n"
+#| " is malformed"
 msgid ""
 "The range\n"
 "%1\n"
@@ -15135,7 +15338,8 @@ msgstr ""
 "on virheellinen"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:58
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert Data From Database"
 msgid "Insert Data From Database"
 msgstr "Lisää tietoja tietokannasta"
 
@@ -15145,22 +15349,28 @@ msgid "Finish"
 msgstr ""
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Type:"
 msgid "Type:"
 msgstr "Tyyppi:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:82
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Database name: "
 msgid "Database name: "
 msgstr "Tietokannan nimi: "
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:90
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Host:"
 msgid "Host:"
 msgstr "Palvelin:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:99
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Port:\n"
+#| "(if necessary)"
 msgid ""
 "Port:\n"
 "(if necessary)"
@@ -15169,7 +15379,10 @@ msgstr ""
 "(jos tarvitaan)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:109
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "User name:\n"
+#| "(if necessary)"
 msgid ""
 "User name:\n"
 "(if necessary)"
@@ -15178,7 +15391,10 @@ msgstr ""
 "(jos tarvitaan)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Password:\n"
+#| "(if necessary)"
 msgid ""
 "Password:\n"
 "(if necessary)"
@@ -15187,176 +15403,209 @@ msgstr ""
 "(jos tarvitaan)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:162
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select tables:"
 msgid "Select tables:"
 msgstr "Valitse taulukot:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:174
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Tables"
 msgid "Tables"
 msgstr "Taulukot"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:183
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select columns:"
 msgid "Select columns:"
 msgstr "Valitse sarakkeet:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:188
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Table"
 msgid "Table"
 msgstr "Taulukko"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:198
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Columns"
 msgid "Columns"
 msgstr "Sarakkeet"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:207
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Match all of the following (AND)"
 msgid "Match all of the following (AND)"
 msgstr "Kaikki alla olevat ehdot täyttyvät (AND)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:212
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Match any of the following (OR)"
 msgid "Match any of the following (OR)"
 msgstr "Mikä tahansa alla oleva ehto täyttyy (OR)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:219
 #: ui/actions/dialogs/DatabaseDialog.cpp:238
 #: ui/actions/dialogs/DatabaseDialog.cpp:254
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "equals"
 msgid "equals"
 msgstr "yhtä suuri kuin"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:220
 #: ui/actions/dialogs/DatabaseDialog.cpp:239
 #: ui/actions/dialogs/DatabaseDialog.cpp:255
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "not equal"
 msgid "not equal"
 msgstr "eri suuri kuin"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:221
 #: ui/actions/dialogs/DatabaseDialog.cpp:240
 #: ui/actions/dialogs/DatabaseDialog.cpp:256
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "in"
 msgid "in"
 msgstr "joukossa"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:222
 #: ui/actions/dialogs/DatabaseDialog.cpp:241
 #: ui/actions/dialogs/DatabaseDialog.cpp:257
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "not in"
 msgid "not in"
 msgstr "ei joukossa"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:223
 #: ui/actions/dialogs/DatabaseDialog.cpp:242
 #: ui/actions/dialogs/DatabaseDialog.cpp:258
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "like"
 msgid "like"
 msgstr "kuten"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:224
 #: ui/actions/dialogs/DatabaseDialog.cpp:243
 #: ui/actions/dialogs/DatabaseDialog.cpp:259
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "greater"
 msgid "greater"
 msgstr "suurempi kuin"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:225
 #: ui/actions/dialogs/DatabaseDialog.cpp:244
 #: ui/actions/dialogs/DatabaseDialog.cpp:260
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "lesser"
 msgid "lesser"
 msgstr "pienempi"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:226
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "greater or equal"
 msgid "greater or equal"
 msgstr "suurempi tai yhtä suuri"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:227
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "less or equal"
 msgid "less or equal"
 msgstr "pienempi tai yhtä suuri"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:267
 #: ui/actions/dialogs/DatabaseDialog.cpp:279
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sorted by"
 msgid "Sorted by"
 msgstr "Lajittele kentän"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:274
 #: ui/actions/dialogs/DatabaseDialog.cpp:286
 #: ui/actions/dialogs/SortDialog.cpp:490 ui/actions/dialogs/SortDialog.cpp:565
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Ascending"
 msgid "Ascending"
 msgstr "mukaan nousevasti"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:275
 #: ui/actions/dialogs/DatabaseDialog.cpp:287
 #: ui/actions/dialogs/SortDialog.cpp:486
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Descending"
 msgid "Descending"
 msgstr "mukaan laskevasti"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:296
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Distinct"
 msgid "Distinct"
 msgstr "Vain ainutkertaiset tietueet"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:301
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Query Options"
 msgid "Query Options"
 msgstr "Kyselyn asetukset"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:310
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "SQL query:"
 msgid "SQL query:"
 msgstr "SQL-kysely:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:323
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert in region"
 msgid "Insert in region"
 msgstr "Lisää alueeseen"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:330
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Starting in cell"
 msgid "Starting in cell"
 msgstr "Aloita solusta"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:341
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Result"
 msgid "Result"
 msgstr "Tulos"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:498
 #: ui/actions/dialogs/DatabaseDialog.cpp:518
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You cannot specify a table here."
 msgid "You cannot specify a table here."
 msgstr "Tässä kohdassa ei voi määritellä taulua."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:505
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You have to specify a valid region."
 msgid "You have to specify a valid region."
 msgstr "Määrittele kelvollinen alue."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:525
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You have to specify a valid cell."
 msgid "You have to specify a valid cell."
 msgstr "Määritelty solu on virheellinen."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:537
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Executing query failed."
 msgid "Executing query failed."
 msgstr "Kyselyn suoritus epäonnistui."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:542
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You did not get any results with this query."
 msgid "You did not get any results with this query."
 msgstr "Tämä kysely ei palauttanut tietoja."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:591
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Data From Database"
 msgctxt "(qtundo-format)"
 msgid "Insert Data From Database"
 msgstr ""
@@ -15364,49 +15613,60 @@ msgstr ""
 "tietojen lisääminen tietokannasta"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:622
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "The port must be a number"
 msgid "The port must be a number"
 msgstr "Portin täytyy olla luku"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:628
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Connecting to database..."
 msgid "Connecting to database..."
 msgstr "Yhdistetään tietokantaan…"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:630
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Connected. Retrieving table information..."
 msgid "Connected. Retrieving table information..."
 msgstr "Yhdistetty. Haetaan taulukkojen tietoja…"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:634
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "This database contains no tables"
 msgid "This database contains no tables"
 msgstr "Tietokanta ei sisällä taulukkoja"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:670
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Driver could not be loaded"
 msgid "Driver could not be loaded"
 msgstr "Ajuria ei voitu ladata."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:680
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Retrieving meta data of tables..."
 msgid "Retrieving meta data of tables..."
 msgstr "Haetaan taulujen metadataa…"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:693
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You have to select at least one table."
 msgid "You have to select at least one table."
 msgstr "Valitse vähintään yksi taulukko."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:729
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You have to select at least one column."
 msgid "You have to select at least one column."
 msgstr "Valitse vähintään yksi sarake."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:836
 #: ui/actions/dialogs/DatabaseDialog.cpp:851
 #: ui/actions/dialogs/DatabaseDialog.cpp:866
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#| "'%' or '_'. Do you want to replace them?"
 msgid ""
 "'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
 "or '_'. Do you want to replace them?"
@@ -15427,32 +15687,38 @@ msgstr ""
 "korvaus"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Document Settings"
 msgid "Document Settings"
 msgstr "Tiedoston asetukset"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:63
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Calculation"
 msgid "Calculation"
 msgstr "Laskenta"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:69
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Locale"
 msgid "Locale"
 msgstr "Maa-asetus"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Case sensitive"
 msgid "Case sensitive"
 msgstr "Erota pien- ja suuraakkoset"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:94
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Precision as shown"
 msgid "Precision as shown"
 msgstr "Tarkkuus kuten näkyy"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Search criteria must apply to whole cell"
 msgid "Search criteria must apply to whole cell"
 msgstr "Hakuehtojen on sovittava koko soluun"
 
@@ -15463,103 +15729,123 @@ msgid "Automatic find labels"
 msgstr "Automaattinen"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:106
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "String comparison:"
 msgid "String comparison:"
 msgstr "Merkkijonovertailu:"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:112
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Regular Expressions"
 msgid "Regular Expressions"
 msgstr "Säännölliset lausekkeet"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:112
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Wildcards"
 msgid "Wildcards"
 msgstr "Jokerimerkit"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:118
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Null Year:"
 msgid "Null Year:"
 msgstr "Tyhjä vuosi:"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:157
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Use System's Locale Settings"
 msgid "&Use System's Locale Settings"
 msgstr "Käytä &järjestelmän kotoistusasetuksia"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:185
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Language: %1 (%2)"
 msgid "Language: %1 (%2)"
 msgstr "Kieli: %1 (%2)"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:186
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Default number format: %1"
 msgid "Default number format: %1"
 msgstr "Oletuslukumuoto: %1"
 
 #. i18ncheckarg
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:187
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Long date format: %1"
 msgid "Long date format: %1"
 msgstr "Pitkä päivämäärämuoto: %1"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:188
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Short date format: %1"
 msgid "Short date format: %1"
 msgstr "Lyhyt päivämäärämuoto: %1"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:189
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Time format: %1"
 msgid "Time format: %1"
 msgstr "Kellonaikamuoto: %1"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:190
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Currency format: %1"
 msgid "Currency format: %1"
 msgstr "Valuuttamuoto: %1"
 
 #: ui/actions/dialogs/FindDialog.cpp:23 ui/actions/dialogs/FindDialog.cpp:93
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "More Options"
 msgid "More Options"
 msgstr "Lisää asetuksia"
 
 #: ui/actions/dialogs/FindDialog.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Search entire sheet"
 msgid "Search entire sheet"
 msgstr "Etsi koko taulukko"
 
 #: ui/actions/dialogs/FindDialog.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Search in:"
 msgid "Search in:"
 msgstr "Etsi:"
 
 #: ui/actions/dialogs/FindDialog.cpp:43
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cell Values"
 msgid "Cell Values"
 msgstr "Solun arvot"
 
 #: ui/actions/dialogs/FindDialog.cpp:44
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Comments"
 msgid "Comments"
 msgstr "Kommentit"
 
 #: ui/actions/dialogs/FindDialog.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Search direction:"
 msgid "Search direction:"
 msgstr "Hakusuunta:"
 
 #: ui/actions/dialogs/FindDialog.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Across then Down"
 msgid "Across then Down"
 msgstr "Ensin poikittain, sitten alas"
 
 #: ui/actions/dialogs/FindDialog.cpp:57
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Down then Across"
 msgid "Down then Across"
 msgstr "Ensin alas, sitten poikittain"
 
 #: ui/actions/dialogs/FindDialog.cpp:90
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fewer Options"
 msgid "Fewer Options"
 msgstr "Vähemmän asetuksia"
 
@@ -15570,187 +15856,223 @@ msgid "Set Function"
 msgstr "Samantapaisia funktioita"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:114
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert function"
 msgid "Insert function"
 msgstr "Lisää funktio"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:129
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Help"
 msgid "Help"
 msgstr "Ohje"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:614
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "This function has no parameters."
 msgid "This function has no parameters."
 msgstr "Tällä funktiolla ei ole parametreja."
 
 #: ui/actions/dialogs/FormulaDialog.cpp:641
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Description is not available."
 msgid "Description is not available."
 msgstr "Kuvausta ei ole saatavilla"
 
 #: ui/actions/dialogs/GoalSeekDialog.cpp:37
 #: ui/actions/dialogs/GoalSeekDialog.cpp:43
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Goal Seek"
 msgid "Goal Seek"
 msgstr "Tavoitteen haku"
 
 #: ui/actions/dialogs/GotoDialog.cpp:27 ui/actions/dialogs/GotoDialog.cpp:29
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Goto Cell"
 msgid "Goto Cell"
 msgstr "Siirry soluun"
 
 #: ui/actions/dialogs/GotoDialog.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Enter cell:"
 msgid "Enter cell:"
 msgstr "Anna solu:"
 
 #: ui/actions/dialogs/InsertDialog.cpp:38
 #: ui/actions/dialogs/PasteInsertDialog.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert"
 msgid "Insert"
 msgstr "Lisää"
 
 #: ui/actions/dialogs/InsertDialog.cpp:41
 #: ui/actions/dialogs/PasteInsertDialog.cpp:37
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Move towards right"
 msgid "Move towards right"
 msgstr "Siirry oikealle"
 
 #: ui/actions/dialogs/InsertDialog.cpp:42
 #: ui/actions/dialogs/PasteInsertDialog.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Move towards bottom"
 msgid "Move towards bottom"
 msgstr "Siirry alaspäin"
 
 #: ui/actions/dialogs/InsertDialog.cpp:43
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert rows"
 msgid "Insert rows"
 msgstr "Lisää rivejä"
 
 #: ui/actions/dialogs/InsertDialog.cpp:44
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert columns"
 msgid "Insert columns"
 msgstr "Lisää sarakkeita"
 
 #: ui/actions/dialogs/InsertDialog.cpp:45
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert Cells"
 msgid "Insert Cells"
 msgstr "Lisää soluja"
 
 #: ui/actions/dialogs/InsertDialog.cpp:47 ui/actions/dialogs/ListDialog.cpp:78
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove"
 msgid "Remove"
 msgstr "Poista"
 
 #: ui/actions/dialogs/InsertDialog.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Move towards left"
 msgid "Move towards left"
 msgstr "Siirry vasemmalle"
 
 #: ui/actions/dialogs/InsertDialog.cpp:49
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Move towards top"
 msgid "Move towards top"
 msgstr "Siirry ylöspäin"
 
 #: ui/actions/dialogs/InsertDialog.cpp:50
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove rows"
 msgid "Remove rows"
 msgstr "Poista rivejä"
 
 #: ui/actions/dialogs/InsertDialog.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove columns"
 msgid "Remove columns"
 msgstr "Poista sarakkeita"
 
 #: ui/actions/dialogs/InsertDialog.cpp:52
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Cells"
 msgid "Remove Cells"
 msgstr "Poista soluja"
 
 #: ui/actions/dialogs/LinkDialog.cpp:58 ui/actions/dialogs/LinkDialog.cpp:59
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert Link"
 msgid "Insert Link"
 msgstr "Lisää linkki"
 
 #: ui/actions/dialogs/LinkDialog.cpp:67
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Internet"
 msgid "Internet"
 msgstr "Internet"
 
 #: ui/actions/dialogs/LinkDialog.cpp:68
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Link to Internet Address"
 msgid "Link to Internet Address"
 msgstr "Linkki internetosoitteeseen"
 
 #: ui/actions/dialogs/LinkDialog.cpp:71 ui/actions/dialogs/LinkDialog.cpp:86
 #: ui/actions/dialogs/LinkDialog.cpp:104 ui/actions/dialogs/LinkDialog.cpp:142
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text to display:"
 msgid "Text to display:"
 msgstr "Näytettävä teksti:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Internet address:"
 msgid "Internet address:"
 msgstr "Internet-osoite:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:82
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Email"
 msgid "Email"
 msgstr "Sähköposti"
 
 #: ui/actions/dialogs/LinkDialog.cpp:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Link to Email Address"
 msgid "Link to Email Address"
 msgstr "Linkki sähköpostiosoitteeseen"
 
 #: ui/actions/dialogs/LinkDialog.cpp:89
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Email address:"
 msgid "Email address:"
 msgstr "Sähköpostiosoite:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:93
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Subject:"
 msgid "Subject:"
 msgstr "Aihe"
 
 #: ui/actions/dialogs/LinkDialog.cpp:100
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File"
 msgid "File"
 msgstr "Tiedosto"
 
 #: ui/actions/dialogs/LinkDialog.cpp:101
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Link to File"
 msgid "Link to File"
 msgstr "Linkki tiedostoon"
 
 #: ui/actions/dialogs/LinkDialog.cpp:107
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File location:"
 msgid "File location:"
 msgstr "Tiedoston sijainti:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:112
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Recent file:"
 msgid "Recent file:"
 msgstr "Viimeksi avattu tiedosto:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:132
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No Entries"
 msgid "No Entries"
 msgstr "Ei merkintöjä"
 
 #: ui/actions/dialogs/LinkDialog.cpp:139
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Link to Cell"
 msgid "Link to Cell"
 msgstr "Linkki soluun"
 
 #: ui/actions/dialogs/LinkDialog.cpp:145
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cell or Named Area:"
 msgid "Cell or Named Area:"
 msgstr "Solu tai nimetty alue:"
 
 #: ui/actions/dialogs/ListDialog.cpp:45
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Custom Lists"
 msgid "Custom Lists"
 msgstr "Omat luettelot"
 
@@ -15765,17 +16087,20 @@ msgstr ""
 "aakkoslajin vaihto"
 
 #: ui/actions/dialogs/ListDialog.cpp:54
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "List:"
 msgid "List:"
 msgstr "Luettelo:"
 
 #: ui/actions/dialogs/ListDialog.cpp:61
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Entry:"
 msgid "Entry:"
 msgstr "Arvo:"
 
 #: ui/actions/dialogs/ListDialog.cpp:67
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add"
 msgid "Add"
 msgstr "Lisää"
 
@@ -15785,32 +16110,40 @@ msgid "Cancel"
 msgstr "Peru"
 
 #: ui/actions/dialogs/ListDialog.cpp:75
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "New"
 msgid "New"
 msgstr "Uusi"
 
 #: ui/actions/dialogs/ListDialog.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Modify"
 msgid "Modify"
 msgstr "Muokkaa"
 
 #: ui/actions/dialogs/ListDialog.cpp:84
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Copy"
 msgid "Copy"
 msgstr "Kopioi"
 
 #: ui/actions/dialogs/ListDialog.cpp:240
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Do you really want to remove this list?"
 msgid "Do you really want to remove this list?"
 msgstr "Haluatko varmasti poistaa luettelon?"
 
 #: ui/actions/dialogs/ListDialog.cpp:240
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove List"
 msgid "Remove List"
 msgstr "Poista luettelo"
 
 #: ui/actions/dialogs/ListDialog.cpp:262
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Entry area is not empty.\n"
+#| "Do you want to continue?"
 msgid ""
 "Entry area is not empty.\n"
 "Do you want to continue?"
@@ -15819,33 +16152,39 @@ msgstr ""
 "Haluatko jatkaa?"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:50 ui/actions/NamedAreas.cpp:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Named Areas"
 msgid "Named Areas"
 msgstr "Nimetyt alueet"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:71
 #: ui/actions/dialogs/NamedAreaDialog.cpp:175
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Area: %1"
 msgid "Area: %1"
 msgstr "Alue: %1"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:84
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cells:"
 msgid "Cells:"
 msgstr "Solut:"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sheet:"
 msgid "Sheet:"
 msgstr "Taulukko:"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:98
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Area name:"
 msgid "Area name:"
 msgstr "Alueen nimi:"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:104
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Remove"
 msgid "&Remove"
 msgstr "&Poista"
 
@@ -15861,12 +16200,14 @@ msgid "(new area)"
 msgstr ""
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:192
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Do you really want to remove this named area?"
 msgid "Do you really want to remove this named area?"
 msgstr "Haluatko varmasti poistaa tämän nimetyn alueen?"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:193
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Named Area"
 msgid "Remove Named Area"
 msgstr "Poista nimetty alue"
 
@@ -15877,12 +16218,14 @@ msgid "The provided region is not valid."
 msgstr "Virheellinen soluviittaus."
 
 #: ui/actions/dialogs/PasteInsertDialog.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Paste Inserting Cells"
 msgid "Paste Inserting Cells"
 msgstr "Liitä lisäämällä soluja"
 
 #: ui/actions/dialogs/pivot.cpp:29
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select Source"
 msgid "Select Source"
 msgstr "Valitse lähde"
 
@@ -15892,7 +16235,8 @@ msgid "Pivot Table Configuration Window"
 msgstr ""
 
 #: ui/actions/dialogs/pivotmain.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add Filter"
 msgid "Add Filter"
 msgstr "Lisää suodatin"
 
@@ -15903,27 +16247,32 @@ msgid "Pivot Options"
 msgstr "Bittioperaatiot"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Row"
 msgid "Resize Row"
 msgstr "Muuta rivin kokoa"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Height:"
 msgid "Height:"
 msgstr "Korkeus:"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:78
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Column"
 msgid "Resize Column"
 msgstr "Muuta sarakkeen kokoa"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:89
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Width:"
 msgid "Width:"
 msgstr "Leveys:"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:29
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Series"
 msgid "Series"
 msgstr "Sarja"
 
@@ -15937,27 +16286,35 @@ msgstr ""
 "sarjan lisäys"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert Values"
 msgid "Insert Values"
 msgstr "Lisää arvoja"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:41
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert the series vertically, one below the other"
 msgid "Insert the series vertically, one below the other"
 msgstr "Lisää sarja pystysuuntaan, yläkkäin"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:43
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert the series horizontally, from left to right"
 msgid "Insert the series horizontally, from left to right"
 msgstr "Lisää sarja vaakasuuntaan, vasemmalta oikealle"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Linear (2,4,6,...)"
 msgid "Linear (2,4,6,...)"
 msgstr "Lineaarinen (2, 4, 6,…)"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:53
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Generate a series from 'start' to 'end' and for each step add the value "
+#| "provided in step. This creates a series where each value is 'step' larger "
+#| "than the value before it."
 msgid ""
 "Generate a series from 'start' to 'end' and for each step add the value "
 "provided in step. This creates a series where each value is 'step' larger "
@@ -15968,12 +16325,19 @@ msgstr ""
 "'Askeleen' verran suurempi kuin edellinen arvo."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Geometric (2,4,8,...)"
 msgid "Geometric (2,4,8,...)"
 msgstr "Nouseva (2, 4, 8,…)"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:58
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Generate a series from 'start' to 'end' and for each step multiply the "
+#| "value with the value provided in step. Using a step of 5 produces a list "
+#| "like: 5, 25, 125, 625 since 5 multiplied by 5 (step) equals 25, and that "
+#| "multiplied by 5 equals 125, which multiplied by the same step-value of 5 "
+#| "equals 625."
 msgid ""
 "Generate a series from 'start' to 'end' and for each step multiply the value "
 "with the value provided in step. Using a step of 5 produces a list like: 5, "
@@ -15986,27 +16350,34 @@ msgstr ""
 "viidellä kerrottuna on 625."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:70
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Start value:"
 msgid "Start value:"
 msgstr "Aloitusarvo:"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:79
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Stop value:"
 msgid "Stop value:"
 msgstr "Loppuarvo:"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:88
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Step value:"
 msgid "Step value:"
 msgstr "Askelarvo:"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:114
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "End and start value must be positive."
 msgid "End and start value must be positive."
 msgstr "Loppu- ja alkuarvojen tulee olla positiivisia."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "End value must be greater than the start value or the step must be less "
+#| "than '1'."
 msgid ""
 "End value must be greater than the start value or the step must be less than "
 "'1'."
@@ -16015,22 +16386,28 @@ msgstr ""
 "pienempi kuin yksi."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:125
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "None of the Start, Stop or Step values may be equal to zero."
 msgid "None of the Start, Stop or Step values may be equal to zero."
 msgstr "Aloitusarvo, lopetusarvo tai askel ei voi olla nolla!"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:130
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Step value must be different from 1"
 msgid "Step value must be different from 1"
 msgstr "Askelarvon on oltava jotakin muuta kuin 1"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:134
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Step is negative."
 msgid "Step is negative."
 msgstr "Askelarvo on negatiivinen."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:142
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The step value must be greater than zero; otherwise, the linear series is "
+#| "infinite."
 msgid ""
 "The step value must be greater than zero; otherwise, the linear series is "
 "infinite."
@@ -16039,7 +16416,10 @@ msgstr ""
 "tulisi päättymätön."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:148
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If the start value is greater than the end value the step must be less "
+#| "than zero."
 msgid ""
 "If the start value is greater than the end value the step must be less than "
 "zero."
@@ -16048,7 +16428,10 @@ msgstr ""
 "pienempi kuin nolla."
 
 #: ui/actions/dialogs/SeriesDialog.cpp:154
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If the step is negative, the start value must be greater then the end "
+#| "value."
 msgid ""
 "If the step is negative, the start value must be greater then the end value."
 msgstr ""
@@ -16056,57 +16439,68 @@ msgstr ""
 "lopetusarvon."
 
 #: ui/actions/dialogs/ShowColRowDialog.cpp:37
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select hidden rows to show:"
 msgid "Select hidden rows to show:"
 msgstr "Valitse näytettävät piilorivit:"
 
 #: ui/actions/dialogs/ShowColRowDialog.cpp:40
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select hidden columns to show:"
 msgid "Select hidden columns to show:"
 msgstr "Valitse näytettävät piilosarakkeet:"
 
 #: ui/actions/dialogs/SortDialog.cpp:76 ui/actions/dialogs/SortDialog.cpp:220
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Column %1"
 msgid "Column %1"
 msgstr "Sarake %1"
 
 #: ui/actions/dialogs/SortDialog.cpp:99 ui/actions/dialogs/SortDialog.cpp:210
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Row %1"
 msgid "Row %1"
 msgstr "Rivi %1"
 
 #: ui/actions/dialogs/SortDialog.cpp:260
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&First column contains row headers"
 msgid "&First column contains row headers"
 msgstr "&Ensimmäinen sarake sisältää riviotsikot"
 
 #: ui/actions/dialogs/SortDialog.cpp:263
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&First row contains column headers"
 msgid "&First row contains column headers"
 msgstr "&Ensimmäinen rivi sisältää sarakeotsikot"
 
 #: ui/actions/dialogs/SortDialog.cpp:275
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sort"
 msgid "Sort"
 msgstr "Lajittele"
 
 #: ui/actions/dialogs/SortDialog.cpp:496
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Case Insensitive"
 msgid "Case Insensitive"
 msgstr "Älä erota pien- ja suuraakkosia"
 
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:19
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Special Paste"
 msgid "Special Paste"
 msgstr "Liitä määräten"
 
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Paste"
 msgid "Paste"
 msgstr "Liitä"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:32
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Style Manager"
 msgid "Style Manager"
 msgstr "Tyylien hallinta"
 
@@ -16117,118 +16511,141 @@ msgid "Style"
 msgstr "Tyyli"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:47
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All Styles"
 msgid "All Styles"
 msgstr "Kaikki tyylit"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Custom Styles"
 msgid "Custom Styles"
 msgstr "Omat tyylit"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:49
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hierarchical"
 msgid "Hierarchical"
 msgstr "Hierarkinen"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:57
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&New..."
 msgid "&New..."
 msgstr "&Uusi…"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:59
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Modify..."
 msgid "&Modify..."
 msgstr "&Muunna…"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:61
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Delete..."
 msgid "&Delete..."
 msgstr "&Poista…"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:168
 #: ui/actions/dialogs/StyleManagerDialog.cpp:171
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "style%1"
 msgid "style%1"
 msgstr "tyyli %1"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:40
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Subtotals"
 msgid "Subtotals"
 msgstr "Välisummat"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove All"
 msgid "Remove All"
 msgstr "Poista kaikki"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:69
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Column '%1' "
 msgid "Column '%1' "
 msgstr "Sarake %1 "
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:89
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "StDev"
 msgid "StDev"
 msgstr "StDev"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:90
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "StDevP"
 msgid "StDevP"
 msgstr "StDevP"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:92
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Var"
 msgid "Var"
 msgstr "Var"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:93
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "VarP"
 msgid "VarP"
 msgstr "VarP"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:144
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You need to select at least one column for adding subtotals."
 msgid "You need to select at least one column for adding subtotals."
 msgstr "Valitse ainakin yksi sarake, johon lisätään välisummia."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:41 ui/actions/Validity.cpp:55
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Validity"
 msgid "Validity"
 msgstr "Kelpoisuus"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clear &All"
 msgid "Clear &All"
 msgstr "Tyhjennä &kaikki"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:54
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Allow:"
 msgid "Allow:"
 msgstr "Salli:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:61
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Integer"
 msgid "Integer"
 msgstr "Kokonaisluku"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:65
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Length"
 msgid "Text Length"
 msgstr "Tekstin pituus"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:66
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "List"
 msgid "List"
 msgstr "Luettelo"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:69
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Allow blanks"
 msgid "Allow blanks"
 msgstr "Salli tyhjät"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:73
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Data:"
 msgid "Data:"
 msgstr "Tieto:"
 
@@ -16237,7 +16654,8 @@ msgstr "Tieto:"
 #: ui/actions/dialogs/ValidityDialog.cpp:259
 #: ui/actions/dialogs/ValidityDialog.cpp:275
 #: ui/actions/dialogs/ValidityDialog.cpp:349
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Minimum:"
 msgid "Minimum:"
 msgstr "Minimi:"
 
@@ -16246,7 +16664,8 @@ msgstr "Minimi:"
 #: ui/actions/dialogs/ValidityDialog.cpp:260
 #: ui/actions/dialogs/ValidityDialog.cpp:276
 #: ui/actions/dialogs/ValidityDialog.cpp:350
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Maximum:"
 msgid "Maximum:"
 msgstr "Maksimi:"
 
@@ -16254,42 +16673,48 @@ msgstr "Maksimi:"
 #: ui/actions/dialogs/ValidityDialog.cpp:289
 #: ui/actions/dialogs/ValidityDialog.cpp:297
 #: ui/actions/dialogs/ValidityDialog.cpp:340
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Date:"
 msgid "Date:"
 msgstr "Päivämäärä:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:109
 #: ui/actions/dialogs/ValidityDialog.cpp:301
 #: ui/actions/dialogs/ValidityDialog.cpp:355
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Date minimum:"
 msgid "Date minimum:"
 msgstr "Päivämäärä vähintään:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:111
 #: ui/actions/dialogs/ValidityDialog.cpp:302
 #: ui/actions/dialogs/ValidityDialog.cpp:356
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Date maximum:"
 msgid "Date maximum:"
 msgstr "Päivämäärä enintään:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:113
 #: ui/actions/dialogs/ValidityDialog.cpp:312
 #: ui/actions/dialogs/ValidityDialog.cpp:342
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Time:"
 msgid "Time:"
 msgstr "Aika:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:115
 #: ui/actions/dialogs/ValidityDialog.cpp:316
 #: ui/actions/dialogs/ValidityDialog.cpp:358
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Time minimum:"
 msgid "Time minimum:"
 msgstr "Aika vähintään:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:117
 #: ui/actions/dialogs/ValidityDialog.cpp:317
 #: ui/actions/dialogs/ValidityDialog.cpp:359
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Time maximum:"
 msgid "Time maximum:"
 msgstr "Aika enintään:"
 
@@ -16297,12 +16722,14 @@ msgstr "Aika enintään:"
 #: ui/actions/dialogs/ValidityDialog.cpp:255
 #: ui/actions/dialogs/ValidityDialog.cpp:271
 #: ui/actions/dialogs/ValidityDialog.cpp:336
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Number:"
 msgid "Number:"
 msgstr "Luku:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:130
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Entries:"
 msgid "Entries:"
 msgstr "Merkinnät:"
 
@@ -16313,45 +16740,54 @@ msgid "Error Alert"
 msgstr "&Virheilmoitus"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:140
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show error message when invalid values are entered"
 msgid "Show error message when invalid values are entered"
 msgstr "Näytä virheviesti jos annetaan virheellisiä arvoja"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:145
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Action:"
 msgid "Action:"
 msgstr "Toiminto:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:150
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Stop"
 msgid "Stop"
 msgstr "Pysäytä"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:151
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Warning"
 msgid "Warning"
 msgstr "Varoitus"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:156
 #: ui/actions/dialogs/ValidityDialog.cpp:179
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Title of message"
+#| msgid "Title:"
 msgctxt "Title of message"
 msgid "Title:"
 msgstr "Otsikko:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:163
 #: ui/actions/dialogs/ValidityDialog.cpp:186
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Message:"
 msgid "Message:"
 msgstr "Viesti:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:170
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Input Help"
 msgid "Input Help"
 msgstr "Syöttöohje"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:174
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show input help when cell is selected"
 msgid "Show input help when cell is selected"
 msgstr "Näytä syöttöohje kun solu on valittuna"
 
@@ -16359,39 +16795,46 @@ msgstr "Näytä syöttöohje kun solu on valittuna"
 #: ui/actions/dialogs/ValidityDialog.cpp:466
 #: ui/actions/dialogs/ValidityDialog.cpp:472
 #: ui/actions/dialogs/ValidityDialog.cpp:477
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "This is not a valid value."
 msgid "This is not a valid value."
 msgstr "Arvo ei kelvollinen."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:483
 #: ui/actions/dialogs/ValidityDialog.cpp:488
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "This is not a valid time."
 msgid "This is not a valid time."
 msgstr "Aika ei ole kelvollinen."
 
 #: ui/actions/dialogs/ValidityDialog.cpp:494
 #: ui/actions/dialogs/ValidityDialog.cpp:499
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "This is not a valid date."
 msgid "This is not a valid date."
 msgstr "Päivämäärä ei ole kelvollinen."
 
 #: ui/actions/DocumentSettings.cpp:22
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Document Settings..."
 msgid "Document Settings..."
 msgstr "Tiedoston asetukset…"
 
 #: ui/actions/DocumentSettings.cpp:24
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show document settings dialog"
 msgid "Show document settings dialog"
 msgstr "Näytä tiedoston asetusikkuna"
 
 #: ui/actions/Editing.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Edit the highlighted cell"
 msgid "Edit the highlighted cell"
 msgstr "Muokkaa korostettua solua"
 
 #: ui/actions/Editing.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Modify Cell"
 msgid "Modify Cell"
 msgstr "Muokkaa solua"
 
@@ -16431,6 +16874,9 @@ msgid "Fill &Right"
 msgstr "&Oikealle"
 
 #: ui/actions/Fill.cpp:79
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Fill Selection"
 msgctxt "(qtundo-format)"
 msgid "Fill Selection"
 msgstr ""
@@ -16438,6 +16884,9 @@ msgstr ""
 "valinnan täyttö"
 
 #: ui/actions/FindReplace.cpp:124
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Replace"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr ""
@@ -16445,7 +16894,8 @@ msgstr ""
 "korvaus"
 
 #: ui/actions/Font.cpp:30
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select Font..."
 msgid "Select Font..."
 msgstr "Valitse fontti…"
 
@@ -16458,6 +16908,9 @@ msgstr "Asettaa solun muotoilun"
 #: ui/actions/Font.cpp:59 ui/actions/Font.cpp:106 ui/actions/Style.cpp:93
 #: ui/actions/Style.cpp:129 ui/actions/Style.cpp:165 ui/actions/Style.cpp:194
 #: ui/actions/Style.cpp:495 ui/actions/Style.cpp:519
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Font"
 msgctxt "(qtundo-format)"
 msgid "Change Font"
 msgstr ""
@@ -16465,7 +16918,8 @@ msgstr ""
 "fontin muuttaminen"
 
 #: ui/actions/Font.cpp:77
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Select Font Size"
 msgid "Select Font Size"
 msgstr "Valitse fonttikoko"
 
@@ -16476,72 +16930,86 @@ msgid "Set the cell font size"
 msgstr "Asettaa solun muotoilun"
 
 #: ui/actions/Font.cpp:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Font Size"
 msgid "Font Size"
 msgstr "Fonttikoko"
 
 #: ui/actions/Font.cpp:125
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set the text color"
 msgid "Set the text color"
 msgstr "Aseta tekstiväri"
 
 #: ui/actions/Font.cpp:125
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Color"
 msgid "Text Color"
 msgstr "Tekstiväri"
 
 #: ui/actions/Formula.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Function..."
 msgid "&Function..."
 msgstr "&Funktio…"
 
 #: ui/actions/Formula.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert math expression"
 msgid "Insert math expression"
 msgstr "Lisää matemaattinen lauseke"
 
 #: ui/actions/Formula.cpp:51 ui/actions/Formula.cpp:59
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Formula Selection"
 msgid "Formula Selection"
 msgstr "Kaavan valinta"
 
 #: ui/actions/Formula.cpp:51 ui/actions/Formula.cpp:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert a function"
 msgid "Insert a function"
 msgstr "Lisää funktio"
 
 #: ui/actions/Formula.cpp:61 ui/actions/Formula.cpp:76
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Others..."
 msgid "Others..."
 msgstr "Muut…"
 
 #: ui/actions/GoalSeek.cpp:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Goal Seek..."
 msgid "&Goal Seek..."
 msgstr "&Tavoitteen haku…"
 
 #: ui/actions/GoalSeek.cpp:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Repeating calculation to find a specific value"
 msgid "Repeating calculation to find a specific value"
 msgstr "Toistuva laskutoimitus määräarvon löytämiseksi"
 
 #: ui/actions/GoalSeek.cpp:59 ui/actions/GoalSeek.cpp:66
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cell reference is invalid."
 msgid "Cell reference is invalid."
 msgstr "Virheellinen soluviittaus."
 
 #: ui/actions/GoalSeek.cpp:75
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Target value is invalid."
 msgid "Target value is invalid."
 msgstr "Virheellinen kohdearvo."
 
 #: ui/actions/GoalSeek.cpp:84
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Source cell must contain a numeric value."
 msgid "Source cell must contain a numeric value."
 msgstr "Lähdesolussa täytyy olla numeerinen arvo."
 
 #: ui/actions/GoalSeek.cpp:90
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Target cell must contain a formula."
 msgid "Target cell must contain a formula."
 msgstr "Kohdesolussa täytyy olla kaava."
 
@@ -16557,22 +17025,26 @@ msgid "Goal seeking with cell %1 found a solution."
 msgstr "Solun %1 tavoitteen haussa löytyi ratkaisu:"
 
 #: ui/actions/GoalSeek.cpp:179
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Goal seeking with cell %1 has found NO solution."
 msgid "Goal seeking with cell %1 has found NO solution."
 msgstr "Solun %1 tavoitteen hakuun EI LÖYTYNYT ratkaisuja."
 
 #: ui/actions/Goto.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Goto Cell..."
 msgid "Goto Cell..."
 msgstr "Siirry soluun…"
 
 #: ui/actions/Goto.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Move to a particular cell"
 msgid "Move to a particular cell"
 msgstr "Siirry tiettyyn soluun"
 
 #: ui/actions/Goto.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Goto"
 msgid "Goto"
 msgstr "Siirry"
 
@@ -16583,26 +17055,33 @@ msgid "That is not a valid cell."
 msgstr "Aika ei ole kelvollinen."
 
 #: ui/actions/Indent.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Decrease Indent"
 msgid "Decrease Indent"
 msgstr "Vähennä sisennystä"
 
 #: ui/actions/Indent.cpp:26
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Increase Indent"
 msgid "Increase Indent"
 msgstr "Kasvata sisennystä"
 
 #: ui/actions/Indent.cpp:28
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Decrease the indentation"
 msgid "Decrease the indentation"
 msgstr "Vähennä sisennystä"
 
 #: ui/actions/Indent.cpp:28
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Increase the indentation"
 msgid "Increase the indentation"
 msgstr "Kasvata sisennystä"
 
 #: ui/actions/Indent.cpp:96
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Increase Indentation"
 msgctxt "(qtundo-format)"
 msgid "Increase Indentation"
 msgstr ""
@@ -16610,6 +17089,9 @@ msgstr ""
 "sisennyksen kasvattaminen"
 
 #: ui/actions/Indent.cpp:98
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Decrease Indentation"
 msgctxt "(qtundo-format)"
 msgid "Decrease Indentation"
 msgstr ""
@@ -16617,17 +17099,22 @@ msgstr ""
 "sisennyksen pienentäminen"
 
 #: ui/actions/InsertFromDatabase.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "From &Database..."
 msgid "From &Database..."
 msgstr "&Tietokannasta…"
 
 #: ui/actions/InsertFromDatabase.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert data from a SQL database"
 msgid "Insert data from a SQL database"
 msgstr "Lisää tietoja SQL-tietokannasta"
 
 #: ui/actions/InsertFromDatabase.cpp:45
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "No database drivers available. To use this feature you need to install "
+#| "the necessary Qt database drivers."
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
@@ -16636,16 +17123,21 @@ msgstr ""
 "asennettava tarvittavat Qt-tietokanta-ajurit."
 
 #: ui/actions/InsertSeries.cpp:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Series..."
 msgid "&Series..."
 msgstr "&Sarja…"
 
 #: ui/actions/InsertSeries.cpp:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert a series"
 msgid "Insert a series"
 msgstr "Lisää sarja"
 
 #: ui/actions/InsertSeries.cpp:60
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Series"
 msgctxt "(qtundo-format)"
 msgid "Insert Series"
 msgstr ""
@@ -16653,46 +17145,57 @@ msgstr ""
 "sarjan lisäys"
 
 #: ui/actions/InsertSpecialChar.cpp:30
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "S&pecial Character..."
 msgid "S&pecial Character..."
 msgstr "&Erikoismerkki…"
 
 #: ui/actions/InsertSpecialChar.cpp:32
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert one or more symbols or letters not found on the keyboard"
 msgid "Insert one or more symbols or letters not found on the keyboard"
 msgstr "Lisää yksi tai useampi erikoismerkki, jota ei löydy näppäimistöltä."
 
 #: ui/actions/Inspector.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Run Inspector..."
 msgid "Run Inspector..."
 msgstr "Suorita tarkistus…"
 
 #: ui/actions/Link.cpp:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Link..."
 msgid "&Link..."
 msgstr "&Linkki…"
 
 #: ui/actions/Link.cpp:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert an Internet hyperlink"
 msgid "Insert an Internet hyperlink"
 msgstr "Lisää Internet-hyperlinkki"
 
 #: ui/actions/Link.cpp:65
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Link"
 msgid "Link"
 msgstr "Linkki"
 
 #: ui/actions/Link.cpp:65
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove a link"
 msgid "Remove a link"
 msgstr "Poista linkki"
 
 #: ui/actions/Link.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Link"
 msgid "Remove Link"
 msgstr "Poista linkki"
 
 #: ui/actions/Link.cpp:92
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Remove Link"
 msgctxt "(qtundo-format)"
 msgid "Remove Link"
 msgstr ""
@@ -16700,6 +17203,9 @@ msgstr ""
 "linkin poisto"
 
 #: ui/actions/Link.cpp:92
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Set Link"
 msgctxt "(qtundo-format)"
 msgid "Set Link"
 msgstr ""
@@ -16707,57 +17213,70 @@ msgstr ""
 "linkin asettaminen"
 
 #: ui/actions/ListChoose.cpp:28
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Selection List..."
 msgid "Selection List..."
 msgstr "Valintaluettelo…"
 
 #: ui/actions/Merge.cpp:19
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Merge Cells Horizontally"
 msgid "Merge Cells Horizontally"
 msgstr "Yhdistä solut vaakasuunnassa"
 
 #: ui/actions/Merge.cpp:19
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Merge Cells Vertically"
 msgid "Merge Cells Vertically"
 msgstr "Yhdistä solut pystysuunnassa"
 
 #: ui/actions/Merge.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Merge the selected region horizontally"
 msgid "Merge the selected region horizontally"
 msgstr "Yhdistä valittu alue vaakasuuntaisesti"
 
 #: ui/actions/Merge.cpp:36
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Merge the selected region vertically"
 msgid "Merge the selected region vertically"
 msgstr "Yhdistä valittu alue pystysuuntaisesti"
 
 #: ui/actions/Merge.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Merge the selected region"
 msgid "Merge the selected region"
 msgstr "Yhdistä valittu alue"
 
 #: ui/actions/Merge.cpp:66
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Dissociate Cells"
 msgid "Dissociate Cells"
 msgstr "Jaa solut"
 
 #: ui/actions/Merge.cpp:66
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unmerge the selected region"
 msgid "Unmerge the selected region"
 msgstr "Erota valitun alueet solut"
 
 #: ui/actions/NamedAreas.cpp:28
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Area Name..."
 msgid "Area Name..."
 msgstr "Alueen nimi…"
 
 #: ui/actions/NamedAreas.cpp:28
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a name for a region of the spreadsheet"
 msgid "Set a name for a region of the spreadsheet"
 msgstr "Asettaa laskentataulukon alueelle nimen."
 
 #: ui/actions/NamedAreas.cpp:53
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The named area '%1' already exists.\n"
+#| "Do you want to replace it?"
 msgid ""
 "The named area '%1' already exists.\n"
 "Do you want to replace it?"
@@ -16766,11 +17285,15 @@ msgstr ""
 "Haluatko korvata sen?"
 
 #: ui/actions/NamedAreas.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Replace Named Area"
 msgid "Replace Named Area"
 msgstr "Korvaa nimetty alue"
 
 #: ui/actions/NamedAreas.cpp:65
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Replace Named Area"
 msgctxt "(qtundo-format)"
 msgid "Replace Named Area"
 msgstr ""
@@ -16778,67 +17301,80 @@ msgstr ""
 "nimetyn alueen korvaaminen"
 
 #: ui/actions/NamedAreas.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Edit or select named areas"
 msgid "Edit or select named areas"
 msgstr "Muokkaa tai valitsee nimettyjä alueita"
 
 #: ui/actions/NamedAreas.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Named Areas..."
 msgid "Named Areas..."
 msgstr "Nimetyt alueet…"
 
 #: ui/actions/PageBreak.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Break Before Row"
 msgid "Break Before Row"
 msgstr "Vaihto ennen riviä"
 
 #: ui/actions/PageBreak.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a manual page break before the row"
 msgid "Set a manual page break before the row"
 msgstr "Aseta pakollinen sivunvaihto ennen riviä"
 
 #: ui/actions/PageBreak.cpp:30
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Row Break"
 msgid "Row Break"
 msgstr "Rivin katkaisu"
 
 #: ui/actions/PageBreak.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Break Before Column"
 msgid "Break Before Column"
 msgstr "Vaihto ennen saraketta"
 
 #: ui/actions/PageBreak.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set a manual page break before the column"
 msgid "Set a manual page break before the column"
 msgstr "Aseta pakollinen sivunvaihto ennen saraketta"
 
 #: ui/actions/PageBreak.cpp:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Column Break"
 msgid "Column Break"
 msgstr "Sarakkeen katkaisu"
 
 #: ui/actions/Paste.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Liitä leikepöydän sisältö kohdistimen kohdalle."
 
 #: ui/actions/Paste.cpp:94
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Special Paste..."
 msgid "Special Paste..."
 msgstr "Liitä määräten…"
 
 #: ui/actions/Paste.cpp:96
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Paste the contents of the clipboard with special options"
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Liitä leikepöydän sisältö määrittelyin…"
 
 #: ui/actions/Paste.cpp:153
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Paste with Insertion"
 msgid "Paste with Insertion"
 msgstr "Liitä lisäten"
 
 #: ui/actions/Paste.cpp:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Lisää solun leikepöydältä laskentataulukkoon"
 
@@ -16855,51 +17391,63 @@ msgid "Create Pivot Tables"
 msgstr "&Välisummat"
 
 #: ui/actions/Pivot.cpp:29
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "You must select multiple cells."
 msgid "You must select multiple cells."
 msgstr "On valittava useampi solu."
 
 #: ui/actions/SelectAll.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Selects all cells in the current sheet"
 msgid "Selects all cells in the current sheet"
 msgstr "Valitsee laskentataulukon kaikki solut"
 
 #: ui/actions/ShowTableView.cpp:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show QTableView..."
 msgid "Show QTableView..."
 msgstr "Näytä QTableView…"
 
 #: ui/actions/Sort.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Sort..."
 msgid "&Sort..."
 msgstr "&Lajittele…"
 
 #: ui/actions/Sort.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sort a group of cells"
 msgid "Sort a group of cells"
 msgstr "Lajittele soluryhmä"
 
 #: ui/actions/Sort.cpp:111
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sort &Increasing"
 msgid "Sort &Increasing"
 msgstr "&Lajittele nousevasti"
 
 #: ui/actions/Sort.cpp:111
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sort a group of cells in ascending(first to last) order"
 msgid "Sort a group of cells in ascending(first to last) order"
 msgstr "Lajittele soluryhmä nousevasti (alusta loppuun)"
 
 #: ui/actions/Sort.cpp:143
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sort &Decreasing"
 msgid "Sort &Decreasing"
 msgstr "&Lajittele laskevasti"
 
 #: ui/actions/Sort.cpp:145
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sort a group of cells in decreasing(last to first) order"
 msgid "Sort a group of cells in decreasing(last to first) order"
 msgstr "Lajittele soluryhmä laskevasti (lopusta alkuun)"
 
 #: ui/actions/Sort.cpp:183
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Sort Data"
 msgctxt "(qtundo-format)"
 msgid "Sort Data"
 msgstr ""
@@ -16907,7 +17455,8 @@ msgstr ""
 "tietojen lajittelu"
 
 #: ui/actions/SpellCheck.cpp:84
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Do you want to check the spelling in the next sheet?"
 msgid "Do you want to check the spelling in the next sheet?"
 msgstr "Haluatko tarkistaa seuraavan laskentataulukon oikeinkirjoituksen?"
 
@@ -16919,17 +17468,20 @@ msgid "Check next sheet"
 msgstr "Siirry seuraavaan laskentataulukkoon"
 
 #: ui/actions/SpellCheck.cpp:237
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Check the spelling"
 msgid "Check the spelling"
 msgstr "Oikolue"
 
 #: ui/actions/Style.cpp:29
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cell Format..."
 msgid "Cell Format..."
 msgstr "Solun muotoilu…"
 
 #: ui/actions/Style.cpp:29
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set the cell formatting"
 msgid "Set the cell formatting"
 msgstr "Asettaa solun muotoilun"
 
@@ -16952,26 +17504,33 @@ msgid "Underline"
 msgstr "Alleviivattu"
 
 #: ui/actions/Style.cpp:184
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Strike Out"
 msgid "Strike Out"
 msgstr "Yliviivaus"
 
 #: ui/actions/Style.cpp:213
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Make the cell text wrap onto multiple lines"
 msgid "Make the cell text wrap onto multiple lines"
 msgstr "Rivitä solun teksti useammalle riville"
 
 #: ui/actions/Style.cpp:213
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Wrap Text"
 msgid "Wrap Text"
 msgstr "Rivitä teksti"
 
 #: ui/actions/Style.cpp:222
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Wrap"
 msgid "Wrap"
 msgstr "Rivitys"
 
 #: ui/actions/Style.cpp:230
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Wrap Text"
 msgctxt "(qtundo-format)"
 msgid "Wrap Text"
 msgstr ""
@@ -16979,16 +17538,21 @@ msgstr ""
 "tekstin rivittäminen"
 
 #: ui/actions/Style.cpp:247
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Print cell contents vertically"
 msgid "Print cell contents vertically"
 msgstr "Tulosta solun sisältö pystysuuntaisesti"
 
 #: ui/actions/Style.cpp:247
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Vertical Text"
 msgid "Vertical Text"
 msgstr "Pystysuuntainen teksti"
 
 #: ui/actions/Style.cpp:257
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Vertical Text"
 msgctxt "(qtundo-format)"
 msgid "Vertical Text"
 msgstr ""
@@ -17045,12 +17609,14 @@ msgid "Format Scientific"
 msgstr "Tieteellinen"
 
 #: ui/actions/Style.cpp:342
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Percent Format"
 msgid "Percent Format"
 msgstr "Prosenttimuoto"
 
 #: ui/actions/Style.cpp:344
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set the cell formatting to look like a percentage"
 msgid "Set the cell formatting to look like a percentage"
 msgstr "Muuta solun muotoilu prosenttimuotoon"
 
@@ -17060,6 +17626,9 @@ msgid "Percent"
 msgstr "Prosentti"
 
 #: ui/actions/Style.cpp:361
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Format Percent"
 msgctxt "(qtundo-format)"
 msgid "Format Percent"
 msgstr ""
@@ -17067,12 +17636,14 @@ msgstr ""
 "prosenttien muotoilu"
 
 #: ui/actions/Style.cpp:379
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Money Format"
 msgid "Money Format"
 msgstr "Valuuttamuoto"
 
 #: ui/actions/Style.cpp:381
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set the cell formatting to look like your local currency"
 msgid "Set the cell formatting to look like your local currency"
 msgstr "Muuta solun muotoilu paikalliseen valuuttamuotoon"
 
@@ -17082,6 +17653,9 @@ msgid "Money"
 msgstr "Valuutta"
 
 #: ui/actions/Style.cpp:398
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Format Money"
 msgctxt "(qtundo-format)"
 msgid "Format Money"
 msgstr ""
@@ -17133,36 +17707,45 @@ msgid "Format Time"
 msgstr "Muotoilu"
 
 #: ui/actions/Style.cpp:480
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Increase Font Size"
 msgid "Increase Font Size"
 msgstr "Suurenna fonttikokoa"
 
 #: ui/actions/Style.cpp:504
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Decrease Font Size"
 msgid "Decrease Font Size"
 msgstr "Pienennä fonttikokoa"
 
 #: ui/actions/Style.cpp:530
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Increase Precision"
 msgid "Increase Precision"
 msgstr "Lisää tarkkuutta"
 
 #: ui/actions/Style.cpp:532
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Increase the decimal precision shown onscreen"
 msgid "Increase the decimal precision shown onscreen"
 msgstr "Lisää näytöllä esitettyä tarkkuutta"
 
 #: ui/actions/Style.cpp:549
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Decrease Precision"
 msgid "Decrease Precision"
 msgstr "Vähennä tarkkuutta"
 
 #: ui/actions/Style.cpp:551
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Decrease the decimal precision shown onscreen"
 msgid "Decrease the decimal precision shown onscreen"
 msgstr "Vähennä näytöllä esitettyä tarkkuutta"
 
 #: ui/actions/Style.cpp:597
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Increase Precision"
 msgctxt "(qtundo-format)"
 msgid "Increase Precision"
 msgstr ""
@@ -17170,6 +17753,9 @@ msgstr ""
 "tarkkuuden lisäys"
 
 #: ui/actions/Style.cpp:599
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Decrease Precision"
 msgctxt "(qtundo-format)"
 msgid "Decrease Precision"
 msgstr ""
@@ -17177,7 +17763,8 @@ msgstr ""
 "tarkkuuden vähennys"
 
 #: ui/actions/Style.cpp:603
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resets to the default format"
 msgid "Resets to the default format"
 msgstr "Palauttaa oletusmuotoilun"
 
@@ -17189,37 +17776,44 @@ msgid "Set Default Style"
 msgstr "Taulukon tyyli"
 
 #: ui/actions/Style.cpp:622
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Background Color"
 msgid "Background Color"
 msgstr "Taustaväri"
 
 #: ui/actions/Style.cpp:622
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set the background color"
 msgid "Set the background color"
 msgstr "Aseta taustaväri"
 
 #: ui/actions/Styles.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Create Style From Cell..."
 msgid "Create Style From Cell..."
 msgstr "Luo tyyli solusta…"
 
 #: ui/actions/Styles.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Create a new style based on the currently selected cell"
 msgid "Create a new style based on the currently selected cell"
 msgstr "Luo uusi tyyli valitun solun pohjalta"
 
 #: ui/actions/Styles.cpp:40
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Style From Cell"
 msgid "Style From Cell"
 msgstr "Tyyli solusta"
 
 #: ui/actions/Styles.cpp:53
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Create Style From Cell"
 msgid "Create Style From Cell"
 msgstr "Luo tyyli solusta"
 
 #: ui/actions/Styles.cpp:61
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "The style name cannot be empty."
 msgid "The style name cannot be empty."
 msgstr "Tyylin nimi ei voi olla tyhjä."
 
@@ -17229,27 +17823,32 @@ msgid "A style with this name already exists."
 msgstr "Tämän niminen tyyli on jo olemassa."
 
 #: ui/actions/Styles.cpp:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Edit and organize cell styles"
 msgid "Edit and organize cell styles"
 msgstr "Muokkaa ja hallitse solutyylejä"
 
 #: ui/actions/Styles.cpp:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Style Manager..."
 msgid "Style Manager..."
 msgstr "Tyylien hallinta…"
 
 #: ui/actions/Styles.cpp:122
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Apply a predefined style to the selected cells"
 msgid "Apply a predefined style to the selected cells"
 msgstr "Käytä ennalta määriteltyä tyyliä valituille soluille."
 
 #: ui/actions/Subtotals.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Subtotals..."
 msgid "&Subtotals..."
 msgstr "&Välisummat"
 
 #: ui/actions/Subtotals.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Create different kind of subtotals to a list or database"
 msgid "Create different kind of subtotals to a list or database"
 msgstr "Luo erilaisia välisummia luetteloon tai tietokantaan"
 
@@ -17261,21 +17860,27 @@ msgid "Subtotals"
 msgstr "Välisummat"
 
 #: ui/actions/TextCase.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Upper"
 msgid "Upper"
 msgstr "Suuraakkoset"
 
 #: ui/actions/TextCase.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Lower"
 msgid "Lower"
 msgstr "Pienaakkoset"
 
 #: ui/actions/TextCase.cpp:37
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "First Letter Upper"
 msgid "First Letter Upper"
 msgstr "Alkukirjain suuraakkoseksi"
 
 #: ui/actions/TextCase.cpp:50
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Switch to uppercase"
 msgctxt "(qtundo-format)"
 msgid "Switch to uppercase"
 msgstr ""
@@ -17283,6 +17888,9 @@ msgstr ""
 "suuraakkosiin muuttaminen"
 
 #: ui/actions/TextCase.cpp:53
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Switch to lowercase"
 msgctxt "(qtundo-format)"
 msgid "Switch to lowercase"
 msgstr ""
@@ -17290,6 +17898,9 @@ msgstr ""
 "pienaakkosiin muuttaminen"
 
 #: ui/actions/TextCase.cpp:56
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "First letter uppercase"
 msgctxt "(qtundo-format)"
 msgid "First letter uppercase"
 msgstr ""
@@ -17297,37 +17908,46 @@ msgstr ""
 "alkukirjaimen suuraakkostaminen"
 
 #: ui/actions/TextCase.cpp:95
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Upper Case"
 msgid "Upper Case"
 msgstr "Suuraakkoset"
 
 #: ui/actions/TextCase.cpp:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Lower Case"
 msgid "Lower Case"
 msgstr "Pienaakkoset"
 
 #: ui/actions/TextCase.cpp:99
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Convert First Letter to Upper Case"
 msgid "Convert First Letter to Upper Case"
 msgstr "Muuta ensimmäinen kirjain suuraakkoseksi"
 
 #: ui/actions/TextCase.cpp:108
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Convert all letters to upper case"
 msgid "Convert all letters to upper case"
 msgstr "Muut kirjaimet suuraakkosiksi"
 
 #: ui/actions/TextCase.cpp:110
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Convert all letters to lower case"
 msgid "Convert all letters to lower case"
 msgstr "Muuta kirjaimet pienaakkosiksi"
 
 #: ui/actions/TextCase.cpp:112
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Capitalize the first letter"
 msgid "Capitalize the first letter"
 msgstr "Muuta alkukirjain suuraakkoseksi"
 
 # ”Aakkoslaji” on minusta kökkö, mutta onko parempaakaan vaihtoehtoa?
 #: ui/actions/TextCase.cpp:120
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Case"
 msgctxt "(qtundo-format)"
 msgid "Change Case"
 msgstr ""
@@ -17335,26 +17955,33 @@ msgstr ""
 "aakkoslajin vaihto"
 
 #: ui/actions/Validity.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set tests to confirm cell data is valid"
 msgid "Set tests to confirm cell data is valid"
 msgstr "Aseta solun kelpoisuuden vahvistavat ehdot"
 
 #: ui/actions/Validity.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Validity..."
 msgid "Validity..."
 msgstr "Kelpoisuus…"
 
 #: ui/actions/Validity.cpp:55
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove the validity tests on this cell"
 msgid "Remove the validity tests on this cell"
 msgstr "Poistaa kelpoisuusehdot tästä solusta"
 
 #: ui/actions/Validity.cpp:64
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Validity"
 msgid "Remove Validity"
 msgstr "Poista kelpoisuusehdot"
 
 #: ui/actions/Validity.cpp:103
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Remove Validity Check"
 msgctxt "(qtundo-format)"
 msgid "Remove Validity Check"
 msgstr ""
@@ -17362,6 +17989,9 @@ msgstr ""
 "kelpoisuustarkistuksen poisto"
 
 #: ui/actions/Validity.cpp:105
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Add Validity Check"
 msgctxt "(qtundo-format)"
 msgid "Add Validity Check"
 msgstr ""
