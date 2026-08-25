@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-08-16 16:08+0200\n"
+"PO-Revision-Date: 2026-08-22 14:47+0200\n"
 "Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -69,7 +69,7 @@ msgstr "&Einstellungen"
 #: part/commands/KPrAddCustomSlideShowCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Add custom slide show"
-msgstr "Neue benutzerdefinierte Vorführung hinzufügen"
+msgstr "Benutzerdefinierte Präsentation hinzufügen"
 
 #: part/commands/KPrAnimationCreateCommand.cpp:32
 msgctxt "(qtundo-format)"
@@ -89,7 +89,7 @@ msgstr "Objektanimation entfernen"
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Delete custom slide show"
-msgstr "Benutzerdefinierte Vorführung löschen"
+msgstr "Benutzerdefinierte Präsentation löschen"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
 msgctxt "(qtundo-format) Delete one slide"
@@ -111,7 +111,7 @@ msgstr "Verzögerung und Dauer der Animation bearbeiten"
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
-msgstr "Benutzerdefinierte Vorführung bearbeiten"
+msgstr "Benutzerdefinierte Präsentation bearbeiten"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -136,7 +136,7 @@ msgstr "Folienübergang bearbeiten"
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
-msgstr "Benutzerdefinierte Vorführung umbenennen"
+msgstr "Benutzerdefinierte Präsentation umbenennen"
 
 #: part/commands/KPrReorderAnimationCommand.cpp:34
 msgctxt "(qtundo-format)"
@@ -429,7 +429,7 @@ msgstr "Aktuelle Folie %1 von %2"
 #: part/KPrPresenterViewInterface.cpp:87
 #, kde-format
 msgid "End of Slide Show"
-msgstr "Ende der Vorführung"
+msgstr "Ende der Präsentation"
 
 #: part/KPrShapeAnimations.cpp:191
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:215
@@ -496,7 +496,7 @@ msgstr "Folienmaster anzeigen"
 #: part/KPrView.cpp:80
 #, kde-format
 msgid "Import Slideshow..."
-msgstr "Vorführung importieren …"
+msgstr "Präsentation importieren …"
 
 #: part/KPrView.cpp:81
 #, kde-format
@@ -591,7 +591,7 @@ msgstr "Einblendanimation erstellen"
 #: part/KPrView.cpp:277
 #, kde-format
 msgid "Edit Custom Slide Shows..."
-msgstr "Benutzerdefinierte Vorführungen bearbeiten …"
+msgstr "Benutzerdefinierte Präsentationen bearbeiten …"
 
 #: part/KPrView.cpp:281
 #, kde-format
@@ -631,7 +631,7 @@ msgstr "Statusleiste anzeigen bzw. ausblenden"
 #: part/KPrView.cpp:310
 #, kde-format
 msgid "Configure Slide Show..."
-msgstr "Vorführung einrichten …"
+msgstr "Präsentation einrichten …"
 
 #: part/KPrView.cpp:314
 #, kde-format
@@ -666,27 +666,27 @@ msgstr "Foliensortierung"
 #: part/KPrViewModeSlidesSorter.cpp:74
 #, kde-format
 msgid "Slide Show: "
-msgstr "Vorführung"
+msgstr "Präsentation: "
 
 #: part/KPrViewModeSlidesSorter.cpp:83
 #, kde-format
 msgid "Add a new custom slide show"
-msgstr "Neue benutzerdefinierte Vorführung hinzufügen"
+msgstr "Neue benutzerdefinierte Präsentation hinzufügen"
 
 #: part/KPrViewModeSlidesSorter.cpp:88
 #, kde-format
 msgid "Delete current custom slide show"
-msgstr "Aktuelle benutzerdefinierte Vorführung löschen"
+msgstr "Aktuelle benutzerdefinierte Präsentation löschen"
 
 #: part/KPrViewModeSlidesSorter.cpp:92
 #, kde-format
 msgid "Add slides to current custom slide show"
-msgstr "Folien zur aktuellen benutzerdefinierte Vorführung hinzufügen"
+msgstr "Folien zur aktuellen benutzerdefinierten Präsentation hinzufügen"
 
 #: part/KPrViewModeSlidesSorter.cpp:97
 #, kde-format
 msgid "Remove slides from current custom slide show"
-msgstr "Folien aus aktuelle benutzerdefinierter Vorführung entfernen"
+msgstr "Folien aus der aktuellen benutzerdefinierten Präsentation entfernen"
 
 #: part/KPrViewModeSlidesSorter.cpp:173
 #, kde-format
@@ -696,7 +696,7 @@ msgstr "Folie duplizieren"
 #: part/KPrViewModeSlidesSorter.cpp:175
 #, kde-format
 msgid "Start Slideshow"
-msgstr "Diaschau starten"
+msgstr "Präsentation starten"
 
 #: part/KPrViewModeSlidesSorter.cpp:532
 #, kde-format
@@ -731,7 +731,7 @@ msgstr "Einfügen"
 #: part/KPrViewModeSlidesSorter.cpp:638 part/KPrViewModeSlidesSorter.cpp:642
 #, kde-format
 msgid "Slide Show %1"
-msgstr "Vorführung %1"
+msgstr "Präsentation %1"
 
 #: part/KPrViewModeSlidesSorter.cpp:655
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
@@ -748,7 +748,7 @@ msgstr "Fehler"
 #: part/KPrViewModeSlidesSorter.cpp:682
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
-msgstr "Es ist nicht möglich, dass zwei Vorführungen denselben Namen haben."
+msgstr "Es ist nicht möglich, dass zwei Präsentationen denselben Namen haben."
 
 #: part/pagelayout/KPrPlaceholders.cpp:46
 #: part/pagelayout/KPrPlaceholders.cpp:47
@@ -1055,7 +1055,7 @@ msgstr "Präsentationsansicht einrichten"
 #: part/ui/KPrConfigureSlideShowDialog.cpp:32
 #, kde-format
 msgid "Configure Slide Show"
-msgstr "Vorführung einrichten"
+msgstr "Präsentation einrichten"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/ui/KPrConfigureSlideShow.ui:19
@@ -1073,7 +1073,7 @@ msgstr "Präsentationsfolien"
 #: part/ui/KPrConfigureSlideShow.ui:54
 #, kde-format
 msgid "Edit Custom Slide Shows ..."
-msgstr "Benutzerdefinierte Vorführungen bearbeiten …"
+msgstr "Benutzerdefinierte Präsentationen bearbeiten …"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
 #: part/ui/KPrHtmlExport.ui:20

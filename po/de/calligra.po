@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-03 00:42+0000\n"
-"PO-Revision-Date: 2026-08-16 15:36+0200\n"
+"PO-Revision-Date: 2026-08-20 16:36+0200\n"
 "Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -2476,7 +2476,7 @@ msgstr "Einrichten …"
 #: pageapp/KoPAView.cpp:517
 #, kde-format
 msgid "Import Slideshow"
-msgstr "Vorführung importieren"
+msgstr "Präsentation importieren"
 
 #: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
 #, kde-format
