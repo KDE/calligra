@@ -32,7 +32,6 @@
     writer.endElement();                                                                                                                                       \
     writer.endDocument();                                                                                                                                      \
     }                                                                                                                                                          \
-    buffer.putChar('\0'); /*null-terminate*/                                                                                                                   \
     QString expectedFull = QString::fromLatin1("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");                                                                \
     expectedFull += expected;                                                                                                                                  \
     QString s1 = QString::fromLatin1(cstr);                                                                                                                    \

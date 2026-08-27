@@ -61,7 +61,6 @@ QString TestXmlWriter::content()
 {
     writer->endElement();
     writer->endDocument();
-    buffer->putChar('\0'); /*null-terminate*/
     buffer->close();
     QString stringContent = QString::fromUtf8(buffer->data());
     int index = stringContent.indexOf("<dummy");
