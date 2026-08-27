@@ -32,10 +32,12 @@
 #include <openssl/provider.h>
 #endif
 
+using namespace Qt::StringLiterals;
+
 namespace
 {
-// Blowfish (mandated by ODF's encryption scheme) lives in OpenSSL 3's "legacy"
-// provider, which isn't loaded by default. Load it once, lazily.
+// Blowfish (mandated by ODF's legacy encryption scheme) lives in OpenSSL 3's
+// "legacy" provider, which isn't loaded by default. Load it once, lazily.
 void ensureLegacyOpenSslProviderLoaded()
 {
 #if OPENSSL_VERSION_NUMBER >= 0x30000000L
@@ -43,17 +45,121 @@ void ensureLegacyOpenSslProviderLoaded()
     Q_UNUSED(legacyProvider);
 #endif
 }
+
+// Blowfish CFB is the original (ODF 1.0/1.1/1.2-era) cipher; AES-256-CBC is
+// the baseline ODF 1.2+ producers are asked to use instead (Part 3 §4.8.1).
+enum class CipherAlgorithm {
+    BlowfishCfb,
+    Aes256Cbc
+};
+
+static constexpr auto AES256_CBC_ALGORITHM_NAME = "http://www.w3.org/2001/04/xmlenc#aes256-cbc"_L1;
+static constexpr auto SHA1_START_KEY_NAME = "http://www.w3.org/2000/09/xmldsig#sha1"_L1;
+static constexpr auto SHA256_START_KEY_NAME = "http://www.w3.org/2000/09/xmldsig#sha256"_L1;
+static constexpr auto PBKDF2_URI_NAME = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#pbkdf2"_L1;
+static constexpr auto SHA1_1K_CHECKSUM_URI = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha1-1k"_L1;
+static constexpr auto SHA256_1K_CHECKSUM_URI = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha256-1k"_L1;
+
+const EVP_CIPHER *evpCipherFor(CipherAlgorithm algorithm)
+{
+    return algorithm == CipherAlgorithm::Aes256Cbc ? EVP_aes_256_cbc() : EVP_bf_cfb();
+}
+
+// Derived-key length in bytes: AES-256 needs a 32-byte key; the legacy
+// scheme's Blowfish setup has always used 16 bytes (128 bits).
+int keyLengthFor(CipherAlgorithm algorithm)
+{
+    return algorithm == CipherAlgorithm::Aes256Cbc ? 32 : 16;
+}
+
+// Initialisation-vector length in bytes: AES-CBC needs one full 16-byte
+// block; Blowfish CFB (an 8-byte-block cipher here) has always used 8.
+int ivLengthFor(CipherAlgorithm algorithm)
+{
+    return algorithm == CipherAlgorithm::Aes256Cbc ? 16 : 8;
+}
+
+QString algorithmNameFor(CipherAlgorithm algorithm)
+{
+    return algorithm == CipherAlgorithm::Aes256Cbc ? AES256_CBC_ALGORITHM_NAME : "Blowfish CFB"_L1;
+}
+
+QString startKeyGenerationNameFor(QCryptographicHash::Algorithm algorithm)
+{
+    return algorithm == QCryptographicHash::Sha256 ? SHA256_START_KEY_NAME : "SHA1"_L1;
+}
+
+QString checksumTypeFor(QCryptographicHash::Algorithm algorithm)
+{
+    return algorithm == QCryptographicHash::Sha256 ? SHA256_1K_CHECKSUM_URI : "SHA1/1K"_L1;
+}
+
+// Returns false for an algorithm-name this reader doesn't recognize (mirrors
+// the existing "unknown encryption method" handling at the call site).
+bool parseCipherAlgorithmName(const QString &name, CipherAlgorithm *algorithm)
+{
+    if (name == "Blowfish CFB"_L1) {
+        *algorithm = CipherAlgorithm::BlowfishCfb;
+        return true;
+    }
+    if (name == AES256_CBC_ALGORITHM_NAME) {
+        *algorithm = CipherAlgorithm::Aes256Cbc;
+        return true;
+    }
+    return false;
+}
+
+bool parseKeyDerivationName(const QString &name)
+{
+    return name == "PBKDF2"_L1 || name == PBKDF2_URI_NAME;
+}
+
+// ODF 1.2 Part 3 §4.8.6: consumers shall support "SHA1" and both the
+// xmldsig#sha1/xmldsig#sha256 IRIs. A missing manifest:start-key-generation
+// element (old files) is handled by the caller as the spec's own default: SHA1.
+bool parseStartKeyGenerationName(const QString &name, QCryptographicHash::Algorithm *algorithm)
+{
+    if (name == "SHA1"_L1 || name == SHA1_START_KEY_NAME) {
+        *algorithm = QCryptographicHash::Sha1;
+        return true;
+    }
+    if (name == SHA256_START_KEY_NAME) {
+        *algorithm = QCryptographicHash::Sha256;
+        return true;
+    }
+    return false;
+}
+
+// ODF 1.2 Part 3 §4.8.3: consumers shall support "SHA1/1K" and both the
+// sha1-1k/sha256-1k IRIs -- all three are "first 1K bytes" checksums.
+bool parseChecksumType(const QString &type, QCryptographicHash::Algorithm *algorithm, bool *isShort)
+{
+    if (type == "SHA1/1K"_L1 || type == SHA1_1K_CHECKSUM_URI) {
+        *algorithm = QCryptographicHash::Sha1;
+        *isShort = true;
+        return true;
+    }
+    if (type == SHA256_1K_CHECKSUM_URI) {
+        *algorithm = QCryptographicHash::Sha256;
+        *isShort = true;
+        return true;
+    }
+    if (type == "SHA1"_L1) {
+        *algorithm = QCryptographicHash::Sha1;
+        *isShort = false;
+        return true;
+    }
+    return false;
+}
 }
 
 QByteArray randomArray(int size)
 {
     QByteArray buf(size, ' ');
-    int r;
-    // FIXME: loop while we don't have enough random bytes.
-    while (true) {
-        r = RAND_bytes((unsigned char *)(buf.data()), size);
-        if (r == 1)
-            break; // success
+    // RAND_priv_bytes(), not RAND_bytes(): this feeds key derivation (salts/IVs).
+    if (RAND_priv_bytes((unsigned char *)(buf.data()), size) != 1) {
+        errorStore << "Failed to generate" << size << "cryptographically secure random bytes";
+        return {};
     }
     return buf;
 }
@@ -64,14 +170,22 @@ struct KoEncryptedStore_EncryptionData {
     // Needed for Key Derivation
     QByteArray salt;
     unsigned int iterationCount;
+    // Derived-key length in bytes. 0 means "not given in the manifest": fall
+    // back to whatever cipher normally needs (see keyLengthFor()).
+    unsigned int keySize = 0;
+
+    // Cipher (manifest:algorithm) and start-key hash (manifest:start-key-generation).
+    CipherAlgorithm cipherAlgorithm = CipherAlgorithm::BlowfishCfb;
+    QCryptographicHash::Algorithm startKeyHashAlgorithm = QCryptographicHash::Sha1;
 
     // Needed for enc/decryption
     QByteArray initVector;
 
     // Needed for (optional) password-checking
     QByteArray checksum;
-    // checksumShort is set to true if the checksum-algorithm is SHA1/1K, which basically means we only use the first 1024 bytes of the unencrypted file to
-    // check against (see also http://www.openoffice.org/servlets/ReadMsg?list=dev&msgNo=17498)
+    QCryptographicHash::Algorithm checksumHashAlgorithm = QCryptographicHash::Sha1;
+    // checksumShort is set to true if the checksum-algorithm is one of the "1K" variants, which basically means we only use the first 1024 bytes of the
+    // unencrypted file to check against (see also http://www.openoffice.org/servlets/ReadMsg?list=dev&msgNo=17498)
     bool checksumShort;
 
     // The size of the uncompressed file
@@ -221,9 +335,14 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
                 encData.filesize = 0;
                 encData.checksum = {};
                 encData.checksumShort = false;
+                encData.checksumHashAlgorithm = QCryptographicHash::Sha1;
                 encData.salt = {};
                 encData.iterationCount = 0;
+                encData.keySize = 0;
                 encData.initVector = {};
+                encData.cipherAlgorithm = CipherAlgorithm::BlowfishCfb;
+                // ODF 1.2 Part 3 §4.8.6's own default when manifest:start-key-generation is absent.
+                encData.startKeyHashAlgorithm = QCryptographicHash::Sha1;
 
                 // Get some info about the file
                 QString fullpath = xmlnode.toElement().attribute("full-path");
@@ -243,18 +362,13 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
                     continue;
                 }
 
-                // Find some things about the checksum
+                // Find some things about the checksum. ODF 1.2 Part 3 §4.8.3: consumers
+                // shall support "SHA1/1K" and the sha1-1k/sha256-1k IRIs.
                 if (xmlencnode.toElement().hasAttribute("checksum")) {
                     encData.checksum = QByteArray::fromBase64(xmlencnode.toElement().attribute("checksum").toLatin1());
                     if (xmlencnode.toElement().hasAttribute("checksum-type")) {
                         QString checksumType = xmlencnode.toElement().attribute("checksum-type");
-                        if (checksumType == "SHA1") {
-                            encData.checksumShort = false;
-                        }
-                        // For this particual hash-type: check KoEncryptedStore_encryptionData.checksumShort
-                        else if (checksumType == "SHA1/1K") {
-                            encData.checksumShort = true;
-                        } else {
+                        if (!parseChecksumType(checksumType, &encData.checksumHashAlgorithm, &encData.checksumShort)) {
                             // Checksum type unknown
                             if (!checksumErrorShown) {
                                 KMessageBox::information(nullptr,
@@ -279,11 +393,14 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
                         continue;
                     }
 
-                    // Find some things about the encryption algorithm
+                    // Find some things about the encryption algorithm. ODF 1.2 Part 3
+                    // §4.8.1 delegates algorithm-name to the W3C XML Encryption IRIs;
+                    // "Blowfish CFB" is the ODF-specific legacy value.
                     if (xmlencattr.toElement().localName() == "algorithm" && xmlencattr.toElement().hasAttribute("initialisation-vector")) {
                         algorithmFound = true;
                         encData.initVector = QByteArray::fromBase64(xmlencattr.toElement().attribute("initialisation-vector").toLatin1());
-                        if (xmlencattr.toElement().hasAttribute("algorithm-name") && xmlencattr.toElement().attribute("algorithm-name") != "Blowfish CFB") {
+                        if (xmlencattr.toElement().hasAttribute("algorithm-name")
+                            && !parseCipherAlgorithmName(xmlencattr.toElement().attribute("algorithm-name"), &encData.cipherAlgorithm)) {
                             if (!unreadableErrorShown) {
                                 KMessageBox::information(nullptr,
                                                          i18n("This document contains an unknown encryption method. Some parts may be unreadable."),
@@ -294,7 +411,8 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
                         }
                     }
 
-                    // Find some things about the key derivation
+                    // Find some things about the key derivation. ODF 1.2 Part 3 §4.8.9:
+                    // consumers shall support "PBKDF2" and the manifest#pbkdf2 IRI.
                     if (xmlencattr.toElement().localName() == "key-derivation" && xmlencattr.toElement().hasAttribute("salt")) {
                         keyDerivationFound = true;
                         encData.salt = QByteArray::fromBase64(xmlencattr.toElement().attribute("salt").toLatin1());
@@ -302,7 +420,27 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
                         if (xmlencattr.toElement().hasAttribute("iteration-count")) {
                             encData.iterationCount = xmlencattr.toElement().attribute("iteration-count").toUInt();
                         }
-                        if (xmlencattr.toElement().hasAttribute("key-derivation-name") && xmlencattr.toElement().attribute("key-derivation-name") != "PBKDF2") {
+                        if (xmlencattr.toElement().hasAttribute("key-size")) {
+                            encData.keySize = xmlencattr.toElement().attribute("key-size").toUInt();
+                        }
+                        if (xmlencattr.toElement().hasAttribute("key-derivation-name")
+                            && !parseKeyDerivationName(xmlencattr.toElement().attribute("key-derivation-name"))) {
+                            if (!unreadableErrorShown) {
+                                KMessageBox::information(nullptr,
+                                                         i18n("This document contains an unknown encryption method. Some parts may be unreadable."),
+                                                         i18nc("@title:dialog", "Warning"));
+                                unreadableErrorShown = true;
+                            }
+                            encData.salt = {};
+                        }
+                    }
+
+                    // Find the (optional) start-key-generation step -- ODF 1.2 Part 3
+                    // §4.8.6. Absent entirely, the spec's own default (SHA1) already set
+                    // above applies; present-but-unrecognized is treated the same as an
+                    // unrecognized algorithm/key-derivation-name.
+                    if (xmlencattr.toElement().localName() == "start-key-generation" && xmlencattr.toElement().hasAttribute("start-key-generation-name")) {
+                        if (!parseStartKeyGenerationName(xmlencattr.toElement().attribute("start-key-generation-name"), &encData.startKeyHashAlgorithm)) {
                             if (!unreadableErrorShown) {
                                 KMessageBox::information(nullptr,
                                                          i18n("This document contains an unknown encryption method. Some parts may be unreadable."),
@@ -335,6 +473,44 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
         dev->close();
         delete dev;
     }
+}
+
+namespace
+{
+// Fills in (or updates) an manifest:encryption-data element's checksum
+// attributes and its algorithm/start-key-generation/key-derivation children.
+// Shared by the two places doFinalize() writes one, so they can't drift.
+void writeEncryptionDataOdf(QDomDocument &document, QDomElement &encryptionElement, const KoEncryptedStore_EncryptionData &encData)
+{
+    encryptionElement.setAttribute("manifest:checksum-type", checksumTypeFor(encData.checksumHashAlgorithm));
+    encryptionElement.setAttribute("manifest:checksum", QString::fromUtf8(encData.checksum.toBase64()));
+
+    QDomNodeList childElements = encryptionElement.elementsByTagName("manifest:algorithm");
+    QDomElement algorithmElement = childElements.isEmpty() ? document.createElement("manifest:algorithm") : childElements.item(0).toElement();
+    if (childElements.isEmpty()) {
+        encryptionElement.appendChild(algorithmElement);
+    }
+    algorithmElement.setAttribute("manifest:algorithm-name", algorithmNameFor(encData.cipherAlgorithm));
+    algorithmElement.setAttribute("manifest:initialisation-vector", QString::fromUtf8(encData.initVector.toBase64()));
+
+    // ODF 1.2 Part 3 §4.8.6.
+    childElements = encryptionElement.elementsByTagName("manifest:start-key-generation");
+    QDomElement startKeyElement = childElements.isEmpty() ? document.createElement("manifest:start-key-generation") : childElements.item(0).toElement();
+    if (childElements.isEmpty()) {
+        encryptionElement.appendChild(startKeyElement);
+    }
+    startKeyElement.setAttribute("manifest:start-key-generation-name", startKeyGenerationNameFor(encData.startKeyHashAlgorithm));
+
+    childElements = encryptionElement.elementsByTagName("manifest:key-derivation");
+    QDomElement keyDerivationElement = childElements.isEmpty() ? document.createElement("manifest:key-derivation") : childElements.item(0).toElement();
+    if (childElements.isEmpty()) {
+        encryptionElement.appendChild(keyDerivationElement);
+    }
+    keyDerivationElement.setAttribute("manifest:key-derivation-name", "PBKDF2");
+    keyDerivationElement.setAttribute("manifest:iteration-count", QString::number(encData.iterationCount));
+    keyDerivationElement.setAttribute("manifest:salt", QString::fromUtf8(encData.salt.toBase64()));
+    keyDerivationElement.setAttribute("manifest:key-size", QString::number(encData.keySize > 0 ? encData.keySize : keyLengthFor(encData.cipherAlgorithm)));
+}
 }
 
 bool KoEncryptedStore::doFinalize()
@@ -386,43 +562,13 @@ bool KoEncryptedStore::doFinalize()
                 // See if the user of this store has already provided (old) encryption data
                 QDomNodeList childElements = fileElement.elementsByTagName("manifest:encryption-data");
                 QDomElement encryptionElement;
-                QDomElement algorithmElement;
-                QDomElement keyDerivationElement;
                 if (childElements.isEmpty()) {
                     encryptionElement = document.createElement("manifest:encryption-data");
                     fileElement.appendChild(encryptionElement);
                 } else {
                     encryptionElement = childElements.item(0).toElement();
                 }
-                childElements = encryptionElement.elementsByTagName("manifest:algorithm");
-                if (childElements.isEmpty()) {
-                    algorithmElement = document.createElement("manifest:algorithm");
-                    encryptionElement.appendChild(algorithmElement);
-                } else {
-                    algorithmElement = childElements.item(0).toElement();
-                }
-                childElements = encryptionElement.elementsByTagName("manifest:key-derivation");
-                if (childElements.isEmpty()) {
-                    keyDerivationElement = document.createElement("manifest:key-derivation");
-                    encryptionElement.appendChild(keyDerivationElement);
-                } else {
-                    keyDerivationElement = childElements.item(0).toElement();
-                }
-                // Set the right encryption data
-                QByteArray checksum = encData.checksum.toBase64();
-                if (encData.checksumShort) {
-                    encryptionElement.setAttribute("manifest:checksum-type", "SHA1/1K");
-                } else {
-                    encryptionElement.setAttribute("manifest:checksum-type", "SHA1");
-                }
-                encryptionElement.setAttribute("manifest:checksum", QString::fromUtf8(checksum));
-                QByteArray initVector = encData.initVector.toBase64();
-                algorithmElement.setAttribute("manifest:algorithm-name", "Blowfish CFB");
-                algorithmElement.setAttribute("manifest:initialisation-vector", QString::fromUtf8(initVector));
-                QByteArray salt = encData.salt.toBase64();
-                keyDerivationElement.setAttribute("manifest:key-derivation-name", "PBKDF2");
-                keyDerivationElement.setAttribute("manifest:iteration-count", QString::number(encData.iterationCount));
-                keyDerivationElement.setAttribute("manifest:salt", QString::fromUtf8(salt));
+                writeEncryptionDataOdf(document, encryptionElement, encData);
             }
             if (foundFiles.size() < m_encryptionData.size()) {
                 QList<QString> keys = m_encryptionData.keys();
@@ -435,25 +581,8 @@ bool KoEncryptedStore::doFinalize()
                         fileElement.setAttribute("manifest:media-type", "");
                         documentElement.appendChild(fileElement);
                         QDomElement encryptionElement = document.createElement("manifest:encryption-data");
-                        QByteArray checksum = encData.checksum.toBase64();
-                        QByteArray initVector = encData.initVector.toBase64();
-                        QByteArray salt = encData.salt.toBase64();
-                        if (encData.checksumShort) {
-                            encryptionElement.setAttribute("manifest:checksum-type", "SHA1/1K");
-                        } else {
-                            encryptionElement.setAttribute("manifest:checksum-type", "SHA1");
-                        }
-                        encryptionElement.setAttribute("manifest:checksum", QString::fromUtf8(checksum));
                         fileElement.appendChild(encryptionElement);
-                        QDomElement algorithmElement = document.createElement("manifest:algorithm");
-                        algorithmElement.setAttribute("manifest:algorithm-name", "Blowfish CFB");
-                        algorithmElement.setAttribute("manifest:initialisation-vector", QString::fromUtf8(initVector));
-                        encryptionElement.appendChild(algorithmElement);
-                        QDomElement keyDerivationElement = document.createElement("manifest:key-derivation");
-                        keyDerivationElement.setAttribute("manifest:key-derivation-name", "PBKDF2");
-                        keyDerivationElement.setAttribute("manifest:iteration-count", QString::number(encData.iterationCount));
-                        keyDerivationElement.setAttribute("manifest:salt", QString::fromUtf8(salt));
-                        encryptionElement.appendChild(keyDerivationElement);
+                        writeEncryptionDataOdf(document, encryptionElement, encData);
                     }
                 }
             }
@@ -608,9 +737,9 @@ bool KoEncryptedStore::openRead(const QString &name)
             if (!encData.checksum.isEmpty()) {
                 QByteArray checksum;
                 if (encData.checksumShort && decrypted.size() > 1024) {
-                    checksum = QCryptographicHash::hash(decrypted.left(1024), QCryptographicHash::Sha1);
+                    checksum = QCryptographicHash::hash(decrypted.left(1024), encData.checksumHashAlgorithm);
                 } else {
-                    checksum = QCryptographicHash::hash(decrypted, QCryptographicHash::Sha1);
+                    checksum = QCryptographicHash::hash(decrypted, encData.checksumHashAlgorithm);
                 }
                 if (checksum != encData.checksum) {
                     continue;
@@ -683,9 +812,12 @@ void KoEncryptedStore::savePasswordInKWallet()
 
 QByteArray KoEncryptedStore::decryptFile(QByteArray &encryptedFile, KoEncryptedStore_EncryptionData &encData, QByteArray &password)
 {
-    QByteArray keyhash = QCryptographicHash::hash(password, QCryptographicHash::Sha1);
+    // ODF 1.2 Part 3 §4.8.6: hash the raw password with whichever algorithm
+    // manifest:start-key-generation specified (SHA1 if that element was absent).
+    QByteArray keyhash = QCryptographicHash::hash(password, encData.startKeyHashAlgorithm);
 
-    constexpr auto keyLength = 16;
+    // manifest:key-size if the manifest gave one, otherwise whatever the cipher needs.
+    const int keyLength = encData.keySize > 0 ? static_cast<int>(encData.keySize) : keyLengthFor(encData.cipherAlgorithm);
 
     // create symmetric key
     QByteArray symmetricKey(keyLength, ' ');
@@ -697,20 +829,21 @@ QByteArray KoEncryptedStore::decryptFile(QByteArray &encryptedFile, KoEncryptedS
                            keyLength,
                            (unsigned char *)symmetricKey.data());
 
-    // setup decrypt context with blowfish cfb cipher
+    // setup decrypt context with the manifest-specified cipher
     ensureLegacyOpenSslProviderLoaded();
     auto context = EVP_CIPHER_CTX_new();
     int resultLength;
-    auto cryptoAlgorithm = EVP_bf_cfb();
+    auto cryptoAlgorithm = evpCipherFor(encData.cipherAlgorithm);
     EVP_CIPHER_CTX_init(context);
 
     EVP_DecryptInit_ex(context, cryptoAlgorithm, nullptr, nullptr, nullptr);
     EVP_CIPHER_CTX_set_key_length(context, symmetricKey.size());
     EVP_DecryptInit_ex(context, nullptr, nullptr, (const unsigned char *)(symmetricKey.data()), (const unsigned char *)(encData.initVector.data()));
 
-    EVP_CIPHER_CTX_set_padding(context, 0);
+    // Blowfish CFB needs no block padding; AES-CBC's PKCS#7 padding must be stripped.
+    EVP_CIPHER_CTX_set_padding(context, encData.cipherAlgorithm == CipherAlgorithm::Aes256Cbc ? 1 : 0);
 
-    // actually decrypt with blowfish cfb cipher
+    // actually decrypt with the manifest-specified cipher
     QByteArray result(encryptedFile.size() + EVP_CIPHER_CTX_block_size(context), ' ');
     int ok = EVP_DecryptUpdate(context, (unsigned char *)result.data(), &resultLength, (unsigned char *)encryptedFile.data(), encryptedFile.size());
     if (!ok) {
@@ -812,14 +945,21 @@ bool KoEncryptedStore::closeWrite()
         result = static_cast<QBuffer *>(d->stream)->buffer();
     } else {
         m_bPasswordUsed = true;
-        // Build all cryptographic data
-        QByteArray passwordHash = QCryptographicHash::hash(m_password, QCryptographicHash::Sha1);
+        // New documents use the ODF 1.2+ baseline (AES-256-CBC, SHA256 start key)
+        // rather than the legacy Blowfish/SHA1 scheme (Part 3 §4.8.1/§4.8.6).
         KoEncryptedStore_EncryptionData encData;
-        encData.initVector = randomArray(8);
+        encData.cipherAlgorithm = CipherAlgorithm::Aes256Cbc;
+        encData.startKeyHashAlgorithm = QCryptographicHash::Sha256;
+        QByteArray passwordHash = QCryptographicHash::hash(m_password, encData.startKeyHashAlgorithm);
+        encData.initVector = randomArray(ivLengthFor(encData.cipherAlgorithm));
         encData.salt = randomArray(16);
+        if (encData.initVector.isEmpty() || encData.salt.isEmpty()) {
+            return false;
+        }
         encData.iterationCount = 1024;
+        encData.keySize = keyLengthFor(encData.cipherAlgorithm);
 
-        constexpr auto keyLength = 16;
+        const int keyLength = static_cast<int>(encData.keySize);
 
         QByteArray symmetricKey(keyLength, ' ');
         PKCS5_PBKDF2_HMAC_SHA1((char *)passwordHash.data(),
@@ -848,13 +988,15 @@ bool KoEncryptedStore::closeWrite()
         }
         compressDevice.close();
 
-        encData.checksum = QCryptographicHash::hash(compressedData.buffer(), QCryptographicHash::Sha1);
-        encData.checksumShort = false;
+        // ODF 1.2 Part 3 §4.8.3: producers should use the SHA256/1K checksum.
+        encData.checksumHashAlgorithm = QCryptographicHash::Sha256;
+        encData.checksumShort = true;
+        const QByteArray &checksumInput = compressedData.buffer().size() > 1024 ? compressedData.buffer().left(1024) : compressedData.buffer();
+        encData.checksum = QCryptographicHash::hash(checksumInput, encData.checksumHashAlgorithm);
 
-        // setup context to encrypt with blowfish cfb cipher
-        ensureLegacyOpenSslProviderLoaded();
+        // setup context to encrypt with the chosen cipher
         auto context = EVP_CIPHER_CTX_new();
-        auto cryptoAlgorithm = EVP_bf_cfb();
+        auto cryptoAlgorithm = evpCipherFor(encData.cipherAlgorithm);
         EVP_CIPHER_CTX_init(context);
 
         int ok = EVP_EncryptInit_ex(context, cryptoAlgorithm, nullptr, nullptr, nullptr);
@@ -869,7 +1011,8 @@ bool KoEncryptedStore::closeWrite()
         if (!ok)
             return false;
 
-        ok = EVP_CIPHER_CTX_set_padding(context, 0);
+        // Blowfish CFB needs no block padding; AES-CBC needs PKCS#7 padding applied.
+        ok = EVP_CIPHER_CTX_set_padding(context, encData.cipherAlgorithm == CipherAlgorithm::Aes256Cbc ? 1 : 0);
         if (!ok)
             return false;
 

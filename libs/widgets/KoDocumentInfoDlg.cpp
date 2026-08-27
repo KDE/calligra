@@ -92,10 +92,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     d->aboutUi = std::make_unique<Ui::KoDocumentInfoAboutWidget>();
     auto infodlg = new QWidget();
     d->aboutUi->setupUi(infodlg);
-    d->aboutUi->lblEncryptedDesc->setVisible(false);
-    d->aboutUi->lblEncrypted->setVisible(false);
-    d->aboutUi->pbEncrypt->setVisible(false);
-    d->aboutUi->lblEncryptedPic->setVisible(false);
     d->aboutUi->cbLanguage->addItems(KoGlobal::listOfLanguages());
     d->aboutUi->cbLanguage->setCurrentIndex(-1);
 
