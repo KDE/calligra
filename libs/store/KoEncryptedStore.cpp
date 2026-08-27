@@ -6,7 +6,6 @@
 */
 #include "KoEncryptedStore.h"
 #include "KoStore_p.h"
-#include "KoXmlReader.h"
 #include <KoXmlNS.h>
 
 #include <KCompressionDevice>
@@ -16,10 +15,13 @@
 #include <KoNetAccess.h>
 #include <QBuffer>
 #include <QByteArray>
+#include <QCryptographicHash>
+#include <QDomDocument>
 #include <QIODevice>
 #include <QString>
 #include <QTemporaryFile>
 #include <QWidget>
+#include <QXmlStreamReader>
 #include <StoreDebug.h>
 #include <knewpassworddialog.h>
 #include <kzip.h>
@@ -31,6 +33,10 @@
 #if OPENSSL_VERSION_NUMBER >= 0x30000000L
 #include <openssl/provider.h>
 #endif
+
+// TODO: Discuss naming of this filer in saving-dialogues
+// TODO: Discuss possibility of allowing programs to remember the password after opening to enable them to supply it when saving
+// TODO: Discuss autosaving and password/leakage-problem (currently: hardcoded no autosave)
 
 using namespace Qt::StringLiterals;
 
@@ -59,6 +65,9 @@ static constexpr auto SHA256_START_KEY_NAME = "http://www.w3.org/2000/09/xmldsig
 static constexpr auto PBKDF2_URI_NAME = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#pbkdf2"_L1;
 static constexpr auto SHA1_1K_CHECKSUM_URI = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha1-1k"_L1;
 static constexpr auto SHA256_1K_CHECKSUM_URI = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha256-1k"_L1;
+static constexpr auto MANIFEST_FILE = "META-INF/manifest.xml"_L1;
+static constexpr auto META_FILE = "meta.xml"_L1;
+static constexpr auto THUMBNAIL_FILE = "Thumbnails/thumbnail.png"_L1;
 
 const EVP_CIPHER *evpCipherFor(CipherAlgorithm algorithm)
 {
@@ -192,16 +201,6 @@ struct KoEncryptedStore_EncryptionData {
     qint64 filesize;
 };
 
-// TODO: Discuss naming of this filer in saving-dialogues
-// TODO: Discuss possibility of allowing programs to remember the password after opening to enable them to supply it when saving
-// TODO: Discuss autosaving and password/leakage-problem (currently: hardcoded no autosave)
-namespace
-{
-const char MANIFEST_FILE[] = "META-INF/manifest.xml";
-const char META_FILE[] = "meta.xml";
-const char THUMBNAIL_FILE[] = "Thumbnails/thumbnail.png";
-}
-
 KoEncryptedStore::KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification, bool writeMimetype)
     : KoStore(mode, writeMimetype)
     , m_filename(filename)
@@ -307,10 +306,11 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
         }
         QIODevice *dev = (static_cast<const KArchiveFile *>(manifestArchiveEntry))->createDevice();
 
-        KoXmlDocument xmldoc;
-        bool namespaceProcessing = true; // for the manifest ignore the namespace (bug #260515)
-        if (!xmldoc.setContent(dev, namespaceProcessing) || xmldoc.documentElement().localName() != "manifest"
-            || xmldoc.documentElement().namespaceURI() != KoXmlNS::manifest) {
+        // Real-world manifests have sometimes had incorrect/missing namespace
+        // declarations (bug #260515), so only the root element's namespace is
+        // checked strictly here; everything nested is matched by local name only.
+        QXmlStreamReader xml(dev);
+        if (!xml.readNextStartElement() || xml.name() != QLatin1String("manifest") || xml.namespaceUri() != KoXmlNS::manifest) {
             // KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
             /// FIXME this message is not something we actually want to not mention, but it makes thumbnails noisy at times, so... let's not
             dev->close();
@@ -319,55 +319,63 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
             d->good = false;
             return;
         }
-        KoXmlElement xmlroot = xmldoc.documentElement();
-        if (xmlroot.hasChildNodes()) {
-            KoXmlNode xmlnode = xmlroot.firstChild();
-            while (!xmlnode.isNull()) {
-                // Search for files
-                if (!xmlnode.isElement() || xmlroot.namespaceURI() != KoXmlNS::manifest || xmlnode.toElement().localName() != "file-entry"
-                    || !xmlnode.toElement().hasAttribute("full-path") || !xmlnode.hasChildNodes()) {
-                    xmlnode = xmlnode.nextSibling();
+
+        // QXmlStreamAttribute::name() is already the local (namespace-stripped)
+        // name, matching the leniency above.
+        auto attr = [](const QXmlStreamAttributes &attrs, QLatin1StringView localName) -> QString {
+            for (const auto &a : attrs) {
+                if (a.name() == localName) {
+                    return a.value().toString();
+                }
+            }
+            return QString();
+        };
+
+        while (xml.readNextStartElement()) {
+            if (xml.name() != QLatin1String("file-entry")) {
+                xml.skipCurrentElement();
+                continue;
+            }
+
+            const QString fullpath = attr(xml.attributes(), QLatin1String("full-path"));
+            const QString sizeAttr = attr(xml.attributes(), QLatin1String("size"));
+            if (fullpath.isEmpty()) {
+                xml.skipCurrentElement();
+                continue;
+            }
+
+            // Build a structure to hold the data and fill it with defaults
+            KoEncryptedStore_EncryptionData encData;
+            encData.filesize = sizeAttr.isEmpty() ? 0 : sizeAttr.toUInt();
+            encData.checksum = {};
+            encData.checksumShort = false;
+            encData.checksumHashAlgorithm = QCryptographicHash::Sha1;
+            encData.salt = {};
+            encData.iterationCount = 0;
+            encData.keySize = 0;
+            encData.initVector = {};
+            encData.cipherAlgorithm = CipherAlgorithm::BlowfishCfb;
+            // ODF 1.2 Part 3 §4.8.6's own default when manifest:start-key-generation is absent.
+            encData.startKeyHashAlgorithm = QCryptographicHash::Sha1;
+
+            bool sawEncryptionData = false;
+            bool algorithmFound = false;
+            bool keyDerivationFound = false;
+
+            while (xml.readNextStartElement()) {
+                if (xml.name() != QLatin1String("encryption-data")) {
+                    xml.skipCurrentElement();
                     continue;
                 }
-
-                // Build a structure to hold the data and fill it with defaults
-                KoEncryptedStore_EncryptionData encData;
-                encData.filesize = 0;
-                encData.checksum = {};
-                encData.checksumShort = false;
-                encData.checksumHashAlgorithm = QCryptographicHash::Sha1;
-                encData.salt = {};
-                encData.iterationCount = 0;
-                encData.keySize = 0;
-                encData.initVector = {};
-                encData.cipherAlgorithm = CipherAlgorithm::BlowfishCfb;
-                // ODF 1.2 Part 3 §4.8.6's own default when manifest:start-key-generation is absent.
-                encData.startKeyHashAlgorithm = QCryptographicHash::Sha1;
-
-                // Get some info about the file
-                QString fullpath = xmlnode.toElement().attribute("full-path");
-
-                if (xmlnode.toElement().hasAttribute("size")) {
-                    encData.filesize = xmlnode.toElement().attribute("size").toUInt();
-                }
-
-                // Find the embedded encryption-data block
-                KoXmlNode xmlencnode = xmlnode.firstChild();
-                while (!xmlencnode.isNull()
-                       && (!xmlencnode.isElement() || xmlencnode.toElement().localName() != "encryption-data" || !xmlencnode.hasChildNodes())) {
-                    xmlencnode = xmlencnode.nextSibling();
-                }
-                if (xmlencnode.isNull()) {
-                    xmlnode = xmlnode.nextSibling();
-                    continue;
-                }
+                sawEncryptionData = true;
 
                 // Find some things about the checksum. ODF 1.2 Part 3 §4.8.3: consumers
                 // shall support "SHA1/1K" and the sha1-1k/sha256-1k IRIs.
-                if (xmlencnode.toElement().hasAttribute("checksum")) {
-                    encData.checksum = QByteArray::fromBase64(xmlencnode.toElement().attribute("checksum").toLatin1());
-                    if (xmlencnode.toElement().hasAttribute("checksum-type")) {
-                        QString checksumType = xmlencnode.toElement().attribute("checksum-type");
+                const QString checksumStr = attr(xml.attributes(), QLatin1String("checksum"));
+                if (!checksumStr.isEmpty()) {
+                    encData.checksum = QByteArray::fromBase64(checksumStr.toLatin1());
+                    const QString checksumType = attr(xml.attributes(), QLatin1String("checksum-type"));
+                    if (!checksumType.isEmpty()) {
                         if (!parseChecksumType(checksumType, &encData.checksumHashAlgorithm, &encData.checksumShort)) {
                             // Checksum type unknown
                             if (!checksumErrorShown) {
@@ -383,64 +391,65 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
                     }
                 }
 
-                KoXmlNode xmlencattr = xmlencnode.firstChild();
-                bool algorithmFound = false;
-                bool keyDerivationFound = false;
                 // Search all data about encryption
-                while (!xmlencattr.isNull()) {
-                    if (!xmlencattr.isElement()) {
-                        xmlencattr = xmlencattr.nextSibling();
-                        continue;
-                    }
-
+                while (xml.readNextStartElement()) {
                     // Find some things about the encryption algorithm. ODF 1.2 Part 3
                     // §4.8.1 delegates algorithm-name to the W3C XML Encryption IRIs;
                     // "Blowfish CFB" is the ODF-specific legacy value.
-                    if (xmlencattr.toElement().localName() == "algorithm" && xmlencattr.toElement().hasAttribute("initialisation-vector")) {
-                        algorithmFound = true;
-                        encData.initVector = QByteArray::fromBase64(xmlencattr.toElement().attribute("initialisation-vector").toLatin1());
-                        if (xmlencattr.toElement().hasAttribute("algorithm-name")
-                            && !parseCipherAlgorithmName(xmlencattr.toElement().attribute("algorithm-name"), &encData.cipherAlgorithm)) {
-                            if (!unreadableErrorShown) {
-                                KMessageBox::information(nullptr,
-                                                         i18n("This document contains an unknown encryption method. Some parts may be unreadable."),
-                                                         i18nc("@title:dialog", "Warning"));
-                                unreadableErrorShown = true;
+                    if (xml.name() == QLatin1String("algorithm")) {
+                        const QString iv = attr(xml.attributes(), QLatin1String("initialisation-vector"));
+                        if (!iv.isEmpty()) {
+                            algorithmFound = true;
+                            encData.initVector = QByteArray::fromBase64(iv.toLatin1());
+                            const QString algorithmName = attr(xml.attributes(), QLatin1String("algorithm-name"));
+                            if (!algorithmName.isEmpty() && !parseCipherAlgorithmName(algorithmName, &encData.cipherAlgorithm)) {
+                                if (!unreadableErrorShown) {
+                                    KMessageBox::information(nullptr,
+                                                             i18n("This document contains an unknown encryption method. Some parts may be unreadable."),
+                                                             i18nc("@title:dialog", "Warning"));
+                                    unreadableErrorShown = true;
+                                }
+                                encData.initVector = {};
                             }
-                            encData.initVector = {};
                         }
+                        xml.skipCurrentElement();
                     }
-
                     // Find some things about the key derivation. ODF 1.2 Part 3 §4.8.9:
                     // consumers shall support "PBKDF2" and the manifest#pbkdf2 IRI.
-                    if (xmlencattr.toElement().localName() == "key-derivation" && xmlencattr.toElement().hasAttribute("salt")) {
-                        keyDerivationFound = true;
-                        encData.salt = QByteArray::fromBase64(xmlencattr.toElement().attribute("salt").toLatin1());
-                        encData.iterationCount = 1024;
-                        if (xmlencattr.toElement().hasAttribute("iteration-count")) {
-                            encData.iterationCount = xmlencattr.toElement().attribute("iteration-count").toUInt();
-                        }
-                        if (xmlencattr.toElement().hasAttribute("key-size")) {
-                            encData.keySize = xmlencattr.toElement().attribute("key-size").toUInt();
-                        }
-                        if (xmlencattr.toElement().hasAttribute("key-derivation-name")
-                            && !parseKeyDerivationName(xmlencattr.toElement().attribute("key-derivation-name"))) {
-                            if (!unreadableErrorShown) {
-                                KMessageBox::information(nullptr,
-                                                         i18n("This document contains an unknown encryption method. Some parts may be unreadable."),
-                                                         i18nc("@title:dialog", "Warning"));
-                                unreadableErrorShown = true;
+                    else if (xml.name() == QLatin1String("key-derivation")) {
+                        const QString saltStr = attr(xml.attributes(), QLatin1String("salt"));
+                        if (!saltStr.isEmpty()) {
+                            keyDerivationFound = true;
+                            encData.salt = QByteArray::fromBase64(saltStr.toLatin1());
+                            encData.iterationCount = 1024;
+                            const QString iterationCountStr = attr(xml.attributes(), QLatin1String("iteration-count"));
+                            if (!iterationCountStr.isEmpty()) {
+                                encData.iterationCount = iterationCountStr.toUInt();
                             }
-                            encData.salt = {};
+                            const QString keySizeStr = attr(xml.attributes(), QLatin1String("key-size"));
+                            if (!keySizeStr.isEmpty()) {
+                                encData.keySize = keySizeStr.toUInt();
+                            }
+                            const QString keyDerivationName = attr(xml.attributes(), QLatin1String("key-derivation-name"));
+                            if (!keyDerivationName.isEmpty() && !parseKeyDerivationName(keyDerivationName)) {
+                                if (!unreadableErrorShown) {
+                                    KMessageBox::information(nullptr,
+                                                             i18n("This document contains an unknown encryption method. Some parts may be unreadable."),
+                                                             i18nc("@title:dialog", "Warning"));
+                                    unreadableErrorShown = true;
+                                }
+                                encData.salt = {};
+                            }
                         }
+                        xml.skipCurrentElement();
                     }
-
                     // Find the (optional) start-key-generation step -- ODF 1.2 Part 3
                     // §4.8.6. Absent entirely, the spec's own default (SHA1) already set
                     // above applies; present-but-unrecognized is treated the same as an
                     // unrecognized algorithm/key-derivation-name.
-                    if (xmlencattr.toElement().localName() == "start-key-generation" && xmlencattr.toElement().hasAttribute("start-key-generation-name")) {
-                        if (!parseStartKeyGenerationName(xmlencattr.toElement().attribute("start-key-generation-name"), &encData.startKeyHashAlgorithm)) {
+                    else if (xml.name() == QLatin1String("start-key-generation")) {
+                        const QString startKeyGenerationName = attr(xml.attributes(), QLatin1String("start-key-generation-name"));
+                        if (!startKeyGenerationName.isEmpty() && !parseStartKeyGenerationName(startKeyGenerationName, &encData.startKeyHashAlgorithm)) {
                             if (!unreadableErrorShown) {
                                 KMessageBox::information(nullptr,
                                                          i18n("This document contains an unknown encryption method. Some parts may be unreadable."),
@@ -449,27 +458,39 @@ void KoEncryptedStore::init(const QByteArray &appIdentification)
                             }
                             encData.salt = {};
                         }
-                    }
-
-                    xmlencattr = xmlencattr.nextSibling();
-                }
-
-                // Only use this encryption data if it makes sense to use it
-                if (!(encData.salt.isEmpty() || encData.initVector.isEmpty())) {
-                    m_encryptionData.insert(fullpath, encData);
-                    if (!(algorithmFound && keyDerivationFound)) {
-                        if (!unreadableErrorShown) {
-                            KMessageBox::information(nullptr,
-                                                     i18n("This document contains incomplete encryption data. Some parts may be unreadable."),
-                                                     i18nc("@title:dialog", "Warning"));
-                            unreadableErrorShown = true;
-                        }
+                        xml.skipCurrentElement();
+                    } else {
+                        xml.skipCurrentElement();
                     }
                 }
+            }
 
-                xmlnode = xmlnode.nextSibling();
+            if (!sawEncryptionData) {
+                continue;
+            }
+
+            // Only use this encryption data if it makes sense to use it
+            if (!(encData.salt.isEmpty() || encData.initVector.isEmpty())) {
+                m_encryptionData.insert(fullpath, encData);
+                if (!(algorithmFound && keyDerivationFound)) {
+                    if (!unreadableErrorShown) {
+                        KMessageBox::information(nullptr,
+                                                 i18n("This document contains incomplete encryption data. Some parts may be unreadable."),
+                                                 i18nc("@title:dialog", "Warning"));
+                        unreadableErrorShown = true;
+                    }
+                }
             }
         }
+
+        if (xml.hasError()) {
+            dev->close();
+            delete dev;
+            m_pZip->close();
+            d->good = false;
+            return;
+        }
+
         dev->close();
         delete dev;
     }
