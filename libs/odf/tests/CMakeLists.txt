@@ -77,4 +77,16 @@ koodf_add_unit_test(TestKoOdfLineNumberingConfiguration TestKoOdfLineNumberingCo
 
 koodf_add_unit_test(TestKoOdfBibliographyConfiguration TestKoOdfBibliographyConfiguration.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
+########### next target ###############
+
+koodf_add_unit_test(TestKoBorder TestKoBorder.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
+########### next target ###############
+
+koodf_add_unit_test(TestKoColumns TestKoColumns.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
+########### next target ###############
+
+koodf_add_unit_test(TestKoPageLayout TestKoPageLayout.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
 ########### end ###############

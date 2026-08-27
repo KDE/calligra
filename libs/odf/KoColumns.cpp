@@ -147,6 +147,7 @@ KoColumns::KoColumns()
     , separatorStyle(defaultSeparatorStyle)
     , separatorColor(defaultSeparatorColor)
     , separatorVerticalAlignment(defaultSeparatorVerticalAlignment)
+    , separatorWidth(0.0)
     , separatorHeight(defaultSeparatorHeight)
 {
 }
@@ -158,6 +159,7 @@ void KoColumns::reset()
     separatorStyle = defaultSeparatorStyle;
     separatorColor = QColor(defaultSeparatorColor);
     separatorVerticalAlignment = defaultSeparatorVerticalAlignment;
+    separatorWidth = 0.0;
     separatorHeight = defaultSeparatorHeight;
 }
 
