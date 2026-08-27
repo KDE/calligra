@@ -22,10 +22,15 @@ target_link_libraries(kundo2
         KF6::ConfigWidgets
 )
 
+target_include_directories(kundo2 PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/calligra>
+)
+
 set_target_properties(kundo2 PROPERTIES
     VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
-install(TARGETS kundo2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kundo2 EXPORT CalligraQt6Targets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -37,6 +42,7 @@ install(FILES
     kundo2view.h
     kundo2model.h
     kundo2command.h
+    kundo2commandextradata.h
     kundo2magicstring.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel
 )

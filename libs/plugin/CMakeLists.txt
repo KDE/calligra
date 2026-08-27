@@ -14,8 +14,13 @@ target_link_libraries(koplugin
         KF6::CoreAddons
 )
 
+target_include_directories(koplugin PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/calligra>
+)
+
 set_target_properties(koplugin PROPERTIES
     VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
-install(TARGETS koplugin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS koplugin EXPORT CalligraQt6Targets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 

@@ -1004,6 +1004,32 @@ add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
 if (SHOULD_BUILD_DEVEL_HEADERS)
     install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
+
+    set(CALLIGRAQT6_INSTALL_CMAKEPACKAGEDIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/CalligraQt6")
+
+    install(EXPORT CalligraQt6Targets
+        FILE CalligraQt6Targets.cmake
+        NAMESPACE CalligraQt6::
+        DESTINATION ${CALLIGRAQT6_INSTALL_CMAKEPACKAGEDIR}
+        COMPONENT Devel
+    )
+
+    configure_package_config_file(
+        cmake/CalligraQt6Config.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/CalligraQt6Config.cmake
+        INSTALL_DESTINATION ${CALLIGRAQT6_INSTALL_CMAKEPACKAGEDIR}
+    )
+    write_basic_package_version_file(
+        ${CMAKE_CURRENT_BINARY_DIR}/CalligraQt6ConfigVersion.cmake
+        VERSION ${CALLIGRA_VERSION}
+        COMPATIBILITY SameMajorVersion
+    )
+    install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/CalligraQt6Config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/CalligraQt6ConfigVersion.cmake
+        DESTINATION ${CALLIGRAQT6_INSTALL_CMAKEPACKAGEDIR}
+        COMPONENT Devel
+    )
 endif()
 
 if (BUILD_TESTING)

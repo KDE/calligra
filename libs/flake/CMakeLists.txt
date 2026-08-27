@@ -227,6 +227,7 @@ target_link_libraries(flake
         kowidgetutils
         koodf
         kundo2
+        interfaces
     PRIVATE
         koplugin
         KF6::IconThemes
@@ -236,13 +237,18 @@ target_link_libraries(flake
         Qt6::Svg
 )
 
+target_include_directories(flake PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/calligra>
+)
+
 set_target_properties(flake PROPERTIES
     VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 
 ########### install files ###############
 
-install(TARGETS flake  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS flake EXPORT CalligraQt6Targets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 #     flake.desktop
 #     flaketool.desktop
@@ -256,6 +262,7 @@ if (SHOULD_BUILD_DEVEL_HEADERS)
 
 install(
     FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/flake_export.h
     KoCanvasBase.h
     KoCanvasController.h
     KoCanvasControllerWidget.h
@@ -280,14 +287,21 @@ install(
     KoImageData.h
     KoInputDevice.h
     KoInsets.h
+    KoMarkerData.h
+    KoPathPoint.h
+    KoPathPointData.h
     KoPathSegment.h
+    KoPathShape.h
     KoPointerEvent.h
     KoRTree.h
     KoSelection.h
     KoShape.h
     KoShapeAnchor.h
+    KoShapeBackground.h
     KoShapeStrokeModel.h
+    KoSnapData.h
     KoToolSelection.h
+    KoTosContainer.h
     KoShapeContainer.h
     KoShapeContainerModel.h
     KoShapeContainerDefaultModel.h
@@ -324,6 +338,7 @@ install(
     commands/KoEventActionAddCommand.h
     commands/KoEventActionRemoveCommand.h
     commands/KoParameterToPathCommand.h
+    commands/KoPathBaseCommand.h
     commands/KoPathCombineCommand.h
     commands/KoPathControlPointMoveCommand.h
     commands/KoPathFillRuleCommand.h

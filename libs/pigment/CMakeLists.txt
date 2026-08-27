@@ -106,6 +106,7 @@ set(PIGMENT_INSTALL_FILES
         KoColorSpaceConstants.h
         KoColorSpaceMaths.h
         KoColorSpaceRegistry.h
+        KoBgrColorSpaceTraits.h
         KoCmykColorSpaceTraits.h
         KoColorSpaceTraits.h
         KoGrayColorSpaceTraits.h
@@ -118,9 +119,13 @@ set(PIGMENT_INSTALL_FILES
         KoColorTransformationFactoryRegistry.h
         KoCompositeOp.h
         KoConvolutionOp.h
+        KoConvolutionOpImpl.h
         KoFallBackColorTransformation.h
         KoIntegerMaths.h
+        KoInvertColorTransformation.h
         KoLabDarkenColorTransformation.h
+        KoLut.h
+        lut.h
         KoMixColorsOp.h
         KoMixColorsOpImpl.h
         KoHistogramProducer.h
@@ -154,11 +159,16 @@ if (HAVE_VC AND NOT PACKAGERS_BUILD)
     set_property(TARGET pigmentcms APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
 endif()
 
+target_include_directories(pigmentcms PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/calligra>
+)
+
 set_target_properties(pigmentcms PROPERTIES
     VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 
-install(TARGETS pigmentcms  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS pigmentcms EXPORT CalligraQt6Targets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # pigment.desktop pigmentextension.desktop

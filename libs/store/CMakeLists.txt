@@ -38,16 +38,24 @@ target_link_libraries(kostore
         ${QTKEYCHAIN_LIBRARIES}
 )
 
+target_include_directories(kostore PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/calligra>
+)
+
 set_target_properties(kostore PROPERTIES
     VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
-install(TARGETS kostore ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kostore EXPORT CalligraQt6Targets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
 install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kostore_export.h
     KoStore.h
+    KoXmlNS.h
+    KoXmlReader.h
+    KoXmlReaderForward.h
 DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
 endif()

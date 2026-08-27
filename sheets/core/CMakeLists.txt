@@ -81,7 +81,6 @@ install( FILES
 
     Condition.h
     Currency.h
-    Format.h
     Cell.h
     Map.h
     Sheet.h

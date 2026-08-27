@@ -205,7 +205,7 @@ calligra_define_product(APP_DEVTOOLS "Tools for developers")
 calligra_define_product(APP_CSTESTER "cstester" REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
 
 # development
-calligra_define_product(DEVEL_HEADERS "Headers of libraries"  UNPORTED)
+calligra_define_product(DEVEL_HEADERS "Headers of libraries")
 
 #############################################
 ####      Product set definitions        ####

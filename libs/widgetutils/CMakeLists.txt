@@ -28,11 +28,16 @@ target_link_libraries(kowidgetutils
         KF6::ConfigCore
 )
 
+target_include_directories(kowidgetutils PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/calligra>
+)
+
 set_target_properties(kowidgetutils
     PROPERTIES VERSION ${CALLIGRA_VERSION} SOVERSION ${CALLIGRA_SOVERSION}
 )
 
-install(TARGETS kowidgetutils ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kowidgetutils EXPORT CalligraQt6Targets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
