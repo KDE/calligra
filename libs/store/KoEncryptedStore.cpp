@@ -676,8 +676,8 @@ QByteArray KoEncryptedStore::decryptFile(QByteArray &encryptedFile, KoEncryptedS
                            keyhash.size(),
                            (unsigned char *)encData.salt.data(),
                            encData.salt.size(),
-                           keyLength,
                            encData.iterationCount,
+                           keyLength,
                            (unsigned char *)symmetricKey.data());
 
     // setup decrypt context with blowfish cfb cipher
@@ -807,8 +807,8 @@ bool KoEncryptedStore::closeWrite()
                                passwordHash.size(),
                                (unsigned char *)encData.salt.data(),
                                encData.salt.size(),
-                               keyLength,
                                encData.iterationCount,
+                               keyLength,
                                (unsigned char *)symmetricKey.data());
 
         // Get the written data
