@@ -107,9 +107,9 @@ void KoOdfLineNumberingConfiguration::loadOdf(const KoXmlElement &element)
         while (!node.isNull()) {
             if (node.isElement()) {
                 KoXmlElement nodeElement = node.toElement();
-                if (nodeElement.localName() == "linenumber-separator") {
+                if (nodeElement.localName() == "linenumbering-separator") {
                     d->separator = nodeElement.text();
-                    d->separatorIncrement = KoUnit::parseValue(element.attributeNS(KoXmlNS::text, "increment", "10"));
+                    d->separatorIncrement = KoUnit::parseValue(nodeElement.attributeNS(KoXmlNS::text, "increment", "10"));
                     break;
                 }
             }
@@ -120,7 +120,7 @@ void KoOdfLineNumberingConfiguration::loadOdf(const KoXmlElement &element)
 
 void KoOdfLineNumberingConfiguration::saveOdf(KoXmlWriter *writer) const
 {
-    writer->addAttribute("text:number-lines", "true");
+    writer->addAttribute("text:number-lines", d->lineNumberingEnabled ? "true" : "false");
     d->numberFormat.saveOdf(writer);
     if (!d->textStyle.isEmpty()) {
         writer->addAttribute("text:style-name", d->textStyle);
@@ -152,7 +152,7 @@ void KoOdfLineNumberingConfiguration::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("text:restart-on-page", d->restartNumberingOnEveryPage);
     }
     if (!d->separator.isNull()) {
-        writer->startElement("txt:linenumber-separator");
+        writer->startElement("text:linenumbering-separator");
         if (d->separatorIncrement != 10) {
             writer->addAttribute("text:increment", d->separatorIncrement);
         }

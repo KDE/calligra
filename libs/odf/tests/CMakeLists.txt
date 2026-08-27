@@ -61,4 +61,20 @@ koodf_add_unit_test(TestWriteStyleXml TestWriteStyleXml.cpp  LINK_LIBRARIES kood
 
 koodf_add_unit_test(TestKo3dScene TestKo3dScene.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
+########### next target ###############
+
+koodf_add_unit_test(TestKoOdfNumberDefinition TestKoOdfNumberDefinition.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
+########### next target ###############
+
+koodf_add_unit_test(TestKoOdfNotesConfiguration TestKoOdfNotesConfiguration.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
+########### next target ###############
+
+koodf_add_unit_test(TestKoOdfLineNumberingConfiguration TestKoOdfLineNumberingConfiguration.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
+########### next target ###############
+
+koodf_add_unit_test(TestKoOdfBibliographyConfiguration TestKoOdfBibliographyConfiguration.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
 ########### end ###############

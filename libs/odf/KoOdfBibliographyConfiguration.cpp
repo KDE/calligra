@@ -154,7 +154,7 @@ void KoOdfBibliographyConfiguration::saveOdf(KoXmlWriter *writer) const
     foreach (const SortKeyPair &key, d->sortKeys) {
         writer->startElement("text:sort-key");
         writer->addAttribute("text:key", key.first);
-        writer->addAttribute("text:sort-ascending", key.second);
+        writer->addAttribute("text:sort-ascending", key.second == Qt::AscendingOrder ? "true" : "false");
         writer->endElement();
     }
     writer->endElement();
