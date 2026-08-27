@@ -995,7 +995,7 @@ KoFilter::ConversionStatus PptToOdp::doConversion(KoStore *storeout)
     }
     storeout->write(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
+        "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.4\"/>\n");
     if (!storeout->close()) {
         delete p;
         p = nullptr;

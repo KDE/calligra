@@ -652,7 +652,7 @@ bool KoOdfChartWriter::saveContent(KoStore *store, KoXmlWriter *manifestWriter)
         stylesWriter->addAttribute("xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
         stylesWriter->addAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
         stylesWriter->addAttribute("xmlns:of", "urn:oasis:names:tc:opendocument:xmlns:of:1.2");
-        stylesWriter->addAttribute("office:version", "1.2");
+        stylesWriter->addAttribute("office:version", "1.4");
         mainStyles.saveOdfStyles(KoGenStyles::MasterStyles, stylesWriter);
         mainStyles.saveOdfStyles(KoGenStyles::DocumentStyles, stylesWriter); // office:style
         mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesWriter); // office:automatic-styles

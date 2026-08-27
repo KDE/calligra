@@ -68,7 +68,9 @@ void ODrawToOdf::processParallelogram(const MSO::OfficeArtSpContainer &o, Writer
     equation(eg, "f11", "21600-?f5 ");
     equation(eg, "f12", "21600*10800/?f0 ");
     equation(eg, "f13", "21600-?f12 ");
-    draw_handle handle(eg.add_draw_handle("$0 top"));
+    draw_handle handle(eg.add_draw_handle());
+    handle.set_draw_handle_position_x("$0");
+    handle.set_draw_handle_position_y("top");
     handle.set_draw_handle_radius_range_maximum("21000");
     handle.set_draw_handle_radius_range_minimum("0");
 }
@@ -93,7 +95,9 @@ void ODrawToOdf::processTrapezoid(const MSO::OfficeArtSpContainer &o, Writer &ou
     equation(eg, "f4", "21600-?f3 ");
     equation(eg, "f5", "$0 /2");
     equation(eg, "f6", "21600-?f5 ");
-    draw_handle handle(eg.add_draw_handle("$0 bottom"));
+    draw_handle handle(eg.add_draw_handle());
+    handle.set_draw_handle_position_x("$0");
+    handle.set_draw_handle_position_y("bottom");
     handle.set_draw_handle_radius_range_maximum("10000");
     handle.set_draw_handle_radius_range_minimum("0");
 }

@@ -53,7 +53,7 @@ void TestWriteStyleXml::testWriteRegionLeft()
     const QString r = buffer.buffer();
     const QString e =
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<office:document-styles office:version=\"1.2\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" "
+        "<office:document-styles office:version=\"1.4\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" "
         "xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\">\n"
         " <office:master-styles>\n"
         "  <style:master-page style:name=\"Standard\" style:page-layout-name=\"Layout\">\n"

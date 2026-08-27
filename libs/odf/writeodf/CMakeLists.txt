@@ -1,4 +1,4 @@
-set(RNGFILE ${CMAKE_SOURCE_DIR}/devtools/scripts/OpenDocument-v1.2-cs01-schema-calligra.rng)
+set(RNGFILE ${CMAKE_SOURCE_DIR}/devtools/scripts/OpenDocument-v1.4-schema-calligra.rng)
 set(RNGHEADERDIR ${CMAKE_BINARY_DIR}/libs/odf/writeodf)
 
 add_custom_command(

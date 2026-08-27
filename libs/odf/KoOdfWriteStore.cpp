@@ -106,7 +106,7 @@ KoXmlWriter *KoOdfWriteStore::createOasisXmlWriter(QIODevice *dev, const char *r
         writer->addAttribute("xmlns:ooo", KoXmlNS::ooo);
     }
 
-    writer->addAttribute("office:version", "1.2");
+    writer->addAttribute("office:version", "1.4");
 
     writer->addAttribute("xmlns:dc", KoXmlNS::dc);
     writer->addAttribute("xmlns:xlink", KoXmlNS::xlink);
@@ -188,7 +188,7 @@ KoXmlWriter *KoOdfWriteStore::manifestWriter(const char *mimeType)
         d->manifestWriter->startDocument("manifest:manifest");
         d->manifestWriter->startElement("manifest:manifest");
         d->manifestWriter->addAttribute("xmlns:manifest", KoXmlNS::manifest);
-        d->manifestWriter->addAttribute("manifest:version", "1.2");
+        d->manifestWriter->addAttribute("manifest:version", "1.4");
         d->manifestWriter->addManifestEntry("/", mimeType);
     }
     return d->manifestWriter;

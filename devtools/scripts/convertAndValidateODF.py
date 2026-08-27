@@ -167,7 +167,11 @@ schemas = {
 	"1.1": ["OpenDocument-schema-v1.1.rng",
 		"OpenDocument-manifest-schema-v1.1.rng"],
 	"1.2": ["OpenDocument-v1.2-cs01-schema-calligra.rng",
-		"OpenDocument-v1.2-cs01-manifest-schema.rng"]
+		"OpenDocument-v1.2-cs01-manifest-schema.rng"],
+	"1.3": ["OpenDocument-v1.3-schema.rng",
+		"OpenDocument-v1.3-manifest-schema.rng"],
+	"1.4": ["OpenDocument-v1.4-schema-calligra.rng",
+		"OpenDocument-v1.4-manifest-schema.rng"]
 }
 
 class jingodfvalidator:

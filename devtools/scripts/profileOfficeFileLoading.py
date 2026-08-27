@@ -114,11 +114,11 @@ class odfvalidator:
 		path = sys.path[0]
 		self.relaxNGValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
-				'OpenDocument-v1.2-cs01-schema-calligra.rng'),
+				'OpenDocument-v1.4-schema-calligra.rng'),
 				'r')))
 		self.relaxNGManifextValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
-				'OpenDocument-v1.2-cs01-manifest-schema.rng'), \
+				'OpenDocument-v1.4-manifest-schema.rng'), \
 				'r')))
 	# returns error string on error, None otherwise
 	def validate(self, odtpath): 
