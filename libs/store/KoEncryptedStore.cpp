@@ -26,7 +26,24 @@
 #include <qt6keychain/keychain.h>
 
 #include <openssl/evp.h>
+#include <openssl/opensslv.h>
 #include <openssl/rand.h>
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+#include <openssl/provider.h>
+#endif
+
+namespace
+{
+// Blowfish (mandated by ODF's encryption scheme) lives in OpenSSL 3's "legacy"
+// provider, which isn't loaded by default. Load it once, lazily.
+void ensureLegacyOpenSslProviderLoaded()
+{
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+    static OSSL_PROVIDER *legacyProvider = OSSL_PROVIDER_load(nullptr, "legacy");
+    Q_UNUSED(legacyProvider);
+#endif
+}
+}
 
 QByteArray randomArray(int size)
 {
@@ -681,6 +698,7 @@ QByteArray KoEncryptedStore::decryptFile(QByteArray &encryptedFile, KoEncryptedS
                            (unsigned char *)symmetricKey.data());
 
     // setup decrypt context with blowfish cfb cipher
+    ensureLegacyOpenSslProviderLoaded();
     auto context = EVP_CIPHER_CTX_new();
     int resultLength;
     auto cryptoAlgorithm = EVP_bf_cfb();
@@ -705,6 +723,7 @@ QByteArray KoEncryptedStore::decryptFile(QByteArray &encryptedFile, KoEncryptedS
     int finalLength;
     final.resize(EVP_CIPHER_CTX_block_size(context));
     EVP_DecryptFinal_ex(context, (unsigned char *) final.data(), &finalLength);
+    final.resize(finalLength);
 
     result += final;
 
@@ -833,6 +852,7 @@ bool KoEncryptedStore::closeWrite()
         encData.checksumShort = false;
 
         // setup context to encrypt with blowfish cfb cipher
+        ensureLegacyOpenSslProviderLoaded();
         auto context = EVP_CIPHER_CTX_new();
         auto cryptoAlgorithm = EVP_bf_cfb();
         EVP_CIPHER_CTX_init(context);
@@ -855,7 +875,7 @@ bool KoEncryptedStore::closeWrite()
 
         // Encrypt the data
         int resultLength;
-        QByteArray result(compressedData.buffer().size() + EVP_CIPHER_CTX_block_size(context), ' ');
+        result = QByteArray(compressedData.buffer().size() + EVP_CIPHER_CTX_block_size(context), ' ');
         ok = EVP_EncryptUpdate(context,
                                (unsigned char *)result.data(),
                                &resultLength,
@@ -863,6 +883,7 @@ bool KoEncryptedStore::closeWrite()
                                compressedData.buffer().size());
         if (!ok)
             return false;
+        result.resize(resultLength);
 
         // Finalize
         QByteArray final;
