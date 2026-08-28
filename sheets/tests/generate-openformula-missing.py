@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys, os, re
 
@@ -83,7 +83,6 @@ WEEKNUM
 WORKDAY
 YEAR
 YEARFRAC
-External
 DDE
 HYPERLINK
 ACCRINT
@@ -405,14 +404,14 @@ path = os.path.join(os.path.split(sys.argv[0])[0],"../functions")
 for n in [ f for f in os.listdir(path) if f.endswith(".cpp") ]:
     f = open(os.path.join(path,n), 'r')
     for t in [t.strip() for t in f.read().split("\n") ]:
-        m = re.search('(?!//|/\*).*new\s+Function\s*\(\s*\"(.+)\"', t)
+        m = re.search(r'(?!//|/\*).*new\s+Function\s*\(\s*\"(.+)\"', t)
         if m:
             functions2.append( functionName(m.group(1)) )
         else:
-            m = re.search('(?!//|/\*).*\-\>\s*setAlternateName\s*\(\s*\"(.+)\"', t)
+            m = re.search(r'(?!//|/\*).*\-\>\s*setAlternateName\s*\(\s*\"(.+)\"', t)
             if m:
                 functions2.append( functionName(m.group(1)) )
 
 diff = list(set(functions1).difference(set(functions2)))
 diff.sort()
-print "%s missing OpenFormula functions (%s available):\n%s" % (len(diff), len(functions2), " ".join(diff))
+print("%s missing OpenFormula functions (%s available):\n%s" % (len(diff), len(functions2), " ".join(diff)))
