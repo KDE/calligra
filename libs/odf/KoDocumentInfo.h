@@ -20,8 +20,8 @@
 
 class QDomDocument;
 class QDomElement;
+class QXmlStreamWriter;
 class KoStore;
-class KoXmlWriter;
 
 /**
  * @short The class containing all meta information about a document
@@ -142,10 +142,10 @@ private:
 
     /**
      * Save the information about the document to an OASIS file
-     * @param xmlWriter a reference to the KoXmlWriter to write in
+     * @param writer a reference to the QXmlStreamWriter to write in
      * @return true if success
      */
-    bool saveOasisAboutInfo(KoXmlWriter &xmlWriter);
+    bool saveOasisAboutInfo(QXmlStreamWriter &writer);
 
     /**
      * Load the information about the document from a Calligra-1.3 file
@@ -177,10 +177,10 @@ private:
 
     /**
      * Save the information about the document to an OASIS file
-     * @param xmlWriter a reference to the KoXmlWriter to write in
+     * @param writer a reference to the QXmlStreamWriter to write in
      * @return true if success
      */
-    bool saveOasisAuthorInfo(KoXmlWriter &xmlWriter);
+    bool saveOasisAuthorInfo(QXmlStreamWriter &writer);
 
     /** A QStringList containing all tags for the document information */
     QStringList m_aboutTags;

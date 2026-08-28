@@ -8,14 +8,13 @@
 #include "KoDocumentInfo.h"
 
 #include "KoDocumentBase.h"
-#include "KoOdfWriteStore.h"
 #include "KoXmlNS.h"
 
 #include <KoStoreDevice.h>
-#include <KoXmlWriter.h>
 #include <QDateTime>
 #include <QDomDocument>
 #include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -168,23 +167,33 @@ bool KoDocumentInfo::saveOasis(KoStore *store)
     updateParametersAndBumpNumCycles();
 
     KoStoreDevice dev(store);
-    KoXmlWriter *xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
-    xmlWriter->startElement("office:meta");
+    QXmlStreamWriter writer(&dev);
+    writer.writeStartDocument();
 
-    xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("Calligra/%1").arg(CALLIGRA_VERSION_STRING));
-    xmlWriter->endElement();
+    // Namespaces used in meta.xml; mirrors the office:document-meta case of
+    // KoOdfWriteStore::createOasisXmlWriter().
+    writer.writeStartElement("office:document-meta"_L1);
+    writer.writeAttribute("xmlns:office"_L1, KoXmlNS::office);
+    writer.writeAttribute("xmlns:meta"_L1, KoXmlNS::meta);
+    writer.writeAttribute("office:version"_L1, "1.4"_L1);
+    writer.writeAttribute("xmlns:dc"_L1, KoXmlNS::dc);
+    writer.writeAttribute("xmlns:xlink"_L1, KoXmlNS::xlink);
 
-    if (!saveOasisAboutInfo(*xmlWriter))
+    writer.writeStartElement("office:meta"_L1);
+
+    writer.writeStartElement("meta:generator"_L1);
+    writer.writeCharacters(QString("Calligra/%1").arg(CALLIGRA_VERSION_STRING));
+    writer.writeEndElement();
+
+    if (!saveOasisAboutInfo(writer))
         return false;
-    if (!saveOasisAuthorInfo(*xmlWriter))
+    if (!saveOasisAuthorInfo(writer))
         return false;
 
-    xmlWriter->endElement();
-    xmlWriter->endElement(); // root element
-    xmlWriter->endDocument();
-    delete xmlWriter;
-    return true;
+    writer.writeEndElement(); // office:meta
+    writer.writeEndElement(); // office:document-meta
+    writer.writeEndDocument();
+    return !writer.hasError();
 }
 
 void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)
@@ -236,18 +245,18 @@ QString KoDocumentInfo::aboutInfo(const QString &info) const
     return m_aboutInfo[info];
 }
 
-bool KoDocumentInfo::saveOasisAuthorInfo(KoXmlWriter &xmlWriter)
+bool KoDocumentInfo::saveOasisAuthorInfo(QXmlStreamWriter &writer)
 {
     foreach (const QString &tag, m_authorTags) {
         if (!authorInfo(tag).isEmpty() && tag == "creator") {
-            xmlWriter.startElement("dc:creator");
-            xmlWriter.addTextNode(authorInfo("creator"));
-            xmlWriter.endElement();
+            writer.writeStartElement("dc:creator"_L1);
+            writer.writeCharacters(authorInfo("creator"));
+            writer.writeEndElement();
         } else if (!authorInfo(tag).isEmpty()) {
-            xmlWriter.startElement("meta:user-defined");
-            xmlWriter.addAttribute("meta:name", tag);
-            xmlWriter.addTextNode(authorInfo(tag));
-            xmlWriter.endElement();
+            writer.writeStartElement("meta:user-defined"_L1);
+            writer.writeAttribute("meta:name"_L1, tag);
+            writer.writeCharacters(authorInfo(tag));
+            writer.writeEndElement();
         }
     }
 
@@ -289,26 +298,24 @@ QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument &doc)
     return e;
 }
 
-bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
+bool KoDocumentInfo::saveOasisAboutInfo(QXmlStreamWriter &writer)
 {
     foreach (const QString &tag, m_aboutTags) {
-        if (!aboutInfo(tag).isEmpty() || tag == "title") {
-            if (tag == "keyword") {
+        if (!aboutInfo(tag).isEmpty() || tag == "title"_L1) {
+            if (tag == "keyword"_L1) {
                 foreach (const QString &tmp, aboutInfo("keyword").split(m_keywordSeparator)) {
-                    xmlWriter.startElement("meta:keyword");
-                    xmlWriter.addTextNode(tmp);
-                    xmlWriter.endElement();
+                    writer.writeStartElement("meta:keyword"_L1);
+                    writer.writeCharacters(tmp);
+                    writer.writeEndElement();
                 }
-            } else if (tag == "title" || tag == "description" || tag == "subject" || tag == "date" || tag == "language") {
-                QByteArray elementName(QString("dc:" + tag).toLatin1());
-                xmlWriter.startElement(elementName.constData());
-                xmlWriter.addTextNode(aboutInfo(tag));
-                xmlWriter.endElement();
+            } else if (tag == "title"_L1 || tag == "description"_L1 || tag == "subject"_L1 || tag == "date"_L1 || tag == "language"_L1) {
+                writer.writeStartElement("dc:"_L1 + tag);
+                writer.writeCharacters(aboutInfo(tag));
+                writer.writeEndElement();
             } else {
-                QByteArray elementName(QString("meta:" + tag).toLatin1());
-                xmlWriter.startElement(elementName.constData());
-                xmlWriter.addTextNode(aboutInfo(tag));
-                xmlWriter.endElement();
+                writer.writeStartElement("meta:"_L1 + tag);
+                writer.writeCharacters(aboutInfo(tag));
+                writer.writeEndElement();
             }
         }
     }

@@ -89,4 +89,8 @@ koodf_add_unit_test(TestKoColumns TestKoColumns.cpp  LINK_LIBRARIES koodf Qt6::T
 
 koodf_add_unit_test(TestKoPageLayout TestKoPageLayout.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
+########### next target ###############
+
+koodf_add_unit_test(TestKoDocumentInfo TestKoDocumentInfo.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
 ########### end ###############
