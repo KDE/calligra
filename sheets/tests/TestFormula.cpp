@@ -311,6 +311,11 @@ void TestFormula::testOperators()
     CHECK_EVAL("10000000000000000/10000000000000000", Value(1));
     CHECK_EVAL("100000000000000000000.0/100000000000000000000.0", Value(1));
     CHECK_EVAL("100000000000000000000/100000000000000000000", Value(1)); // number too big to be represented as int64
+
+    // * and / have equal precedence and are left-associative, like every other spreadsheet engine
+    CHECK_EVAL("100/5*2", Value(40)); // (100/5)*2, not 100/(5*2)
+    CHECK_EVAL("2*3/6", Value(1)); // (2*3)/6, not 2*(3/6)
+    CHECK_EVAL("2/4*8", Value(4)); // (2/4)*8, not 2/(4*8)
 }
 
 void TestFormula::testComparison()

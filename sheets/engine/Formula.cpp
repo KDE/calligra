@@ -168,7 +168,7 @@ static int opPrecedence(Token::Op op)
         prec = 5;
         break;
     case Token::Slash:
-        prec = 6;
+        prec = 5;
         break;
     case Token::Plus:
         prec = 3;
