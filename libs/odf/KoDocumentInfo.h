@@ -126,6 +126,35 @@ public:
     /** Takes care of updating the document info from configuration correctly */
     void updateParameters();
 
+    /**
+     * The names of the document's custom properties, i.e. the meta:user-defined entries
+     * that aren't one of Calligra's own extended author fields (see authorInfo()).
+     */
+    QStringList customPropertyNames() const;
+
+    /**
+     * A custom property's value, as its literal ODF text representation (e.g. "3.14",
+     * "2024-01-02", "PT1H30M", "true", or plain text for an untyped/string property).
+     */
+    QString customPropertyValue(const QString &name) const;
+
+    /**
+     * A custom property's meta:value-type ("float", "date", "time", "boolean" or "string"),
+     * or an empty string if it was saved without one (a plain untyped value).
+     */
+    QString customPropertyValueType(const QString &name) const;
+
+    /**
+     * Sets a custom document property, saved as its own ODF meta:user-defined element.
+     * @param name the property's name (meta:name)
+     * @param value the property's ODF text representation
+     * @param valueType meta:value-type ("float", "date", "time", "boolean", "string"), or empty for untyped
+     */
+    void setCustomProperty(const QString &name, const QString &value, const QString &valueType = QString());
+
+    /** Removes a custom document property. */
+    void removeCustomProperty(const QString &name);
+
 private:
     /// Bumps the editing cycles count and save date, and then calls updateParameters
     void updateParametersAndBumpNumCycles();
@@ -194,6 +223,10 @@ private:
     QMap<QString, QString> m_authorInfoOverride;
     /** The map containing information about the document */
     QMap<QString, QString> m_aboutInfo;
+    /** Custom (meta:user-defined) document properties, keyed by name */
+    QMap<QString, QString> m_customProperties;
+    /** meta:value-type of each entry in m_customProperties that has one */
+    QMap<QString, QString> m_customPropertyTypes;
     /** The original meta:generator of the document */
     QString m_generator;
     const QString m_keywordSeparator = QStringLiteral(";");

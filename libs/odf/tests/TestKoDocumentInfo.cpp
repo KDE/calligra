@@ -23,8 +23,10 @@ private Q_SLOTS:
     void testLoadOasisRejectsMissingMeta_data();
     void testLoadOasisRejectsMissingMeta();
     void testLoadOasisDocumentStatistic();
+    void testLoadOasisCustomProperties();
     void testSaveOasisRoundTrip();
     void testSaveOasisDocumentStatisticRoundTrip();
+    void testSaveOasisCustomPropertyRoundTrip();
 };
 
 void TestKoDocumentInfo::testLoadOasis()
@@ -149,6 +151,56 @@ void TestKoDocumentInfo::testLoadOasisDocumentStatistic()
     QCOMPARE(info.aboutInfo("character-count"), QString());
 }
 
+void TestKoDocumentInfo::testLoadOasisCustomProperties()
+{
+    // clang-format off
+    const QString xml =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-meta"
+        " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
+        " xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\">"
+        "<office:meta>"
+        // Untyped -- but not one of Calligra's own author-profile fields, so it's a
+        // genuine custom property rather than author info.
+        "<meta:user-defined meta:name=\"Project Code\">ABC-123</meta:user-defined>"
+        // Typed custom properties, one per meta:value-type.
+        "<meta:user-defined meta:name=\"Budget\" meta:value-type=\"float\">1234.5</meta:user-defined>"
+        "<meta:user-defined meta:name=\"Due Date\" meta:value-type=\"date\">2026-01-01</meta:user-defined>"
+        "<meta:user-defined meta:name=\"Approved\" meta:value-type=\"boolean\">true</meta:user-defined>"
+        // "company" IS one of Calligra's own author-profile fields, and untyped -- so it
+        // must still be routed to authorInfo(), not treated as a custom property.
+        "<meta:user-defined meta:name=\"company\">Acme Corp</meta:user-defined>"
+        // Same, but explicitly string-typed -- what saveOasis() itself now writes.
+        "<meta:user-defined meta:name=\"city\" meta:value-type=\"string\">Springfield</meta:user-defined>"
+        "</office:meta>"
+        "</office:document-meta>";
+    // clang-format on
+
+    QXmlStreamReader reader(xml);
+    KoDocumentInfo info;
+    QVERIFY(info.loadOasis(reader));
+
+    QCOMPARE(info.authorInfo("company"), QString("Acme Corp"));
+    QVERIFY(!info.customPropertyNames().contains("company"));
+    QCOMPARE(info.authorInfo("city"), QString("Springfield"));
+    QVERIFY(!info.customPropertyNames().contains("city"));
+
+    const QStringList names = info.customPropertyNames();
+    QCOMPARE(names.size(), 4);
+
+    QCOMPARE(info.customPropertyValue("Project Code"), QString("ABC-123"));
+    QCOMPARE(info.customPropertyValueType("Project Code"), QString());
+
+    QCOMPARE(info.customPropertyValue("Budget"), QString("1234.5"));
+    QCOMPARE(info.customPropertyValueType("Budget"), QString("float"));
+
+    QCOMPARE(info.customPropertyValue("Due Date"), QString("2026-01-01"));
+    QCOMPARE(info.customPropertyValueType("Due Date"), QString("date"));
+
+    QCOMPARE(info.customPropertyValue("Approved"), QString("true"));
+    QCOMPARE(info.customPropertyValueType("Approved"), QString("boolean"));
+}
+
 void TestKoDocumentInfo::testSaveOasisRoundTrip()
 {
     QTemporaryDir tempDir;
@@ -223,6 +275,39 @@ void TestKoDocumentInfo::testSaveOasisDocumentStatisticRoundTrip()
     QCOMPARE(reloaded.aboutInfo("page-count"), QString("7"));
     // Statistics that were never set must not appear as e.g. an empty string.
     QCOMPARE(reloaded.aboutInfo("table-count"), QString());
+}
+
+void TestKoDocumentInfo::testSaveOasisCustomPropertyRoundTrip()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    const QString path = tempDir.path() + QStringLiteral("/meta-customprop-roundtrip.zip");
+
+    KoDocumentInfo original;
+    original.setCustomProperty("Project Code", "ABC-123");
+    original.setCustomProperty("Budget", "1234.5", "float");
+
+    KoStore *writeStore = KoStore::createStore(path, KoStore::Write, "", KoStore::Zip);
+    QVERIFY(writeStore);
+    QVERIFY(writeStore->open("meta.xml"));
+    QVERIFY(original.saveOasis(writeStore));
+    QVERIFY(writeStore->close());
+    delete writeStore;
+
+    KoStore *readStore = KoStore::createStore(path, KoStore::Read, "", KoStore::Zip);
+    QVERIFY(readStore);
+    QVERIFY(readStore->open("meta.xml"));
+
+    QXmlStreamReader reader(readStore->device());
+    KoDocumentInfo reloaded;
+    QVERIFY(reloaded.loadOasis(reader));
+    readStore->close();
+    delete readStore;
+
+    QCOMPARE(reloaded.customPropertyValue("Project Code"), QString("ABC-123"));
+    QCOMPARE(reloaded.customPropertyValueType("Project Code"), QString());
+    QCOMPARE(reloaded.customPropertyValue("Budget"), QString("1234.5"));
+    QCOMPARE(reloaded.customPropertyValueType("Budget"), QString("float"));
 }
 
 QTEST_MAIN(TestKoDocumentInfo)

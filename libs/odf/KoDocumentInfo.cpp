@@ -99,6 +99,8 @@ bool KoDocumentInfo::load(const KoXmlDocument &doc)
 bool KoDocumentInfo::loadOasis(QXmlStreamReader &reader)
 {
     m_authorInfo.clear();
+    m_customProperties.clear();
+    m_customPropertyTypes.clear();
 
     if (!reader.readNextStartElement() || reader.namespaceUri() != KoXmlNS::office || reader.name() != "document-meta"_L1)
         return false;
@@ -133,9 +135,18 @@ bool KoDocumentInfo::loadOasis(QXmlStreamReader &reader)
                 setActiveAuthorInfo("creator", text);
         } else if (ns == KoXmlNS::meta && localName == "user-defined"_L1) {
             const QString name = reader.attributes().value(KoXmlNS::meta, "name"_L1).toString();
+            const QString valueType = reader.attributes().value(KoXmlNS::meta, "value-type"_L1).toString();
             const QString text = reader.readElementText();
-            if (!text.isEmpty())
-                setActiveAuthorInfo(name, text);
+            if ((valueType.isEmpty() || valueType == "string"_L1) && m_authorTags.contains(name)) {
+                // Calligra's own convention: extended author-profile fields (phone, address, ...)
+                // that ODF has no dedicated element for. Always string-typed (or untyped, for
+                // files written before this was added).
+                if (!text.isEmpty())
+                    setActiveAuthorInfo(name, text);
+            } else if (!text.isEmpty() || !valueType.isEmpty()) {
+                // A genuine custom document property, possibly typed (meta:value-type).
+                setCustomProperty(name, text, valueType);
+            }
         } else if (ns == KoXmlNS::dc && localName == "description"_L1) {
             // this is the odf way but add meta:comments if it's already loaded
             const QString text = reader.readElementText().trimmed();
@@ -220,6 +231,16 @@ bool KoDocumentInfo::saveOasis(KoStore *store)
     if (!saveOasisAuthorInfo(writer))
         return false;
 
+    for (auto it = m_customProperties.cbegin(); it != m_customProperties.cend(); ++it) {
+        writer.writeStartElement("meta:user-defined"_L1);
+        writer.writeAttribute("meta:name"_L1, it.key());
+        const QString valueType = m_customPropertyTypes.value(it.key());
+        if (!valueType.isEmpty())
+            writer.writeAttribute("meta:value-type"_L1, valueType);
+        writer.writeCharacters(it.value());
+        writer.writeEndElement();
+    }
+
     writer.writeEndElement(); // office:meta
     writer.writeEndElement(); // office:document-meta
     writer.writeEndDocument();
@@ -285,6 +306,7 @@ bool KoDocumentInfo::saveOasisAuthorInfo(QXmlStreamWriter &writer)
         } else if (!authorInfo(tag).isEmpty()) {
             writer.writeStartElement("meta:user-defined"_L1);
             writer.writeAttribute("meta:name"_L1, tag);
+            writer.writeAttribute("meta:value-type"_L1, "string"_L1);
             writer.writeCharacters(authorInfo(tag));
             writer.writeEndElement();
         }
@@ -499,4 +521,34 @@ QString KoDocumentInfo::originalGenerator() const
 void KoDocumentInfo::setOriginalGenerator(const QString &generator)
 {
     m_generator = generator;
+}
+
+QStringList KoDocumentInfo::customPropertyNames() const
+{
+    return m_customProperties.keys();
+}
+
+QString KoDocumentInfo::customPropertyValue(const QString &name) const
+{
+    return m_customProperties.value(name);
+}
+
+QString KoDocumentInfo::customPropertyValueType(const QString &name) const
+{
+    return m_customPropertyTypes.value(name);
+}
+
+void KoDocumentInfo::setCustomProperty(const QString &name, const QString &value, const QString &valueType)
+{
+    m_customProperties.insert(name, value);
+    if (valueType.isEmpty())
+        m_customPropertyTypes.remove(name);
+    else
+        m_customPropertyTypes.insert(name, valueType);
+}
+
+void KoDocumentInfo::removeCustomProperty(const QString &name)
+{
+    m_customProperties.remove(name);
+    m_customPropertyTypes.remove(name);
 }
