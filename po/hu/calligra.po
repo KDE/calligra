@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:42+0000\n"
+"POT-Creation-Date: 2026-08-28 00:45+0000\n"
 "PO-Revision-Date: 2026-06-18 21:46+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1439,7 +1439,7 @@ msgstr "Mentés másként - %1"
 msgid "Save"
 msgstr "Mentés"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:368
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (ismeretlen fájltípus)"
@@ -2140,7 +2140,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Szerző"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:121
 #, kde-format
 msgid "Author"
 msgstr "Szerző"
@@ -3569,7 +3569,7 @@ msgstr "Adattípus"
 msgid "Stored In"
 msgstr "Itt tárolva:"
 
-#: store/KoEncryptedStore.cpp:244
+#: store/KoEncryptedStore.cpp:375
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3578,14 +3578,15 @@ msgstr ""
 "A dokumentum ismeretlen ellenőrzőösszeget tartalmaz. A megadott jelszó nem "
 "ellenőrizhető."
 
-#: store/KoEncryptedStore.cpp:245
+#: store/KoEncryptedStore.cpp:376
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Figyelem"
 
-#: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
+#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
+#: store/KoEncryptedStore.cpp:446
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3594,15 +3595,15 @@ msgstr ""
 "A dokumentum ismeretlen titkosítási eljárást használ. Egyes részei "
 "olvashatatlanok lehetnek."
 
-#: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
-#: store/KoEncryptedStore.cpp:309
+#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
+#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Figyelem"
 
-#: store/KoEncryptedStore.cpp:308
+#: store/KoEncryptedStore.cpp:463
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3611,7 +3612,7 @@ msgstr ""
 "A dokumentum befejezetlen titkosítási adatot tartalmaz. Egyes részei "
 "olvashatatlanok lehetnek."
 
-#: store/KoEncryptedStore.cpp:349
+#: store/KoEncryptedStore.cpp:542
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3622,7 +3623,7 @@ msgstr ""
 "olvashatatlan marad. A módosítások elvesztésének megelőzésére próbálja meg "
 "újra elmenteni a dokumentumot."
 
-#: store/KoEncryptedStore.cpp:447
+#: store/KoEncryptedStore.cpp:593
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3631,17 +3632,17 @@ msgstr ""
 "A jegyzékfájl nem írható, és a dokumentum olvashatatlan marad. A módosítások "
 "elvesztésének megelőzésére próbálja meg újra elmenteni a dokumentumot."
 
-#: store/KoEncryptedStore.cpp:569
+#: store/KoEncryptedStore.cpp:715
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Adja meg a jelszót a fájl megnyitásához!"
 
-#: store/KoEncryptedStore.cpp:768
+#: store/KoEncryptedStore.cpp:920
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Adja meg a jelszót a dokumentum titkosításához!"
 
-#: store/KoEncryptedStore.cpp:783
+#: store/KoEncryptedStore.cpp:935
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "El szeretné menteni a jelszót?"
@@ -4384,8 +4385,8 @@ msgid "Lock Docker"
 msgstr "Dokkoló zárolása"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
-#: widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:217
+#: widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "&Encrypt"
 msgstr "&Titkosítás"
@@ -4469,74 +4470,74 @@ msgstr "&Alapállapot"
 msgid "Language:"
 msgstr "Nyelv:"
 
-#: widgets/KoDocumentInfoDlg.cpp:102 widgets/KoDocumentInfoDlg.cpp:103
+#: widgets/KoDocumentInfoDlg.cpp:98 widgets/KoDocumentInfoDlg.cpp:99
 #, kde-format
 msgid "General"
 msgstr "Általános"
 
-#: widgets/KoDocumentInfoDlg.cpp:126
+#: widgets/KoDocumentInfoDlg.cpp:122
 #, kde-format
 msgid "Last saved by"
 msgstr "Utoljára mentette"
 
-#: widgets/KoDocumentInfoDlg.cpp:175
+#: widgets/KoDocumentInfoDlg.cpp:171
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "';' használható (például: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
+#: widgets/KoDocumentInfoDlg.cpp:201 widgets/KoDocumentInfoDlg.cpp:297
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "A dokumentum visszafejtésre kerül"
 
-#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
+#: widgets/KoDocumentInfoDlg.cpp:203 widgets/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Ne legyen visszafejtve"
 
-#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Ez a dokumentum titkosított"
 
-#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "D&ecrypt"
 msgstr "&Visszafejtés"
 
-#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:306
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "A dokumentum titkosításra kerül."
 
-#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:213 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Ne legyen titkosítva"
 
-#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Ez a dokumentum nem titkosított"
 
-#: widgets/KoDocumentInfoDlg.cpp:225
+#: widgets/KoDocumentInfoDlg.cpp:221
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Ez a dokumentum nem támogatja a titkosítást"
 
-#: widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:231
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
+#: widgets/KoDocumentInfoDlg.cpp:274 widgets/KoDocumentInfoDlg.cpp:280
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:337
+#: widgets/KoDocumentInfoDlg.cpp:333
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4545,17 +4546,17 @@ msgstr ""
 "<qt>A dokumentum visszafejtése során a jelszavas védelem eltávolításra kerül."
 "<p>Biztosan vissza szeretné fejteni a fájlt?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:339
+#: widgets/KoDocumentInfoDlg.cpp:335
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Visszafejtés megerősítése"
 
-#: widgets/KoDocumentInfoDlg.cpp:340
+#: widgets/KoDocumentInfoDlg.cpp:336
 #, kde-format
 msgid "Decrypt"
 msgstr "Visszafejtés"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:345
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4564,13 +4565,13 @@ msgstr ""
 "<qt>A dokumentum nem menthető automatikusan.<p>A visszafejtés befejezéséhez "
 "mentse a dokumentumot.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
-#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
+#: widgets/KoDocumentInfoDlg.cpp:347 widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:389 widgets/KoDocumentInfoDlg.cpp:397
 #, kde-format
 msgid "Save Document"
 msgstr "Dokumentum mentése"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, fuzzy, kde-format
 #| msgid ""
 #| "<qt>The document has been changed since it was opened. To complete the "
@@ -4583,7 +4584,7 @@ msgstr ""
 "<qt>A dokumentum a megnyitása óta módosult. A visszafejtés befejezéséhez "
 "szükséges a dokumentum mentése.<p>El szeretné most menteni?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:371
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4594,17 +4595,17 @@ msgstr ""
 "<b>OASIS OpenDocument</b> formátumra van szükség.<p>Át szeretné alakítani "
 "OASIS OpenDocument formátumúra?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:378
+#: widgets/KoDocumentInfoDlg.cpp:374
 #, kde-format
 msgid "Change Filetype"
 msgstr "Fájltípus módosítása"
 
-#: widgets/KoDocumentInfoDlg.cpp:379
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid "Change"
 msgstr "Módosítás"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:387
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4613,7 +4614,7 @@ msgstr ""
 "<qt>A dokumentum nem menthető automatikusan.<p>A titkosítás befejezéséhez "
 "mentse a dokumentumot.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:399
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:42+0000\n"
+"POT-Creation-Date: 2026-08-28 00:45+0000\n"
 "PO-Revision-Date: 2007-08-08 15:46+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1578,7 +1578,7 @@ msgstr "%1 रूपमा बचत गर्नुहोस्।"
 msgid "Save"
 msgstr "बचत"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:368
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (अज्ञात फाइल प्रकार)"
@@ -2381,7 +2381,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "लेखक"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:121
 #, kde-format
 msgid "Author"
 msgstr "लेखक"
@@ -3973,7 +3973,7 @@ msgstr "मिति"
 msgid "Stored In"
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:244
+#: store/KoEncryptedStore.cpp:375
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3982,14 +3982,15 @@ msgstr ""
 "यो कागजातले अपरिचित चेकसम समावेश गरेको छ ।जब तपाईँ यसलाई पासवर्ड दिनुहुनछ,  रूजु भएको "
 "नहुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:245
+#: store/KoEncryptedStore.cpp:376
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "चेतावनी"
 
-#: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
+#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
+#: store/KoEncryptedStore.cpp:446
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3997,22 +3998,22 @@ msgid ""
 msgstr ""
 "यो कागजातले अपरिचित गुप्तिकरण विधि समावेश गरेको छ ।केही भाग पढ्न अयोग्य हुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
-#: store/KoEncryptedStore.cpp:309
+#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
+#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "चेतावनी"
 
-#: store/KoEncryptedStore.cpp:308
+#: store/KoEncryptedStore.cpp:463
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr "यो कागजातले अपूर्ण गुप्तिकरण डाटा समावेश गरेको छ । केही भाग पढ्न अयोग्य हुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:349
+#: store/KoEncryptedStore.cpp:542
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -4022,7 +4023,7 @@ msgstr ""
 "देखिएकोेस्ट फाइल अनुपयोगी  देखिन्छ । यो परिमार्जित गर्न सकिँदैन र कागजात पढ्न अयोग्य "
 "रहनेछ । कपून: तपाईँको कार्य हराउनबाट रोपुन क्न प्रयास गर्नुहोस र कागजात बचत गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:447
+#: store/KoEncryptedStore.cpp:593
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -4031,17 +4032,17 @@ msgstr ""
 "देखिएको फाइल लेख्न सकिँदैन।उक्त कागजात पढ्न अयोग्य रहनेछ । कृपया तपाईँको कार्य हराउनबाट "
 "रोक्न फेरि प्रयास गर्नुहोस् र कागजात बचत गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:569
+#: store/KoEncryptedStore.cpp:715
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "कृपया, यो फइल खोल्नका लागि पासवर्ड प्रविष्ट गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:768
+#: store/KoEncryptedStore.cpp:920
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "कृपया कागजातसहित गुप्तिकरण गर्न पासवर्ड प्रविष्ट गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:783
+#: store/KoEncryptedStore.cpp:935
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "तपाईँ पासवर्ड बचत गर्न  हटाउन चाहनुहुन्छ ?"
@@ -4900,8 +4901,8 @@ msgid "Lock Docker"
 msgstr "डकर्स"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
-#: widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:217
+#: widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "&Encrypt"
 msgstr "गुप्तिकरण गर्नुहोस्"
@@ -4989,77 +4990,77 @@ msgstr "रिसेट गर्नुहोस्"
 msgid "Language:"
 msgstr "भाषा"
 
-#: widgets/KoDocumentInfoDlg.cpp:102 widgets/KoDocumentInfoDlg.cpp:103
+#: widgets/KoDocumentInfoDlg.cpp:98 widgets/KoDocumentInfoDlg.cpp:99
 #, kde-format
 msgid "General"
 msgstr "साधारण"
 
-#: widgets/KoDocumentInfoDlg.cpp:126
+#: widgets/KoDocumentInfoDlg.cpp:122
 #, fuzzy, kde-format
 #| msgid "Paste Text"
 msgid "Last saved by"
 msgstr "पाठ टाँस्नुहोस्"
 
-#: widgets/KoDocumentInfoDlg.cpp:175
+#: widgets/KoDocumentInfoDlg.cpp:171
 #, fuzzy, kde-format
 #| msgid "Use ';' (Example: Office;KDE;KOffice)"
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "';' प्रयोग गर्नुहोस् (जस्तै: अफिस;केडिइ;केअफिस)"
 
-#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
+#: widgets/KoDocumentInfoDlg.cpp:201 widgets/KoDocumentInfoDlg.cpp:297
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "यो कागजात गुप्तलिखित हुनेछ ।छ।ैछ"
 
-#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
+#: widgets/KoDocumentInfoDlg.cpp:203 widgets/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "Do not decrypt"
 msgstr "गुप्तलेखन नउल्टाउनुहोस्नुहोस्।"
 
-#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document is encrypted"
 msgstr "यो कागजात गुप्तिकरण गरिएको छ।"
 
-#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "D&ecrypt"
 msgstr "गुप्तलेखन उल्टाउनुहोस्डट"
 
-#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:306
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "यो कागजात गुप्तिकरण गरिने छ। "
 
-#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:213 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "Do not encrypt"
 msgstr "गुप्तिकरण नगर्नुहोस्।"
 
-#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "यो कागजात गुप्तिकरण गरिएको छैन।"
 
-#: widgets/KoDocumentInfoDlg.cpp:225
+#: widgets/KoDocumentInfoDlg.cpp:221
 #, fuzzy, kde-format
 #| msgid "This document is not encrypted"
 msgid "This document does not support encryption"
 msgstr "यो कागजात गुप्तिकरण गरिएको छैन।"
 
-#: widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:231
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
+#: widgets/KoDocumentInfoDlg.cpp:274 widgets/KoDocumentInfoDlg.cpp:280
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: widgets/KoDocumentInfoDlg.cpp:337
+#: widgets/KoDocumentInfoDlg.cpp:333
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -5068,17 +5069,17 @@ msgstr ""
 "<qt>कागजातलाई गुप्तिकरणबाटणबाट हटाउँदा यसबाट पासवर्ड सुरक्षा हटाउँछ ।<p>तपाईँ अझै "
 "फाइललाई गुप्तिकरणबाट हटाउन चाहानुहुन्छ ?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:339
+#: widgets/KoDocumentInfoDlg.cpp:335
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "गुप्तलेखनिकरण यकीन गर्नुहोस्।"
 
-#: widgets/KoDocumentInfoDlg.cpp:340
+#: widgets/KoDocumentInfoDlg.cpp:336
 #, kde-format
 msgid "Decrypt"
 msgstr "गुप्तलेखन उल्टाउनुहोस्"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:345
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -5086,13 +5087,13 @@ msgid ""
 msgstr ""
 "<qt>तपाईँको कागजात स्वत बचत हुँदैन,<p>गुप्तलेखन पूर्ण गर्न कृपया कागजात बचत गर्नुहोस् </qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
-#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
+#: widgets/KoDocumentInfoDlg.cpp:347 widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:389 widgets/KoDocumentInfoDlg.cpp:397
 #, kde-format
 msgid "Save Document"
 msgstr "कागजात बचत गर्नुहोस्।"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, fuzzy, kde-format
 #| msgid ""
 #| "<qt>The document has been changed since it was opened. To complete the "
@@ -5105,7 +5106,7 @@ msgstr ""
 "<qt>यो खोले देखि कागजात परिवर्तन भएको छ । गुप्तलेखन पुर्ण गर्न कागजात बचत गर्न आवश्यक "
 "हुन्छ ।<p>तपाईँ अहिले कागजात बचत गर्न चाहानुहुनछ ?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:371
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -5116,17 +5117,17 @@ msgstr ""
 "गुप्तिकरण हुनका लागि.<pकागजात परिवर्तित हुन आवश्यक छ ।तपाईँ फाइल ओएएसआइएस खुल्ला "
 "कागजातमा परिवर्तन गर्न चाहानुहुन्छ ?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:378
+#: widgets/KoDocumentInfoDlg.cpp:374
 #, kde-format
 msgid "Change Filetype"
 msgstr "फाइल प्रकार परिवर्तन गर्नुहोस्।"
 
-#: widgets/KoDocumentInfoDlg.cpp:379
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid "Change"
 msgstr "परिवर्तन गर्नुहोस्।"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:387
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -5135,7 +5136,7 @@ msgstr ""
 "<qt>तपाईँको कागजात स्वत बचत हुँदैन ।<p>गुप्तिकरण पूर्ण गर्न कृपया   कागजात बचत गर्नु।स् ।</"
 "qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:399
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:42+0000\n"
+"POT-Creation-Date: 2026-08-28 00:45+0000\n"
 "PO-Revision-Date: 2026-08-10 16:08+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -1425,7 +1425,7 @@ msgstr "Saglabāt kā „%1“"
 msgid "Save"
 msgstr "Saglabāt"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:368
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (nezināms datnes tips)"
@@ -2120,7 +2120,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autors"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:121
 #, kde-format
 msgid "Author"
 msgstr "Autors"
@@ -3547,7 +3547,7 @@ msgstr "Datu tips"
 msgid "Stored In"
 msgstr "Saglabāts"
 
-#: store/KoEncryptedStore.cpp:244
+#: store/KoEncryptedStore.cpp:375
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3556,13 +3556,14 @@ msgstr ""
 "Šis dokuments satur nezināmu kontrolsummu. Ievadot paroli, tā var netikt "
 "pārbaudīta."
 
-#: store/KoEncryptedStore.cpp:245
+#: store/KoEncryptedStore.cpp:376
 #, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Uzmanību"
 
-#: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
+#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
+#: store/KoEncryptedStore.cpp:446
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3571,14 +3572,14 @@ msgstr ""
 "Dokuments satur nezināmu šifrēšanas metodi. Atsevišķas daļas var nebūt "
 "nolasāmas."
 
-#: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
-#: store/KoEncryptedStore.cpp:309
+#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
+#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Uzmanību"
 
-#: store/KoEncryptedStore.cpp:308
+#: store/KoEncryptedStore.cpp:463
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3587,7 +3588,7 @@ msgstr ""
 "Šis dokuments satur nederīgus šifrēšanas datus. Dažas daļas var nebūt "
 "nolasāmas."
 
-#: store/KoEncryptedStore.cpp:349
+#: store/KoEncryptedStore.cpp:542
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3597,7 +3598,7 @@ msgstr ""
 "Manifesta datne izskatās bojāta. To nevar modificēt un dokuments nebūs "
 "nolasāms. Mēģiniet vēlreiz saglabāt dokumentu, lai novērstu darba zaudēšanu."
 
-#: store/KoEncryptedStore.cpp:447
+#: store/KoEncryptedStore.cpp:593
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3606,17 +3607,17 @@ msgstr ""
 "Manifesta datnē nevar rakstīt. Dokuments paliks nenolasāms. Mēģiniet vēlreiz "
 "saglabāt dokumentu, lai novērstu datu zudumu."
 
-#: store/KoEncryptedStore.cpp:569
+#: store/KoEncryptedStore.cpp:715
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Ievadiet paroli datnes atvēršanai."
 
-#: store/KoEncryptedStore.cpp:768
+#: store/KoEncryptedStore.cpp:920
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Ierakstiet paroli, ar kuru šifrēt dokumentu."
 
-#: store/KoEncryptedStore.cpp:783
+#: store/KoEncryptedStore.cpp:935
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Vai vēlaties saglabāt paroli?"
@@ -4357,8 +4358,8 @@ msgid "Lock Docker"
 msgstr "Slēgt dokeru"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
-#: widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:217
+#: widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "&Encrypt"
 msgstr "Š&ifrēt"
@@ -4442,74 +4443,74 @@ msgstr "&Atiestatīt"
 msgid "Language:"
 msgstr "Valoda:"
 
-#: widgets/KoDocumentInfoDlg.cpp:102 widgets/KoDocumentInfoDlg.cpp:103
+#: widgets/KoDocumentInfoDlg.cpp:98 widgets/KoDocumentInfoDlg.cpp:99
 #, kde-format
 msgid "General"
 msgstr "Pamata"
 
-#: widgets/KoDocumentInfoDlg.cpp:126
+#: widgets/KoDocumentInfoDlg.cpp:122
 #, kde-format
 msgid "Last saved by"
 msgstr "Pēdējo reizi saglabāja"
 
-#: widgets/KoDocumentInfoDlg.cpp:175
+#: widgets/KoDocumentInfoDlg.cpp:171
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Izmantojiet ';' (Piemērs: Office;KDE;Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
+#: widgets/KoDocumentInfoDlg.cpp:201 widgets/KoDocumentInfoDlg.cpp:297
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Dokuments tiks atšifrēts"
 
-#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
+#: widgets/KoDocumentInfoDlg.cpp:203 widgets/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Neatšifrēt"
 
-#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Šis dokuments ir šifrēts"
 
-#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "D&ecrypt"
 msgstr "A&tšifrēt"
 
-#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:306
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Šis dokuments tiks šifrēts."
 
-#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:213 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Nešifrēt"
 
-#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Šis dokuments nav šifrēts"
 
-#: widgets/KoDocumentInfoDlg.cpp:225
+#: widgets/KoDocumentInfoDlg.cpp:221
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Šis dokuments neatbalsta šifrēšanu"
 
-#: widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:231
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr "Nav iestatīts"
 
-#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
+#: widgets/KoDocumentInfoDlg.cpp:274 widgets/KoDocumentInfoDlg.cpp:280
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ", "
 
-#: widgets/KoDocumentInfoDlg.cpp:337
+#: widgets/KoDocumentInfoDlg.cpp:333
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4518,17 +4519,17 @@ msgstr ""
 "<qt>Šī dokumenta atšifrēšana tam noņems paroles aizsardzību.<p>Vai tik un tā "
 "vēlaties atšifrēt šo datni?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:339
+#: widgets/KoDocumentInfoDlg.cpp:335
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Apstiprināt atšifrēšanu"
 
-#: widgets/KoDocumentInfoDlg.cpp:340
+#: widgets/KoDocumentInfoDlg.cpp:336
 #, kde-format
 msgid "Decrypt"
 msgstr "Atšifrēt"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:345
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4537,13 +4538,13 @@ msgstr ""
 "<qt>Dokumentu nevar automātiski saglabāt.<p>Lai pabeigtu atšifrēšanu, "
 "saglabājiet šo dokumentu.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
-#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
+#: widgets/KoDocumentInfoDlg.cpp:347 widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:389 widgets/KoDocumentInfoDlg.cpp:397
 #, kde-format
 msgid "Save Document"
 msgstr "Saglabāt dokumentu"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4552,7 +4553,7 @@ msgstr ""
 "<qt>Lai pabeigtu atšifrēšanu, dokuments ir jāsaglabā.<p>Vai vēlaties "
 "dokumentu saglabāt tagad?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:371
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4563,17 +4564,17 @@ msgstr ""
 "OpenDocument</b>, lai to varētu šifrēt.<p>Vai vēlaties datnes formātu mainīt "
 "uz„OASIS OpenDocument“?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:378
+#: widgets/KoDocumentInfoDlg.cpp:374
 #, kde-format
 msgid "Change Filetype"
 msgstr "Mainīt datnes tipu"
 
-#: widgets/KoDocumentInfoDlg.cpp:379
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid "Change"
 msgstr "Mainīt"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:387
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4582,7 +4583,7 @@ msgstr ""
 "<qt>Dokumentu nevar automātiski saglabāt.<p>Lai pabeigtu šifrēšanu, "
 "saglabājiet dokumentu.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:399
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

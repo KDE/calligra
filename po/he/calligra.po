@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:42+0000\n"
+"POT-Creation-Date: 2026-08-28 00:45+0000\n"
 "PO-Revision-Date: 2026-04-13 21:19+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -1424,7 +1424,7 @@ msgstr "שמירה בשם %1"
 msgid "Save"
 msgstr "שמירה"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:368
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (סוג קובץ לא מוכר)"
@@ -2123,7 +2123,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "מחבר"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:121
 #, kde-format
 msgid "Author"
 msgstr "מחבר"
@@ -3540,7 +3540,7 @@ msgstr "סוג נתונים"
 msgid "Stored In"
 msgstr "מאוחסן תחת"
 
-#: store/KoEncryptedStore.cpp:244
+#: store/KoEncryptedStore.cpp:375
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3548,13 +3548,14 @@ msgid ""
 msgstr ""
 "המסמך הזה מכיל סיכום ביקורת לא ידוע. בעת אספקת סיסמה לא ניתן יהיה לאמת אותה."
 
-#: store/KoEncryptedStore.cpp:245
+#: store/KoEncryptedStore.cpp:376
 #, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "אזהרה"
 
-#: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
+#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
+#: store/KoEncryptedStore.cpp:446
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3562,14 +3563,14 @@ msgid ""
 msgstr ""
 "המסמך הזה מכיל שיטת הצפנה לא מוכרת. חלקים ממנו עלולים להיות בלתי קריאים."
 
-#: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
-#: store/KoEncryptedStore.cpp:309
+#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
+#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "אזהרה"
 
-#: store/KoEncryptedStore.cpp:308
+#: store/KoEncryptedStore.cpp:463
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3577,7 +3578,7 @@ msgid ""
 msgstr ""
 "המסמך הזה מכיל נתוני הצפנה חלקיים. חלקים ממנו עלולים להיות בלתי קריאים."
 
-#: store/KoEncryptedStore.cpp:349
+#: store/KoEncryptedStore.cpp:542
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3587,7 +3588,7 @@ msgstr ""
 "קובץ ההצהרה/manifest נראה פגום. אי אפשר לשנות אותו והמסמך יישאר בלתי קריא. "
 "נא לנסות לשמור את המסמך שוב כדי למנוע את אובדן העבודה שלך."
 
-#: store/KoEncryptedStore.cpp:447
+#: store/KoEncryptedStore.cpp:593
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3596,17 +3597,17 @@ msgstr ""
 "אי אפשר לכתוב את קובץ ההצהרה/manifest. המסמך יישאר בלתי קריא. נא לנסות לשמור "
 "את המסמך שוב כדי למנוע את אובדן העבודה שלך."
 
-#: store/KoEncryptedStore.cpp:569
+#: store/KoEncryptedStore.cpp:715
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "נא למלא סיסמה כדי לפתוח את הקובץ הזה."
 
-#: store/KoEncryptedStore.cpp:768
+#: store/KoEncryptedStore.cpp:920
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "נא למלא את הסיסמה להצפנת המסמך הזה."
 
-#: store/KoEncryptedStore.cpp:783
+#: store/KoEncryptedStore.cpp:935
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "לשמור את הסיסמה?"
@@ -4347,8 +4348,8 @@ msgid "Lock Docker"
 msgstr "נעילת מעגן"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
-#: widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:217
+#: widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "&Encrypt"
 msgstr "ה&צפנה"
@@ -4432,74 +4433,74 @@ msgstr "&איפוס"
 msgid "Language:"
 msgstr "שפה:"
 
-#: widgets/KoDocumentInfoDlg.cpp:102 widgets/KoDocumentInfoDlg.cpp:103
+#: widgets/KoDocumentInfoDlg.cpp:98 widgets/KoDocumentInfoDlg.cpp:99
 #, kde-format
 msgid "General"
 msgstr "כללי"
 
-#: widgets/KoDocumentInfoDlg.cpp:126
+#: widgets/KoDocumentInfoDlg.cpp:122
 #, kde-format
 msgid "Last saved by"
 msgstr "נשמר לאחרונה על ידי"
 
-#: widgets/KoDocumentInfoDlg.cpp:175
+#: widgets/KoDocumentInfoDlg.cpp:171
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "להשתמש ב־‚;’ (למשל: כלי משרד;KDE;‏Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
+#: widgets/KoDocumentInfoDlg.cpp:201 widgets/KoDocumentInfoDlg.cpp:297
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "המסמך הזה יפוענח"
 
-#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
+#: widgets/KoDocumentInfoDlg.cpp:203 widgets/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "Do not decrypt"
 msgstr "לא לפענח"
 
-#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document is encrypted"
 msgstr "המסמך הזה מוצפו"
 
-#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "D&ecrypt"
 msgstr "&פיענוח"
 
-#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:306
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "המסמך הזה יוצפן."
 
-#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:213 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "Do not encrypt"
 msgstr "לא להצפין"
 
-#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "המסמך הזה לא מוצפן"
 
-#: widgets/KoDocumentInfoDlg.cpp:225
+#: widgets/KoDocumentInfoDlg.cpp:221
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "המסמך הזה לא תומך בהצפנה"
 
-#: widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:231
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr "לא מוגדר"
 
-#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
+#: widgets/KoDocumentInfoDlg.cpp:274 widgets/KoDocumentInfoDlg.cpp:280
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ", "
 
-#: widgets/KoDocumentInfoDlg.cpp:337
+#: widgets/KoDocumentInfoDlg.cpp:333
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4507,17 +4508,17 @@ msgid ""
 msgstr ""
 "<qt>פיענוח המסמך יסיר את הסיסמה שמגנה עליו<p>להמשיך לפענח את המסמך?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:339
+#: widgets/KoDocumentInfoDlg.cpp:335
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "אישור פיענוח"
 
-#: widgets/KoDocumentInfoDlg.cpp:340
+#: widgets/KoDocumentInfoDlg.cpp:336
 #, kde-format
 msgid "Decrypt"
 msgstr "לפענח"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:345
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4526,20 +4527,20 @@ msgstr ""
 "<qt>לא ניתן לשמור את המסמך שלך אוטומטית.<p>כדי להשלים את הפיענוח נא לשמור את "
 "המסמך.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
-#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
+#: widgets/KoDocumentInfoDlg.cpp:347 widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:389 widgets/KoDocumentInfoDlg.cpp:397
 #, kde-format
 msgid "Save Document"
 msgstr "שמירת המסמך"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr "<qt>כדי להשלים את הפנוח יש לשמור את המסמך.<p>לשמור את המסמך כעת?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:371
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4549,17 +4550,17 @@ msgstr ""
 "<qt>המסמך שמור כעת בתור %1. יש לשנות את המסמך ל־<b>OASIS OpenDocument</b> "
 "כדי להצפין אותו.<p>להחליף את סוג הקובץ ל־OASIS OpenDocument?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:378
+#: widgets/KoDocumentInfoDlg.cpp:374
 #, kde-format
 msgid "Change Filetype"
 msgstr "שינוי סוג קובץ"
 
-#: widgets/KoDocumentInfoDlg.cpp:379
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid "Change"
 msgstr "לשנות"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:387
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4568,7 +4569,7 @@ msgstr ""
 "<qt>לא ניתן לשמור את המסמך שלך אוטומטית.<p>כדי להשלים את ההצפנה, נא לשמור את "
 "המסמך.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:399
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

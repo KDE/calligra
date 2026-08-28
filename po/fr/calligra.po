@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kplatomodels\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-03 00:42+0000\n"
+"POT-Creation-Date: 2026-08-28 00:45+0000\n"
 "PO-Revision-Date: 2026-07-05 17:23+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -1439,7 +1439,7 @@ msgstr "Enregistrer comme %1"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:372
+#: main/KoMainWindow.cpp:815 widgets/KoDocumentInfoDlg.cpp:368
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (type de fichier inconnu)"
@@ -2131,7 +2131,7 @@ msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Auteur"
 
-#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:125
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:121
 #, kde-format
 msgid "Author"
 msgstr "Auteur"
@@ -3561,7 +3561,7 @@ msgstr "Type de données"
 msgid "Stored In"
 msgstr "Stocké dans "
 
-#: store/KoEncryptedStore.cpp:244
+#: store/KoEncryptedStore.cpp:375
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3570,13 +3570,14 @@ msgstr ""
 "Ce document contient une somme de vérification inconnue. Quand vous "
 "fournissez un mot de passe, Impossible de le vérifier."
 
-#: store/KoEncryptedStore.cpp:245
+#: store/KoEncryptedStore.cpp:376
 #, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Avertissement"
 
-#: store/KoEncryptedStore.cpp:272 store/KoEncryptedStore.cpp:291
+#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
+#: store/KoEncryptedStore.cpp:446
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3585,14 +3586,14 @@ msgstr ""
 "Ce document contient une méthode de chiffrement inconnue. Certaines parties "
 "peuvent être illisibles."
 
-#: store/KoEncryptedStore.cpp:273 store/KoEncryptedStore.cpp:292
-#: store/KoEncryptedStore.cpp:309
+#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
+#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Avertissement"
 
-#: store/KoEncryptedStore.cpp:308
+#: store/KoEncryptedStore.cpp:463
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3601,7 +3602,7 @@ msgstr ""
 "Ce document contient des données de chiffrement incomplètes. Certaines "
 "parties peuvent être illisibles."
 
-#: store/KoEncryptedStore.cpp:349
+#: store/KoEncryptedStore.cpp:542
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3612,7 +3613,7 @@ msgstr ""
 "illisible. Veuillez essayer d'enregistrer de nouveau le document pour éviter "
 "de perdre votre travail. "
 
-#: store/KoEncryptedStore.cpp:447
+#: store/KoEncryptedStore.cpp:593
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3622,17 +3623,17 @@ msgstr ""
 "essayer d'enregistrer de nouveau le document pour éviter de perdre votre "
 "travail."
 
-#: store/KoEncryptedStore.cpp:569
+#: store/KoEncryptedStore.cpp:715
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Veuillez Saisir le mot de passe pour ouvrir ce fichier."
 
-#: store/KoEncryptedStore.cpp:768
+#: store/KoEncryptedStore.cpp:920
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Veuillez Saisir le mot de passe pour chiffrer le document avec."
 
-#: store/KoEncryptedStore.cpp:783
+#: store/KoEncryptedStore.cpp:935
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Voulez-vous enregistrer le mot de passe ? "
@@ -4373,8 +4374,8 @@ msgid "Lock Docker"
 msgstr "Verrouiller le panneau"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
-#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:221
-#: widgets/KoDocumentInfoDlg.cpp:316
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:217
+#: widgets/KoDocumentInfoDlg.cpp:312
 #, kde-format
 msgid "&Encrypt"
 msgstr "&Chiffrer"
@@ -4458,74 +4459,74 @@ msgstr "&Réinitialiser"
 msgid "Language:"
 msgstr "Langue :"
 
-#: widgets/KoDocumentInfoDlg.cpp:102 widgets/KoDocumentInfoDlg.cpp:103
+#: widgets/KoDocumentInfoDlg.cpp:98 widgets/KoDocumentInfoDlg.cpp:99
 #, kde-format
 msgid "General"
 msgstr "Général"
 
-#: widgets/KoDocumentInfoDlg.cpp:126
+#: widgets/KoDocumentInfoDlg.cpp:122
 #, kde-format
 msgid "Last saved by"
 msgstr "Dernier enregistrement par "
 
-#: widgets/KoDocumentInfoDlg.cpp:175
+#: widgets/KoDocumentInfoDlg.cpp:171
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Utiliser « ; » (Office ; KDE ; Calligra)"
 
-#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
+#: widgets/KoDocumentInfoDlg.cpp:201 widgets/KoDocumentInfoDlg.cpp:297
 #, kde-format
 msgid "This document will be decrypted"
 msgstr "Ce document sera déchiffré"
 
-#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
+#: widgets/KoDocumentInfoDlg.cpp:203 widgets/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "Do not decrypt"
 msgstr "Ne pas déchiffrer"
 
-#: widgets/KoDocumentInfoDlg.cpp:209 widgets/KoDocumentInfoDlg.cpp:305
+#: widgets/KoDocumentInfoDlg.cpp:205 widgets/KoDocumentInfoDlg.cpp:301
 #, kde-format
 msgid "This document is encrypted"
 msgstr "Ce document est chiffré"
 
-#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:307
+#: widgets/KoDocumentInfoDlg.cpp:207 widgets/KoDocumentInfoDlg.cpp:303
 #, kde-format
 msgid "D&ecrypt"
 msgstr "D&échiffré"
 
-#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
+#: widgets/KoDocumentInfoDlg.cpp:211 widgets/KoDocumentInfoDlg.cpp:306
 #, kde-format
 msgid "This document will be encrypted."
 msgstr "Ce document sera chiffré"
 
-#: widgets/KoDocumentInfoDlg.cpp:217 widgets/KoDocumentInfoDlg.cpp:312
+#: widgets/KoDocumentInfoDlg.cpp:213 widgets/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "Do not encrypt"
 msgstr "Ne pas chiffrer"
 
-#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:314
+#: widgets/KoDocumentInfoDlg.cpp:215 widgets/KoDocumentInfoDlg.cpp:310
 #, kde-format
 msgid "This document is not encrypted"
 msgstr "Ce document n'est pas chiffré"
 
-#: widgets/KoDocumentInfoDlg.cpp:225
+#: widgets/KoDocumentInfoDlg.cpp:221
 #, kde-format
 msgid "This document does not support encryption"
 msgstr "Ce document n'accepte pas le chiffrement"
 
-#: widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:231
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Not set"
 msgstr "Non défini"
 
-#: widgets/KoDocumentInfoDlg.cpp:278 widgets/KoDocumentInfoDlg.cpp:284
+#: widgets/KoDocumentInfoDlg.cpp:274 widgets/KoDocumentInfoDlg.cpp:280
 #, kde-format
 msgctxt "list separator"
 msgid ", "
 msgstr ", "
 
-#: widgets/KoDocumentInfoDlg.cpp:337
+#: widgets/KoDocumentInfoDlg.cpp:333
 #, kde-format
 msgid ""
 "<qt>Decrypting the document will remove the password protection from it."
@@ -4534,17 +4535,17 @@ msgstr ""
 "<qt>Déchiffrer le document supprimera la protection par mot de passe. "
 "<p>Voulez--vous encore déchiffrer ce fichier ?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:339
+#: widgets/KoDocumentInfoDlg.cpp:335
 #, kde-format
 msgid "Confirm Decrypt"
 msgstr "Confirmer le déchiffrement"
 
-#: widgets/KoDocumentInfoDlg.cpp:340
+#: widgets/KoDocumentInfoDlg.cpp:336
 #, kde-format
 msgid "Decrypt"
 msgstr "Déchiffrer"
 
-#: widgets/KoDocumentInfoDlg.cpp:349
+#: widgets/KoDocumentInfoDlg.cpp:345
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4553,13 +4554,13 @@ msgstr ""
 "<qt>Impossible d'enregistrer automatique votre document.<p>Pour terminer le "
 "déchiffrement, veuillez enregistrer le document.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:351 widgets/KoDocumentInfoDlg.cpp:358
-#: widgets/KoDocumentInfoDlg.cpp:393 widgets/KoDocumentInfoDlg.cpp:401
+#: widgets/KoDocumentInfoDlg.cpp:347 widgets/KoDocumentInfoDlg.cpp:354
+#: widgets/KoDocumentInfoDlg.cpp:389 widgets/KoDocumentInfoDlg.cpp:397
 #, kde-format
 msgid "Save Document"
 msgstr "Enregistrer le document"
 
-#: widgets/KoDocumentInfoDlg.cpp:356
+#: widgets/KoDocumentInfoDlg.cpp:352
 #, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
@@ -4568,7 +4569,7 @@ msgstr ""
 "<qt>Pour terminer le déchiffrement, le document doit être enregistré. "
 "<p>Voulez--vous enregistrer le document maintenant ?</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:371
 #, kde-format
 msgid ""
 "<qt>The document is currently saved as %1. The document needs to be changed "
@@ -4579,17 +4580,17 @@ msgstr ""
 "modifié en <b>OASIS OpenDocument</b> pour être chiffré. <p>Voulez--vous "
 "transformer le fichier en OASIS OpenDocument ? </qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:378
+#: widgets/KoDocumentInfoDlg.cpp:374
 #, kde-format
 msgid "Change Filetype"
 msgstr "Modifier le type de fichier"
 
-#: widgets/KoDocumentInfoDlg.cpp:379
+#: widgets/KoDocumentInfoDlg.cpp:375
 #, kde-format
 msgid "Change"
 msgstr "Modifier"
 
-#: widgets/KoDocumentInfoDlg.cpp:391
+#: widgets/KoDocumentInfoDlg.cpp:387
 #, kde-format
 msgid ""
 "<qt>Your document could not be saved automatically.<p>To complete the "
@@ -4598,7 +4599,7 @@ msgstr ""
 "<qt>Impossible d'enregistrer automatique votre document.<p>Pour terminer le "
 "chiffrement, veuillez enregistrer le document.</qt>"
 
-#: widgets/KoDocumentInfoDlg.cpp:399
+#: widgets/KoDocumentInfoDlg.cpp:395
 #, kde-format
 msgid ""
 "<qt>The document has been changed since it was opened. To complete the "

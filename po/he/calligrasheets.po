@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 00:45+0000\n"
-"PO-Revision-Date: 2026-06-09 09:23+0300\n"
+"PO-Revision-Date: 2026-08-27 09:03+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.1\n"
+"X-Generator: Lokalize 26.04.3\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -15055,9 +15055,9 @@ msgid "Document Settings"
 msgstr "פרמטרים מקומיים"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calculation"
-msgstr "שיטת חישוב"
+msgstr "חישוב"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:69
 #, kde-format
@@ -15230,9 +15230,9 @@ msgstr "הזן תא:"
 
 #: ui/actions/dialogs/InsertDialog.cpp:38
 #: ui/actions/dialogs/PasteInsertDialog.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert"
-msgstr "אינטרנט"
+msgstr "הוספה"
 
 #: ui/actions/dialogs/InsertDialog.cpp:41
 #: ui/actions/dialogs/PasteInsertDialog.cpp:37
@@ -15262,9 +15262,9 @@ msgid "Insert Cells"
 msgstr "הוספת תאים"
 
 #: ui/actions/dialogs/InsertDialog.cpp:47 ui/actions/dialogs/ListDialog.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove"
-msgstr "הסר הכל"
+msgstr "הסרה"
 
 #: ui/actions/dialogs/InsertDialog.cpp:48
 #, kde-format
@@ -15302,9 +15302,9 @@ msgid "Internet"
 msgstr "אינטרנט"
 
 #: ui/actions/dialogs/LinkDialog.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link to Internet Address"
-msgstr "כתובת אינטרנט:"
+msgstr "קישור לכתובת באינטרנט"
 
 #: ui/actions/dialogs/LinkDialog.cpp:71 ui/actions/dialogs/LinkDialog.cpp:86
 #: ui/actions/dialogs/LinkDialog.cpp:104 ui/actions/dialogs/LinkDialog.cpp:142
@@ -15318,34 +15318,34 @@ msgid "Internet address:"
 msgstr "כתובת אינטרנט:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Email"
-msgstr "דוא\"ל:"
+msgstr "דוא״ל"
 
 #: ui/actions/dialogs/LinkDialog.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link to Email Address"
-msgstr "כתובת אינטרנט:"
+msgstr "קישור לכתובת דוא״ל"
 
 #: ui/actions/dialogs/LinkDialog.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Email address:"
-msgstr "כתובת הדואר ריקה"
+msgstr "כתובת דוא״ל:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subject:"
-msgstr "&אובייקט..."
+msgstr "נושא:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "File"
 msgstr "קובץ"
 
 #: ui/actions/dialogs/LinkDialog.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link to File"
-msgstr "גודל תא"
+msgstr "קישור לקובץ"
 
 #: ui/actions/dialogs/LinkDialog.cpp:107
 #, kde-format
@@ -15363,14 +15363,14 @@ msgid "No Entries"
 msgstr "אין רשומות"
 
 #: ui/actions/dialogs/LinkDialog.cpp:139
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link to Cell"
-msgstr "גודל תא"
+msgstr "קישור לתא"
 
 #: ui/actions/dialogs/LinkDialog.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cell or Named Area:"
-msgstr "הסרת תחום"
+msgstr "תא או אזור עם שם:"
 
 #: ui/actions/dialogs/ListDialog.cpp:45
 #, kde-format
@@ -15378,9 +15378,9 @@ msgid "Custom Lists"
 msgstr "רשימות מותאמות אישית"
 
 #: ui/actions/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Changes"
-msgstr "שינוי זווית"
+msgstr "שמירת השינויים"
 
 #: ui/actions/dialogs/ListDialog.cpp:54
 #, kde-format
@@ -15393,9 +15393,9 @@ msgid "Entry:"
 msgstr "ערך:"
 
 #: ui/actions/dialogs/ListDialog.cpp:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add"
-msgstr "ה&וסף"
+msgstr "הוספה"
 
 #: ui/actions/dialogs/ListDialog.cpp:71 ui/ExternalEditor.cpp:60
 #, kde-format
@@ -15403,19 +15403,19 @@ msgid "Cancel"
 msgstr "ביטול"
 
 #: ui/actions/dialogs/ListDialog.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "New"
-msgstr "&חדש"
+msgstr "חדש"
 
 #: ui/actions/dialogs/ListDialog.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Modify"
-msgstr "&שינוי..."
+msgstr "שינוי"
 
 #: ui/actions/dialogs/ListDialog.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy"
-msgstr "הע&תק"
+msgstr "העתקה"
 
 #: ui/actions/dialogs/ListDialog.cpp:240
 #, kde-format
@@ -15437,9 +15437,9 @@ msgstr ""
 "האם ברצונך להמשיך?"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:50 ui/actions/NamedAreas.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Named Areas"
-msgstr "הסרת תחום"
+msgstr "אזורים עם שם"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:71
 #: ui/actions/dialogs/NamedAreaDialog.cpp:175
@@ -15463,9 +15463,9 @@ msgid "Area name:"
 msgstr "שם התחום:"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Remove"
-msgstr "ה&סר קישור"
+msgstr "ה&סרה"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:106
 #, kde-format
@@ -15478,20 +15478,19 @@ msgid "(new area)"
 msgstr ""
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:192
-#, fuzzy, kde-format
+#, kde-format
 msgid "Do you really want to remove this named area?"
-msgstr "האם אתה בטוח שברצונך להסיר שם תחום זה?"
+msgstr "להסיר את האזור עם השם?"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Named Area"
-msgstr "הסרת תחום"
+msgstr "הסרת אזור עם שם"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:219
-#, fuzzy, kde-format
-#| msgid "Cell reference is invalid."
+#, kde-format
 msgid "The provided region is not valid."
-msgstr "ההתייחסות לתא אינה תקפה."
+msgstr "התחום שסופק שגוי."
 
 #: ui/actions/dialogs/PasteInsertDialog.cpp:26
 #, kde-format
@@ -15499,9 +15498,9 @@ msgid "Paste Inserting Cells"
 msgstr "הדבקה והוספת תאים"
 
 #: ui/actions/dialogs/pivot.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Source"
-msgstr "&תו מיוחד..."
+msgstr "בחירת מקור"
 
 #: ui/actions/dialogs/pivotmain.cpp:47
 #, kde-format
@@ -15509,14 +15508,14 @@ msgid "Pivot Table Configuration Window"
 msgstr ""
 
 #: ui/actions/dialogs/pivotmain.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Filter"
-msgstr "קובץ"
+msgstr "הוספת סינון"
 
 #: ui/actions/dialogs/pivotoptions.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pivot Options"
-msgstr "פעולה"
+msgstr "אפשרויות ציר"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:31
 #, kde-format
@@ -15544,9 +15543,9 @@ msgid "Series"
 msgstr "סידרה"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Series"
-msgstr "הוספת סידרה."
+msgstr "הוספת סדרה"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:38
 #, kde-format
@@ -15680,14 +15679,14 @@ msgid "Row %1"
 msgstr "שורה %1"
 
 #: ui/actions/dialogs/SortDialog.cpp:260
-#, fuzzy, kde-format
+#, kde-format
 msgid "&First column contains row headers"
-msgstr "השו&רה הראשונה מכילה את הכותרת"
+msgstr "העמודה הראשונה מכילה כותרות &שורות"
 
 #: ui/actions/dialogs/SortDialog.cpp:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "&First row contains column headers"
-msgstr "השו&רה הראשונה מכילה את הכותרת"
+msgstr "השורה הראשונה מכילה כותרות &עמודות"
 
 #: ui/actions/dialogs/SortDialog.cpp:275
 #, kde-format
@@ -15695,9 +15694,9 @@ msgid "Sort"
 msgstr "מיון"
 
 #: ui/actions/dialogs/SortDialog.cpp:496
-#, fuzzy, kde-format
+#, kde-format
 msgid "Case Insensitive"
-msgstr "הדבקה והוספה"
+msgstr "ללא תלות ברישיות"
 
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:19
 #, kde-format
@@ -15746,9 +15745,9 @@ msgid "&Modify..."
 msgstr "&שינוי..."
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Delete..."
-msgstr "&חתירה למטרה..."
+msgstr "מ&חיקה…"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:168
 #: ui/actions/dialogs/StyleManagerDialog.cpp:171
@@ -15906,15 +15905,14 @@ msgid "Number:"
 msgstr "מספר:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Entries:"
-msgstr "רשומות"
+msgstr "רשומות:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "&Error Alert"
+#, kde-format
 msgid "Error Alert"
-msgstr "&התראה לגבי שגיאה"
+msgstr "התראת שגיאה"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:140
 #, kde-format
@@ -15932,13 +15930,13 @@ msgid "Stop"
 msgstr ""
 
 #: ui/actions/dialogs/ValidityDialog.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Warning"
-msgstr "הדפסה"
+msgstr "אזהרה"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:156
 #: ui/actions/dialogs/ValidityDialog.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Title of message"
 msgid "Title:"
 msgstr "כותרת:"
@@ -15980,19 +15978,19 @@ msgid "This is not a valid date."
 msgstr "תאריך זה אינו תקף."
 
 #: ui/actions/DocumentSettings.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document Settings..."
-msgstr "פרמטרים מקומיים"
+msgstr "הגדרות מסמך…"
 
 #: ui/actions/DocumentSettings.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show document settings dialog"
-msgstr "הצג &סימון הערות"
+msgstr "הצגת חלונית הגדרות מסמך"
 
 #: ui/actions/Editing.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit the highlighted cell"
-msgstr "עריכת התא הנבחר."
+msgstr "עריכת התא המודגש"
 
 #: ui/actions/Editing.cpp:20
 #, kde-format
@@ -16015,31 +16013,26 @@ msgid "Fill &Up"
 msgstr ""
 
 #: ui/actions/Fill.cpp:66
-#, fuzzy, kde-format
-#| msgid "&Down"
+#, kde-format
 msgid "Fill &Down"
-msgstr "&למטה"
+msgstr "מילוי למ&טה"
 
 #: ui/actions/Fill.cpp:68
-#, fuzzy, kde-format
-#| msgid "&Left"
+#, kde-format
 msgid "Fill &Left"
-msgstr "&שמאלה"
+msgstr "מילוי &שמאלה"
 
 #: ui/actions/Fill.cpp:70
-#, fuzzy, kde-format
-#| msgid "&Right"
+#, kde-format
 msgid "Fill &Right"
-msgstr "&ימינה"
+msgstr "מילוי ימי&נה"
 
 #: ui/actions/Fill.cpp:79
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Fill Selection"
-msgstr "בחירת נוסחה"
+msgstr "מילוי הבחירה"
 
 #: ui/actions/FindReplace.cpp:124
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "החלפה"
@@ -16050,17 +16043,16 @@ msgid "Select Font..."
 msgstr "בחירת גופן..."
 
 #: ui/actions/Font.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell font"
-msgstr "הגדרת העיצוב של התא."
+msgstr "הגדרת גופן התא"
 
 #: ui/actions/Font.cpp:59 ui/actions/Font.cpp:106 ui/actions/Style.cpp:93
 #: ui/actions/Style.cpp:129 ui/actions/Style.cpp:165 ui/actions/Style.cpp:194
 #: ui/actions/Style.cpp:495 ui/actions/Style.cpp:519
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Font"
-msgstr "שינוי עיצוב"
+msgstr "החלפת גופן"
 
 #: ui/actions/Font.cpp:77
 #, kde-format
@@ -16068,19 +16060,19 @@ msgid "Select Font Size"
 msgstr "בחר גודל גופן"
 
 #: ui/actions/Font.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell font size"
-msgstr "הגדרת העיצוב של התא."
+msgstr "הגדרת גודל גופן התא"
 
 #: ui/actions/Font.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Font Size"
-msgstr "בחר גודל גופן"
+msgstr "גודל גופן"
 
 #: ui/actions/Font.cpp:125
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the text color"
-msgstr "הגדרת צבע הרקע."
+msgstr "הגדרת צבע הטקסט"
 
 #: ui/actions/Font.cpp:125
 #, kde-format
@@ -16093,9 +16085,9 @@ msgid "&Function..."
 msgstr "&פונקציה..."
 
 #: ui/actions/Formula.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert math expression"
-msgstr "הוספת ביטוי מתמטי."
+msgstr "הוספת ביטוי מתמטי"
 
 #: ui/actions/Formula.cpp:51 ui/actions/Formula.cpp:59
 #, kde-format
@@ -16103,9 +16095,9 @@ msgid "Formula Selection"
 msgstr "בחירת נוסחה"
 
 #: ui/actions/Formula.cpp:51 ui/actions/Formula.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert a function"
-msgstr "הוספת פונקציה."
+msgstr "הוספת פונקציה"
 
 #: ui/actions/Formula.cpp:61 ui/actions/Formula.cpp:76
 #, kde-format
@@ -16271,14 +16263,14 @@ msgid "Insert an Internet hyperlink"
 msgstr "הוספת קישור אינטרנטי."
 
 #: ui/actions/Link.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link"
-msgstr "הוספת קישור"
+msgstr "קישור"
 
 #: ui/actions/Link.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove a link"
-msgstr "הסרת קישור."
+msgstr "הסרת קישור"
 
 #: ui/actions/Link.cpp:74
 #, kde-format
@@ -16286,16 +16278,14 @@ msgid "Remove Link"
 msgstr "הסרת קישור"
 
 #: ui/actions/Link.cpp:92
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Link"
 msgstr "הסרת קישור"
 
 #: ui/actions/Link.cpp:92
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Link"
-msgstr "הוספת קישור"
+msgstr "הגדרת קישור"
 
 #: ui/actions/ListChoose.cpp:28
 #, kde-format
@@ -16303,29 +16293,29 @@ msgid "Selection List..."
 msgstr "רשימת בחירה..."
 
 #: ui/actions/Merge.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge Cells Horizontally"
-msgstr "מיזוג התאים %1"
+msgstr "מיזוג תאים אופקית"
 
 #: ui/actions/Merge.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge Cells Vertically"
-msgstr "מיזוג התאים %1"
+msgstr "מיזוג תאים אנכית"
 
 #: ui/actions/Merge.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge the selected region horizontally"
-msgstr "מיזוג התחום הנבחר לתא אחד גדול."
+msgstr "מיזוג התחום הנבחר אופקית"
 
 #: ui/actions/Merge.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge the selected region vertically"
-msgstr "מיזוג התחום הנבחר לתא אחד גדול."
+msgstr "מיזוג התחום הנבחר אנכית"
 
 #: ui/actions/Merge.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Merge the selected region"
-msgstr "מיזוג התחום הנבחר לתא אחד גדול."
+msgstr "מיזוג התחום הנבחר"
 
 #: ui/actions/Merge.cpp:66
 #, kde-format
@@ -16333,9 +16323,9 @@ msgid "Dissociate Cells"
 msgstr "פצל תאים"
 
 #: ui/actions/Merge.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unmerge the selected region"
-msgstr "מיזוג התחום הנבחר לתא אחד גדול."
+msgstr "פירוק מיזוג התחום הנבחר"
 
 #: ui/actions/NamedAreas.cpp:28
 #, kde-format
@@ -16343,9 +16333,9 @@ msgid "Area Name..."
 msgstr "שם תחום..."
 
 #: ui/actions/NamedAreas.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a name for a region of the spreadsheet"
-msgstr "הגדרת שם עבור תחום מסויים בגיליון האלקטרוני."
+msgstr "הגדרת שם לתחום בגיליון הנתונים"
 
 #: ui/actions/NamedAreas.cpp:53
 #, kde-format
@@ -16355,30 +16345,29 @@ msgid ""
 msgstr ""
 
 #: ui/actions/NamedAreas.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Replace Named Area"
-msgstr "הצגת תחום שניתן לו שם."
+msgstr "החלפת אזור עם שם"
 
 #: ui/actions/NamedAreas.cpp:65
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace Named Area"
-msgstr "הצגת תחום שניתן לו שם."
+msgstr "החלפת אזור עם שם"
 
 #: ui/actions/NamedAreas.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit or select named areas"
-msgstr "הצגת תחום שניתן לו שם."
+msgstr "עריכת או בחירת אזורים עם שם"
 
 #: ui/actions/NamedAreas.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Named Areas..."
-msgstr "הצגת תחום..."
+msgstr "אזורים עם שם…"
 
 #: ui/actions/PageBreak.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Break Before Row"
-msgstr "הסרת טורים"
+msgstr "מעבר לפני שורה"
 
 #: ui/actions/PageBreak.cpp:21
 #, kde-format
@@ -16386,14 +16375,14 @@ msgid "Set a manual page break before the row"
 msgstr ""
 
 #: ui/actions/PageBreak.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row Break"
-msgstr "כותרת"
+msgstr "מעבר שורה"
 
 #: ui/actions/PageBreak.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Break Before Column"
-msgstr "הסרת טורים"
+msgstr "מעבר לפני עמודה"
 
 #: ui/actions/PageBreak.cpp:74
 #, kde-format
@@ -16401,14 +16390,14 @@ msgid "Set a manual page break before the column"
 msgstr ""
 
 #: ui/actions/PageBreak.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column Break"
-msgstr "מספר טור"
+msgstr "מעבר עמודה"
 
 #: ui/actions/Paste.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
-msgstr "הדבקת תוכן לוח העריכה במיקום הסמן."
+msgstr "הדבקת תוכן לוח הגזירים במקום של הסמן"
 
 #: ui/actions/Paste.cpp:94
 #, kde-format
@@ -16416,9 +16405,9 @@ msgid "Special Paste..."
 msgstr "הדבקה מיוחדת..."
 
 #: ui/actions/Paste.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Paste the contents of the clipboard with special options"
-msgstr "הדבקת תוכן לוח העריכה עם אפשרויות מיוחדות."
+msgstr "הדבקת תוכן לוח הגזירים עם אפשרויות מיוחדות"
 
 #: ui/actions/Paste.cpp:153
 #, kde-format
@@ -16426,19 +16415,19 @@ msgid "Paste with Insertion"
 msgstr "הדבק והוסף"
 
 #: ui/actions/Paste.cpp:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "הוספת תא לגיליון האלקטרוני מתוך לוח העריכה."
+msgstr "הוספת תא מלוח הגזירים לגיליון הנתונים"
 
 #: ui/actions/Pivot.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Pivot Tables..."
-msgstr "&סכומי ביניים..."
+msgstr "&טבלאות ציר…"
 
 #: ui/actions/Pivot.cpp:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Pivot Tables"
-msgstr "&סכומי ביניים..."
+msgstr "יצירת טבלאות ציר"
 
 #: ui/actions/Pivot.cpp:29
 #, kde-format
@@ -16446,9 +16435,9 @@ msgid "You must select multiple cells."
 msgstr "יש לבחור מספר תאים."
 
 #: ui/actions/SelectAll.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selects all cells in the current sheet"
-msgstr "חישוב מחדש של הערכים של כל התאים בגיליון העבודה הנוכחי."
+msgstr "בחירת כל התאים בגיליון הנוכחי"
 
 #: ui/actions/ShowTableView.cpp:23
 #, fuzzy, kde-format
@@ -16461,9 +16450,9 @@ msgid "&Sort..."
 msgstr "&מיון..."
 
 #: ui/actions/Sort.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sort a group of cells"
-msgstr "מיון קבוצת תאים."
+msgstr "מיון קבוצה של תאים"
 
 #: ui/actions/Sort.cpp:111
 #, kde-format
@@ -16471,9 +16460,9 @@ msgid "Sort &Increasing"
 msgstr "מיין בסדר &עולה"
 
 #: ui/actions/Sort.cpp:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sort a group of cells in ascending(first to last) order"
-msgstr "מיון קבוצת תאים בסדר עולה (מראשון לאחרון)."
+msgstr "מיון קבוצה של תאים בסדר עולה (מהראשונה לאחרון)"
 
 #: ui/actions/Sort.cpp:143
 #, kde-format
@@ -16481,15 +16470,14 @@ msgid "Sort &Decreasing"
 msgstr "מיין בסדר &יורד"
 
 #: ui/actions/Sort.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sort a group of cells in decreasing(last to first) order"
-msgstr "מיון קבוצת תאים בסדר יורד (מהאחרון לראשון)."
+msgstr "מיון קבוצה של תאים בסדר יורד (מהאחרון לראשון)"
 
 #: ui/actions/Sort.cpp:183
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Sort Data"
-msgstr "קריטריונים למיון"
+msgstr "מיון נתונים"
 
 #: ui/actions/SpellCheck.cpp:84
 #, kde-format
@@ -16497,16 +16485,15 @@ msgid "Do you want to check the spelling in the next sheet?"
 msgstr "האם ברצונך לבדוק את האיות גם בגיליון הבא?"
 
 #: ui/actions/SpellCheck.cpp:88
-#, fuzzy, kde-format
-#| msgid "Move to the next sheet"
+#, kde-format
 msgctxt "@action:button"
 msgid "Check next sheet"
-msgstr "מעבר לגיליון הבא"
+msgstr "בדיקת הגיליון הבא"
 
 #: ui/actions/SpellCheck.cpp:237
-#, fuzzy, kde-format
+#, kde-format
 msgid "Check the spelling"
-msgstr "בדיקת האיות."
+msgstr "בדיקת האיות"
 
 #: ui/actions/Style.cpp:29
 #, kde-format
@@ -16514,9 +16501,9 @@ msgid "Cell Format..."
 msgstr "עיצוב תא..."
 
 #: ui/actions/Style.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting"
-msgstr "הגדרת העיצוב של התא."
+msgstr "הגדרת תבנית התאים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #: ui/actions/Style.cpp:76 ui/dialogs/FontWidget.ui:83
@@ -16542,9 +16529,9 @@ msgid "Strike Out"
 msgstr "קו חוצה"
 
 #: ui/actions/Style.cpp:213
-#, fuzzy, kde-format
+#, kde-format
 msgid "Make the cell text wrap onto multiple lines"
-msgstr "גרום לטקסט של התא לגלוש על פני מספר שורות."
+msgstr "לגרום לטקסט של התא לגלוש על פני מספר שורות"
 
 #: ui/actions/Style.cpp:213
 #, kde-format
@@ -16552,20 +16539,19 @@ msgid "Wrap Text"
 msgstr "גלישת טקסט"
 
 #: ui/actions/Style.cpp:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "Wrap"
-msgstr "גלישת טקסט"
+msgstr "גלישה"
 
 #: ui/actions/Style.cpp:230
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Wrap Text"
 msgstr "גלישת טקסט"
 
 #: ui/actions/Style.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgid "Print cell contents vertically"
-msgstr "הצגת תוכן התא באופן אנכי."
+msgstr "הצגת תוכן התא אנכית"
 
 #: ui/actions/Style.cpp:247
 #, kde-format
@@ -16573,37 +16559,34 @@ msgid "Vertical Text"
 msgstr "טקסט אנכי"
 
 #: ui/actions/Style.cpp:257
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Vertical Text"
 msgstr "טקסט אנכי"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number Format"
-msgstr "מספר הניסיונות"
+msgstr "תבנית מספר"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to a number"
-msgstr "הגדרת העיצוב של התא."
+msgstr "הגדרת תבנית התא למספר"
 
 #: ui/actions/Style.cpp:291
-#, fuzzy
-#| msgid "First number"
 msgctxt "(qtundo-format)"
 msgid "Format Number"
-msgstr "מספר ראשון"
+msgstr "עיצוב מספר"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scientific Format"
-msgstr "מדעית"
+msgstr "תבנית מדעית"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to a scientific format"
-msgstr "קביעת תבנית התא לתבנית אחוזים."
+msgstr "הגדרת תבנית התא לתבנית מדעית"
 
 #: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
@@ -16611,11 +16594,9 @@ msgid "Scientific"
 msgstr "מדעית"
 
 #: ui/actions/Style.cpp:324
-#, fuzzy
-#| msgid "Scientific"
 msgctxt "(qtundo-format)"
 msgid "Format Scientific"
-msgstr "מדעית"
+msgstr "עיצוב מדעי"
 
 #: ui/actions/Style.cpp:342
 #, kde-format
@@ -16623,9 +16604,9 @@ msgid "Percent Format"
 msgstr "תבנית אחוזים"
 
 #: ui/actions/Style.cpp:344
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to look like a percentage"
-msgstr "קביעת תבנית התא לתבנית אחוזים."
+msgstr "הגדרת תבנית התא כך שתיראה כמו שעה"
 
 #: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:69
 #, kde-format
@@ -16633,10 +16614,9 @@ msgid "Percent"
 msgstr "אחוזים"
 
 #: ui/actions/Style.cpp:361
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format Percent"
-msgstr "החלת תבנית אחוזים"
+msgstr "עיצוב אחוזים"
 
 #: ui/actions/Style.cpp:379
 #, kde-format
@@ -16644,9 +16624,9 @@ msgid "Money Format"
 msgstr "תבנית כסף"
 
 #: ui/actions/Style.cpp:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to look like your local currency"
-msgstr "קביעת תבנית התא לתבנית של המטבע המקומי שלך."
+msgstr "הגדרת תבנית התא כך שתיראה כמו המטבע המקומי שלך"
 
 #: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:76
 #, kde-format
@@ -16654,44 +16634,39 @@ msgid "Money"
 msgstr "כסף"
 
 #: ui/actions/Style.cpp:398
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format Money"
-msgstr "החלת תבנית כסף"
+msgstr "עיצוב כסף"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
+#, kde-format
 msgid "Date Format"
 msgstr "תבנית תאריך"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to a date"
-msgstr "הגדרת העיצוב של התא."
+msgstr "הגדרת תבנית התא לתאריך"
 
 #: ui/actions/Style.cpp:431
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format Date"
-msgstr "תבנית"
+msgstr "עיצוב תאריך"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the cell formatting to a time"
-msgstr "הגדרת העיצוב של התא."
+msgstr "הגדרת תבנית התא לשעה"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgid "Time Format"
 msgstr "תבנית שעה"
 
 #: ui/actions/Style.cpp:464
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format Time"
-msgstr "תבנית"
+msgstr "עיצוב שעה"
 
 #: ui/actions/Style.cpp:480
 #, kde-format
@@ -16709,9 +16684,9 @@ msgid "Increase Precision"
 msgstr "הגדל דיוק"
 
 #: ui/actions/Style.cpp:532
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase the decimal precision shown onscreen"
-msgstr "הגדלת הדיוק העשרוני המוצג על גבי המסך."
+msgstr "הגדלת הדיוק העשרוני המוצג על המסך"
 
 #: ui/actions/Style.cpp:549
 #, kde-format
@@ -16719,33 +16694,29 @@ msgid "Decrease Precision"
 msgstr "הקטן דיוק"
 
 #: ui/actions/Style.cpp:551
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease the decimal precision shown onscreen"
-msgstr "הקטנת הדיוק העשרוני המוצג על גבי המסך."
+msgstr "הקטנת הדיוק העשרוני המוצג על המסך"
 
 #: ui/actions/Style.cpp:597
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Increase Precision"
-msgstr "הגדל דיוק"
+msgstr "הגדלת דיוק"
 
 #: ui/actions/Style.cpp:599
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease Precision"
-msgstr "הקטן דיוק"
+msgstr "הקטנת דיוק"
 
 #: ui/actions/Style.cpp:603
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resets to the default format"
-msgstr "חזרה לעיצוב ברירת המחדל."
+msgstr "איפוס לתסדיר ברירת המחדל"
 
 #: ui/actions/Style.cpp:613
-#, fuzzy
-#| msgid "Sheet Style"
 msgctxt "(qtundo-format)"
 msgid "Set Default Style"
-msgstr "סגנון גיליון"
+msgstr "הגדרת סגנון ברירת מחדל"
 
 #: ui/actions/Style.cpp:622
 #, kde-format
@@ -16753,9 +16724,9 @@ msgid "Background Color"
 msgstr "צבע רקע"
 
 #: ui/actions/Style.cpp:622
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the background color"
-msgstr "הגדרת צבע הרקע."
+msgstr "הגדרת צבע הרקע"
 
 #: ui/actions/Styles.cpp:31
 #, kde-format
@@ -16763,14 +16734,14 @@ msgid "Create Style From Cell..."
 msgstr "יצירת סגנון מתוך התא..."
 
 #: ui/actions/Styles.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create a new style based on the currently selected cell"
-msgstr "יצירת סגנון חדש המתבסס על סגנון התא הנבחר."
+msgstr "יצירת סגנון חדש לפי התא הנבחר"
 
 #: ui/actions/Styles.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Style From Cell"
-msgstr "סגנון תא"
+msgstr "סגנון מתא"
 
 #: ui/actions/Styles.cpp:53
 #, kde-format
@@ -16788,19 +16759,19 @@ msgid "A style with this name already exists."
 msgstr "כבר קיים סגנון בשם זה."
 
 #: ui/actions/Styles.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit and organize cell styles"
-msgstr "עריכת סגנונות תאים וניהולם."
+msgstr "עריכה וארגון סגנונות תאים"
 
 #: ui/actions/Styles.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Style Manager..."
-msgstr "מנהל הסגנונות"
+msgstr "מנהל סגנונות…"
 
 #: ui/actions/Styles.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Apply a predefined style to the selected cells"
-msgstr "החלת סגנון מוגדר מראש על התאים הנבחרים."
+msgstr "החלת סגנון מוגדר מראש על התאים הנבחרים"
 
 #: ui/actions/Subtotals.cpp:21
 #, kde-format
@@ -16808,49 +16779,44 @@ msgid "&Subtotals..."
 msgstr "&סכומי ביניים..."
 
 #: ui/actions/Subtotals.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create different kind of subtotals to a list or database"
-msgstr "יצירת סוגים שונים של סכומי ביניים עבור רשימה או מסד נתונים."
+msgstr "יצירת סוגים שונים של סכומי ביניים עבור רשימה או מסד נתונים"
 
 #: ui/actions/Subtotals.cpp:118
-#, fuzzy
-#| msgid "Subtotals"
 msgctxt "(qtundo-format)"
 msgid "Subtotals"
 msgstr "סכומי ביניים"
 
 #: ui/actions/TextCase.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Upper"
-msgstr "אותיות רישיות"
+msgstr "גדולה"
 
 #: ui/actions/TextCase.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lower"
-msgstr "חזקה"
+msgstr "קטנה"
 
 #: ui/actions/TextCase.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "First Letter Upper"
-msgstr "המר או&ת ראשונה לאות רישית"
+msgstr "אות ראשונה גדולה"
 
 #: ui/actions/TextCase.cpp:50
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Switch to uppercase"
-msgstr "המר או&ת ראשונה לאות רישית"
+msgstr "החלפה לאותיות גדולות"
 
 #: ui/actions/TextCase.cpp:53
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Switch to lowercase"
-msgstr "המר או&ת ראשונה לאות רישית"
+msgstr "החלפה לאותיות רגילות"
 
 #: ui/actions/TextCase.cpp:56
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "First letter uppercase"
-msgstr "המר או&ת ראשונה לאות רישית"
+msgstr "אות ראשונה גדולה"
 
 #: ui/actions/TextCase.cpp:95
 #, kde-format
@@ -16868,30 +16834,29 @@ msgid "Convert First Letter to Upper Case"
 msgstr "המר אות ראשונה לאות רישית"
 
 #: ui/actions/TextCase.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert all letters to upper case"
-msgstr "המרת כל האותיות לאותיות רישיות."
+msgstr "המרת כל האותיות לגדולות"
 
 #: ui/actions/TextCase.cpp:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert all letters to lower case"
-msgstr "המרת כל האותיות לאותיות רגילות."
+msgstr "המרה כל האותיות לרגילות"
 
 #: ui/actions/TextCase.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "Capitalize the first letter"
-msgstr "שינוי האות הראשונה לאות רישית."
+msgstr "הגדלת האות הראשונה"
 
 #: ui/actions/TextCase.cpp:120
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Case"
-msgstr "שינוי זווית"
+msgstr "שינוי מצב רישיות"
 
 #: ui/actions/Validity.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set tests to confirm cell data is valid"
-msgstr "הגדרת מבחנים לצורך קביעה אם נתוני התא תקפים."
+msgstr "הגדרת בדיקות כדי לאשר שנתוני התא תקפים"
 
 #: ui/actions/Validity.cpp:21
 #, kde-format
@@ -16899,26 +16864,24 @@ msgid "Validity..."
 msgstr "תוקף..."
 
 #: ui/actions/Validity.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove the validity tests on this cell"
-msgstr "הסרת מבחני התוקף של תא זה."
+msgstr "הסרת בדיקות התוקף של התא הזה"
 
 #: ui/actions/Validity.cpp:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Validity"
-msgstr "הסרת קישור."
+msgstr "הסרת תוקף"
 
 #: ui/actions/Validity.cpp:103
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Validity Check"
-msgstr "הסרת קישור."
+msgstr "הסרת בדיקת תוקף"
 
 #: ui/actions/Validity.cpp:105
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Validity Check"
-msgstr "תנאי תוקף"
+msgstr "הוספת בדיקת תוקף"
 
 #: ui/CellToolBase.cpp:813
 #, kde-format
