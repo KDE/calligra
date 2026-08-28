@@ -15,6 +15,8 @@
 #include <QDomDocument>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <algorithm>
+#include <utility>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -40,6 +42,25 @@ KoDocumentInfo::KoDocumentInfo(QObject *parent)
                 << "date"
                 << "creation-date"
                 << "language";
+
+    // meta:document-statistic's attributes -- grouped into a single element on save/load,
+    // but otherwise plain about-info fields (see saveOasisAboutInfo()/loadOasis()).
+    m_documentStatisticTags << "page-count"
+                            << "table-count"
+                            << "draw-count"
+                            << "image-count"
+                            << "ole-object-count"
+                            << "object-count"
+                            << "paragraph-count"
+                            << "word-count"
+                            << "character-count"
+                            << "frame-count"
+                            << "sentence-count"
+                            << "syllable-count"
+                            << "non-whitespace-character-count"
+                            << "row-count"
+                            << "cell-count";
+    m_aboutTags << m_documentStatisticTags;
 
     m_authorTags << "creator"
                  << "initial"
@@ -129,6 +150,15 @@ bool KoDocumentInfo::loadOasis(QXmlStreamReader &reader)
             const QString text = reader.readElementText().trimmed();
             if (!text.isEmpty())
                 setAboutInfo(localName.toString(), text);
+        } else if (ns == KoXmlNS::meta && localName == "document-statistic"_L1) {
+            // an empty element: the counts are attributes, not text content
+            const QXmlStreamAttributes attrs = reader.attributes();
+            for (const QString &tag : std::as_const(m_documentStatisticTags)) {
+                const auto value = attrs.value(KoXmlNS::meta, tag);
+                if (!value.isEmpty())
+                    setAboutInfo(tag, value.toString());
+            }
+            reader.skipCurrentElement();
         } else if (ns == KoXmlNS::meta && m_aboutTags.contains(localName.toString())) {
             const QString text = reader.readElementText().trimmed();
             if (!text.isEmpty())
@@ -301,6 +331,9 @@ QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument &doc)
 bool KoDocumentInfo::saveOasisAboutInfo(QXmlStreamWriter &writer)
 {
     foreach (const QString &tag, m_aboutTags) {
+        if (m_documentStatisticTags.contains(tag)) {
+            continue; // written as meta:document-statistic's attributes below
+        }
         if (!aboutInfo(tag).isEmpty() || tag == "title"_L1) {
             if (tag == "keyword"_L1) {
                 foreach (const QString &tmp, aboutInfo("keyword").split(m_keywordSeparator)) {
@@ -318,6 +351,19 @@ bool KoDocumentInfo::saveOasisAboutInfo(QXmlStreamWriter &writer)
                 writer.writeEndElement();
             }
         }
+    }
+
+    const bool hasAnyStatistic = std::any_of(m_documentStatisticTags.cbegin(), m_documentStatisticTags.cend(), [this](const QString &tag) {
+        return !aboutInfo(tag).isEmpty();
+    });
+    if (hasAnyStatistic) {
+        writer.writeStartElement("meta:document-statistic"_L1);
+        for (const QString &tag : std::as_const(m_documentStatisticTags)) {
+            const QString value = aboutInfo(tag);
+            if (!value.isEmpty())
+                writer.writeAttribute("meta:"_L1 + tag, value);
+        }
+        writer.writeEndElement();
     }
 
     return true;

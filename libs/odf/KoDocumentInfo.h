@@ -184,6 +184,8 @@ private:
 
     /** A QStringList containing all tags for the document information */
     QStringList m_aboutTags;
+    /** The subset of m_aboutTags that are serialized as meta:document-statistic's attributes */
+    QStringList m_documentStatisticTags;
     /** A QStringList containing all tags for the author information */
     QStringList m_authorTags;
     /** The map containing information about the author */

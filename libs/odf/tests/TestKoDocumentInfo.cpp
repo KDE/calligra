@@ -22,7 +22,9 @@ private Q_SLOTS:
     void testLoadOasisFoldsCommentsIntoDescription();
     void testLoadOasisRejectsMissingMeta_data();
     void testLoadOasisRejectsMissingMeta();
+    void testLoadOasisDocumentStatistic();
     void testSaveOasisRoundTrip();
+    void testSaveOasisDocumentStatisticRoundTrip();
 };
 
 void TestKoDocumentInfo::testLoadOasis()
@@ -122,6 +124,31 @@ void TestKoDocumentInfo::testLoadOasisRejectsMissingMeta()
     QVERIFY(!info.loadOasis(reader));
 }
 
+void TestKoDocumentInfo::testLoadOasisDocumentStatistic()
+{
+    // clang-format off
+    const QString xml =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-meta"
+        " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
+        " xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\">"
+        "<office:meta>"
+        "<meta:document-statistic meta:word-count=\"42\" meta:page-count=\"3\" meta:table-count=\"0\"/>"
+        "</office:meta>"
+        "</office:document-meta>";
+    // clang-format on
+
+    QXmlStreamReader reader(xml);
+    KoDocumentInfo info;
+    QVERIFY(info.loadOasis(reader));
+
+    QCOMPARE(info.aboutInfo("word-count"), QString("42"));
+    QCOMPARE(info.aboutInfo("page-count"), QString("3"));
+    QCOMPARE(info.aboutInfo("table-count"), QString("0"));
+    // Attributes absent from the element must not be synthesized.
+    QCOMPARE(info.aboutInfo("character-count"), QString());
+}
+
 void TestKoDocumentInfo::testSaveOasisRoundTrip()
 {
     QTemporaryDir tempDir;
@@ -163,6 +190,39 @@ void TestKoDocumentInfo::testSaveOasisRoundTrip()
     QCOMPARE(reloaded.authorInfo("creator"), QString("Round Trip Author"));
     QCOMPARE(reloaded.authorInfo("company"), QString("Round Trip Co"));
     QCOMPARE(reloaded.originalGenerator(), QString("Calligra/%1").arg(CALLIGRA_VERSION_STRING));
+}
+
+void TestKoDocumentInfo::testSaveOasisDocumentStatisticRoundTrip()
+{
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    const QString path = tempDir.path() + QStringLiteral("/meta-statistic-roundtrip.zip");
+
+    KoDocumentInfo original;
+    original.setAboutInfo("word-count", "1234");
+    original.setAboutInfo("page-count", "7");
+
+    KoStore *writeStore = KoStore::createStore(path, KoStore::Write, "", KoStore::Zip);
+    QVERIFY(writeStore);
+    QVERIFY(writeStore->open("meta.xml"));
+    QVERIFY(original.saveOasis(writeStore));
+    QVERIFY(writeStore->close());
+    delete writeStore;
+
+    KoStore *readStore = KoStore::createStore(path, KoStore::Read, "", KoStore::Zip);
+    QVERIFY(readStore);
+    QVERIFY(readStore->open("meta.xml"));
+
+    QXmlStreamReader reader(readStore->device());
+    KoDocumentInfo reloaded;
+    QVERIFY(reloaded.loadOasis(reader));
+    readStore->close();
+    delete readStore;
+
+    QCOMPARE(reloaded.aboutInfo("word-count"), QString("1234"));
+    QCOMPARE(reloaded.aboutInfo("page-count"), QString("7"));
+    // Statistics that were never set must not appear as e.g. an empty string.
+    QCOMPARE(reloaded.aboutInfo("table-count"), QString());
 }
 
 QTEST_MAIN(TestKoDocumentInfo)
