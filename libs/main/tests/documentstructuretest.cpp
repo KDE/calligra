@@ -7,6 +7,7 @@
 #include "documentstructuretest.h"
 
 #include <QTest>
+#include <QXmlStreamReader>
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
@@ -42,15 +43,17 @@ static KoDocumentInfo *loadDocumentInfo(const QString &odt)
 {
     KoStore *store = KoStore::createStore(odt, KoStore::Read, "", KoStore::Zip);
     KoOdfReadStore odfReadStore(store);
-    KoXmlDocument metaDoc;
+    QXmlStreamReader reader;
     KoDocumentInfo *documentInfo = new KoDocumentInfo;
     QString error;
-    if (!odfReadStore.loadAndParse("meta.xml", metaDoc, error)) {
+    if (!odfReadStore.load("meta.xml", reader, error)) {
         delete store;
         delete documentInfo;
         return nullptr;
     }
-    if (!documentInfo->loadOasis(metaDoc)) {
+    bool ok = documentInfo->loadOasis(reader);
+    store->close();
+    if (!ok) {
         delete store;
         delete documentInfo;
         return nullptr;

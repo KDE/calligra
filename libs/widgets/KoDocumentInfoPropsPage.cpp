@@ -14,6 +14,7 @@
 #include "KoOdfReadStore.h"
 #include "KoStore.h"
 #include <QUrl>
+#include <QXmlStreamReader>
 #include <WidgetsDebug.h>
 
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate
@@ -44,11 +45,12 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props, const
 
     // OASIS/OOo file format?
     if (d->m_src->hasFile("meta.xml")) {
-        KoXmlDocument metaDoc;
+        QXmlStreamReader reader;
         KoOdfReadStore oasisStore(d->m_src);
         QString lastErrorMessage;
-        if (oasisStore.loadAndParse("meta.xml", metaDoc, lastErrorMessage)) {
-            d->m_info->loadOasis(metaDoc);
+        if (oasisStore.load("meta.xml", reader, lastErrorMessage)) {
+            d->m_info->loadOasis(reader);
+            d->m_src->close();
         }
     }
     // Old calligra file format?

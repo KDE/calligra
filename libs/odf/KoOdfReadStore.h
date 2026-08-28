@@ -12,6 +12,7 @@
 
 class QString;
 class QIODevice;
+class QXmlStreamReader;
 class KoStore;
 class KoOdfStylesReader;
 
@@ -85,10 +86,27 @@ public:
     bool loadAndParse(const QString &fileName, KoXmlDocument &doc, QString &errorMessage);
 
     /**
+     * Open a file from an odf store and set up @p reader to stream it.
+     *
+     * Unlike the KoXmlDocument overload, this does not parse the file itself: it only opens the
+     * store entry and points @p reader at it, so the caller drives the actual parsing by
+     * pulling tokens from @p reader afterwards. Because of that, the store entry is left open;
+     * call store()->close() once done reading.
+     */
+    bool load(const QString &fileName, QXmlStreamReader &reader, QString &errorMessage);
+
+    /**
      * Load a file and parse from a QIODevice
      * filename argument is just used for debug message
      */
     static bool loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QString &errorMessage, const QString &fileName);
+
+    /**
+     * Open a QIODevice and set up @p reader to stream it. See the QXmlStreamReader overload
+     * above for the caller's responsibility to close the source once done reading.
+     * filename argument is just used for debug message
+     */
+    static bool load(QIODevice *fileDevice, QXmlStreamReader &reader, QString &errorMessage, const QString &fileName);
 
 private:
     class Private;

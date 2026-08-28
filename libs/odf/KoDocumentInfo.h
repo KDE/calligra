@@ -16,6 +16,7 @@
 
 #include "koodf_export.h"
 #include <KoXmlReader.h>
+#include <QXmlStreamReader>
 
 class QDomDocument;
 class QDomElement;
@@ -50,10 +51,10 @@ public:
 
     /**
      * Load the KoDocumentInfo from an OASIS document
-     * @param metaDoc the QDomDocument with the metaInformation
+     * @param reader the QXmlStreamReader with the metaInformation
      * @return true if success
      */
-    bool loadOasis(const KoXmlDocument &metaDoc);
+    bool loadOasis(QXmlStreamReader &reader);
 
     /**
      * Save the KoDocumentInfo to an OASIS document
@@ -140,13 +141,6 @@ private:
     void setActiveAuthorInfo(const QString &info, const QString &data);
 
     /**
-     * Load the information about the document from an OASIS file
-     * @param metaDoc a reference to the information node
-     * @return true if success
-     */
-    bool loadOasisAboutInfo(const KoXmlNode &metaDoc);
-
-    /**
      * Save the information about the document to an OASIS file
      * @param xmlWriter a reference to the KoXmlWriter to write in
      * @return true if success
@@ -166,13 +160,6 @@ private:
      * @return the QDomElement to which was saved
      */
     QDomElement saveAboutInfo(QDomDocument &doc);
-
-    /**
-     * Load the information about the document from an OASIS file
-     * @param metaDoc a reference to the information node
-     * @return true if success
-     */
-    bool loadOasisAuthorInfo(const KoXmlNode &metaDoc);
 
     /**
      * Load the information about the document from a Calligra-1.3 file

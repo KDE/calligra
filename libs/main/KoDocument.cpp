@@ -59,6 +59,7 @@
 #include <QPainter>
 #include <QTemporaryFile>
 #include <QTimer>
+#include <QXmlStreamReader>
 #include <QtGlobal>
 #ifdef WITH_QTDBUS
 #include <KJobWidgets>
@@ -81,6 +82,7 @@
 #include <memory>
 
 using namespace std;
+using namespace Qt::StringLiterals;
 
 /**********************************************************
  *
@@ -1839,10 +1841,11 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
     }
 
     if (oasis && store->hasFile("meta.xml")) {
-        KoXmlDocument metaDoc;
+        QXmlStreamReader reader;
         KoOdfReadStore oasisStore(store);
-        if (oasisStore.loadAndParse("meta.xml", metaDoc, d->lastErrorMessage)) {
-            d->docInfo->loadOasis(metaDoc);
+        if (oasisStore.load("meta.xml", reader, d->lastErrorMessage)) {
+            d->docInfo->loadOasis(reader);
+            store->close();
         }
     } else if (!oasis && store->hasFile("documentinfo.xml")) {
         KoXmlDocument doc = KoXmlDocument(true);
@@ -1861,23 +1864,22 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
         notify->setUrls({store->urlOfStore()});
         QTimer::singleShot(0, notify, &KNotification::sendEvent);
 
-        KoXmlDocument versionInfo;
+        QXmlStreamReader xml;
         KoOdfReadStore oasisStore(store);
-        if (oasisStore.loadAndParse("VersionList.xml", versionInfo, d->lastErrorMessage)) {
-            KoXmlNode list = KoXml::namedItemNS(versionInfo, KoXmlNS::VL, "version-list");
-            KoXmlElement e;
-            forEachElement(e, list)
-            {
-                if (e.localName() == "version-entry" && e.namespaceURI() == KoXmlNS::VL) {
+        if (oasisStore.load("VersionList.xml", xml, d->lastErrorMessage)) {
+            while (!xml.atEnd()) {
+                xml.readNext();
+                if (xml.isStartElement() && xml.name() == "version-entry"_L1 && xml.namespaceUri() == KoXmlNS::VL) {
                     KoVersionInfo version;
-                    version.comment = e.attribute("comment");
-                    version.title = e.attribute("title");
-                    version.saved_by = e.attribute("creator");
-                    version.date = QDateTime::fromString(e.attribute("date-time"), Qt::ISODate);
+                    version.comment = xml.attributes().value("comment"_L1).toString();
+                    version.title = xml.attributes().value("title"_L1).toString();
+                    version.saved_by = xml.attributes().value("creator"_L1).toString();
+                    version.date = QDateTime::fromString(xml.attributes().value("date-time"_L1).toString(), Qt::ISODate);
                     store->extractFile("Versions/" + version.title, version.data);
                     d->versionInfo.append(version);
                 }
             }
+            store->close();
         }
     }
 

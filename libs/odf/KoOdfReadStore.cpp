@@ -129,3 +129,37 @@ bool KoOdfReadStore::loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QSt
     }
     return ok;
 }
+
+bool KoOdfReadStore::load(const QString &fileName, QXmlStreamReader &reader, QString &errorMessage)
+{
+    if (!d->store) {
+        errorMessage = i18n("No store backend");
+        return false;
+    }
+
+    if (!d->store->isOpen()) {
+        if (!d->store->open(fileName)) {
+            debugOdf << "Entry " << fileName << " not found!"; // not a warning as embedded stores don't have to have all files
+            errorMessage = i18n("Could not find %1", fileName);
+            return false;
+        }
+    }
+
+    // Unlike the KoXmlDocument overload, the store entry is left open here: the reader
+    // streams from it lazily, so the caller must call store()->close() once done reading.
+    return load(d->store->device(), reader, errorMessage, fileName);
+}
+
+bool KoOdfReadStore::load(QIODevice *fileDevice, QXmlStreamReader &reader, QString &errorMessage, const QString &fileName)
+{
+    if (!fileDevice->isOpen() && !fileDevice->open(QIODevice::ReadOnly)) {
+        errorMessage = i18n("Could not open %1", fileName);
+        return false;
+    }
+
+    reader.setDevice(fileDevice);
+    reader.setNamespaceProcessing(true);
+
+    debugOdf << "File" << fileName << " ready to be parsed";
+    return true;
+}

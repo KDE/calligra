@@ -14,6 +14,8 @@
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include <QDateTime>
+#include <QDomDocument>
+#include <QXmlStreamReader>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -23,6 +25,8 @@
 #include <OdfDebug.h>
 
 #include "calligra-version.h"
+
+using namespace Qt::StringLiterals;
 
 KoDocumentInfo::KoDocumentInfo(QObject *parent)
     : QObject(parent)
@@ -72,23 +76,73 @@ bool KoDocumentInfo::load(const KoXmlDocument &doc)
     return true;
 }
 
-bool KoDocumentInfo::loadOasis(const KoXmlDocument &metaDoc)
+bool KoDocumentInfo::loadOasis(QXmlStreamReader &reader)
 {
     m_authorInfo.clear();
 
-    KoXmlNode t = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
-    KoXmlNode office = KoXml::namedItemNS(t, KoXmlNS::office, "meta");
-
-    if (office.isNull())
+    if (!reader.readNextStartElement() || reader.namespaceUri() != KoXmlNS::office || reader.name() != "document-meta"_L1)
         return false;
 
-    if (!loadOasisAboutInfo(office))
+    bool foundMeta = false;
+    while (reader.readNextStartElement()) {
+        if (reader.namespaceUri() == KoXmlNS::office && reader.name() == "meta"_L1) {
+            foundMeta = true;
+            break;
+        }
+        reader.skipCurrentElement();
+    }
+    if (!foundMeta)
         return false;
 
-    if (!loadOasisAuthorInfo(office))
-        return false;
+    QStringList keywords;
 
-    return true;
+    // Walk the direct children of office:meta once, dispatching by (namespace, local name).
+    while (reader.readNextStartElement()) {
+        const auto ns = reader.namespaceUri();
+        const auto localName = reader.name();
+
+        if (localName == "keyword"_L1) {
+            const QString text = reader.readElementText().trimmed();
+            if (!text.isEmpty())
+                keywords << text;
+        } else if (localName == "generator"_L1) {
+            setOriginalGenerator(reader.readElementText().trimmed());
+        } else if (ns == KoXmlNS::dc && localName == "creator"_L1) {
+            const QString text = reader.readElementText();
+            if (!text.isEmpty())
+                setActiveAuthorInfo("creator", text);
+        } else if (ns == KoXmlNS::meta && localName == "user-defined"_L1) {
+            const QString name = reader.attributes().value(KoXmlNS::meta, "name"_L1).toString();
+            const QString text = reader.readElementText();
+            if (!text.isEmpty())
+                setActiveAuthorInfo(name, text);
+        } else if (ns == KoXmlNS::dc && localName == "description"_L1) {
+            // this is the odf way but add meta:comments if it's already loaded
+            const QString text = reader.readElementText().trimmed();
+            if (!text.isEmpty())
+                setAboutInfo("description", aboutInfo("description") + text);
+        } else if (ns == KoXmlNS::meta && localName == "comments"_L1) {
+            // this was the old way so fold it into dc:description too
+            const QString text = reader.readElementText().trimmed();
+            if (!text.isEmpty())
+                setAboutInfo("description", aboutInfo("description") + text);
+        } else if (ns == KoXmlNS::dc && (localName == "title"_L1 || localName == "subject"_L1 || localName == "date"_L1 || localName == "language"_L1)) {
+            const QString text = reader.readElementText().trimmed();
+            if (!text.isEmpty())
+                setAboutInfo(localName.toString(), text);
+        } else if (ns == KoXmlNS::meta && m_aboutTags.contains(localName.toString())) {
+            const QString text = reader.readElementText().trimmed();
+            if (!text.isEmpty())
+                setAboutInfo(localName.toString(), text);
+        } else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    if (!keywords.isEmpty())
+        setAboutInfo("keyword", keywords.join(m_keywordSeparator));
+
+    return !reader.hasError();
 }
 
 QDomDocument KoDocumentInfo::save(QDomDocument &doc)
@@ -200,28 +254,6 @@ bool KoDocumentInfo::saveOasisAuthorInfo(KoXmlWriter &xmlWriter)
     return true;
 }
 
-bool KoDocumentInfo::loadOasisAuthorInfo(const KoXmlNode &metaDoc)
-{
-    KoXmlElement e = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, "creator");
-    if (!e.isNull() && !e.text().isEmpty())
-        setActiveAuthorInfo("creator", e.text());
-
-    KoXmlNode n = metaDoc.firstChild();
-    for (; !n.isNull(); n = n.nextSibling()) {
-        if (!n.isElement())
-            continue;
-
-        KoXmlElement e = n.toElement();
-        if (!(e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" && !e.text().isEmpty()))
-            continue;
-
-        QString name = e.attributeNS(KoXmlNS::meta, "name", QString());
-        setActiveAuthorInfo(name, e.text());
-    }
-
-    return true;
-}
-
 bool KoDocumentInfo::loadAuthorInfo(const KoXmlElement &e)
 {
     KoXmlNode n = e.namedItem("author").firstChild();
@@ -279,51 +311,6 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
                 xmlWriter.endElement();
             }
         }
-    }
-
-    return true;
-}
-
-bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
-{
-    QStringList keywords;
-    KoXmlElement e;
-    forEachElement(e, metaDoc)
-    {
-        QString tag(e.localName());
-        if (!m_aboutTags.contains(tag) && tag != "generator") {
-            continue;
-        }
-
-        // debugOdf<<"localName="<<e.localName();
-        if (tag == "keyword") {
-            if (!e.text().isEmpty())
-                keywords << e.text().trimmed();
-        } else if (tag == "description") {
-            // this is the odf way but add meta:comment if is already loaded
-            KoXmlElement e = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
-            if (!e.isNull() && !e.text().isEmpty())
-                setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
-        } else if (tag == "comments") {
-            // this was the old way so add it to dc:description
-            KoXmlElement e = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
-            if (!e.isNull() && !e.text().isEmpty())
-                setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
-        } else if (tag == "title" || tag == "subject" || tag == "date" || tag == "language") {
-            KoXmlElement e = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
-            if (!e.isNull() && !e.text().isEmpty())
-                setAboutInfo(tag, e.text().trimmed());
-        } else if (tag == "generator") {
-            setOriginalGenerator(e.text().trimmed());
-        } else {
-            KoXmlElement e = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
-            if (!e.isNull() && !e.text().isEmpty())
-                setAboutInfo(tag, e.text().trimmed());
-        }
-    }
-
-    if (keywords.count() > 0) {
-        setAboutInfo("keyword", keywords.join(m_keywordSeparator));
     }
 
     return true;
