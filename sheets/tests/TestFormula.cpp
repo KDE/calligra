@@ -176,6 +176,7 @@ void TestFormula::testTokenizer()
     CHECK_TOKENIZE("<=", "o");
     CHECK_TOKENIZE(">=", "o");
     CHECK_TOKENIZE("%", "o");
+    CHECK_TOKENIZE("A1:A5 B1:B5", "PROBE");
 
     // commonly used formulas
     CHECK_TOKENIZE("A1+A2", "coc");

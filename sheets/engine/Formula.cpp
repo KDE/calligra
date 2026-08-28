@@ -1596,10 +1596,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
 
             // array intersection
         case Opcode::Intersect: {
-            val1 = stack.pop().val;
-            val2 = stack.pop().val;
-            Region r1 = map->regionFromName(d->constants[index].asString(), d->sheet);
-            Region r2 = map->regionFromName(d->constants[index + 1].asString(), d->sheet);
+            Region r2 = stack.pop().reg;
+            Region r1 = stack.pop().reg;
             if (!r1.isValid() || !r2.isValid()) {
                 val1 = Value::errorNULL();
             } else {
