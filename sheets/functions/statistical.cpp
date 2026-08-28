@@ -21,16 +21,20 @@ Value func_averagea(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_averageif(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_averageifs(valVector args, ValueCalc *calc, FuncExtra *e);
 Value func_avedev(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_b(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betadist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betainv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bino(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_chidist(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_chisqdist(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_chisqinv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combina(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_confidence(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_correl_pop(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_covar(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_critbinom(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_devsq(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_devsqa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_expondist(valVector args, ValueCalc *calc, FuncExtra *);
@@ -38,6 +42,7 @@ Value func_fdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_finv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisher(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisherinv(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_forecast(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_frequency(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ftest(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammadist(valVector args, ValueCalc *calc, FuncExtra *);
@@ -54,8 +59,11 @@ Value func_kurtosis_pop(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_large(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacychidist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacychiinv(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_legacychitest(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacyfdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacyfinv(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_linest(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_logest(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_loginv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lognormdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_median(valVector args, ValueCalc *calc, FuncExtra *);
@@ -65,9 +73,11 @@ Value func_normdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_norminv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_normsinv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_percentile(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_percentrank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_permutationa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_prob(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rsq(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_quartile(valVector args, ValueCalc *calc, FuncExtra *);
@@ -129,6 +139,9 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
+    f = new Function("B", func_b);
+    f->setParamCount(3, 4);
+    add(f);
     f = new Function("BETADIST", func_betadist);
     f->setParamCount(3, 6);
     add(f);
@@ -142,6 +155,12 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setParamCount(4);
     add(f);
     f = new Function("CHIDIST", func_chidist);
+    f->setParamCount(2);
+    add(f);
+    f = new Function("CHISQDIST", func_chisqdist);
+    f->setParamCount(3);
+    add(f);
+    f = new Function("CHISQINV", func_chisqinv);
     f->setParamCount(2);
     add(f);
     f = new Function("COMBIN", func_combin);
@@ -160,6 +179,9 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f = new Function("COVAR", func_covar);
     f->setParamCount(2);
     f->setAcceptArray();
+    add(f);
+    f = new Function("CRITBINOM", func_critbinom);
+    f->setParamCount(3);
     add(f);
     f = new Function("DEVSQ", func_devsq);
     f->setParamCount(1, -1);
@@ -181,6 +203,10 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f = new Function("FISHER", func_fisher);
     add(f);
     f = new Function("FISHERINV", func_fisherinv);
+    add(f);
+    f = new Function("FORECAST", func_forecast);
+    f->setParamCount(3);
+    f->setAcceptArray();
     add(f);
     f = new Function("FREQUENCY", func_frequency);
     f->setParamCount(2);
@@ -239,6 +265,10 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f = new Function("LEGACYCHIINV", func_legacychiinv);
     f->setParamCount(2);
     add(f);
+    f = new Function("LEGACYCHITEST", func_legacychitest);
+    f->setParamCount(2);
+    f->setAcceptArray();
+    add(f);
     f = new Function("LEGACYFDIST", func_legacyfdist);
     f->setParamCount(3);
     add(f);
@@ -252,6 +282,14 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     // this is meant to be a copy of the function NORMSINV.
     // required for OpenFormula compliance.
     f = new Function("LEGACYNORMSINV", func_normsinv);
+    add(f);
+    f = new Function("LINEST", func_linest);
+    f->setParamCount(1, 4);
+    f->setAcceptArray();
+    add(f);
+    f = new Function("LOGEST", func_logest);
+    f->setParamCount(1, 4);
+    f->setAcceptArray();
     add(f);
     f = new Function("LOGINV", func_loginv);
     f->setParamCount(1, 3);
@@ -288,6 +326,10 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setParamCount(2);
     f->setAcceptArray();
     add(f);
+    f = new Function("PERCENTRANK", func_percentrank);
+    f->setParamCount(2, 3);
+    f->setAcceptArray();
+    add(f);
     f = new Function("PERMUT", func_arrang);
     f->setParamCount(2);
     add(f);
@@ -298,6 +340,10 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     add(f);
     f = new Function("POISSON", func_poisson);
     f->setParamCount(3);
+    add(f);
+    f = new Function("PROB", func_prob);
+    f->setParamCount(3, 4);
+    f->setAcceptArray();
     add(f);
     f = new Function("RANK", func_rank);
     f->setParamCount(2, 3);
@@ -986,6 +1032,69 @@ Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 //
+// Function: b
+//
+// probability of Trials in a binomial experiment (each with success probability SP) resulting
+// in a number of successes between T1 and T2 (or exactly T1, if T2 is omitted), inclusive.
+//
+Value func_b(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value trials = args[0];
+    Value sp = args[1];
+    Value x1 = args[2];
+    Value x2 = args.count() > 3 ? args[3] : x1;
+
+    if (calc->greater(x1, x2))
+        return Value::errorVALUE();
+
+    Value cdfHigh = func_binomdist(valVector() << x2 << trials << sp << Value(1), calc, nullptr);
+    if (cdfHigh.isError())
+        return cdfHigh;
+
+    if (calc->lower(x1, Value(1.0)))
+        return cdfHigh; // P(0<=X<=x2) is just the cumulative distribution at x2
+
+    Value cdfLow = func_binomdist(valVector() << calc->sub(x1, Value(1.0)) << trials << sp << Value(1), calc, nullptr);
+    if (cdfLow.isError())
+        return cdfLow;
+
+    return calc->sub(cdfHigh, cdfLow);
+}
+
+//
+// Function: critbinom
+//
+// smallest value X for which the cumulative binomial distribution is >= alpha
+//
+Value func_critbinom(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value trials = args[0];
+    Value sp = args[1];
+    Value alpha = args[2];
+
+    if (calc->lower(trials, Value(0.0)) || calc->lower(sp, Value(0.0)) || calc->greater(sp, Value(1.0)) || calc->lower(alpha, Value(0.0))
+        || calc->greater(alpha, Value(1.0)))
+        return Value::errorVALUE();
+
+    const int n = calc->conv()->asInteger(trials).asInteger();
+
+    // The cumulative distribution is monotonically nondecreasing in k, so binary search for
+    // the smallest k in [0, n] with BINOMDIST(k, n, sp, TRUE) >= alpha.
+    int lo = 0, hi = n;
+    while (lo < hi) {
+        const int mid = lo + (hi - lo) / 2;
+        const Value cdf = func_binomdist(valVector() << Value(mid) << trials << sp << Value(1), calc, nullptr);
+        if (cdf.isError())
+            return cdf;
+        if (calc->greater(cdf, alpha) || calc->equal(cdf, alpha))
+            hi = mid;
+        else
+            lo = mid + 1;
+    }
+    return Value(lo);
+}
+
+//
 // Function: chidist
 //
 // returns the chi-distribution
@@ -1004,6 +1113,46 @@ Value func_chidist(valVector args, ValueCalc *calc, FuncExtra *)
 
     // 1.0 - GetGammaDist (fChi / 2.0, fDF / 2.0, 1.0)
     return calc->sub(Value(1.0), calc->GetGammaDist(calc->div(fChi, 2.0), calc->div(fDF, 2.0), Value(1.0)));
+}
+
+//
+// Function: chisqdist
+//
+// the chi-square distribution: a chi-square(df) variable is Gamma(shape=df/2, scale=2)
+//
+Value func_chisqdist(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value x = args[0];
+    Value df = args[1];
+    Value cumulative = args[2];
+
+    if (calc->lower(df, Value(1.0)))
+        return Value::errorVALUE();
+
+    Value alpha = calc->div(df, 2.0);
+    return func_gammadist(valVector() << x << alpha << Value(2.0) << cumulative, calc, nullptr);
+}
+
+//
+// Function: chisqinv
+//
+// inverse of CHISQDIST's cumulative distribution function
+//
+Value func_chisqinv(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value p = args[0];
+    Value df = args[1];
+
+    if (calc->lower(df, Value(1.0)) || calc->lower(p, Value(0.0)) || calc->greater(p, Value(1.0)))
+        return Value::errorVALUE();
+
+    bool convergenceError;
+    Value result = InverseIterator(func_chisqdist, valVector() << df << Value(1), calc).exec(p.asFloat(), df.asFloat() * 0.5, df.asFloat(), convergenceError);
+
+    if (convergenceError)
+        return Value::errorVALUE();
+
+    return result;
 }
 
 //
@@ -1659,6 +1808,133 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 //
+// Function: linest
+//
+// linear regression: fits y = m*x + b (simple, single-variable regression only) to the given
+// known y/x values and returns {m, b} as a 1x2 array, or (with stats=TRUE) a 5x2 array of
+// additional regression statistics matching the usual LINEST/Excel layout:
+//   row 0: m,      b
+//   row 1: se(m),  se(b)
+//   row 2: r^2,    se(y)
+//   row 3: F,      df
+//   row 4: ss(reg), ss(resid)
+//
+Value func_linest(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value knownY = args[0];
+
+    Value knownX;
+    if (args.count() > 1 && !args[1].isEmpty()) {
+        knownX = args[1];
+    } else {
+        knownX = Value(Value::Array);
+        const int count = calc->count(knownY);
+        for (int i = 0; i < count; ++i)
+            knownX.setElement(i, 0, Value(double(i + 1)));
+    }
+
+    const bool withOffset = args.count() > 2 ? bool(calc->conv()->asInteger(args[2]).asInteger()) : true;
+    const bool stats = args.count() > 3 ? bool(calc->conv()->asInteger(args[3]).asInteger()) : false;
+
+    const int n = calc->count(knownY);
+    if (n < 1 || n != calc->count(knownX))
+        return Value::errorNA();
+
+    valVector param;
+    param.append(knownY);
+    param.append(knownX);
+
+    const Value m = func_slope(param, calc, nullptr);
+    if (m.isError())
+        return m;
+    const Value b = withOffset ? func_intercept(param, calc, nullptr) : Value(0.0);
+    if (b.isError())
+        return b;
+
+    Value res(Value::Array);
+    res.setElement(0, 0, m);
+    res.setElement(1, 0, b);
+
+    if (!stats)
+        return res;
+
+    const int df = withOffset ? (n - 2) : (n - 1);
+    if (df < 1)
+        return Value::errorDIV0();
+
+    const Value seY = func_steyx(param, calc, nullptr); // standard error of the y estimate
+    if (seY.isError())
+        return seY;
+
+    Value devsqX;
+    calc->arrayWalk(knownX, devsqX, calc->awFunc("devsq"), calc->avg(knownX));
+    if (calc->isZero(devsqX))
+        return Value::errorDIV0();
+
+    const Value seM = calc->div(seY, calc->sqrt(devsqX));
+    Value seB = Value::errorNA(); // undefined when the intercept is forced to 0
+    if (withOffset) {
+        const Value avgX = calc->avg(knownX);
+        seB = calc->mul(seY, calc->sqrt(calc->add(calc->div(Value(1.0), Value(n)), calc->div(calc->sqr(avgX), devsqX))));
+    }
+
+    const Value r2 = func_rsq(param, calc, nullptr);
+    const Value ssResid = calc->mul(calc->sqr(seY), Value(df));
+    Value devsqY;
+    calc->arrayWalk(knownY, devsqY, calc->awFunc("devsq"), calc->avg(knownY));
+    const Value ssReg = calc->sub(devsqY, ssResid);
+    const Value f = calc->isZero(ssResid) ? Value::errorDIV0() : calc->div(ssReg, calc->div(ssResid, Value(df)));
+
+    res.setElement(0, 1, seM);
+    res.setElement(1, 1, seB);
+    res.setElement(0, 2, r2);
+    res.setElement(1, 2, seY);
+    res.setElement(0, 3, f);
+    res.setElement(1, 3, Value(df));
+    res.setElement(0, 4, ssReg);
+    res.setElement(1, 4, ssResid);
+
+    return res;
+}
+
+//
+// Function: logest
+//
+// exponential regression: fits y = b*m^x by linear-regressing ln(y) against x (see LINEST).
+// The m/b coefficients are transformed back via exp(); the additional statistics (when
+// stats=TRUE) remain those of the underlying linear fit against ln(y), as is conventional.
+//
+Value func_logest(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const Value knownY = args[0];
+
+    const uint count = knownY.count();
+    for (uint i = 0; i < count; ++i) {
+        if (!knownY.element(i).isNumber() || !calc->greater(knownY.element(i), Value(0.0)))
+            return Value::errorNUM(); // ln() requires strictly positive y values
+    }
+
+    Value lnY(Value::Array);
+    const uint rows = knownY.rows();
+    const uint cols = knownY.columns();
+    for (uint r = 0; r < rows; ++r)
+        for (uint c = 0; c < cols; ++c)
+            lnY.setElement(c, r, calc->ln(knownY.element(c, r)));
+
+    valVector logArgs = args;
+    logArgs[0] = lnY;
+
+    Value res = func_linest(logArgs, calc, nullptr);
+    if (res.isError())
+        return res;
+
+    res.setElement(0, 0, calc->exp(res.element(0, 0)));
+    res.setElement(1, 0, calc->exp(res.element(1, 0)));
+
+    return res;
+}
+
+//
 // function: geomean
 //
 Value func_geomean(valVector args, ValueCalc *calc, FuncExtra *)
@@ -1744,6 +2020,34 @@ Value func_intercept(valVector args, ValueCalc *calc, FuncExtra *)
     calc->arrayWalk(args[1], denominator, calc->awFunc("devsq"), avgX);
     // result = Ey - SLOPE * Ex
     return calc->sub(avgY, calc->mul(calc->div(nominator, denominator), avgX));
+}
+
+//
+// Function: forecast
+//
+// estimates a future value along a linear trend, using existing x/y values
+//
+Value func_forecast(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value x = args[0];
+    Value knownY = args[1];
+    Value knownX = args[2];
+
+    if (calc->count(knownY) < 1 || calc->count(knownY) != calc->count(knownX))
+        return Value::errorNA();
+
+    valVector param;
+    param.append(knownY);
+    param.append(knownX);
+
+    const Value slope = func_slope(param, calc, nullptr);
+    if (slope.isError())
+        return slope;
+    const Value intercept = func_intercept(param, calc, nullptr);
+    if (intercept.isError())
+        return intercept;
+
+    return calc->add(intercept, calc->mul(slope, x));
 }
 
 //
@@ -1866,6 +2170,43 @@ Value func_legacychiinv(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     return result;
+}
+
+//
+// Function: legacy.chitest
+//
+// chi-square test: given ranges of observed and expected values of the same shape, returns
+// the probability that the chi-square statistic they yield would occur under the hypothesis
+// of independence (i.e. a p-value from the chi-square distribution).
+//
+Value func_legacychitest(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value actual = args[0];
+    Value expected = args[1];
+
+    const uint rows = actual.rows();
+    const uint cols = actual.columns();
+    if (rows == 0 || cols == 0 || rows != expected.rows() || cols != expected.columns())
+        return Value::errorNA();
+
+    double chisq = 0.0;
+    for (uint r = 0; r < rows; ++r) {
+        for (uint c = 0; c < cols; ++c) {
+            const double o = actual.element(c, r).asFloat();
+            const double e = expected.element(c, r).asFloat();
+            if (e == 0.0)
+                return Value::errorDIV0();
+            const double diff = o - e;
+            chisq += diff * diff / e;
+        }
+    }
+
+    // degrees of freedom: (rows-1)*(cols-1), except a single row/column uses count-1
+    const int df = (rows == 1 || cols == 1) ? int(rows * cols) - 1 : int(rows - 1) * int(cols - 1);
+    if (df < 1)
+        return Value::errorNA();
+
+    return func_legacychidist(valVector() << Value(chisq) << Value(df), calc, nullptr);
 }
 
 //
@@ -2180,6 +2521,47 @@ Value func_percentile(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 //
+// Function: percentrank
+//
+// the rank of a value in a dataset, as a fraction of the dataset (the inverse of PERCENTILE)
+//
+Value func_percentrank(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const double x = args[1].asFloat();
+    const int significance = args.count() > 2 ? calc->conv()->asInteger(args[2]).asInteger() : 3;
+    if (significance < 1)
+        return Value::errorVALUE();
+
+    List array;
+    int number = 0;
+    func_array_helper(args[0], calc, array, number);
+    if (number < 1)
+        return Value::errorNA();
+
+    std::sort(array.begin(), array.end());
+
+    if (x < array.first() || x > array.last())
+        return Value::errorNA();
+
+    double rank;
+    if (number == 1) {
+        rank = 0.0;
+    } else {
+        // find the largest index i with array[i] <= x
+        int i = 0;
+        while (i < number - 1 && array[i + 1] <= x)
+            ++i;
+        if (i == number - 1 || array[i] == x)
+            rank = double(i) / (number - 1);
+        else
+            rank = (i + (x - array[i]) / (array[i + 1] - array[i])) / (number - 1);
+    }
+
+    const double factor = ::pow(10.0, significance);
+    return Value(::floor(rank * factor) / factor);
+}
+
+//
 // Function: permutationa
 //
 // returns the number of ordered permutations (with repetition)
@@ -2246,6 +2628,45 @@ Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *)
     }
 
     return result;
+}
+
+//
+// Function: prob
+//
+// probability that values in a range fall within given limits, weighted by a range of
+// probabilities that must sum to 1
+//
+Value func_prob(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value xRange = args[0];
+    Value probRange = args[1];
+    Value lower = args[2];
+    Value upper = args.count() > 3 ? args[3] : lower;
+
+    const int n = calc->count(xRange);
+    if (n < 1 || n != calc->count(probRange))
+        return Value::errorNA();
+    if (calc->greater(lower, upper))
+        return Value::errorVALUE();
+
+    double sum = 0.0;
+    double probSum = 0.0;
+    for (int i = 0; i < n; ++i) {
+        const Value p = probRange.element(i);
+        if (calc->lower(p, Value(0.0)) || calc->greater(p, Value(1.0)))
+            return Value::errorNUM();
+        probSum += p.asFloat();
+
+        const Value x = xRange.element(i);
+        if (!calc->lower(x, lower) && !calc->greater(x, upper))
+            sum += p.asFloat();
+    }
+
+    // OpenFormula requires the probabilities to sum to 1; be lenient about rounding
+    if (::fabs(probSum - 1.0) > 1.0E-7)
+        return Value::errorNUM();
+
+    return Value(sum);
 }
 
 //

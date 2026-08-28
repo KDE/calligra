@@ -1830,6 +1830,246 @@
     </Help>
     </Function>
 
+    <Function>
+        <Name>B</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>Number of trials</Comment>
+            <Type>Int</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Success probability</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Number of successes (or the lower limit, if the upper limit is given)</Comment>
+            <Type>Int</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Upper limit for the number of successes</Comment>
+            <Type>Int</Type>
+        </Parameter>
+        <Help>
+            <Text>The B() function returns the probability of drawing between T1 and T2 (inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in Trials independent trials, each with success probability SP.</Text>
+            <Syntax>B(trials; SP; T1; T2)</Syntax>
+            <Example>B(20; 0.5; 8) returns 0.120134</Example>
+            <Example>B(20; 0.5; 8; 10) returns 0.456511</Example>
+            <Related>BINOMDIST</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>CHISQDIST</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>Number</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Degrees of freedom</Comment>
+            <Type>Int</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Cumulative</Comment>
+            <Type>Boolean</Type>
+        </Parameter>
+        <Help>
+            <Text>The CHISQDIST() function returns the value of the cumulative distribution function (or, if Cumulative is FALSE, the probability density function) for the chi-square distribution.</Text>
+            <Syntax>CHISQDIST(number; degrees_freedom; cumulative)</Syntax>
+            <Example>CHISQDIST(13.27; 5; TRUE) returns 0.979</Example>
+            <Related>CHIDIST</Related>
+            <Related>CHISQINV</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>CHISQINV</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>Probability</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Degrees of freedom</Comment>
+            <Type>Int</Type>
+        </Parameter>
+        <Help>
+            <Text>The CHISQINV() function returns the inverse of CHISQDIST(number; degrees_freedom; TRUE).</Text>
+            <Syntax>CHISQINV(probability; degrees_freedom)</Syntax>
+            <Example>CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27</Example>
+            <Related>CHISQDIST</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>CRITBINOM</Name>
+        <Type>Int</Type>
+        <Parameter>
+            <Comment>Number of trials</Comment>
+            <Type>Int</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Success probability</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Criterion value</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Help>
+            <Text>The CRITBINOM() function returns the smallest value for which the cumulative binomial distribution is greater than or equal to the criterion value alpha.</Text>
+            <Syntax>CRITBINOM(trials; SP; alpha)</Syntax>
+            <Example>CRITBINOM(20; 0.5; 0.55) returns 10</Example>
+            <Related>BINOMDIST</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>FORECAST</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>The x-value for which a y-value is estimated</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Known y-values</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Known x-values</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Help>
+            <Text>The FORECAST() function estimates a future y-value along the linear trend fitted to the known x/y-values, for a given new x-value.</Text>
+            <Syntax>FORECAST(x; known_y's; known_x's)</Syntax>
+            <Related>TREND</Related>
+            <Related>SLOPE</Related>
+            <Related>INTERCEPT</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>LEGACYCHITEST</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>Observed values</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Expected values</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Help>
+            <Text>The LEGACYCHITEST() function returns the probability, from the chi-square distribution, that the chi-square statistic computed from the given observed and expected value ranges (which must have the same shape) would occur by chance.</Text>
+            <Syntax>LEGACYCHITEST(actual range; theoretical range)</Syntax>
+            <Related>LEGACYCHIDIST</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>LINEST</Name>
+        <Type>Array</Type>
+        <Parameter>
+            <Comment>Known y-values</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Known x-values (defaults to the sequence 1, 2, 3, ...)</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Whether to fit an intercept (defaults to TRUE)</Comment>
+            <Type>Boolean</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Whether to return additional regression statistics (defaults to FALSE)</Comment>
+            <Type>Boolean</Type>
+        </Parameter>
+        <Help>
+            <Text>The LINEST() function fits a straight line y=m*x+b (only a single known-x range is supported) to the given data using the least-squares method, and returns {m, b}. If Stats is TRUE, it instead returns a 5-row array also containing the standard errors of m and b, R-squared and the standard error of the y estimate, the F statistic and its degrees of freedom, and the regression and residual sums of squares.</Text>
+            <Syntax>LINEST(known_y's; known_x's; const; stats)</Syntax>
+            <Related>TREND</Related>
+            <Related>LOGEST</Related>
+            <Related>SLOPE</Related>
+            <Related>INTERCEPT</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>LOGEST</Name>
+        <Type>Array</Type>
+        <Parameter>
+            <Comment>Known y-values (must be positive)</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Known x-values (defaults to the sequence 1, 2, 3, ...)</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Whether to fit an intercept (defaults to TRUE)</Comment>
+            <Type>Boolean</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Whether to return additional regression statistics (defaults to FALSE)</Comment>
+            <Type>Boolean</Type>
+        </Parameter>
+        <Help>
+            <Text>The LOGEST() function fits an exponential curve y=b*m^x to the given data, by linear-regressing ln(y) against x (see LINEST), and returns {m, b}. If Stats is TRUE, it also returns the same additional regression statistics as LINEST, computed for the underlying linear fit against ln(y).</Text>
+            <Syntax>LOGEST(known_y's; known_x's; const; stats)</Syntax>
+            <Related>GROWTH</Related>
+            <Related>LINEST</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>PERCENTRANK</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>Data set</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Value to rank</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Number of significant digits (defaults to 3)</Comment>
+            <Type>Int</Type>
+        </Parameter>
+        <Help>
+            <Text>The PERCENTRANK() function returns the rank, as a fraction of the data set, of a value in that data set. This is the inverse of PERCENTILE.</Text>
+            <Syntax>PERCENTRANK(data; x; significance)</Syntax>
+            <Related>PERCENTILE</Related>
+            <Related>RANK</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>PROB</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>Values</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Probabilities, one for each value (must sum to 1)</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Lower limit (or the only value to test for, if Upper limit is omitted)</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Parameter optional="true">
+            <Comment>Upper limit</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Help>
+            <Text>The PROB() function returns the sum of the probabilities of the values that fall between (or equal) a lower and upper limit.</Text>
+            <Syntax>PROB(values; probabilities; lower limit; upper limit)</Syntax>
+        </Help>
+    </Function>
+
 </Group>
 
 </KSpreadFunctions>

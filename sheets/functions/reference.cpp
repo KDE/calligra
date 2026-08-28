@@ -26,7 +26,9 @@ Value func_cell(valVector args, ValueCalc *calc, FuncExtra *e);
 Value func_choose(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_column(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_columns(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dde(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_hlookup(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_hyperlink(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_index(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lookup(valVector args, ValueCalc *calc, FuncExtra *);
@@ -71,9 +73,15 @@ ReferenceModule::ReferenceModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
+    f = new Function("DDE", func_dde);
+    f->setParamCount(3, 4);
+    add(f);
     f = new Function("HLOOKUP", func_hlookup);
     f->setParamCount(3, 4);
     f->setAcceptArray();
+    add(f);
+    f = new Function("HYPERLINK", func_hyperlink);
+    f->setParamCount(1, 2);
     add(f);
     f = new Function("INDEX", func_index);
     f->setParamCount(3);
@@ -323,6 +331,32 @@ Value func_columns(valVector, ValueCalc *, FuncExtra *e)
     if ((col1 == -1) || (col2 == -1))
         return Value::errorVALUE();
     return Value(col2 - col1 + 1);
+}
+
+//
+// Function: DDE
+//
+// Requests data from another running application via Dynamic Data Exchange, a Windows-only
+// inter-process mechanism this platform has no equivalent of. There is nothing meaningful to
+// evaluate DDE(...) to, so it always yields an error -- registering it (rather than failing to
+// parse the formula at all) is what OpenFormula compliance requires for documents that use it.
+//
+Value func_dde(valVector, ValueCalc *, FuncExtra *)
+{
+    return Value::errorNA();
+}
+
+//
+// Function: HYPERLINK
+//
+// Returns the display text for a hyperlink (or the URL itself, if no display text was given).
+// Following the link is a UI concern handled outside formula evaluation.
+//
+Value func_hyperlink(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    if (args.count() > 1)
+        return calc->conv()->asString(args[1]);
+    return calc->conv()->asString(args[0]);
 }
 
 //

@@ -381,6 +381,49 @@
            <Syntax>OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer newHeight; Integer newWidth)</Syntax>
        </Help>
    </Function>
+
+   <Function>
+       <Name>DDE</Name>
+       <Type>Any</Type>
+       <Parameter>
+           <Comment>Server application</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Topic</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter>
+           <Comment>Item</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="true">
+           <Comment>Mode</Comment>
+           <Type>Int</Type>
+       </Parameter>
+       <Help>
+           <Text>Requests data from another running application via Dynamic Data Exchange, a Windows-only inter-process mechanism this platform does not support. DDE() is recognized so documents that reference it still load, but always evaluates to an error.</Text>
+           <Syntax>DDE(server; topic; item; mode)</Syntax>
+       </Help>
+   </Function>
+
+   <Function>
+       <Name>HYPERLINK</Name>
+       <Type>String</Type>
+       <Parameter>
+           <Comment>URL</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Parameter optional="true">
+           <Comment>Display text (defaults to the URL)</Comment>
+           <Type>String</Type>
+       </Parameter>
+       <Help>
+           <Text>Returns the display text for a hyperlink, or the URL itself if no display text is given. Following the link is handled by the application, not by formula evaluation.</Text>
+           <Syntax>HYPERLINK(url; display text)</Syntax>
+           <Example>HYPERLINK("https://calligra.org"; "Calligra") returns "Calligra"</Example>
+       </Help>
+   </Function>
 </Group>
 
 </KSpreadFunctions>

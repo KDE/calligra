@@ -146,7 +146,9 @@ DateTimeModule::DateTimeModule(QObject *parent, const QVariantList &)
     f->setParamCount(3);
     add(f);
     f = new Function("NETWORKDAY", func_networkday);
-    // f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNETWORKDAYS");
+    // OpenFormula/Excel spell this with a trailing "S"; keep NETWORKDAY as the primary
+    // name for backwards compatibility and expose the standard spelling as an alias.
+    f->setAlternateName("NETWORKDAYS");
     f->setParamCount(2, 3);
     f->setAcceptArray();
     add(f);

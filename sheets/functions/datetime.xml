@@ -706,6 +706,29 @@
             <Syntax>NETWORKDAY(start date; end date; holidays)</Syntax>
             <Example>NETWORKDAY("01/01/2001";"01/08/2001") returns 5 workdays</Example>
             <Example>NETWORKDAY("01/01/2001";"01/08/2001";2) returns 3 workdays</Example>
+            <Related>NETWORKDAYS</Related>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>NETWORKDAYS</Name>
+        <Type>Int</Type>
+        <Parameter>
+            <Comment>Start date</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>End date</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Holidays</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Help>
+            <Text>NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are otherwise identical.</Text>
+            <Syntax>NETWORKDAYS(start date; end date; holidays)</Syntax>
+            <Related>NETWORKDAY</Related>
         </Help>
     </Function>
 
