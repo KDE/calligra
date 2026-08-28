@@ -11,6 +11,8 @@ macro(SHEETS_ADD_UNIT_TEST _TEST_NAME)
         TEST_NAME "${_TEST_NAME}"
         NAME_PREFIX "sheets-"
     )
+    set_tests_properties("sheets-${_TEST_NAME}" PROPERTIES ENVIRONMENT
+        "QT_PLUGIN_PATH=${KDE_INSTALL_FULL_PLUGINDIR};XDG_DATA_DIRS=${KDE_INSTALL_FULL_DATADIR}:/usr/local/share:/usr/share")
 endmacro()
 
 ########### Core Functionality ###############

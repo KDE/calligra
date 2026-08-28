@@ -43,9 +43,9 @@ private Q_SLOTS:
     void testAsTime();
 
 private:
-    CalculationSettings *m_calcsettings;
-    ValueParser *m_parser;
-    ValueConverter *m_converter;
+    CalculationSettings *m_calcsettings = nullptr;
+    ValueParser *m_parser = nullptr;
+    ValueConverter *m_converter = nullptr;
     QString m_translationsFile;
 };
 

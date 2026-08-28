@@ -490,19 +490,19 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("errorREF") << "C" << Value::errorREF() << Value("#REF!");
     QTest::newRow("errorVALUE") << "C" << Value::errorVALUE() << Value("#VALUE!");
 
-    QTest::newRow("integer time us") << "en_US" << ValueWithFormat(4, Value::fmt_Time) << Value("12:00:00 am");
+    QTest::newRow("integer time us") << "en_US" << ValueWithFormat(4, Value::fmt_Time) << Value("12:00:00 am");
     //    QTest::newRow("integer datetime 1 us") << "en_US" << ValueWithFormat(4, Value::fmt_DateTime) << Value("Wednesday, January 5, 2000 12:00:00 am");
     //    QTest::newRow("integer datetime 2 xx") << "en_US" << ValueWithFormat(-10, Value::fmt_DateTime) << Value("Wednesday, December 22, 1999 12:00:00 am");
-    QTest::newRow("float time 0 us") << "en_US" << ValueWithFormat(4.0, Value::fmt_Time) << Value("12:00:00 am");
-    QTest::newRow("float time 1 us") << "en_US" << ValueWithFormat(0.5, Value::fmt_Time) << Value("12:00:00 pm");
-    QTest::newRow("float time 2 us") << "en_US" << ValueWithFormat(3.675, Value::fmt_Time) << Value("4:12:00 pm");
+    QTest::newRow("float time 0 us") << "en_US" << ValueWithFormat(4.0, Value::fmt_Time) << Value("12:00:00 am");
+    QTest::newRow("float time 1 us") << "en_US" << ValueWithFormat(0.5, Value::fmt_Time) << Value("12:00:00 pm");
+    QTest::newRow("float time 2 us") << "en_US" << ValueWithFormat(3.675, Value::fmt_Time) << Value("4:12:00 pm");
 
     //    QTest::newRow("float datetime 0 us") << "en_US" << ValueWithFormat(4.0, Value::fmt_DateTime)<< Value("Wednesday, January 5, 2000 12:00:00 AM UTC");
     //    QTest::newRow("float datetime 1 us") << "en_US" << ValueWithFormat(2000.5, Value::fmt_DateTime) << Value("Thursday, June 23, 2005 12:00:00 PM UTC");
 
-    QTest::newRow("complex time 0 us") << "en_US" << ValueWithFormat(complex<Number>(4, 634), Value::fmt_Time) << Value("12:00:00 am");
-    QTest::newRow("complex time 1 us") << "en_US" << ValueWithFormat(complex<Number>(0.5, 2.3), Value::fmt_Time) << Value("12:00:00 pm");
-    QTest::newRow("complex time 2 us") << "en_US" << ValueWithFormat(complex<Number>(3.675, 2), Value::fmt_Time) << Value("4:12:00 pm");
+    QTest::newRow("complex time 0 us") << "en_US" << ValueWithFormat(complex<Number>(4, 634), Value::fmt_Time) << Value("12:00:00 am");
+    QTest::newRow("complex time 1 us") << "en_US" << ValueWithFormat(complex<Number>(0.5, 2.3), Value::fmt_Time) << Value("12:00:00 pm");
+    QTest::newRow("complex time 2 us") << "en_US" << ValueWithFormat(complex<Number>(3.675, 2), Value::fmt_Time) << Value("4:12:00 pm");
 
     QTest::newRow("complex date 3 us") << "en_US" << ValueWithFormat(complex<Number>(-9.234, 0), Value::fmt_Date) << Value("Wednesday, December 22, 1999");
     //    QTest::newRow("float datetime 2 us") << "en_US" << ValueWithFormat(-9.325, Value::fmt_DateTime) << Value("Wednesday, December 22, 1999 4:12:00 PM
@@ -546,7 +546,6 @@ void TestValueConverter::testAsString()
     QFETCH(QString, locale);
     QFETCH(Value, value);
     QFETCH(Value, expected);
-    QTest::addColumn<QString>("expfail");
 
     m_calcsettings->locale()->setLanguage(locale);
 

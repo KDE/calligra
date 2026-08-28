@@ -372,13 +372,11 @@ Time Localization::readTime(const QString &str, const QString &format, bool *ok)
 QString Localization::dateTimeFormat(bool longFormat) const
 {
     QString res = d->locale.dateTimeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
-    const auto pos = res.indexOf(" t"); // timespec should never be used
-    if (pos != -1) {
-        res.remove(pos, 2);
-    }
+    // timespec should never be used; the token is 1-4 "t"s (QLocale's long format uses "tttt")
+    res.remove(QRegularExpression(QStringLiteral("\\s*t{1,4}")));
     // The format must match what is used in KoOdfNumberstyles::loadOdfNumberStyle(),
     // which use lowercase atm
-    res.replace('H', 'h').replace("AP", "ap");
+    res.replace('H', 'h').replace(QStringLiteral("ap"), QStringLiteral("ap"), Qt::CaseInsensitive);
     return res;
 }
 
@@ -394,10 +392,8 @@ QString Localization::timeFormat(bool longFormat) const
     // The format must match what is used in KoOdfNumberstyles::loadOdfNumberStyle(),
     // which use lowercase atm
     fmt = fmt.toLower();
-    const auto pos = fmt.indexOf(" t"); // timespec should never be used
-    if (pos != -1) {
-        fmt.remove(pos, 2);
-    }
+    // timespec should never be used; the token is 1-4 "t"s (QLocale's long format uses "tttt")
+    fmt.remove(QRegularExpression(QStringLiteral("\\s*t{1,4}")));
     // QLocale returns seconds (ss) also for short format, remove
     if (!longFormat) {
         fmt.replace(":ss", "");

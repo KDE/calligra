@@ -36,8 +36,8 @@ private Q_SLOTS:
     void testParse();
 
 private:
-    CalculationSettings *m_calcsettings;
-    ValueParser *m_parser;
+    CalculationSettings *m_calcsettings = nullptr;
+    ValueParser *m_parser = nullptr;
     QString m_translationsFile;
 };
 
