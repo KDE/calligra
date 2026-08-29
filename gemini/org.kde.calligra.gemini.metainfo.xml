@@ -20,6 +20,7 @@
   <name xml:lang="fr">Gemini</name>
   <name xml:lang="ga">Gemini</name>
   <name xml:lang="gl">Gemini</name>
+  <name xml:lang="he">Gemini</name>
   <name xml:lang="hu">Gemini</name>
   <name xml:lang="ia">Geminos</name>
   <name xml:lang="id">Gemini</name>
@@ -56,6 +57,7 @@
   <summary xml:lang="fr">Suite bureautique</summary>
   <summary xml:lang="ga">Sraith Oifige</summary>
   <summary xml:lang="gl">Suite de oficina</summary>
+  <summary xml:lang="he">ערכת כלי משרד</summary>
   <summary xml:lang="hu">Irodai programcsomag</summary>
   <summary xml:lang="ia">Suite de Office</summary>
   <summary xml:lang="id">Suite Perkantoran</summary>
@@ -225,6 +227,7 @@
       <li xml:lang="fr">Fonctionnalités communes</li>
       <li xml:lang="ga">Gnéithe Coitianta</li>
       <li xml:lang="gl">Funcionalidades comúns</li>
+      <li xml:lang="he">יכולות משותפות</li>
       <li xml:lang="hu">Közös jellemzők</li>
       <li xml:lang="id">Fitur Umum</li>
       <li xml:lang="it">Funzionalità comuni</li>
@@ -295,6 +298,7 @@
       <li xml:lang="fr">Objets intégrables</li>
       <li xml:lang="ga">Réada Inleabaithe</li>
       <li xml:lang="gl">Obxectos incrustábeis</li>
+      <li xml:lang="he">עצמים שניתן להטמיע</li>
       <li xml:lang="hu">Beágyazható objektumok</li>
       <li xml:lang="id">Objek Yang Dapat Ditanamkan</li>
       <li xml:lang="it">Oggetti integrabili</li>
@@ -366,6 +370,7 @@
       <li xml:lang="fr">Format de fichier standard</li>
       <li xml:lang="ga">Formáid comhaid chaighdeánach</li>
       <li xml:lang="gl">Formato de ficheiro estándar</li>
+      <li xml:lang="he">תסדיר קובץ רגיל</li>
       <li xml:lang="hu">Standard fájlformátum</li>
       <li xml:lang="id">Format file standar</li>
       <li xml:lang="it">Formato standard dei file</li>
@@ -441,6 +446,7 @@
       <caption xml:lang="fr">Une présentation téléchargée directement à partir de DropBox en mode « Modification »</caption>
       <caption xml:lang="ga">Cur i láthair a luchtaíodh go díreach ó DropBox, i mód Eagarthóireachta</caption>
       <caption xml:lang="gl">Unha presentación cargada directamente de DropBox, en modo de edición.</caption>
+      <caption xml:lang="he">מצגת שנטענה ישירות מ־DropBox, במצב עריכה</caption>
       <caption xml:lang="hu">Egy közvetlenül a DropBoxból betöltött prezentáció, szerkesztési módban</caption>
       <caption xml:lang="id">Presentasi dimuat langsung dari DropBox, dalam mode Edit</caption>
       <caption xml:lang="it">Una presentazione caricata direttamente da DropBox, in modalità Modifica</caption>
@@ -478,6 +484,7 @@
       <caption xml:lang="fr">Un document de texte avec une interface utilisateur d'un bureau traditionnel (Mode « Création »)</caption>
       <caption xml:lang="ga">Doiciméad téacs i stíl thraidisiúnta an chomhéadain deisce (mód cruthaithe)</caption>
       <caption xml:lang="gl">Un documento de texto na interface de usuario tradicional de escritorio (modo de creación).</caption>
+      <caption xml:lang="he">מסמך טקסט במנשק המשתמש בסגנון שולחן העבודה המסורתי (מצב יצירה)</caption>
       <caption xml:lang="hu">Egy szöveges dokumentum a hagyományos asztali stílusú felhasználói felületen (Létrehozás mód)</caption>
       <caption xml:lang="id">Dokumen teks dalam UI gaya desktop tradisional (mode Ciptakan)</caption>
       <caption xml:lang="it">Un documento di testo nell'interfaccia in stile desktop tradizionale (modalità Crea)</caption>
@@ -515,6 +522,7 @@
       <caption xml:lang="fr">Un document de texte en mode « Création » avec l'affichage d'un panneau de notes</caption>
       <caption xml:lang="ga">Doiciméad téacs i mód Cruthaithe agus an painéal nótaí le feiceáil</caption>
       <caption xml:lang="gl">Un documento de texto no modo de creación co panel de notas visíbel.</caption>
+      <caption xml:lang="he">מסמך טקסט במצב יצירה כשלוח ההערות מופיע</caption>
       <caption xml:lang="hu">Egy szöveges dokumentum Létrehozás módban, a jegyzetpanel megjelenítésével</caption>
       <caption xml:lang="id">Dokumen teks dalam mode Ciptakan dengan panel catatan yang ditampilkan</caption>
       <caption xml:lang="it">Un documento di testo in modalità Crea con il pannello delle note visibile</caption>
