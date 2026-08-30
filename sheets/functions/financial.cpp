@@ -575,9 +575,8 @@ static Value helper_ipmt(ValueCalc *calc, Value rate, Value per, Value nper, Val
         return calc->mul(calc->sub(func_fv(fvArgs, calc, nullptr), pmt), rate);
     }
 
-    const Value val1(pow1p(rate.asFloat(), calc->sub(per, Value(1)).asFloat()));
-    const Value val2(pow1pm1(rate.asFloat(), calc->sub(per, Value(1)).asFloat()));
-    return calc->mul(Value(-1), calc->add(calc->mul(calc->mul(pv, val1), rate), calc->mul(pmt, val2)));
+    valVector fvArgs = {rate, calc->sub(per, Value(1)), pmt, pv, Value(0)};
+    return calc->mul(func_fv(fvArgs, calc, nullptr), rate);
 }
 
 //
@@ -1739,8 +1738,8 @@ static double irrResultDerive(Value sec, ValueCalc *calc, double rate)
 //
 Value func_irr(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    static const double maxEpsilon = 1e-10;
-    static const int maxIter = 50;
+    static const double maxEpsilon = 1e-7;
+    static const int maxIter = 20;
 
     Value seq = args[0];
 
