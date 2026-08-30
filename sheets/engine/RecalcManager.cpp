@@ -215,6 +215,7 @@ void RecalcManager::recalc(Updater *updater)
         updater->setProgress(0);
 
     const QList<CellBase> cells = d->cells.values();
+    d->cells.clear();
     const int cellsCount = cells.count();
     for (int c = 0; c < cellsCount; ++c) {
         // only recalculate, if no circular dependency occurred
@@ -228,13 +229,15 @@ void RecalcManager::recalc(Updater *updater)
 
         // evaluate the formula and set the result
         Value result = cells.value(c).formula().eval();
-        if (result.isArray() && (result.columns() > 1 || result.rows() > 1)) {
-            const QRect rect = cells.value(c).lockedCells();
+        const QRect rect = cells.value(c).lockedCells();
+        if (rect.width() > 1 || rect.height() > 1) {
             // unlock
             sheet->cellStorage()->unlockCells(rect.left(), rect.top());
             for (int row = rect.top(); row <= rect.bottom(); ++row) {
                 for (int col = rect.left(); col <= rect.right(); ++col) {
-                    CellBase(sheet, col, row).setValue(result.element(col - rect.left(), row - rect.top()));
+                    CellBase(sheet, col, row).setValue(result.isArray() ? result.element(col - rect.left(), row - rect.top()) : result);
+                    if (col != rect.left() || row != rect.top())
+                        d->cellsToCalculate(d->map->dependencyManager()->consumingRegion(CellBase(sheet, col, row)));
                 }
             }
             // relock
@@ -249,8 +252,8 @@ void RecalcManager::recalc(Updater *updater)
     if (updater)
         updater->setProgress(100);
 
-    //     dump();
-    d->cells.clear();
+    if (!d->cells.isEmpty())
+        recalc(updater);
 }
 
 void RecalcManager::dump() const

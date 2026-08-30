@@ -251,7 +251,11 @@ QPair<QRectF, T> RectStorage<T>::containedPair(const QPoint &point) const
 {
     ensureLoaded();
     const QVector<QPair<QRectF, T>> results = m_tree.intersectingPairs(QRect(point, point)).values().toVector();
-    return results.isEmpty() ? qMakePair(QRectF(), T()) : results.last();
+    for (auto it = results.crbegin(); it != results.crend(); ++it) {
+        if (it->first.contains(point))
+            return *it;
+    }
+    return qMakePair(QRectF(), T());
 }
 
 template<typename T>

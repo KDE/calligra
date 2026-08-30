@@ -425,10 +425,10 @@ void CellBaseStorage::lockCells(const QRect &rect)
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(rect.topLeft()); // FIXME
     if (!pair.first.isNull())
-        d->matrixStorage->insert(Region(pair.first.toRect()), false);
+        d->matrixStorage->insert(Region(pair.first.toRect(), d->sheet), false);
     // Lock the cells
     if (rect.width() > 1 || rect.height() > 1)
-        d->matrixStorage->insert(Region(rect), true);
+        d->matrixStorage->insert(Region(rect, d->sheet), true);
 }
 
 void CellBaseStorage::unlockCells(int column, int row)

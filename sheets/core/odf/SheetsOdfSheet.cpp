@@ -863,6 +863,8 @@ int Odf::loadRowFormat(Sheet *sheet,
     static const QString sTableCell = QString::fromLatin1("table-cell");
     static const QString sCoveredTableCell = QString::fromLatin1("covered-table-cell");
     static const QString sNumberColumnsRepeated = QString::fromLatin1("number-columns-repeated");
+    static const QString sNumberMatrixColumnsSpanned = QString::fromLatin1("number-matrix-columns-spanned");
+    static const QString sNumberMatrixRowsSpanned = QString::fromLatin1("number-matrix-rows-spanned");
 
     //    debugSheetsODF<<"Odf::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
     KoOdfLoadingContext &odfContext = tableContext.odfContext;
@@ -976,15 +978,17 @@ int Odf::loadRowFormat(Sheet *sheet,
             cellStyleName = columnStyles.get(columnIndex);
 
         Cell cell(sheet, columnIndex, rowIndex);
-        loadCell(&cell, cellElement, tableContext, autoStyles, cellStyleName, shapeData);
+        const bool isMatrixFollower = sheet->cellStorage()->isLocked(columnIndex, rowIndex);
+        if (!isMatrixFollower)
+            loadCell(&cell, cellElement, tableContext, autoStyles, cellStyleName, shapeData);
 
         // If comment/conditions/etc are set, copy them to all the cells in range.
-        if (!cell.conditions().isEmpty())
+        if (!isMatrixFollower && !cell.conditions().isEmpty())
             sheet->fullCellStorage()->setConditions(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.conditions());
-        if (!cell.validity().isEmpty())
+        if (!isMatrixFollower && !cell.validity().isEmpty())
             sheet->cellStorage()->setValidity(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.validity());
 
-        if (!cell.hasDefaultContent()) {
+        if (!isMatrixFollower && !cell.hasDefaultContent()) {
             // Row-wise filling of PointStorages is faster than column-wise filling.
             QSharedPointer<QTextDocument> richText = cell.richText();
             for (int r = rowIndex; r <= endRow; ++r) {
@@ -1001,6 +1005,12 @@ int Odf::loadRowFormat(Sheet *sheet,
                 }
             }
         }
+        bool matrixColumnsOk = false;
+        const int matrixColumns = cellElement.attributeNS(KoXmlNS::table, sNumberMatrixColumnsSpanned, QString()).toInt(&matrixColumnsOk);
+        bool matrixRowsOk = false;
+        const int matrixRows = cellElement.attributeNS(KoXmlNS::table, sNumberMatrixRowsSpanned, QString()).toInt(&matrixRowsOk);
+        if ((matrixColumnsOk && matrixColumns > 1) || (matrixRowsOk && matrixRows > 1))
+            sheet->cellStorage()->lockCells(QRect(columnIndex, rowIndex, matrixColumnsOk ? matrixColumns : 1, matrixRowsOk ? matrixRows : 1));
         columnIndex += numberColumns;
     }
 
