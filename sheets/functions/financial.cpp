@@ -615,6 +615,7 @@ static double vdbGetGDA(const double cost, const double salvage, const double li
 static double vdbInterVDB(const double cost, const double salvage, const double life, const double life1, const double period, const double depreciationFactor)
 {
     double res = 0.0;
+    double compensation = 0.0;
 
     double intEnd = ceil(period);
     unsigned long loopEnd = (unsigned long)intEnd;
@@ -644,7 +645,10 @@ static double vdbInterVDB(const double cost, const double salvage, const double 
         if (i == loopEnd)
             term *= (period + 1.0 - intEnd);
 
-        res += term;
+        const double adjustedTerm = term - compensation;
+        const double sum = res + adjustedTerm;
+        compensation = (sum - res) - adjustedTerm;
+        res = sum;
     }
 
     return (res);
@@ -2543,7 +2547,7 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
         depreciationFactor = calc->conv()->asFloat(args[5]).asFloat();
 
     // check if parameters are valid
-    if (cost < 0.0 || endPeriod < startPeriod || endPeriod > life || cost < 0.0 || salvage > cost || depreciationFactor <= 0.0)
+    if (startPeriod < 0.0 || endPeriod < startPeriod || endPeriod > life || cost < 0.0 || salvage > cost || depreciationFactor <= 0.0)
         return Value::errorVALUE();
 
     // calc loop start and end
@@ -2553,6 +2557,7 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
     unsigned long loopEnd = (unsigned long)intEnd;
 
     double res = 0.0;
+    double compensation = 0.0;
 
     if (flag) {
         // no straight-line depreciation
@@ -2565,25 +2570,30 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
             else if (i == loopEnd)
                 term *= (endPeriod + 1.0 - intEnd);
 
-            res += term;
+            const double adjustedTerm = term - compensation;
+            const double sum = res + adjustedTerm;
+            compensation = (sum - res) - adjustedTerm;
+            res = sum;
         }
     } else {
-        double life1 = life;
-        double part;
-
-        if (startPeriod != floor(startPeriod)) {
-            if (depreciationFactor > 1) {
-                if (startPeriod >= life / 2 || startPeriod == life / 2) {
-                    part = startPeriod - life / 2;
-                    startPeriod = life / 2;
-                    endPeriod -= part;
-                    life1 += 1;
-                }
+        double part = 0.0;
+        if (startPeriod != intStart || endPeriod != intEnd) {
+            if (startPeriod != intStart) {
+                const double tempIntEnd = intStart + 1.0;
+                const double tempValue = cost - vdbInterVDB(cost, salvage, life, life, intStart, depreciationFactor);
+                part += (startPeriod - intStart)
+                    * vdbInterVDB(tempValue, salvage, life, life - intStart, tempIntEnd - intStart, depreciationFactor);
+            }
+            if (endPeriod != intEnd) {
+                const double tempIntStart = intEnd - 1.0;
+                const double tempValue = cost - vdbInterVDB(cost, salvage, life, life, tempIntStart, depreciationFactor);
+                part += (intEnd - endPeriod)
+                    * vdbInterVDB(tempValue, salvage, life, life - tempIntStart, intEnd - tempIntStart, depreciationFactor);
             }
         }
-
-        cost -= vdbInterVDB(cost, salvage, life, life1, startPeriod, depreciationFactor);
-        res = vdbInterVDB(cost, salvage, life, life - startPeriod, endPeriod - startPeriod, depreciationFactor);
+        cost -= vdbInterVDB(cost, salvage, life, life, intStart, depreciationFactor);
+        res = vdbInterVDB(cost, salvage, life, life - intStart, intEnd - intStart, depreciationFactor);
+        res -= part;
     } // end not flag
 
     return Value(res);
