@@ -923,7 +923,7 @@ static Value coup_checkparams(valVector args, ValueCalc *calc, QDate &settlement
     if (args.count() > 4)
         conf.eom = calc->conv()->asBoolean(args[4]).asBoolean();
 
-    if (conf.basis < 0 || conf.basis > 5 || (conf.frequency == 0) || (12 % conf.frequency != 0) || settlement.daysTo(maturity) <= 0)
+    if (conf.basis < 0 || conf.basis > 5 || (conf.frequency <= 0) || (12 % conf.frequency != 0) || settlement.daysTo(maturity) <= 0)
         return Value::errorVALUE();
 
     return Value();
@@ -1981,8 +1981,7 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
     //   debugSheetsFormula<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<"
     //   freq="<<freq<<" basis="<<basis;
 
-    // TODO check frequency
-    if (yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last)
+    if (yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last || conv.frequency <= 0 || 12 % conv.frequency != 0)
         return Value::errorVALUE();
 
     QDate d = last;
@@ -2024,8 +2023,7 @@ Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
     //   debugSheetsFormula<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" price="<<price<<" redemp="<<redemp<<"
     //   freq="<<freq<<" basis="<<basis;
 
-    // TODO check frequency
-    if (rate < 0.0 || price <= 0.0 || maturity <= settlement || settlement <= last)
+    if (rate < 0.0 || price <= 0.0 || maturity <= settlement || settlement <= last || conv.frequency <= 0 || 12 % conv.frequency != 0)
         return Value::errorVALUE();
 
     QDate d = last;
@@ -2517,7 +2515,7 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
     // opt. parameter
     if (args.count() > 6)
         flag = calc->conv()->asInteger(args[6]).asInteger();
-    if (args.count() >= 5)
+    if (args.count() >= 6)
         depreciationFactor = calc->conv()->asFloat(args[5]).asFloat();
 
     // check if parameters are valid
