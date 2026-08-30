@@ -64,8 +64,8 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pmt(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_price (valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_pricedisc (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_price(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_pricedisc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pricemat(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv_annuity(valVector args, ValueCalc *calc, FuncExtra *);
@@ -256,14 +256,14 @@ FinancialModule::FinancialModule(QObject *parent, const QVariantList &)
     f = new Function("PPMT", func_ppmt);
     f->setParamCount(4, 6);
     add(f);
-    //   f = new Function ("PRICE", func_price);
-    //   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETPRICE");
-    //   f->setParamCount (6, 7);
-    //   add(f);
-    //   f = new Function ("PRICEDISC", func_pricedisc);
-    //   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETPRICEDISC");
-    //   f->setParamCount (4, 5);
-    //   add(f);
+    f = new Function("PRICE", func_price);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETPRICE");
+    f->setParamCount(6, 7);
+    add(f);
+    f = new Function("PRICEDISC", func_pricedisc);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETPRICEDISC");
+    f->setParamCount(4, 5);
+    add(f);
     f = new Function("PRICEMAT", func_pricemat);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETPRICEMAT");
     f->setParamCount(5, 6);
@@ -1129,6 +1129,25 @@ Value func_coupncd(valVector args, ValueCalc *calc, FuncExtra *)
 //
 // COUPNUM ( settlement, maturity, freq, [ basis = 0 ], [ eom ] )
 //
+static int coupNumPeriods(const QDate &settlement, const QDate &maturity, int frequency, bool eom)
+{
+    QDate cDate(maturity);
+
+    int months = maturity.month() - settlement.month() + 12 * (maturity.year() - settlement.year());
+
+    cDate = cDate.addMonths(-months);
+
+    if (eom && maturity.daysInMonth() == maturity.day()) {
+        while (cDate.daysInMonth() != cDate.day())
+            cDate = cDate.addDays(1);
+    }
+
+    if (settlement.day() >= cDate.day())
+        --months;
+
+    return 1 + months / (12 / frequency);
+}
+
 Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // dates and integers only - don't need high-precision for this
@@ -1145,27 +1164,10 @@ Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 5)
         eom = calc->conv()->asBoolean(args[4]).asBoolean();
 
-    if (basis < 0 || basis > 5 || (frequency == 0) || (12 % frequency != 0) || settlement.daysTo(maturity) <= 0)
+    if (basis < 0 || basis > 5 || (frequency <= 0) || (12 % frequency != 0) || settlement.daysTo(maturity) <= 0)
         return Value::errorVALUE();
 
-    double result;
-    QDate cDate(maturity);
-
-    int months = maturity.month() - settlement.month() + 12 * (maturity.year() - settlement.year());
-
-    cDate = cDate.addMonths(-months);
-
-    if (eom && maturity.daysInMonth() == maturity.day()) {
-        while (cDate.daysInMonth() != cDate.day())
-            cDate = cDate.addDays(1);
-    }
-
-    if (settlement.day() >= cDate.day())
-        --months;
-
-    result = (1 + months / (12 / frequency));
-
-    return Value(result);
+    return Value(coupNumPeriods(settlement, maturity, frequency, eom));
 }
 
 //
@@ -2094,6 +2096,76 @@ Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *)
     Value pay = getPay(calc, rate, nper, pv, fv, type);
     Value ipmt = func_ipmt(args, calc, nullptr);
     return calc->sub(pay, ipmt);
+}
+
+//
+// PRICE
+//
+// PRICE(settlement; maturity; rate; yield; redemption; frequency; [basis])
+//
+Value func_price(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
+    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    double rate = calc->conv()->asFloat(args[2]).asFloat();
+    double yield = calc->conv()->asFloat(args[3]).asFloat();
+    double redemption = calc->conv()->asFloat(args[4]).asFloat();
+    int frequency = calc->conv()->asInteger(args[5]).asInteger();
+
+    int basis = 0;
+    if (args.count() > 6)
+        basis = calc->conv()->asInteger(args[6]).asInteger();
+
+    if (rate < 0.0 || yield < 0.0 || redemption <= 0.0 || settlement >= maturity || frequency <= 0 || 12 % frequency != 0 || basis < 0 || basis > 5)
+        return Value::errorVALUE();
+
+    CoupSettings conf;
+    conf.frequency = frequency;
+    conf.basis = static_cast<CoupBasis>(basis);
+    conf.eom = true;
+
+    const QDate prevCoupon = coup_cd(settlement, maturity, frequency, conf.eom, false);
+    const QDate nextCoupon = coup_cd(settlement, maturity, frequency, conf.eom, true);
+
+    const double e = coupdays(settlement, maturity, conf);
+    const double dsc = daysBetweenBasis(settlement, nextCoupon, conf.basis);
+    const double a = daysBetweenBasis(prevCoupon, settlement, conf.basis);
+    const int n = coupNumPeriods(settlement, maturity, frequency, conf.eom);
+
+    const double coupon = 100.0 * rate / frequency;
+    const double yieldPerPeriod = yield / frequency;
+    const double dscOverE = dsc / e;
+
+    double result = redemption / pow(1.0 + yieldPerPeriod, n - 1 + dscOverE);
+    for (int k = 1; k <= n; ++k)
+        result += coupon / pow(1.0 + yieldPerPeriod, k - 1 + dscOverE);
+    result -= coupon * (a / e);
+
+    return Value(result);
+}
+
+//
+// PRICEDISC
+//
+// PRICEDISC(settlement; maturity; discount; redemption; [basis])
+//
+Value func_pricedisc(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
+    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    double discount = calc->conv()->asFloat(args[2]).asFloat();
+    double redemption = calc->conv()->asFloat(args[3]).asFloat();
+
+    int basis = 0;
+    if (args.count() > 4)
+        basis = calc->conv()->asInteger(args[4]).asInteger();
+
+    if (settlement >= maturity || discount <= 0.0 || redemption <= 0.0 || basis < 0 || basis > 4)
+        return Value::errorVALUE();
+
+    const double yearFrac = calc->yearFrac(settlement, maturity, basis).asFloat();
+
+    return Value(redemption * (1.0 - discount * yearFrac));
 }
 
 //
