@@ -88,7 +88,7 @@ install(FILES statistical.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/
 
 ########### next target ###############
 
-add_library(kspreadtextmodule MODULE TextModule.h text.cpp)
+add_library(kspreadtextmodule MODULE TextModule.h text.cpp JapaneseWidthFolding.h JapaneseWidthFolding.cpp)
 target_include_directories( kspreadtextmodule PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 target_link_libraries(kspreadtextmodule calligrasheetsengine)
 install(TARGETS kspreadtextmodule DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrasheets/functions)

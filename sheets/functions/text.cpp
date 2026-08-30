@@ -6,6 +6,7 @@
 // built-in text functions
 #include "TextModule.h"
 
+#include "JapaneseWidthFolding.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Function.h"
 #include "engine/Localization.h"
@@ -179,7 +180,7 @@ QString TextModule::descriptionFileName() const
 Value func_asc(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString s = calc->conv()->asString(args[0]).asString();
-    return Value(QString(s));
+    return Value(JapaneseWidthFolding::toHalfWidthForAsc(s));
 }
 
 // Function: CHAR
@@ -376,9 +377,8 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: JIS
 Value func_jis(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Q_UNUSED(args);
-    Q_UNUSED(calc);
-    return Value(QString("FIXME JIS()"));
+    QString s = calc->conv()->asString(args[0]).asString();
+    return Value(JapaneseWidthFolding::toFullWidthForJis(s));
 }
 
 // Function: LEFT

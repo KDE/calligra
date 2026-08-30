@@ -55,9 +55,9 @@ Value TestTextFunctions::evaluate(const QString &formula, Value &ex)
 
 void TestTextFunctions::testASC()
 {
-    // TODO reactivate after function is implemented
-    //     CHECK_EVAL( "ASC(\"ＡＢＣ\")", Value( "ABC" ) );
-    //     CHECK_EVAL( "ASC(\"アイウ\")", Value( "ｧｨｩ" ) );
+    CHECK_EVAL("ASC(\"ＡＢＣ\")", Value("ABC"));
+    CHECK_EVAL("ASC(\"アイウ\")", Value("ｱｲｳ"));
+    CHECK_EVAL("ASC(\"ガ\")", Value("ｶﾞ")); // decomposes: GA -> KA + voiced-sound-mark
 }
 
 void TestTextFunctions::testCHAR()
@@ -148,9 +148,9 @@ void TestTextFunctions::testFIXED()
 
 void TestTextFunctions::testJIS()
 {
-    // TODO reactivate after function is implemented
-    //     CHECK_EVAL( "JIS(\"ABC\")", Value( "ＡＢＣ") );
-    //     CHECK_EVAL( "JIS(\"ｧｨｩ\")", Value( "アイウ" ) );
+    CHECK_EVAL("JIS(\"ABC\")", Value("ＡＢＣ"));
+    CHECK_EVAL("JIS(\"ｶﾞ\")", Value("ガ")); // composes: KA + voiced-sound-mark -> GA
+    CHECK_EVAL("JIS(\"ｦ\")", Value("ヲ"));
 }
 
 void TestTextFunctions::testLEFT()
