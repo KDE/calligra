@@ -1355,27 +1355,16 @@ Value func_disc(valVector args, ValueCalc *calc, FuncExtra *)
     QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
     QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
 
-    // TODO sascha fix error value checking
-    //   // check dates
-    //   if ( settlement > maturity || )
-    //     return Value(false);
-
     Value par = args[2];
     Value redemp = args[3];
-
-    // check parameters
-    if (settlement > maturity || redemp.asFloat() <= 0.0 || par.asFloat() <= 0.0)
-        return Value(false);
 
     int basis = 0;
     if (args.count() == 5)
         basis = calc->conv()->asInteger(args[4]).asInteger();
 
-    /*  double y = daysPerYear (settlement, basis);
-      double d = daysBetweenDates (settlement, maturity, basis);
-
-      if ( y <= 0 || d <= 0 || basis < 0 || basis > 4 || calc->isZero (redemp) )
-        return Value(false);*/
+    // check parameters
+    if (settlement > maturity || redemp.asFloat() <= 0.0 || par.asFloat() <= 0.0 || basis < 0 || basis > 4)
+        return Value::errorNUM();
 
     // res=(1-(price/redemption)/yearfrac)
     return calc->div(calc->sub(Value(1.0), calc->div(par, redemp)), calc->yearFrac(settlement, maturity, basis));
