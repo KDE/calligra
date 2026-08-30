@@ -381,6 +381,12 @@ Value func_jis(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(JapaneseWidthFolding::toFullWidthForJis(s));
 }
 
+// codepoint-based QString::fromUcs4, since Qt's toUcs4() still returns QList<uint>
+static QString fromCodePoints(const QList<uint> &cps, int pos, int len)
+{
+    return QString::fromUcs4(reinterpret_cast<const char32_t *>(cps.constData()) + pos, len);
+}
+
 // Function: LEFT
 Value func_left(valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -391,13 +397,15 @@ Value func_left(valVector args, ValueCalc *calc, FuncExtra *)
     if (nb < 0)
         return Value::errorVALUE();
 
-    return Value(str.left(nb));
+    // by Unicode code point, not UTF-16 code unit, so this doesn't split a surrogate pair
+    const QList<uint> cps = str.toUcs4();
+    return Value(fromCodePoints(cps, 0, qMin(nb, cps.size())));
 }
 
 // Function: LEN
 Value func_len(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    int nb = calc->conv()->asString(args[0]).asString().length();
+    const int nb = calc->conv()->asString(args[0]).asString().toUcs4().size();
     return Value(nb);
 }
 
@@ -413,7 +421,7 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     QString str = calc->conv()->asString(args[0]).asString();
 
     int pos = calc->conv()->asInteger(args[1]).asInteger();
-    if (pos < 0) {
+    if (pos < 1) {
         return Value::errorVALUE();
     }
 
@@ -428,11 +436,12 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     // Excel compatible
     pos--;
 
-    // workaround for Qt bug
-    if (len > 0x7fffffff - pos)
-        len = 0x7fffffff - pos;
+    // by Unicode code point, not UTF-16 code unit, so this doesn't split a surrogate pair
+    const QList<uint> cps = str.toUcs4();
+    pos = qBound(0, pos, cps.size());
+    len = qMin(len, cps.size() - pos);
 
-    return Value(str.mid(pos, len));
+    return Value(fromCodePoints(cps, pos, len));
 }
 
 // Function: NUMBERVALUE
@@ -568,7 +577,10 @@ Value func_right(valVector args, ValueCalc *calc, FuncExtra *)
     if (nb < 0)
         return Value::errorVALUE();
 
-    return Value(str.right(nb));
+    // by Unicode code point, not UTF-16 code unit, so this doesn't split a surrogate pair
+    const QList<uint> cps = str.toUcs4();
+    const int start = qMax(0, cps.size() - nb);
+    return Value(fromCodePoints(cps, start, cps.size() - start));
 }
 
 // Function: ROT13
