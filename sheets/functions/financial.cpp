@@ -2619,18 +2619,23 @@ Value func_xirr(valVector args, ValueCalc *calc, FuncExtra *)
     // max number of iterations
     static const int maxIter = 50;
 
-    // Newton's method - try to find a res, with a accuracy of maxEpsilon
-    double newRate, rateEpsilon, resultValue;
-    int i = 0;
-    bool contLoop;
-
+    double resultValue = 0.0;
+    bool contLoop = false;
+    int scan = 0;
     do {
-        resultValue = xirrResult(args, calc, resultRate);
-        newRate = resultRate - resultValue / xirrResultDerive(args, calc, resultRate);
-        rateEpsilon = fabs(newRate - resultRate);
-        resultRate = newRate;
-        contLoop = (rateEpsilon > maxEpsilon) && (fabs(resultValue) > maxEpsilon);
-    } while (contLoop && (++i < maxIter));
+        if (scan > 0)
+            resultRate = -0.99 + (scan - 1) * 0.01;
+        int i = 0;
+        do {
+            resultValue = xirrResult(args, calc, resultRate);
+            const double newRate = resultRate - resultValue / xirrResultDerive(args, calc, resultRate);
+            const double rateEpsilon = fabs(newRate - resultRate);
+            resultRate = newRate;
+            contLoop = (rateEpsilon > maxEpsilon) && (fabs(resultValue) > maxEpsilon);
+        } while (contLoop && (++i < maxIter));
+        if (!std::isfinite(resultRate) || !std::isfinite(resultValue))
+            contLoop = true;
+    } while (contLoop && ++scan < 200);
 
     if (contLoop)
         return Value::errorVALUE();
