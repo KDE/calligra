@@ -565,7 +565,15 @@ static Value helper_ipmt(ValueCalc *calc, Value rate, Value per, Value nper, Val
     //     // -ineg * rate
     //     return calc->mul (calc->mul (ineg, Value(-1)), rate);
 
-    const Value pmt = getPay(calc, rate, nper, pv, fv, Value(0)); // Type 0
+    const Value pmt = getPay(calc, rate, nper, pv, fv, type);
+
+    if (calc->equal(per, Value(1)))
+        return type.isZero() ? calc->mul(calc->mul(pv, Value(-1)), rate) : Value(0);
+
+    if (!type.isZero()) {
+        valVector fvArgs = {rate, calc->sub(per, Value(2)), pmt, pv, type};
+        return calc->mul(calc->sub(func_fv(fvArgs, calc, nullptr), pmt), rate);
+    }
 
     // pow1p (rate, per-1)
     const Value val1(pow1p(rate.asFloat(), calc->sub(per, Value(1)).asFloat()));
@@ -576,7 +584,7 @@ static Value helper_ipmt(ValueCalc *calc, Value rate, Value per, Value nper, Val
     // -1*(pv * pow1p(rate, per-1)*rate + pmt* pow1pm1(rate, per-1))
     ipmt = calc->mul(Value(-1), calc->add(calc->mul(calc->mul(pv, val1), rate), calc->mul(pmt, val2)));
 
-    return (type.isZero()) ? ipmt : calc->div(ipmt, calc->add(Value(1), rate));
+    return ipmt;
 }
 
 //
@@ -1693,7 +1701,10 @@ Value func_ipmt(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 4)
         fv = args[4];
     if (args.count() == 6)
-        type = args[5];
+        type = Value(static_cast<int64_t>(calc->conv()->asBoolean(args[5]).asBoolean()));
+
+    if (calc->lower(per, Value(1)) || calc->greater(per, nper))
+        return Value::errorVALUE();
 
     return helper_ipmt(calc, rate, per, nper, pv, fv, type);
 }
@@ -2085,12 +2096,13 @@ Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 4)
         fv = args[4];
     if (args.count() == 6)
-        type = args[5];
+        type = Value(static_cast<int64_t>(calc->conv()->asBoolean(args[5]).asBoolean()));
 
-    debugSheets << "Type=" << type;
+    if (calc->lower(per, Value(1)) || calc->greater(per, nper))
+        return Value::errorVALUE();
 
     Value pay = getPay(calc, rate, nper, pv, fv, type);
-    Value ipmt = func_ipmt(args, calc, nullptr);
+    Value ipmt = helper_ipmt(calc, rate, per, nper, pv, fv, type);
     return calc->sub(pay, ipmt);
 }
 
@@ -2183,15 +2195,12 @@ Value func_pricemat(valVector args, ValueCalc *calc, FuncExtra *)
     // debugSheetsFormula<<"PRICEMAT";
     // debugSheetsFormula<<"settlement ="<<settlement<<" maturity="<<maturity<<" issue="<<issue<<" rate="<<rate<<" yield="<<yield<<" basis="<<basis;
 
-    if (rate < 0.0 || yield < 0.0 || settlement >= maturity)
+    if (args[3].isEmpty() || args[4].isEmpty() || rate < 0.0 || yield < 0.0 || settlement >= maturity || basis < 0 || basis > 4)
         return Value::errorVALUE();
 
-    long double y = daysPerYear(settlement, basis);
-    if (!y)
-        return Value::errorVALUE();
-    long double issMat = daysBetweenDates(issue, maturity, basis) / y;
-    long double issSet = daysBetweenDates(issue, settlement, basis) / y;
-    long double setMat = daysBetweenDates(settlement, maturity, basis) / y;
+    long double issMat = calc->yearFrac(issue, maturity, basis).asFloat();
+    long double issSet = calc->yearFrac(issue, settlement, basis).asFloat();
+    long double setMat = calc->yearFrac(settlement, maturity, basis).asFloat();
 
     long double res = 1.0l + issMat * rate;
     res /= 1.0l + setMat * yield;
@@ -2382,8 +2391,9 @@ Value func_received(valVector args, ValueCalc *calc, FuncExtra *)
     double d = daysBetweenDates(settlement, maturity, basis);
     double y = daysPerYear(settlement, basis);
 
-    if (d <= 0 || y <= 0 || basis < 0 || basis > 4)
-        return Value(false);
+    if (args[0].isEmpty() || args[1].isEmpty() || investment.isEmpty() || discount.isEmpty() || d <= 0 || y <= 0 || calc->lower(investment, Value(0))
+        || calc->lower(discount, Value(0)) || basis < 0 || basis > 4)
+        return Value::errorVALUE();
 
     // 1.0 - ( discount * d / y )
     Value x = calc->sub(Value(1.0), (calc->mul(discount, d / y)));
