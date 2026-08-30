@@ -124,6 +124,7 @@ void TestFormula::initTestCase()
     map->calculationSettings()->locale()->setLanguage(QLocale::C);
     CellBase(m_sheet, 1, 1).setCellValue(Value(6));
     CellBase(m_sheet, 1, 2).setCellValue(Value(1.5));
+    CellBase(m_sheet, 30, 500).setCellValue(Value(100)); // AD500, for testIntersect() -- far from ranges used elsewhere
 }
 
 void TestFormula::testTokenizer()
@@ -176,7 +177,9 @@ void TestFormula::testTokenizer()
     CHECK_TOKENIZE("<=", "o");
     CHECK_TOKENIZE(">=", "o");
     CHECK_TOKENIZE("%", "o");
-    CHECK_TOKENIZE("A1:A5 B1:B5", "PROBE");
+    CHECK_TOKENIZE("A1:A5 B1:B5", "ror");
+    CHECK_TOKENIZE("A1 + B1", "coc");
+    CHECK_TOKENIZE("A1:A5   B1:B5", "ror");
 
     // commonly used formulas
     CHECK_TOKENIZE("A1+A2", "coc");
@@ -187,7 +190,9 @@ void TestFormula::testTokenizer()
 
     // should be correctly parsed though they are nonsense (can't be evaluated)
     CHECK_TOKENIZE("0E0.5", "ff");
-    CHECK_TOKENIZE("B3 D4:D5 Sheet1!K1", "crc");
+    // whitespace between two references is the array intersection operator
+    CHECK_TOKENIZE("B3 D4:D5 Sheet1!K1", "coroc");
+    // ... but not after a bare identifier (function name/named range), to keep this targeted
     CHECK_TOKENIZE("SIN A1", "xc");
     CHECK_TOKENIZE("SIN A1:A20", "xr");
 
@@ -317,6 +322,17 @@ void TestFormula::testOperators()
     CHECK_EVAL("100/5*2", Value(40)); // (100/5)*2, not 100/(5*2)
     CHECK_EVAL("2*3/6", Value(1)); // (2*3)/6, not 2*(3/6)
     CHECK_EVAL("2/4*8", Value(4)); // (2/4)*8, not 2/(4*8)
+}
+
+void TestFormula::testIntersect()
+{
+    // AD500:AE500 is row 500, columns AD-AE; AD500:AD501 is column AD, rows 500-501 --
+    // they intersect at AD500 (=100)
+    CHECK_EVAL("AD500:AE500 AD500:AD501", Value(100));
+    CHECK_EVAL("AD500:AD501 AD500:AE500", Value(100)); // order shouldn't matter
+
+    // disjoint ranges intersect to nothing
+    CHECK_EVAL("A1:A1 B1:B1", Value::errorNULL());
 }
 
 void TestFormula::testComparison()

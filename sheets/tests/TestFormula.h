@@ -27,6 +27,7 @@ private Q_SLOTS:
     void testUnary();
     void testBinary();
     void testOperators();
+    void testIntersect();
     void testComparison();
     void testString();
     void testReferences();

@@ -569,6 +569,13 @@ Tokens Formula::tokens() const
     return scan(d->expression, locale());
 }
 
+static bool startsReference(const QChar *p, const QChar *end)
+{
+    if (p >= end)
+        return false;
+    return p->isLetter() || p->isDigit() || *p == QChar('$') || *p == QChar('\'');
+}
+
 Tokens Formula::scan(const QString &expr, const Localization *locale) const
 {
     // parsing state
@@ -619,7 +626,12 @@ Tokens Formula::scan(const QString &expr, const Localization *locale) const
         case Start:
             tokenStart = data;
             // Whitespaces can be used as intersect-operator for two arrays.
-            if (data->isSpace()) {
+            if (data->isSpace() && !((!tokens.isEmpty()) && (tokens.last().type() == Token::Cell || tokens.last().type() == Token::Range) && [&] {
+                    const QChar *p = data;
+                    while (p < end && p->isSpace())
+                        ++p;
+                    return startsReference(p, end);
+                }())) {
                 ++data;
             }
             // check for number
@@ -1604,10 +1616,15 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
                 Region r = r1.intersected(r2);
                 QRect rect = r.boundingRect();
                 CellBase cell;
-                if (rect.top() == rect.bottom())
+                if (rect.top() == rect.bottom() && rect.left() == rect.right())
+                    // a single cell: no disambiguation needed
+                    cell = CellBase(r.firstSheet(), rect.left(), rect.top());
+                else if (rect.top() == rect.bottom())
+                    // a whole row: pick this formula's own column out of it
                     cell = CellBase(r.firstSheet(), fe.mycol, rect.top());
                 else if (rect.left() == rect.right())
-                    cell = CellBase(r.firstSheet(), rect.left(), fe.mycol);
+                    // a whole column: pick this formula's own row out of it
+                    cell = CellBase(r.firstSheet(), rect.left(), fe.myrow);
                 if (cell.isNull())
                     val1 = Value::errorNULL();
                 else if (cell.isEmpty())
