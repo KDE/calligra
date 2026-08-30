@@ -279,3 +279,11 @@ add_executable(BenchmarkRTree ${BenchmarkRTree_SRCS})
 ecm_mark_as_test(BenchmarkRTree)
 target_link_libraries(BenchmarkRTree calligrasheetsengine Qt6::Test)
 
+########### next target ###############
+
+sheets_add_unit_test(Fods
+    TestFods.cpp
+    LINK_LIBRARIES calligrasheetspartlib Qt6::Test
+)
+target_compile_definitions(Fods PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods")
+
