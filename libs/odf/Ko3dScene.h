@@ -49,7 +49,7 @@ public:
         Draft // Wireframe
     };
 
-    class Lightsource
+    class KOODF_EXPORT Lightsource
     {
     public:
         Lightsource();
@@ -78,7 +78,7 @@ public:
     };
 
     /** A dr3d:cube 3d primitive shape. */
-    class Cube
+    class KOODF_EXPORT Cube
     {
     public:
         Cube();
@@ -102,7 +102,7 @@ public:
     };
 
     /** A dr3d:sphere 3d primitive shape. */
-    class Sphere
+    class KOODF_EXPORT Sphere
     {
     public:
         Sphere();
@@ -126,7 +126,7 @@ public:
     };
 
     /** A dr3d:extrude 3d primitive shape: a 2d path extruded along the z axis. */
-    class Extrude
+    class KOODF_EXPORT Extrude
     {
     public:
         Extrude();
@@ -150,7 +150,7 @@ public:
     };
 
     /** A dr3d:rotate 3d primitive shape: a 2d path rotated around the y axis. */
-    class Rotate
+    class KOODF_EXPORT Rotate
     {
     public:
         Rotate();
