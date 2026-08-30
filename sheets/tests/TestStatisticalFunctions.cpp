@@ -797,6 +797,7 @@ void TestStatisticalFunctions::testMIN()
     CHECK_EVAL("MIN(B3)", Value(0)); // If no numbers are provided in all ranges, MIN returns 0
     CHECK_EVAL("MIN(\"a\")", Value::errorNUM()); // Non-numbers inline are NOT ignored.
     CHECK_EVAL("MIN(B3:B5)", Value(2)); // Cell text is not converted to numbers and is ignored.
+    QCOMPARE(evaluate("MIN(B3:B9)"), Value::errorDIV0()); // Errors inside ranges are propagated.
 }
 
 void TestStatisticalFunctions::testMINA()
@@ -811,6 +812,7 @@ void TestStatisticalFunctions::testMINA()
     //     CHECK_EVAL("MINA(B3:B5)",    Value(        0 ) ); // Cell text is converted to 0.
 
     CHECK_EVAL("MINA(B6:C6)", Value(1)); // The value "True" is considered equivalent to 1.
+    QCOMPARE(evaluate("MINA(B3:B9)"), Value::errorDIV0()); // Errors inside ranges are propagated.
 }
 
 void TestStatisticalFunctions::testMODE()
