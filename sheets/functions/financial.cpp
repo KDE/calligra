@@ -80,7 +80,7 @@ Value func_tbillyield(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xirr(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xnpv(valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_yield (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_yield(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yielddisc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yieldmat(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *);
@@ -316,10 +316,10 @@ FinancialModule::FinancialModule(QObject *parent, const QVariantList &)
     f->setParamCount(3);
     f->setAcceptArray();
     add(f);
-    //   f = new Function ("YIELD", func_yield);
-    //   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYIELD");
-    //   f->setParamCount (6, 7);
-    //   add(f);
+    f = new Function("YIELD", func_yield);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYIELD");
+    f->setParamCount(6, 7);
+    add(f);
     f = new Function("YIELDDISC", func_yielddisc);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYIELDDISC");
     f->setParamCount(4, 5);
@@ -2699,6 +2699,58 @@ Value func_xnpv(valVector args, ValueCalc *calc, FuncExtra *)
     }
 
     return Value(res);
+}
+
+Value func_yield(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
+    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    double coupon = calc->conv()->asFloat(args[2]).asFloat();
+    double price = calc->conv()->asFloat(args[3]).asFloat();
+    double redemption = calc->conv()->asFloat(args[4]).asFloat();
+    int frequency = calc->conv()->asInteger(args[5]).asInteger();
+    int basis = 0;
+    if (args.count() > 6)
+        basis = calc->conv()->asInteger(args[6]).asInteger();
+
+    if (args[0].isEmpty() || args[1].isEmpty() || args[2].isEmpty() || args[3].isEmpty() || args[4].isEmpty() || args[5].isEmpty() || coupon < 0.0
+        || price <= 0.0 || redemption <= 0.0 || settlement >= maturity || (frequency != 1 && frequency != 2 && frequency != 4) || basis < 0 || basis > 4)
+        return Value::errorVALUE();
+
+    auto calculatePrice = [&](double yield) {
+        valVector priceArgs =
+            {args[0], args[1], Value(coupon), Value(yield), Value(redemption), Value(static_cast<int64_t>(frequency)), Value(static_cast<int64_t>(basis))};
+        return func_price(priceArgs, calc, nullptr).asFloat();
+    };
+
+    double lowerYield = 0.0;
+    double upperYield = 1.0;
+    double lowerPrice = calculatePrice(lowerYield);
+    double upperPrice = calculatePrice(upperYield);
+    double yield = 0.5;
+    double calculatedPrice = 0.0;
+
+    for (int iteration = 0; iteration < 100; ++iteration) {
+        calculatedPrice = calculatePrice(yield);
+        if (calc->approxEqual(Value(calculatedPrice), Value(price)))
+            return Value(yield);
+        if (price < upperPrice) {
+            upperYield *= 2.0;
+            upperPrice = calculatePrice(upperYield);
+            yield = (upperYield - lowerYield) * 0.5;
+        } else {
+            if (price < calculatedPrice) {
+                lowerYield = yield;
+                lowerPrice = calculatedPrice;
+            } else {
+                upperYield = yield;
+                upperPrice = calculatedPrice;
+            }
+            yield = upperYield - (upperYield - lowerYield) * ((price - upperPrice) / (lowerPrice - upperPrice));
+        }
+    }
+
+    return fabs(price - calculatedPrice) > price / 100.0 ? Value::errorVALUE() : Value(yield);
 }
 
 //

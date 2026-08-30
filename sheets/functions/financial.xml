@@ -1435,6 +1435,47 @@
            </Function>
 
            <Function>
+               <Name>YIELD</Name>
+               <Type>Float</Type>
+               <Parameter>
+                   <Comment>Settlement</Comment>
+                   <Type>Date</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Maturity</Comment>
+                   <Type>Date</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Annual coupon rate</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Price per 100 currency units of face value</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Redemption value per 100 currency units of face value</Comment>
+                   <Type>Float</Type>
+               </Parameter>
+               <Parameter>
+                   <Comment>Number of coupon payments per year</Comment>
+                   <Type>Int</Type>
+               </Parameter>
+               <Parameter optional="true">
+                   <Comment>Day counting basis</Comment>
+                   <Type>Int</Type>
+               </Parameter>
+               <Help>
+                   <Text>The YIELD function calculates the annual yield of a security that pays periodic interest.</Text>
+                   <Syntax>YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])</Syntax>
+                   <Example>YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065</Example>
+                   <Related>PRICE</Related>
+                   <Related>YIELDDISC</Related>
+                   <Related>YIELDMAT</Related>
+               </Help>
+           </Function>
+
+           <Function>
                <Name>YIELDDISC</Name>
                <Type>Float</Type>
                <Parameter>
