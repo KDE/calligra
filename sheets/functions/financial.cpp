@@ -2713,7 +2713,7 @@ Value func_yield(valVector args, ValueCalc *calc, FuncExtra *)
         return func_price(priceArgs, calc, nullptr).asFloat();
     };
 
-    double lowerYield = 0.0;
+    double lowerYield = 1e-12;
     double upperYield = 1.0;
     double lowerPrice = calculatePrice(lowerYield);
     double upperPrice = calculatePrice(upperYield);
