@@ -1498,10 +1498,10 @@ Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *)
 
     int basis = 0;
     if (args.count() > 5)
-        basis = calc->conv()->asInteger(args[3]).asInteger();
+        basis = calc->conv()->asInteger(args[5]).asInteger();
 
-    // TODO add chk_freq
-    if (coup < 0.0 || yield < 0.0)
+    if (settlement >= maturity || args[2].isEmpty() || args[3].isEmpty() || args[4].isEmpty() || coup < 0.0 || yield < 0.0
+        || (freq != 1 && freq != 2 && freq != 4) || basis < 0 || basis > 4)
         return Value::errorVALUE();
 
     valVector param;
