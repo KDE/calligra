@@ -2492,6 +2492,10 @@ Value func_tbillprice(valVector args, ValueCalc *calc, FuncExtra *)
     QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
     Value discount = args[2];
 
+    if (args[0].isEmpty() || args[1].isEmpty() || discount.isEmpty() || settlement >= maturity || calc->lower(discount, Value(0)) || calc->isZero(discount)
+        || settlement.daysTo(maturity) > 365)
+        return Value::errorVALUE();
+
     Value fraction = calc->yearFrac(settlement, maturity.addDays(1), 0); // basis: USA 30/360
     double dummy;
 
