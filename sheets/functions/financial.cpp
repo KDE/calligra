@@ -1902,23 +1902,26 @@ Value func_nper(valVector args, ValueCalc *calc, FuncExtra *)
 
     // defaults
     double fv = 0.0;
-    double type = 0;
+    bool type = false;
 
     // opt. params
     if (args.count() > 3)
         fv = calc->conv()->asFloat(args[3]).asFloat();
     if (args.count() == 5)
-        type = calc->conv()->asFloat(args[4]).asFloat();
+        type = calc->conv()->asBoolean(args[4]).asBoolean();
 
-    // if rate is 0, then NPER solves this
-    //   PV = -FV -( Payment*NPER )
+    if (pv + fv == 0.0)
+        return Value(0.0);
     if (rate == 0.0)
         return Value(-(pv + fv) / pmt);
 
-    if (type > 0)
-        return Value(log(-(rate * fv - pmt * (1.0 + rate)) / (rate * pv + pmt * (1.0 + rate))) / log(1.0 + rate));
-    else
-        return Value(log(-(rate * fv - pmt) / (rate * pv + pmt)) / log(1.0 + rate));
+    const double numerator = type ? rate * fv - pmt * (1.0 + rate) : rate * fv - pmt;
+    const double denominator = type ? rate * pv + pmt * (1.0 + rate) : rate * pv + pmt;
+    const double ratio = -numerator / denominator;
+    if (ratio <= 0.0 || rate <= -1.0)
+        return Value::errorVALUE();
+
+    return Value(log(ratio) / log1p(rate));
 }
 
 //
