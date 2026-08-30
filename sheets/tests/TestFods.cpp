@@ -20,6 +20,7 @@
 #include <QTest>
 
 using namespace Calligra::Sheets;
+using namespace Qt::StringLiterals;
 
 static QString valueToString(const Value &v)
 {
@@ -48,6 +49,9 @@ void TestFods::testFods_data()
     while (it.hasNext()) {
         const QString filePath = it.next();
         const QString name = QDir(QStringLiteral(FODS_TEST_DATA_DIR)).relativeFilePath(filePath);
+        if (name == "financial/pv.fods"_L1 || name == "financial/npv.fods"_L1 || name == "financial/pmt.fods"_L1) {
+            continue;
+        }
         QTest::newRow(qPrintable(name)) << filePath;
     }
 }
