@@ -1132,7 +1132,7 @@ void Formula::compile(const Tokens &tokens) const
                     // rule for empty function arguments, if token is ; or )
                     // id ( arg ; -> id ( arg
                     if (!ruleFound)
-                        if (syntaxStack.itemCount() >= 3)
+                        if (syntaxStack.itemCount() >= 4)
                             if ((token.asOperator() == Token::RightPar) || (token.asOperator() == Token::Semicolon)) {
                                 Token sep = syntaxStack.top();
                                 Token arg = syntaxStack.top(1);
