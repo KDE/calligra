@@ -56,6 +56,14 @@ struct ShapeLoadingData;
 CALLIGRA_SHEETS_CORE_EXPORT bool loadDocument(DocBase *doc, KoOdfReadStore &odfStore);
 CALLIGRA_SHEETS_CORE_EXPORT bool saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext);
 
+/**
+ * Loads a document from a single flat-XML OpenDocument (e.g. .fods) document, i.e. one where
+ * office:meta, office:settings, office:styles, office:automatic-styles and office:body are all
+ * children of one office:document root, instead of being split into separate content.xml,
+ * styles.xml and settings.xml store entries.
+ */
+CALLIGRA_SHEETS_CORE_EXPORT bool loadFlatXmlDocument(DocBase *doc, const KoXmlDocument &flatDoc);
+
 CALLIGRA_SHEETS_CORE_EXPORT bool loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadingContext &context);
 CALLIGRA_SHEETS_CORE_EXPORT void saveTableShape(Sheet *sheet, KoShapeSavingContext &context);
 

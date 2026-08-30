@@ -25,6 +25,8 @@
 
 #include <KoCanvasResourceIdentities.h>
 #include <KoDocumentResourceManager.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 #include "Map.h"
 #include "engine/CalculationSettings.h"
@@ -138,6 +140,10 @@ void DocBase::paintContent(QPainter &, const QRect &)
 
 bool DocBase::loadXML(const KoXmlDocument &doc, KoStore *)
 {
+    const KoXmlElement root = doc.documentElement();
+    if (root.localName() == "document" && root.namespaceURI() == KoXmlNS::office) {
+        return Odf::loadFlatXmlDocument(this, doc);
+    }
     return Ksp::loadDoc(this, doc);
 }
 

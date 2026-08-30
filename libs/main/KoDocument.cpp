@@ -1724,7 +1724,7 @@ bool KoDocument::loadNativeFormat(const QString &file_)
         int errorColumn;
         KoXmlDocument doc = KoXmlDocument(true);
         bool res;
-        if (doc.setContent(&in, &errorMsg, &errorLine, &errorColumn)) {
+        if (doc.setContent(&in, true, &errorMsg, &errorLine, &errorColumn)) {
             res = loadXML(doc, nullptr);
             if (res)
                 res = completeLoading(nullptr);

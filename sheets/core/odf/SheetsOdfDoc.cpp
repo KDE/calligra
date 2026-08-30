@@ -41,6 +41,7 @@
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
+#include <QScopedPointer>
 
 // This file contains functionality to load/save a DocBase
 
@@ -132,6 +133,82 @@ bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
 
     if (updater)
         updater->setProgress(100);
+
+    return true;
+}
+
+bool Odf::loadFlatXmlDocument(DocBase *doc, const KoXmlDocument &flatDoc)
+{
+    QPointer<KoUpdater> updater;
+    if (doc->progressUpdater()) {
+        updater = doc->progressUpdater()->startSubtask(1, "Calligra::Sheets::Odf::loadFlatXmlDocument");
+        updater->setProgress(0);
+    }
+
+    doc->setSpellListIgnoreAll(QStringList());
+
+    KoXmlElement root = flatDoc.documentElement();
+    KoXmlElement realBody(KoXml::namedItemNS(root, KoXmlNS::office, "body"));
+    if (realBody.isNull()) {
+        doc->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
+        doc->map()->deleteLoadingInfo();
+        return false;
+    }
+    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
+
+    if (body.isNull()) {
+        errorSheetsODF << "No office:spreadsheet found!" << Qt::endl;
+        KoXmlElement childElem;
+        QString localName;
+        forEachElement(childElem, realBody)
+        {
+            localName = childElem.localName();
+        }
+        if (localName.isEmpty()) {
+            doc->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
+        } else {
+            doc->setErrorMessage(i18n("This document is not a spreadsheet, but %1. Please try opening it with the appropriate application.",
+                                      KoDocument::tagNameToDocumentType(localName)));
+        }
+        doc->map()->deleteLoadingInfo();
+        return false;
+    }
+
+    doc->map()->calculationSettings()->setFileName(doc->url().toDisplayString());
+
+    KoOdfStylesReader stylesReader;
+    stylesReader.createStyleMap(flatDoc, true);
+
+    // Create dummy empty store
+    QBuffer buffer;
+    buffer.open(QIODevice::ReadOnly);
+    QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Read));
+    KoOdfLoadingContext context(stylesReader, store.data());
+
+    if (!loadMap(doc->map(), body, context)) {
+        doc->map()->deleteLoadingInfo();
+        return false;
+    }
+
+    loadDocSettings(doc, flatDoc);
+    doc->initConfig();
+
+    SheetAccessModel *sheetModel = doc->map()->sheetAccessModel();
+    const QList<SheetBase *> sheets = doc->map()->sheetList();
+    for (SheetBase *sheet : sheets) {
+        // This region contains the entire sheet
+        const QRect region(0, 0, KS_colMax - 1, KS_rowMax - 1);
+        QModelIndex index = sheetModel->index(0, doc->map()->indexOf(sheet));
+        QVariant bindingModelValue = sheetModel->data(index, Qt::DisplayRole);
+        BindingModel *curBindingModel = dynamic_cast<BindingModel *>(qvariant_cast<QPointer<QAbstractItemModel>>(bindingModelValue).data());
+        if (curBindingModel) {
+            curBindingModel->emitDataChanged(region);
+        }
+    }
+
+    if (updater) {
+        updater->setProgress(100);
+    }
 
     return true;
 }
