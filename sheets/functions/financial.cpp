@@ -107,6 +107,7 @@ FinancialModule::FinancialModule(QObject *parent, const QVariantList &)
     f = new Function("AMORLINC", func_amorlinc);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORLINC");
     f->setParamCount(6, 7);
+    f->setAcceptArray();
     add(f);
     f = new Function("COMPOUND", func_compound);
     f->setParamCount(4);
@@ -840,6 +841,10 @@ Value func_amorlinc(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 6)
         basis = calc->conv()->asInteger(args[6]).asInteger();
 
+    if (cost < 0.0 || salvage < 0.0 || period < 0 || rate < 0.0 || basis < 0 || basis > 4 || args[0].isArray() || args[1].isArray()
+        || args[2].isArray() || args[3].isArray() || args[4].isArray() || args[5].isArray() || (args.count() > 6 && args[6].isArray()))
+        return Value::errorVALUE();
+
     double oneRate = cost * rate;
     double costDelta = cost - salvage;
     double nullRate = calc->yearFrac(purchaseDate, firstPeriodEndDate, basis).asFloat() * rate * cost;
@@ -852,7 +857,7 @@ Value func_amorlinc(valVector args, ValueCalc *calc, FuncExtra *)
     else if (period <= numOfFullPeriods)
         res = oneRate;
     else if (period == numOfFullPeriods + 1)
-        res = costDelta - oneRate * numOfFullPeriods - nullRate;
+        res = qMax(0.0, costDelta - oneRate * numOfFullPeriods - nullRate);
     else
         res = 0.0;
 
