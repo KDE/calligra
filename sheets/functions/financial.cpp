@@ -575,16 +575,9 @@ static Value helper_ipmt(ValueCalc *calc, Value rate, Value per, Value nper, Val
         return calc->mul(calc->sub(func_fv(fvArgs, calc, nullptr), pmt), rate);
     }
 
-    // pow1p (rate, per-1)
     const Value val1(pow1p(rate.asFloat(), calc->sub(per, Value(1)).asFloat()));
-    // pow1pm1 (rate, per-1)
     const Value val2(pow1pm1(rate.asFloat(), calc->sub(per, Value(1)).asFloat()));
-
-    Value ipmt;
-    // -1*(pv * pow1p(rate, per-1)*rate + pmt* pow1pm1(rate, per-1))
-    ipmt = calc->mul(Value(-1), calc->add(calc->mul(calc->mul(pv, val1), rate), calc->mul(pmt, val2)));
-
-    return ipmt;
+    return calc->mul(Value(-1), calc->add(calc->mul(calc->mul(pv, val1), rate), calc->mul(pmt, val2)));
 }
 
 //
@@ -795,6 +788,9 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *)
     int basis = 0;
     if (args.count() > 6)
         basis = calc->conv()->asInteger(args[6]).asInteger();
+
+    if (cost <= 0.0 || salvage < 0.0 || salvage > cost || period < 0 || rate <= 0.0 || purchaseDate > firstPeriodEndDate || basis < 0 || basis > 4)
+        return Value::errorVALUE();
 
     int n;
     double amorCoeff, nRate, rest, usePer;
@@ -1230,8 +1226,13 @@ Value func_cumipmt(valVector args, ValueCalc *calc, FuncExtra *)
     const int end = v2.asInteger();
     if (end < start || end > periods)
         return Value::errorVALUE();
+    if (args[5].isError() || (args[5].isEmpty() && args[5].isNull()))
+        return args[5].isError() ? args[5] : Value::errorVALUE();
+    const double paymentType = calc->conv()->asFloat(args[5]).asFloat();
+    if (paymentType != floor(paymentType))
+        return Value::errorVALUE();
     const Value type(calc->conv()->asInteger(args[5]));
-    if (type.isError())
+    if (type.isError() || (type.asInteger() != 0 && type.asInteger() != 1))
         return Value::errorVALUE();
 
     Value result(0.0);
@@ -1268,8 +1269,13 @@ Value func_cumprinc(valVector args, ValueCalc *calc, FuncExtra *)
     const int end = v2.asInteger();
     if (end <= 0 || end < start || end > periods)
         return Value::errorVALUE();
+    if (args[5].isError() || (args[5].isEmpty() && args[5].isNull()))
+        return args[5].isError() ? args[5] : Value::errorVALUE();
+    const double paymentType = calc->conv()->asFloat(args[5]).asFloat();
+    if (paymentType != floor(paymentType))
+        return Value::errorVALUE();
     const Value type(calc->conv()->asInteger(args[5]));
-    if (type.isError())
+    if (type.isError() || (type.asInteger() != 0 && type.asInteger() != 1))
         return Value::errorVALUE();
 
     const Value pay = getPay(calc, rate, nper, pv, Value(0.0), type);
@@ -1296,12 +1302,8 @@ Value func_db(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 5)
         month = numToDouble(calc->conv()->toFloat(args[4]));
 
-    // sentinel check
-    if (cost == 0 || life <= 0.0 || period == 0)
-        return Value::errorNUM();
-
-    if (calc->lower(calc->div(Value(salvage), Value(cost)), Value(0)))
-        return Value::errorNUM();
+    if (cost <= 0.0 || salvage < 0.0 || salvage > cost || life <= 0.0 || life > 1200.0 || period <= 0.0 || period > life + 1.0 || month < 1.0 || month > 12.0)
+        return Value::errorVALUE();
 
     double rate = 1000 * (1 - pow((salvage / cost), (1 / life)));
     rate = floor(rate + 0.5) / 1000;
@@ -1545,6 +1547,9 @@ Value func_effective(valVector args, ValueCalc *calc, FuncExtra *)
     Value nominal = args[0];
     Value periods = args[1];
 
+    if (calc->lower(nominal, Value(0.0)) || calc->lower(periods, Value(1.0)))
+        return Value::errorVALUE();
+
     // base = 1 + (nominal / periods)
     // result = pow (base, periods) - 1
     Value base = calc->add(calc->div(nominal, periods), 1);
@@ -1624,6 +1629,9 @@ Value func_fvschedule(valVector args, ValueCalc *calc, FuncExtra *)
     Value pv = args[0];
     Value schedule = args[1];
 
+    if (schedule.isEmpty() && schedule.isNull())
+        return Value::errorVALUE();
+
     int n = schedule.count();
     int i;
 
@@ -1666,6 +1674,8 @@ Value func_intrate(valVector args, ValueCalc *calc, FuncExtra *)
 
     Value invest = args[2];
     Value redemption = args[3];
+    const double investment = calc->conv()->asFloat(invest).asFloat();
+    const double redemptionAmount = calc->conv()->asFloat(redemption).asFloat();
 
     int basis = 0;
     if (args.count() == 5)
@@ -1674,7 +1684,7 @@ Value func_intrate(valVector args, ValueCalc *calc, FuncExtra *)
     double d = daysBetweenDates(settlement, maturity, basis);
     double y = daysPerYear(settlement, basis);
 
-    if (d <= 0 || y <= 0 || calc->isZero(invest) || basis < 0 || basis > 4)
+    if (d <= 0 || y <= 0 || investment <= 0.0 || redemptionAmount <= 0.0 || basis < 0 || basis > 4)
         return Value::errorVALUE();
 
     // (redemption - invest) / invest * (y / d)
@@ -1868,11 +1878,12 @@ Value func_nominal(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value effective = args[0];
     Value periods = args[1];
+    const double periodsValue = calc->conv()->asFloat(periods).asFloat();
 
     // sentinel checks
     if (calc->isZero(periods))
         return Value::errorDIV0();
-    if (!calc->greater(periods, Value(0.0)))
+    if (!calc->greater(periods, Value(0.0)) || periodsValue != floor(periodsValue))
         return Value::errorVALUE();
     if (calc->isZero(effective))
         return Value::errorVALUE();
@@ -2028,7 +2039,7 @@ Value func_pmt(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 3)
         fv = args[3];
     if (args.count() == 5)
-        type = args[4];
+        type = Value(static_cast<int64_t>(calc->conv()->asBoolean(args[4]).asBoolean()));
 
     return getPay(calc, rate, nper, pv, fv, type);
 }
@@ -2092,7 +2103,8 @@ Value func_price(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 6)
         basis = calc->conv()->asInteger(args[6]).asInteger();
 
-    if (rate < 0.0 || yield < 0.0 || redemption <= 0.0 || settlement >= maturity || frequency <= 0 || 12 % frequency != 0 || basis < 0 || basis > 5)
+    if ((args[2].isEmpty() && args[2].isNull()) || rate < 0.0 || yield <= 0.0 || redemption <= 0.0 || settlement >= maturity || frequency <= 0
+        || 12 % frequency != 0 || basis < 0 || basis > 4)
         return Value::errorVALUE();
 
     CoupSettings conf;
@@ -2139,7 +2151,7 @@ Value func_pricedisc(valVector args, ValueCalc *calc, FuncExtra *)
     if (settlement >= maturity || discount <= 0.0 || redemption <= 0.0 || basis < 0 || basis > 4)
         return Value::errorVALUE();
 
-    const double yearFrac = calc->yearFrac(settlement, maturity, basis).asFloat();
+    const double yearFrac = static_cast<double>(daysBetweenDates(settlement, maturity, basis)) / daysPerYear(settlement, basis);
 
     return Value(redemption * (1.0 - discount * yearFrac));
 }
@@ -2195,9 +2207,10 @@ Value func_pv(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 3)
         fv = calc->conv()->asFloat(args[3]).asFloat();
     if (args.count() > 4)
-        type = calc->conv()->asInteger(args[4]).asInteger();
-    // TODO error Value checking for type
+        type = calc->conv()->asBoolean(args[4]).asBoolean();
 
+    if (rate == 0.0)
+        return Value(-fv - pmt * nper);
     double pvif = pow(1 + rate, nper);
     double fvifa = (pvif - 1) / rate;
 
@@ -2381,7 +2394,7 @@ Value func_rri(valVector args, ValueCalc *calc, FuncExtra *)
     double fv = calc->conv()->asFloat(args[2]).asFloat();
 
     // constraints N>0
-    if (p < 1)
+    if (p < 1 || pv <= 0.0 || fv <= 0.0)
         return Value::errorVALUE();
 
     double res = pow((fv / pv), 1 / p) - 1;
@@ -2400,7 +2413,7 @@ Value func_sln(valVector args, ValueCalc *calc, FuncExtra *)
     Value life = args[2];
 
     // sentinel check
-    if (!calc->greater(life, Value(0.0)))
+    if (calc->isZero(life))
         return Value::errorVALUE();
 
     // (cost - salvage_value) / life
