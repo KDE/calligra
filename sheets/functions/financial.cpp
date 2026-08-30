@@ -1335,7 +1335,7 @@ Value func_ddb(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 5)
         factor = numToDouble(calc->conv()->toFloat(args[4]));
 
-    if (cost < 0.0 || salvage < 0.0 || life <= 0.0 || period < 0.0 || factor < 0.0)
+    if (cost <= 0.0 || salvage < 0.0 || life <= 0.0 || period <= 0.0 || period > life || factor <= 0.0 || (args.count() == 5 && args[4].isEmpty()))
         return Value::errorVALUE();
 
     double result = 0.0;
@@ -2032,19 +2032,16 @@ Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
     //   debugSheetsFormula<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" price="<<price<<" redemp="<<redemp<<"
     //   freq="<<freq<<" basis="<<basis;
 
-    if (rate < 0.0 || price <= 0.0 || maturity <= settlement || settlement <= last || conv.frequency <= 0 || 12 % conv.frequency != 0)
+    if (args[3].isEmpty() || args[4].isEmpty() || args[5].isEmpty() || args[6].isEmpty() || rate <= 0.0 || price <= 0.0 || redemp <= 0.0
+        || maturity <= settlement || settlement <= last || (conv.frequency != 1 && conv.frequency != 2 && conv.frequency != 4) || basis < 0 || basis > 4)
         return Value::errorVALUE();
 
-    QDate d = last;
-    do {
-        d = d.addMonths(12 / conv.frequency);
-    } while (d.isValid() && d < maturity);
+    const double dCi = calc->yearFrac(last, maturity, basis).asFloat() * conv.frequency;
+    const double dSci = calc->yearFrac(settlement, maturity, basis).asFloat() * conv.frequency;
+    const double ai = calc->yearFrac(last, settlement, basis).asFloat() * conv.frequency;
+    const double coupon = 100.0 * rate / conv.frequency;
 
-    double x1 = date_ratio(last, settlement, d, conv);
-    double x2 = date_ratio(last, maturity, d, conv);
-    double x3 = date_ratio(settlement, maturity, d, conv);
-
-    return Value((conv.frequency * (redemp - price) + 100 * rate * (x2 - x1)) / (x3 * price + 100 * rate * x1 * x3 / conv.frequency));
+    return Value((((redemp + dCi * coupon) / (price + ai * coupon)) - 1.0) * conv.frequency / dSci);
 }
 
 //
