@@ -1939,30 +1939,6 @@ Value func_npv(valVector args, ValueCalc *calc, FuncExtra *)
     return result.element(0, 0);
 }
 
-static double date_ratio(const QDate &d1, const QDate &d2, const QDate &d3, const CoupSettings &conv)
-{
-    QDate next = coup_cd(d1, d3, conv.frequency, conv.eom, true);
-    QDate prev = coup_cd(d1, d3, conv.frequency, conv.eom, false);
-
-    if (next >= d2) {
-        return daysBetweenBasis(d1, d2, conv.basis) / coupdays(prev, next, conv);
-    }
-
-    double res = daysBetweenBasis(d1, next, conv.basis) / coupdays(prev, next, conv);
-
-    while (true) {
-        prev = next;
-        next = next.addMonths(12 / conv.frequency);
-        // if (!next.isValid())
-        //
-        if (next >= d2) {
-            res += daysBetweenBasis(prev, d2, conv.basis) / coupdays(prev, next, conv);
-            return res;
-        }
-        res += 1;
-    }
-}
-
 //
 // ODDLPRICE
 //
@@ -1990,19 +1966,16 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
     //   debugSheetsFormula<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<"
     //   freq="<<freq<<" basis="<<basis;
 
-    if (yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last || conv.frequency <= 0 || 12 % conv.frequency != 0)
+    if (args[3].isEmpty() || args[4].isEmpty() || args[5].isEmpty() || args[6].isEmpty() || rate <= 0.0 || yield < 0.0 || redemp <= 0.0
+        || maturity <= settlement || settlement <= last || (conv.frequency != 1 && conv.frequency != 2 && conv.frequency != 4) || basis < 0 || basis > 4)
         return Value::errorVALUE();
 
-    QDate d = last;
-    do {
-        d = d.addMonths(12 / conv.frequency);
-    } while (d.isValid() && d < maturity);
+    const double dCi = calc->yearFrac(last, maturity, basis).asFloat() * conv.frequency;
+    const double dSci = calc->yearFrac(settlement, maturity, basis).asFloat() * conv.frequency;
+    const double ai = calc->yearFrac(last, settlement, basis).asFloat() * conv.frequency;
+    const double coupon = 100.0 * rate / conv.frequency;
 
-    double x1 = date_ratio(last, settlement, d, conv);
-    double x2 = date_ratio(last, maturity, d, conv);
-    double x3 = date_ratio(settlement, maturity, d, conv);
-
-    return Value((redemp * conv.frequency + 100 * rate * (x2 - x1 * (1 + yield * x3 / conv.frequency))) / (yield * x3 + conv.frequency));
+    return Value((redemp + dCi * coupon) / (dSci * yield / conv.frequency + 1.0) - ai * coupon);
 }
 
 //
