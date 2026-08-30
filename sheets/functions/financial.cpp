@@ -2253,19 +2253,11 @@ Value func_pv_annuity(valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: RATE
 //
-Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
+// Newton-Raphson solver shared by RATE's integer- and non-integer-Nper cases; mirrors
+// LibreOffice's ScInterpreter::RateIteration so the two engines converge to the same root
+// (or fail to converge under the same conditions).
+static bool rateIteration(double fNper, double fPayment, double fPv, double fFv, bool bPayType, double &fGuess)
 {
-    const Value nper = args[0];
-    double fNper = calc->conv()->asFloat(nper).asFloat();
-    double fPayment = calc->conv()->asFloat(args[1]).asFloat();
-    double fPv = calc->conv()->asFloat(args[2]).asFloat();
-    double fFv = (args.count() > 3) ? calc->conv()->asFloat(args[3]).asFloat() : 0;
-    double fPayType = (args.count() > 4) ? calc->conv()->asFloat(args[4]).asFloat() : 0;
-    double fGuess = (args.count() > 5) ? calc->conv()->asFloat(args[5]).asFloat() : 0.1;
-
-    if (fNper <= 0.0)
-        return Value::errorVALUE();
-
     bool bValid = true, bFound = false;
     double fX, fXnew, fTerm, fTermDerivation;
     double fGeoSeries, fGeoSeriesDerivation;
@@ -2274,15 +2266,19 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
     const double fEpsilonSmall = 1.0E-14;
     const double fEpsilon = 1.0E-7;
 
-    fFv -= fPayment * fPayType;
-    fPv += fPayment * fPayType;
-    if (nper.isInteger()) {
+    if (bPayType) {
+        // payment at beginning of each period
+        fFv -= fPayment;
+        fPv += fPayment;
+    }
+
+    if (fNper == round(fNper)) {
         fX = fGuess;
         double fPowN, fPowNminus1;
         while (!bFound && nCount < nIterationsMax) {
             fPowNminus1 = pow(1.0 + fX, fNper - 1.0);
             fPowN = fPowNminus1 * (1.0 + fX);
-            if (calc->approxEqual(Value(fabs(fX)), Value(0.0))) {
+            if (fX == 0.0) {
                 fGeoSeries = fNper;
                 fGeoSeriesDerivation = fNper * (fNper - 1.0) / 2.0;
             } else {
@@ -2294,7 +2290,7 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
             if (fabs(fTerm) < fEpsilonSmall) {
                 bFound = true;
             } else {
-                if (calc->approxEqual(Value(fabs(fTermDerivation)), Value(0.0)))
+                if (fTermDerivation == 0.0)
                     fXnew = fX + 1.1 * fEpsilon;
                 else
                     fXnew = fX - fTerm / fTermDerivation;
@@ -2303,11 +2299,11 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
                 fX = fXnew;
             }
         }
-        bValid = (fX >= -1.0);
+        bValid = (fX > -1.0);
     } else {
         fX = (fGuess < -1.0) ? -1.0 : fGuess;
         while (bValid && !bFound && nCount < nIterationsMax) {
-            if (calc->approxEqual(Value(fabs(fX)), Value(0.0))) {
+            if (fX == 0.0) {
                 fGeoSeries = fNper;
                 fGeoSeriesDerivation = fNper * (fNper - 1.0) / 2.0;
             } else {
@@ -2319,7 +2315,7 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
             if (fabs(fTerm) < fEpsilonSmall) {
                 bFound = true;
             } else {
-                if (calc->approxEqual(Value(fabs(fTermDerivation)), Value(0.0)))
+                if (fTermDerivation == 0.0)
                     fXnew = fX + 1.1 * fEpsilon;
                 else
                     fXnew = fX - fTerm / fTermDerivation;
@@ -2331,8 +2327,42 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
         }
     }
     fGuess = fX;
-    // ODF specs do not say that we should return an error in that case
-    // if (!bValid || !bFound) return Value::errorVALUE();
+    return bValid && bFound;
+}
+
+Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    double fNper = calc->conv()->asFloat(args[0]).asFloat();
+    double fPayment = calc->conv()->asFloat(args[1]).asFloat();
+    double fPv = calc->conv()->asFloat(args[2]).asFloat();
+    double fFv = (args.count() > 3) ? calc->conv()->asFloat(args[3]).asFloat() : 0;
+    // the type argument is a plain flag: any non-zero value means "due at the beginning"
+    const bool bPayType = (args.count() > 4) && calc->conv()->asBoolean(args[4]).asBoolean();
+    const bool bDefaultGuess = args.count() <= 5;
+    double fGuess = bDefaultGuess ? 0.1 : calc->conv()->asFloat(args[5]).asFloat();
+    const double fOrigGuess = fGuess;
+
+    if (fNper <= 0.0)
+        return Value::errorVALUE();
+
+    bool bValid = rateIteration(fNper, fPayment, fPv, fFv, bPayType, fGuess);
+
+    if (!bValid && bDefaultGuess) {
+        // retry with a spread of guesses around the default one, like LibreOffice does,
+        // before giving up and reporting that no rate could be found
+        for (int nStep = 2; nStep <= 10 && !bValid; ++nStep) {
+            fGuess = fOrigGuess * nStep;
+            bValid = rateIteration(fNper, fPayment, fPv, fFv, bPayType, fGuess);
+            if (!bValid) {
+                fGuess = fOrigGuess / nStep;
+                bValid = rateIteration(fNper, fPayment, fPv, fFv, bPayType, fGuess);
+            }
+        }
+    }
+
+    if (!bValid)
+        return Value::errorNUM();
+
     return Value(fGuess);
 }
 

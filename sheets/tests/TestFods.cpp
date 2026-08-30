@@ -21,6 +21,19 @@
 
 using namespace Calligra::Sheets;
 
+static QString valueToString(const Value &v)
+{
+    if (v.isString())
+        return v.asString();
+    if (v.isBoolean())
+        return v.asBoolean() ? QStringLiteral("TRUE") : QStringLiteral("FALSE");
+    if (v.isError())
+        return v.errorMessage();
+    if (v.isNumber())
+        return QString::number(v.asFloat(), 'g', 15);
+    return QStringLiteral("<empty>");
+}
+
 void TestFods::initTestCase()
 {
     KLocalizedString::setApplicationDomain("calligrasheets");
@@ -68,7 +81,15 @@ void TestFods::testFods()
                     continue;
                 const Value value = cell.value();
                 if (value.isBoolean() && !value.asBoolean()) {
-                    failures << QStringLiteral("%1!%2%3: %4").arg(sheet->sheetName()).arg(col).arg(row).arg(formula);
+                    Cell a(sheet, 1, row);
+                    Cell b(sheet, 2, row);
+                    failures << QStringLiteral("%1!%2%3: %4 (A%3=%5 B%3=%6)")
+                                    .arg(sheet->sheetName())
+                                    .arg(col)
+                                    .arg(row)
+                                    .arg(formula)
+                                    .arg(valueToString(a.value()))
+                                    .arg(valueToString(b.value()));
                 }
             }
         }
