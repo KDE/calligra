@@ -1605,18 +1605,13 @@ Value func_fv(valVector args, ValueCalc *calc, FuncExtra *)
         pv = Value(calc->conv()->asFloat(args[3]).asFloat());
 
     if (args.count() == 5)
-        type = calc->conv()->asInteger(args[4]).asInteger();
+        type = calc->conv()->asBoolean(args[4]).asBoolean() ? 1 : 0;
 
-    // TODO check payType
-
-    Value pvif = Value(pow1p(rate.asFloat(), nper.asFloat()));
-    Value fvifa = calc_fvifa(calc, rate, nper);
-
-    Value res(calc->mul(Value(-1), calc->add(calc->mul(pv, pvif), calc->mul(pmt, calc->mul(calc->add(Value(1), calc->mul(rate, type)), fvifa)))));
-
-    return (res);
-    // present * pow (1 + interest, periods)
-    //   return calc->mul (present, calc->pow (calc->add (interest, 1), periods));
+    const double numericRate = rate.asFloat();
+    const double term = pow(1.0 + numericRate, nper.asFloat());
+    const double result = numericRate == 0.0 ? pv.asFloat() + pmt.asFloat() * nper.asFloat()
+                                             : pv.asFloat() * term + pmt.asFloat() * (1.0 + numericRate * type) * (term - 1.0) / numericRate;
+    return Value(-result);
 }
 
 //
