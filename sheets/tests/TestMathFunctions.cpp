@@ -700,6 +700,9 @@ void TestMathFunctions::testMULTINOMIAL()
 {
     // ODF-tests
     CHECK_EVAL("=MULTINOMIAL(3;4;5)", Value(27720));
+    CHECK_EVAL("=ROUND(MULTINOMIAL(2^30;2;1) / 6.18970023101455E26; 12)", Value(1));
+    CHECK_EVAL("=MULTINOMIAL(-1;2;3)", Value::errorNUM());
+    CHECK_EVAL("=MULTINOMIAL(3.4;2.3)", Value(10));
     // alternate function name
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMULTINOMIAL(3;4;5)", Value(27720));
 }

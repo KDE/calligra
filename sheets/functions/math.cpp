@@ -25,6 +25,10 @@
 
 #include <Eigen/LU>
 
+#include <algorithm>
+#include <cmath>
+#include <limits>
+
 using namespace Calligra::Sheets;
 
 // RANDBINOM and RANDNEGBINOM won't support arbitrary precision
@@ -848,14 +852,66 @@ Value func_factdouble(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: MULTINOMIAL
 Value func_multinomial(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    // (a+b+c)! / a!b!c!  (any number of params possible)
-    Value num = Value(0), den = Value(1);
-    for (int i = 0; i < args.count(); ++i) {
-        num = calc->add(num, args[i]);
-        den = calc->mul(den, calc->fact(args[i]));
+    QList<int64_t> values;
+    Number total = 0;
+    const auto appendValue = [&](const auto &self, const Value &arg) -> bool {
+        if (arg.isArray()) {
+            for (unsigned row = 0; row < arg.rows(); ++row) {
+                for (unsigned column = 0; column < arg.columns(); ++column) {
+                    if (!self(self, arg.element(column, row)))
+                        return false;
+                }
+            }
+            return true;
+        }
+        if (arg.isEmpty())
+            return true;
+
+        bool ok = true;
+        const Number number = calc->conv()->asFloat(arg, &ok).asFloat();
+        if (!ok || number < 0 || number > Number(std::numeric_limits<int64_t>::max()))
+            return false;
+        total += number;
+        values.append(static_cast<int64_t>(floor(number)));
+        return true;
+    };
+    for (const Value &arg : args) {
+        if (!appendValue(appendValue, arg))
+            return Value::errorNUM();
     }
-    num = calc->fact(num);
-    return calc->div(num, den);
+    if (total > Number(std::numeric_limits<int64_t>::max()))
+        return Value::errorNUM();
+
+    // Build the multinomial as a product of binomial coefficients instead of
+    // calculating the factorials separately.  Sorting keeps each binomial's
+    // smaller argument small (notably for inputs such as 2^30, 2, 1).
+    std::sort(values.begin(), values.end(), std::greater<int64_t>());
+
+    int64_t accumulated = 0;
+    Number result = 1;
+    for (const int64_t value : values) {
+        if (value > std::numeric_limits<int64_t>::max() - accumulated)
+            return Value::errorNUM();
+
+        const int64_t count = std::min(accumulated, value);
+        const int64_t base = std::max(accumulated, value);
+        for (int64_t i = 1; i <= count; ++i) {
+            result *= Number(base + i) / Number(i);
+            if (!std::isfinite(numToDouble(result)))
+                return Value::errorNUM();
+        }
+        accumulated += value;
+    }
+
+    // Preserve the historical behavior for fractional arguments: each
+    // denominator uses floor(argument), while the numerator uses floor(sum).
+    const int64_t integerTotal = static_cast<int64_t>(floor(total));
+    while (accumulated < integerTotal) {
+        result *= Number(++accumulated);
+        if (!std::isfinite(numToDouble(result)))
+            return Value::errorNUM();
+    }
+    return Value(result);
 }
 
 // Function: sign
