@@ -171,6 +171,7 @@ MathModule::MathModule(QObject *parent, const QVariantList &)
     f = new Function("MULTINOMIAL", func_multinomial);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMULTINOMIAL");
     f->setParamCount(1, -1);
+    f->setAcceptArray();
     add(f);
     f = new Function("ODD", func_odd);
     add(f);
