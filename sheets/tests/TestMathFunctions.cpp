@@ -357,6 +357,7 @@ void TestMathFunctions::testCOMBINA()
 {
     // ODF-tests
     CHECK_EVAL("COMBINA(5;3)", Value(35)); //
+    CHECK_EVAL("COMBINA(0;0)", Value(0));
     CHECK_EVAL("COMBINA(-1;3)", Value::errorNUM()); // N must be >= 0
     CHECK_EVAL("COMBINA(4;-3)", Value::errorNUM()); // M must be >= 0
 }
@@ -692,6 +693,7 @@ void TestMathFunctions::testMROUND()
     CHECK_EVAL("=MROUND(1520;100)", Value(1500));
     CHECK_EVAL("=MROUND(1550;100)", Value(1600));
     CHECK_EVAL("=MROUND(41.89;8)", Value(40));
+    CHECK_EVAL("=MROUND(5;-2)", Value(6));
     // alternate function name
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMROUND(1520;100)", Value(1500));
 }
@@ -790,6 +792,7 @@ void TestMathFunctions::testROUND()
     CHECK_EVAL("=ROUND(-1.5)", Value(-2));
     CHECK_EVAL("=ROUND(1.1)", Value(1));
     CHECK_EVAL("=ROUND(9.8)", Value(10));
+    CHECK_EVAL("=ROUND(2.15;1)", Value(2.2));
 }
 
 void TestMathFunctions::testROUNDDOWN()
@@ -803,6 +806,7 @@ void TestMathFunctions::testROUNDDOWN()
     CHECK_EVAL("=ROUNDDOWN(9;0)", Value(9));
     CHECK_EVAL("=ROUNDDOWN(-1.1)", Value(-1));
     CHECK_EVAL("=ROUNDDOWN(-1.9)", Value(-1));
+    CHECK_EVAL("=ROUNDDOWN(-999.13;2)", Value(-999.13));
 }
 
 void TestMathFunctions::testROUNDUP()
@@ -817,6 +821,7 @@ void TestMathFunctions::testROUNDUP()
     CHECK_EVAL("=ROUNDUP(9;0)", Value(9));
     CHECK_EVAL("=ROUNDUP(-1.1)", Value(-2));
     CHECK_EVAL("=ROUNDUP(-1.9)", Value(-2));
+    CHECK_EVAL("=ROUNDUP(8.23456789013;11)", Value(8.23456789013));
 }
 
 void TestMathFunctions::testSERIESSUM()

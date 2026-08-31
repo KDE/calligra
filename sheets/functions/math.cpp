@@ -26,6 +26,7 @@
 #include <Eigen/LU>
 
 #include <algorithm>
+#include <cfloat>
 #include <cmath>
 #include <limits>
 
@@ -883,9 +884,6 @@ Value func_multinomial(valVector args, ValueCalc *calc, FuncExtra *)
     if (total > Number(std::numeric_limits<int64_t>::max()))
         return Value::errorNUM();
 
-    // Build the multinomial as a product of binomial coefficients instead of
-    // calculating the factorials separately.  Sorting keeps each binomial's
-    // smaller argument small (notably for inputs such as 2^30, 2, 1).
     std::sort(values.begin(), values.end(), std::greater<int64_t>());
 
     int64_t accumulated = 0;
@@ -904,8 +902,6 @@ Value func_multinomial(valVector args, ValueCalc *calc, FuncExtra *)
         accumulated += value;
     }
 
-    // Preserve the historical behavior for fractional arguments: each
-    // denominator uses floor(argument), while the numerator uses floor(sum).
     const int64_t integerTotal = static_cast<int64_t>(floor(total));
     while (accumulated < integerTotal) {
         result *= Number(++accumulated);
@@ -927,74 +923,79 @@ Value func_inv(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->mul(args[0], -1);
 }
 
+static Number approxValue(Number value)
+{
+    if (value == 0 || !std::isfinite(numToDouble(value)) || fabsl(value) > Number(0x1p41))
+        return value;
+    const Number exponent = Number(14) - floor(log10(fabsl(value)));
+    const Number factor = pow(Number(10), fabsl(exponent));
+    Number scaled = exponent < 0 ? value / factor : value * factor;
+    scaled = round(scaled);
+    return exponent < 0 ? scaled * factor : scaled / factor;
+}
+
+static Number roundDigits(Number number, int64_t digits, int mode)
+{
+    const Number factor = pow(Number(10), Number(fabsl(Number(digits))));
+    if (!std::isfinite(numToDouble(factor)))
+        return number;
+
+    Number scaled = digits >= 0 ? number * factor : number / factor;
+    if (mode < 0)
+        scaled = copysign(floor(approxValue(fabsl(scaled))), scaled);
+    else if (mode > 0)
+        scaled = copysign(ceil(approxValue(fabsl(scaled))), scaled);
+    else
+        scaled = copysign(floor(approxValue(fabsl(scaled) + Number(0.5))), scaled);
+    return digits >= 0 ? scaled / factor : scaled * factor;
+}
+
+static Value roundDigits(const Value &value, const Value &digitsValue, ValueCalc *calc, int mode)
+{
+    Number number = calc->conv()->toFloat(value);
+    const int64_t digits = calc->conv()->toInteger(digitsValue);
+    if (mode != 0 && digits < 12 && fmod(number, Number(1)) != 0) {
+        const int64_t shift = static_cast<int64_t>(floor(log10(fabsl(number)))) + 1 - 12;
+        const Number factor = pow(Number(10), Number(fabsl(Number(shift))));
+        Number normalized = shift < 0 ? number * factor : number / factor;
+        normalized = Number(static_cast<double>(normalized));
+        if (mode > 0)
+            normalized = copysign(floor(approxValue(fabsl(normalized))), normalized);
+        normalized = roundDigits(normalized, digits + shift, mode);
+        number = shift < 0 ? normalized / factor : normalized * factor;
+    } else {
+        number = roundDigits(number, digits, mode);
+    }
+    return Value(Number(static_cast<double>(approxValue(number))));
+}
+
 // Function: MROUND
 Value func_mround(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value d = args[0];
-    Value m = args[1];
-
-    // signs must be the same
-    if ((calc->greater(d, Value(0)) && calc->lower(m, Value(0))) || (calc->lower(d, Value(0)) && calc->greater(m, Value(0))))
-        return Value::errorVALUE();
-
-    int sign = 1;
-
-    if (calc->lower(d, Value(0))) {
-        sign = -1;
-        d = calc->mul(d, Value(-1));
-        m = calc->mul(m, Value(-1));
-    }
-
-    // from gnumeric:
-    Value mod = calc->mod(d, m);
-    Value div = calc->sub(d, mod);
-
-    Value result = div;
-    if (calc->gequal(mod, calc->div(m, Value(2)))) // mod >= m/2
-        result = calc->add(result, m); // result += m
-    result = calc->mul(result, sign); // add the sign
-
-    return result;
+    const Number number = calc->conv()->toFloat(args[0]);
+    const Number multiple = fabsl(calc->conv()->toFloat(args[1]));
+    if (multiple == 0)
+        return Value::errorDIV0();
+    const Number result = roundDigits(fabsl(number) / multiple, 0, 0) * multiple;
+    return Value(copysign(result, number));
 }
 
 // Function: ROUNDDOWN
 Value func_rounddown(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args.count() == 2) {
-        if (calc->greater(args[0], 0.0))
-            return calc->roundDown(args[0], args[1]);
-        else
-            return calc->roundUp(args[0], args[1]);
-    }
-
-    if (calc->greater(args[0], 0.0))
-        return calc->roundDown(args[0], 0);
-    else
-        return calc->roundUp(args[0], 0);
+    return roundDigits(args[0], args.count() == 2 ? args[1] : Value(0), calc, -1);
 }
 
 // Function: ROUNDUP
 Value func_roundup(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args.count() == 2) {
-        if (calc->greater(args[0], 0.0))
-            return calc->roundUp(args[0], args[1]);
-        else
-            return calc->roundDown(args[0], args[1]);
-    }
-
-    if (calc->greater(args[0], 0.0))
-        return calc->roundUp(args[0], 0);
-    else
-        return calc->roundDown(args[0], 0);
+    return roundDigits(args[0], args.count() == 2 ? args[1] : Value(0), calc, 1);
 }
 
 // Function: ROUND
 Value func_round(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args.count() == 2)
-        return calc->round(args[0], args[1]);
-    return calc->round(args[0], 0);
+    return roundDigits(args[0], args.count() == 2 ? args[1] : Value(0), calc, 0);
 }
 
 // Function: EVEN

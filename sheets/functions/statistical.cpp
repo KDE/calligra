@@ -1173,6 +1173,8 @@ Value func_combina(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (calc->lower(args[1], Value(0.0)) || calc->lower(args[1], Value(0.0)) || calc->greater(args[1], args[0]))
         return Value::errorNUM();
+    if (calc->isZero(args[0]) && calc->isZero(args[1]))
+        return Value(0);
 
     return calc->combin(calc->sub(calc->add(args[0], args[1]), Value(1.0)), args[1]);
 }
