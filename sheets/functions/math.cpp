@@ -34,6 +34,8 @@ using namespace Calligra::Sheets;
 
 // RANDBINOM and RANDNEGBINOM won't support arbitrary precision
 
+static Number approxValue(Number value);
+
 // prototypes
 Value func_abs(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ceil(valVector args, ValueCalc *calc, FuncExtra *);
@@ -452,12 +454,12 @@ Value func_floor(valVector args, ValueCalc *calc, FuncExtra *)
     Number number = args[0].asFloat();
 
     Number significance;
-    if (args.count() >= 2) { // we have the optional "significance" argument
+    if (args.count() >= 2 && !args[1].isEmpty()) {
         significance = args[1].asFloat();
         // Sign of number and significance must match.
         if (calc->gequal(args[0], Value(0.0)) != calc->gequal(args[1], Value(0.0)))
             return Value::errorVALUE();
-    } else // use 1 or -1, depending on the sign of the first argument
+    } else
         significance = calc->gequal(args[0], Value(0.0)) ? 1.0 : -1.0;
     if (calc->approxEqual(Value(significance), Value(0.0)))
         return Value(0);
@@ -470,9 +472,9 @@ Value func_floor(valVector args, ValueCalc *calc, FuncExtra *)
     else { // round towards negative infinity
         result = number / significance; // always positive, because signs match
         if (calc->gequal(args[0], Value(0.0))) // positive values
-            result = floor(result) * significance;
+            result = floor(approxValue(result)) * significance;
         else // negative values
-            result = ceil(result) * significance;
+            result = ceil(approxValue(result)) * significance;
     }
     return Value(result);
 }
@@ -667,7 +669,8 @@ Value func_mina(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: INT
 Value func_int(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return calc->conv()->asInteger(args[0]);
+    const Number value = calc->conv()->toFloat(args[0]);
+    return Value(floor(approxValue(value)));
 }
 
 // Function: QUOTIENT
@@ -832,7 +835,15 @@ Value func_pow(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: MOD
 Value func_mod(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return calc->mod(args[0], args[1]);
+    if (calc->isZero(args[1]))
+        return Value::errorDIV0();
+
+    const Number numerator = calc->conv()->toFloat(args[0]);
+    const Number denominator = calc->conv()->toFloat(args[1]);
+    const Number multiple = floor(approxValue(numerator / denominator)) * denominator;
+    const Number remainder = numerator - multiple;
+    const Number tolerance = Number(4 * DBL_EPSILON) * std::max(fabsl(numerator), fabsl(multiple));
+    return Value(fabsl(remainder) <= tolerance ? 0 : remainder);
 }
 
 // Function: fact

@@ -521,6 +521,8 @@ void TestMathFunctions::testFLOOR()
     CHECK_EVAL("=FLOOR(-2.5;0)", Value(0));
     CHECK_EVAL("=FLOOR(0;-1)", Value(0));
     CHECK_EVAL("=FLOOR(-1.1)", Value(-2));
+    CHECK_EVAL("=FLOOR(1.5;0.1)", Value(1.5));
+    CHECK_EVAL("=FLOOR(7.9;;1)", Value(7));
 }
 
 void TestMathFunctions::testGAMMA()
@@ -579,6 +581,7 @@ void TestMathFunctions::testINT()
     CHECK_EVAL("=INT(1.7)", Value(1));
     CHECK_EVAL("=INT(-1.2)", Value(-2));
     CHECK_EVAL("=INT((1/3)*3)", Value(1));
+    CHECK_EVAL("=INT(((6*15.54)-77.7)/15.54)", Value(1));
 }
 
 void TestMathFunctions::testLCM()
@@ -684,6 +687,7 @@ void TestMathFunctions::testMOD()
     CHECK_EVAL("MOD(-2;-3)", Value(-2)); // The location of the sign matters.
     CHECK_EVAL("MOD(10;3)", Value(1)); // 10/3 has remainder 1.
     CHECK_EVAL("MOD(10;0)", Value::errorDIV0()); // Division by zero is not allowed
+    CHECK_EVAL("MOD(7.55*1000;5)", Value(0));
 }
 
 void TestMathFunctions::testMROUND()
