@@ -14,6 +14,7 @@
 
 #include <QRegularExpression>
 #include <cfloat>
+#include <cmath>
 #include <limits>
 
 using namespace Calligra::Sheets;
@@ -78,13 +79,22 @@ void awSumA(ValueCalc *c, Value &res, Value val, Value)
 
 void awSumSq(ValueCalc *c, Value &res, Value val, Value)
 {
+    // unlike blank/text/boolean, an error taints the whole sum
+    if (val.isError()) {
+        res = val;
+        return;
+    }
     // removed (!val.isBoolean()) to allow conversion from BOOL to int
-    if ((!val.isEmpty()) && (!val.isString()) && (!val.isError()))
+    if ((!val.isEmpty()) && (!val.isString()))
         res = c->add(res, c->sqr(val));
 }
 
 void awSumSqA(ValueCalc *c, Value &res, Value val, Value)
 {
+    if (val.isError()) {
+        res = val;
+        return;
+    }
     if (!val.isEmpty())
         res = c->add(res, c->sqr(val));
 }
@@ -367,7 +377,10 @@ Value ValueCalc::pow(const Value &a, const Value &b)
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
+    errno = 0;
     Value res(::pow(aa, bb));
+    if (errno)
+        return Value::errorNUM();
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));
@@ -461,7 +474,11 @@ Value ValueCalc::abs(const Value &a)
 {
     if (a.isError())
         return a;
-    return toValue(fabs(converter->toFloat(a)));
+    bool ok = true;
+    Number n = converter->asFloat(a, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+    return toValue(fabs(n));
 }
 
 bool ValueCalc::isZero(const Value &a)
@@ -904,11 +921,19 @@ Value ValueCalc::fromBase(const Value &val, int base)
     return Value::errorVALUE();
 }
 
+// beyond this magnitude, sin/cos/tan lose all precision without a true domain error
+static bool isValidArcArg(Number n)
+{
+    return qAbs(n) <= 18446744073709551616.0; // 2^64
+}
+
 Value ValueCalc::sin(const Value &number)
 {
+    if (number.isError())
+        return number;
     bool ok = true;
     Number n = converter->asFloat(number, &ok).asFloat();
-    if (!ok)
+    if (!ok || !isValidArcArg(n))
         return Value::errorVALUE();
 
     Value res = Value(::sin(n));
@@ -921,9 +946,11 @@ Value ValueCalc::sin(const Value &number)
 
 Value ValueCalc::cos(const Value &number)
 {
+    if (number.isError())
+        return number;
     bool ok = true;
     Number n = converter->asFloat(number, &ok).asFloat();
-    if (!ok)
+    if (!ok || !isValidArcArg(n))
         return Value::errorVALUE();
 
     Value res = Value(::cos(n));
@@ -936,7 +963,14 @@ Value ValueCalc::cos(const Value &number)
 
 Value ValueCalc::tg(const Value &number)
 {
-    Value res = Value(::tg(converter->toFloat(number)));
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok || !isValidArcArg(n))
+        return Value::errorVALUE();
+
+    Value res = Value(::tg(n));
 
     if (number.isNumber() || number.isEmpty())
         res.setFormat(number.format());
@@ -946,7 +980,14 @@ Value ValueCalc::tg(const Value &number)
 
 Value ValueCalc::cotg(const Value &number)
 {
-    Value res = div(1, Value(::tg(converter->toFloat(number))));
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok || !isValidArcArg(n))
+        return Value::errorVALUE();
+
+    Value res = div(1, Value(::tg(n)));
 
     if (number.isNumber() || number.isEmpty())
         res.setFormat(number.format());
@@ -956,6 +997,8 @@ Value ValueCalc::cotg(const Value &number)
 
 Value ValueCalc::asin(const Value &number)
 {
+    if (number.isError())
+        return number;
     bool ok = true;
     Number n = converter->asFloat(number, &ok).asFloat();
     if (!ok)
@@ -976,6 +1019,8 @@ Value ValueCalc::asin(const Value &number)
 
 Value ValueCalc::acos(const Value &number)
 {
+    if (number.isError())
+        return number;
     bool ok = true;
     Number n = converter->asFloat(number, &ok).asFloat();
     if (!ok)
@@ -996,8 +1041,15 @@ Value ValueCalc::acos(const Value &number)
 
 Value ValueCalc::atg(const Value &number)
 {
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+
     errno = 0;
-    Value res = Value(::atg(converter->toFloat(number)));
+    Value res = Value(::atg(n));
     if (errno)
         return Value::errorVALUE();
 
@@ -1009,6 +1061,10 @@ Value ValueCalc::atg(const Value &number)
 
 Value ValueCalc::atan2(const Value &y, const Value &x)
 {
+    if (y.isError())
+        return y;
+    if (x.isError())
+        return x;
     Number yy = converter->toFloat(y);
     Number xx = converter->toFloat(x);
     return Value(::atan2(yy, xx));
@@ -1016,7 +1072,16 @@ Value ValueCalc::atan2(const Value &y, const Value &x)
 
 Value ValueCalc::sinh(const Value &number)
 {
-    Value res = Value(::sinh(converter->toFloat(number)));
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+
+    Value res = Value(::sinh(n));
+    if (!std::isfinite(numToDouble(res.asFloat())))
+        return Value::errorVALUE();
 
     if (number.isNumber() || number.isEmpty())
         res.setFormat(number.format());
@@ -1026,7 +1091,16 @@ Value ValueCalc::sinh(const Value &number)
 
 Value ValueCalc::cosh(const Value &number)
 {
-    Value res = Value(::cosh(converter->toFloat(number)));
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+
+    Value res = Value(::cosh(n));
+    if (!std::isfinite(numToDouble(res.asFloat())))
+        return Value::errorVALUE();
 
     if (number.isNumber() || number.isEmpty())
         res.setFormat(number.format());
@@ -1036,7 +1110,14 @@ Value ValueCalc::cosh(const Value &number)
 
 Value ValueCalc::tgh(const Value &number)
 {
-    Value res = Value(::tgh(converter->toFloat(number)));
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+
+    Value res = Value(::tgh(n));
 
     if (number.isNumber() || number.isEmpty())
         res.setFormat(number.format());
@@ -1046,8 +1127,15 @@ Value ValueCalc::tgh(const Value &number)
 
 Value ValueCalc::asinh(const Value &number)
 {
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+
     errno = 0;
-    Value res = Value(::asinh(converter->toFloat(number)));
+    Value res = Value(::asinh(n));
     if (errno)
         return Value::errorVALUE();
 
@@ -1059,8 +1147,15 @@ Value ValueCalc::asinh(const Value &number)
 
 Value ValueCalc::acosh(const Value &number)
 {
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+
     errno = 0;
-    Value res = Value(::acosh(converter->toFloat(number)));
+    Value res = Value(::acosh(n));
     if (errno)
         return Value::errorVALUE();
 
@@ -1072,8 +1167,15 @@ Value ValueCalc::acosh(const Value &number)
 
 Value ValueCalc::atgh(const Value &number)
 {
+    if (number.isError())
+        return number;
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+
     errno = 0;
-    Value res = Value(::atgh(converter->toFloat(number)));
+    Value res = Value(::atgh(n));
     if (errno)
         return Value::errorVALUE();
 

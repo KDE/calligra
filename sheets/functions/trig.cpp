@@ -8,6 +8,7 @@
 
 #include "engine/Function.h"
 #include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
 using namespace Calligra::Sheets;
 
@@ -146,7 +147,14 @@ Value func_acot(valVector args, ValueCalc *calc, FuncExtra *)
 // function: ACOTH
 Value func_acoth(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (calc->lower(calc->abs(args[0]), Value(1.0)))
+    if (args[0].isError())
+        return args[0];
+    bool ok = true;
+    calc->conv()->asFloat(args[0], &ok);
+    if (!ok)
+        return Value::errorVALUE();
+    // ACOTH requires |x| > 1; the boundary itself divides by zero
+    if (!calc->greater(calc->abs(args[0]), Value(1.0)))
         return Value::errorNUM();
 
     return calc->mul(Value(0.5), calc->ln(calc->div(calc->add(args[0], Value(1.0)), calc->sub(args[0], Value(1.0)))));
@@ -230,6 +238,15 @@ Value func_sech(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DEGREES
 Value func_degrees(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    if (args[0].isError())
+        return args[0];
+    // mul()/div() silently coerce non-numeric text to 0; validate first
+    if (!args[0].isArray()) {
+        bool ok = true;
+        calc->conv()->asFloat(args[0], &ok);
+        if (!ok)
+            return Value::errorVALUE();
+    }
     // val * 180 / pi
     return calc->div(calc->mul(args[0], 180.0), calc->pi());
 }
@@ -237,6 +254,14 @@ Value func_degrees(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: RADIANS
 Value func_radians(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    if (args[0].isError())
+        return args[0];
+    if (!args[0].isArray()) {
+        bool ok = true;
+        calc->conv()->asFloat(args[0], &ok);
+        if (!ok)
+            return Value::errorVALUE();
+    }
     // val * pi / 180
     return calc->mul(calc->div(args[0], 180.0), calc->pi());
 }
