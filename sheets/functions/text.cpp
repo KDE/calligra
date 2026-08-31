@@ -10,8 +10,11 @@
 #include "engine/CalculationSettings.h"
 #include "engine/Function.h"
 #include "engine/Localization.h"
+#include "engine/MapBase.h"
+#include "engine/SheetBase.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
+#include "engine/ValueParser.h"
 
 // #include <math.h>
 
@@ -20,6 +23,7 @@
 // #include "ValueFormatter.h"
 
 using namespace Calligra::Sheets;
+using namespace Qt::StringLiterals;
 
 // Functions DOLLAR and FIXED convert data to double, hence they will not
 // support arbitrary precision, when it will be introduced.
@@ -136,7 +140,7 @@ TextModule::TextModule(QObject *parent, const QVariantList &)
     f->setAlternateName("MIDB");
     add(f);
     f = new Function("NUMBERVALUE", func_numbervalue);
-    f->setParamCount(2, 3);
+    f->setParamCount(1, 3);
     add(f);
     f = new Function("REGEXP", func_regexp);
     f->setParamCount(2, 4);
@@ -458,12 +462,71 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: NUMBERVALUE
 Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QString text = calc->conv()->asString(args[0]).asString();
+    QString text = calc->conv()->asString(args[0]).asString().trimmed();
 
-    const Localization *locale = calc->settings()->locale();
-    bool ok;
-    double v = locale->readNumber(text, &ok);
-    return ok ? Value(v) : Value::errorVALUE();
+    QString decimalSep = calc->settings()->locale()->decimalSymbol();
+    QString groupSep;
+    if (args.count() > 1) {
+        decimalSep = calc->conv()->asString(args[1]).asString();
+    }
+    if (args.count() > 2) {
+        groupSep = calc->conv()->asString(args[2]).asString();
+    }
+    if (!groupSep.isEmpty() && decimalSep == groupSep) {
+        return Value::errorVALUE();
+    }
+
+    if (!groupSep.isEmpty()) {
+        text.replace(groupSep, QString());
+    }
+
+    const bool percent = text.endsWith(u'%');
+    if (percent) {
+        text.chop(1);
+    }
+    text = text.trimmed();
+
+    QString sign;
+    if (text.startsWith(u'+') || text.startsWith(u'-')) {
+        sign = text.left(1);
+        text = text.mid(1);
+    }
+
+    QString intPart = text;
+    QString fracPart;
+    if (!decimalSep.isEmpty()) {
+        const int decPos = text.indexOf(decimalSep);
+        if (decPos >= 0) {
+            intPart = text.left(decPos);
+            fracPart = text.mid(decPos + decimalSep.length());
+        }
+    }
+
+    // anything besides digits, the sign, and the one decimal separator is not a number
+    const auto allDigits = [](const QString &s) {
+        return std::all_of(s.begin(), s.end(), [](QChar c) {
+            return c.isDigit();
+        });
+    };
+    if (!allDigits(intPart) || !allDigits(fracPart)) {
+        return Value::errorVALUE();
+    }
+
+    QString composed = sign + (intPart.isEmpty() ? u"0"_s : intPart);
+    if (!fracPart.isEmpty()) {
+        composed += u'.' + fracPart;
+    }
+
+    bool ok = false;
+    double v = composed.toDouble(&ok);
+    if (!ok) {
+        return Value::errorVALUE();
+    }
+    if (percent) {
+        v /= 100.0;
+    }
+
+    return Value(v);
 }
 
 // Function: PROPER
