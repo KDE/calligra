@@ -70,8 +70,9 @@ void TestTextFunctions::testCHAR()
 
     // newline
     CHECK_EVAL("LEN(CHAR(10))", Value(1));
-    // number has to be >=0
-    CHECK_EVAL("CHAR(-1)", Value::errorNUM());
+    // number has to be in 0-255
+    CHECK_EVAL("CHAR(-1)", Value::errorVALUE());
+    CHECK_EVAL("CHAR(256)", Value::errorVALUE());
 }
 
 void TestTextFunctions::testCLEAN()

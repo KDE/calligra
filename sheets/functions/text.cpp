@@ -211,10 +211,9 @@ Value func_asc(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_char(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int val = calc->conv()->asInteger(args[0]).asInteger();
-    if (val >= 0)
-        return Value(QString(QChar(val)));
-    else
-        return Value::errorNUM();
+    if (val < 0 || val > 255)
+        return Value::errorVALUE();
+    return Value(QString(QChar(val)));
 }
 
 // Function: CLEAN
@@ -1033,6 +1032,8 @@ Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: T
 Value func_t(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    if (args[0].isError())
+        return args[0];
     if (args[0].isString())
         return calc->conv()->asString(args[0]);
     else

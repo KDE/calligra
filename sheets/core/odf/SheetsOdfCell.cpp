@@ -119,6 +119,9 @@ bool Odf::loadCell(Cell *cell,
     // formula
     //
     bool isFormula = false;
+    // unescaped paragraph text, kept for value-type="string" cells below since the ' prepended
+    // to avoid the accidental formula detection isn't part of the actual cell text
+    QString rawTextValue;
     if (element.hasAttributeNS(KoXmlNS::table, sFormula)) {
         isFormula = true;
         QString oasisFormula(element.attributeNS(KoXmlNS::table, sFormula, QString()));
@@ -135,8 +138,10 @@ bool Odf::loadCell(Cell *cell,
         }
         oasisFormula = Odf::decodeFormula(oasisFormula, cell->locale(), namespacePrefix);
         cell->setUserInput(oasisFormula);
-    } else if (!cell->userInput().isEmpty() && cell->userInput().at(0) == '=') // prepend ' to the text to avoid = to be painted
+    } else if (!cell->userInput().isEmpty() && cell->userInput().at(0) == '=') { // prepend ' to the text to avoid = to be painted
+        rawTextValue = cell->userInput();
         cell->setUserInput(cell->userInput().prepend('\''));
+    }
 
     //
     // validation
@@ -324,7 +329,7 @@ bool Odf::loadCell(Cell *cell,
                 cell->setValue(Value(value));
             } else {
                 // use the paragraph(s) read in before
-                cell->setValue(Value(cell->userInput()));
+                cell->setValue(Value(!rawTextValue.isEmpty() ? rawTextValue : cell->userInput()));
             }
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 #if 0
