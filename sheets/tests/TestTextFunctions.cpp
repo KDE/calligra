@@ -315,9 +315,11 @@ void TestTextFunctions::testBAHTTEXT()
 
 void TestTextFunctions::testTEXT()
 {
-    CHECK_EVAL("TEXT(71)", Value("71"));
-    // this is not currently supported
-    //    CHECK_EVAL("TEXT(TIME(13;10;43);\"hh:mm\")", Value("13:10"));
+    // TEXT() requires exactly 2 parameters (value, format code)
+    CHECK_EVAL("ISERROR(TEXT(71))", Value(true));
+    CHECK_EVAL("TEXT(71;\"0\")", Value("71"));
+    CHECK_EVAL("TEXT(1234.567;\"$#,##0.00\")", Value("$1,234.57"));
+    CHECK_EVAL("TEXT(TIME(13;10;43);\"hh:mm\")", Value("13:10"));
 }
 
 void TestTextFunctions::cleanupTestCase()

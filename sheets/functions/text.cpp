@@ -16,7 +16,7 @@
 #include "engine/ValueConverter.h"
 #include "engine/ValueParser.h"
 
-// #include <math.h>
+#include <cmath>
 
 // #include "SheetsDebug.h"
 // #include "FunctionModuleRegistry.h"
@@ -187,7 +187,7 @@ TextModule::TextModule(QObject *parent, const QVariantList &)
     f->setParamCount(3, 4);
     add(f);
     f = new Function("TEXT", func_text);
-    f->setParamCount(1, 2);
+    f->setParamCount(2);
     add(f);
     f = new Function("BAHTTEXT", func_bahttext);
     f->setAlternateName("COM.MICROSOFT.BAHTTEXT");
@@ -1040,11 +1040,445 @@ Value func_t(valVector args, ValueCalc *calc, FuncExtra *)
         return Value("");
 }
 
+// --- TEXT() number-format-code engine ---------------------------------------------------
+
+// Renders `digits` (a plain decimal digit string, no sign) against `mask`'s 0/# placeholder
+// positions: a placeholder with no matching digit shows '0' for '0', nothing for '#'; every
+// other character is passed through literally. Extra leading digits beyond the placeholder
+// count all land on the first placeholder (no truncation).
+static bool isDigitPlaceholder(QChar c)
+{
+    return c == QLatin1Char('0') || c == QLatin1Char('#') || c == QLatin1Char('?');
+}
+
+static QString renderIntegerMask(const QString &digits, const QString &mask)
+{
+    QList<int> slotPositions;
+    for (int i = 0; i < mask.size(); ++i)
+        if (isDigitPlaceholder(mask.at(i)))
+            slotPositions << i;
+
+    const int slotCount = slotPositions.size();
+    const int shift = slotCount - digits.size();
+
+    QStringList slotOutputs;
+    for (int i = 0; i < slotCount; ++i) {
+        const int digitIndex = i - shift;
+        if (digitIndex < 0) {
+            const QChar type = mask.at(slotPositions[i]);
+            slotOutputs << (type == QLatin1Char('0') ? u"0"_s : type == QLatin1Char('?') ? u" "_s : QString());
+        } else if (i == 0 && digitIndex > 0) {
+            slotOutputs << digits.left(digitIndex + 1);
+        } else {
+            slotOutputs << QString(digits.at(digitIndex));
+        }
+    }
+
+    QString result;
+    int slot = 0;
+    for (int i = 0; i < mask.size(); ++i)
+        result += isDigitPlaceholder(mask.at(i)) ? slotOutputs[slot++] : QString(mask.at(i));
+    return result;
+}
+
+// Rounds |value| to fracDigits decimals and splits it into integer/fractional digit strings.
+static void splitRoundedDigits(double value, int fracDigits, QString &intDigits, QString &fracDigitsStr)
+{
+    const double scale = std::pow(10.0, fracDigits);
+    const qint64 scaled = qRound64(qAbs(value) * scale);
+    QString all = QString::number(scaled);
+    if (all.size() <= fracDigits)
+        all = all.rightJustified(fracDigits + 1, QLatin1Char('0'));
+    intDigits = all.left(all.size() - fracDigits);
+    fracDigitsStr = fracDigits > 0 ? all.right(fracDigits) : QString();
+}
+
+// Renders the integer part with thousands grouping for a mask containing a ',' among its
+// placeholders, e.g. "$#,##0". Literals outside the placeholder run become a plain prefix/suffix.
+static QString renderGroupedInteger(const QString &intDigits, const QString &mask)
+{
+    int first = 0;
+    int last = mask.size() - 1;
+    while (first < mask.size() && mask.at(first) != QLatin1Char('0') && mask.at(first) != QLatin1Char('#'))
+        ++first;
+    while (last >= 0 && mask.at(last) != QLatin1Char('0') && mask.at(last) != QLatin1Char('#'))
+        --last;
+    const QString prefix = mask.left(first);
+    const QString suffix = mask.mid(last + 1);
+
+    QString maskNoComma = mask.mid(first, last - first + 1);
+    maskNoComma.remove(QLatin1Char(','));
+    int minDigits = 0;
+    while (minDigits < maskNoComma.size() && maskNoComma.at(maskNoComma.size() - 1 - minDigits) == QLatin1Char('0'))
+        ++minDigits;
+
+    const QString digits = intDigits.size() < minDigits ? intDigits.rightJustified(minDigits, QLatin1Char('0')) : intDigits;
+    QString grouped;
+    int count = 0;
+    for (int i = digits.size() - 1; i >= 0; --i) {
+        grouped.prepend(digits.at(i));
+        if (++count % 3 == 0 && i != 0)
+            grouped.prepend(QLatin1Char(','));
+    }
+    return prefix + grouped + suffix;
+}
+
+// Renders a "# ?/?"-style fraction section: an optional integer-part mask/separator, then a
+// numerator/denominator pair approximating the fractional part, denominator width bounded by
+// the number of '?' after the '/'.
+static QString formatFractionSection(double value, const QString &format)
+{
+    const int slash = format.indexOf(QLatin1Char('/'));
+    const QString beforeSlash = format.left(slash);
+    const QString denMask = format.mid(slash + 1);
+
+    int numStart = beforeSlash.size();
+    while (numStart > 0 && beforeSlash.at(numStart - 1) == QLatin1Char('?'))
+        --numStart;
+    const QString numMask = beforeSlash.mid(numStart);
+    const QString intMaskAndSep = beforeSlash.left(numStart);
+
+    int maxDenominator = 1;
+    for (int i = 0; i < denMask.count(QLatin1Char('?')); ++i)
+        maxDenominator *= 10;
+    maxDenominator -= 1;
+    if (maxDenominator < 1)
+        maxDenominator = 1;
+
+    const bool neg = value < 0;
+    double v = qAbs(value);
+    qint64 intPart = qint64(v);
+    double frac = v - intPart;
+
+    int bestNum = 0;
+    int bestDen = 1;
+    double bestErr = frac;
+    for (int den = 1; den <= maxDenominator; ++den) {
+        const int num = qRound(frac * den);
+        const double err = qAbs(frac - double(num) / den);
+        if (err < bestErr) {
+            bestErr = err;
+            bestNum = num;
+            bestDen = den;
+        }
+    }
+    if (bestDen != 0 && bestNum == bestDen) { // rounded up to the next whole number
+        ++intPart;
+        bestNum = 0;
+    }
+
+    QString intOnly;
+    QString sep;
+    for (QChar c : intMaskAndSep) {
+        if (c == QLatin1Char('0') || c == QLatin1Char('#'))
+            intOnly += c;
+        else
+            sep += c;
+    }
+    QString intText;
+    if (intPart != 0 || intOnly.contains(QLatin1Char('0')))
+        intText = renderIntegerMask(QString::number(intPart), intOnly.isEmpty() ? u"#"_s : intOnly);
+
+    const QString result =
+        intText + sep + renderIntegerMask(QString::number(bestNum), numMask) + QLatin1Char('/') + renderIntegerMask(QString::number(bestDen), denMask);
+    return neg ? QLatin1Char('-') + result : result;
+}
+
+// Renders a "0.00E+00"-style scientific-notation section.
+static QString formatScientificSection(double value, const QString &format, int eIdx)
+{
+    const QString mantissaMask = format.left(eIdx);
+    const QChar signChar = format.at(eIdx + 1);
+    const QString expMask = format.mid(eIdx + 2);
+
+    const int dot = mantissaMask.indexOf(QLatin1Char('.'));
+    const QString intMask = dot >= 0 ? mantissaMask.left(dot) : mantissaMask;
+    const QString fracMask = dot >= 0 ? mantissaMask.mid(dot + 1) : QString();
+    int intSlots = 0;
+    for (QChar c : intMask)
+        if (c == QLatin1Char('0') || c == QLatin1Char('#'))
+            ++intSlots;
+    if (intSlots < 1)
+        intSlots = 1;
+    const int fracDigits = fracMask.size();
+
+    const bool neg = value < 0;
+    double v = qAbs(value);
+    int exponent = 0;
+    if (v != 0) {
+        exponent = int(std::floor(std::log10(v))) - (intSlots - 1);
+        v /= std::pow(10.0, exponent);
+        const double rounded = qRound(v * std::pow(10.0, fracDigits)) / std::pow(10.0, fracDigits);
+        if (rounded >= std::pow(10.0, intSlots)) {
+            v = rounded / 10.0;
+            ++exponent;
+        } else {
+            v = rounded;
+        }
+    }
+
+    QString intDigits;
+    QString fracDigitsStr;
+    splitRoundedDigits(v, fracDigits, intDigits, fracDigitsStr);
+
+    QString mantissa = renderIntegerMask(intDigits, intMask);
+    if (!fracMask.isEmpty())
+        mantissa += QLatin1Char('.') + renderIntegerMask(fracDigitsStr, fracMask);
+
+    QString expSign;
+    if (exponent < 0)
+        expSign = u"-"_s;
+    else if (signChar == QLatin1Char('+'))
+        expSign = u"+"_s;
+    const QString expDigits = renderIntegerMask(QString::number(qAbs(exponent)), expMask);
+
+    return (neg ? u"-"_s : QString()) + mantissa + QLatin1Char('E') + expSign + expDigits;
+}
+
+// Renders one number-format section (percent/scientific/fraction/plain, with optional thousands
+// grouping) against `value`.
+static QString formatNumberSection(double value, QString format)
+{
+    const bool percent = format.contains(QLatin1Char('%'));
+    if (percent) {
+        value *= 100;
+        format.remove(QLatin1Char('%'));
+    }
+
+    const int eIdx = format.indexOf(QLatin1Char('E'), 0, Qt::CaseInsensitive);
+    if (eIdx >= 0 && eIdx + 1 < format.size() && (format.at(eIdx + 1) == QLatin1Char('+') || format.at(eIdx + 1) == QLatin1Char('-')))
+        return formatScientificSection(value, format, eIdx);
+
+    if (format.contains(QLatin1Char('?')) && format.contains(QLatin1Char('/')))
+        return formatFractionSection(value, format);
+
+    const int dot = format.indexOf(QLatin1Char('.'));
+    const QString intMask = dot >= 0 ? format.left(dot) : format;
+    const QString fracMask = dot >= 0 ? format.mid(dot + 1) : QString();
+    int fracDigits = 0;
+    for (QChar c : fracMask)
+        if (c == QLatin1Char('0') || c == QLatin1Char('#'))
+            ++fracDigits;
+
+    QString intDigits;
+    QString fracDigitsStr;
+    splitRoundedDigits(value, fracDigits, intDigits, fracDigitsStr);
+
+    QString result = intMask.contains(QLatin1Char(',')) ? renderGroupedInteger(intDigits, intMask) : renderIntegerMask(intDigits, intMask);
+    if (!fracMask.isEmpty()) {
+        QString fracPart = renderIntegerMask(fracDigitsStr, fracMask);
+        // '#' placeholders suppress trailing insignificant zeros, unlike '0'
+        int end = fracMask.size();
+        while (end > 0 && fracMask.at(end - 1) == QLatin1Char('#') && fracPart.at(end - 1) == QLatin1Char('0'))
+            --end;
+        fracPart = fracPart.left(end);
+        if (!fracPart.isEmpty())
+            result += QLatin1Char('.') + fracPart;
+    }
+    if (percent)
+        result += QLatin1Char('%');
+    return (value < 0 ? u"-"_s : QString()) + result;
+}
+
+struct FormatSection {
+    QString condition;
+    QString format;
+};
+
+static QList<FormatSection> splitFormatSections(const QString &format)
+{
+    QList<FormatSection> sections;
+    const auto parts = format.split(QLatin1Char(';'));
+    for (const QString &raw : parts) {
+        FormatSection section;
+        QString s = raw;
+        if (s.startsWith(QLatin1Char('['))) {
+            const int end = s.indexOf(QLatin1Char(']'));
+            if (end > 0) {
+                section.condition = s.mid(1, end - 1);
+                s = s.mid(end + 1);
+            }
+        }
+        section.format = s;
+        sections << section;
+    }
+    return sections;
+}
+
+static bool evaluateCondition(double value, const QString &condition)
+{
+    static const QRegularExpression re(u"^(<=|>=|<>|<|>|=)?(-?\\d+(?:\\.\\d+)?)$"_s);
+    const QRegularExpressionMatch m = re.match(condition);
+    if (!m.hasMatch())
+        return false;
+    const QString op = m.captured(1);
+    const double bound = m.captured(2).toDouble();
+    if (op.isEmpty() || op == "="_L1)
+        return value == bound;
+    if (op == "<"_L1)
+        return value < bound;
+    if (op == "<="_L1)
+        return value <= bound;
+    if (op == ">"_L1)
+        return value > bound;
+    if (op == ">="_L1)
+        return value >= bound;
+    return value != bound; // "<>"
+}
+
+// Picks which section of a (possibly multi-section, possibly conditional) format string applies
+// to `value`: sections with an explicit [condition] are matched first, in order; otherwise the
+// standard positive/negative/zero convention applies.
+static QString selectFormatSection(double value, const QList<FormatSection> &sections)
+{
+    for (const FormatSection &s : sections)
+        if (!s.condition.isEmpty() && evaluateCondition(value, s.condition))
+            return s.format;
+
+    QStringList unconditional;
+    for (const FormatSection &s : sections)
+        if (s.condition.isEmpty())
+            unconditional << s.format;
+
+    if (unconditional.isEmpty())
+        return sections.isEmpty() ? QString() : sections.last().format;
+    if (unconditional.size() == 1)
+        return unconditional.first();
+    if (unconditional.size() >= 3 && value == 0)
+        return unconditional.at(2);
+    return (value < 0 && unconditional.size() >= 2) ? unconditional.at(1) : unconditional.first();
+}
+
+// A run of Y/M/D/H/S format letters (case-insensitive), or a literal span kept as-is.
+struct DateToken {
+    QChar kind; // 'Y'/'M'/'m' (minutes)/'D'/'H'/'S', or a null QChar for a literal
+    QString text; // literal text (only meaningful when kind is null)
+    int length = 0;
+};
+
+static QList<DateToken> tokenizeDateFormat(const QString &format)
+{
+    static const QString dateLetters = u"YMDHS"_s;
+    QList<DateToken> tokens;
+    int i = 0;
+    while (i < format.size()) {
+        const QChar u = format.at(i).toUpper();
+        if (dateLetters.contains(u)) {
+            int j = i;
+            while (j < format.size() && format.at(j).toUpper() == u)
+                ++j;
+            tokens << DateToken{u, QString(), j - i};
+            i = j;
+        } else {
+            int j = i;
+            while (j < format.size() && !dateLetters.contains(format.at(j).toUpper()))
+                ++j;
+            tokens << DateToken{QChar(), format.mid(i, j - i), 0};
+            i = j;
+        }
+    }
+    return tokens;
+}
+
+// An "M" run means minutes rather than month when it sits next to an H (before) or S (after)
+// token; mark those by lower-casing their kind.
+static void resolveMinuteTokens(QList<DateToken> &tokens)
+{
+    for (int i = 0; i < tokens.size(); ++i) {
+        if (tokens[i].kind != QLatin1Char('M'))
+            continue;
+        bool minute = false;
+        for (int j = i - 1; j >= 0 && !minute; --j) {
+            if (tokens[j].kind == QChar())
+                continue;
+            minute = tokens[j].kind == QLatin1Char('H');
+            break;
+        }
+        if (!minute) {
+            for (int j = i + 1; j < tokens.size(); ++j) {
+                if (tokens[j].kind == QChar())
+                    continue;
+                minute = tokens[j].kind == QLatin1Char('S');
+                break;
+            }
+        }
+        if (minute)
+            tokens[i].kind = QLatin1Char('m');
+    }
+}
+
+static QString renderDateTimeFormat(const QDateTime &dt, const QString &format)
+{
+    QList<DateToken> tokens = tokenizeDateFormat(format);
+    resolveMinuteTokens(tokens);
+
+    QString result;
+    for (const DateToken &t : tokens) {
+        if (t.kind == QChar()) {
+            result += t.text;
+            continue;
+        }
+        int value = 0;
+        switch (t.kind.unicode()) {
+        case 'Y':
+            value = dt.date().year();
+            if (t.length <= 2)
+                value %= 100;
+            break;
+        case 'M':
+            value = dt.date().month();
+            break;
+        case 'm':
+            value = dt.time().minute();
+            break;
+        case 'D':
+            value = dt.date().day();
+            break;
+        case 'H':
+            value = dt.time().hour();
+            break;
+        case 'S':
+            value = dt.time().second();
+            break;
+        }
+        result += QString::number(value).rightJustified(t.length, QLatin1Char('0'));
+    }
+    return result;
+}
+
+static bool isDateTimeFormat(const QString &format)
+{
+    for (QChar c : format) {
+        const QChar u = c.toUpper();
+        if (u == QLatin1Char('Y') || u == QLatin1Char('D') || u == QLatin1Char('H') || u == QLatin1Char('S'))
+            return true;
+    }
+    return false;
+}
+
 // Function: TEXT
 Value func_text(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QString s = calc->conv()->asString(args[0]).asString();
-    return Value(QString(s));
+    if (args[0].isError())
+        return args[0];
+    // text values pass through unformatted
+    if (args[0].isString())
+        return args[0];
+
+    const QString format = calc->conv()->asString(args[1]).asString();
+
+    if (isDateTimeFormat(format)) {
+        // use asFloat (blank -> 0) rather than asDateTime, which treats a blank value as "now"
+        const double serial = calc->conv()->asFloat(args[0]).asFloat();
+        QDateTime dt(calc->settings()->referenceDate(), QTime(), Qt::UTC);
+        const int days = int(serial);
+        dt = dt.addDays(days).addMSecs(qRound64((serial - days) * 86400000.0));
+        return Value(renderDateTimeFormat(dt, format));
+    }
+
+    const double value = calc->conv()->asFloat(args[0]).asFloat();
+    const QString section = selectFormatSection(value, splitFormatSections(format));
+    return Value(formatNumberSection(value, section));
 }
 
 // Function: TOGGLE
