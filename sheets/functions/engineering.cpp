@@ -274,7 +274,9 @@ Value func_base(valVector args, ValueCalc *calc, FuncExtra *)
     if ((base < 2) || (base > 36))
         return Value::errorVALUE();
     if (minLength < 0)
-        minLength = 2;
+        return Value::errorVALUE();
+    if (calc->conv()->asFloat(args[0]).asFloat() < 0)
+        return Value::errorVALUE();
 
     return calc->base(args[0], base, 0, minLength);
 }

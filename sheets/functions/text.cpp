@@ -297,9 +297,41 @@ Value func_dollar(valVector args, ValueCalc *calc, FuncExtra *)
     value = floor(value * pow(10.0, precision) + 0.5) / pow(10.0, precision);
 
     const Localization *locale = calc->settings()->locale();
-    QString s = locale->formatCurrency(value, locale->currencySymbol(), precision);
+    // always a leading minus sign, never locale-specific parentheses
+    QString s = locale->formatCurrency(fabs(value), locale->currencySymbol(), qMax(0, precision));
+    if (value < 0)
+        s.prepend('-');
 
     return Value(s);
+}
+
+// codepoint index -> UTF-16 index table for `text`, with a trailing sentinel at text.length()
+static QList<int> codepointOffsets(const QString &text)
+{
+    QList<int> offsets;
+    offsets.reserve(text.length());
+    for (int i = 0; i < text.length();) {
+        offsets << i;
+        if (text.at(i).isHighSurrogate() && i + 1 < text.length() && text.at(i + 1).isLowSurrogate())
+            i += 2;
+        else
+            ++i;
+    }
+    offsets << text.length();
+    return offsets;
+}
+
+// 1-based codepoint position of the first match of `needle` (a literal QString or a
+// QRegularExpression) in `haystack` at or after codepoint startCodepoint (1-based);
+// 0 if startCodepoint is out of range or there's no match.
+template<typename Needle>
+static int findCodepointPos(const QString &haystack, const Needle &needle, int startCodepoint)
+{
+    const QList<int> offsets = codepointOffsets(haystack);
+    if (startCodepoint < 1 || startCodepoint > offsets.size() - 1)
+        return 0;
+    const int pos = haystack.indexOf(needle, offsets[startCodepoint - 1]);
+    return pos < 0 ? 0 : offsets.indexOf(pos) + 1;
 }
 
 // Function: EXACT
@@ -328,11 +360,11 @@ Value func_find(valVector args, ValueCalc *calc, FuncExtra *)
     if (start_num > (int)within_text.length())
         return Value::errorVALUE();
 
-    int pos = within_text.indexOf(find_text, start_num - 1);
-    if (pos < 0)
+    int pos = findCodepointPos(within_text, find_text, start_num);
+    if (pos == 0)
         return Value::errorVALUE();
 
-    return Value(pos + 1);
+    return Value(pos);
 }
 
 // Function: FIXED
@@ -412,7 +444,7 @@ Value func_left(valVector args, ValueCalc *calc, FuncExtra *)
     if (nb < 0)
         return Value::errorVALUE();
 
-    // by Unicode code point, not UTF-16 code unit, so this doesn't split a surrogate pair
+    // by codepoint, not UTF-16 unit, to not split a surrogate pair
     const QList<uint> cps = str.toUcs4();
     return Value(fromCodePoints(cps, 0, qMin(nb, cps.size())));
 }
@@ -451,7 +483,7 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     // Excel compatible
     pos--;
 
-    // by Unicode code point, not UTF-16 code unit, so this doesn't split a surrogate pair
+    // by codepoint, not UTF-16 unit, to not split a surrogate pair
     const QList<uint> cps = str.toUcs4();
     pos = qBound(0, pos, cps.size());
     len = qMin(len, cps.size() - pos);
@@ -534,25 +566,15 @@ Value func_proper(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str = calc->conv()->asString(args[0]).asString().toLower();
 
-    QChar f;
-    bool first = true;
-
+    bool startOfWord = true;
     for (int i = 0; i < str.length(); ++i) {
-        if (first) {
-            f = str[i];
-            if (f.isNumber())
-                continue;
-
-            f = f.toUpper();
-
-            str[i] = f;
-            first = false;
-
-            continue;
+        if (str[i].isLetter()) {
+            if (startOfWord)
+                str[i] = str[i].toUpper();
+            startOfWord = false;
+        } else {
+            startOfWord = true;
         }
-
-        if (str[i].isSpace() || str[i].isPunct())
-            first = true;
     }
 
     return Value(str);
@@ -618,10 +640,16 @@ Value func_replace(valVector args, ValueCalc *calc, FuncExtra *)
     int len = calc->conv()->asInteger(args[2]).asInteger();
     QString new_text = calc->conv()->asString(args[3]).asString();
 
-    if (pos < 0)
-        pos = 0;
+    if (pos < 1 || len < 0)
+        return Value::errorVALUE();
+    pos--;
 
-    QString result = text.replace(pos - 1, len, new_text);
+    // by codepoint, not UTF-16 unit, to not split a surrogate pair
+    const QList<uint> cps = text.toUcs4();
+    pos = qMin(pos, cps.size());
+    len = qMin(len, cps.size() - pos);
+
+    QString result = fromCodePoints(cps, 0, pos) + new_text + fromCodePoints(cps, pos + len, cps.size() - pos - len);
     return Value(result);
 }
 
@@ -651,7 +679,7 @@ Value func_right(valVector args, ValueCalc *calc, FuncExtra *)
     if (nb < 0)
         return Value::errorVALUE();
 
-    // by Unicode code point, not UTF-16 code unit, so this doesn't split a surrogate pair
+    // by codepoint, not UTF-16 unit, to not split a surrogate pair
     const QList<uint> cps = str.toUcs4();
     const int start = qMax(0, cps.size() - nb);
     return Value(fromCodePoints(cps, start, cps.size() - start));
@@ -690,11 +718,11 @@ Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
 
     // use globbing feature of QRegExp
     auto regex = QRegularExpression::fromWildcard(find_text, Qt::CaseInsensitive, QRegularExpression::UnanchoredWildcardConversion);
-    int pos = within_text.indexOf(regex, start_num - 1);
-    if (pos < 0)
+    int pos = findCodepointPos(within_text, regex, start_num);
+    if (pos == 0)
         return Value::errorNA();
 
-    return Value(pos + 1);
+    return Value(pos);
 }
 
 // Function: SLEEK
@@ -823,10 +851,22 @@ Value func_upper(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: VALUE
-Value func_value(valVector args, ValueCalc *calc, FuncExtra *)
+Value func_value(valVector args, ValueCalc *calc, FuncExtra *extra)
 {
-    // same as the N function
-    return calc->conv()->asFloat(args[0]);
+    if (args[0].isNumber())
+        return calc->conv()->asFloat(args[0]);
+
+    const QString text = calc->conv()->asString(args[0]).asString();
+    if (extra && extra->sheet) {
+        const Value parsed = extra->sheet->map()->parser()->parse(text);
+        if (!parsed.isString())
+            return calc->conv()->asFloat(parsed);
+        return Value::errorVALUE();
+    }
+
+    bool ok = false;
+    Value result = calc->conv()->asFloat(args[0], &ok);
+    return ok ? result : Value::errorVALUE();
 }
 
 #define UTF8_TH_0 "\340\270\250\340\270\271\340\270\231\340\270\242\340\271\214"
