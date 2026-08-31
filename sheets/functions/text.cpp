@@ -605,9 +605,20 @@ Value func_lenb(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: LOWER
+// asString() renders a date/time-tagged value using its display format (e.g. "Saturday, ..."),
+// but text functions like LOWER/UPPER are specified to just stringify the raw serial number.
+static Value stripDateTimeFormat(const Value &value)
+{
+    if (value.format() != Value::fmt_Date && value.format() != Value::fmt_DateTime && value.format() != Value::fmt_Time)
+        return value;
+    Value copy(value);
+    copy.setFormat(Value::fmt_None);
+    return copy;
+}
+
 Value func_lower(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value(calc->conv()->asString(args[0]).asString().toLower());
+    return Value(calc->conv()->asString(stripDateTimeFormat(args[0])).asString().toLower());
 }
 
 // Function: MID
@@ -1533,7 +1544,7 @@ Value func_unicode(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: UPPER
 Value func_upper(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value(calc->conv()->asString(args[0]).asString().toUpper());
+    return Value(calc->conv()->asString(stripDateTimeFormat(args[0])).asString().toUpper());
 }
 
 // Function: VALUE
