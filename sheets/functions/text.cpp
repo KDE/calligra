@@ -198,14 +198,25 @@ Value func_clean(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str(calc->conv()->asString(args[0]).asString());
     QString result;
-    QChar c;
-    int i;
-    int l = str.length();
+    result.reserve(str.length());
 
-    for (i = 0; i < l; ++i) {
-        c = str[i];
-        if (c.isPrint())
+    // CLEAN strips C0/C1 control characters and Unicode noncharacters, but not e.g.
+    // private-use code points that QChar::isPrint() would also (wrongly) flag as non-printable
+    for (int i = 0; i < str.length(); ++i) {
+        const QChar c = str.at(i);
+        char32_t cp = c.unicode();
+        int width = 1;
+        if (c.isHighSurrogate() && i + 1 < str.length() && str.at(i + 1).isLowSurrogate()) {
+            cp = QChar::surrogateToUcs4(c, str.at(i + 1));
+            width = 2;
+        }
+        const bool removable = cp < 0x20 || (cp >= 0x7F && cp <= 0x9F) || (cp & 0xFFFE) == 0xFFFE || (cp >= 0xFDD0 && cp <= 0xFDEF);
+        if (!removable) {
             result += c;
+            if (width == 2)
+                result += str.at(i + 1);
+        }
+        i += width - 1;
     }
 
     return Value(result);
