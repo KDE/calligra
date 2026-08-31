@@ -148,24 +148,53 @@ Value func_sexdec(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: ROMAN
+// mode (0-4) controls how aggressively subtractive pairs are relaxed to shorten the result,
+// e.g. 999 is CMXCIX at mode 0 but LMVLIV at mode 1 and IM at mode 4.
 Value func_roman(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    static const QString RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
-    static const QString RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-    static const QString RNHundreds[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
-    static const QString RNThousands[] = {"", "M", "MM", "MMM"};
-
-    // precision loss is not a problem here, as we only use the 0-3999 range
     int64_t value = calc->conv()->asInteger(args[0]).asInteger();
-    if ((value < 0) || (value > 3999)) {
-        return Value::errorNA();
+    int mode = 0;
+    if (args.count() == 2)
+        mode = calc->conv()->asInteger(args[1]).asInteger();
+
+    if (value < 0 || value > 3999 || mode < 0 || mode > 4)
+        return Value::errorVALUE();
+
+    static const QChar chars[] = {u'M', u'D', u'C', u'L', u'X', u'V', u'I'};
+    static const int values[] = {1000, 500, 100, 50, 10, 5, 1};
+    static const int maxIndex = 6;
+
+    QString roman;
+    int val = static_cast<int>(value);
+
+    for (int i = 0; i <= maxIndex / 2; ++i) {
+        int index = 2 * i;
+        int digit = val / values[index];
+
+        if (digit % 5 == 4) {
+            int index2 = (digit == 4) ? index - 1 : index - 2;
+            int steps = 0;
+            while (steps < mode && index < maxIndex) {
+                ++steps;
+                if (values[index2] - values[index + 1] <= val)
+                    ++index;
+                else
+                    steps = mode;
+            }
+            roman += chars[index];
+            roman += chars[index2];
+            val += values[index] - values[index2];
+        } else {
+            if (digit > 4)
+                roman += chars[index - 1];
+            int pad = digit % 5;
+            if (pad)
+                roman += QString(pad, chars[index]);
+            val %= values[index];
+        }
     }
 
-    // There is an optional argument, but the specification only covers the case
-    // where it is zero for conciseness, and zero is the default. So we just
-    // ignore it.
-    QString result = RNThousands[(value / 1000)] + RNHundreds[(value / 100) % 10] + RNTens[(value / 10) % 10] + RNUnits[(value) % 10];
-    return Value(result);
+    return Value(roman);
 }
 
 // convert single roman character to decimal
