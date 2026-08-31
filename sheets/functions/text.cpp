@@ -940,6 +940,17 @@ Value func_rot13(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: SEARCH
+// SEARCH's find_text uses ?/* wildcards; '|' between them additionally means "or" (each side
+// converted from wildcard syntax and combined into one alternation), matching real LO behaviour.
+static QRegularExpression wildcardSearchRegex(const QString &find_text)
+{
+    QStringList patterns;
+    const auto alternatives = find_text.split(QLatin1Char('|'));
+    for (const QString &alt : alternatives)
+        patterns << QRegularExpression::fromWildcard(alt, Qt::CaseInsensitive, QRegularExpression::UnanchoredWildcardConversion).pattern();
+    return QRegularExpression(patterns.join(QLatin1Char('|')), QRegularExpression::CaseInsensitiveOption);
+}
+
 Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString find_text = calc->conv()->asString(args[0]).asString();
@@ -954,8 +965,7 @@ Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
     if (start_num > (int)within_text.length())
         return Value::errorVALUE();
 
-    // use globbing feature of QRegExp
-    auto regex = QRegularExpression::fromWildcard(find_text, Qt::CaseInsensitive, QRegularExpression::UnanchoredWildcardConversion);
+    const QRegularExpression regex = wildcardSearchRegex(find_text);
     int pos = findUnitPos(within_text, regex, start_num, codepointWidth);
     if (pos == 0)
         return Value::errorNA();
@@ -978,7 +988,7 @@ Value func_searchb(valVector args, ValueCalc *calc, FuncExtra *)
     if (start_num > offsets.last().unit)
         return Value::errorVALUE();
 
-    auto regex = QRegularExpression::fromWildcard(find_text, Qt::CaseInsensitive, QRegularExpression::UnanchoredWildcardConversion);
+    const QRegularExpression regex = wildcardSearchRegex(find_text);
     int pos = findUnitPos(within_text, regex, start_num, dbcsWidth);
     if (pos == 0)
         return Value::errorNA();
