@@ -108,16 +108,23 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
     // perform the actual array expansion if need be
 
     if (mustExpandArray) {
-        // compute number of rows/cols of the result
+        // compute number of rows/cols of the result; for an array argument, its own dimensions
+        // are authoritative (extra->ranges reflects the source cell range only for a *direct*
+        // range reference — for a computed array, e.g. from a nested function call, it's a
+        // meaningless 1x1 default and would silently truncate the expansion to a single element)
         int rows = 0;
         int cols = 0;
         for (int i = 0; i < args.count(); ++i) {
             int x = 1;
-            if (extra)
+            if (args[i].isArray())
+                x = args[i].rows();
+            else if (extra)
                 x = extra->ranges[i].rows();
             if (x > rows)
                 rows = x;
-            if (extra)
+            if (args[i].isArray())
+                x = args[i].columns();
+            else if (extra)
                 x = extra->ranges[i].columns();
             if (x > cols)
                 cols = x;
@@ -131,8 +138,8 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
                 valVector vals(args.count());
                 FuncExtra extra2 = *extra;
                 for (int i = 0; i < args.count(); ++i) {
-                    int r = extra->ranges[i].rows();
-                    int c = extra->ranges[i].columns();
+                    int r = args[i].isArray() ? args[i].rows() : extra->ranges[i].rows();
+                    int c = args[i].isArray() ? args[i].columns() : extra->ranges[i].columns();
                     vals[i] = args[i].isArray() ? args[i].element(col % c, row % r) : args[i];
 
                     // adjust the FuncExtra structure to refer to the correct cells

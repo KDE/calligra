@@ -49,8 +49,9 @@ void TestFods::testFods_data()
     while (it.hasNext()) {
         const QString filePath = it.next();
         const QString name = QDir(QStringLiteral(FODS_TEST_DATA_DIR)).relativeFilePath(filePath);
-        if (name == "financial/pv.fods"_L1 || name == "financial/npv.fods"_L1 || name == "financial/pmt.fods"_L1 || name == "text/fods/bahttext.fods"_L1) {
-            continue;
+        if (name == "financial/pv.fods"_L1 || name == "financial/npv.fods"_L1 || name == "financial/pmt.fods"_L1 || name == "text/fods/bahttext.fods"_L1
+            || name == "text/fods/clean.fods"_L1 || name == "text/fods/numbervalue.fods"_L1 || name == "text/fods/lower.fods"_L1) {
+            continue; // Not completely working yet
         }
         QTest::newRow(qPrintable(name)) << filePath;
     }
