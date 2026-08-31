@@ -38,21 +38,28 @@ Value func_concatenate(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dollar(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_exact(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_find(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_findb(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_jis(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_left(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_leftb(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_len(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_lenb(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lower(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mid(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_midb(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_proper(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_regexpre(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_replace(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_replaceb(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rept(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rot13(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_right(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rightb(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_search(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_searchb(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sleek(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_t(valVector args, ValueCalc *calc, FuncExtra *);
@@ -84,7 +91,8 @@ TextModule::TextModule(QObject *parent, const QVariantList &)
     f = new Function("JIS", func_jis);
     add(f);
     f = new Function("LEN", func_len);
-    f->setAlternateName("LENB");
+    add(f);
+    f = new Function("LENB", func_lenb);
     add(f);
     f = new Function("LOWER", func_lower);
     add(f);
@@ -126,18 +134,24 @@ TextModule::TextModule(QObject *parent, const QVariantList &)
     add(f);
     f = new Function("FIND", func_find);
     f->setParamCount(2, 3);
-    f->setAlternateName("FINDB");
+    add(f);
+    f = new Function("FINDB", func_findb);
+    f->setParamCount(2, 3);
     add(f);
     f = new Function("FIXED", func_fixed);
     f->setParamCount(1, 3);
     add(f);
     f = new Function("LEFT", func_left);
     f->setParamCount(1, 2);
-    f->setAlternateName("LEFTB");
+    add(f);
+    f = new Function("LEFTB", func_leftb);
+    f->setParamCount(1, 2);
     add(f);
     f = new Function("MID", func_mid);
     f->setParamCount(2, 3);
-    f->setAlternateName("MIDB");
+    add(f);
+    f = new Function("MIDB", func_midb);
+    f->setParamCount(2, 3);
     add(f);
     f = new Function("NUMBERVALUE", func_numbervalue);
     f->setParamCount(1, 3);
@@ -150,18 +164,24 @@ TextModule::TextModule(QObject *parent, const QVariantList &)
     add(f);
     f = new Function("REPLACE", func_replace);
     f->setParamCount(4);
-    f->setAlternateName("REPLACEB");
+    add(f);
+    f = new Function("REPLACEB", func_replaceb);
+    f->setParamCount(4);
     add(f);
     f = new Function("REPT", func_rept);
     f->setParamCount(2);
     add(f);
     f = new Function("RIGHT", func_right);
     f->setParamCount(1, 2);
-    f->setAlternateName("RIGHTB");
+    add(f);
+    f = new Function("RIGHTB", func_rightb);
+    f->setParamCount(1, 2);
     add(f);
     f = new Function("SEARCH", func_search);
     f->setParamCount(2, 3);
-    f->setAlternateName("SEARCHB");
+    add(f);
+    f = new Function("SEARCHB", func_searchb);
+    f->setParamCount(2, 3);
     add(f);
     f = new Function("SUBSTITUTE", func_substitute);
     f->setParamCount(3, 4);
@@ -305,33 +325,118 @@ Value func_dollar(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(s);
 }
 
-// codepoint index -> UTF-16 index table for `text`, with a trailing sentinel at text.length()
-static QList<int> codepointOffsets(const QString &text)
+// per-codepoint UTF-16 index plus cumulative "unit" count, with a trailing sentinel at
+// (text.length(), totalUnits). unitWidth(cp) is 1 for character-based positions (LEFT, MID,
+// LEN, FIND, SEARCH), or the DBCS byte width (1 or 2) for the "B" variants.
+struct UnitOffset {
+    int utf16;
+    int unit;
+};
+
+static int codepointWidth(char32_t)
 {
-    QList<int> offsets;
-    offsets.reserve(text.length());
+    return 1;
+}
+
+// Unicode ranges that DBCS byte-oriented functions (LEFTB/RIGHTB/MIDB/LENB/FINDB/SEARCHB/
+// REPLACEB) count as 2 bytes (roughly East Asian Wide/Fullwidth); everything else is 1 byte.
+static int dbcsWidth(char32_t cp)
+{
+    static const std::pair<char32_t, char32_t> wideRanges[] = {
+        {0x1100, 0x115F},
+        {0x2E80, 0x303E},
+        {0x3041, 0x33FF},
+        {0x3400, 0x4DBF},
+        {0x4E00, 0x9FFF},
+        {0xA000, 0xA4CF},
+        {0xAC00, 0xD7A3},
+        {0xF900, 0xFAFF},
+        {0xFE30, 0xFE4F},
+        {0xFF00, 0xFF60},
+        {0xFFE0, 0xFFE6},
+        {0x1F300, 0x1FAFF},
+        {0x20000, 0x3FFFD},
+    };
+    for (const auto &r : wideRanges)
+        if (cp >= r.first && cp <= r.second)
+            return 2;
+    return 1;
+}
+
+template<typename WidthFn>
+static QList<UnitOffset> unitOffsets(const QString &text, WidthFn unitWidth)
+{
+    QList<UnitOffset> offsets;
+    int unit = 0;
     for (int i = 0; i < text.length();) {
-        offsets << i;
-        if (text.at(i).isHighSurrogate() && i + 1 < text.length() && text.at(i + 1).isLowSurrogate())
-            i += 2;
-        else
-            ++i;
+        offsets << UnitOffset{i, unit};
+        char32_t cp = text.at(i).unicode();
+        int w16 = 1;
+        if (text.at(i).isHighSurrogate() && i + 1 < text.length() && text.at(i + 1).isLowSurrogate()) {
+            cp = QChar::surrogateToUcs4(text.at(i), text.at(i + 1));
+            w16 = 2;
+        }
+        unit += unitWidth(cp);
+        i += w16;
     }
-    offsets << text.length();
+    offsets << UnitOffset{int(text.length()), unit};
     return offsets;
 }
 
-// 1-based codepoint position of the first match of `needle` (a literal QString or a
-// QRegularExpression) in `haystack` at or after codepoint startCodepoint (1-based);
-// 0 if startCodepoint is out of range or there's no match.
-template<typename Needle>
-static int findCodepointPos(const QString &haystack, const Needle &needle, int startCodepoint)
+// 1-based unit position of the first match of `needle` (a literal QString or a
+// QRegularExpression) in `haystack` at or after unit startUnit (1-based); 0 if startUnit is
+// out of range or there's no match.
+template<typename Needle, typename WidthFn>
+static int findUnitPos(const QString &haystack, const Needle &needle, int startUnit, WidthFn unitWidth)
 {
-    const QList<int> offsets = codepointOffsets(haystack);
-    if (startCodepoint < 1 || startCodepoint > offsets.size() - 1)
+    const QList<UnitOffset> offsets = unitOffsets(haystack, unitWidth);
+    int idx = 0;
+    while (idx < offsets.size() && offsets[idx].unit < startUnit - 1)
+        ++idx;
+    if (idx >= offsets.size())
         return 0;
-    const int pos = haystack.indexOf(needle, offsets[startCodepoint - 1]);
-    return pos < 0 ? 0 : offsets.indexOf(pos) + 1;
+    const int pos = haystack.indexOf(needle, offsets[idx].utf16);
+    if (pos < 0)
+        return 0;
+    for (const UnitOffset &o : offsets)
+        if (o.utf16 == pos)
+            return o.unit + 1;
+    return 0;
+}
+
+static int findCodepointPos(const QString &haystack, const QString &needle, int startCodepoint)
+{
+    return findUnitPos(haystack, needle, startCodepoint, codepointWidth);
+}
+
+// largest codepoint count whose cumulative unit width is <= maxUnits
+static int unitCountFitting(const QList<UnitOffset> &offsets, int maxUnits)
+{
+    int m = 0;
+    while (m + 1 < offsets.size() && offsets[m + 1].unit <= maxUnits)
+        ++m;
+    return m;
+}
+
+// number of codepoints, starting at codepoint index fromIdx, whose cumulative unit width
+// (relative to fromIdx) is <= maxUnits
+static int unitCountFromFitting(const QList<UnitOffset> &offsets, int fromIdx, int maxUnits)
+{
+    const int base = offsets[fromIdx].unit;
+    int m = 0;
+    while (fromIdx + m + 1 < offsets.size() && offsets[fromIdx + m + 1].unit - base <= maxUnits)
+        ++m;
+    return m;
+}
+
+// smallest codepoint index whose suffix (through the end) has cumulative unit width <= maxUnits
+static int unitSuffixStart(const QList<UnitOffset> &offsets, int maxUnits)
+{
+    const int target = offsets.last().unit - maxUnits;
+    int k = 0;
+    while (k < offsets.size() - 1 && offsets[k].unit < target)
+        ++k;
+    return k;
 }
 
 // Function: EXACT
@@ -361,6 +466,28 @@ Value func_find(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     int pos = findCodepointPos(within_text, find_text, start_num);
+    if (pos == 0)
+        return Value::errorVALUE();
+
+    return Value(pos);
+}
+
+// Function: FINDB (byte-position variant of FIND, wide/CJK characters count as 2 bytes)
+Value func_findb(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QString find_text = calc->conv()->asString(args[0]).asString();
+    QString within_text = calc->conv()->asString(args[1]).asString();
+    int start_num = 1;
+    if (args.count() == 3)
+        start_num = calc->conv()->asInteger(args[2]).asInteger();
+
+    if (start_num <= 0)
+        return Value::errorVALUE();
+    const QList<UnitOffset> offsets = unitOffsets(within_text, dbcsWidth);
+    if (start_num > offsets.last().unit)
+        return Value::errorVALUE();
+
+    int pos = findUnitPos(within_text, find_text, start_num, dbcsWidth);
     if (pos == 0)
         return Value::errorVALUE();
 
@@ -449,11 +576,33 @@ Value func_left(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(fromCodePoints(cps, 0, qMin(nb, cps.size())));
 }
 
+// Function: LEFTB (byte-position variant of LEFT, wide/CJK characters count as 2 bytes)
+Value func_leftb(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QString str = calc->conv()->asString(args[0]).asString();
+    int nb = 1;
+    if (args.count() == 2)
+        nb = calc->conv()->asInteger(args[1]).asInteger();
+    if (nb < 0)
+        return Value::errorVALUE();
+
+    const QList<UnitOffset> offsets = unitOffsets(str, dbcsWidth);
+    const QList<uint> cps = str.toUcs4();
+    return Value(fromCodePoints(cps, 0, unitCountFitting(offsets, nb)));
+}
+
 // Function: LEN
 Value func_len(valVector args, ValueCalc *calc, FuncExtra *)
 {
     const int nb = calc->conv()->asString(args[0]).asString().toUcs4().size();
     return Value(nb);
+}
+
+// Function: LENB (byte-length variant of LEN, wide/CJK characters count as 2 bytes)
+Value func_lenb(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const QString str = calc->conv()->asString(args[0]).asString();
+    return Value(unitOffsets(str, dbcsWidth).last().unit);
 }
 
 // Function: LOWER
@@ -489,6 +638,31 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     len = qMin(len, cps.size() - pos);
 
     return Value(fromCodePoints(cps, pos, len));
+}
+
+// Function: MIDB (byte-position variant of MID, wide/CJK characters count as 2 bytes)
+Value func_midb(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QString str = calc->conv()->asString(args[0]).asString();
+
+    int pos = calc->conv()->asInteger(args[1]).asInteger();
+    if (pos < 1)
+        return Value::errorVALUE();
+
+    int len = 0x7fffffff;
+    if (args.count() == 3) {
+        len = calc->conv()->asInteger(args[2]).asInteger();
+        if (len < 0)
+            return Value::errorVALUE();
+    }
+    pos--;
+
+    const QList<UnitOffset> offsets = unitOffsets(str, dbcsWidth);
+    const int startIdx = unitCountFitting(offsets, pos);
+    const int count = unitCountFromFitting(offsets, startIdx, len);
+
+    const QList<uint> cps = str.toUcs4();
+    return Value(fromCodePoints(cps, startIdx, count));
 }
 
 // Function: NUMBERVALUE
@@ -653,6 +827,42 @@ Value func_replace(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(result);
 }
 
+// Function: REPLACEB (byte-position variant of REPLACE, wide/CJK characters count as 2 bytes)
+Value func_replaceb(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QString text = calc->conv()->asString(args[0]).asString();
+    int pos = calc->conv()->asInteger(args[1]).asInteger();
+    int len = calc->conv()->asInteger(args[2]).asInteger();
+    QString new_text = calc->conv()->asString(args[3]).asString();
+
+    if (pos < 1 || len < 0)
+        return Value::errorVALUE();
+
+    const QList<UnitOffset> offsets = unitOffsets(text, dbcsWidth);
+    const int start = pos - 1;
+    const int end = start + len;
+    if (end > offsets.last().unit)
+        return Value::errorVALUE();
+
+    const QList<uint> cps = text.toUcs4();
+
+    // a byte boundary that splits a wide character turns that character into a single space
+    const int prefixCount = unitCountFitting(offsets, start);
+    QString prefix = fromCodePoints(cps, 0, prefixCount);
+    if (offsets[prefixCount].unit < start)
+        prefix += QLatin1Char(' ');
+
+    int suffixStart = unitCountFitting(offsets, end);
+    QString suffix;
+    if (offsets[suffixStart].unit < end) {
+        suffix += QLatin1Char(' ');
+        ++suffixStart;
+    }
+    suffix += fromCodePoints(cps, suffixStart, cps.size() - suffixStart);
+
+    return Value(prefix + new_text + suffix);
+}
+
 // Function: REPT
 Value func_rept(valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -682,6 +892,24 @@ Value func_right(valVector args, ValueCalc *calc, FuncExtra *)
     // by codepoint, not UTF-16 unit, to not split a surrogate pair
     const QList<uint> cps = str.toUcs4();
     const int start = qMax(0, cps.size() - nb);
+    return Value(fromCodePoints(cps, start, cps.size() - start));
+}
+
+// Function: RIGHTB (byte-position variant of RIGHT, wide/CJK characters count as 2 bytes)
+Value func_rightb(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QString str = calc->conv()->asString(args[0]).asString();
+    int nb = 1;
+    if (args.count() == 2)
+        nb = calc->conv()->asInteger(args[1]).asInteger();
+
+    if (nb < 0)
+        return Value::errorVALUE();
+
+    const QList<UnitOffset> offsets = unitOffsets(str, dbcsWidth);
+    const int start = unitSuffixStart(offsets, nb);
+
+    const QList<uint> cps = str.toUcs4();
     return Value(fromCodePoints(cps, start, cps.size() - start));
 }
 
@@ -718,7 +946,30 @@ Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
 
     // use globbing feature of QRegExp
     auto regex = QRegularExpression::fromWildcard(find_text, Qt::CaseInsensitive, QRegularExpression::UnanchoredWildcardConversion);
-    int pos = findCodepointPos(within_text, regex, start_num);
+    int pos = findUnitPos(within_text, regex, start_num, codepointWidth);
+    if (pos == 0)
+        return Value::errorNA();
+
+    return Value(pos);
+}
+
+// Function: SEARCHB (byte-position variant of SEARCH, wide/CJK characters count as 2 bytes)
+Value func_searchb(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QString find_text = calc->conv()->asString(args[0]).asString();
+    QString within_text = calc->conv()->asString(args[1]).asString();
+    int start_num = 1;
+    if (args.count() == 3)
+        start_num = calc->conv()->asInteger(args[2]).asInteger();
+
+    if (start_num <= 0)
+        return Value::errorVALUE();
+    const QList<UnitOffset> offsets = unitOffsets(within_text, dbcsWidth);
+    if (start_num > offsets.last().unit)
+        return Value::errorVALUE();
+
+    auto regex = QRegularExpression::fromWildcard(find_text, Qt::CaseInsensitive, QRegularExpression::UnanchoredWildcardConversion);
+    int pos = findUnitPos(within_text, regex, start_num, dbcsWidth);
     if (pos == 0)
         return Value::errorNA();
 
