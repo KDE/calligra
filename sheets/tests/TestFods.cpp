@@ -73,14 +73,13 @@ void TestFods::testFods()
         const QRect area = sheet->usedArea(true);
         for (int row = area.top(); row <= area.bottom(); ++row) {
             for (int col = area.left(); col <= area.right(); ++col) {
+                // column C ("Correct") is the fods template's own self-check column
+                if (col != 3)
+                    continue;
                 Cell cell(sheet, col, row);
                 if (cell.isNull() || !cell.isFormula())
                     continue;
                 const QString formula = cell.userInput().trimmed();
-                // Top-level AND()/OR() cells summarize a whole (often blank-padded) range and
-                // are skipped here; each individual test row already has its own check formula
-                // (a ROUND(...)=ROUND(...) or ISERROR(...) comparison) that this loop catches
-                // directly, without depending on AND()/OR()'s handling of blank cells.
                 if (formula.startsWith(QLatin1String("=AND(")) || formula.startsWith(QLatin1String("=OR(")))
                     continue;
                 const Value value = cell.value();
