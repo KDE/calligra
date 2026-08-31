@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-28 00:45+0000\n"
+"POT-Creation-Date: 2026-08-31 00:43+0000\n"
 "PO-Revision-Date: 2011-01-17 21:09+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -1042,17 +1042,17 @@ msgstr "Tofer si siervi di c' modele ci a l' enondaedje do programe"
 msgid "Always use this template"
 msgstr "Tofer si siervi di c' modele ci"
 
-#: main/KoDocument.cpp:548
+#: main/KoDocument.cpp:550
 #, kde-format
 msgid "Making backup..."
 msgstr "Fijhant ene copeye di såvrité..."
 
-#: main/KoDocument.cpp:563
+#: main/KoDocument.cpp:565
 #, kde-format
 msgid "Saving..."
 msgstr "Schapant.."
 
-#: main/KoDocument.cpp:591
+#: main/KoDocument.cpp:593
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -1061,7 +1061,7 @@ msgstr ""
 "Dji n' sai schaper\n"
 "%1"
 
-#: main/KoDocument.cpp:593
+#: main/KoDocument.cpp:595
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -1070,12 +1070,12 @@ msgstr ""
 "Dji n' a savou schaper %1\n"
 "Vochal li råjhon: %2"
 
-#: main/KoDocument.cpp:621
+#: main/KoDocument.cpp:623
 #, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "Documint <i>%1</i> schapé"
 
-#: main/KoDocument.cpp:709
+#: main/KoDocument.cpp:711
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -1084,42 +1084,42 @@ msgstr ""
 "Li scret di c' documint ecripté n' est nén cnoxhou. Schapaedje otomatike "
 "abandné ! Schapez vost ovraedje al mwin, s' i vs plait."
 
-#: main/KoDocument.cpp:712
+#: main/KoDocument.cpp:714
 #, kde-format
 msgid "Autosaving..."
 msgstr "Schapaedje otomatike..."
 
-#: main/KoDocument.cpp:724
+#: main/KoDocument.cpp:726
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr ""
 "Åk n' a nén stî tot rlomant dji schapéve otomaticmint ! Li pårticion est ele "
 "rimpleye ?"
 
-#: main/KoDocument.cpp:812
+#: main/KoDocument.cpp:814
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Dji n' a savou ahiver l' fitchî pol schapaedje"
 
-#: main/KoDocument.cpp:856 main/KoDocument.cpp:878 main/KoDocument.cpp:908
-#: main/KoDocument.cpp:942
+#: main/KoDocument.cpp:858 main/KoDocument.cpp:880 main/KoDocument.cpp:910
+#: main/KoDocument.cpp:944
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Dji n' sai scrire « %1 ». Li pårticion est ele rimpleye ?"
 
-#: main/KoDocument.cpp:863
+#: main/KoDocument.cpp:865
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Dji n' sai scrire les meta-dnêyes RDF. Li pårticion est ele rimpleye ?"
 
-#: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
+#: main/KoDocument.cpp:873 main/KoDocument.cpp:919 main/KoDocument.cpp:1977
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr ""
 "Åk n' a nén stî come dji sayive di scrire « %1 ». Li pårticion est ele "
 "rimpleye ?"
 
-#: main/KoDocument.cpp:1217
+#: main/KoDocument.cpp:1219
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1128,7 +1128,7 @@ msgstr ""
 "URL må basti\n"
 "%1"
 
-#: main/KoDocument.cpp:1233
+#: main/KoDocument.cpp:1235
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1137,106 +1137,106 @@ msgstr ""
 "On fitchî ki dj' a schapé tot seu egzistêye po ci documint ci\n"
 "Voloz vs ki djel drove ?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
+#: main/KoDocument.cpp:1311 main/KoDocument.cpp:1672 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Li fitchî %1 n' egzistêye nén."
 
-#: main/KoDocument.cpp:1433
+#: main/KoDocument.cpp:1435
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening Document"
 msgstr "Drovi on documint"
 
-#: main/KoDocument.cpp:1449
+#: main/KoDocument.cpp:1451
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the filter plugin"
 msgstr "Dji n' a savou ahiver l' fitchî pol schapaedje"
 
-#: main/KoDocument.cpp:1453
+#: main/KoDocument.cpp:1455
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the output document"
 msgstr "Dji n' a savou ahiver l' fitchî pol schapaedje"
 
-#: main/KoDocument.cpp:1457
+#: main/KoDocument.cpp:1459
 #, kde-format
 msgid "File not found"
 msgstr "Fitchî nén trové"
 
-#: main/KoDocument.cpp:1461
+#: main/KoDocument.cpp:1463
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Dji n' sai ahiver l' sitocaedje"
 
-#: main/KoDocument.cpp:1465
+#: main/KoDocument.cpp:1467
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Mwaijhe sôre MIME"
 
-#: main/KoDocument.cpp:1469
+#: main/KoDocument.cpp:1471
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Åk ni va nén dins l' ravalé documint"
 
-#: main/KoDocument.cpp:1473
+#: main/KoDocument.cpp:1475
 #, kde-format
 msgid "Format not recognized"
 msgstr "Cogne nén rconoxhowe"
 
-#: main/KoDocument.cpp:1477
+#: main/KoDocument.cpp:1479
 #, kde-format
 msgid "Not implemented"
 msgstr "Dji n' sai nén fé ça"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1483
 #, kde-format
 msgid "Parsing error"
 msgstr "Aroke d' analijhe del sintake"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1487
 #, kde-format
 msgid "Document is password protected"
 msgstr "Li documint est waeranti pas on scret"
 
-#: main/KoDocument.cpp:1489
+#: main/KoDocument.cpp:1491
 #, fuzzy, kde-format
 #| msgid "Locale format"
 msgid "Invalid file format"
 msgstr "Cogne locåle"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1499
 #, kde-format
 msgid "Internal error"
 msgstr "Divintrinne aroke"
 
-#: main/KoDocument.cpp:1501
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Out of memory"
 msgstr "Pupont d' memwere"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1507
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1511
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1513
+#: main/KoDocument.cpp:1515
 #, fuzzy, kde-format
 msgid "Failed to download remote file"
 msgstr "Dji n' a savou drovi li fitchî %1"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1524
 #, kde-format
 msgid "Unknown error"
 msgstr "Aroke nén cnoxhowe"
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1529
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -1252,17 +1252,18 @@ msgstr ""
 "%2\n"
 "Vochal li råjhon : %1"
 
-#: main/KoDocument.cpp:1585
+#: main/KoDocument.cpp:1587
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Documint <i>%1</i> tcherdjî"
 
-#: main/KoDocument.cpp:1642 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1644 odf/KoOdfReadStore.cpp:98
+#: odf/KoOdfReadStore.cpp:143
 #, kde-format
 msgid "Could not find %1"
 msgstr "Dji n' a savou trover %1"
 
-#: main/KoDocument.cpp:1654
+#: main/KoDocument.cpp:1656
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1271,23 +1272,23 @@ msgstr ""
 "Aroke d' analijhe del sintake dins %1 al roye %2, colone %3\n"
 "Messaedje d' aroke: %4"
 
-#: main/KoDocument.cpp:1677
+#: main/KoDocument.cpp:1679
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 n' est nén on fitchî."
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1694
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr ""
 "Dji n' a savou drovi l' fitchî pol lére (waitîz les droets d' léjhadje)."
 
-#: main/KoDocument.cpp:1703
+#: main/KoDocument.cpp:1705
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Dji n' a savou lére li cmince do fitchî."
 
-#: main/KoDocument.cpp:1734
+#: main/KoDocument.cpp:1736
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1296,18 +1297,18 @@ msgstr ""
 "aroke d' analijhe del sintake e mwaisse documint al roye %1, colone %2\n"
 "Messaedje d' aroke: %3"
 
-#: main/KoDocument.cpp:1755
+#: main/KoDocument.cpp:1757
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "Fitchî KOffice nén valåbe : %1"
 
-#: main/KoDocument.cpp:1836
+#: main/KoDocument.cpp:1838
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Documint nén valåbe : pont d' fitchî « maindoc.xml »."
 
-#: main/KoDocument.cpp:1860
+#: main/KoDocument.cpp:1863
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1316,25 +1317,25 @@ msgstr ""
 "I gn a sacwantès modêyes dins l' documint <i>%1</i>. Potchîz dins Fitchî-"
 ">Modêyes po drovi ene viye modêye."
 
-#: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
+#: main/KoDocument.cpp:2063 main/KoDocument.cpp:2517 main/KoDocument.cpp:2546
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "Sins no"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
+#: main/KoDocument.cpp:2066 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Li documint <b>«%1»</b> a stî candjî.</p><p>El voloz schaper?</p>"
 
-#: main/KoDocument.cpp:2147
+#: main/KoDocument.cpp:2149
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Divintrinne aroke: saveXML nén co epleminté"
 
-#: main/KoDocument.cpp:2180
+#: main/KoDocument.cpp:2182
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1343,7 +1344,7 @@ msgstr ""
 "Dji n' a savou drovi\n"
 "%1"
 
-#: main/KoDocument.cpp:2182
+#: main/KoDocument.cpp:2184
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1352,27 +1353,27 @@ msgstr ""
 "Dji n' a savou drovi li fitchî %1\n"
 "Vochal li råjhon: %2"
 
-#: main/KoDocument.cpp:2235
+#: main/KoDocument.cpp:2237
 msgid "a word processing"
 msgstr "on scrijhaedje di tecse"
 
-#: main/KoDocument.cpp:2236
+#: main/KoDocument.cpp:2238
 msgid "a spreadsheet"
 msgstr "on tåvlea"
 
-#: main/KoDocument.cpp:2237
+#: main/KoDocument.cpp:2239
 msgid "a presentation"
 msgstr "on prezintaedje"
 
-#: main/KoDocument.cpp:2238
+#: main/KoDocument.cpp:2240
 msgid "a chart"
 msgstr "on grafike"
 
-#: main/KoDocument.cpp:2239
+#: main/KoDocument.cpp:2241
 msgid "a drawing"
 msgstr "on dessin"
 
-#: main/KoDocument.cpp:2547
+#: main/KoDocument.cpp:2549
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1382,7 +1383,7 @@ msgid ""
 "Do you want to save your changes or discard them?"
 msgstr "<p>Li documint <b>«%1»</b> a stî candjî.</p><p>El voloz schaper?</p>"
 
-#: main/KoDocument.cpp:2550
+#: main/KoDocument.cpp:2552
 #, fuzzy, kde-format
 #| msgid "Custom Document"
 msgid "Close Document"
@@ -1919,12 +1920,12 @@ msgstr ""
 msgid "Default Author Profile"
 msgstr "Prémetowe coleur"
 
-#: odf/KoDocumentInfo.cpp:56
+#: odf/KoDocumentInfo.cpp:80
 #, kde-format
 msgid "Unknown"
 msgstr "Nén cnoxhou"
 
-#: odf/KoOdfReadStore.cpp:91
+#: odf/KoOdfReadStore.cpp:91 odf/KoOdfReadStore.cpp:136
 #, kde-format
 msgid "No store backend"
 msgstr "Nou programe fondmint di stocaedje"
@@ -1937,6 +1938,16 @@ msgid ""
 msgstr ""
 "Aroke d' analijhe del sintake e mwaisse documint al roye %1, colone %2\n"
 "Messaedje d' aroke: %3"
+
+#: odf/KoOdfReadStore.cpp:156
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%1"
+msgid "Could not open %1"
+msgstr ""
+"Dji n' a savou drovi\n"
+"%1"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"
@@ -3815,7 +3826,7 @@ msgstr "Sôre di dnêyes"
 msgid "Stored In"
 msgstr "Wårdé divins"
 
-#: store/KoEncryptedStore.cpp:375
+#: store/KoEncryptedStore.cpp:383
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3824,15 +3835,15 @@ msgstr ""
 "I gn a dins c' documint ci ene checksum nén cnoxhowe. Cwand vs denroz on "
 "scret, i pôrè esse verifyî."
 
-#: store/KoEncryptedStore.cpp:376
+#: store/KoEncryptedStore.cpp:384
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Adviertixhmint"
 
-#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
-#: store/KoEncryptedStore.cpp:446
+#: store/KoEncryptedStore.cpp:408 store/KoEncryptedStore.cpp:437
+#: store/KoEncryptedStore.cpp:455
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3841,15 +3852,15 @@ msgstr ""
 "I gn a dins c' documint ci ene metôde d' ecriptaedje nén cnoxhowe. Des "
 "bokets pôrént esse nén léjhåve."
 
-#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
-#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
+#: store/KoEncryptedStore.cpp:409 store/KoEncryptedStore.cpp:438
+#: store/KoEncryptedStore.cpp:456 store/KoEncryptedStore.cpp:479
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Adviertixhmint"
 
-#: store/KoEncryptedStore.cpp:463
+#: store/KoEncryptedStore.cpp:478
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3858,7 +3869,7 @@ msgstr ""
 "I gn a dins c' documint ci des dnêyes d' ecriptaedje nén completes. Des "
 "bokets pôrént esse nén léjhåve."
 
-#: store/KoEncryptedStore.cpp:542
+#: store/KoEncryptedStore.cpp:563
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3869,7 +3880,7 @@ msgstr ""
 "dmorrè nén léjhåve. Sayîz s' i vs plait co on côp d' schaper l' documint po "
 "n' nén piede vost ovraedje."
 
-#: store/KoEncryptedStore.cpp:593
+#: store/KoEncryptedStore.cpp:614
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3878,17 +3889,17 @@ msgstr ""
 "Dji n' sai scrire sol fitchî afitcha. Li documint dmorrè nén léjhåve. Sayîz "
 "s' i vs plait co on côp d' schaper l' documint po n' nén piede vost ovraedje."
 
-#: store/KoEncryptedStore.cpp:715
+#: store/KoEncryptedStore.cpp:736
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Dinez l' sicret po drovi c' fitchî, s' i vs plait."
 
-#: store/KoEncryptedStore.cpp:920
+#: store/KoEncryptedStore.cpp:941
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Dinez l' sicret pos ecripter l' fitchî."
 
-#: store/KoEncryptedStore.cpp:935
+#: store/KoEncryptedStore.cpp:956
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Voloz vs schaper l' sicret ?"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-28 00:45+0000\n"
+"POT-Creation-Date: 2026-08-31 00:43+0000\n"
 "PO-Revision-Date: 2013-10-24 03:22+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -955,17 +955,17 @@ msgstr "Бастағанда әрқашанда осы үлгіні қолдан
 msgid "Always use this template"
 msgstr "Әрқашан осы үлгі қолданылсын"
 
-#: main/KoDocument.cpp:548
+#: main/KoDocument.cpp:550
 #, kde-format
 msgid "Making backup..."
 msgstr "Сақтық көшірмесін жасау..."
 
-#: main/KoDocument.cpp:563
+#: main/KoDocument.cpp:565
 #, kde-format
 msgid "Saving..."
 msgstr "Сақтау..."
 
-#: main/KoDocument.cpp:591
+#: main/KoDocument.cpp:593
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -974,7 +974,7 @@ msgstr ""
 "%1\n"
 "сақталмады"
 
-#: main/KoDocument.cpp:593
+#: main/KoDocument.cpp:595
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -983,12 +983,12 @@ msgstr ""
 "%1 сақталмады\n"
 "Себебі: %2"
 
-#: main/KoDocument.cpp:621
+#: main/KoDocument.cpp:623
 #, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "<i>%1</i> құжаты сақталды"
 
-#: main/KoDocument.cpp:709
+#: main/KoDocument.cpp:711
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -997,38 +997,38 @@ msgstr ""
 "Бұл шифрланған құжаттың паролі беймәлім. Автосақтау доғарылды! Қолмен сақтап "
 "көріңіз."
 
-#: main/KoDocument.cpp:712
+#: main/KoDocument.cpp:714
 #, kde-format
 msgid "Autosaving..."
 msgstr "Автосақтау..."
 
-#: main/KoDocument.cpp:724
+#: main/KoDocument.cpp:726
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Автосақтау кезіндегі қате! Дискі толы?"
 
-#: main/KoDocument.cpp:812
+#: main/KoDocument.cpp:814
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Сақтау үшін файл құрылмады"
 
-#: main/KoDocument.cpp:856 main/KoDocument.cpp:878 main/KoDocument.cpp:908
-#: main/KoDocument.cpp:942
+#: main/KoDocument.cpp:858 main/KoDocument.cpp:880 main/KoDocument.cpp:910
+#: main/KoDocument.cpp:944
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "'%1' жазылмады. Дискі толы ма?"
 
-#: main/KoDocument.cpp:863
+#: main/KoDocument.cpp:865
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "RDF метадерегі жазылмады. Дискі бөлімі толы ма?"
 
-#: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
+#: main/KoDocument.cpp:873 main/KoDocument.cpp:919 main/KoDocument.cpp:1977
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "'%1' жазу кезіндегі қате. Дискі толы ма?"
 
-#: main/KoDocument.cpp:1217
+#: main/KoDocument.cpp:1219
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1037,7 +1037,7 @@ msgstr ""
 "Жарамсыз URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1233
+#: main/KoDocument.cpp:1235
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1046,102 +1046,102 @@ msgstr ""
 "Бұл құжаттың автосақтталған файлы бар.\n"
 "Мынаның орнына соны ашып көресіз бе?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
+#: main/KoDocument.cpp:1311 main/KoDocument.cpp:1672 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "%1 деген файл жоқ."
 
-#: main/KoDocument.cpp:1433
+#: main/KoDocument.cpp:1435
 #, kde-format
 msgid "Opening Document"
 msgstr "Құжатты ашу..."
 
-#: main/KoDocument.cpp:1449
+#: main/KoDocument.cpp:1451
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Сүзгі плагині құрылмады"
 
-#: main/KoDocument.cpp:1453
+#: main/KoDocument.cpp:1455
 #, kde-format
 msgid "Could not create the output document"
 msgstr "Шығыс құжаты құрылмады"
 
-#: main/KoDocument.cpp:1457
+#: main/KoDocument.cpp:1459
 #, kde-format
 msgid "File not found"
 msgstr "Файл табылмады"
 
-#: main/KoDocument.cpp:1461
+#: main/KoDocument.cpp:1463
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Жинақтау құрылмады"
 
-#: main/KoDocument.cpp:1465
+#: main/KoDocument.cpp:1467
 #, kde-format
 msgid "Bad MIME type"
 msgstr "MIME түрі дұрыс емес"
 
-#: main/KoDocument.cpp:1469
+#: main/KoDocument.cpp:1471
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Ендірме құжатта қате"
 
-#: main/KoDocument.cpp:1473
+#: main/KoDocument.cpp:1475
 #, kde-format
 msgid "Format not recognized"
 msgstr "Танылмайтын пішім"
 
-#: main/KoDocument.cpp:1477
+#: main/KoDocument.cpp:1479
 #, kde-format
 msgid "Not implemented"
 msgstr "Іске асырылмаған"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1483
 #, kde-format
 msgid "Parsing error"
 msgstr "Талдау қатесі"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1487
 #, kde-format
 msgid "Document is password protected"
 msgstr "Құжат паролімен қорғалған"
 
-#: main/KoDocument.cpp:1489
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Invalid file format"
 msgstr "Жарамсыз файл пішімі"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1499
 #, kde-format
 msgid "Internal error"
 msgstr "Ішкі қате"
 
-#: main/KoDocument.cpp:1501
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Out of memory"
 msgstr "Жад тапшылығы"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1507
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "Бос сүзгі плагині"
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1511
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "Жарамсыз құжат түрін жүктеп алу әрекеті"
 
-#: main/KoDocument.cpp:1513
+#: main/KoDocument.cpp:1515
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "Қашықтағы файлды жүктеп алу жаңылысы"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1524
 #, kde-format
 msgid "Unknown error"
 msgstr "Беймәлім қате"
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1529
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -1156,17 +1156,18 @@ msgstr ""
 "ашылмады.\n"
 "Себебі: %1"
 
-#: main/KoDocument.cpp:1585
+#: main/KoDocument.cpp:1587
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "<i>%1</i> құжаты жүктелді"
 
-#: main/KoDocument.cpp:1642 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1644 odf/KoOdfReadStore.cpp:98
+#: odf/KoOdfReadStore.cpp:143
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 табылмады"
 
-#: main/KoDocument.cpp:1654
+#: main/KoDocument.cpp:1656
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1175,22 +1176,22 @@ msgstr ""
 "%1 дегеннің %2-жолында, %3-бағанында талдау қатесі\n"
 "Қате хабарламасы: %4"
 
-#: main/KoDocument.cpp:1677
+#: main/KoDocument.cpp:1679
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 деген файл емес."
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1694
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Файл оқуға ашылмады (оқу рұқсатын тексеріңіз)."
 
-#: main/KoDocument.cpp:1703
+#: main/KoDocument.cpp:1705
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Файлдың басы оқылмады."
 
-#: main/KoDocument.cpp:1734
+#: main/KoDocument.cpp:1736
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1199,17 +1200,17 @@ msgstr ""
 "Негізгі құжаттың %1-жолында, %2-бағанында талдау қатесі\n"
 "Қате хабарламасы: %3"
 
-#: main/KoDocument.cpp:1755
+#: main/KoDocument.cpp:1757
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Дұрыс Calligra файлы емес: %1"
 
-#: main/KoDocument.cpp:1836
+#: main/KoDocument.cpp:1838
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Жарамсыз құжат: 'maindoc.xml' файлы жоқ."
 
-#: main/KoDocument.cpp:1860
+#: main/KoDocument.cpp:1863
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1218,25 +1219,25 @@ msgstr ""
 "<i>%1</i> құжаттың бірнеше нұсқасы бар. Ескі нұсқасын ашу үшін Файлға өту -> "
 "Нұсқалары дегенге барыңыз."
 
-#: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
+#: main/KoDocument.cpp:2063 main/KoDocument.cpp:2517 main/KoDocument.cpp:2546
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "Аталмаған"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
+#: main/KoDocument.cpp:2066 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p><b>'%1'</b> құжаты өзгерілген.</p><p>Сақтауды қалайсыз ба?</p>"
 
-#: main/KoDocument.cpp:2147
+#: main/KoDocument.cpp:2149
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Ішкі қатесі: saveXML іске асырылмаған"
 
-#: main/KoDocument.cpp:2180
+#: main/KoDocument.cpp:2182
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1245,7 +1246,7 @@ msgstr ""
 "%1\n"
 "ашылмады"
 
-#: main/KoDocument.cpp:2182
+#: main/KoDocument.cpp:2184
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1254,27 +1255,27 @@ msgstr ""
 "%1 ашылмады\n"
 "Себебі: %2"
 
-#: main/KoDocument.cpp:2235
+#: main/KoDocument.cpp:2237
 msgid "a word processing"
 msgstr "мәтінді өңдеу"
 
-#: main/KoDocument.cpp:2236
+#: main/KoDocument.cpp:2238
 msgid "a spreadsheet"
 msgstr "электрондық кесте"
 
-#: main/KoDocument.cpp:2237
+#: main/KoDocument.cpp:2239
 msgid "a presentation"
 msgstr "презентация"
 
-#: main/KoDocument.cpp:2238
+#: main/KoDocument.cpp:2240
 msgid "a chart"
 msgstr "диаграмма"
 
-#: main/KoDocument.cpp:2239
+#: main/KoDocument.cpp:2241
 msgid "a drawing"
 msgstr "сурет"
 
-#: main/KoDocument.cpp:2547
+#: main/KoDocument.cpp:2549
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1283,7 +1284,7 @@ msgstr ""
 "\"%1\" құжаты өзгертілген.\n"
 "Сақтамақсыз ба, әлде ысырып тастамақсыз ба?"
 
-#: main/KoDocument.cpp:2550
+#: main/KoDocument.cpp:2552
 #, kde-format
 msgid "Close Document"
 msgstr "Құжатты жабу"
@@ -1810,12 +1811,12 @@ msgstr "Анонимді"
 msgid "Default Author Profile"
 msgstr "Әдетті автордың профилі"
 
-#: odf/KoDocumentInfo.cpp:56
+#: odf/KoDocumentInfo.cpp:80
 #, kde-format
 msgid "Unknown"
 msgstr "Беймәлім"
 
-#: odf/KoOdfReadStore.cpp:91
+#: odf/KoOdfReadStore.cpp:91 odf/KoOdfReadStore.cpp:136
 #, kde-format
 msgid "No store backend"
 msgstr "Сақтайтын тетік жоқ"
@@ -1828,6 +1829,16 @@ msgid ""
 msgstr ""
 "Негізгі құжатта %1-жолында, %2-бағанында талдау қатесі\n"
 "Қате хабарламасы: %3"
+
+#: odf/KoOdfReadStore.cpp:156
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%1"
+msgid "Could not open %1"
+msgstr ""
+"%1\n"
+"ашылмады"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"
@@ -3574,7 +3585,7 @@ msgstr "Дерек түрі"
 msgid "Stored In"
 msgstr "Сақталған жері"
 
-#: store/KoEncryptedStore.cpp:375
+#: store/KoEncryptedStore.cpp:383
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3583,30 +3594,30 @@ msgstr ""
 "Құжатта беймәлім бақылау қосындысы бар. Келтірілген пароль тексерістен "
 "өтпеуі мүмкін."
 
-#: store/KoEncryptedStore.cpp:376
+#: store/KoEncryptedStore.cpp:384
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Ескерту"
 
-#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
-#: store/KoEncryptedStore.cpp:446
+#: store/KoEncryptedStore.cpp:408 store/KoEncryptedStore.cpp:437
+#: store/KoEncryptedStore.cpp:455
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr "Құжатта беймәлім шифрлау әдісі бар. Кейбір бөлшектері оқылмауы мүмкін."
 
-#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
-#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
+#: store/KoEncryptedStore.cpp:409 store/KoEncryptedStore.cpp:438
+#: store/KoEncryptedStore.cpp:456 store/KoEncryptedStore.cpp:479
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Ескерту"
 
-#: store/KoEncryptedStore.cpp:463
+#: store/KoEncryptedStore.cpp:478
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3615,7 +3626,7 @@ msgstr ""
 "Құжатта шифрлауы аяқталмаған деректері бар. Кейбір бөлшектері оқылмауы "
 "мүмкін."
 
-#: store/KoEncryptedStore.cpp:542
+#: store/KoEncryptedStore.cpp:563
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3625,7 +3636,7 @@ msgstr ""
 "Манифест файлы бүлінген сияқты. Ол өзгертілмейді де құжат оқылмайды. "
 "Жұмысыңызды жоғалтпау үшін құжатты сақтау жолын тауып қөріңіз."
 
-#: store/KoEncryptedStore.cpp:593
+#: store/KoEncryptedStore.cpp:614
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3634,17 +3645,17 @@ msgstr ""
 "Манифест файлы жазылмайды.Құжат оқылмайтын болады. Жұмысыңызды жоғалтпау "
 "үшін құжатты сақтау жолын тауып қөріңіз."
 
-#: store/KoEncryptedStore.cpp:715
+#: store/KoEncryptedStore.cpp:736
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Бұл файлды ашу үшін паролін келтіріңіз."
 
-#: store/KoEncryptedStore.cpp:920
+#: store/KoEncryptedStore.cpp:941
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Құжатты шифрлау үшін паролін келтіріңіз."
 
-#: store/KoEncryptedStore.cpp:935
+#: store/KoEncryptedStore.cpp:956
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Паролін сақтауды қалайсыз ба?"

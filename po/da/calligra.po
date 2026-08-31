@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-28 00:45+0000\n"
+"POT-Creation-Date: 2026-08-31 00:43+0000\n"
 "PO-Revision-Date: 2020-04-22 21:51+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -934,17 +934,17 @@ msgstr "Brug altid denne skabelon når programmet startes"
 msgid "Always use this template"
 msgstr "Brug altid denne skabelon"
 
-#: main/KoDocument.cpp:548
+#: main/KoDocument.cpp:550
 #, kde-format
 msgid "Making backup..."
 msgstr "Laver sikkerhedskopi..."
 
-#: main/KoDocument.cpp:563
+#: main/KoDocument.cpp:565
 #, kde-format
 msgid "Saving..."
 msgstr "Gemmer..."
 
-#: main/KoDocument.cpp:591
+#: main/KoDocument.cpp:593
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -953,7 +953,7 @@ msgstr ""
 "Kunne ikke gemme\n"
 "%1"
 
-#: main/KoDocument.cpp:593
+#: main/KoDocument.cpp:595
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -962,12 +962,12 @@ msgstr ""
 "Kunne ikke gemme %1\n"
 "Årsag: %2"
 
-#: main/KoDocument.cpp:621
+#: main/KoDocument.cpp:623
 #, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "Dokumentet <i>%1</i> blev gemt"
 
-#: main/KoDocument.cpp:709
+#: main/KoDocument.cpp:711
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -976,38 +976,38 @@ msgstr ""
 "Kodeordet for dette krypterede dokument kendes ikke. Autogem afbrudt! Gem "
 "dit arbejde manuelt."
 
-#: main/KoDocument.cpp:712
+#: main/KoDocument.cpp:714
 #, kde-format
 msgid "Autosaving..."
 msgstr "Gemmer automatisk..."
 
-#: main/KoDocument.cpp:724
+#: main/KoDocument.cpp:726
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Fejl ved at gemme automatisk. Er partitionen fuld?"
 
-#: main/KoDocument.cpp:812
+#: main/KoDocument.cpp:814
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Kunne ikke oprette filen til skrivning"
 
-#: main/KoDocument.cpp:856 main/KoDocument.cpp:878 main/KoDocument.cpp:908
-#: main/KoDocument.cpp:942
+#: main/KoDocument.cpp:858 main/KoDocument.cpp:880 main/KoDocument.cpp:910
+#: main/KoDocument.cpp:944
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Kan ikke skrive '%1'. Er partitionen fuld?"
 
-#: main/KoDocument.cpp:863
+#: main/KoDocument.cpp:865
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Kan ikke skrive RDF-metadata. Er partitionen fuld?"
 
-#: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
+#: main/KoDocument.cpp:873 main/KoDocument.cpp:919 main/KoDocument.cpp:1977
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Fejl ved forsøg på at skrive '%1'. Er partitionen fuld?"
 
-#: main/KoDocument.cpp:1217
+#: main/KoDocument.cpp:1219
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1016,7 +1016,7 @@ msgstr ""
 "Misdannet URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1233
+#: main/KoDocument.cpp:1235
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1025,102 +1025,102 @@ msgstr ""
 "En automatisk gemt fil eksisterer for dette dokument.\n"
 "Vil du åbne den i stedet?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
+#: main/KoDocument.cpp:1311 main/KoDocument.cpp:1672 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Filen %1 findes ikke."
 
-#: main/KoDocument.cpp:1433
+#: main/KoDocument.cpp:1435
 #, kde-format
 msgid "Opening Document"
 msgstr "Åbner dokument"
 
-#: main/KoDocument.cpp:1449
+#: main/KoDocument.cpp:1451
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Kunne ikke oprette filter-plugin"
 
-#: main/KoDocument.cpp:1453
+#: main/KoDocument.cpp:1455
 #, kde-format
 msgid "Could not create the output document"
 msgstr "Kunne ikke oprette output-dokumentet"
 
-#: main/KoDocument.cpp:1457
+#: main/KoDocument.cpp:1459
 #, kde-format
 msgid "File not found"
 msgstr "Fil ikke fundet"
 
-#: main/KoDocument.cpp:1461
+#: main/KoDocument.cpp:1463
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Kan ikke oprette opbevaring"
 
-#: main/KoDocument.cpp:1465
+#: main/KoDocument.cpp:1467
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Dårlig Mime-type"
 
-#: main/KoDocument.cpp:1469
+#: main/KoDocument.cpp:1471
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Fejl i indlejret dokument"
 
-#: main/KoDocument.cpp:1473
+#: main/KoDocument.cpp:1475
 #, kde-format
 msgid "Format not recognized"
 msgstr "Format ikke genkendt"
 
-#: main/KoDocument.cpp:1477
+#: main/KoDocument.cpp:1479
 #, kde-format
 msgid "Not implemented"
 msgstr "Ikke implementeret"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1483
 #, kde-format
 msgid "Parsing error"
 msgstr "Tolkningsfejl"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1487
 #, kde-format
 msgid "Document is password protected"
 msgstr "Dokumentet er kodeordsbeskyttet"
 
-#: main/KoDocument.cpp:1489
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Invalid file format"
 msgstr "Ugyldigt filformat"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1499
 #, kde-format
 msgid "Internal error"
 msgstr "Intern fejl"
 
-#: main/KoDocument.cpp:1501
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Out of memory"
 msgstr "Ude af hukommelse"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1507
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "Tomt filter-plugin"
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1511
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "Prøver at indlæse den forkerte dokumenttype"
 
-#: main/KoDocument.cpp:1513
+#: main/KoDocument.cpp:1515
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "Kunne ikke downloade ekstern fil"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1524
 #, kde-format
 msgid "Unknown error"
 msgstr "Ukendt fejl"
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1529
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1131,17 +1131,18 @@ msgstr ""
 "Årsag: %1.\n"
 "%3"
 
-#: main/KoDocument.cpp:1585
+#: main/KoDocument.cpp:1587
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Dokumentet <i>%1</i> blev indlæst"
 
-#: main/KoDocument.cpp:1642 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1644 odf/KoOdfReadStore.cpp:98
+#: odf/KoOdfReadStore.cpp:143
 #, kde-format
 msgid "Could not find %1"
 msgstr "Kunne ikke finde %1"
 
-#: main/KoDocument.cpp:1654
+#: main/KoDocument.cpp:1656
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1150,22 +1151,22 @@ msgstr ""
 "Fortolkningsfejl i %1 på linje %2, kolonne %3\n"
 "Fejlbesked: %4"
 
-#: main/KoDocument.cpp:1677
+#: main/KoDocument.cpp:1679
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 er ikke en fil."
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1694
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Kunne ikke åbne filen til læsning (tjek læsetilladelser)."
 
-#: main/KoDocument.cpp:1703
+#: main/KoDocument.cpp:1705
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Kunne ikke læse begyndelsen af filen."
 
-#: main/KoDocument.cpp:1734
+#: main/KoDocument.cpp:1736
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1174,17 +1175,17 @@ msgstr ""
 "Fortolkningsfejl i hoveddokumentet på linje %1, kolonne %2\n"
 "Fejlbesked: %3"
 
-#: main/KoDocument.cpp:1755
+#: main/KoDocument.cpp:1757
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Ikke en gyldig Calligra-fil: %1"
 
-#: main/KoDocument.cpp:1836
+#: main/KoDocument.cpp:1838
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Ugyldigt dokument: ingen fil 'maindoc.xml'."
 
-#: main/KoDocument.cpp:1860
+#: main/KoDocument.cpp:1863
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1193,13 +1194,13 @@ msgstr ""
 "Dokumentet <i>%1</i> indeholder flere versioner. Gå til til Fil->Versioner "
 "for at åbne en gammel version."
 
-#: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
+#: main/KoDocument.cpp:2063 main/KoDocument.cpp:2517 main/KoDocument.cpp:2546
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "Unavngivet"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
+#: main/KoDocument.cpp:2066 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1207,12 +1208,12 @@ msgid ""
 msgstr ""
 "<p>Dokumentet <b>'%1'</b> er blevet ændret. </p><p>Vil du gemme det?</p>"
 
-#: main/KoDocument.cpp:2147
+#: main/KoDocument.cpp:2149
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Intern fejl: saveXML er ikke implementeret"
 
-#: main/KoDocument.cpp:2180
+#: main/KoDocument.cpp:2182
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1221,7 +1222,7 @@ msgstr ""
 "Kunne ikke åbne\n"
 "%1"
 
-#: main/KoDocument.cpp:2182
+#: main/KoDocument.cpp:2184
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1230,27 +1231,27 @@ msgstr ""
 "Kunne ikke åbne %1\n"
 "Årsag: %2"
 
-#: main/KoDocument.cpp:2235
+#: main/KoDocument.cpp:2237
 msgid "a word processing"
 msgstr "en tekstbehandling"
 
-#: main/KoDocument.cpp:2236
+#: main/KoDocument.cpp:2238
 msgid "a spreadsheet"
 msgstr "et regneark"
 
-#: main/KoDocument.cpp:2237
+#: main/KoDocument.cpp:2239
 msgid "a presentation"
 msgstr "en præsentation"
 
-#: main/KoDocument.cpp:2238
+#: main/KoDocument.cpp:2240
 msgid "a chart"
 msgstr "et diagram"
 
-#: main/KoDocument.cpp:2239
+#: main/KoDocument.cpp:2241
 msgid "a drawing"
 msgstr "en tegning"
 
-#: main/KoDocument.cpp:2547
+#: main/KoDocument.cpp:2549
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1259,7 +1260,7 @@ msgstr ""
 "Dokumentet \"%1\" er blevet ændret.\n"
 "Vil du gemme dine ændringer eller kassere dem?"
 
-#: main/KoDocument.cpp:2550
+#: main/KoDocument.cpp:2552
 #, kde-format
 msgid "Close Document"
 msgstr "Luk dokument"
@@ -1785,12 +1786,12 @@ msgstr "Anonym"
 msgid "Default Author Profile"
 msgstr "Profil for standardophavsmand"
 
-#: odf/KoDocumentInfo.cpp:56
+#: odf/KoDocumentInfo.cpp:80
 #, kde-format
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: odf/KoOdfReadStore.cpp:91
+#: odf/KoOdfReadStore.cpp:91 odf/KoOdfReadStore.cpp:136
 #, kde-format
 msgid "No store backend"
 msgstr "Ingen lagringsmotor"
@@ -1803,6 +1804,16 @@ msgid ""
 msgstr ""
 "Fortolkningsfejl i hoveddokumentet på linje %1, kolonne %2\n"
 "Fejlbesked: %3"
+
+#: odf/KoOdfReadStore.cpp:156
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%1"
+msgid "Could not open %1"
+msgstr ""
+"Kunne ikke åbne\n"
+"%1"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"
@@ -3547,7 +3558,7 @@ msgstr "DataType"
 msgid "Stored In"
 msgstr "Gemt i"
 
-#: store/KoEncryptedStore.cpp:375
+#: store/KoEncryptedStore.cpp:383
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3556,15 +3567,15 @@ msgstr ""
 "Dette dokument indeholder en ukendt checksum. Når du giver et kodeord vil "
 "det måske ikke blive godkendt."
 
-#: store/KoEncryptedStore.cpp:376
+#: store/KoEncryptedStore.cpp:384
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Advarsel"
 
-#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
-#: store/KoEncryptedStore.cpp:446
+#: store/KoEncryptedStore.cpp:408 store/KoEncryptedStore.cpp:437
+#: store/KoEncryptedStore.cpp:455
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3573,15 +3584,15 @@ msgstr ""
 "Dette dokument indeholder en ukendt krypteringsmetode. Nogle dele kan være "
 "ulæselige."
 
-#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
-#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
+#: store/KoEncryptedStore.cpp:409 store/KoEncryptedStore.cpp:438
+#: store/KoEncryptedStore.cpp:456 store/KoEncryptedStore.cpp:479
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Advarsel"
 
-#: store/KoEncryptedStore.cpp:463
+#: store/KoEncryptedStore.cpp:478
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3590,7 +3601,7 @@ msgstr ""
 "Dette dokument indeholder ufuldstændige krypteringsdata. Nogle dele kan være "
 "ulæselige."
 
-#: store/KoEncryptedStore.cpp:542
+#: store/KoEncryptedStore.cpp:563
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3601,7 +3612,7 @@ msgstr ""
 "forbliver ulæseligt. Forsøg at gemme dokumentet igen for  at undgå tab af "
 "dit arbejde."
 
-#: store/KoEncryptedStore.cpp:593
+#: store/KoEncryptedStore.cpp:614
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3610,17 +3621,17 @@ msgstr ""
 "Manifest-filen kan ikke skrives. Dokumentet forbliver ulæseligt. Forsøg at "
 "gemme dokumentet igen for at undgå tab af dit arbejde."
 
-#: store/KoEncryptedStore.cpp:715
+#: store/KoEncryptedStore.cpp:736
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Indtast kodeordet som åbner denne fil."
 
-#: store/KoEncryptedStore.cpp:920
+#: store/KoEncryptedStore.cpp:941
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Indtast kodeordet som skal bruges til at kryptere dokumentet."
 
-#: store/KoEncryptedStore.cpp:935
+#: store/KoEncryptedStore.cpp:956
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Vil du gemme kodeordet?"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-28 00:45+0000\n"
+"POT-Creation-Date: 2026-08-31 00:43+0000\n"
 "PO-Revision-Date: 2007-08-08 15:46+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1065,17 +1065,17 @@ msgstr "अनुप्रयोग सुरुआतमा सधै यो �
 msgid "Always use this template"
 msgstr "सधै यो टेम्प्लेट प्रयोग गर्नुहोस्"
 
-#: main/KoDocument.cpp:548
+#: main/KoDocument.cpp:550
 #, kde-format
 msgid "Making backup..."
 msgstr "जगेडा बनाइदैछ..."
 
-#: main/KoDocument.cpp:563
+#: main/KoDocument.cpp:565
 #, kde-format
 msgid "Saving..."
 msgstr "बचत हुँदैछ..."
 
-#: main/KoDocument.cpp:591
+#: main/KoDocument.cpp:593
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -1084,7 +1084,7 @@ msgstr ""
 "बचत गर्न सकिएन\n"
 "%1"
 
-#: main/KoDocument.cpp:593
+#: main/KoDocument.cpp:595
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -1093,13 +1093,13 @@ msgstr ""
 "%1 बचत गर्न सकिएन\n"
 "कारण: %2"
 
-#: main/KoDocument.cpp:621
+#: main/KoDocument.cpp:623
 #, fuzzy, kde-format
 #| msgid "Document Title"
 msgid "Document <i>%1</i> saved"
 msgstr "कागजात शीर्षक"
 
-#: main/KoDocument.cpp:709
+#: main/KoDocument.cpp:711
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -1108,39 +1108,39 @@ msgstr ""
 "यो गुप्तिकरण गरिएको कागजातको पसवर्ड अज्ञात छ। स्वत: वचत परित्याग गरियो! कृपया आफ्नो "
 "काम म्यानुअल तरीकाले बचत गर्नुहोस्।"
 
-#: main/KoDocument.cpp:712
+#: main/KoDocument.cpp:714
 #, kde-format
 msgid "Autosaving..."
 msgstr "स्वत: बचत हुँदैछ..."
 
-#: main/KoDocument.cpp:724
+#: main/KoDocument.cpp:726
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "स्वत: बचत गर्दा त्रुटि! विभाजन पूरा छ ?"
 
-#: main/KoDocument.cpp:812
+#: main/KoDocument.cpp:814
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "बचत गर्नका लागि फाइल सिर्जना गर्न सकिएन"
 
-#: main/KoDocument.cpp:856 main/KoDocument.cpp:878 main/KoDocument.cpp:908
-#: main/KoDocument.cpp:942
+#: main/KoDocument.cpp:858 main/KoDocument.cpp:880 main/KoDocument.cpp:910
+#: main/KoDocument.cpp:944
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "'%1' लेख्न सकिएन । विभाजन पूरा छ ?"
 
-#: main/KoDocument.cpp:863
+#: main/KoDocument.cpp:865
 #, fuzzy, kde-format
 #| msgid "Not able to write '%1'. Partition full?"
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "'%1' लेख्न सकिएन । विभाजन पूरा छ ?"
 
-#: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
+#: main/KoDocument.cpp:873 main/KoDocument.cpp:919 main/KoDocument.cpp:1977
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "'%1' लेख्ने प्रयास गर्दा त्रुटि । विभाजन पूरा छ ?"
 
-#: main/KoDocument.cpp:1217
+#: main/KoDocument.cpp:1219
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1149,7 +1149,7 @@ msgstr ""
 "विकृत यूआरएल\n"
 "%1"
 
-#: main/KoDocument.cpp:1233
+#: main/KoDocument.cpp:1235
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1158,106 +1158,106 @@ msgstr ""
 "यो कागजातका लागि एउटा स्वत: बचत गरिएको फाइल अवस्थित छ ।\n"
 "तपाईँ यसलाई सट्टामा खोल्न चाहनुहुन्छ ?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
+#: main/KoDocument.cpp:1311 main/KoDocument.cpp:1672 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "फाइल %1 अवस्थित छैन ।"
 
-#: main/KoDocument.cpp:1433
+#: main/KoDocument.cpp:1435
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening Document"
 msgstr "कागजात खोल्नुहोस्।"
 
-#: main/KoDocument.cpp:1449
+#: main/KoDocument.cpp:1451
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the filter plugin"
 msgstr "बचत गर्नका लागि फाइल सिर्जना गर्न सकिएन"
 
-#: main/KoDocument.cpp:1453
+#: main/KoDocument.cpp:1455
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the output document"
 msgstr "बचत गर्नका लागि फाइल सिर्जना गर्न सकिएन"
 
-#: main/KoDocument.cpp:1457
+#: main/KoDocument.cpp:1459
 #, kde-format
 msgid "File not found"
 msgstr "फाइल फेला परेन"
 
-#: main/KoDocument.cpp:1461
+#: main/KoDocument.cpp:1463
 #, kde-format
 msgid "Cannot create storage"
 msgstr "भण्डारण सिर्जना गर्न सकिएन"
 
-#: main/KoDocument.cpp:1465
+#: main/KoDocument.cpp:1467
 #, kde-format
 msgid "Bad MIME type"
 msgstr "खराब माइम प्रकार"
 
-#: main/KoDocument.cpp:1469
+#: main/KoDocument.cpp:1471
 #, kde-format
 msgid "Error in embedded document"
 msgstr "सम्मिलित कागजातमा त्रुटि"
 
-#: main/KoDocument.cpp:1473
+#: main/KoDocument.cpp:1475
 #, kde-format
 msgid "Format not recognized"
 msgstr "परिचित ढाँचा होइन"
 
-#: main/KoDocument.cpp:1477
+#: main/KoDocument.cpp:1479
 #, kde-format
 msgid "Not implemented"
 msgstr "कार्यान्वयन भएन"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1483
 #, kde-format
 msgid "Parsing error"
 msgstr "पद वर्णन त्रुटि"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1487
 #, kde-format
 msgid "Document is password protected"
 msgstr "कागजात पासवर्ड सुरक्षित छ।"
 
-#: main/KoDocument.cpp:1489
+#: main/KoDocument.cpp:1491
 #, fuzzy, kde-format
 #| msgid "Locale format"
 msgid "Invalid file format"
 msgstr "लोकेलय ढाँचा"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1499
 #, kde-format
 msgid "Internal error"
 msgstr "आन्तरिक त्रुटि"
 
-#: main/KoDocument.cpp:1501
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Out of memory"
 msgstr "स्मृतिभन्दा बाहिर"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1507
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1511
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1513
+#: main/KoDocument.cpp:1515
 #, kde-format
 msgid "Failed to download remote file"
 msgstr ""
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1524
 #, kde-format
 msgid "Unknown error"
 msgstr "अज्ञात त्रुटि"
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1529
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -1272,18 +1272,19 @@ msgstr ""
 "%2 ।\n"
 "कारण: %1"
 
-#: main/KoDocument.cpp:1585
+#: main/KoDocument.cpp:1587
 #, fuzzy, kde-format
 #| msgid "Document Title"
 msgid "Document <i>%1</i> loaded"
 msgstr "कागजात शीर्षक"
 
-#: main/KoDocument.cpp:1642 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1644 odf/KoOdfReadStore.cpp:98
+#: odf/KoOdfReadStore.cpp:143
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 फेला पार्न सकिएन"
 
-#: main/KoDocument.cpp:1654
+#: main/KoDocument.cpp:1656
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1292,22 +1293,22 @@ msgstr ""
 "%1 भित्र रेखा %2, स्तम्भ %3 मा पद वर्णन त्रुटि\n"
 "त्रुटि सन्देश: %4"
 
-#: main/KoDocument.cpp:1677
+#: main/KoDocument.cpp:1679
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 फाइल होइन ।"
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1694
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "पढ्नका लागि फाइल खोल्न सकिएन (पढ्ने अनुमति जाँच गर्नुहोस्)।"
 
-#: main/KoDocument.cpp:1703
+#: main/KoDocument.cpp:1705
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "फाइलको सुरुआत पढ्न सकिएन ।"
 
-#: main/KoDocument.cpp:1734
+#: main/KoDocument.cpp:1736
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1316,18 +1317,18 @@ msgstr ""
 "रेखा %1, स्तम्भ %2 मा मुख्य कागजातमा पद वर्णन त्रुटि\n"
 "त्रुटि सन्देश: %3"
 
-#: main/KoDocument.cpp:1755
+#: main/KoDocument.cpp:1757
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "वैध कडीई कार्यालय फाइल होइन: %1"
 
-#: main/KoDocument.cpp:1836
+#: main/KoDocument.cpp:1838
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "अवैध कागजात: 'maindoc.xml' फाइल होइन ।"
 
-#: main/KoDocument.cpp:1860
+#: main/KoDocument.cpp:1863
 #, fuzzy, kde-format
 #| msgid ""
 #| "This document contains several versions. Go to File->Versions to open an "
@@ -1337,13 +1338,13 @@ msgid ""
 "an old version."
 msgstr "यो कागजातले धेरै संस्करण लिएको छ।पुरानो संस्करण खोल्न फाइल->संस्करणमा जानुहोस् ।"
 
-#: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
+#: main/KoDocument.cpp:2063 main/KoDocument.cpp:2517 main/KoDocument.cpp:2546
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "शीर्षक नभएको।"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
+#: main/KoDocument.cpp:2066 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1351,12 +1352,12 @@ msgid ""
 msgstr ""
 "<p>कागजात <b>'%1'</b> परिमार्जन गरियो ।</p><p>तपाईँ यसलाई बचत गर्न चाहनुहुन्छ ?</p>"
 
-#: main/KoDocument.cpp:2147
+#: main/KoDocument.cpp:2149
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "आन्तरीक त्रुटि: बचत एक्सएमएल कार्यान्वयन भएन।"
 
-#: main/KoDocument.cpp:2180
+#: main/KoDocument.cpp:2182
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1365,7 +1366,7 @@ msgstr ""
 "खोल्न सकिएन\n"
 "%1"
 
-#: main/KoDocument.cpp:2182
+#: main/KoDocument.cpp:2184
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1374,27 +1375,27 @@ msgstr ""
 "%1 खोल्न सकिएन\n"
 "कारण: %2"
 
-#: main/KoDocument.cpp:2235
+#: main/KoDocument.cpp:2237
 msgid "a word processing"
 msgstr "वर्ड प्रोसेसिङ"
 
-#: main/KoDocument.cpp:2236
+#: main/KoDocument.cpp:2238
 msgid "a spreadsheet"
 msgstr "स्प्रेडसिट"
 
-#: main/KoDocument.cpp:2237
+#: main/KoDocument.cpp:2239
 msgid "a presentation"
 msgstr "प्रस्तुतिकरण"
 
-#: main/KoDocument.cpp:2238
+#: main/KoDocument.cpp:2240
 msgid "a chart"
 msgstr "चित्रपट"
 
-#: main/KoDocument.cpp:2239
+#: main/KoDocument.cpp:2241
 msgid "a drawing"
 msgstr "रेखाचित्र"
 
-#: main/KoDocument.cpp:2547
+#: main/KoDocument.cpp:2549
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1405,7 +1406,7 @@ msgid ""
 msgstr ""
 "<p>कागजात <b>'%1'</b> परिमार्जन गरियो ।</p><p>तपाईँ यसलाई बचत गर्न चाहनुहुन्छ ?</p>"
 
-#: main/KoDocument.cpp:2550
+#: main/KoDocument.cpp:2552
 #, fuzzy, kde-format
 #| msgid "Custom Document"
 msgid "Close Document"
@@ -1954,12 +1955,12 @@ msgstr ""
 msgid "Default Author Profile"
 msgstr "पूर्वानिर्धारित उपकरण"
 
-#: odf/KoDocumentInfo.cpp:56
+#: odf/KoDocumentInfo.cpp:80
 #, kde-format
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: odf/KoOdfReadStore.cpp:91
+#: odf/KoOdfReadStore.cpp:91 odf/KoOdfReadStore.cpp:136
 #, kde-format
 msgid "No store backend"
 msgstr "भन्डारण गर्ने ठाउँ छैन।"
@@ -1972,6 +1973,16 @@ msgid ""
 msgstr ""
 "रेखा %1, स्तम्भ %2 मा मुख्य कागजात भित्र पद वर्णन त्रुटि\n"
 "त्रुटि सन्देश: %3"
+
+#: odf/KoOdfReadStore.cpp:156
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%1"
+msgid "Could not open %1"
+msgstr ""
+"खोल्न सकिएन\n"
+"%1"
 
 #: odf/KoPageFormat.cpp:48
 #, fuzzy
@@ -3973,7 +3984,7 @@ msgstr "मिति"
 msgid "Stored In"
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:375
+#: store/KoEncryptedStore.cpp:383
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3982,15 +3993,15 @@ msgstr ""
 "यो कागजातले अपरिचित चेकसम समावेश गरेको छ ।जब तपाईँ यसलाई पासवर्ड दिनुहुनछ,  रूजु भएको "
 "नहुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:376
+#: store/KoEncryptedStore.cpp:384
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "चेतावनी"
 
-#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
-#: store/KoEncryptedStore.cpp:446
+#: store/KoEncryptedStore.cpp:408 store/KoEncryptedStore.cpp:437
+#: store/KoEncryptedStore.cpp:455
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3998,22 +4009,22 @@ msgid ""
 msgstr ""
 "यो कागजातले अपरिचित गुप्तिकरण विधि समावेश गरेको छ ।केही भाग पढ्न अयोग्य हुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
-#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
+#: store/KoEncryptedStore.cpp:409 store/KoEncryptedStore.cpp:438
+#: store/KoEncryptedStore.cpp:456 store/KoEncryptedStore.cpp:479
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "चेतावनी"
 
-#: store/KoEncryptedStore.cpp:463
+#: store/KoEncryptedStore.cpp:478
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr "यो कागजातले अपूर्ण गुप्तिकरण डाटा समावेश गरेको छ । केही भाग पढ्न अयोग्य हुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:542
+#: store/KoEncryptedStore.cpp:563
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -4023,7 +4034,7 @@ msgstr ""
 "देखिएकोेस्ट फाइल अनुपयोगी  देखिन्छ । यो परिमार्जित गर्न सकिँदैन र कागजात पढ्न अयोग्य "
 "रहनेछ । कपून: तपाईँको कार्य हराउनबाट रोपुन क्न प्रयास गर्नुहोस र कागजात बचत गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:593
+#: store/KoEncryptedStore.cpp:614
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -4032,17 +4043,17 @@ msgstr ""
 "देखिएको फाइल लेख्न सकिँदैन।उक्त कागजात पढ्न अयोग्य रहनेछ । कृपया तपाईँको कार्य हराउनबाट "
 "रोक्न फेरि प्रयास गर्नुहोस् र कागजात बचत गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:715
+#: store/KoEncryptedStore.cpp:736
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "कृपया, यो फइल खोल्नका लागि पासवर्ड प्रविष्ट गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:920
+#: store/KoEncryptedStore.cpp:941
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "कृपया कागजातसहित गुप्तिकरण गर्न पासवर्ड प्रविष्ट गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:935
+#: store/KoEncryptedStore.cpp:956
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "तपाईँ पासवर्ड बचत गर्न  हटाउन चाहनुहुन्छ ?"

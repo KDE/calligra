@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-06 00:45+0000\n"
+"POT-Creation-Date: 2026-08-31 00:43+0000\n"
 "PO-Revision-Date: 2004-05-25 15:26+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -278,12 +278,12 @@ msgstr "Skouerioù"
 msgid "Related Functions"
 msgstr "Fonksion"
 
-#: engine/Localization.cpp:769
+#: engine/Localization.cpp:765
 #, kde-format
 msgid "true"
 msgstr "gwir"
 
-#: engine/Localization.cpp:770
+#: engine/Localization.cpp:766
 #, kde-format
 msgid "false"
 msgstr "n'eo ket gwir"
@@ -868,9 +868,10 @@ msgstr "0 e zistaol CARY(12;0)"
 #: functions/statistical.xml:686 functions/statistical.xml:832
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
-#: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/actions/dialogs/ValidityDialog.cpp:60
-#: ui/actions/Style.cpp:283 ui/dialogs/LayoutPage_Float.cpp:63
+#: functions/statistical.xml:1823 functions/statistical.xml:1865
+#: functions/text.xml:11 functions/text.xml:30 functions/text.xml:838
+#: ui/actions/dialogs/ValidityDialog.cpp:60 ui/actions/Style.cpp:283
+#: ui/dialogs/LayoutPage_Float.cpp:63
 #, kde-format
 msgid "Number"
 msgstr "Niverenn"
@@ -1211,7 +1212,7 @@ msgstr "Deiziad hag eur"
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
-#: functions/datetime.xml:603 functions/datetime.xml:716
+#: functions/datetime.xml:603 functions/datetime.xml:739
 #: ui/actions/dialogs/ValidityDialog.cpp:63 ui/actions/Style.cpp:423
 #: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
@@ -2105,6 +2106,7 @@ msgid "YEARFRAC(start date; end date; basis)"
 msgstr ""
 
 #: functions/datetime.xml:669 functions/datetime.xml:692
+#: functions/datetime.xml:717
 #, kde-format
 msgid "Start date"
 msgstr "Deizhiad an deroù"
@@ -2116,6 +2118,7 @@ msgid "Working days"
 msgstr "Honduras"
 
 #: functions/datetime.xml:677 functions/datetime.xml:700
+#: functions/datetime.xml:725
 #, fuzzy, kde-format
 #| msgid "Honduras"
 msgid "Holidays"
@@ -2148,7 +2151,7 @@ msgid ""
 "WORKDAY(B9;2;D3:D4) returns \"Fri Jan 5 2001\""
 msgstr ""
 
-#: functions/datetime.xml:696
+#: functions/datetime.xml:696 functions/datetime.xml:721
 #, fuzzy, kde-format
 #| msgid "date"
 msgid "End date"
@@ -2177,47 +2180,59 @@ msgstr ""
 msgid "NETWORKDAY(\"01/01/2001\";\"01/08/2001\";2) returns 3 workdays"
 msgstr ""
 
-#: functions/datetime.xml:720
+#: functions/datetime.xml:729
+#, kde-format
+msgid ""
+"NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
+"otherwise identical."
+msgstr ""
+
+#: functions/datetime.xml:730
+#, kde-format
+msgid "NETWORKDAYS(start date; end date; holidays)"
+msgstr ""
+
+#: functions/datetime.xml:743
 #, fuzzy, kde-format
 #| msgid "Degrees of freedom 1"
 msgid "DATE2UNIX() function converts a date and time value to unix time."
 msgstr "Diri 1 a frankiz"
 
-#: functions/datetime.xml:721 functions/datetime.xml:736
+#: functions/datetime.xml:744 functions/datetime.xml:759
 #, kde-format
 msgid "A unix time is the number of seconds after midnight January 1st, 1970."
 msgstr ""
 
-#: functions/datetime.xml:722
+#: functions/datetime.xml:745
 #, fuzzy, kde-format
 #| msgid "DATEVALUE(date)"
 msgid "DATE2UNIX(date)"
 msgstr "DATEVALUE(deiziad)"
 
-#: functions/datetime.xml:723
+#: functions/datetime.xml:746
 #, fuzzy, kde-format
 #| msgid "EDATE(\"3/31/2002\"; -1) returns \"2/28/2002\""
 msgid "DATE2UNIX(\"01/01/2000\") returns 946,684,800"
 msgstr "« 2/28/2002 » e zistaol EDATE(\"3/31/2002\"; -1)"
 
-#: functions/datetime.xml:731
+#: functions/datetime.xml:754
 #, fuzzy, kde-format
 #| msgid "time"
 msgid "Unixtime"
 msgstr "eur"
 
-#: functions/datetime.xml:735
+#: functions/datetime.xml:758
 #, fuzzy, kde-format
 #| msgid "Degrees of freedom 1"
 msgid "UNIX2DATE() function converts unix time to a date and time value."
 msgstr "Diri 1 a frankiz"
 
-#: functions/datetime.xml:737
+#: functions/datetime.xml:760
 #, kde-format
 msgid "UNIX2DATE(unixtime)"
 msgstr ""
 
-#: functions/datetime.xml:738
+#: functions/datetime.xml:761
 #, fuzzy, kde-format
 #| msgid "CURRENTTIME() returns \"19:12:01\""
 msgid "UNIX2DATE(0) returns 1970-01-01"
@@ -2469,6 +2484,7 @@ msgid "Lower limit"
 msgstr "Hep muzul"
 
 #: functions/engineering.xml:157 functions/engineering.xml:176
+#: functions/statistical.xml:2064
 #, fuzzy, kde-format
 #| msgid "No Limit"
 msgid "Upper limit"
@@ -3520,7 +3536,7 @@ msgstr "Folenn kentañ"
 #: functions/financial.xml:1184 functions/financial.xml:1293
 #: functions/financial.xml:1317 functions/financial.xml:1341
 #: functions/financial.xml:1365 functions/financial.xml:1441
-#: functions/financial.xml:1471
+#: functions/financial.xml:1482 functions/financial.xml:1512
 #, fuzzy, kde-format
 #| msgid "Replacement"
 msgid "Settlement"
@@ -3545,7 +3561,7 @@ msgstr "Furmad an niverenn"
 
 #: functions/financial.xml:35 functions/financial.xml:66
 #: functions/financial.xml:193 functions/financial.xml:365
-#: functions/financial.xml:620
+#: functions/financial.xml:620 functions/financial.xml:1465
 #, kde-format
 msgid "Day counting basis"
 msgstr ""
@@ -3678,7 +3694,7 @@ msgstr "Kentañ"
 
 #: functions/financial.xml:137 functions/financial.xml:163
 #: functions/financial.xml:585 functions/financial.xml:1110
-#: functions/financial.xml:1132 functions/financial.xml:1512
+#: functions/financial.xml:1132 functions/financial.xml:1553
 #, fuzzy, kde-format
 #| msgid "Internet"
 msgid "Interest rate"
@@ -3691,7 +3707,7 @@ msgid "Periods per year"
 msgstr "Pik"
 
 #: functions/financial.xml:145 functions/financial.xml:167
-#: functions/financial.xml:743 functions/financial.xml:1516
+#: functions/financial.xml:743 functions/financial.xml:1557
 #, kde-format
 msgid "Years"
 msgstr "Bloazioù"
@@ -3740,7 +3756,7 @@ msgstr "Ingal ouzh 1105.17 eo CONTINUOUS(1000;0.1;1)"
 #: functions/financial.xml:1188 functions/financial.xml:1297
 #: functions/financial.xml:1321 functions/financial.xml:1345
 #: functions/financial.xml:1369 functions/financial.xml:1445
-#: functions/financial.xml:1475
+#: functions/financial.xml:1486 functions/financial.xml:1516
 #, fuzzy, kde-format
 #| msgid "Mauritius"
 msgid "Maturity"
@@ -3913,7 +3929,7 @@ msgstr ""
 
 #: functions/financial.xml:361 functions/financial.xml:616
 #: functions/financial.xml:920 functions/financial.xml:963
-#: functions/financial.xml:1377 functions/financial.xml:1453
+#: functions/financial.xml:1377 functions/financial.xml:1494
 #, fuzzy, kde-format
 #| msgid "Fewer Options"
 msgid "Redemption"
@@ -4049,8 +4065,8 @@ msgstr ""
 #: functions/financial.xml:464 functions/financial.xml:781
 #: functions/financial.xml:928 functions/financial.xml:971
 #: functions/financial.xml:1084 functions/financial.xml:1200
-#: functions/financial.xml:1381 functions/financial.xml:1457
-#: functions/financial.xml:1491
+#: functions/financial.xml:1381 functions/financial.xml:1498
+#: functions/financial.xml:1532
 #, fuzzy, kde-format
 #| msgid "Bs"
 msgid "Basis"
@@ -4357,7 +4373,7 @@ msgstr "Ingal ouzh -292.45 eo IPMT(0.1;3;3;8000)"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639
+#: functions/math.xml:639 functions/statistical.xml:2052
 #, fuzzy, kde-format
 #| msgid "&Values"
 msgid "Values"
@@ -4416,7 +4432,7 @@ msgstr ""
 msgid "ISPMT(0.1; 1; 3; 8000000) equals -533333"
 msgstr "Ingal ouzh -533333 eo ISPMT(0.1; 1; 3; 8000000)"
 
-#: functions/financial.xml:731 functions/financial.xml:1508
+#: functions/financial.xml:731 functions/financial.xml:1549
 #, fuzzy, kde-format
 #| msgid "New value:"
 msgid "Face value"
@@ -4630,7 +4646,7 @@ msgid ""
 msgstr ""
 
 #: functions/financial.xml:959 functions/financial.xml:1373
-#: functions/financial.xml:1449 functions/financial.xml:1487
+#: functions/financial.xml:1490 functions/financial.xml:1528
 #, fuzzy, kde-format
 #| msgid "&Picture"
 msgid "Price"
@@ -4698,7 +4714,7 @@ msgstr ""
 msgid "PPMT(0.0875;1;36;5000;8000;1) equals -18.48"
 msgstr "Ingal ouzh -18.48 eo PPMT(0.0875;1;36;5000;8000;1)"
 
-#: functions/financial.xml:1072 functions/financial.xml:1479
+#: functions/financial.xml:1072 functions/financial.xml:1520
 #, fuzzy, kde-format
 #| msgid "First Key"
 msgid "Issue"
@@ -4706,7 +4722,7 @@ msgstr "Alc'hwez kentañ"
 
 #: functions/financial.xml:1076 functions/financial.xml:1196
 #: functions/financial.xml:1301 functions/financial.xml:1325
-#: functions/financial.xml:1483
+#: functions/financial.xml:1524
 #, fuzzy, kde-format
 #| msgid "Count"
 msgid "Discount rate"
@@ -5049,25 +5065,67 @@ msgid ""
 "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" returns 2907.83187"
 msgstr ""
 
+#: functions/financial.xml:1449
+#, fuzzy, kde-format
+#| msgid "Count"
+msgid "Annual coupon rate"
+msgstr "Niveriñ"
+
+#: functions/financial.xml:1453
+#, kde-format
+msgid "Price per 100 currency units of face value"
+msgstr ""
+
+#: functions/financial.xml:1457
+#, kde-format
+msgid "Redemption value per 100 currency units of face value"
+msgstr ""
+
 #: functions/financial.xml:1461
+#, fuzzy, kde-format
+#| msgid "Number Format"
+msgid "Number of coupon payments per year"
+msgstr "Furmad an niverenn"
+
+#: functions/financial.xml:1469
+#, fuzzy, kde-format
+#| msgid "Degrees of freedom 1"
+msgid ""
+"The YIELD function calculates the annual yield of a security that pays "
+"periodic interest."
+msgstr "Diri 1 a frankiz"
+
+#: functions/financial.xml:1470
+#, kde-format
+msgid ""
+"YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
+msgstr ""
+
+#: functions/financial.xml:1471
+#, no-c-format, kde-format
+msgid ""
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
+msgstr ""
+
+#: functions/financial.xml:1502
 #, kde-format
 msgid ""
 "YIELDDISC calculates the yield of a discounted security per 100 currency "
 "units of face value."
 msgstr ""
 
-#: functions/financial.xml:1462
+#: functions/financial.xml:1503
 #, kde-format
 msgid "YIELDDISC(settlement; maturity; price, redemp, basis)"
 msgstr ""
 
-#: functions/financial.xml:1463
+#: functions/financial.xml:1504
 #, kde-format
 msgid ""
 "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns 0.106194684"
 msgstr ""
 
-#: functions/financial.xml:1495
+#: functions/financial.xml:1536
 #, fuzzy, kde-format
 #| msgid "Degrees of freedom 1"
 msgid ""
@@ -5075,19 +5133,19 @@ msgid ""
 "interest on the maturity date."
 msgstr "Diri 1 a frankiz"
 
-#: functions/financial.xml:1496
+#: functions/financial.xml:1537
 #, kde-format
 msgid "YIELDMAT( Settlement; Maturity; Issue; Rate; Price; Basis )"
 msgstr ""
 
-#: functions/financial.xml:1497
+#: functions/financial.xml:1538
 #, no-c-format, kde-format
 msgid ""
 "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); 6%;103.819218241) "
 "returns 0.050000000"
 msgstr ""
 
-#: functions/financial.xml:1520
+#: functions/financial.xml:1561
 #, no-c-format, kde-format
 msgid ""
 "The ZERO_COUPON() function calculates the value of a zero-coupon (pure "
@@ -5095,12 +5153,12 @@ msgid ""
 "matures in 20 years is worth ZERO_COUPON(1000;.1;20) or $148.64."
 msgstr ""
 
-#: functions/financial.xml:1521
+#: functions/financial.xml:1562
 #, kde-format
 msgid "ZERO_COUPON(face value;rate;years)"
 msgstr ""
 
-#: functions/financial.xml:1522
+#: functions/financial.xml:1563
 #, kde-format
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "Ingal ouzh 148.64 eo ZERO_COUPON(1000;.1;20)"
@@ -8317,6 +8375,71 @@ msgid ""
 "newHeight; Integer newWidth)"
 msgstr ""
 
+#: functions/reference.xml:389
+#, kde-format
+msgid "Server application"
+msgstr ""
+
+#: functions/reference.xml:393
+#, kde-format
+msgid "Topic"
+msgstr ""
+
+#: functions/reference.xml:397
+#, fuzzy, kde-format
+#| msgid "Bs"
+msgid "Item"
+msgstr "Bs"
+
+#: functions/reference.xml:401
+#, kde-format
+msgid "Mode"
+msgstr ""
+
+#: functions/reference.xml:405
+#, kde-format
+msgid ""
+"Requests data from another running application via Dynamic Data Exchange, a "
+"Windows-only inter-process mechanism this platform does not support. DDE() "
+"is recognized so documents that reference it still load, but always "
+"evaluates to an error."
+msgstr ""
+
+#: functions/reference.xml:406
+#, kde-format
+msgid "DDE(server; topic; item; mode)"
+msgstr ""
+
+#: functions/reference.xml:414
+#, fuzzy, kde-format
+#| msgid "EUR"
+msgid "URL"
+msgstr "EUR"
+
+#: functions/reference.xml:418
+#, kde-format
+msgid "Display text (defaults to the URL)"
+msgstr ""
+
+#: functions/reference.xml:422
+#, kde-format
+msgid ""
+"Returns the display text for a hyperlink, or the URL itself if no display "
+"text is given. Following the link is handled by the application, not by "
+"formula evaluation."
+msgstr ""
+
+#: functions/reference.xml:423
+#, kde-format
+msgid "HYPERLINK(url; display text)"
+msgstr ""
+
+#: functions/reference.xml:424
+#, fuzzy, kde-format
+#| msgid "RIGHT(\"hello\";2) returns \"lo\""
+msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
+msgstr "« lo » e zistaol RIGHT(\"hello\";2)"
+
 #: functions/statistical.xml:5
 #, fuzzy, kde-format
 #| msgid "Function"
@@ -8468,7 +8591,7 @@ msgstr "&Loc'hañ"
 msgid "End"
 msgstr "Dibenn"
 
-#: functions/statistical.xml:111
+#: functions/statistical.xml:111 functions/statistical.xml:1873
 #, kde-format
 msgid "Cumulative"
 msgstr ""
@@ -8537,7 +8660,8 @@ msgstr "Ingal ouzh 0.01 eo LOGNORMDIST(0.1;0;1)"
 msgid "BETADIST(BETAINV(0.3;3;4);3;4) equals 0.3"
 msgstr "Ingal ouzh 0.01 eo LOGNORMDIST(0.1;0;1)"
 
-#: functions/statistical.xml:164
+#: functions/statistical.xml:164 functions/statistical.xml:1869
+#: functions/statistical.xml:1893
 #, kde-format
 msgid "Degrees of freedom"
 msgstr "Diri a frankiz"
@@ -9093,7 +9217,8 @@ msgid "Number of success in the sample"
 msgstr "Furmad an niverenn"
 
 #: functions/statistical.xml:565 functions/statistical.xml:1760
-#: functions/statistical.xml:1801
+#: functions/statistical.xml:1801 functions/statistical.xml:1837
+#: functions/statistical.xml:1908
 #, fuzzy, kde-format
 #| msgid "Number Format"
 msgid "Number of trials"
@@ -9238,7 +9363,7 @@ msgstr ""
 msgid "LEGACYFDIST(0.8;8;12) yields 0.61"
 msgstr "Ingal ouzh 0.01 eo LOGNORMDIST(0.1;0;1)"
 
-#: functions/statistical.xml:708
+#: functions/statistical.xml:708 functions/statistical.xml:1889
 #, fuzzy, kde-format
 #| msgid "Number Format"
 msgid "Probability"
@@ -10569,6 +10694,268 @@ msgstr "GAMMALN(Niverenn)"
 #, kde-format
 msgid "GAMMALN(2) returns 0"
 msgstr "0 e zistaol GAMMALN(2)"
+
+#: functions/statistical.xml:1841 functions/statistical.xml:1912
+#, fuzzy, kde-format
+#| msgid "Number Format"
+msgid "Success probability"
+msgstr "Furmad an niverenn"
+
+#: functions/statistical.xml:1845
+#, kde-format
+msgid "Number of successes (or the lower limit, if the upper limit is given)"
+msgstr ""
+
+#: functions/statistical.xml:1849
+#, kde-format
+msgid "Upper limit for the number of successes"
+msgstr ""
+
+#: functions/statistical.xml:1853
+#, kde-format
+msgid ""
+"The B() function returns the probability of drawing between T1 and T2 "
+"(inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in "
+"Trials independent trials, each with success probability SP."
+msgstr ""
+
+#: functions/statistical.xml:1854
+#, kde-format
+msgid "B(trials; SP; T1; T2)"
+msgstr ""
+
+#: functions/statistical.xml:1855
+#, fuzzy, kde-format
+#| msgid "BINO(12;9;0.8) returns 0.236223201"
+msgid "B(20; 0.5; 8) returns 0.120134"
+msgstr "0.236223201 e zistaol BINO(12;9;0.8)"
+
+#: functions/statistical.xml:1856
+#, fuzzy, kde-format
+#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+msgid "B(20; 0.5; 8; 10) returns 0.456511"
+msgstr "1 e zistaol MAX(0.5; 0.4; TRUE; 0.2)"
+
+#: functions/statistical.xml:1877
+#, fuzzy, kde-format
+#| msgid "Degrees of freedom 1"
+msgid ""
+"The CHISQDIST() function returns the value of the cumulative distribution "
+"function (or, if Cumulative is FALSE, the probability density function) for "
+"the chi-square distribution."
+msgstr "Diri 1 a frankiz"
+
+#: functions/statistical.xml:1878
+#, fuzzy, kde-format
+#| msgid "GAMMALN(Number)"
+msgid "CHISQDIST(number; degrees_freedom; cumulative)"
+msgstr "GAMMALN(Niverenn)"
+
+#: functions/statistical.xml:1879
+#, fuzzy, kde-format
+#| msgid "CHIDIST(13.27;5) returns 0.021"
+msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
+msgstr "0.021 e zistaol CHIDIST(13.27;5)"
+
+#: functions/statistical.xml:1897
+#, fuzzy, kde-format
+#| msgid "Degrees of freedom 1"
+msgid ""
+"The CHISQINV() function returns the inverse of CHISQDIST(number; "
+"degrees_freedom; TRUE)."
+msgstr "Diri 1 a frankiz"
+
+#: functions/statistical.xml:1898
+#, kde-format
+msgid "CHISQINV(probability; degrees_freedom)"
+msgstr ""
+
+#: functions/statistical.xml:1899
+#, fuzzy, kde-format
+#| msgid "CHIDIST(13.27;5) returns 0.021"
+msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
+msgstr "0.021 e zistaol CHIDIST(13.27;5)"
+
+#: functions/statistical.xml:1916
+#, fuzzy, kde-format
+#| msgid "Insert Values"
+msgid "Criterion value"
+msgstr "Enlakaat ar gwerzhioù"
+
+#: functions/statistical.xml:1920
+#, kde-format
+msgid ""
+"The CRITBINOM() function returns the smallest value for which the cumulative "
+"binomial distribution is greater than or equal to the criterion value alpha."
+msgstr ""
+
+#: functions/statistical.xml:1921
+#, kde-format
+msgid "CRITBINOM(trials; SP; alpha)"
+msgstr ""
+
+#: functions/statistical.xml:1922
+#, fuzzy, kde-format
+#| msgid "COMBIN(5;5) returns 1"
+msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
+msgstr "1 e zistaol COMBIN(5;5)"
+
+#: functions/statistical.xml:1931
+#, kde-format
+msgid "The x-value for which a y-value is estimated"
+msgstr ""
+
+#: functions/statistical.xml:1935 functions/statistical.xml:1973
+#, fuzzy, kde-format
+#| msgid "Any value"
+msgid "Known y-values"
+msgstr "Ur werzh bennak"
+
+#: functions/statistical.xml:1939
+#, fuzzy, kde-format
+#| msgid "Any value"
+msgid "Known x-values"
+msgstr "Ur werzh bennak"
+
+#: functions/statistical.xml:1943
+#, kde-format
+msgid ""
+"The FORECAST() function estimates a future y-value along the linear trend "
+"fitted to the known x/y-values, for a given new x-value."
+msgstr ""
+
+#: functions/statistical.xml:1944
+#, kde-format
+msgid "FORECAST(x; known_y's; known_x's)"
+msgstr ""
+
+#: functions/statistical.xml:1955
+#, fuzzy, kde-format
+#| msgid "Any value"
+msgid "Observed values"
+msgstr "Ur werzh bennak"
+
+#: functions/statistical.xml:1959
+#, fuzzy, kde-format
+#| msgid "New value:"
+msgid "Expected values"
+msgstr "Gwerzh nevez :"
+
+#: functions/statistical.xml:1963
+#, kde-format
+msgid ""
+"The LEGACYCHITEST() function returns the probability, from the chi-square "
+"distribution, that the chi-square statistic computed from the given observed "
+"and expected value ranges (which must have the same shape) would occur by "
+"chance."
+msgstr ""
+
+#: functions/statistical.xml:1964
+#, kde-format
+msgid "LEGACYCHITEST(actual range; theoretical range)"
+msgstr ""
+
+#: functions/statistical.xml:1977 functions/statistical.xml:2006
+#, kde-format
+msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
+msgstr ""
+
+#: functions/statistical.xml:1981 functions/statistical.xml:2010
+#, kde-format
+msgid "Whether to fit an intercept (defaults to TRUE)"
+msgstr ""
+
+#: functions/statistical.xml:1985 functions/statistical.xml:2014
+#, kde-format
+msgid "Whether to return additional regression statistics (defaults to FALSE)"
+msgstr ""
+
+#: functions/statistical.xml:1989
+#, kde-format
+msgid ""
+"The LINEST() function fits a straight line y=m*x+b (only a single known-x "
+"range is supported) to the given data using the least-squares method, and "
+"returns {m, b}. If Stats is TRUE, it instead returns a 5-row array also "
+"containing the standard errors of m and b, R-squared and the standard error "
+"of the y estimate, the F statistic and its degrees of freedom, and the "
+"regression and residual sums of squares."
+msgstr ""
+
+#: functions/statistical.xml:1990
+#, kde-format
+msgid "LINEST(known_y's; known_x's; const; stats)"
+msgstr ""
+
+#: functions/statistical.xml:2002
+#, fuzzy, kde-format
+#| msgid "Alpha parameter"
+msgid "Known y-values (must be positive)"
+msgstr "Rannbennad alfa"
+
+#: functions/statistical.xml:2018
+#, kde-format
+msgid ""
+"The LOGEST() function fits an exponential curve y=b*m^x to the given data, "
+"by linear-regressing ln(y) against x (see LINEST), and returns {m, b}. If "
+"Stats is TRUE, it also returns the same additional regression statistics as "
+"LINEST, computed for the underlying linear fit against ln(y)."
+msgstr ""
+
+#: functions/statistical.xml:2019
+#, kde-format
+msgid "LOGEST(known_y's; known_x's; const; stats)"
+msgstr ""
+
+#: functions/statistical.xml:2029
+#, fuzzy, kde-format
+#| msgid "Database"
+msgid "Data set"
+msgstr "Stlennvon"
+
+#: functions/statistical.xml:2033
+#, fuzzy, kde-format
+#| msgid "&Values"
+msgid "Value to rank"
+msgstr "&Gwerzhioù"
+
+#: functions/statistical.xml:2037
+#, kde-format
+msgid "Number of significant digits (defaults to 3)"
+msgstr ""
+
+#: functions/statistical.xml:2041
+#, kde-format
+msgid ""
+"The PERCENTRANK() function returns the rank, as a fraction of the data set, "
+"of a value in that data set. This is the inverse of PERCENTILE."
+msgstr ""
+
+#: functions/statistical.xml:2042
+#, kde-format
+msgid "PERCENTRANK(data; x; significance)"
+msgstr ""
+
+#: functions/statistical.xml:2056
+#, kde-format
+msgid "Probabilities, one for each value (must sum to 1)"
+msgstr ""
+
+#: functions/statistical.xml:2060
+#, kde-format
+msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
+msgstr ""
+
+#: functions/statistical.xml:2068
+#, kde-format
+msgid ""
+"The PROB() function returns the sum of the probabilities of the values that "
+"fall between (or equal) a lower and upper limit."
+msgstr ""
+
+#: functions/statistical.xml:2069
+#, kde-format
+msgid "PROB(values; probabilities; lower limit; upper limit)"
+msgstr ""
 
 #: functions/text.xml:15 functions/text.xml:34
 #, fuzzy, kde-format
@@ -18882,9 +19269,6 @@ msgstr ""
 #~ msgid "Andorra"
 #~ msgstr "Andora"
 
-#~ msgid "EUR"
-#~ msgstr "EUR"
-
 #~ msgid "ADP"
 #~ msgstr "ADP"
 
@@ -20625,11 +21009,6 @@ msgstr ""
 #~| msgid "Down"
 #~ msgid "Move Up"
 #~ msgstr "Izel"
-
-#, fuzzy
-#~| msgid "Bs"
-#~ msgid "Item"
-#~ msgstr "Bs"
 
 #, fuzzy
 #~| msgid "Border"

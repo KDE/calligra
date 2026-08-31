@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-28 00:45+0000\n"
+"POT-Creation-Date: 2026-08-31 00:43+0000\n"
 "PO-Revision-Date: 2008-01-27 21:10+0700\n"
 "Last-Translator: Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -1023,17 +1023,17 @@ msgstr "Luôn dùng mẫu này khi khởi chạy"
 msgid "Always use this template"
 msgstr "Luôn dùng mẫu này"
 
-#: main/KoDocument.cpp:548
+#: main/KoDocument.cpp:550
 #, kde-format
 msgid "Making backup..."
 msgstr "Đang tạo bản dự phòng..."
 
-#: main/KoDocument.cpp:563
+#: main/KoDocument.cpp:565
 #, kde-format
 msgid "Saving..."
 msgstr "Đang lưu..."
 
-#: main/KoDocument.cpp:591
+#: main/KoDocument.cpp:593
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -1042,7 +1042,7 @@ msgstr ""
 "Không thể lưu\n"
 "%1"
 
-#: main/KoDocument.cpp:593
+#: main/KoDocument.cpp:595
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -1051,12 +1051,12 @@ msgstr ""
 "Không thể lưu %1\n"
 "Lí do: %2"
 
-#: main/KoDocument.cpp:621
+#: main/KoDocument.cpp:623
 #, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "Đã lưu tài liệu <i>%1</i>"
 
-#: main/KoDocument.cpp:709
+#: main/KoDocument.cpp:711
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -1065,39 +1065,39 @@ msgstr ""
 "Không biết mật khẩu cho tài liệu được mã hoá này. Tự động lưu thất bại! Xin "
 "hãy tự lưu tài liệu."
 
-#: main/KoDocument.cpp:712
+#: main/KoDocument.cpp:714
 #, kde-format
 msgid "Autosaving..."
 msgstr "Đang tự động lưu..."
 
-#: main/KoDocument.cpp:724
+#: main/KoDocument.cpp:726
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Lỗi khi đang tự động lưu! Đĩa đầy?"
 
-#: main/KoDocument.cpp:812
+#: main/KoDocument.cpp:814
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Không thể tạo tệp để lưu"
 
-#: main/KoDocument.cpp:856 main/KoDocument.cpp:878 main/KoDocument.cpp:908
-#: main/KoDocument.cpp:942
+#: main/KoDocument.cpp:858 main/KoDocument.cpp:880 main/KoDocument.cpp:910
+#: main/KoDocument.cpp:944
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Không thể ghi '%1'. Đĩa đầy?"
 
-#: main/KoDocument.cpp:863
+#: main/KoDocument.cpp:865
 #, fuzzy, kde-format
 #| msgid "Not able to write '%1'. Partition full?"
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Không thể ghi '%1'. Đĩa đầy?"
 
-#: main/KoDocument.cpp:871 main/KoDocument.cpp:917 main/KoDocument.cpp:1975
+#: main/KoDocument.cpp:873 main/KoDocument.cpp:919 main/KoDocument.cpp:1977
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Lỗi khi đang cố ghi '%1'. Đĩa đầy?"
 
-#: main/KoDocument.cpp:1217
+#: main/KoDocument.cpp:1219
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1106,7 +1106,7 @@ msgstr ""
 "URL không hợp lệ\n"
 "%1"
 
-#: main/KoDocument.cpp:1233
+#: main/KoDocument.cpp:1235
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1115,104 +1115,104 @@ msgstr ""
 "Một tệp được lưu tự động của tài liệu này đã tồn tại.\n"
 "Bạn có muốn mở nó không?"
 
-#: main/KoDocument.cpp:1309 main/KoDocument.cpp:1670 main/KoMainWindow.cpp:673
+#: main/KoDocument.cpp:1311 main/KoDocument.cpp:1672 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Tệp %1 không tồn tại."
 
-#: main/KoDocument.cpp:1433
+#: main/KoDocument.cpp:1435
 #, fuzzy, kde-format
 msgid "Opening Document"
 msgstr "Mở tài liệu"
 
-#: main/KoDocument.cpp:1449
+#: main/KoDocument.cpp:1451
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the filter plugin"
 msgstr "Không thể tạo tệp để lưu"
 
-#: main/KoDocument.cpp:1453
+#: main/KoDocument.cpp:1455
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the output document"
 msgstr "Không thể tạo tệp để lưu"
 
-#: main/KoDocument.cpp:1457
+#: main/KoDocument.cpp:1459
 #, kde-format
 msgid "File not found"
 msgstr "Không tìm thấy tệp"
 
-#: main/KoDocument.cpp:1461
+#: main/KoDocument.cpp:1463
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Không thể tạo lưu trữ"
 
-#: main/KoDocument.cpp:1465
+#: main/KoDocument.cpp:1467
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Loại MIME xấu"
 
-#: main/KoDocument.cpp:1469
+#: main/KoDocument.cpp:1471
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Lỗi trong tài liệu nhúng"
 
-#: main/KoDocument.cpp:1473
+#: main/KoDocument.cpp:1475
 #, kde-format
 msgid "Format not recognized"
 msgstr "Không nhận dạng được định dạng"
 
-#: main/KoDocument.cpp:1477
+#: main/KoDocument.cpp:1479
 #, fuzzy, kde-format
 msgid "Not implemented"
 msgstr "Chưa được viết"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1483
 #, fuzzy, kde-format
 msgid "Parsing error"
 msgstr "Lỗi đọc"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1487
 #, kde-format
 msgid "Document is password protected"
 msgstr "Tài liệu được bảo vệ với mật khẩu"
 
-#: main/KoDocument.cpp:1489
+#: main/KoDocument.cpp:1491
 #, fuzzy, kde-format
 msgid "Invalid file format"
 msgstr "Định dạng trang"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1499
 #, fuzzy, kde-format
 msgid "Internal error"
 msgstr "Lỗi bên trong"
 
-#: main/KoDocument.cpp:1501
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Out of memory"
 msgstr "Hết bộ nhớ"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1507
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1511
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1513
+#: main/KoDocument.cpp:1515
 #, fuzzy, kde-format
 msgid "Failed to download remote file"
 msgstr "Không thể mở được file %1"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1524
 #, fuzzy, kde-format
 msgid "Unknown error"
 msgstr "Lỗi không rõ"
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1529
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -1227,17 +1227,18 @@ msgstr ""
 "%2.\n"
 "Lí do: %1"
 
-#: main/KoDocument.cpp:1585
+#: main/KoDocument.cpp:1587
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Đã tải tài liệu <i>%1</i>"
 
-#: main/KoDocument.cpp:1642 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1644 odf/KoOdfReadStore.cpp:98
+#: odf/KoOdfReadStore.cpp:143
 #, kde-format
 msgid "Could not find %1"
 msgstr "Không tìm thấy %1"
 
-#: main/KoDocument.cpp:1654
+#: main/KoDocument.cpp:1656
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1246,22 +1247,22 @@ msgstr ""
 "Lỗi đọc trong %1 trên dòng %2, cột %3\n"
 "Thông báo lỗi: %4"
 
-#: main/KoDocument.cpp:1677
+#: main/KoDocument.cpp:1679
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 không phải là tệp."
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1694
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Không thể mở tệp đó để đọc (hãy kiểm tra quyền hạn đọc)."
 
-#: main/KoDocument.cpp:1703
+#: main/KoDocument.cpp:1705
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Không thể đọc được phần đầu của tệp."
 
-#: main/KoDocument.cpp:1734
+#: main/KoDocument.cpp:1736
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1270,18 +1271,18 @@ msgstr ""
 "Lỗi đọc trong tài liệu chính trên dòng %1, cột %2\n"
 "Thông báo lỗi: %3"
 
-#: main/KoDocument.cpp:1755
+#: main/KoDocument.cpp:1757
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "Không phải tệp KOffice hợp lệ: %1"
 
-#: main/KoDocument.cpp:1836
+#: main/KoDocument.cpp:1838
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Tài liệu không hợp lệ: không có tệp 'maindoc.xml'."
 
-#: main/KoDocument.cpp:1860
+#: main/KoDocument.cpp:1863
 #, fuzzy, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1290,13 +1291,13 @@ msgstr ""
 "Tài liệu này chứa vài phiên bản. Dùng Tệp -> Các phiên bản để mở một phiên "
 "bản cũ."
 
-#: main/KoDocument.cpp:2061 main/KoDocument.cpp:2515 main/KoDocument.cpp:2544
+#: main/KoDocument.cpp:2063 main/KoDocument.cpp:2517 main/KoDocument.cpp:2546
 #: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
 #, kde-format
 msgid "Untitled"
 msgstr "Không đề"
 
-#: main/KoDocument.cpp:2064 main/KoMainWindow.cpp:1136
+#: main/KoDocument.cpp:2066 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1304,12 +1305,12 @@ msgid ""
 msgstr ""
 "<p>Tài liệu <b>'%1'</b> đã bị thay đổi.</p><p>Bạn có muốn lưu nó không?</p>"
 
-#: main/KoDocument.cpp:2147
+#: main/KoDocument.cpp:2149
 #, fuzzy, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Lỗi bên trong: saveXML chưa được viết"
 
-#: main/KoDocument.cpp:2180
+#: main/KoDocument.cpp:2182
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1318,7 +1319,7 @@ msgstr ""
 "Không thể mở\n"
 "%1"
 
-#: main/KoDocument.cpp:2182
+#: main/KoDocument.cpp:2184
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1327,31 +1328,31 @@ msgstr ""
 "Không thể mở %1\n"
 "Lí do: %2"
 
-#: main/KoDocument.cpp:2235
+#: main/KoDocument.cpp:2237
 #, fuzzy
 msgid "a word processing"
 msgstr "một chương trình văn bản"
 
-#: main/KoDocument.cpp:2236
+#: main/KoDocument.cpp:2238
 #, fuzzy
 #| msgid "Page Preview"
 msgid "a spreadsheet"
 msgstr "Xem trước Trang"
 
-#: main/KoDocument.cpp:2237
+#: main/KoDocument.cpp:2239
 #, fuzzy
 msgid "a presentation"
 msgstr "một bài trình diễn"
 
-#: main/KoDocument.cpp:2238
+#: main/KoDocument.cpp:2240
 msgid "a chart"
 msgstr "một biểu đồ"
 
-#: main/KoDocument.cpp:2239
+#: main/KoDocument.cpp:2241
 msgid "a drawing"
 msgstr "một bức vẽ"
 
-#: main/KoDocument.cpp:2547
+#: main/KoDocument.cpp:2549
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1362,7 +1363,7 @@ msgid ""
 msgstr ""
 "<p>Tài liệu <b>'%1'</b> đã bị thay đổi.</p><p>Bạn có muốn lưu nó không?</p>"
 
-#: main/KoDocument.cpp:2550
+#: main/KoDocument.cpp:2552
 #, fuzzy, kde-format
 msgid "Close Document"
 msgstr "Tài liệu Riêng"
@@ -1902,12 +1903,12 @@ msgstr ""
 msgid "Default Author Profile"
 msgstr "Chép trang hiện tại"
 
-#: odf/KoDocumentInfo.cpp:56
+#: odf/KoDocumentInfo.cpp:80
 #, kde-format
 msgid "Unknown"
 msgstr "Không biết"
 
-#: odf/KoOdfReadStore.cpp:91
+#: odf/KoOdfReadStore.cpp:91 odf/KoOdfReadStore.cpp:136
 #, fuzzy, kde-format
 msgid "No store backend"
 msgstr "Không có hậu phương lưu"
@@ -1920,6 +1921,16 @@ msgid ""
 msgstr ""
 "Lỗi đọc tài liệu chính ở dòng %1, cột %2\n"
 "Thông báo lỗi: %3"
+
+#: odf/KoOdfReadStore.cpp:156
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%1"
+msgid "Could not open %1"
+msgstr ""
+"Không thể mở\n"
+"%1"
 
 #: odf/KoPageFormat.cpp:48
 #, fuzzy
@@ -3838,7 +3849,7 @@ msgstr "Dữ liệu "
 msgid "Stored In"
 msgstr "Bị dừng"
 
-#: store/KoEncryptedStore.cpp:375
+#: store/KoEncryptedStore.cpp:383
 #, fuzzy, kde-format
 #| msgid ""
 #| "This document contains an unknown encryption method. Some parts may be "
@@ -3849,15 +3860,15 @@ msgid ""
 msgstr ""
 "Tài liệu chứa phương pháp mã hoá không rõ. Một số phần có thể không đọc được."
 
-#: store/KoEncryptedStore.cpp:376
+#: store/KoEncryptedStore.cpp:384
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Cảnh báo"
 
-#: store/KoEncryptedStore.cpp:406 store/KoEncryptedStore.cpp:430
-#: store/KoEncryptedStore.cpp:446
+#: store/KoEncryptedStore.cpp:408 store/KoEncryptedStore.cpp:437
+#: store/KoEncryptedStore.cpp:455
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3865,15 +3876,15 @@ msgid ""
 msgstr ""
 "Tài liệu chứa phương pháp mã hoá không rõ. Một số phần có thể không đọc được."
 
-#: store/KoEncryptedStore.cpp:407 store/KoEncryptedStore.cpp:431
-#: store/KoEncryptedStore.cpp:447 store/KoEncryptedStore.cpp:464
+#: store/KoEncryptedStore.cpp:409 store/KoEncryptedStore.cpp:438
+#: store/KoEncryptedStore.cpp:456 store/KoEncryptedStore.cpp:479
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Cảnh báo"
 
-#: store/KoEncryptedStore.cpp:463
+#: store/KoEncryptedStore.cpp:478
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3881,7 +3892,7 @@ msgid ""
 msgstr ""
 "Tài liệu chứa dữ liệu mã hoá không đầy đủ. Một số phần có thể không đọc được."
 
-#: store/KoEncryptedStore.cpp:542
+#: store/KoEncryptedStore.cpp:563
 #, fuzzy, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3891,7 +3902,7 @@ msgstr ""
 "Danh sách tệp có vẻ bị lỗi. Nó không thể bị thay đổi và tài liệu sẽ chỉ được "
 "đọc. Xin cố lưu lại tài liệu để tránh mất dữ liệu."
 
-#: store/KoEncryptedStore.cpp:593
+#: store/KoEncryptedStore.cpp:614
 #, fuzzy, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3900,17 +3911,17 @@ msgstr ""
 "Không thể ghi danh sách tệp. Tài liệu sẽ chỉ được đọc. Xin cố lưu lại tài "
 "liệu để tránh mất dữ liệu."
 
-#: store/KoEncryptedStore.cpp:715
+#: store/KoEncryptedStore.cpp:736
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Nhập mật khẩu để mở tệp này."
 
-#: store/KoEncryptedStore.cpp:920
+#: store/KoEncryptedStore.cpp:941
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Nhập mật khẩu để mã hoá tài liệu này."
 
-#: store/KoEncryptedStore.cpp:935
+#: store/KoEncryptedStore.cpp:956
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Bạn có muốn lưu lại mật khẩu?"
