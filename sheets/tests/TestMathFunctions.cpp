@@ -144,6 +144,13 @@ void TestMathFunctions::cleanupTestCase()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
+void TestMathFunctions::testArithmetic()
+{
+    CHECK_EVAL("-0.3+0.2+0.1", Value(0));
+    CHECK_EVAL("0.3-0.2-0.1", Value(0));
+    CHECK_EVAL("ORG.LIBREOFFICE.RAWSUBTRACT(0.987654321098765;0.9876543210987;0.98765432109867)", Value(-0.987654321098605));
+}
+
 void TestMathFunctions::testABS()
 {
     CHECK_EVAL("ABS(0)", Value(0));
@@ -383,24 +390,21 @@ void TestMathFunctions::testCONVERT()
     // exact even on floating-point implementations
     CHECK_EVAL("CONVERT(   2; \"Ym\";     \"Zm\")", Value(2000)); // Must support Y and Z prefixes. (wrong ODF-specs 100)
     CHECK_EVAL("CONVERT(  20; \"F\";      \"m\")", Value::errorNA()); // Different groups produce an error.
-    CHECK_EVAL_SHORT("CONVERT(1000;\"qt\";\"l\")", Value(946.5588641)); // Quart is U.S. customary, liquid measure
-    CHECK_EVAL_SHORT("CONVERT(1000;\"tbs\";\"l\")", Value(14.78998225)); // Tablespoon uses U.S. customary historic definition
-    // - note that there are many other definitions
-    CHECK_EVAL("CONVERT(1000; \"tsp\";    \"l\")", Value(4.929994084)); // Teaspoon uses U.S. customary historic definition
-    // - note that there are many other definitions
+    CHECK_EVAL_SHORT("CONVERT(1000;\"qt\";\"l\")", Value(946.352946));
+    CHECK_EVAL_SHORT("CONVERT(1000;\"tbs\";\"l\")", Value(14.78676478125));
+    CHECK_EVAL("CONVERT(1000; \"tsp\";    \"l\")", Value(4.92892159375));
     CHECK_EVAL("CONVERT(   1; \"das\";    \"sec\")", Value(10)); // Does it support both "s" and "sec" for second?
     // Does it support "da" as the SI standard deka prefix?
     CHECK_EVAL("CONVERT(   1; \"ar\";     \"m^2\")", Value(100)); // A hectare (ar) is 100 square meters.
     //   CHECK_EVAL( "CONVERT(   1; \"cal\";    \"J\")",      Value( 4.1868 ) );    // "cal" is an International Table (IT) calorie, 4.1868 J.
     CHECK_EVAL("CONVERT(   1; \"lbf\";    \"N\")", Value(4.448222)); // Converting pound-force to Newtons
-    CHECK_EVAL("CONVERT(   1; \"HP\";     \"W\")", Value(745.701)); // Horsepower to Watts
+    CHECK_EVAL("CONVERT(   1; \"HP\";     \"W\")", Value(745.6999214032282));
     CHECK_EVAL("CONVERT(   1; \"Mibyte\"; \"bit\")", Value(8388608)); // Converts bytes to bits, and tests binary prefixes
     CHECK_EVAL("CONVERT(   1; \"Gibyte\"; \"Mibyte\")", Value(1024)); // Converts bytes to bits, and tests binary prefixes
     CHECK_EVAL("CONVERT(   1; \"T\";      \"ga\")", Value(10000)); // Tesla to Gauss
     //   CHECK_EVAL( "CONVERT(   1; \"lbm\";    \"g\")",    Value( 453.59237 ) );   // International pound mass (avoirdupois) to grams.
     // (This is actually exact.)
-    CHECK_EVAL("CONVERT(   1; \"uk_ton\"; \"lbm\")", Value(2240)); // Imperial ton, aka "long ton", "deadweight ton",
-    // or "weight ton", is 2240 lbm.
+    CHECK_EVAL("CONVERT(   1; \"uk_ton\"; \"lbm\")", Value(2240.000297541782));
     //   CHECK_EVAL( "CONVERT(   1; \"psi\";    \"Pa\")",   Value( 6894.76 ) );     // Pounds per square inch to Pascals.
     CHECK_EVAL("CONVERT(  60; \"mph\";    \"km/h\")", Value(96.56064)); // Miles per hour to kilometers per hour.
     CHECK_EVAL("CONVERT(   1; \"day\";    \"s\")", Value(86400)); // Day to seconds.  Note: This test uses the

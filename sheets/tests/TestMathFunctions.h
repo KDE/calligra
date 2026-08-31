@@ -25,6 +25,7 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
+    void testArithmetic();
     void testABS();
     void testACOS();
     void testACOSH();

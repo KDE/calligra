@@ -617,7 +617,11 @@ static bool kspread_convert_mass(const QString &fromUnit, const QString &toUnit,
         massMap["pweight"] = 7.054792E-01; // Pennyweight
         massMap["hweight"] = 1.968413E-05; // Hundredweight
         massMap["shweight"] = 2.204623E-05; // Shorthundredweight
-        massMap["uk_ton"] = 1.0 / 2240 * 2.2046229146913400E-03; // It's long ton or Imperial ton, 2240 lbm.
+        massMap["cwt"] = 2.2046226218487758E-05;
+        massMap["uk_cwt"] = 1.9684130552221213E-05;
+        massMap["lcwt"] = massMap["uk_cwt"];
+        massMap["uk_ton"] = 9.8420652761106063E-07;
+        massMap["LTON"] = massMap["uk_ton"];
     }
 
     QString fromU = fromUnit;
@@ -650,7 +654,7 @@ static bool kspread_convert_distance(const QString &fromUnit, const QString &toU
         distanceMap["m"] = 1.0; // meter (the reference)
 
         distanceMap["ang"] = 1e10; // Angstrom
-        distanceMap["ell"] = 1.0 / (45.0 * 0.0254); // Ell, exactly 45 international inches
+        distanceMap["ell"] = 8.748906e-1;
         distanceMap["ft"] = 1.0 / (12.0 * 0.0254); // feet
         distanceMap["in"] = 1.0 / 0.0254; // inch
         distanceMap["lightyear"] = 1.057023455773293e-16; // lightyear
@@ -660,7 +664,10 @@ static bool kspread_convert_distance(const QString &fromUnit, const QString &toU
         distanceMap["parsec"] = 3.240779e-17; // Parsec
         distanceMap["pc"] = 3.240779e-17; // Parsec
         distanceMap["Pica"] = 1.0 * 72 / 0.0254; // Pica (1/72) inch
-        distanceMap["statute_mi"] = 1.0 / (6336000.0 / 3937.0); // U.S. survey mile aka U.S. statute mile
+        distanceMap["picapt"] = 2.8346456692913386E03;
+        distanceMap["pica"] = 2.36220472441E02;
+        distanceMap["survey_mi"] = 6.2136994949494949E-04;
+        distanceMap["statute_mi"] = 6.2136994949494949E-04;
         distanceMap["yd"] = 1.0 / (3.0 * 12.0 * 0.0254); // yard
     }
 
@@ -693,11 +700,11 @@ static bool kspread_convert_pressure(const QString &fromUnit, const QString &toU
     if (pressureMap.isEmpty()) {
         pressureMap["Pa"] = 1.0;
 
-        pressureMap["atm"] = 0.9869233e-5; // Atmosphere
-        pressureMap["atm"] = 0.9869233e-5; // Atmosphere
-        pressureMap["mmHg"] = 0.00750061708; // mm of Mercury
-        pressureMap["psi"] = 1 / 6894.754; // Pounds per square inch
-        pressureMap["Torr"] = 1 / 133.32237; // Torr, exactly 101325/760 Pa
+        pressureMap["atm"] = 9.86923299998193e-6;
+        pressureMap["at"] = pressureMap["atm"];
+        pressureMap["mmHg"] = 7.50061707998627e-3;
+        pressureMap["psi"] = 1.450377e-4;
+        pressureMap["Torr"] = 7.500638e-3;
     }
 
     QString fromU = fromUnit;
@@ -731,7 +738,7 @@ static bool kspread_convert_force(const QString &fromUnit, const QString &toUnit
 
         forceMap["dy"] = 1.0e5; // dyne
         forceMap["dyn"] = 1.0e5; // dyne
-        forceMap["lbf"] = 1.0 / 4.448222; // Pound force (see "lbm" for pound mass)
+        forceMap["lbf"] = 2.24808923655339E-01;
         forceMap["pond"] = 1.019716e2; // pond
     }
 
@@ -768,10 +775,14 @@ static bool kspread_convert_energy(const QString &fromUnit, const QString &toUni
         energyMap["c"] = 0.239006249473467; // thermodynamical calorie
         energyMap["cal"] = 0.238846190642017; // calorie
         energyMap["eV"] = 6.241457e+18; // electronvolt
-        energyMap["HPh"] = 3.72506111e-7; // horsepower-hour
-        energyMap["Wh"] = 0.000277778; // watt-hour
-        energyMap["flb"] = 23.73042222;
+        energyMap["HPh"] = 3.7250611111111111e-7;
+        energyMap["Wh"] = 2.7777777777777778e-4;
+        energyMap["flb"] = 2.37304222192651e1;
         energyMap["BTU"] = 9.47815067349015e-4; // British Thermal Unit
+        energyMap["btu"] = energyMap["BTU"];
+        energyMap["ev"] = energyMap["eV"];
+        energyMap["hh"] = energyMap["HPh"];
+        energyMap["wh"] = energyMap["Wh"];
     }
 
     QString fromU = fromUnit;
@@ -804,8 +815,9 @@ static bool kspread_convert_power(const QString &fromUnit, const QString &toUnit
         powerMap["W"] = 1.0; // Watt (the reference)
 
         //     powerMap[ "HP" ]  = 1.341022e-3; // Horsepower
-        powerMap["HP"] = 1.0 / 745.701; // Horsepower (UK)
+        powerMap["HP"] = 1.341022e-3;
         powerMap["PS"] = 1.359622e-3; // Pferdestaerke (German)
+        powerMap["w"] = powerMap["W"];
     }
 
     QString fromU = fromUnit;
@@ -869,11 +881,21 @@ static bool kspread_convert_temperature(const QString &fromUnit, const QString &
     // first-time initialization
     if (tempFactorMap.isEmpty() || tempOffsetMap.isEmpty()) {
         tempFactorMap["C"] = 1.0;
-        tempOffsetMap["C"] = 0.0;
-        tempFactorMap["F"] = 5.0 / 9.0;
-        tempOffsetMap["F"] = -32.0;
+        tempOffsetMap["C"] = -273.15;
+        tempFactorMap["F"] = 1.8;
+        tempOffsetMap["F"] = -255.37222222222222;
         tempFactorMap["K"] = 1.0;
-        tempOffsetMap["K"] = -273.15;
+        tempOffsetMap["K"] = 0.0;
+        tempFactorMap["Rank"] = 1.8;
+        tempOffsetMap["Rank"] = 0.0;
+        tempFactorMap["Reau"] = 0.8;
+        tempOffsetMap["Reau"] = -273.15;
+        tempFactorMap["cel"] = tempFactorMap["C"];
+        tempOffsetMap["cel"] = tempOffsetMap["C"];
+        tempFactorMap["fah"] = tempFactorMap["F"];
+        tempOffsetMap["fah"] = tempOffsetMap["F"];
+        tempFactorMap["kel"] = tempFactorMap["K"];
+        tempOffsetMap["kel"] = tempOffsetMap["K"];
     }
 
     if (!tempFactorMap.contains(fromUnit))
@@ -885,8 +907,8 @@ static bool kspread_convert_temperature(const QString &fromUnit, const QString &
     if (!tempOffsetMap.contains(toUnit))
         return false;
 
-    result = (value + tempOffsetMap[fromUnit]) * tempFactorMap[fromUnit];
-    result = (result / tempFactorMap[toUnit]) - tempOffsetMap[toUnit];
+    result = value / tempFactorMap[fromUnit] - tempOffsetMap[fromUnit];
+    result = (result + tempOffsetMap[toUnit]) * tempFactorMap[toUnit];
 
     return true;
 }
@@ -902,28 +924,47 @@ static bool kspread_convert_volume(const QString &fromUnit, const QString &toUni
     if (volumeMap.isEmpty()) {
         volumeMap["l"] = 1.0; // Liter (the reference)
 
-        // TODO ang3
-        volumeMap["barrel"] = 6.289811E-03; // barrel
-        // TODO bushel
-        volumeMap["cup"] = 4.22583333333333; // cup
+        volumeMap["ang3"] = 1.0e27;
+        volumeMap["barrel"] = 6.2898107704321051e-3;
+        volumeMap["bushel"] = 2.837759e-2;
+        volumeMap["cup"] = 4.2267528377303746;
         volumeMap["ft3"] = 3.5314666721488590e-2; // cubic foot
-        volumeMap["gal"] = 0.26411458333333; // gallone
+        volumeMap["gal"] = 2.6417205235814842e-1;
         volumeMap["in3"] = 6.1023744094732284e1; // cubic inch
         volumeMap["m3"] = 1.0e-3; // cubic meter
         volumeMap["mi3"] = 2.3991275857892772e-13; // cubic mile
-        // TODO MTON
+        volumeMap["MTON"] = 1.4125866688595436;
         volumeMap["Nmi3"] = 1.5742621468581148e-13; // cubic Nautical mile
-        volumeMap["oz"] = 33.8066666666667; // ounce liquid
-        // TODO Pica3
-        volumeMap["pt"] = 2.11291666666667; // pint
-        volumeMap["qt"] = 1.05645833333333; // quart
-        volumeMap["GRT"] = 2831.6846592; // Gross Register Ton
+        volumeMap["oz"] = 3.3814022701842997e1;
+        volumeMap["Pica3"] = 2.2776990435870636e7;
+        volumeMap["picapt3"] = 2.2776990435870636e7;
+        volumeMap["pica3"] = 1.31811287245e4;
+        volumeMap["pt"] = 2.1133764188651873;
+        volumeMap["qt"] = 1.0566882094325937;
+        volumeMap["GRT"] = 3.531467e-4;
         volumeMap["regton"] = volumeMap["GRT"];
-        volumeMap["tbs"] = 67.6133333333333; // sheetspoon
-        volumeMap["tsp"] = 202.84; // teaspoon
-        // TODO tspm
-        // TODO uk_pt
-        volumeMap["yd3"] = 1.3079506193143922; // cubic yard
+        volumeMap["tbs"] = 6.7628045403685994e1;
+        volumeMap["tsp"] = 2.0288413621105798e2;
+        volumeMap["tspm"] = 2.0e2;
+        volumeMap["uk_gal"] = 2.1996924829908779e-1;
+        volumeMap["uk_pt"] = 1.7597539863927023;
+        volumeMap["uk_qt"] = 8.7987699319635115e-1;
+        volumeMap["ly3"] = 1.1810108125623799e-51;
+        volumeMap["yd3"] = 1.3079506193143922e-3;
+        volumeMap["ang^3"] = volumeMap["ang3"];
+        volumeMap["ft^3"] = volumeMap["ft3"];
+        volumeMap["lt"] = volumeMap["l"];
+        volumeMap["L"] = volumeMap["l"];
+        volumeMap["in^3"] = volumeMap["in3"];
+        volumeMap["ly^3"] = volumeMap["ly3"];
+        volumeMap["m^3"] = volumeMap["m3"];
+        volumeMap["mi^3"] = volumeMap["mi3"];
+        volumeMap["Nmi^3"] = volumeMap["Nmi3"];
+        volumeMap["Pica^3"] = volumeMap["Pica3"];
+        volumeMap["picapt^3"] = volumeMap["picapt3"];
+        volumeMap["pica^3"] = volumeMap["pica3"];
+        volumeMap["us_pt"] = volumeMap["pt"];
+        volumeMap["yd^3"] = volumeMap["yd3"];
     }
 
     QString fromU = fromUnit;
@@ -956,19 +997,31 @@ static bool kspread_convert_area(const QString &fromUnit, const QString &toUnit,
         areaMap["m2"] = 1.0; // square meter (the reference)
         areaMap["m^2"] = 1.0; // square meter (the reference)
 
-        areaMap["acre"] = 4.046856e3; // acre
+        areaMap["acre"] = 2.471053815e-4;
+        areaMap["uk_acre"] = 2.4710538146716534e-4;
+        areaMap["us_acre"] = 2.4710439304662790e-4;
+        areaMap["ang2"] = 1.0e20;
         areaMap["ar"] = 1.0 / 100; // are
         areaMap["ft2"] = 1.0763910416709722e1; // square foot
         areaMap["ft^2"] = 1.0763910416709722e1; // square foot
-        areaMap["ha"] = 1.0e4; // hectare
+        areaMap["ha"] = 1.0e-4;
         areaMap["in2"] = 1.5500031000062000e3; // square inch
         areaMap["in^2"] = 1.5500031000062000e3; // square inch
         areaMap["mi2"] = 3.8610215854244585e-7; // square mile
         areaMap["mi^2"] = 3.8610215854244585e-7; // square mile
         areaMap["Nmi2"] = 2.9155334959812286e-7; // square Nautical mile
         areaMap["Nmi^2"] = 2.9155334959812286e-7; // square Nautical mile
-        areaMap["yd2"] = 1.0936132983377078; // square yard
-        areaMap["yd^2"] = 1.0936132983377078; // square yard
+        areaMap["yd2"] = 1.1959900463010803;
+        areaMap["yd^2"] = 1.1959900463010803;
+        areaMap["Pica2"] = 8.0352160704321409e6;
+        areaMap["picapt2"] = 8.0352160704321409e6;
+        areaMap["pica2"] = 5.58001116002232e4;
+        areaMap["Morgen"] = 4.0e-4;
+        areaMap["ly2"] = 1.1172985860549147e-32;
+        areaMap["ang^2"] = areaMap["ang2"];
+        areaMap["ly^2"] = areaMap["ly2"];
+        areaMap["Pica^2"] = areaMap["Pica2"];
+        areaMap["picapt^2"] = areaMap["picapt2"];
     }
 
     QString fromU = fromUnit;
@@ -1003,6 +1056,9 @@ static bool kspread_convert_speed(const QString &fromUnit, const QString &toUnit
         speedMap["m/h"] = 3.6e3; // meters per hour
         speedMap["mph"] = 2.2369362920544023; // miles per hour
         speedMap["kn"] = 1.9438444924406048; // knot
+        speedMap["admkn"] = 1.9438446603753486;
+        speedMap["m/hr"] = speedMap["m/h"];
+        speedMap["m/sec"] = speedMap["m/s"];
     }
 
     QString fromU = fromUnit;

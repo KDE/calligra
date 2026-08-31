@@ -247,7 +247,11 @@ Value ValueCalc::add(const Value &a, const Value &b)
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
-    Value res = toValue(aa + bb);
+    Value res;
+    if (((aa < 0 && bb > 0) || (aa > 0 && bb < 0)) && approxEqual(Value(aa), Value(-bb)))
+        res = Value(0);
+    else
+        res = toValue(aa + bb);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));
@@ -267,7 +271,11 @@ Value ValueCalc::sub(const Value &a, const Value &b)
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
-    Value res = toValue(aa - bb);
+    Value res;
+    if (((aa < 0 && bb < 0) || (aa > 0 && bb > 0)) && approxEqual(Value(aa), Value(bb)))
+        res = Value(0);
+    else
+        res = toValue(aa - bb);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));

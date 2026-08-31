@@ -45,6 +45,7 @@ Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_effective(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_euro(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_euroconvert(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_convert_ooo(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fvschedule(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv_annuity(valVector args, ValueCalc *calc, FuncExtra *);
@@ -183,6 +184,9 @@ FinancialModule::FinancialModule(QObject *parent, const QVariantList &)
     f->setParamCount(1);
     add(f);
     f = new Function("EUROCONVERT", func_euroconvert);
+    f->setParamCount(3, 5);
+    add(f);
+    f = new Function("ORG.OPENOFFICE.CONVERT", func_convert_ooo);
     f->setParamCount(3);
     add(f);
     f = new Function("FV", func_fv);
@@ -553,6 +557,14 @@ static double helper_eurofactor(const QString &currency)
         result = 30.126; // Slovakia
 
     return result;
+}
+
+static int helper_eurodigits(const QString &currency)
+{
+    const QString cur = currency.toUpper();
+    if (cur == "BEF" || cur == "ESP" || cur == "ITL" || cur == "LUF" || cur == "LUX")
+        return 0;
+    return 2;
 }
 
 //
@@ -1585,9 +1597,41 @@ Value func_euroconvert(valVector args, ValueCalc *calc, FuncExtra *)
     if (factor2 < 0)
         return Value::errorNUM();
 
-    double result = number * factor2 / factor1;
+    int precision = 0;
+    if (args.count() == 5) {
+        precision = static_cast<int>(floor(calc->conv()->toFloat(args[4])));
+        if (precision < 3)
+            return Value::errorVALUE();
+    }
+
+    const bool fullPrecision = args.count() >= 4 && calc->conv()->asBoolean(args[3]).asBoolean();
+    double result;
+    if (source.compare(target, Qt::CaseInsensitive) == 0) {
+        result = number;
+    } else {
+        double intermediate = number / factor1;
+        if (precision > 0) {
+            const double scale = pow(10.0, precision);
+            intermediate = round(intermediate * scale) / scale;
+        }
+        result = intermediate * factor2;
+        if (!fullPrecision) {
+            const double scale = pow(10.0, helper_eurodigits(target));
+            result = round(result * scale) / scale;
+        }
+    }
 
     return Value(result);
+}
+
+Value func_convert_ooo(valVector args, ValueCalc *calc, FuncExtra *extra)
+{
+    const QString source = calc->conv()->asString(args[1]).asString();
+    const QString target = calc->conv()->asString(args[2]).asString();
+    if (source != source.toUpper() || target != target.toUpper())
+        return Value::errorVALUE();
+    args.append(Value(true));
+    return func_euroconvert(args, calc, extra);
 }
 
 //

@@ -88,6 +88,7 @@ Value func_randexp(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_randnegbinom(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_randnorm(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_randpoisson(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rawsubtract(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rootn(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_round(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rounddown(valVector args, ValueCalc *calc, FuncExtra *);
@@ -187,6 +188,9 @@ MathModule::MathModule(QObject *parent, const QVariantList &)
     f = new Function("QUOTIENT", func_quotient);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETQUOTIENT");
     f->setParamCount(2);
+    add(f);
+    f = new Function("ORG.LIBREOFFICE.RAWSUBTRACT", func_rawsubtract);
+    f->setParamCount(2, -1);
     add(f);
     f = new Function("RAND", func_rand);
     f->setParamCount(0);
@@ -844,6 +848,15 @@ Value func_mod(valVector args, ValueCalc *calc, FuncExtra *)
     const Number remainder = numerator - multiple;
     const Number tolerance = Number(4 * DBL_EPSILON) * std::max(fabsl(numerator), fabsl(multiple));
     return Value(fabsl(remainder) <= tolerance ? 0 : remainder);
+}
+
+// Function: RAWSUBTRACT
+Value func_rawsubtract(valVector args, ValueCalc *, FuncExtra *)
+{
+    Number result = args[0].asFloat();
+    for (int i = 1; i < args.count(); ++i)
+        result -= args[i].asFloat();
+    return Value(result);
 }
 
 // Function: fact
