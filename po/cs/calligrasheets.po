@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-07-07 19:58+0200\n"
+"PO-Revision-Date: 2026-08-31 12:20+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Poedit 3.9\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -15366,7 +15366,7 @@ msgstr "menší nebo rovno"
 #: ui/actions/dialogs/DatabaseDialog.cpp:279
 #, kde-format
 msgid "Sorted by"
-msgstr "Seřazeno:"
+msgstr "Seřazeno"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:274
 #: ui/actions/dialogs/DatabaseDialog.cpp:286
@@ -16978,7 +16978,7 @@ msgstr "Kurzíva"
 #: ui/actions/Style.cpp:148 ui/dialogs/FontWidget.ui:101
 #, kde-format
 msgid "Underline"
-msgstr "podtržené"
+msgstr "Podtržené"
 
 #: ui/actions/Style.cpp:184
 #, kde-format
@@ -17877,7 +17877,7 @@ msgstr "Pokud je toto zaškrtnuto, text aktuální buňky bude přeškrtnutý."
 #: ui/dialogs/FontWidget.ui:142
 #, kde-format
 msgid "Strike out"
-msgstr "přeškrtnuté"
+msgstr "Přeškrtnuté"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, size_spinner)
 #: ui/dialogs/FontWidget.ui:149

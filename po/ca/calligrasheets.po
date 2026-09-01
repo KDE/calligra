@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-07-06 18:50+0200\n"
+"PO-Revision-Date: 2026-08-31 11:18+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2249,13 +2249,13 @@ msgid ""
 "Holidays must be one of the following: number = days to add, a single date "
 "or an array of dates."
 msgstr ""
-"Les vacances han de ser una de les següents: nombre = dies a afegir-hi, una "
+"Els festius han de ser una de les següents: nombre = dies a afegir-hi, una "
 "data única o una matriu de dates."
 
 #: functions/datetime.xml:683
 #, kde-format
 msgid "WORKDAY(start date; days; holidays)"
-msgstr "WORKDAY(data d'inici; dies; vacances)"
+msgstr "WORKDAY(data d'inici; dies; festius)"
 
 #: functions/datetime.xml:684
 #, kde-format
@@ -2283,7 +2283,7 @@ msgstr ""
 #: functions/datetime.xml:706
 #, kde-format
 msgid "NETWORKDAY(start date; end date; holidays)"
-msgstr "NETWORKDAY(data d'inici; data final; vacances)"
+msgstr "NETWORKDAY(data d'inici; data final; festius)"
 
 #: functions/datetime.xml:707
 #, kde-format
@@ -8898,7 +8898,7 @@ msgid ""
 "The CHIDIST() function returns the probability value from the indicated Chi "
 "square that a hypothesis is confirmed."
 msgstr ""
-"La funció CHIDIST() retorna el valor de probabilitat del quadrat Chi "
+"La funció CHIDIST() retorna el valor de probabilitat del khi quadrat "
 "indicat, que confirma una hipòtesi."
 
 #: functions/statistical.xml:169
@@ -8910,10 +8910,10 @@ msgid ""
 "determines from this the probability of error for the hypothesis to be "
 "tested."
 msgstr ""
-"CHIDIST compara el valor quadrat Chi que s'ha de donar a una mostra "
+"CHIDIST compara el valor khi quadrat que s'ha de donar a una mostra "
 "aleatòria que es calcula de la suma de (valor dels valors esperats "
-"observats)^2/valors esperats per tots els valors amb la distribució quadrada "
-"Chi teòrica i determina d'aquí la probabilitat d'error d'una hipòtesi a "
+"observats)^2/valors esperats per tots els valors amb la distribució khi "
+"quadrat teòrica i determina d'aquí la probabilitat d'error d'una hipòtesi a "
 "provar."
 
 #: functions/statistical.xml:170
@@ -11337,7 +11337,7 @@ msgstr "COMPARE(\"Calligra\"; \"Calligra\"; true) retorna 0"
 #: functions/text.xml:199
 #, kde-format
 msgid "COMPARE(\"calligra\"; \"Calligra\"; true) returns 1"
-msgstr "COMPARE(\"calligra\"; \"Calligra\"; true) returns 1"
+msgstr "COMPARE(\"calligra\"; \"Calligra\"; true) retorna 1"
 
 #: functions/text.xml:200
 #, kde-format

@@ -4304,7 +4304,7 @@ all changes will be overwritten on the next script run
 <para
 >La funció NETWORKDAY() retorna el nombre de dies laborables entre la data d'inici i la data final.</para>
 <para
->Les vacances han de ser una de les següents: nombre = dies a afegir-hi, una data única o una matriu de dates.</para>
+>Els festius han de ser una de les següents: nombre = dies a afegir-hi, una data única o una matriu de dates.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -4321,7 +4321,7 @@ all changes will be overwritten on the next script run
 >Sintaxi</term>
 <listitem
 ><para
->NETWORKDAY(data d'inici; data final; vacances)</para
+>NETWORKDAY(data d'inici; data final; festius)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -5125,7 +5125,7 @@ all changes will be overwritten on the next script run
 <para
 >La funció WORKDAY() retorna la data de dies laborables des de la data d'inici.</para>
 <para
->Les vacances han de ser una de les següents: nombre = dies a afegir-hi, una data única o una matriu de dates.</para>
+>Els festius han de ser una de les següents: nombre = dies a afegir-hi, una data única o una matriu de dates.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -5142,7 +5142,7 @@ all changes will be overwritten on the next script run
 >Sintaxi</term>
 <listitem
 ><para
->WORKDAY(data d'inici; dies; vacances)</para
+>WORKDAY(data d'inici; dies; festius)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -22859,9 +22859,9 @@ all changes will be overwritten on the next script run
 <title
 >CHIDIST</title>
 <para
->La funció CHIDIST() retorna el valor de probabilitat del quadrat Chi indicat, que confirma una hipòtesi.</para>
+>La funció CHIDIST() retorna el valor de probabilitat del khi quadrat indicat, que confirma una hipòtesi.</para>
 <para
->CHIDIST compara el valor quadrat Chi que s'ha de donar a una mostra aleatòria que es calcula de la suma de (valor dels valors esperats observats)^2/valors esperats per tots els valors amb la distribució quadrada Chi teòrica i determina d'aquí la probabilitat d'error d'una hipòtesi a provar.</para>
+>CHIDIST compara el valor khi quadrat que s'ha de donar a una mostra aleatòria que es calcula de la suma de (valor dels valors esperats observats)^2/valors esperats per tots els valors amb la distribució khi quadrat teòrica i determina d'aquí la probabilitat d'error d'una hipòtesi a provar.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -28335,7 +28335,7 @@ all changes will be overwritten on the next script run
 >Exemples</term>
 <listitem
 ><para
->COMPARE("calligra"; "Calligra"; true) returns 1</para
+>COMPARE("calligra"; "Calligra"; true) retorna 1</para
 ></listitem>
 </varlistentry>
 <varlistentry

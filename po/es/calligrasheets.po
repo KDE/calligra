@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-07-21 22:29+0100\n"
+"PO-Revision-Date: 2026-08-31 18:54+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n:
@@ -4049,7 +4049,7 @@ msgstr "DDB(75000;1;60;12;2) devuelve 1721.81"
 #: functions/financial.xml:357 functions/financial.xml:1349
 #, kde-format
 msgid "Price per $100 face value"
-msgstr "Precio por el valor facial de 100 €"
+msgstr "Precio por el valor nominal de 100 €"
 
 #: functions/financial.xml:361 functions/financial.xml:616
 #: functions/financial.xml:920 functions/financial.xml:963
@@ -4581,12 +4581,12 @@ msgstr "ISPMT(0.1; 1; 3; 8000000) es igual a -533333"
 #: functions/financial.xml:731 functions/financial.xml:1508
 #, kde-format
 msgid "Face value"
-msgstr "Valor facial"
+msgstr "Valor nominal"
 
 #: functions/financial.xml:735
 #, kde-format
 msgid "Coupon rate"
-msgstr "Tasa del cupón"
+msgstr "Tasa de interés nominal"
 
 #: functions/financial.xml:739
 #, kde-format
@@ -4616,7 +4616,8 @@ msgstr ""
 #, kde-format
 msgid "LEVEL_COUPON(face value;coupon rate;coupons per year;years;market rate)"
 msgstr ""
-"LEVEL_COUPON(valor nominal; cupón; cupones por año; años; tipo del mercado)"
+"LEVEL_COUPON(valor nominal; tasa de interés nominal; cupones por año; años; "
+"tipo del mercado)"
 
 #: functions/financial.xml:753
 #, kde-format
@@ -4781,7 +4782,7 @@ msgid ""
 "units of face value. The security has an irregular last interest date."
 msgstr ""
 "La función ODDLPRICE calcula el valor del título por 100 unidades de divisa "
-"de valor facial. El título tiene una fecha de último interés irregular."
+"de valor nominal. El título tiene una fecha de último interés irregular."
 
 #: functions/financial.xml:933
 #, kde-format
@@ -4895,7 +4896,7 @@ msgid ""
 "PRICEMAT Calculate the price per 100 currency units of face value of the "
 "security that pays interest on the maturity date."
 msgstr ""
-"PRICEMAT calcula el precio por 100 unidades de divisa de valor facial del "
+"PRICEMAT calcula el precio por 100 unidades de divisa de valor nominal del "
 "título que paga interés en la fecha de vencimiento."
 
 #: functions/financial.xml:1089
@@ -5282,7 +5283,7 @@ msgid ""
 "units of face value."
 msgstr ""
 "La función YIELDDISC calcula el rendimiento de un título descontado por 100 "
-"unidades monetarias de valor facial."
+"unidades monetarias de valor nominal."
 
 #: functions/financial.xml:1462
 #, kde-format
@@ -5334,7 +5335,7 @@ msgstr ""
 #: functions/financial.xml:1521
 #, kde-format
 msgid "ZERO_COUPON(face value;rate;years)"
-msgstr "ZERO_COUPON(valor facial; tasa; años)"
+msgstr "ZERO_COUPON(valor nominal; tasa; años)"
 
 #: functions/financial.xml:1522
 #, kde-format
@@ -7391,7 +7392,7 @@ msgstr "CEIL(-12.5) es igual a -12"
 #: functions/math.xml:855 functions/math.xml:884
 #, kde-format
 msgid "Significance (optional)"
-msgstr "Significancia (opcional)"
+msgstr "Significación (opcional)"
 
 #: functions/math.xml:859 functions/math.xml:888
 #, kde-format
@@ -7408,8 +7409,8 @@ msgid ""
 "rounds away from zero, instead of up towards the positive infinity."
 msgstr ""
 "La función CEILING() redondea x por exceso (alejándose de cero) al múltiplo "
-"de significancia más cercano que sea mayor al de la entrada. El valor "
-"predeterminado de significancia es 1 (o -1 si el valor es negativo), lo que "
+"de significación más cercano que sea mayor al de la entrada. El valor "
+"predeterminado de significación es 1 (o -1 si el valor es negativo), lo que "
 "significa redondear por exceso al entero más próximo. Si el parámetro «modo» "
 "es distinto de cero, la función redondea alejándose de cero, en lugar de "
 "hacia el infinito positivo."
@@ -7446,7 +7447,7 @@ msgid ""
 "Significance."
 msgstr ""
 "Redondea un número x por defecto al múltiplo más cercano del segundo "
-"parámetro, Significancia."
+"parámetro, Significación."
 
 #: functions/math.xml:899
 #, kde-format
@@ -7464,15 +7465,15 @@ msgid ""
 "the result is zero."
 msgstr ""
 "La función FLOOR() redondea x hacia abajo (hacia cero) al múltiplo de "
-"significancia más cercano que sea menor que la entrada.\n"
-"                El valor predeterminado de significancia es 1, si x es "
+"significación más cercano que sea menor que la entrada.\n"
+"                El valor predeterminado de significación es 1, si x es "
 "positivo. Es -1 si el valor es negativo,\n"
 "                lo que significa redondear al entero más próximo.\n"
 "                Si se indica el modo y no es igual a cero, la cantidad de x "
 "se redondea hacia cero a un múltiplo\n"
-"                de significancia, y a continuación se aplica el signo. En "
+"                de significación, y a continuación se aplica el signo. En "
 "caso contrario, se redondea hacia menos infinito.\n"
-"                    Si alguno de los dos parámetros x o la significancia es "
+"                    Si alguno de los dos parámetros x o la significación es "
 "cero, el resultado es cero."
 
 #: functions/math.xml:900
