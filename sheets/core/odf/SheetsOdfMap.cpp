@@ -435,6 +435,9 @@ bool Odf::loadDatabaseRanges(Map *map, const KoXmlElement &body)
             const Region region = database.range();
             if (!region.isValid())
                 continue;
+            const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
+            if (!name.isEmpty())
+                map->namedAreaManager()->insert(region, name);
             SheetBase *sheet = region.lastSheet();
             if (!sheet)
                 continue;

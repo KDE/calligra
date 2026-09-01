@@ -1440,7 +1440,9 @@ bool Formula::isNamedArea(const QString &expr) const
 Value Formula::eval(CellIndirection cellIndirections) const
 {
     QHash<CellBase, Value> values;
-    return evalRecursive(cellIndirections, values);
+    Value result = evalRecursive(cellIndirections, values);
+    const bool directCellReference = d->codes.size() == 1 && d->codes.constFirst().type == Opcode::Cell;
+    return directCellReference && result.isEmpty() && result.isReference() ? Value(0) : result;
 }
 
 // We need to unroll arrays.
@@ -1805,15 +1807,20 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
                             val1 = cell.value();
                         values[cell] = val1;
                     }
-                    if (val1.isEmpty())
-                        val1.setReference();
                 }
+                if (val1.isEmpty())
+                    val1.setReference();
                 // store the reference, so we can use it within functions
                 entry.col1 = entry.col2 = position.x();
                 entry.row1 = entry.row2 = position.y();
                 entry.reg = region;
             } else {
-                warnSheets << "Unhandled non singular region in Opcode::Cell with rects=" << region.rects();
+                val1 = region.firstSheet()->cellStorage()->valueRegion(region);
+                entry.col1 = region.firstRange().left();
+                entry.row1 = region.firstRange().top();
+                entry.col2 = region.firstRange().right();
+                entry.row2 = region.firstRange().bottom();
+                entry.reg = region;
             }
             entry.val = val1;
             stack.push(entry);

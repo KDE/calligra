@@ -2024,6 +2024,8 @@ Value ValueCalc::arrayMap(const Value &array, arrayMapFunc func, const Value &pa
 
 Value ValueCalc::twoArrayMap(const Value &array1, arrayMapFunc func, const Value &array2)
 {
+    if (array1.isArray() && array2.isArray() && (array1.rows() != array2.rows() || array1.columns() != array2.columns()))
+        return Value::errorVALUE();
     Value res(Value::Array);
     // Map each element in one array with the respective element in the other array
     unsigned rows = qMax(array1.rows(), array2.rows());
@@ -2638,10 +2640,14 @@ void ValueCalc::getCond(Condition &cond, Value val)
     text = text.trimmed();
 
     bool ok = false;
-    double d = text.toDouble(&ok);
+    double numericValue = text.toDouble(&ok);
+    if (!ok) {
+        QString normalized = text;
+        numericValue = normalized.replace(QLatin1Char(','), QLatin1Char('.')).toDouble(&ok);
+    }
     if (ok) {
         cond.type = numeric;
-        cond.value = d;
+        cond.value = numericValue;
     } else {
         cond.type = string;
         cond.stringValue = text;

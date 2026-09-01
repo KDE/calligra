@@ -11,6 +11,7 @@
 #include "engine/Function.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
+#include "engine/ValueStorage.h"
 
 using namespace Calligra::Sheets;
 
@@ -1414,23 +1415,31 @@ Value func_frequency(valVector args, ValueCalc *, FuncExtra *)
     // sort the data
     std::stable_sort(data.begin(), data.end());
 
-    Value result(Value::Array);
-    QVector<double>::ConstIterator begin = data.constBegin();
+    QVector<double> limits;
+    limits.reserve(bins.count());
     for (uint v = 0; v < bins.count(); ++v) {
-        if (!bins.element(v).isNumber())
-            continue;
-        QVector<double>::ConstIterator it = std::upper_bound(begin, data.constEnd(), bins.element(v).asFloat());
-        // exact match?
-        if (*it == numToDouble(bins.element(v).asFloat()))
-            ++it;
+        if (bins.element(v).isNumber())
+            limits.append(numToDouble(bins.element(v).asFloat()));
+    }
+    std::sort(limits.begin(), limits.end());
+
+    ValueStorage output;
+    QVector<double>::ConstIterator begin = data.constBegin();
+    QVector<int64_t> counts;
+    counts.reserve(limits.count());
+    for (int v = 0; v < limits.count(); ++v) {
+        const double bin = limits.at(v);
+        QVector<double>::ConstIterator it = std::upper_bound(begin, data.constEnd(), bin);
         // add the number of values in this interval to the result
-        result.setElement(0, v, Value(static_cast<int64_t>(it - begin)));
+        counts.append(static_cast<int64_t>(it - begin));
         begin = it;
     }
     // the remaining values
-    result.setElement(0, bins.count(), Value(static_cast<int64_t>(data.constEnd() - begin)));
+    for (int v = 0; v < limits.count(); ++v)
+        output.insert(1, v + 1, Value(counts.at(v)));
+    output.insert(1, limits.count() + 1, Value(static_cast<int64_t>(data.constEnd() - begin)));
 
-    return result;
+    return Value(output, QSize(1, limits.count() + 1));
 }
 
 //
@@ -1695,8 +1704,12 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
     {
         debugSheets << "fill X-Matrix with 0,1,2,3 .. sequence";
         const int known_Y_count = known_Y.count();
-        for (int i = 0; i < known_Y_count; ++i)
-            known_X.setElement(i, 0, Value(i));
+        for (int i = 0; i < known_Y_count; ++i) {
+            if (known_Y.columns() == 1)
+                known_X.setElement(0, i, Value(i));
+            else
+                known_X.setElement(i, 0, Value(i));
+        }
 
         cols_X = cols_Y;
         rows_X = rows_Y;
@@ -1748,11 +1761,11 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         debugSheets << "Simple regression detected"; // Debug
 
         double count = 0.0;
-        double sumX = 0.0;
-        double sumSqrX = 0.0;
-        double sumY = 0.0;
-        double sumSqrY = 0.0;
-        double sumXY = 0.0;
+        long double sumX = 0.0;
+        long double sumSqrX = 0.0;
+        long double sumY = 0.0;
+        long double sumSqrY = 0.0;
+        long double sumXY = 0.0;
         double valX, valY;
 
         //
@@ -1777,7 +1790,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         } else {
             double f1 = count * sumXY - sumX * sumY;
             double X = count * sumSqrX - sumX * sumX;
-            double b, m;
+            long double b, m;
 
             if (withOffset) {
                 // with offset
@@ -1795,7 +1808,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
             for (uint c = 0; c < cols_newX; ++c) {
                 for (uint r = 0; r < rows_newX; ++r) {
                     double result = 0.0;
-                    result = exp(newX.element(c, r).asFloat() * m + b);
+                    result = std::exp(newX.element(c, r).asFloat() * m + b);
                     debugSheets << "res(" << c << "," << r << ") = " << result;
                     res.setElement(c, r, Value(result));
                 }
@@ -3156,11 +3169,12 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
 
     List knownX, newX;
     int knownXcount = 0, newXcount = 0;
+    unsigned resultColumns = args[0].columns();
 
     //
     // knownX
     //
-    if (args[1].isEmpty()) {
+    if (args.count() < 2 || args[1].isEmpty()) {
         // if knownX is empty it has to be set to the sequence 1,2,3... n (n number of counts knownY)
         for (uint i = 1; i < args[0].count() + 1; ++i)
             knownX.append(i);
@@ -3176,12 +3190,13 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
     //
     // newX
     //
-    if (args[2].isEmpty()) {
+    if (args.count() < 3 || args[2].isEmpty()) {
         for (uint i = 1; i < args[0].count() + 1; ++i)
             newX.append(i);
     } else {
         // copy array to list
         func_array_helper(args[2], calc, newX, newXcount);
+        resultColumns = args[2].columns();
     }
 
     // create the resulting matrix
@@ -3219,7 +3234,7 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
     Value v2 = func_intercept(param, calc, nullptr); // v2 is const, we only need to calc it once
 
     // fill array up with values
-    for (uint i = 0; i < args[2].count(); ++i) {
+    for (qsizetype i = 0; i < newX.size(); ++i) {
         Value trend;
         Value v1;
 
@@ -3233,7 +3248,7 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
         }
 
         // set value in res array
-        res.setElement(i, 0, trend);
+        res.setElement(i % resultColumns, i / resultColumns, trend);
     }
 
     return (res); // return array

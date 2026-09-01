@@ -1272,6 +1272,10 @@ Value func_mdeterm(valVector args, ValueCalc *calc, FuncExtra *)
     Value matrix = args[0];
     if (matrix.columns() != matrix.rows() || matrix.rows() < 1)
         return Value::errorVALUE();
+    for (unsigned row = 0; row < matrix.rows(); ++row)
+        for (unsigned col = 0; col < matrix.columns(); ++col)
+            if (!matrix.element(col, row).isNumber())
+                return Value::errorVALUE();
 
     const Eigen::MatrixXd eMatrix = convert(matrix, calc);
 
@@ -1427,8 +1431,7 @@ Value func_transpose(valVector args, ValueCalc *calc, FuncExtra *)
     Value transpose(Value::Array);
     for (int row = 0; row < rows; ++row) {
         for (int col = 0; col < cols; ++col) {
-            if (!matrix.element(col, row).isEmpty())
-                transpose.setElement(row, col, matrix.element(col, row));
+            transpose.setElement(row, col, matrix.element(col, row));
         }
     }
     return transpose;

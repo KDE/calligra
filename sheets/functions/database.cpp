@@ -177,9 +177,9 @@ void DBConditions::parse(Value conds)
             // if (cond[idx]) delete cond[idx];
             Condition *theCond = new Condition;
             if (cnd.isEmpty()) {
-                theCond->type = Calligra::Sheets::string;
+                theCond->type = Calligra::Sheets::numeric;
                 theCond->comp = isEqual;
-                theCond->stringValue.clear();
+                theCond->value = 0;
             } else {
                 calc->getCond(*theCond, cnd);
             }
@@ -197,18 +197,31 @@ bool DBConditions::matches(unsigned row)
     for (int r = 0; r < rows; ++r) {
         // within a row, all criteria must match
         bool match = true;
+        bool hasCondition = false;
         for (int c = 0; c < cols; ++c) {
             int idx = r * cols + c;
             if (cond[idx].isEmpty())
                 continue;
+            hasCondition = true;
             for (int i = 0; i < cond[idx].size(); i++) {
-                if (!calc->matches(*cond[idx][i], db.element(c, row + 1))) {
+                Value value = db.element(c, row + 1);
+                if (cond[idx][i]->type == numeric) {
+                    if (value.isString() && !value.asString().isEmpty()) {
+                        bool ok = false;
+                        const Value numericValue = calc->conv()->asNumeric(value, &ok);
+                        if (ok)
+                            value = numericValue;
+                    }
+                }
+                const bool emptyStringNotEqual =
+                    (value.isEmpty() || (value.isString() && value.asString().isEmpty())) && cond[idx][i]->type == numeric && cond[idx][i]->comp == notEqual;
+                if (!emptyStringNotEqual && !calc->matches(*cond[idx][i], value)) {
                     match = false; // didn't match
                     break;
                 }
             }
         }
-        if (match)
+        if (match && hasCondition)
             return true;
     }
 
@@ -237,8 +250,12 @@ Value func_dsum(valVector args, ValueCalc *calc, FuncExtra *)
         if (conds.matches(r)) {
             Value val = database.element(fieldIndex, r + 1);
             // include this value in the result
-            if (!val.isEmpty())
-                res = calc->add(res, val);
+            if (!val.isEmpty()) {
+                bool ok = false;
+                const Value numericValue = calc->conv()->asNumeric(val, &ok);
+                if (ok)
+                    res = calc->add(res, numericValue);
+            }
         }
 
     return res;
