@@ -17,14 +17,14 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-07-06 09:59+0200\n"
+"PO-Revision-Date: 2026-08-31 12:10+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n:
@@ -2342,12 +2342,13 @@ msgid ""
 "NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
 "otherwise identical."
 msgstr ""
+"NETWORKDAYS() is de OpenFormula-/Excel-schrijfwijze van NETWORKDAY(); verder "
+"zijn ze identiek."
 
 #: functions/datetime.xml:730
-#, fuzzy, kde-format
-#| msgid "NETWORKDAY(start date; end date; holidays)"
+#, kde-format
 msgid "NETWORKDAYS(start date; end date; holidays)"
-msgstr "NETWORKDAY(startdatum; einddatum; vrije_dagen)"
+msgstr "NETWORKDAYS(startdatum; einddatum; vrije_dagen)"
 
 #: functions/datetime.xml:743
 #, kde-format
@@ -5366,65 +5367,48 @@ msgstr ""
 "\"=DATE(2001;3;1)\"; geeft 2907.83187 terug"
 
 #: functions/financial.xml:1449
-#, fuzzy, kde-format
-#| msgid "Coupon rate"
+#, kde-format
 msgid "Annual coupon rate"
-msgstr "Couponrente"
+msgstr "Jaarlijkse couponrente"
 
 #: functions/financial.xml:1453
-#, fuzzy, kde-format
-#| msgid "Price per $100 face value"
+#, kde-format
 msgid "Price per 100 currency units of face value"
-msgstr "Prijs per $100 nominale waarde"
+msgstr "Prijs per 100 valuta-eenheden van de nominale waarde"
 
 #: functions/financial.xml:1457
-#, fuzzy, kde-format
-#| msgid ""
-#| "YIELDDISC calculates the yield of a discounted security per 100 currency "
-#| "units of face value."
+#, kde-format
 msgid "Redemption value per 100 currency units of face value"
-msgstr ""
-"YIELDDISC berekent de opbrengstrente van een waardepapier met korting per "
-"100 valuta-eenheden van de zichtwaarde."
+msgstr "Aflossingswaarde per 100 valuta-eenheden van nominale waarde"
 
 #: functions/financial.xml:1461
-#, fuzzy, kde-format
-#| msgid "Number of payments per year"
+#, kde-format
 msgid "Number of coupon payments per year"
-msgstr "Aantal betalingen per jaar"
+msgstr "Aantal couponbetalingen per jaar"
 
 #: functions/financial.xml:1469
-#, fuzzy, kde-format
-#| msgid ""
-#| "The YIELDMAT function calculates the yield of the security that pays "
-#| "interest on the maturity date."
+#, kde-format
 msgid ""
 "The YIELD function calculates the annual yield of a security that pays "
 "periodic interest."
 msgstr ""
-"De functie YIELDMAT berekent de opbrengst van een waardepapier waarvan de "
-"rente op de vervaldatum betaalt wordt."
+"De functie YIELD berekent de jaarlijkse opbrengst van een waardepapier dat "
+"periodiek rente betaald."
 
 #: functions/financial.xml:1470
-#, fuzzy, kde-format
-#| msgid ""
-#| "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency "
-#| "[; Basis = 0 ] )"
+#, kde-format
 msgid ""
 "YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
 msgstr ""
-"ODDLYIELD( Betaaldatum; Vervaldatum; Laatste; Rente; Prijs; Aflossing; "
-"Frequentie [; Basis = 0 ] )"
+"YIELD(betaaldatum; vervaldatum; rente; prijs; aflossing; frequentie [; basis "
+"= 0 ] )"
 
 #: functions/financial.xml:1471
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns "
-#| "0.106194684"
+#, no-c-format, kde-format
 msgid ""
 "YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
 msgstr ""
-"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) geeft 0.106194684 "
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) geeft 0.065 "
 "terug"
 
 #: functions/financial.xml:1502
@@ -8900,15 +8884,14 @@ msgstr ""
 "nieuweHoogte; Integer nieuweBreedte)"
 
 #: functions/reference.xml:389
-#, fuzzy, kde-format
-#| msgid "Spreadsheet Application"
+#, kde-format
 msgid "Server application"
-msgstr "Rekenbladtoepassing"
+msgstr "Servertoepassing"
 
 #: functions/reference.xml:393
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "Onderwerp"
 
 #: functions/reference.xml:397
 #, kde-format
@@ -8918,7 +8901,7 @@ msgstr "Item"
 #: functions/reference.xml:401
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "Modus"
 
 #: functions/reference.xml:405
 #, kde-format
@@ -8928,22 +8911,26 @@ msgid ""
 "is recognized so documents that reference it still load, but always "
 "evaluates to an error."
 msgstr ""
+"Vraagt ​​gegevens op bij een andere actieve toepassing via Dynamic Data "
+"Exchange (DDE), een mechanisme voor communicatie tussen processen dat "
+"specifiek is voor Windows en niet door dit platform wordt ondersteund. De "
+"functie DDE() wordt herkend, zodat documenten die ervan gebruikmaken nog "
+"steeds worden geladen, maar de aanroep resulteert altijd in een foutmelding."
 
 #: functions/reference.xml:406
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
-msgstr ""
+msgstr "DDE(server; onderwerp; item; modus)"
 
 #: functions/reference.xml:414
-#, fuzzy, kde-format
-#| msgid "EUR"
+#, kde-format
 msgid "URL"
-msgstr "EUR"
+msgstr "URL"
 
 #: functions/reference.xml:418
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr ""
+msgstr "Tekst tonen (standaard naar de URL)"
 
 #: functions/reference.xml:422
 #, kde-format
@@ -8952,17 +8939,20 @@ msgid ""
 "text is given. Following the link is handled by the application, not by "
 "formula evaluation."
 msgstr ""
+"Geeft de weergavetekst voor een hyperlink terug, of de URL zelf als er geen "
+"weergavetekst is opgegeven. Het volgen van de koppeling wordt afgehandeld "
+"door de toepassing, niet door de formule-evaluatie."
 
 #: functions/reference.xml:423
 #, kde-format
 msgid "HYPERLINK(url; display text)"
-msgstr ""
+msgstr "HYPERLINK(url; getoonde tekst)"
 
 #: functions/reference.xml:424
-#, fuzzy, kde-format
-#| msgid "T(\"Calligra\") returns \"Calligra\""
+#, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\") geeft \"Calligra\" terug"
+msgstr ""
+"HYPERLINK(\"https://calligra.org\"; \"Calligra\") geeft \"Calligra\" terug"
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -11349,20 +11339,19 @@ msgid "GAMMALN(2) returns 0"
 msgstr "GAMMALN(2) geeft 0 terug"
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "Waarschijnlijkheid"
+msgstr "Waarschijnlijkheid van succes"
 
 #: functions/statistical.xml:1845
 #, kde-format
 msgid "Number of successes (or the lower limit, if the upper limit is given)"
-msgstr ""
+msgstr "Aantal successen (of de ondergrens, indien de bovengrens is opgegeven)"
 
 #: functions/statistical.xml:1849
 #, kde-format
 msgid "Upper limit for the number of successes"
-msgstr ""
+msgstr "Bovengrens voor het aantal successen"
 
 #: functions/statistical.xml:1853
 #, kde-format
@@ -11371,77 +11360,69 @@ msgid ""
 "(inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in "
 "Trials independent trials, each with success probability SP."
 msgstr ""
+"De functie B() retourneert de kans op het behalen van een aantal successen "
+"tussen T1 en T2 (inclusief) — of precies T1 successen als T2 wordt "
+"weggelaten — bij Pogingen onafhankelijke pogingen, elk met een succeskans SP."
 
 #: functions/statistical.xml:1854
 #, kde-format
 msgid "B(trials; SP; T1; T2)"
-msgstr ""
+msgstr "B(pogingen; SP; T1; T2)"
 
 #: functions/statistical.xml:1855
-#, fuzzy, kde-format
-#| msgid "BINO(12;9;0.8) returns 0.236223201"
+#, kde-format
 msgid "B(20; 0.5; 8) returns 0.120134"
-msgstr "BINO(12;9;0.8) geeft 0.236223201 terug"
+msgstr "B(20; 0.5; 8) geeft 0.120134 terug"
 
 #: functions/statistical.xml:1856
-#, fuzzy, kde-format
-#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+#, kde-format
 msgid "B(20; 0.5; 8; 10) returns 0.456511"
-msgstr "MAX(0.5; 0.4; Waar; 0.2) geeft 0.5 terug"
+msgstr "B(20; 0.5; 8; 10) geeft 0.456511 terug"
 
 #: functions/statistical.xml:1877
-#, fuzzy, kde-format
-#| msgid ""
-#| "The PHI() function returns value of the distribution function for a "
-#| "standard normal distribution."
+#, kde-format
 msgid ""
 "The CHISQDIST() function returns the value of the cumulative distribution "
 "function (or, if Cumulative is FALSE, the probability density function) for "
 "the chi-square distribution."
 msgstr ""
-"De functie PHI(x) geeft de functiewaarde terug voor x van de "
-"kansdichtheidsfunctie voor de standaardnormale verdeling."
+"De functie CHISQDIST() retourneert de waarde van de cumulatieve "
+"verdelingsfunctie (of, als Cumulatief ONWAAR is, de kansdichtheidsfunctie) "
+"voor de chi-kwadraatverdeling."
 
 #: functions/statistical.xml:1878
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQDIST(number; degrees_freedom; cumulative)"
-msgstr "CHIDIST(getal;vrijheidsgraden)"
+msgstr "CHISQDIST(getal; vrijheidsgraden; cumulatief)"
 
 #: functions/statistical.xml:1879
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
-msgstr "CHIDIST(13.27;5) geeft 0.021 terug"
+msgstr "CHISQDIST(13.27; 5; TRUE) geeft 0.979 terug"
 
 #: functions/statistical.xml:1897
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;"
-#| "TRUE())."
+#, kde-format
 msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
 msgstr ""
-"De functie BETAINV() geeft de inverse van BETADIST(x;alfa;beta;a;b;Waar()) "
+"De functie CHISQINV() retourneert de inverse van CHISQDIST(getal; "
+"vrijheidsgraden; WAAR)."
 
 #: functions/statistical.xml:1898
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQINV(probability; degrees_freedom)"
-msgstr "CHIDIST(getal;vrijheidsgraden)"
+msgstr "CHISQINV(waarschijnlijkheid; vrijheidsgraden)"
 
 #: functions/statistical.xml:1899
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
-msgstr "CHIDIST(13.27;5) geeft 0.021 terug"
+msgstr "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) geeft 13.27 terug"
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "Tekenreekswaarden"
+msgstr "Criteriumwaarde"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -11449,34 +11430,34 @@ msgid ""
 "The CRITBINOM() function returns the smallest value for which the cumulative "
 "binomial distribution is greater than or equal to the criterion value alpha."
 msgstr ""
+"De functie CRITBINOM() retourneert de kleinste waarde waarvoor de "
+"cumulatieve binomiale verdeling groter is dan of gelijk is aan de "
+"criteriumwaarde alfa."
 
 #: functions/statistical.xml:1921
 #, kde-format
 msgid "CRITBINOM(trials; SP; alpha)"
-msgstr ""
+msgstr "CRITBINOM(pogingen; SP; alfa)"
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "COMBIN(5;5) geeft 1 terug"
+msgstr "CRITBINOM(20; 0.5; 0.55) geeft 10 terug"
 
 #: functions/statistical.xml:1931
 #, kde-format
 msgid "The x-value for which a y-value is estimated"
-msgstr ""
+msgstr "De x-waarde waarvoor een y-waarde wordt geschat"
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "Booleaanse waarden"
+msgstr "Bekende y-waarden"
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "Booleaanse waarden"
+msgstr "Bekende x-waarden"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -11484,23 +11465,24 @@ msgid ""
 "The FORECAST() function estimates a future y-value along the linear trend "
 "fitted to the known x/y-values, for a given new x-value."
 msgstr ""
+"De functie FORECAST() schat een toekomstige y-waarde langs de lineaire "
+"trendlijn die is aangepast aan de bekende x- en y-waarden, voor een gegeven "
+"nieuwe x-waarde."
 
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr ""
+msgstr "FORECAST(x; bekende_y's; bekende_x's)"
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "Nulwaarden"
+msgstr "Waargenomen waarden"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "Nominale waarde"
+msgstr "Verwachte waarden"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -11510,26 +11492,32 @@ msgid ""
 "and expected value ranges (which must have the same shape) would occur by "
 "chance."
 msgstr ""
+"De functie LEGACYCHITEST() retourneert de waarschijnlijkheid (op basis van "
+"de chi-kwadraatverdeling) dat de chi-kwadraat-toetsingsgrootheid – berekend "
+"op basis van de opgegeven bereiken met waargenomen en verwachte waarden (die "
+"dezelfde vorm moeten hebben) – op toeval zou berusten."
 
 #: functions/statistical.xml:1964
 #, kde-format
 msgid "LEGACYCHITEST(actual range; theoretical range)"
-msgstr ""
+msgstr "LEGACYCHITEST(actuele bereik; theoretische bereik)"
 
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr ""
+msgstr "Bekende x-waarden (is standaard de reeks 1, 2, 3, ...)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr ""
+msgstr "Of er een intercept moet worden opgenomen (standaard TRUE)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
 msgid "Whether to return additional regression statistics (defaults to FALSE)"
 msgstr ""
+"Of aanvullende regressiestatistieken moeten worden geretourneerd "
+"(standaardwaarde is FALSE)"
 
 #: functions/statistical.xml:1989
 #, kde-format
@@ -11541,17 +11529,23 @@ msgid ""
 "of the y estimate, the F statistic and its degrees of freedom, and the "
 "regression and residual sums of squares."
 msgstr ""
+"De functie LINEST() past een rechte lijn y=m*x+b (er wordt slechts één "
+"bereik met bekende x-waarden ondersteund) aan de opgegeven gegevens aan met "
+"behulp van de kleinste-kwadratenmethode en retourneert {m, b}. Als Stats "
+"WAAR is, wordt in plaats daarvan een matrix met 5 rijen geretourneerd die "
+"ook de standaardfouten van m en b, de R-kwadraatwaarde en de standaardfout "
+"van de y-schatting, de F-statistiek en de bijbehorende vrijheidsgraden, en "
+"de som van de kwadraten van de regressie en de residuen bevat."
 
 #: functions/statistical.xml:1990
 #, kde-format
 msgid "LINEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LINEST(bekende_y's; bekende_x's; const; stats)"
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "Eind- en startwaarde moeten positief te zijn."
+msgstr "Bekende y-waarden (moeten positief te zijn)"
 
 #: functions/statistical.xml:2018
 #, kde-format
@@ -11561,28 +11555,31 @@ msgid ""
 "Stats is TRUE, it also returns the same additional regression statistics as "
 "LINEST, computed for the underlying linear fit against ln(y)."
 msgstr ""
+"De functie LOGEST() past een exponentiële kromme y=b*m^x aan de opgegeven "
+"gegevens aan door een lineaire regressie uit te voeren van ln(y) op x (zie "
+"LINEST), en retourneert {m, b}. Als Stats WAAR is, worden ook dezelfde "
+"aanvullende regressiestatistieken geretourneerd als bij LINEST, berekend "
+"voor de onderliggende lineaire aanpassing aan ln(y)."
 
 #: functions/statistical.xml:2019
 #, kde-format
 msgid "LOGEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LOGEST(bekende_y's; bekende_x's; const; stats)"
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "Gegevens"
+msgstr "Gegevensset"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Waarde (reeks)"
+msgstr "Rangorde aan waarde te geven"
 
 #: functions/statistical.xml:2037
 #, kde-format
 msgid "Number of significant digits (defaults to 3)"
-msgstr ""
+msgstr "Aantal significante cijfers (is standaard 3)"
 
 #: functions/statistical.xml:2041
 #, kde-format
@@ -11590,21 +11587,25 @@ msgid ""
 "The PERCENTRANK() function returns the rank, as a fraction of the data set, "
 "of a value in that data set. This is the inverse of PERCENTILE."
 msgstr ""
+"De functie PERCENTRANK() retourneert de rangorde van een waarde in een "
+"gegevensset, uitgedrukt als een fractie van die gegevensset. Dit is het "
+"omgekeerde van PERCENTILE."
 
 #: functions/statistical.xml:2042
 #, kde-format
 msgid "PERCENTRANK(data; x; significance)"
-msgstr ""
+msgstr "PERCENTRANK(gegevens; x; betekenis)"
 
 #: functions/statistical.xml:2056
 #, kde-format
 msgid "Probabilities, one for each value (must sum to 1)"
-msgstr ""
+msgstr "Kansen, één voor elke waarde (moeten samen 1 zijn)"
 
 #: functions/statistical.xml:2060
 #, kde-format
 msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
 msgstr ""
+"Ondergrens (of de enige te testen waarde, als de bovengrens wordt weggelaten)"
 
 #: functions/statistical.xml:2068
 #, kde-format
@@ -11612,12 +11613,13 @@ msgid ""
 "The PROB() function returns the sum of the probabilities of the values that "
 "fall between (or equal) a lower and upper limit."
 msgstr ""
+"De functie PROB() retourneert de som van de kansen van de waarden die tussen "
+"een onder- en bovengrens liggen (of daaraan gelijk zijn)."
 
 #: functions/statistical.xml:2069
-#, fuzzy, kde-format
-#| msgid "ERF(Lower limit; Upper limit)"
+#, kde-format
 msgid "PROB(values; probabilities; lower limit; upper limit)"
-msgstr "ERF(ondergrens; bovengrens)"
+msgstr "PROB(waarden; kansen; ondergrens; bovengrens)"
 
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format

@@ -17,7 +17,7 @@
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
 # Sander Koning <ask@macedon.demon.nl>, 2005.
 # Natalie Koning <nat@switch.demon.nl>, 2006.
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2024, 2026 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2008-2012, 2024, 2026 Freek de Kruijf <freekdekruijf@kde.nl>
 # Hannie Dumoleyn <hannie@kde.nl>, 2010.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016, 2017, 2019, 2021, 2022, 2023.
 msgid ""
@@ -25,14 +25,14 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-03-03 10:51+0100\n"
+"PO-Revision-Date: 2026-08-31 11:30+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 26.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -1821,14 +1821,9 @@ msgstr ""
 "Foutmelding: %3"
 
 #: odf/KoOdfReadStore.cpp:156
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%1"
+#, kde-format
 msgid "Could not open %1"
-msgstr ""
-"Fout bij het openen van\n"
-"%1"
+msgstr "Kan %1 niet openen"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"

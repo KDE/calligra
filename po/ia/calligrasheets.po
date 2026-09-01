@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-07-17 11:18+0200\n"
+"PO-Revision-Date: 2026-08-31 12:26+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -7957,10 +7957,9 @@ msgid "DDE(server; topic; item; mode)"
 msgstr ""
 
 #: functions/reference.xml:414
-#, fuzzy, kde-format
-#| msgid "EUR"
+#, kde-format
 msgid "URL"
-msgstr "EUR"
+msgstr "URL"
 
 #: functions/reference.xml:418
 #, kde-format
@@ -10097,10 +10096,9 @@ msgid "GAMMALN(2) returns 0"
 msgstr ""
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "Probabilitate"
+msgstr "Probabilitate de successo"
 
 #: functions/statistical.xml:1845
 #, kde-format
@@ -10171,10 +10169,9 @@ msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
 msgstr ""
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "Valores de catena"
+msgstr "Valor de criterio"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -10199,16 +10196,14 @@ msgid "The x-value for which a y-value is estimated"
 msgstr ""
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "Valores boolean"
+msgstr "Valores  de y cognoscite"
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "Valores boolean"
+msgstr "Valores de x cognoscite"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -10223,16 +10218,14 @@ msgid "FORECAST(x; known_y's; known_x's)"
 msgstr ""
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "Valores  de zero"
+msgstr "Valores observate"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "Valor de facie"
+msgstr "Valores expectate"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -10280,10 +10273,9 @@ msgid "LINEST(known_y's; known_x's; const; stats)"
 msgstr ""
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "Valor de initio e fin debe esser positive."
+msgstr "Valor de y cognoscite (debe esser positive)."
 
 #: functions/statistical.xml:2018
 #, kde-format
@@ -10300,16 +10292,14 @@ msgid "LOGEST(known_y's; known_x's; const; stats)"
 msgstr ""
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "Base de datos"
+msgstr "Insimul de datos"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Valor (array)"
+msgstr "Valor  a classificar"
 
 #: functions/statistical.xml:2037
 #, kde-format

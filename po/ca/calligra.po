@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-08-23 09:03+0200\n"
+"PO-Revision-Date: 2026-08-31 09:32+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -1810,14 +1810,9 @@ msgstr ""
 "Missatge d'error: %3"
 
 #: odf/KoOdfReadStore.cpp:156
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%1"
+#, kde-format
 msgid "Could not open %1"
-msgstr ""
-"No s'ha pogut obrir\n"
-"%1"
+msgstr "No s'ha pogut obrir %1"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"

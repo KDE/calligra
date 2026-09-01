@@ -1800,14 +1800,9 @@ msgstr ""
 "Chybová zpráva: %3"
 
 #: odf/KoOdfReadStore.cpp:156
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%1"
+#, kde-format
 msgid "Could not open %1"
-msgstr ""
-"Nelze otevřít\n"
-"%1"
+msgstr "Nelze otevřít %1"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"

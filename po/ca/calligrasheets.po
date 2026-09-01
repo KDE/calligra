@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-07-06 19:25+0200\n"
+"PO-Revision-Date: 2026-08-31 11:51+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2252,13 +2252,13 @@ msgid ""
 "Holidays must be one of the following: number = days to add, a single date "
 "or an array of dates."
 msgstr ""
-"Les vacances han de ser una de les següents: nombre = dies a afegir-hi, una "
+"Els festius han de ser una de les següents: nombre = dies a afegir-hi, una "
 "data única o una matriu de dates."
 
 #: functions/datetime.xml:683
 #, kde-format
 msgid "WORKDAY(start date; days; holidays)"
-msgstr "WORKDAY(data d'inici; dies; vacances)"
+msgstr "WORKDAY(data d'inici; dies; festius)"
 
 #: functions/datetime.xml:684
 #, kde-format
@@ -2286,7 +2286,7 @@ msgstr ""
 #: functions/datetime.xml:706
 #, kde-format
 msgid "NETWORKDAY(start date; end date; holidays)"
-msgstr "NETWORKDAY(data d'inici; data final; vacances)"
+msgstr "NETWORKDAY(data d'inici; data final; festius)"
 
 #: functions/datetime.xml:707
 #, kde-format
@@ -2304,12 +2304,13 @@ msgid ""
 "NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
 "otherwise identical."
 msgstr ""
+"NETWORKDAYS() és l'ortografia OpenFormula/Excel de NETWORKDAY(); els dos són "
+"idèntics."
 
 #: functions/datetime.xml:730
-#, fuzzy, kde-format
-#| msgid "NETWORKDAY(start date; end date; holidays)"
+#, kde-format
 msgid "NETWORKDAYS(start date; end date; holidays)"
-msgstr "NETWORKDAY(data d'inici; data final; vacances)"
+msgstr "NETWORKDAYS(data d'inici; data final; festius)"
 
 #: functions/datetime.xml:743
 #, kde-format
@@ -4905,7 +4906,7 @@ msgid ""
 "PRICEMAT Calculate the price per 100 currency units of face value of the "
 "security that pays interest on the maturity date."
 msgstr ""
-"PRICEMAT calcula el preu per a 100 unitats de moneda de valor nominal de "
+"PRICEMAT calcula el preu per a 100 unitats monetàries de valor nominal de "
 "l'actiu que paga interessos en la data de venciment."
 
 #: functions/financial.xml:1089
@@ -5284,65 +5285,47 @@ msgstr ""
 "«=DATE(2001;3;1)» retorna 2907,83187"
 
 #: functions/financial.xml:1449
-#, fuzzy, kde-format
-#| msgid "Coupon rate"
+#, kde-format
 msgid "Annual coupon rate"
-msgstr "Taxa de cupó"
+msgstr "Taxa de cupó anual"
 
 #: functions/financial.xml:1453
-#, fuzzy, kde-format
-#| msgid "Price per $100 face value"
+#, kde-format
 msgid "Price per 100 currency units of face value"
-msgstr "Preu per al valor nominal de 100€"
+msgstr "Preu per al valor nominal de 100 unitats monetàries"
 
 #: functions/financial.xml:1457
-#, fuzzy, kde-format
-#| msgid ""
-#| "YIELDDISC calculates the yield of a discounted security per 100 currency "
-#| "units of face value."
+#, kde-format
 msgid "Redemption value per 100 currency units of face value"
-msgstr ""
-"YIELDDISC calcula l'interès d'un actiu de descompte per a 100 unitats de "
-"moneda de valor nominal."
+msgstr "Valor d'amortització per a 100 unitats monetàries de valor nominal"
 
 #: functions/financial.xml:1461
-#, fuzzy, kde-format
-#| msgid "Number of payments per year"
+#, kde-format
 msgid "Number of coupon payments per year"
-msgstr "Nombre de pagaments per any"
+msgstr "Nombre de pagaments de cupó per any"
 
 #: functions/financial.xml:1469
-#, fuzzy, kde-format
-#| msgid ""
-#| "The YIELDMAT function calculates the yield of the security that pays "
-#| "interest on the maturity date."
+#, kde-format
 msgid ""
 "The YIELD function calculates the annual yield of a security that pays "
 "periodic interest."
 msgstr ""
-"La funció YIELDMAT calcula l'interès d'un actiu que paga interès en la data "
-"de venciment."
+"La funció YIELD calcula l'interès anual d'un actiu que paga interès periòdic."
 
 #: functions/financial.xml:1470
-#, fuzzy, kde-format
-#| msgid ""
-#| "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency "
-#| "[; Basis = 0 ] )"
+#, kde-format
 msgid ""
 "YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
 msgstr ""
-"ODDLYIELD( Liquidació; Venciment; Últim; Taxa; Preu; Amortització; "
-"Freqüència [; Base = 0 ] )"
+"YIELD(liquidació; venciment; taxa; preu; amortització; freqüència [; base = "
+"0])"
 
 #: functions/financial.xml:1471
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns "
-#| "0.106194684"
+#, no-c-format, kde-format
 msgid ""
 "YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
 msgstr ""
-"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941,66667;1000) retorna 0,106194684"
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);95,75%;95,04287;100;2) retorna 0,065"
 
 #: functions/financial.xml:1502
 #, kde-format
@@ -8740,25 +8723,24 @@ msgstr ""
 "desplaçamentColumna; Enter novaAlçada; Enter novaAmplada)"
 
 #: functions/reference.xml:389
-#, fuzzy, kde-format
-#| msgid "Spreadsheet Application"
+#, kde-format
 msgid "Server application"
-msgstr "Aplicació de full de càlcul"
+msgstr "Aplicació de servidor"
 
 #: functions/reference.xml:393
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "Tema"
 
 #: functions/reference.xml:397
 #, kde-format
 msgid "Item"
-msgstr ""
+msgstr "Element"
 
 #: functions/reference.xml:401
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "Mode"
 
 #: functions/reference.xml:405
 #, kde-format
@@ -8768,21 +8750,25 @@ msgid ""
 "is recognized so documents that reference it still load, but always "
 "evaluates to an error."
 msgstr ""
+"Sol·licita dades d'una altra aplicació en execució a través de Dynamic Data "
+"Exchange, un mecanisme interprocés només per al Windows que aquesta "
+"plataforma no admet. DDE() es reconeix de manera que els documents que la "
+"fan referència encara es carreguen, però sempre s'avalua com un error."
 
 #: functions/reference.xml:406
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
-msgstr ""
+msgstr "DDE(servidor; tema; element; mode)"
 
 #: functions/reference.xml:414
 #, kde-format
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: functions/reference.xml:418
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr ""
+msgstr "Text de visualització (predeterminat a l'URL)"
 
 #: functions/reference.xml:422
 #, kde-format
@@ -8791,17 +8777,19 @@ msgid ""
 "text is given. Following the link is handled by the application, not by "
 "formula evaluation."
 msgstr ""
+"Retorna el text de visualització d'un enllaç, o l'URL en si mateix si no es "
+"proporciona cap text de visualització. El seguiment de l'enllaç és gestionat "
+"per l'aplicació, no per l'avaluació de fórmules."
 
 #: functions/reference.xml:423
 #, kde-format
 msgid "HYPERLINK(url; display text)"
-msgstr ""
+msgstr "HYPERLINK(url; text de visualització)"
 
 #: functions/reference.xml:424
-#, fuzzy, kde-format
-#| msgid "T(\"Calligra\") returns \"Calligra\""
+#, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\") retorna \"Calligra\""
+msgstr "HYPERLINK(\"https://calligra.org\"; \"Calligra\") retorna \"Calligra\""
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -9041,7 +9029,7 @@ msgid ""
 "The CHIDIST() function returns the probability value from the indicated Chi "
 "square that a hypothesis is confirmed."
 msgstr ""
-"La funció CHIDIST() retorna el valor de probabilitat del quadrat Chi "
+"La funció CHIDIST() retorna el valor de probabilitat del khi quadrat "
 "indicat, que confirma una hipòtesi."
 
 #: functions/statistical.xml:169
@@ -9053,10 +9041,10 @@ msgid ""
 "determines from this the probability of error for the hypothesis to be "
 "tested."
 msgstr ""
-"CHIDIST compara el valor quadrat Chi que s'ha de donar a una mostra "
+"CHIDIST compara el valor khi quadrat que s'ha de donar a una mostra "
 "aleatòria que es calcula de la suma de (valor dels valors esperats "
-"observats)^2/valors esperats per tots els valors amb la distribució quadrada "
-"Chi teòrica i determina d'aquí la probabilitat d'error d'una hipòtesi a "
+"observats)^2/valors esperats per tots els valors amb la distribució khi "
+"quadrat teòrica i determina d'aquí la probabilitat d'error d'una hipòtesi a "
 "provar."
 
 #: functions/statistical.xml:170
@@ -11149,20 +11137,19 @@ msgid "GAMMALN(2) returns 0"
 msgstr "GAMMALN(2) retorna 0"
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "Probabilitat"
+msgstr "Probabilitat d'èxit"
 
 #: functions/statistical.xml:1845
 #, kde-format
 msgid "Number of successes (or the lower limit, if the upper limit is given)"
-msgstr ""
+msgstr "Nombre d'encerts (o el límit inferior, si es dona el límit superior)"
 
 #: functions/statistical.xml:1849
 #, kde-format
 msgid "Upper limit for the number of successes"
-msgstr ""
+msgstr "Límit superior del nombre d'encerts"
 
 #: functions/statistical.xml:1853
 #, kde-format
@@ -11171,77 +11158,69 @@ msgid ""
 "(inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in "
 "Trials independent trials, each with success probability SP."
 msgstr ""
+"La funció B() retorna la probabilitat de treure entre T1 i T2 encerts "
+"(inclusius); o exactament T1 encerts, si s'omet T2; en assaigs independents, "
+"cadascun amb probabilitat d'èxit SP."
 
 #: functions/statistical.xml:1854
 #, kde-format
 msgid "B(trials; SP; T1; T2)"
-msgstr ""
+msgstr "B(assaigs; SP; T1; T2)"
 
 #: functions/statistical.xml:1855
-#, fuzzy, kde-format
-#| msgid "BINO(12;9;0.8) returns 0.236223201"
+#, kde-format
 msgid "B(20; 0.5; 8) returns 0.120134"
-msgstr "BINO(12;9;0,8) retorna 0,236223201"
+msgstr "B(20; 0,5; 8) retorna 0,120134"
 
 #: functions/statistical.xml:1856
-#, fuzzy, kde-format
-#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+#, kde-format
 msgid "B(20; 0.5; 8; 10) returns 0.456511"
-msgstr "MAX(0,5; 0,4; TRUE; 0,2) retorna 0,5"
+msgstr "B(20; 0,5; 8; 10) retorna 0,456511"
 
 #: functions/statistical.xml:1877
-#, fuzzy, kde-format
-#| msgid ""
-#| "The PHI() function returns value of the distribution function for a "
-#| "standard normal distribution."
+#, kde-format
 msgid ""
 "The CHISQDIST() function returns the value of the cumulative distribution "
 "function (or, if Cumulative is FALSE, the probability density function) for "
 "the chi-square distribution."
 msgstr ""
-"La funció PHI() retorna el valor de la funció de distribució per a la "
-"distribució normal estàndard."
+"La funció CHISQDIST() retorna el valor de la funció de distribució acumulada "
+"(o, si acumulada és FALS, la funció de densitat de probabilitat) per a la "
+"distribució khi quadrat."
 
 #: functions/statistical.xml:1878
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQDIST(number; degrees_freedom; cumulative)"
-msgstr "CHIDIST(nombre;graus_llibertat)"
+msgstr "CHISQDIST(nombre; graus_llibertat; acumulat)"
 
 #: functions/statistical.xml:1879
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
-msgstr "CHIDIST(13,27;5) retorna 0,021"
+msgstr "CHISQDIST(13,27; 5; TRUE) retorna 0,979"
 
 #: functions/statistical.xml:1897
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;"
-#| "TRUE())."
+#, kde-format
 msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
 msgstr ""
-"La funció BETAINV() retorna l'invers de BETADIST(x;alfa;beta;a;b;CERT())."
+"La funció CHISQINV() retorna la inversa de CHISQDIST(nombre; "
+"graus_llibertat; acumulat)."
 
 #: functions/statistical.xml:1898
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQINV(probability; degrees_freedom)"
-msgstr "CHIDIST(nombre;graus_llibertat)"
+msgstr "CHISQINV(probabilitat; graus_llibertat)"
 
 #: functions/statistical.xml:1899
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
-msgstr "CHIDIST(13,27;5) retorna 0,021"
+msgstr "CHISQINV(CHISQDIST(13,27; 5; TRUE); 5) retorna 13,27"
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "Valors de cadena"
+msgstr "Valor de criteri"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -11249,36 +11228,35 @@ msgid ""
 "The CRITBINOM() function returns the smallest value for which the cumulative "
 "binomial distribution is greater than or equal to the criterion value alpha."
 msgstr ""
+"La funció CRITBINOM() retorna el valor més petit per al qual la distribució "
+"binomial acumulada és més gran o igual que el valor de criteri alfa."
 
 #: functions/statistical.xml:1921
 #, kde-format
 msgid "CRITBINOM(trials; SP; alpha)"
-msgstr ""
+msgstr "CRITBINOM(assaigs; SP; alfa)"
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "COMBIN(5;5) retorna 1"
+msgstr "CRITBINOM(20; 0,5; 0,55) retorna 10"
 
 #: functions/statistical.xml:1931
 #, kde-format
 msgid "The x-value for which a y-value is estimated"
-msgstr ""
+msgstr "El valor x per al qual s'estima un valor y"
 
 # msgid "Start value:"
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "Valors booleans"
+msgstr "Valors y coneguts"
 
 # msgid "Start value:"
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "Valors booleans"
+msgstr "Valors x coneguts"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -11286,24 +11264,24 @@ msgid ""
 "The FORECAST() function estimates a future y-value along the linear trend "
 "fitted to the known x/y-values, for a given new x-value."
 msgstr ""
+"La funció FORECAST() estima un valor y futur al llarg de la tendència lineal "
+"ajustat als valors x/y coneguts, per a un nou valor x donat."
 
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr ""
+msgstr "FORECAST(x; y_coneguts; x_coneguts)"
 
 # msgid "Start value:"
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "Valors zero"
+msgstr "Valors observats"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "Valor nominal"
+msgstr "Valors esperats"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -11313,27 +11291,34 @@ msgid ""
 "and expected value ranges (which must have the same shape) would occur by "
 "chance."
 msgstr ""
+"La funció LEGACYCHITEST() retorna la probabilitat, a partir de la "
+"distribució khi quadrat, que l'estadística khi quadrat calculada a partir "
+"dels intervals de valor observats i esperats donats (que han de tenir la "
+"mateixa forma) es produiria per atzar."
 
 #: functions/statistical.xml:1964
 #, kde-format
 msgid "LEGACYCHITEST(actual range; theoretical range)"
-msgstr ""
+msgstr "LEGACYCHITEST(interval real; interval teòric)"
 
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr ""
+msgstr "Valors x coneguts (el valor predeterminat és la seqüència 1, 2, 3...)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr ""
+msgstr "Si s'ha d'ajustar a una intercepció (valor predeterminat TRUE)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
 msgid "Whether to return additional regression statistics (defaults to FALSE)"
 msgstr ""
+"Si s'han de retornar estadístiques de regressió addicionals (valor "
+"predeterminat FALSE)"
 
+# skip-rule: rst-asterisk1
 #: functions/statistical.xml:1989
 #, kde-format
 msgid ""
@@ -11344,18 +11329,24 @@ msgid ""
 "of the y estimate, the F statistic and its degrees of freedom, and the "
 "regression and residual sums of squares."
 msgstr ""
+"La funció LINEST() ajusta una línia recta y=m*x+b (només s'admet un interval "
+"únic conegut x) a les dades donades utilitzant el mètode dels mínims "
+"quadrats, i retorna {m, b}. Si «estadístiques» és TRUE, en canvi retorna una "
+"matriu de 5 files que conté també els errors estàndard de m i b, R-quadrat i "
+"l'error estàndard de l'estimació de y, l'estadística F i els seus graus de "
+"llibertat, i la regressió i les sumes residuals de quadrats."
 
 #: functions/statistical.xml:1990
 #, kde-format
 msgid "LINEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LINEST(y_coneguts; x_coneguts; const; estadístiques)"
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "El valor final i inicial ha de ser positiu."
+msgstr "Valors y coneguts (cal que siguin positius)"
 
+# skip-rule: rst-asterisk1
 #: functions/statistical.xml:2018
 #, kde-format
 msgid ""
@@ -11364,28 +11355,31 @@ msgid ""
 "Stats is TRUE, it also returns the same additional regression statistics as "
 "LINEST, computed for the underlying linear fit against ln(y)."
 msgstr ""
+"La funció LOGEST() ajusta a una corba exponencial y=b*m^x a les dades "
+"donades, mitjançant la regressió lineal ln(y) contra x (vegeu LINEST), i "
+"retorna {m, b}. Si «estadístiques» és TRUE, també retorna les mateixes "
+"estadístiques de regressió addicionals que LINEST, calculades per a l'ajust "
+"lineal subjacent contra ln(y)."
 
 #: functions/statistical.xml:2019
 #, kde-format
 msgid "LOGEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LOGEST(y_coneguts; x_coneguts; const; estadístiques)"
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "Base de dades"
+msgstr "Conjunt de dades"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Valor (desplegament)"
+msgstr "Valor a ordenar"
 
 #: functions/statistical.xml:2037
 #, kde-format
 msgid "Number of significant digits (defaults to 3)"
-msgstr ""
+msgstr "Nombre de dígits significatius (valor predeterminat 3)"
 
 #: functions/statistical.xml:2041
 #, kde-format
@@ -11393,21 +11387,23 @@ msgid ""
 "The PERCENTRANK() function returns the rank, as a fraction of the data set, "
 "of a value in that data set. This is the inverse of PERCENTILE."
 msgstr ""
+"La funció PERCENTRANK() retorna l'interval, com a fracció del conjunt de "
+"dades, d'un valor del conjunt de dades. Aquesta és la inversa de PERCENTILE."
 
 #: functions/statistical.xml:2042
 #, kde-format
 msgid "PERCENTRANK(data; x; significance)"
-msgstr ""
+msgstr "PERCENTRANK(dades; x; significança)"
 
 #: functions/statistical.xml:2056
 #, kde-format
 msgid "Probabilities, one for each value (must sum to 1)"
-msgstr ""
+msgstr "Probabilitats, una per a cada valor (cal que sumin 1)"
 
 #: functions/statistical.xml:2060
 #, kde-format
 msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
-msgstr ""
+msgstr "Límit inferior (o l'únic valor a provar, si s'omet el límit superior)"
 
 #: functions/statistical.xml:2068
 #, kde-format
@@ -11415,12 +11411,13 @@ msgid ""
 "The PROB() function returns the sum of the probabilities of the values that "
 "fall between (or equal) a lower and upper limit."
 msgstr ""
+"La funció PROB() retorna la suma de les probabilitats dels valors que cauen "
+"entre un límit inferior i superior (o són iguals)."
 
 #: functions/statistical.xml:2069
-#, fuzzy, kde-format
-#| msgid "ERF(Lower limit; Upper limit)"
+#, kde-format
 msgid "PROB(values; probabilities; lower limit; upper limit)"
-msgstr "ERF(Límit inferior; Límit superior)"
+msgstr "PROB(valors; probabilitats; límit inferior; límit superior)"
 
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format
@@ -11755,7 +11752,7 @@ msgstr "COMPARE(\"Calligra\"; \"Calligra\"; true) retorna 0"
 #: functions/text.xml:199
 #, kde-format
 msgid "COMPARE(\"calligra\"; \"Calligra\"; true) returns 1"
-msgstr "COMPARE(\"calligra\"; \"Calligra\"; true) returns 1"
+msgstr "COMPARE(\"calligra\"; \"Calligra\"; true) retorna 1"
 
 #: functions/text.xml:200
 #, kde-format

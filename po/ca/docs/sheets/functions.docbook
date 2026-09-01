@@ -22859,9 +22859,9 @@ all changes will be overwritten on the next script run
 <title
 >CHIDIST</title>
 <para
->La funció CHIDIST() retorna el valor de probabilitat del quadrat Chi indicat, que confirma una hipòtesi.</para>
+>La funció CHIDIST() retorna el valor de probabilitat del khi quadrat indicat, que confirma una hipòtesi.</para>
 <para
->CHIDIST compara el valor quadrat Chi que s'ha de donar a una mostra aleatòria que es calcula de la suma de (valor dels valors esperats observats)^2/valors esperats per tots els valors amb la distribució quadrada Chi teòrica i determina d'aquí la probabilitat d'error d'una hipòtesi a provar.</para>
+>CHIDIST compara el valor khi quadrat que s'ha de donar a una mostra aleatòria que es calcula de la suma de (valor dels valors esperats observats)^2/valors esperats per tots els valors amb la distribució khi quadrat teòrica i determina d'aquí la probabilitat d'error d'una hipòtesi a provar.</para>
 <para
 ><segmentedlist
 ><segtitle

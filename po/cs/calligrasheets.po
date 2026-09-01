@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-07-07 19:58+0200\n"
+"PO-Revision-Date: 2026-08-31 12:20+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Poedit 3.9\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -2273,12 +2273,13 @@ msgid ""
 "NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
 "otherwise identical."
 msgstr ""
+"Funkce NETWORKDAYS() je v OpenFormula/Excelu ekvivalentem funkce "
+"NETWORKDAY(); jinak jsou tyto dvě funkce identické."
 
 #: functions/datetime.xml:730
-#, fuzzy, kde-format
-#| msgid "NETWORKDAY(start date; end date; holidays)"
+#, kde-format
 msgid "NETWORKDAYS(start date; end date; holidays)"
-msgstr "NETWORKDAY(počáteční datum; koncové datum; svátky)"
+msgstr "NETWORKDAYS(počáteční datum; koncové datum; svátky)"
 
 #: functions/datetime.xml:743
 #, kde-format
@@ -5218,65 +5219,47 @@ msgstr ""
 "2907.83187"
 
 #: functions/financial.xml:1449
-#, fuzzy, kde-format
-#| msgid "Coupon rate"
+#, kde-format
 msgid "Annual coupon rate"
-msgstr "Úrok kupónu"
+msgstr "Roční úroková sazba"
 
 #: functions/financial.xml:1453
-#, fuzzy, kde-format
-#| msgid "Price per $100 face value"
+#, kde-format
 msgid "Price per 100 currency units of face value"
-msgstr "Cena za 100 $ nominální hodnoty"
+msgstr "Cena za 100 měnových jednotek nominální hodnoty"
 
 #: functions/financial.xml:1457
-#, fuzzy, kde-format
-#| msgid ""
-#| "YIELDDISC calculates the yield of a discounted security per 100 currency "
-#| "units of face value."
+#, kde-format
 msgid "Redemption value per 100 currency units of face value"
-msgstr ""
-"Funkce YIELDDISC vypočítá výnos diskontovaného cenného papíru na 100 "
-"měnových jednotek nominální hodnoty."
+msgstr "Výkupní hodnota na 100 měnových jednotek nominální hodnoty"
 
 #: functions/financial.xml:1461
-#, fuzzy, kde-format
-#| msgid "Number of payments per year"
+#, kde-format
 msgid "Number of coupon payments per year"
-msgstr "Počet plateb za rok"
+msgstr "Počet splátek úroku za rok"
 
 #: functions/financial.xml:1469
-#, fuzzy, kde-format
-#| msgid ""
-#| "The YIELDMAT function calculates the yield of the security that pays "
-#| "interest on the maturity date."
+#, kde-format
 msgid ""
 "The YIELD function calculates the annual yield of a security that pays "
 "periodic interest."
 msgstr ""
-"Funkce YIELDMAT vypočítá výnos cenného papíru, u kterého se úroky vyplácejí "
-"v den splatnosti."
+"Funkce YIELD vypočítá roční výnos cenného papíru, z něhož jsou pravidelně "
+"vypláceny úroky."
 
 #: functions/financial.xml:1470
-#, fuzzy, kde-format
-#| msgid ""
-#| "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency "
-#| "[; Basis = 0 ] )"
+#, kde-format
 msgid ""
 "YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
 msgstr ""
-"ODDLYIELD( datum vypořádání; datum splatnosti; poslední cena; úroková sazba; "
-"cena; datum splacení; frekvence [; základ = 0 ] )"
+"YIELD(vypořádání; splatnost; sazba; cena; splacení; frekvence [; základ = 0])"
 
 #: functions/financial.xml:1471
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns "
-#| "0.106194684"
+#, no-c-format, kde-format
 msgid ""
 "YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
 msgstr ""
-"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) vrací 0.106194684"
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) vrací 0.065"
 
 #: functions/financial.xml:1502
 #, kde-format
@@ -8645,25 +8628,24 @@ msgstr ""
 "newHeight; Integer newWidth)"
 
 #: functions/reference.xml:389
-#, fuzzy, kde-format
-#| msgid "Spreadsheet Application"
+#, kde-format
 msgid "Server application"
-msgstr "Tabulkový procesor"
+msgstr "Serverová aplikace"
 
 #: functions/reference.xml:393
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "Téma"
 
 #: functions/reference.xml:397
 #, kde-format
 msgid "Item"
-msgstr ""
+msgstr "Položka"
 
 #: functions/reference.xml:401
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "Režim"
 
 #: functions/reference.xml:405
 #, kde-format
@@ -8673,21 +8655,25 @@ msgid ""
 "is recognized so documents that reference it still load, but always "
 "evaluates to an error."
 msgstr ""
+"Vyžaduje data z jiné spuštěné aplikace prostřednictvím Dynamic Data Exchange "
+"(DDE), což je mechanismus pro komunikaci mezi procesy dostupný pouze ve "
+"Windows, který tato platforma nepodporuje. Funkce DDE() je rozpoznána, takže "
+"dokumenty, které na ni odkazují, se stále načtou, ale vždy dojde k chybě."
 
 #: functions/reference.xml:406
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
-msgstr ""
+msgstr "DDE(server; téma; položka; režim)"
 
 #: functions/reference.xml:414
 #, kde-format
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: functions/reference.xml:418
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr ""
+msgstr "Zobrazit text (výchozí hodnota je URL)"
 
 #: functions/reference.xml:422
 #, kde-format
@@ -8696,17 +8682,19 @@ msgid ""
 "text is given. Following the link is handled by the application, not by "
 "formula evaluation."
 msgstr ""
+"Vrátí text zobrazený u hypertextového odkazu, případně samotnou adresu URL, "
+"pokud není zadán žádný text pro zobrazení. Provedení odkazu zajišťuje "
+"aplikace, nikoli vyhodnocení vzorce."
 
 #: functions/reference.xml:423
 #, kde-format
 msgid "HYPERLINK(url; display text)"
-msgstr ""
+msgstr "HYPERLINK(url; zobrazený text)"
 
 #: functions/reference.xml:424
-#, fuzzy, kde-format
-#| msgid "T(\"Calligra\") returns \"Calligra\""
+#, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\") vrací \"Calligra\""
+msgstr "HYPERLINK(\"https://calligra.org\"; \"Calligra\") vrací \"Calligra\""
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -11034,20 +11022,19 @@ msgid "GAMMALN(2) returns 0"
 msgstr "GAMMALN(2) vrací 0"
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "Pravděpodobnost"
+msgstr "Pravděpodobnost úspěchu"
 
 #: functions/statistical.xml:1845
 #, kde-format
 msgid "Number of successes (or the lower limit, if the upper limit is given)"
-msgstr ""
+msgstr "Počet úspěšných pokusů (nebo dolní mez, je-li uvedena horní mez)"
 
 #: functions/statistical.xml:1849
 #, kde-format
 msgid "Upper limit for the number of successes"
-msgstr ""
+msgstr "Horní hranice počtu úspěšných pokusů"
 
 #: functions/statistical.xml:1853
 #, kde-format
@@ -11056,77 +11043,69 @@ msgid ""
 "(inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in "
 "Trials independent trials, each with success probability SP."
 msgstr ""
+"Funkce B() vrací pravděpodobnost, že v nezávislých pokusech, z nichž každý "
+"má pravděpodobnost úspěchu SP, dojde k počtu úspěchů v rozmezí od T1 do T2 "
+"(včetně) – nebo přesně k T1 úspěchům, pokud je T2 vynecháno."
 
 #: functions/statistical.xml:1854
 #, kde-format
 msgid "B(trials; SP; T1; T2)"
-msgstr ""
+msgstr "B(pokusy; SP; T1; T2)"
 
 #: functions/statistical.xml:1855
-#, fuzzy, kde-format
-#| msgid "BINO(12;9;0.8) returns 0.236223201"
+#, kde-format
 msgid "B(20; 0.5; 8) returns 0.120134"
-msgstr "BINO(12;9;0,8) vrací 0,236223201"
+msgstr "B(20; 0.5; 8) vrací 0.120134"
 
 #: functions/statistical.xml:1856
-#, fuzzy, kde-format
-#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+#, kde-format
 msgid "B(20; 0.5; 8; 10) returns 0.456511"
-msgstr "MAX(0,5; 0,4; TRUE; 0,2) vrací 0,5"
+msgstr "B(20; 0.5; 8; 10) vrací 0.456511"
 
 #: functions/statistical.xml:1877
-#, fuzzy, kde-format
-#| msgid ""
-#| "The PHI() function returns value of the distribution function for a "
-#| "standard normal distribution."
+#, kde-format
 msgid ""
 "The CHISQDIST() function returns the value of the cumulative distribution "
 "function (or, if Cumulative is FALSE, the probability density function) for "
 "the chi-square distribution."
 msgstr ""
-"Funkce PHI() vrací hodnotu distribuční funkce pro standardní normální "
-"rozdělení."
+"Funkce CHISQDIST() vrací hodnotu kumulativní distribuční funkce (nebo, pokud "
+"je parametr Cumulative nastaven na hodnotu FALSE, hodnotu funkce hustoty "
+"pravděpodobnosti) pro chi-kvadrátové rozdělení."
 
 #: functions/statistical.xml:1878
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQDIST(number; degrees_freedom; cumulative)"
-msgstr "CHIDIST(číslo;stupně_volnosti)"
+msgstr "CHISQDIST(číslo; počet_stupňů_volnosti; kumulativní)"
 
 #: functions/statistical.xml:1879
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
-msgstr "CHIDIST(13,27;5) vrací 0,021"
+msgstr "CHISQDIST(13.27; 5; TRUE) vrací 0.979"
 
 #: functions/statistical.xml:1897
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;"
-#| "TRUE())."
+#, kde-format
 msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
 msgstr ""
-"Funkce BETAINV() vrací inverzní funkci k BETADIST(x;alfa;beta;a;b;TRUE())."
+"Funkce CHISQINV() vrací inverzní hodnotu funkce CHISQDIST(číslo; "
+"počet_stupňů_volnosti; TRUE)."
 
 #: functions/statistical.xml:1898
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQINV(probability; degrees_freedom)"
-msgstr "CHIDIST(číslo;stupně_volnosti)"
+msgstr "CHISQINV(pravděpodobnost; počet_stupňů_volnosti)"
 
 #: functions/statistical.xml:1899
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
-msgstr "CHIDIST(13,27;5) vrací 0,021"
+msgstr "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) vrací 13.27"
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "Řetězcové hodnoty"
+msgstr "Hodnota kritéria"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -11134,34 +11113,33 @@ msgid ""
 "The CRITBINOM() function returns the smallest value for which the cumulative "
 "binomial distribution is greater than or equal to the criterion value alpha."
 msgstr ""
+"Funkce CRITBINOM() vrací nejmenší hodnotu, pro kterou je kumulativní "
+"binomické rozdělení větší nebo rovno kritické hodnotě alfa."
 
 #: functions/statistical.xml:1921
 #, kde-format
 msgid "CRITBINOM(trials; SP; alpha)"
-msgstr ""
+msgstr "CRITBINOM (pokusy; SP; alfa)"
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "COMBIN(5;5) vrací 1"
+msgstr "CRITBINOM(20; 0.5; 0.55) vrací 10"
 
 #: functions/statistical.xml:1931
 #, kde-format
 msgid "The x-value for which a y-value is estimated"
-msgstr ""
+msgstr "Hodnota x, pro kterou se odhaduje hodnota y"
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "Booleovské hodnoty"
+msgstr "Známé hodnoty y"
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "Booleovské hodnoty"
+msgstr "Známé hodnoty x"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -11169,23 +11147,23 @@ msgid ""
 "The FORECAST() function estimates a future y-value along the linear trend "
 "fitted to the known x/y-values, for a given new x-value."
 msgstr ""
+"Funkce FORECAST() odhaduje budoucí hodnotu y podél lineárního trendu, který "
+"byl odvozen ze známých hodnot x a y, a to pro danou novou hodnotu x."
 
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr ""
+msgstr "FORECAST(x; známé hodnoty y; známé hodnoty x)"
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "Nulové hodnoty"
+msgstr "Naměřené hodnoty"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "Nominální hodnota"
+msgstr "Očekávané hodnoty"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -11195,26 +11173,31 @@ msgid ""
 "and expected value ranges (which must have the same shape) would occur by "
 "chance."
 msgstr ""
+"Funkce LEGACYCHITEST() vrací pravděpodobnost z chi-kvadrátového rozdělení, "
+"že by se chi-kvadrátová statistika vypočítaná na základě zadaných rozsahů "
+"pozorovaných a očekávaných hodnot (které musí mít stejný tvar) vyskytla "
+"náhodou."
 
 #: functions/statistical.xml:1964
 #, kde-format
 msgid "LEGACYCHITEST(actual range; theoretical range)"
-msgstr ""
+msgstr "LEGACYCHITEST (skutečný rozsah; teoretický rozsah)"
 
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr ""
+msgstr "Známé hodnoty x (výchozí nastavení je posloupnost 1, 2, 3, …)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr ""
+msgstr "Zda se má použít intercept (výchozí hodnota je TRUE)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
 msgid "Whether to return additional regression statistics (defaults to FALSE)"
 msgstr ""
+"Zda se mají vrátit další regresní statistiky (výchozí hodnota je FALSE)"
 
 #: functions/statistical.xml:1989
 #, kde-format
@@ -11226,17 +11209,22 @@ msgid ""
 "of the y estimate, the F statistic and its degrees of freedom, and the "
 "regression and residual sums of squares."
 msgstr ""
+"Funkce LINEST() pomocí metody nejmenších čtverců provede aproximaci daných "
+"dat přímkou y = m*x + b (podporován je pouze jeden rozsah známých hodnot x) "
+"a vrátí {m, b}. Je-li Stats nastaveno na TRUE, vrátí místo toho 5-řádkové "
+"pole, které obsahuje také standardní chyby m a b, koeficient R², standardní "
+"chybu odhadu y, F-statistiku a její stupně volnosti, jakož i součty čtverců "
+"regrese a reziduí."
 
 #: functions/statistical.xml:1990
 #, kde-format
 msgid "LINEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LINEST(známé_hodnoty_y; známé_hodnoty_x; konstanta; statistiky)"
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "Konečná a počáteční hodnota musí být kladné."
+msgstr "Známé hodnoty y (musí být kladné)"
 
 #: functions/statistical.xml:2018
 #, kde-format
@@ -11246,28 +11234,31 @@ msgid ""
 "Stats is TRUE, it also returns the same additional regression statistics as "
 "LINEST, computed for the underlying linear fit against ln(y)."
 msgstr ""
+"Funkce LOGEST() provádí aproximaci daných dat exponenciální křivkou y = b * "
+"m^x pomocí lineární regrese ln(y) vůči x (viz LINEST) a vrací {m, b}. Je-li "
+"parametr Stats nastaven na TRUE, vrátí také stejné doplňkové regresní "
+"statistiky jako funkce LINEST, vypočítané pro základní lineární aproximaci "
+"vůči ln(y)."
 
 #: functions/statistical.xml:2019
 #, kde-format
 msgid "LOGEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LOGEST(známé_hodnoty_y; známé_hodnoty_x; konstanta; statistiky)"
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "Databáze"
+msgstr "Soubor dat"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Hodnota (pole)"
+msgstr "Hodnota pro seřazení"
 
 #: functions/statistical.xml:2037
 #, kde-format
 msgid "Number of significant digits (defaults to 3)"
-msgstr ""
+msgstr "Počet platných číslic (výchozí hodnota je 3)"
 
 #: functions/statistical.xml:2041
 #, kde-format
@@ -11275,21 +11266,27 @@ msgid ""
 "The PERCENTRANK() function returns the rank, as a fraction of the data set, "
 "of a value in that data set. This is the inverse of PERCENTILE."
 msgstr ""
+"Funkce PERCENTRANK() vrací pořadí hodnoty v daném datovém souboru vyjádřené "
+"jako podíl z celkového počtu dat v souboru. Jedná se o inverzní funkci k "
+"PERCENTILE."
 
 #: functions/statistical.xml:2042
 #, kde-format
 msgid "PERCENTRANK(data; x; significance)"
-msgstr ""
+msgstr "PERCENTRANK(data; x; významnost)"
 
 #: functions/statistical.xml:2056
 #, kde-format
 msgid "Probabilities, one for each value (must sum to 1)"
 msgstr ""
+"Pravděpodobnosti, po jedné pro každou hodnotu (jejich součet musí být 1)"
 
 #: functions/statistical.xml:2060
 #, kde-format
 msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
 msgstr ""
+"Dolní mez (nebo jediná hodnota, na kterou se má testovat, pokud není uvedena "
+"horní mez)"
 
 #: functions/statistical.xml:2068
 #, kde-format
@@ -11297,12 +11294,13 @@ msgid ""
 "The PROB() function returns the sum of the probabilities of the values that "
 "fall between (or equal) a lower and upper limit."
 msgstr ""
+"Funkce PROB() vrací součet pravděpodobností hodnot, které leží v rozmezí "
+"mezi dolní a horní hranicí (nebo se rovnají těmto hranicím)."
 
 #: functions/statistical.xml:2069
-#, fuzzy, kde-format
-#| msgid "ERF(Lower limit; Upper limit)"
+#, kde-format
 msgid "PROB(values; probabilities; lower limit; upper limit)"
-msgstr "ERF(spodní limit; horní limit)"
+msgstr "PROB(hodnoty; pravděpodobnosti; dolní mez; horní mez)"
 
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format
@@ -15781,7 +15779,7 @@ msgstr "menší nebo rovno"
 #: ui/actions/dialogs/DatabaseDialog.cpp:279
 #, kde-format
 msgid "Sorted by"
-msgstr "Seřazeno:"
+msgstr "Seřazeno"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:274
 #: ui/actions/dialogs/DatabaseDialog.cpp:286
@@ -17393,7 +17391,7 @@ msgstr "Kurzíva"
 #: ui/actions/Style.cpp:148 ui/dialogs/FontWidget.ui:101
 #, kde-format
 msgid "Underline"
-msgstr "podtržené"
+msgstr "Podtržené"
 
 #: ui/actions/Style.cpp:184
 #, kde-format
@@ -18292,7 +18290,7 @@ msgstr "Pokud je toto zaškrtnuto, text aktuální buňky bude přeškrtnutý."
 #: ui/dialogs/FontWidget.ui:142
 #, kde-format
 msgid "Strike out"
-msgstr "přeškrtnuté"
+msgstr "Přeškrtnuté"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, size_spinner)
 #: ui/dialogs/FontWidget.ui:149

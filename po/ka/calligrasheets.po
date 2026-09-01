@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-07-06 12:09+0200\n"
+"PO-Revision-Date: 2026-08-31 06:23+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2279,12 +2279,13 @@ msgid ""
 "NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
 "otherwise identical."
 msgstr ""
+"NETWORKDAYS() წარმოადგენს OpenFormula/Excel-ის ვარიანტს ფუნქციისთვის "
+"NETWORKDAY(); სხვაგვარად ეს ორი იდენტურია."
 
 #: functions/datetime.xml:730
-#, fuzzy, kde-format
-#| msgid "NETWORKDAY(start date; end date; holidays)"
+#, kde-format
 msgid "NETWORKDAYS(start date; end date; holidays)"
-msgstr "NETWORKDAY(საწყისი თარიღი; საბოლოო თარიღი; დასვენებები)"
+msgstr "NETWORKDAYS(საწყისი თარიღი; საბოლოო თარიღი; დასვენებები)"
 
 #: functions/datetime.xml:743
 #, kde-format
@@ -4469,6 +4470,7 @@ msgid ""
 "The IRR function calculates the internal rate of return for a series of cash "
 "flows."
 msgstr ""
+"IRR ფუნქცია ითვლის შიდა ანაზღაურების მაჩვენებელს ფულადი ნაკადების სერიისთვის."
 
 #: functions/financial.xml:687
 #, kde-format
@@ -4839,6 +4841,8 @@ msgstr "  5       ევროპული მეთოდი. 12 თვე, თ
 #, kde-format
 msgid "PRICEMAT(settlement; maturity; issue; rate; yield [; basis = 0 ] )"
 msgstr ""
+"PRICEMAT(ანგარიშსწორება; დაფარვის ვადა; გამოშვება; განაკვეთი; სარგებელი [; "
+"ბაზა = 0 ] )"
 
 #: functions/financial.xml:1096
 #, no-c-format, kde-format
@@ -5134,58 +5138,49 @@ msgstr ""
 "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" დააბრუნებს 2907.83187"
 
 #: functions/financial.xml:1449
-#, fuzzy, kde-format
-#| msgid "Coupon rate"
+#, kde-format
 msgid "Annual coupon rate"
-msgstr "კუპონის განაკვეთი"
+msgstr "კუპონის წლიური განაკვეთი"
 
 #: functions/financial.xml:1453
-#, fuzzy, kde-format
-#| msgid "Price per $100 face value"
+#, kde-format
 msgid "Price per 100 currency units of face value"
-msgstr "ფასი ყოველი $100 ნომინალური ფასისთვის"
+msgstr "ფასი ნომინალური ღირებულების 100 ვალუტის ერთეულზე"
 
 #: functions/financial.xml:1457
 #, kde-format
 msgid "Redemption value per 100 currency units of face value"
-msgstr ""
+msgstr "გამოსყიდვის ღირებულება ნომინალური ღირებულების 100 ვალუტის ერთეულზე"
 
 #: functions/financial.xml:1461
-#, fuzzy, kde-format
-#| msgid "Number of payments per year"
+#, kde-format
 msgid "Number of coupon payments per year"
-msgstr "გადახდების რაოდენობა წელიწადში"
+msgstr "კუპონის გადახდები წელიწადში"
 
 #: functions/financial.xml:1469
-#, fuzzy, kde-format
-#| msgid ""
-#| "The SLOPE() function calculates the slope of the linear regression line."
+#, kde-format
 msgid ""
 "The YIELD function calculates the annual yield of a security that pays "
 "periodic interest."
-msgstr "ფუნქცია SLOPE() წრფივი რეგრესიის ხაზის დახრას აბრუნებს."
+msgstr ""
+"ფუნქცია YIELD ითვლის ფასიანი ქაღალდის წლიურ სარგებელს, რომელიც იხდის "
+"პერიოდულ პროცენტს."
 
 #: functions/financial.xml:1470
-#, fuzzy, kde-format
-#| msgid ""
-#| "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency "
-#| "[; Basis = 0 ] )"
+#, kde-format
 msgid ""
 "YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
 msgstr ""
-"ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency [; "
+"YIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency [; "
 "Basis = 0 ] )"
 
 #: functions/financial.xml:1471
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns "
-#| "0.106194684"
+#, no-c-format, kde-format
 msgid ""
 "YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
 msgstr ""
-"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) აბრუნებს "
-"მნიშვნელობას 0.106194684"
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) აბრუნებს "
+"მნიშვნელობას 0.065"
 
 #: functions/financial.xml:1502
 #, kde-format
@@ -5197,7 +5192,7 @@ msgstr ""
 #: functions/financial.xml:1503
 #, kde-format
 msgid "YIELDDISC(settlement; maturity; price, redemp, basis)"
-msgstr ""
+msgstr "YIELDDISC (ანგარიშსწორება; დაფარვის ვადა; ფასი, გამოსყიდვა, ბაზისი)"
 
 #: functions/financial.xml:1504
 #, kde-format
@@ -5218,6 +5213,7 @@ msgstr ""
 #, kde-format
 msgid "YIELDMAT( Settlement; Maturity; Issue; Rate; Price; Basis )"
 msgstr ""
+"YIELDMAT( ანგარიშსწორება; ვადის ვადა; გამოშვება; განაკვეთი; ფასი; ბაზისი )"
 
 #: functions/financial.xml:1538
 #, no-c-format, kde-format
@@ -7791,6 +7787,8 @@ msgid ""
 "The matrix multiplied with its inverse results in the unity matrix of the "
 "same dimension."
 msgstr ""
+"მატრიცა, გამრავლებული მისივე შებრუნებულზე, უდრის იგივე განზომილების "
+"გაერთიანებულ მატრიცას."
 
 #: functions/math.xml:1256
 #, kde-format
@@ -8406,15 +8404,14 @@ msgid ""
 msgstr ""
 
 #: functions/reference.xml:389
-#, fuzzy, kde-format
-#| msgid "Spreadsheet Application"
+#, kde-format
 msgid "Server application"
-msgstr "ელცხრილების აპლიკაცია"
+msgstr "სერვერის აპლიკაცია"
 
 #: functions/reference.xml:393
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "თემა"
 
 #: functions/reference.xml:397
 #, kde-format
@@ -8424,7 +8421,7 @@ msgstr "ელემენტი"
 #: functions/reference.xml:401
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "რეჟიმი"
 
 #: functions/reference.xml:405
 #, kde-format
@@ -8438,18 +8435,17 @@ msgstr ""
 #: functions/reference.xml:406
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
-msgstr ""
+msgstr "DDE(სერვერი; თემა; ელემენტი; რეჟიმი)"
 
 #: functions/reference.xml:414
-#, fuzzy, kde-format
-#| msgid "EUR"
+#, kde-format
 msgid "URL"
-msgstr "EUR"
+msgstr "URL"
 
 #: functions/reference.xml:418
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr ""
+msgstr "ტექსტის ჩვენება (ნაგულისხმევად URL)"
 
 #: functions/reference.xml:422
 #, kde-format
@@ -8462,13 +8458,14 @@ msgstr ""
 #: functions/reference.xml:423
 #, kde-format
 msgid "HYPERLINK(url; display text)"
-msgstr ""
+msgstr "HYPERLINK(url; საჩვენებელი ტექსტი)"
 
 #: functions/reference.xml:424
-#, fuzzy, kde-format
-#| msgid "T(\"Calligra\") returns \"Calligra\""
+#, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\") აბრუნებს მნიშვნელობას \"Calligra\""
+msgstr ""
+"HYPERLINK(\"https://calligra.org\"; \"Calligra\") აბრუნებს მნიშვნელობას "
+"\"Calligra\""
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -8846,7 +8843,7 @@ msgstr "CORREL(A1:A3; B1:B3)"
 #: functions/statistical.xml:267
 #, kde-format
 msgid "The COVAR() function calculates the covariance of two cell ranges."
-msgstr ""
+msgstr "COVAR () ფუნქცია ითვლის ორი უჯრედის დიაპაზონის კოვარიანტობას."
 
 #: functions/statistical.xml:268
 #, kde-format
@@ -10596,10 +10593,9 @@ msgid "GAMMALN(2) returns 0"
 msgstr "GAMMALN(2) აბრუნებს მნიშვნელობას 0"
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "ალბათობა"
+msgstr "წარმატების ალბათობა"
 
 #: functions/statistical.xml:1845
 #, kde-format
@@ -10609,7 +10605,7 @@ msgstr ""
 #: functions/statistical.xml:1849
 #, kde-format
 msgid "Upper limit for the number of successes"
-msgstr ""
+msgstr "წარმატებების რაოდენობის ზედა ზღვარი"
 
 #: functions/statistical.xml:1853
 #, kde-format
@@ -10622,19 +10618,17 @@ msgstr ""
 #: functions/statistical.xml:1854
 #, kde-format
 msgid "B(trials; SP; T1; T2)"
-msgstr ""
+msgstr "B(cdebi; SP; T1; T2)"
 
 #: functions/statistical.xml:1855
-#, fuzzy, kde-format
-#| msgid "BINO(12;9;0.8) returns 0.236223201"
+#, kde-format
 msgid "B(20; 0.5; 8) returns 0.120134"
-msgstr "BINO(12;9;0.8) აბრუნებს მნიშვნელობას 0.236223201"
+msgstr "B(20; 0.5; 8) აბრუნებს მნიშვნელობას 0.120134"
 
 #: functions/statistical.xml:1856
-#, fuzzy, kde-format
-#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+#, kde-format
 msgid "B(20; 0.5; 8; 10) returns 0.456511"
-msgstr "MAX(0.5; 0.4; TRUE; 0.2) აბრუნებს მნიშვნელობას 0.5"
+msgstr "B(20; 0.5; 8; 10) აბრუნებს მნიშვნელობას 0.456511"
 
 #: functions/statistical.xml:1877
 #, kde-format
@@ -10645,42 +10639,38 @@ msgid ""
 msgstr ""
 
 #: functions/statistical.xml:1878
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQDIST(number; degrees_freedom; cumulative)"
-msgstr "CHIDIST(number;degrees_freedom)"
+msgstr "CHISQDIST(რიცხვი; თავისუფლების ხარისხი; დაგროვებადი)"
 
 #: functions/statistical.xml:1879
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
-msgstr "CHIDIST(13.27;5) აბრუნებს მნიშვნელობას 0.021"
+msgstr "CHISQDIST(13.27; 5; TRUE) აბრუნებს მნიშვნელობას 0.979"
 
 #: functions/statistical.xml:1897
-#, fuzzy, kde-format
-#| msgid "The ACOT() function returns the inverse cotangent of a number."
+#, kde-format
 msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
-msgstr "ფუნქცია ACOT() რიცხვის შებრუნებულ კოტანგენსს აბრუნებს."
+msgstr ""
+"ფუნქცია CHISQINV() აბრუნებს ფუნქციის CHISQDIST(რიცხვი; თავისუფლების_ხარისხი; "
+"TRUE) ინვერსიას."
 
 #: functions/statistical.xml:1898
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQINV(probability; degrees_freedom)"
-msgstr "CHIDIST(number;degrees_freedom)"
+msgstr "CHISQINV(ალბათობა; თავისუფლების_ხარისხი)"
 
 #: functions/statistical.xml:1899
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
-msgstr "CHIDIST(13.27;5) აბრუნებს მნიშვნელობას 0.021"
+msgstr "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) აბრუნებს მნიშვნელობას 13.27"
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "სტრიქონის მნიშვნელობები"
+msgstr "პირობის მნიშვნელობა"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -10692,30 +10682,27 @@ msgstr ""
 #: functions/statistical.xml:1921
 #, kde-format
 msgid "CRITBINOM(trials; SP; alpha)"
-msgstr ""
+msgstr "CRITBINOM(ცდები; SP; ალფა)"
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "COMBIN(5;5) აბრუნებს 1"
+msgstr "CRITBINOM(20; 0.5; 0.55) აბრუნებს მნიშვნელობას 10"
 
 #: functions/statistical.xml:1931
 #, kde-format
 msgid "The x-value for which a y-value is estimated"
-msgstr ""
+msgstr "X მნიშვნელობა, რომლისთვისაც მოხდება Y მნიშვნელობის პროგნოზი"
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "ლოგიკური მნიშვნელობები"
+msgstr "ცნობილი y-მნიშვნელობები"
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "ლოგიკური მნიშვნელობები"
+msgstr "ცნობილი x-მნიშვნელობები"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -10727,19 +10714,17 @@ msgstr ""
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr ""
+msgstr "FORECAST(x; ცნობილი_y's; ცნობილი_x's)"
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "ნულოვანი მნიშვნელობები"
+msgstr "დაკვირვებული მნიშვნელობები"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "ნომინალი"
+msgstr "მოსალოდნელი მნიშვნელობები"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -10753,17 +10738,17 @@ msgstr ""
 #: functions/statistical.xml:1964
 #, kde-format
 msgid "LEGACYCHITEST(actual range; theoretical range)"
-msgstr ""
+msgstr "LEGACYCHITEST (ფაქტობრივი დიაპაზონი; თეორიული დიაპაზონი)"
 
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr ""
+msgstr "ცნობილი x-მნიშვნელობები (ნაგულისხმევად თანმიმდევრობა 1, 2, 3, ...)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr ""
+msgstr "შეესაბამება თუ არა ჩარევას (ნაგულისხმევი TRUE)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
@@ -10784,13 +10769,12 @@ msgstr ""
 #: functions/statistical.xml:1990
 #, kde-format
 msgid "LINEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LINEST(ცნობილი_y-ები; ცნობილი_x-ები; კონსტ; სტატისტიკა)"
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "ბოლო და პირველი მნიშვნელობა დადებითი უნდა იყოს."
+msgstr "ცნობილი y-მნიშვნელობები (უნდა იყოს დადებითი)"
 
 #: functions/statistical.xml:2018
 #, kde-format
@@ -10804,24 +10788,22 @@ msgstr ""
 #: functions/statistical.xml:2019
 #, kde-format
 msgid "LOGEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LOGEST(ცნობილი_y-ები; ცნობილი_x-ები; კონსტ; სტატისტიკა)"
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "მონაცემთა ბაზა"
+msgstr "მონაცემების სეტი"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Value (მასივი)"
+msgstr "შესაფასებელი მნიშვნელობა"
 
 #: functions/statistical.xml:2037
 #, kde-format
 msgid "Number of significant digits (defaults to 3)"
-msgstr ""
+msgstr "მნიშვნელოვანი ციფრების რაოდენობა (ნაგულისხმევად 3)"
 
 #: functions/statistical.xml:2041
 #, kde-format
@@ -10833,12 +10815,12 @@ msgstr ""
 #: functions/statistical.xml:2042
 #, kde-format
 msgid "PERCENTRANK(data; x; significance)"
-msgstr ""
+msgstr "PERCENTRANK(მონაცემები; x; მნიშვნელობა)"
 
 #: functions/statistical.xml:2056
 #, kde-format
 msgid "Probabilities, one for each value (must sum to 1)"
-msgstr ""
+msgstr "ალბათობები, თითო თითოეული მნიშვნელობისთვის (ჯამი უნდა იყოს 1-მდე)"
 
 #: functions/statistical.xml:2060
 #, kde-format
@@ -10853,10 +10835,9 @@ msgid ""
 msgstr ""
 
 #: functions/statistical.xml:2069
-#, fuzzy, kde-format
-#| msgid "ERF(Lower limit; Upper limit)"
+#, kde-format
 msgid "PROB(values; probabilities; lower limit; upper limit)"
-msgstr "ERF(ქვედა ზღვარი; ზედა ზღვარი)"
+msgstr "PROB(მნიშვნელობები; ალბათობები; ქვედა ზღვარი; ზედა ზღვარი)"
 
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format
@@ -11276,6 +11257,9 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text."
 msgstr ""
+"ფუნქცია FIND() ეძებს ერთ ტექსტურ სტრიქონს (საძებნი_ტექსტი) მეორე ტექსტურ "
+"სტრიქონში (ტექსტში) და აბრუნებს საძებნი_ტექსტის საწყისი წერტილის რაოდენობას "
+"'ტექსტში' ტექსტის ყველაზე მარცხენა სიმბოლოდან."
 
 #: functions/text.xml:302
 #, kde-format
@@ -11700,12 +11684,12 @@ msgstr "UPPER(ტექსტი)"
 #: functions/text.xml:655
 #, kde-format
 msgid "UPPER(\"hello\") returns \"HELLO\""
-msgstr "UPPER(\"hello\") აბრუნებს \"HELLO\""
+msgstr "UPPER(\"hello\") აბრუნებს მნიშვნელობას \"HELLO\""
 
 #: functions/text.xml:656
 #, kde-format
 msgid "UPPER(\"HELLO\") returns \"HELLO\""
-msgstr "UPPER(\"HELLO\") აბრუნებს \"HELLO\""
+msgstr "UPPER(\"HELLO\") აბრუნებს მნიშვნელობას \"HELLO\""
 
 #: functions/text.xml:670
 #, kde-format
@@ -18204,6 +18188,9 @@ msgid ""
 "checked (default), the cell content will be printed.\n"
 "Note that you can print it even if the cell is protected"
 msgstr ""
+"თუ ჩართულია, უჯრედის შემცველობა არ დაიბეჭდება. თუ ეს ჩართული არაა "
+"(ნაგულისხმევად), უჯრედის შემცველობა დაიბეჭდება.\n"
+"გაითვალისწინეთ, რომ დაბეჭდვა მაშინაც შეგიძლიათ, როცა უჯრედი დაცულია"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
 #: ui/dialogs/ProtectionWidget.ui:51
@@ -18259,6 +18246,10 @@ msgid ""
 "contain formulae so the user cannot view the formula. And the sheet must be "
 "protected for this to work."
 msgstr ""
+"როცა ეს ჩართულია, უჯრედი ჯერ კიდევ ხილულია, მაგრამ მისი შემცველობა ფორმულის "
+"ზოლში არ გამოჩნდება. ფორმულის დამალვა, მხოლოდ, იმ უჯრედებისთვის მუშაობს, "
+"რომლებიც შეიცავენ ფორმულებს, რომ ისინი მომხმარებელმა არ დაინახოს. იმისათვის, "
+"რომ ამან იმუშაოს, ფურცელი დაცული უნდა იყოს."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
 #: ui/dialogs/ProtectionWidget.ui:133

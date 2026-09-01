@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1745148 2026-08-31 01:28:32Z scripty $
+# $Id: calligrasheets.po 1745239 2026-09-01 01:31:06Z scripty $
 # $Source$
 #
 #
@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-07-06 12:29+0200\n"
+"PO-Revision-Date: 2026-08-31 11:33+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -2271,12 +2271,13 @@ msgid ""
 "NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
 "otherwise identical."
 msgstr ""
+"NETWORKDAYS() je zapis funkcije NETWORKDAY() v OpenFormuli/Excelu; sicer sta "
+"si identični."
 
 #: functions/datetime.xml:730
-#, fuzzy, kde-format
-#| msgid "NETWORKDAY(start date; end date; holidays)"
+#, kde-format
 msgid "NETWORKDAYS(start date; end date; holidays)"
-msgstr "NETWORKDAY(začetni datum; končni datum; prazniki)"
+msgstr "NETWORKDAYS(začetni datum; končni datum; prazniki)"
 
 #: functions/datetime.xml:743
 #, kde-format
@@ -5194,65 +5195,48 @@ msgstr ""
 "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" vrne 2907.83187"
 
 #: functions/financial.xml:1449
-#, fuzzy, kde-format
-#| msgid "Coupon rate"
+#, kde-format
 msgid "Annual coupon rate"
-msgstr "Stopnja odrezkov"
+msgstr "Letna obrestna mera kuponov"
 
 #: functions/financial.xml:1453
-#, fuzzy, kde-format
-#| msgid "Price per $100 face value"
+#, kde-format
 msgid "Price per 100 currency units of face value"
-msgstr "Cena na 100 dolarjev nominalne vrednosti"
+msgstr "Cena na 100 denarnih enot nominalne vrednosti"
 
 #: functions/financial.xml:1457
-#, fuzzy, kde-format
-#| msgid ""
-#| "YIELDDISC calculates the yield of a discounted security per 100 currency "
-#| "units of face value."
+#, kde-format
 msgid "Redemption value per 100 currency units of face value"
-msgstr ""
-"YIELDDISC izračuna donos diskontiranega vrednostnega papirja za 100 enot "
-"valute nominalne vrednosti."
+msgstr "Odkupna vrednost na 100 denarnih enot nominalne vrednosti"
 
 #: functions/financial.xml:1461
-#, fuzzy, kde-format
-#| msgid "Number of payments per year"
+#, kde-format
 msgid "Number of coupon payments per year"
-msgstr "Število plačil letno"
+msgstr "Število izplačil kuponov na leto"
 
 #: functions/financial.xml:1469
-#, fuzzy, kde-format
-#| msgid ""
-#| "The YIELDMAT function calculates the yield of the security that pays "
-#| "interest on the maturity date."
+#, kde-format
 msgid ""
 "The YIELD function calculates the annual yield of a security that pays "
 "periodic interest."
 msgstr ""
-"Funkcija YIELDMAT izračuna donos obveznice, ki prinaša obresti na datum "
-"zapadlosti."
+"Funkcija YIELD izračuna letni donos vrednostnega papirja, ki izplačuje "
+"periodične obresti."
 
 #: functions/financial.xml:1470
-#, fuzzy, kde-format
-#| msgid ""
-#| "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency "
-#| "[; Basis = 0 ] )"
+#, kde-format
 msgid ""
 "YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
 msgstr ""
-"ODDLYIELD(Poplačilo; Zapadlost; Zadnji; Stopnja; Cena; Redemption; "
-"Frekvenca[; Baza = 0 ] )"
+"YIELD(poravnava; zapadlost; obrestna mera; cena; odkup; pogostost [; osnova "
+"= 0])"
 
 #: functions/financial.xml:1471
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns "
-#| "0.106194684"
+#, no-c-format, kde-format
 msgid ""
 "YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
 msgstr ""
-"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) vrne 0.106194684"
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) vrne 0.065"
 
 #: functions/financial.xml:1502
 #, kde-format
@@ -8621,15 +8605,14 @@ msgstr ""
 "newHeight; Integer newWidth)"
 
 #: functions/reference.xml:389
-#, fuzzy, kde-format
-#| msgid "Spreadsheet Application"
+#, kde-format
 msgid "Server application"
-msgstr "Orodje za preglednice"
+msgstr "Strežniška aplikacija"
 
 #: functions/reference.xml:393
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "Tema"
 
 #: functions/reference.xml:397
 #, kde-format
@@ -8639,7 +8622,7 @@ msgstr "Predmet"
 #: functions/reference.xml:401
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "Način"
 
 #: functions/reference.xml:405
 #, kde-format
@@ -8649,22 +8632,26 @@ msgid ""
 "is recognized so documents that reference it still load, but always "
 "evaluates to an error."
 msgstr ""
+"Zahteva podatke iz druge delujoče aplikacije prek dinamične izmenjave "
+"podatkov (Dynamic Data Exchange), mehanizma med procesi, ki je na voljo samo "
+"v sistemu Windows in ga ta platforma ne podpira. Funkcija DDE() je "
+"prepoznana, zato se dokumenti, ki se nanjo sklicujejo, še vedno naložijo, "
+"vendar vedno izračunajo napako."
 
 #: functions/reference.xml:406
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
-msgstr ""
+msgstr "DDE(strežnik; tema; element; način)"
 
 #: functions/reference.xml:414
-#, fuzzy, kde-format
-#| msgid "EUR"
+#, kde-format
 msgid "URL"
-msgstr "EUR"
+msgstr "URL"
 
 #: functions/reference.xml:418
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr ""
+msgstr "Prikaže besedilo (privzeto je URL)"
 
 #: functions/reference.xml:422
 #, kde-format
@@ -8673,17 +8660,18 @@ msgid ""
 "text is given. Following the link is handled by the application, not by "
 "formula evaluation."
 msgstr ""
+"Vrne prikazano besedilo za hiperpovezavo ali sam URL, če prikazano besedilo "
+"ni podano. Sledenje povezavi obravnava aplikacija, ne pa vrednotenje formule."
 
 #: functions/reference.xml:423
 #, kde-format
 msgid "HYPERLINK(url; display text)"
-msgstr ""
+msgstr "HYPERLINK(url; prikazno besedilo)"
 
 #: functions/reference.xml:424
-#, fuzzy, kde-format
-#| msgid "T(\"Calligra\") returns \"Calligra\""
+#, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\") vrne \"Calligra\""
+msgstr "HYPERLINK(\"https://calligra.org\"; \"Calligra\") vrne \"Calligra\""
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -10994,20 +10982,19 @@ msgid "GAMMALN(2) returns 0"
 msgstr "GAMMALN(2) vrne 0"
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "Verjetnost"
+msgstr "Verjetnost uspeha"
 
 #: functions/statistical.xml:1845
 #, kde-format
 msgid "Number of successes (or the lower limit, if the upper limit is given)"
-msgstr ""
+msgstr "Število uspehov (ali spodnja meja, če je podana zgornja meja)"
 
 #: functions/statistical.xml:1849
 #, kde-format
 msgid "Upper limit for the number of successes"
-msgstr ""
+msgstr "Zgornja meja števila uspehov"
 
 #: functions/statistical.xml:1853
 #, kde-format
@@ -11016,77 +11003,69 @@ msgid ""
 "(inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in "
 "Trials independent trials, each with success probability SP."
 msgstr ""
+"Funkcija B() vrne verjetnost žrebanja med uspehi T1 in T2 (vključno) – ali "
+"natančno T1 uspehi, če je T2 izpuščen – v neodvisnih poskusih, pri čemer ima "
+"vsak verjetnost uspeha SP."
 
 #: functions/statistical.xml:1854
 #, kde-format
 msgid "B(trials; SP; T1; T2)"
-msgstr ""
+msgstr "B(trials; SP; T1; T2)"
 
 #: functions/statistical.xml:1855
-#, fuzzy, kde-format
-#| msgid "BINO(12;9;0.8) returns 0.236223201"
+#, kde-format
 msgid "B(20; 0.5; 8) returns 0.120134"
-msgstr "BINO(12;9;0.8) vrne 0,236223201"
+msgstr "B(20; 0.5; 8) vrne 0.120134"
 
 #: functions/statistical.xml:1856
-#, fuzzy, kde-format
-#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+#, kde-format
 msgid "B(20; 0.5; 8; 10) returns 0.456511"
-msgstr "MAX(0.5; 0.4; TRUE; 0.2) vrne 0.5"
+msgstr "B(20; 0.5; 8; 10) vrne 0.456511"
 
 #: functions/statistical.xml:1877
-#, fuzzy, kde-format
-#| msgid ""
-#| "The PHI() function returns value of the distribution function for a "
-#| "standard normal distribution."
+#, kde-format
 msgid ""
 "The CHISQDIST() function returns the value of the cumulative distribution "
 "function (or, if Cumulative is FALSE, the probability density function) for "
 "the chi-square distribution."
 msgstr ""
-"Funkcija PHI() vrne vrednost porazdelitvene funkcije za standardno normalno "
-"porazdelitev."
+"Funkcija CHISQDIST() vrne vrednost kumulativne porazdelitvene funkcije (ali, "
+"če je Cumulative FALSE, funkcije gostote verjetnosti) za porazdelitev hi-"
+"kvadrat."
 
 #: functions/statistical.xml:1878
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQDIST(number; degrees_freedom; cumulative)"
-msgstr "CHIDIST(število;stopnje_svobode)"
+msgstr "CHISQDIST(number; degrees_freedom; cumulative)"
 
 #: functions/statistical.xml:1879
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
-msgstr "CHIDIST(13,27;5) returns 0,021"
+msgstr "CHISQDIST(13.27; 5; TRUE) vrne 0.979"
 
 #: functions/statistical.xml:1897
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;"
-#| "TRUE())."
+#, kde-format
 msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
 msgstr ""
-"Funkcija BETAINV() vrne inverzno funkcijo BETADIST(x;alpha;beta;a;b;TRUE())."
+"Funkcija CHISQINV() vrne inverzno vrednost funkcije CHISQDIST(number; "
+"degrees_freedom; TRUE)."
 
 #: functions/statistical.xml:1898
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQINV(probability; degrees_freedom)"
-msgstr "CHIDIST(število;stopnje_svobode)"
+msgstr "CHISQINV(probability; degrees_freedom)"
 
 #: functions/statistical.xml:1899
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
-msgstr "CHIDIST(13,27;5) returns 0,021"
+msgstr "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) vrne 13.27"
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "Vrednosti niza"
+msgstr "Vrednosti kriterija"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -11094,34 +11073,33 @@ msgid ""
 "The CRITBINOM() function returns the smallest value for which the cumulative "
 "binomial distribution is greater than or equal to the criterion value alpha."
 msgstr ""
+"Funkcija CRITBINOM() vrne najmanjšo vrednost, za katero je kumulativna "
+"binomska porazdelitev večja ali enaka vrednosti kriterija alpha."
 
 #: functions/statistical.xml:1921
 #, kde-format
 msgid "CRITBINOM(trials; SP; alpha)"
-msgstr ""
+msgstr "CRITBINOM(trials; SP; alpha)"
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "COMBIN(5;5) vrne 1"
+msgstr "CRITBINOM(20; 0.5; 0.55) vrne 10"
 
 #: functions/statistical.xml:1931
 #, kde-format
 msgid "The x-value for which a y-value is estimated"
-msgstr ""
+msgstr "Vrednost x, za katero je ocenjena vrednost y"
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "Boolova vrednost"
+msgstr "Znane vrednosti y"
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "Boolova vrednost"
+msgstr "Znane vrednosti x"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -11129,23 +11107,23 @@ msgid ""
 "The FORECAST() function estimates a future y-value along the linear trend "
 "fitted to the known x/y-values, for a given new x-value."
 msgstr ""
+"Funkcija FORECAST() oceni prihodnjo vrednost y vzdolž linearnega trenda, "
+"prilagojenega znanim vrednostim x/y, za dano novo vrednost x."
 
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr ""
+msgstr "FORECAST(x; znani_y; znani_x)"
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "Ničelne vrednosti"
+msgstr "Opazovane vrednosti"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "Nominalna vrednost"
+msgstr "Pričakovane vrednosti"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -11155,26 +11133,29 @@ msgid ""
 "and expected value ranges (which must have the same shape) would occur by "
 "chance."
 msgstr ""
+"Funkcija LEGACYCHITEST() vrne verjetnost iz porazdelitve hi-kvadrat, da se "
+"bo statistika hi-kvadrat, izračunana iz danih opazovanih in pričakovanih "
+"razponov vrednosti (ki morajo imeti enako obliko), pojavila po naključju."
 
 #: functions/statistical.xml:1964
 #, kde-format
 msgid "LEGACYCHITEST(actual range; theoretical range)"
-msgstr ""
+msgstr "LEGACYCHITEST(dejanski obseg; teoretični obseg)"
 
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr ""
+msgstr "Znane vrednosti x (privzeto zaporedje 1, 2, 3, ...)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr ""
+msgstr "Ali naj se prilagodi presečišče (privzeto na TRUE)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
 msgid "Whether to return additional regression statistics (defaults to FALSE)"
-msgstr ""
+msgstr "Ali naj vrne dodatno regresijsko statistiko (privzeto FALSE)"
 
 #: functions/statistical.xml:1989
 #, kde-format
@@ -11186,17 +11167,22 @@ msgid ""
 "of the y estimate, the F statistic and its degrees of freedom, and the "
 "regression and residual sums of squares."
 msgstr ""
+"Funkcija LINEST() z metodo najmanjših kvadratov prilagodi premico y=m*x+b "
+"(podprt je samo en znani obseg x) danim podatkom in vrne {m, b}. Če je "
+"argument Stats TRUE, namesto tega vrne 5-vrstično tabelo, ki vsebuje tudi "
+"standardni napaki m in b, R-kvadrat in standardno napako ocene y, statistiko "
+"F in njene stopinje prostosti ter regresijsko vsoto in vsoto kvadratov "
+"ostankov."
 
 #: functions/statistical.xml:1990
 #, kde-format
 msgid "LINEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LINEST(znani_y; znani_x; const; stats)"
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "Začetna in končna vrednost morata biti pozitivni."
+msgstr "Znane vrednosti y (morajo biti pozitivne)"
 
 #: functions/statistical.xml:2018
 #, kde-format
@@ -11206,28 +11192,30 @@ msgid ""
 "Stats is TRUE, it also returns the same additional regression statistics as "
 "LINEST, computed for the underlying linear fit against ln(y)."
 msgstr ""
+"Funkcija LOGEST() prilagodi eksponentno krivuljo y=b*m^x danim podatkom z "
+"linearno regresijo ln(y) glede na x (glejte LINEST) in vrne {m, b}. Če je "
+"argument Stat enak TRUE, vrne tudi enako dodatno regresijsko statistiko kot "
+"LINEST, izračunano za osnovno linearno regresijsko premico glede na ln(y)."
 
 #: functions/statistical.xml:2019
 #, kde-format
 msgid "LOGEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LOGEST(znani_y; znani_x; const; stats)"
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
 msgstr "Zbirka podatkov"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Vrednost (polje)"
+msgstr "Vrednost za rangiranje"
 
 #: functions/statistical.xml:2037
 #, kde-format
 msgid "Number of significant digits (defaults to 3)"
-msgstr ""
+msgstr "Število pomembnih števk (privzeto 3)"
 
 #: functions/statistical.xml:2041
 #, kde-format
@@ -11235,21 +11223,23 @@ msgid ""
 "The PERCENTRANK() function returns the rank, as a fraction of the data set, "
 "of a value in that data set. This is the inverse of PERCENTILE."
 msgstr ""
+"Funkcija PERCENTRANK() vrne rang vrednosti v naboru podatkov kot ulomek "
+"nabora podatkov. To je obratna vrednost funkcije PERCENTILE."
 
 #: functions/statistical.xml:2042
 #, kde-format
 msgid "PERCENTRANK(data; x; significance)"
-msgstr ""
+msgstr "PERCENTRANK(data; x; significance)"
 
 #: functions/statistical.xml:2056
 #, kde-format
 msgid "Probabilities, one for each value (must sum to 1)"
-msgstr ""
+msgstr "Verjetnosti, po ena za vsako vrednost (seštevek mora biti 1)"
 
 #: functions/statistical.xml:2060
 #, kde-format
 msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
-msgstr ""
+msgstr "Spodnja meja (ali edina vrednost za test, če zgornja meja ni navedena)"
 
 #: functions/statistical.xml:2068
 #, kde-format
@@ -11257,12 +11247,13 @@ msgid ""
 "The PROB() function returns the sum of the probabilities of the values that "
 "fall between (or equal) a lower and upper limit."
 msgstr ""
+"Funkcija PROB() vrne vsoto verjetnosti vrednosti, ki ležijo med (ali so "
+"enake) spodnji in zgornji meji."
 
 #: functions/statistical.xml:2069
-#, fuzzy, kde-format
-#| msgid "ERF(Lower limit; Upper limit)"
+#, kde-format
 msgid "PROB(values; probabilities; lower limit; upper limit)"
-msgstr "ERF(spodnja meja; zgornja meja)"
+msgstr "PROB(vrednosti; verjetnosti; spodnja meja; zgornja meja)"
 
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format

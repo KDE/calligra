@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-07-07 17:04+0200\n"
+"PO-Revision-Date: 2026-08-31 20:09+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n:
@@ -2291,10 +2291,9 @@ msgid ""
 msgstr ""
 
 #: functions/datetime.xml:730
-#, fuzzy, kde-format
-#| msgid "NETWORKDAY(start date; end date; holidays)"
+#, kde-format
 msgid "NETWORKDAYS(start date; end date; holidays)"
-msgstr "NETWORKDAY(startdatum; slutdatum; helgdagar)"
+msgstr "NETWORKDAYS(startdatum; slutdatum; helgdagar)"
 
 #: functions/datetime.xml:743
 #, kde-format
@@ -5255,66 +5254,48 @@ msgstr ""
 "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" returnerar 2907,83187"
 
 #: functions/financial.xml:1449
-#, fuzzy, kde-format
-#| msgid "Coupon rate"
+#, kde-format
 msgid "Annual coupon rate"
-msgstr "Kupongsats"
+msgstr "Årlig räntesats"
 
 #: functions/financial.xml:1453
-#, fuzzy, kde-format
-#| msgid "Price per $100 face value"
+#, kde-format
 msgid "Price per 100 currency units of face value"
-msgstr "Pris per 100 dollar nominellt värde"
+msgstr "Pris per 100 valutaenheter nominellt värde"
 
 #: functions/financial.xml:1457
-#, fuzzy, kde-format
-#| msgid ""
-#| "YIELDDISC calculates the yield of a discounted security per 100 currency "
-#| "units of face value."
+#, kde-format
 msgid "Redemption value per 100 currency units of face value"
-msgstr ""
-"YIELDDISC beräknar avkastningen för ett rabatterat värdepapper per 100 "
-"valutaenheter nominellt värde."
+msgstr "Avkastningsvärdet per 100 valutaenheter nominellt värde"
 
 #: functions/financial.xml:1461
-#, fuzzy, kde-format
-#| msgid "Number of payments per year"
+#, kde-format
 msgid "Number of coupon payments per year"
-msgstr "Antal betalningar per år"
+msgstr "Antal räntebetalningar per år"
 
 #: functions/financial.xml:1469
-#, fuzzy, kde-format
-#| msgid ""
-#| "The YIELDMAT function calculates the yield of the security that pays "
-#| "interest on the maturity date."
+#, kde-format
 msgid ""
 "The YIELD function calculates the annual yield of a security that pays "
 "periodic interest."
 msgstr ""
-"Funktionen YIELDMAT beräknar avkastningen för värdepappret som betalar ränta "
-"på förfallodatum."
+"Funktionen YIELD beräknar årliga avkastningen för värdepappret som betalar "
+"periodisk ränta."
 
 #: functions/financial.xml:1470
-#, fuzzy, kde-format
-#| msgid ""
-#| "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency "
-#| "[; Basis = 0 ] )"
+#, kde-format
 msgid ""
 "YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
 msgstr ""
-"ODDLYIELD(Avräkning; Förfaller; Sista; Räntesats; Pris; Andelsåterköp; "
-"Frekvens [; Bas = 0 ])"
+"YIELD(avräkning; förfaller; räntesats; pris; andelsåterköp; frekvens [; bas "
+"= 0 ])"
 
 #: functions/financial.xml:1471
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns "
-#| "0.106194684"
+#, no-c-format, kde-format
 msgid ""
 "YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
 msgstr ""
-"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returnerar "
-"0,106194684"
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returnerar 0.065"
 
 #: functions/financial.xml:1502
 #, kde-format
@@ -8701,15 +8682,14 @@ msgstr ""
 "kolumnförskjutning; Integer ny-höjd; Integer ny-bredd)"
 
 #: functions/reference.xml:389
-#, fuzzy, kde-format
-#| msgid "Spreadsheet Application"
+#, kde-format
 msgid "Server application"
-msgstr "Kalkylprogram"
+msgstr "Serverprogram"
 
 #: functions/reference.xml:393
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "Ämne"
 
 #: functions/reference.xml:397
 #, kde-format
@@ -8719,7 +8699,7 @@ msgstr "Objekt"
 #: functions/reference.xml:401
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "Läge"
 
 #: functions/reference.xml:405
 #, kde-format
@@ -8736,10 +8716,9 @@ msgid "DDE(server; topic; item; mode)"
 msgstr ""
 
 #: functions/reference.xml:414
-#, fuzzy, kde-format
-#| msgid "EUR"
+#, kde-format
 msgid "URL"
-msgstr "EUR"
+msgstr "Webbadress"
 
 #: functions/reference.xml:418
 #, kde-format
@@ -8760,10 +8739,10 @@ msgid "HYPERLINK(url; display text)"
 msgstr ""
 
 #: functions/reference.xml:424
-#, fuzzy, kde-format
-#| msgid "T(\"Calligra\") returns \"Calligra\""
+#, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\") returnerar \"Calligra\""
+msgstr ""
+"HYPERLINK(\"https://calligra.org\"; \"Calligra\") returnerar \"Calligra\""
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -11103,10 +11082,9 @@ msgid "GAMMALN(2) returns 0"
 msgstr "GAMMALN(2) returnerar 0"
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "Sannolikhet"
+msgstr "Framgångssannolikhet"
 
 #: functions/statistical.xml:1845
 #, kde-format
@@ -11129,73 +11107,57 @@ msgstr ""
 #: functions/statistical.xml:1854
 #, kde-format
 msgid "B(trials; SP; T1; T2)"
-msgstr ""
+msgstr "B(försök; SP; T1; T2)"
 
 #: functions/statistical.xml:1855
-#, fuzzy, kde-format
-#| msgid "BINO(12;9;0.8) returns 0.236223201"
+#, kde-format
 msgid "B(20; 0.5; 8) returns 0.120134"
-msgstr "BINO(12;9;0.8) returnerar 0.236223201"
+msgstr "B(20; 0,5; 8) returnerar 0,120134"
 
 #: functions/statistical.xml:1856
-#, fuzzy, kde-format
-#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+#, kde-format
 msgid "B(20; 0.5; 8; 10) returns 0.456511"
-msgstr "MAX(0,5; 0,4; TRUE; 0,2) returnerar 0,5"
+msgstr "B(20; 0,5; 8; 10) returnerar 0,456511"
 
 #: functions/statistical.xml:1877
-#, fuzzy, kde-format
-#| msgid ""
-#| "The PHI() function returns value of the distribution function for a "
-#| "standard normal distribution."
+#, kde-format
 msgid ""
 "The CHISQDIST() function returns the value of the cumulative distribution "
 "function (or, if Cumulative is FALSE, the probability density function) for "
 "the chi-square distribution."
 msgstr ""
-"Funktionen PHI() returnerar värdet på fördelningsfunktionen för en "
-"normalfördelning."
 
 #: functions/statistical.xml:1878
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQDIST(number; degrees_freedom; cumulative)"
-msgstr "CHIDIST(tal;frihetsgrader)"
+msgstr "CHISQDIST(tal; frihetsgrader; ackumulera)"
 
 #: functions/statistical.xml:1879
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
-msgstr "CHIDIST(13,27;5) returnerar 0,021"
+msgstr "CHISQDIST(13,27; 5; TRUE) returnerar 0,979"
 
 #: functions/statistical.xml:1897
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;"
-#| "TRUE())."
+#, kde-format
 msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
 msgstr ""
-"Funktionen BETAINV() returnerar inversen av BETADIST(x;alfa;beta;a;b;TRUE())."
 
 #: functions/statistical.xml:1898
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQINV(probability; degrees_freedom)"
-msgstr "CHIDIST(tal;frihetsgrader)"
+msgstr "CHISQINV(sannolikhet; frihetsgrader)"
 
 #: functions/statistical.xml:1899
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
-msgstr "CHIDIST(13,27;5) returnerar 0,021"
+msgstr "CHISQINV(CHISQDIST(13,27; 5; TRUE); 5) returnerar 13,27"
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "Strängvärden"
+msgstr "Kriterievärde"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -11210,10 +11172,9 @@ msgid "CRITBINOM(trials; SP; alpha)"
 msgstr ""
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "COMBIN(5;5) returnerar 1"
+msgstr "CRITBINOM(20; 0,5; 0.55) returnerar 10"
 
 #: functions/statistical.xml:1931
 #, kde-format
@@ -11221,16 +11182,14 @@ msgid "The x-value for which a y-value is estimated"
 msgstr ""
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "Booleska värden"
+msgstr "Kända y-värden"
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "Booleska värden"
+msgstr "Kända x-värden"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -11245,16 +11204,14 @@ msgid "FORECAST(x; known_y's; known_x's)"
 msgstr ""
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "Nollvärden"
+msgstr "Observerade värden"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "Valör"
+msgstr "Förväntade värden"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -11302,10 +11259,9 @@ msgid "LINEST(known_y's; known_x's; const; stats)"
 msgstr ""
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "Start- och slutvärden måste vara positiva."
+msgstr "Kända y-värden (måste vara positiva)"
 
 #: functions/statistical.xml:2018
 #, kde-format
@@ -11322,21 +11278,19 @@ msgid "LOGEST(known_y's; known_x's; const; stats)"
 msgstr ""
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "Databas"
+msgstr "Datamängd"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Värde (lista)"
+msgstr "Värde att ranka"
 
 #: functions/statistical.xml:2037
 #, kde-format
 msgid "Number of significant digits (defaults to 3)"
-msgstr ""
+msgstr "Antal signifikanta siffror (normalvärdet är 3)"
 
 #: functions/statistical.xml:2041
 #, kde-format
@@ -11368,10 +11322,9 @@ msgid ""
 msgstr ""
 
 #: functions/statistical.xml:2069
-#, fuzzy, kde-format
-#| msgid "ERF(Lower limit; Upper limit)"
+#, kde-format
 msgid "PROB(values; probabilities; lower limit; upper limit)"
-msgstr "ERF(Undre gräns; Övre gräns)"
+msgstr "PROB(värden; sannolikheter; undre gräns; övre gräns)"
 
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-08-06 20:23+0300\n"
+"PO-Revision-Date: 2026-08-31 20:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.04.2\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -2284,12 +2284,13 @@ msgid ""
 "NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
 "otherwise identical."
 msgstr ""
+"NETWORKDAYS(), NETWORKDAY() işlevinin OpenFormula/Excel sürümüdür; bunun "
+"dışında ikisi tümüyle aynıdır."
 
 #: functions/datetime.xml:730
-#, fuzzy, kde-format
-#| msgid "NETWORKDAY(start date; end date; holidays)"
+#, kde-format
 msgid "NETWORKDAYS(start date; end date; holidays)"
-msgstr "NETWORKDAY(başlangıç tarihi; bitiş tarihi; tatil günleri)"
+msgstr "NETWORKDAYS(başlangıç tarihi; bitiş tarihi; tatiller)"
 
 #: functions/datetime.xml:743
 #, kde-format
@@ -4037,7 +4038,7 @@ msgstr "Her $100 nominal değer için fiyat"
 #: functions/financial.xml:1377 functions/financial.xml:1494
 #, kde-format
 msgid "Redemption"
-msgstr "Ödeme"
+msgstr "İtfâ"
 
 #: functions/financial.xml:369
 #, kde-format
@@ -4054,7 +4055,7 @@ msgstr ""
 #: functions/financial.xml:370
 #, kde-format
 msgid "DISC(settlement; maturity; par; redemption [; basis ] )"
-msgstr "DISC(ödeme; vade; par; kefaret [; temel ] )"
+msgstr "DISC(işlem; vade; par; itfâ [; temel ] )"
 
 #: functions/financial.xml:371
 #, kde-format
@@ -4394,7 +4395,7 @@ msgstr ""
 #: functions/financial.xml:625
 #, kde-format
 msgid "INTRATE(settlement; maturity; investment; redemption; basis)"
-msgstr "FAİZORANI(ödeme; vade; yatırım; paraya dönüştürme; temel)"
+msgstr "INTRATE(işlem; vade; yatırım; itfâ; temel)"
 
 #: functions/financial.xml:626
 #, kde-format
@@ -4759,8 +4760,7 @@ msgid ""
 "ODDLPRICE( Settlement; Maturity; Last; Rate; AnnualYield; Redemption; "
 "Frequency [; Basis = 0 ] )"
 msgstr ""
-"ODDLPRICE(Ödeme; Vade; Son faiz; Oran; Getiri; Paraya dönüştürme; Sıklık; "
-"[Temel = 0] )"
+"ODDLPRICE(işlem; vade; son; oran; yıllık_getiri; itfâ; sıklık[; temel = 0 ] )"
 
 #: functions/financial.xml:934
 #, no-c-format, kde-format
@@ -4791,9 +4791,7 @@ msgstr ""
 msgid ""
 "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency [; "
 "Basis = 0 ] )"
-msgstr ""
-"TEKSGETİRİ(Ödeme; Vade; Son faiz; Oran; Fiyat; Paraya dönüştürme; Sıklık [; "
-"Temel = 0 ] )"
+msgstr "ODDLYIELD(işlem; vade; son; oran; fiyat; itfâ; sıklık [; temel = 0 ] )"
 
 #: functions/financial.xml:977
 #, no-c-format, kde-format
@@ -5232,65 +5230,46 @@ msgstr ""
 "içerdiğini varsayarsanız XNPV(5%; B1:B4; C1:C4), 2907,83187 döndürür"
 
 #: functions/financial.xml:1449
-#, fuzzy, kde-format
-#| msgid "Coupon rate"
+#, kde-format
 msgid "Annual coupon rate"
-msgstr "Kupon oranı"
+msgstr "Yıllık kupon oranı"
 
 #: functions/financial.xml:1453
-#, fuzzy, kde-format
-#| msgid "Price per $100 face value"
+#, kde-format
 msgid "Price per 100 currency units of face value"
-msgstr "Her $100 nominal değer için fiyat"
+msgstr "100 para birimlik nominal değerin fiyatı"
 
 #: functions/financial.xml:1457
-#, fuzzy, kde-format
-#| msgid ""
-#| "YIELDDISC calculates the yield of a discounted security per 100 currency "
-#| "units of face value."
+#, kde-format
 msgid "Redemption value per 100 currency units of face value"
-msgstr ""
-"YIELDDISC görünür değerin her 100 para biriminin indirimli güvenliğinin "
-"verimini hesaplar."
+msgstr "100 para birimlik nominal değerin itfâ değeri"
 
 #: functions/financial.xml:1461
-#, fuzzy, kde-format
-#| msgid "Number of payments per year"
+#, kde-format
 msgid "Number of coupon payments per year"
-msgstr "Yıl içindeki ödeme sayısı"
+msgstr "Yıl içindeki kupon ödeme sayısı"
 
 #: functions/financial.xml:1469
-#, fuzzy, kde-format
-#| msgid ""
-#| "The YIELDMAT function calculates the yield of the security that pays "
-#| "interest on the maturity date."
+#, kde-format
 msgid ""
 "The YIELD function calculates the annual yield of a security that pays "
 "periodic interest."
 msgstr ""
-"YIELDMAT işlevi, vadesinde faiz ödeyen bir menkul kıymet için kârı hesaplar."
+"YIELD işlevi, dönemsel olarak faiz ödeyen bir menkul kıymetin yıllık "
+"getirisini hesaplar."
 
 #: functions/financial.xml:1470
-#, fuzzy, kde-format
-#| msgid ""
-#| "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency "
-#| "[; Basis = 0 ] )"
+#, kde-format
 msgid ""
 "YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
-msgstr ""
-"TEKSGETİRİ(Ödeme; Vade; Son faiz; Oran; Fiyat; Paraya dönüştürme; Sıklık [; "
-"Temel = 0 ] )"
+msgstr "YIELD(işlem; vade; oran; fiyat; itfâ; sıklık [; temel = 0])"
 
 #: functions/financial.xml:1471
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns "
-#| "0.106194684"
+#, no-c-format, kde-format
 msgid ""
 "YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
 msgstr ""
-"YIELDDISC(DATE(1990; 6; 1); DATE(1990; 12; 31); 941,66667; 1000), "
-"0,106194684 döndürür"
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2), 0,065 döndürür"
 
 #: functions/financial.xml:1502
 #, kde-format
@@ -8653,26 +8632,24 @@ msgstr ""
 "yeniYükseklik; Tamsayı yeniGenişlik)"
 
 #: functions/reference.xml:389
-#, fuzzy, kde-format
-#| msgid "Spreadsheet Application"
+#, kde-format
 msgid "Server application"
-msgstr "Hesap Tablosu Uygulaması"
+msgstr "Sunucu uygulaması"
 
 #: functions/reference.xml:393
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "Konu"
 
 #: functions/reference.xml:397
-#, fuzzy, kde-format
-#| msgid "Base Item"
+#, kde-format
 msgid "Item"
-msgstr "Temel Öge"
+msgstr "Öge"
 
 #: functions/reference.xml:401
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "Kip"
 
 #: functions/reference.xml:405
 #, kde-format
@@ -8682,22 +8659,25 @@ msgid ""
 "is recognized so documents that reference it still load, but always "
 "evaluates to an error."
 msgstr ""
+"Devingen Veri Değişimi (Dynamic Data Exchange) ile yalnızca Windows üzerinde "
+"çalışan bir süreçler arası mekanizma ile çalışan başka bir uygulamadan veri "
+"ister. Bu, bu platform üzerinde desteklenmemektedir. DDE() yine de tanınır; "
+"böylece belgeler yüklenir; ancak her zaman bir hata döndürür."
 
 #: functions/reference.xml:406
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
-msgstr ""
+msgstr "DDE(sunucu; konu; öge; kip)"
 
 #: functions/reference.xml:414
-#, fuzzy, kde-format
-#| msgid "EUR"
+#, kde-format
 msgid "URL"
-msgstr "EUR"
+msgstr "URL"
 
 #: functions/reference.xml:418
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr ""
+msgstr "Metin görüntüle (öntanımlı olarak URL)"
 
 #: functions/reference.xml:422
 #, kde-format
@@ -8706,17 +8686,19 @@ msgid ""
 "text is given. Following the link is handled by the application, not by "
 "formula evaluation."
 msgstr ""
+"Bir köprü için olan metni veya görüntülenecek bir metin verilmemişse URL’nin "
+"kendisini döndürür. Bağlantıyı izleme uygulama tarafından yapılır; işlev "
+"değerlendirmesi ile değil."
 
 #: functions/reference.xml:423
 #, kde-format
 msgid "HYPERLINK(url; display text)"
-msgstr ""
+msgstr "HYPERLINK(url; görüntülenecek metin)"
 
 #: functions/reference.xml:424
-#, fuzzy, kde-format
-#| msgid "T(\"Calligra\") returns \"Calligra\""
+#, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\"), “Calligra” döndürür"
+msgstr "HYPERLINK(\"https://calligra.org\"; \"Calligra\"), “Calligra” döndürür"
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -11040,20 +11022,19 @@ msgid "GAMMALN(2) returns 0"
 msgstr "GAMMALN(2), 0 döndürür"
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "Olasılık"
+msgstr "Başarı olasılığı"
 
 #: functions/statistical.xml:1845
 #, kde-format
 msgid "Number of successes (or the lower limit, if the upper limit is given)"
-msgstr ""
+msgstr "Başarı sayısı (veya üst sınır verilmişse alt sınır)"
 
 #: functions/statistical.xml:1849
 #, kde-format
 msgid "Upper limit for the number of successes"
-msgstr ""
+msgstr "Başarı sayısının üst sınırı"
 
 #: functions/statistical.xml:1853
 #, kde-format

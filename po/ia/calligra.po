@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-07-29 11:45+0200\n"
+"PO-Revision-Date: 2026-08-31 12:23+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1781,14 +1781,9 @@ msgstr ""
 "Message de error: %3"
 
 #: odf/KoOdfReadStore.cpp:156
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%1"
+#, kde-format
 msgid "Could not open %1"
-msgstr ""
-"Non pote aperir\n"
-"%1"
+msgstr "Non pote aperir %1"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"

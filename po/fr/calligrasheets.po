@@ -8885,7 +8885,8 @@ msgid "Topic"
 msgstr ""
 
 #: functions/reference.xml:397
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Item"
 msgid "Item"
 msgstr "Élément"
 
