@@ -141,6 +141,11 @@ bool SheetBase::rowIsHidden(int /*row*/) const
     return false;
 }
 
+bool SheetBase::rowIsFiltered(int /*row*/) const
+{
+    return false;
+}
+
 bool SheetBase::isHidden() const
 {
     return d->hide;

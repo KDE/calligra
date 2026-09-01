@@ -165,6 +165,12 @@ bool Odf::loadCell(Cell *cell,
             const QString val = element.attributeNS(KoXmlNS::office, sBooleanValue, QString()).toLower();
             if ((val == sTrue) || (val == sFalse))
                 cell->setValue(Value(val == sTrue));
+            else {
+                bool ok = false;
+                const double number = val.toDouble(&ok);
+                if (ok)
+                    cell->setValue(Value(number));
+            }
         }
 
         // integer and floating-point value

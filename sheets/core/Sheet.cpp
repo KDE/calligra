@@ -786,6 +786,11 @@ bool Sheet::rowIsHidden(int row) const
     return rowFormats()->isHidden(row);
 }
 
+bool Sheet::rowIsFiltered(int row) const
+{
+    return rowFormats()->isFiltered(row);
+}
+
 void Sheet::showStatusMessage(const QString &message, int timeout) const
 {
     Q_EMIT statusMessage(message, timeout);

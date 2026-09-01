@@ -554,9 +554,20 @@ Value func_suma(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     Value checkRange = args[0];
-    QString condition = calc->conv()->asString(args[1]).asString();
+    QString condition = args[1].isEmpty() ? QString() : calc->conv()->asString(args[1]).asString();
     Condition cond;
-    calc->getCond(cond, Value(condition));
+    if (args[1].isEmpty()) {
+        cond.type = Calligra::Sheets::string;
+        cond.comp = isEqual;
+        cond.stringValue.clear();
+    } else {
+        calc->getCond(cond, Value(condition));
+    }
+    if (condition.trimmed().isEmpty()) {
+        cond.type = Calligra::Sheets::string;
+        cond.comp = isEqual;
+        cond.stringValue.clear();
+    }
 
     if (args.count() == 3) {
         CellBase sumRangeStart(e->regions[2].firstSheet(), e->regions[2].firstRange().topLeft());
@@ -1333,16 +1344,17 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
 
     // run through the cells in the selected range
     Value empty;
+    SheetBase *rangeSheet = e && e->regions.size() > 1 ? e->regions[1].firstSheet() : (e ? e->sheet : nullptr);
     if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
         for (int r = r1; r <= r2; ++r) {
-            const bool setAllEmpty = excludeHiddenRows && e->sheet->rowIsHidden(r);
+            const bool setAllEmpty = rangeSheet && (rangeSheet->rowIsFiltered(r) || (excludeHiddenRows && rangeSheet->rowIsHidden(r)));
             for (int c = c1; c <= c2; ++c) {
                 // put an empty value to all cells in a hidden row
                 if (setAllEmpty) {
                     range.setElement(c - c1, r - r1, empty);
                     continue;
                 }
-                CellBase cell(e->sheet, c, r);
+                CellBase cell(rangeSheet ? static_cast<SheetBase *>(rangeSheet) : e->sheet, c, r);
                 // put an empty value to the place of all occurrences of the SUBTOTAL function
                 if (cell.isFormula() && cell.userInput().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
                     range.setElement(c - c1, r - r1, empty);

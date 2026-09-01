@@ -402,32 +402,38 @@ void Odf::loadCalculationSettings(CalculationSettings *settings, const KoXmlElem
             QString value = element.attributeNS(KoXmlNS::table, "case-sensitive", "true");
             if (value == "false")
                 settings->setCaseSensitiveComparisons(Qt::CaseInsensitive);
-        } else if (element.hasAttributeNS(KoXmlNS::table, "precision-as-shown")) {
+        }
+        if (element.hasAttributeNS(KoXmlNS::table, "precision-as-shown")) {
             settings->setPrecisionAsShown(false);
             QString value = element.attributeNS(KoXmlNS::table, "precision-as-shown", "false");
             if (value == "true")
                 settings->setPrecisionAsShown(true);
-        } else if (element.hasAttributeNS(KoXmlNS::table, "search-criteria-must-apply-to-whole-cell")) {
+        }
+        if (element.hasAttributeNS(KoXmlNS::table, "search-criteria-must-apply-to-whole-cell")) {
             settings->setWholeCellSearchCriteria(true);
             QString value = element.attributeNS(KoXmlNS::table, "search-criteria-must-apply-to-whole-cell", "true");
             if (value == "false")
                 settings->setWholeCellSearchCriteria(false);
-        } else if (element.hasAttributeNS(KoXmlNS::table, "automatic-find-labels")) {
+        }
+        if (element.hasAttributeNS(KoXmlNS::table, "automatic-find-labels")) {
             settings->setAutomaticFindLabels(true);
             QString value = element.attributeNS(KoXmlNS::table, "automatic-find-labels", "true");
             if (value == "false")
                 settings->setAutomaticFindLabels(false);
-        } else if (element.hasAttributeNS(KoXmlNS::table, "use-regular-expressions")) {
+        }
+        if (element.hasAttributeNS(KoXmlNS::table, "use-regular-expressions")) {
             settings->setUseRegularExpressions(true);
             QString value = element.attributeNS(KoXmlNS::table, "use-regular-expressions", "true");
             if (value == "false")
                 settings->setUseRegularExpressions(false);
-        } else if (element.hasAttributeNS(KoXmlNS::table, "use-wildcards")) {
+        }
+        if (element.hasAttributeNS(KoXmlNS::table, "use-wildcards")) {
             settings->setUseWildcards(false);
             QString value = element.attributeNS(KoXmlNS::table, "use-wildcards", "false");
             if (value == "true")
                 settings->setUseWildcards(true);
-        } else if (element.hasAttributeNS(KoXmlNS::table, "null-year")) {
+        }
+        if (element.hasAttributeNS(KoXmlNS::table, "null-year")) {
             settings->setReferenceYear(1940);
             QString value = element.attributeNS(KoXmlNS::table, "null-year", "1940");
             if (!value.isEmpty() && value != "1940") {

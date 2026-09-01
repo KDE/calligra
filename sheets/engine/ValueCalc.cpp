@@ -2651,8 +2651,13 @@ void ValueCalc::getCond(Condition &cond, Value val)
 
 bool ValueCalc::matches(const Condition &cond, Value val)
 {
-    if (val.isEmpty())
-        return false;
+    if (val.isNull() || val.isEmpty()) {
+        if (cond.type != string)
+            return false;
+        if (cond.comp == notEqual)
+            return !cond.stringValue.isEmpty();
+        return cond.comp == isEqual && cond.stringValue.isEmpty();
+    }
     if (cond.type == numeric) {
         Number d = converter->toFloat(val);
         switch (cond.comp) {
@@ -2691,6 +2696,8 @@ bool ValueCalc::matches(const Condition &cond, Value val)
         }
     } else {
         QString d = converter->asString(val).asString();
+        if (cond.stringValue.isEmpty() && d.trimmed().isEmpty())
+            return cond.comp == isEqual || cond.comp == wildcardMatch;
         switch (cond.comp) {
         case isEqual:
             if (d == cond.stringValue)

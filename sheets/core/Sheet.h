@@ -196,6 +196,7 @@ public:
 
     /** Returns whether a row is hidden. */
     virtual bool rowIsHidden(int row) const override;
+    virtual bool rowIsFiltered(int row) const override;
 
     /**
      * @return a flag that indicates whether the sheet should paint the page breaks.
