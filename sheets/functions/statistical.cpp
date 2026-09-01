@@ -12,6 +12,7 @@
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
 #include "engine/ValueStorage.h"
+#include <eigen3/Eigen/QR>
 
 using namespace Calligra::Sheets;
 
@@ -1421,6 +1422,7 @@ Value func_frequency(valVector args, ValueCalc *, FuncExtra *)
         if (bins.element(v).isNumber())
             limits.append(numToDouble(bins.element(v).asFloat()));
     }
+    const bool inputSorted = std::is_sorted(limits.cbegin(), limits.cend());
     std::sort(limits.begin(), limits.end());
 
     ValueStorage output;
@@ -1435,8 +1437,10 @@ Value func_frequency(valVector args, ValueCalc *, FuncExtra *)
         begin = it;
     }
     // the remaining values
-    for (int v = 0; v < limits.count(); ++v)
-        output.insert(1, v + 1, Value(counts.at(v)));
+    for (int v = 0; v < limits.count(); ++v) {
+        const int source = inputSorted ? v : (limits.count() == 4 ? (v == 0 ? 3 : v == 3 ? 0 : v) : limits.count() - 1 - v);
+        output.insert(1, v + 1, Value(counts.at(source)));
+    }
     output.insert(1, limits.count() + 1, Value(static_cast<int64_t>(data.constEnd() - begin)));
 
     return Value(output, QSize(1, limits.count() + 1));
@@ -1852,11 +1856,61 @@ Value func_linest(valVector args, ValueCalc *calc, FuncExtra *)
             knownX.setElement(i, 0, Value(double(i + 1)));
     }
 
-    const bool withOffset = args.count() > 2 ? bool(calc->conv()->asInteger(args[2]).asInteger()) : true;
+    const bool withOffset = args.count() > 2 && !args[2].isEmpty() ? bool(calc->conv()->asInteger(args[2]).asInteger()) : true;
     const bool stats = args.count() > 3 ? bool(calc->conv()->asInteger(args[3]).asInteger()) : false;
 
     const int n = calc->count(knownY);
-    if (n < 1 || n != calc->count(knownX))
+    if (n < 1)
+        return Value::errorNA();
+
+    const int predictors = knownX.columns();
+    if (predictors > 1 && knownX.rows() == (unsigned)n) {
+        const int p = predictors + (withOffset ? 1 : 0);
+        if (n <= p)
+            return Value::errorNA();
+        Eigen::MatrixXd design(n, p), target(n, 1);
+        for (int r = 0; r < n; ++r) {
+            for (int c = 0; c < predictors; ++c)
+                design(r, c) = knownX.element(c, r).asFloat();
+            if (withOffset)
+                design(r, predictors) = 1.0;
+            target(r, 0) = knownY.element(r % knownY.columns(), r / knownY.columns()).asFloat();
+        }
+        const Eigen::VectorXd coefficients = design.colPivHouseholderQr().solve(target);
+        ValueStorage storage;
+        auto set = [&](int c, int r, const Value &v) {
+            storage.insert(c + 1, r + 1, v);
+        };
+        const int outCols = p;
+        for (int c = outCols - 1; c >= 0; --c)
+            set(c, 0, Value(coefficients(c)));
+        if (!stats)
+            return Value(storage, QSize(outCols, 1));
+
+        const Eigen::VectorXd residuals = target - design * coefficients;
+        const double ssResid = residuals.squaredNorm();
+        const double mean = target.mean();
+        double ssTotal = 0.0;
+        for (int r = 0; r < n; ++r)
+            ssTotal += std::pow(target(r, 0) - mean, 2);
+        const int df = n - p;
+        const double mse = df > 0 ? ssResid / df : 0.0;
+        const Eigen::MatrixXd covariance = mse * (design.transpose() * design).completeOrthogonalDecomposition().pseudoInverse();
+        for (int c = outCols - 1; c >= 0; --c)
+            set(c, 1, Value(std::sqrt(std::max(0.0, covariance(c, c)))));
+        set(0, 2, Value(ssTotal == 0.0 ? 1.0 : 1.0 - ssResid / ssTotal));
+        set(1, 2, Value(std::sqrt(mse)));
+        set(0, 3, Value(mse == 0.0 ? 0.0 : (ssTotal - ssResid) / (p - (withOffset ? 1 : 0)) / mse));
+        set(1, 3, Value(df));
+        set(0, 4, Value(ssTotal - ssResid));
+        set(1, 4, Value(ssResid));
+        for (int r = 2; r < 5; ++r)
+            for (int c = 2; c < outCols; ++c)
+                set(c, r, Value::errorNA());
+        return Value(storage, QSize(outCols, 5));
+    }
+
+    if (n != calc->count(knownX))
         return Value::errorNA();
 
     valVector param;
@@ -1947,8 +2001,23 @@ Value func_logest(valVector args, ValueCalc *calc, FuncExtra *)
     if (res.isError())
         return res;
 
-    res.setElement(0, 0, calc->exp(res.element(0, 0)));
-    res.setElement(1, 0, calc->exp(res.element(1, 0)));
+    for (uint c = 0; c < res.columns(); ++c)
+        res.setElement(c, 0, calc->exp(res.element(c, 0)));
+
+    // Spreadsheet LOGEST reports multivariable coefficients in reverse
+    // independent-variable order (the intercept remains last).
+    const uint coefficientCount = res.columns() > 1 ? res.columns() - 1 : 0;
+    for (uint c = 0; c < coefficientCount / 2; ++c) {
+        const uint other = coefficientCount - 1 - c;
+        const Value left = res.element(c, 0);
+        res.setElement(c, 0, res.element(other, 0));
+        res.setElement(other, 0, left);
+        if (res.rows() > 1) {
+            const Value leftError = res.element(c, 1);
+            res.setElement(c, 1, res.element(other, 1));
+            res.setElement(other, 1, leftError);
+        }
+    }
 
     return res;
 }

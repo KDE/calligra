@@ -2569,7 +2569,7 @@
      <table:table-cell office:value-type="float" office:value="538.890398315583" calcext:value-type="float">
       <text:p>538.890398315583</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce14" table:formula="of:=ROUND([.A21];12)=ROUND([.B21];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce14" table:formula="of:=ROUND([.A21];8)=ROUND([.B21];8)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=K32" calcext:value-type="string">
@@ -2928,7 +2928,7 @@
      <table:table-cell office:value-type="float" office:value="80387.1472131755" calcext:value-type="float">
       <text:p>80387.1472131755</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A38];12)=ROUND([.B38];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A38];7)=ROUND([.B38];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=O29" calcext:value-type="string">
