@@ -1,0 +1,10 @@
+version = 1
+SPDX-PackageName = "Calligra"
+SPDX-PackageSupplier = "Carl Schwan <carl@carlschwan.eu>"
+SPDX-PackageDownloadLocation = "https://invent.kde.org/office/calligra"
+
+[[annotations]]
+path = ["sheets/tests/data/fods/"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "LibreOffice contributors"
+SPDX-License-Identifier = "MPL-2.0"
