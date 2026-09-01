@@ -405,7 +405,7 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("SUMPRODUCT", func_sumproduct);
-    f->setParamCount(2);
+    f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
     f = new Function("SUMX2PY2", func_sumx2py2);
@@ -730,6 +730,10 @@ void awKurtosis(ValueCalc *c, Value &res, Value val, Value p)
 
 void tawSumproduct(ValueCalc *c, Value &res, Value v1, Value v2)
 {
+    if (v1.isBoolean())
+        v1 = Value(v1.asBoolean());
+    if (v2.isBoolean())
+        v2 = Value(v2.asBoolean());
     // res += v1*v2
     res = c->add(res, c->mul(v1, v2));
 }
@@ -3026,8 +3030,31 @@ Value func_steyx(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_sumproduct(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value result;
-    calc->twoArrayWalk(args[0], args[1], result, tawSumproduct);
+    if (args.count() == 2) {
+        Value result;
+        calc->twoArrayWalk(args[0], args[1], result, tawSumproduct);
+        return result;
+    }
+    Value result(0.0);
+    unsigned rows = 1, cols = 1;
+    for (const Value &arg : args) {
+        if (arg.isArray()) {
+            if ((rows != 1 && rows != arg.rows()) || (cols != 1 && cols != arg.columns()))
+                return Value::errorVALUE();
+            rows = arg.rows();
+            cols = arg.columns();
+        }
+    }
+    for (unsigned row = 0; row < rows; ++row) {
+        for (unsigned col = 0; col < cols; ++col) {
+            Value product(1.0);
+            for (const Value &arg : args) {
+                const Value value = arg.isArray() ? arg.element(col, row) : arg;
+                product = calc->mul(product, value);
+            }
+            result = calc->add(result, product);
+        }
+    }
     return result;
 }
 
