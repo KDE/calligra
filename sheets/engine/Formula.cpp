@@ -1462,10 +1462,19 @@ Value Formula::Private::valueOrElement(FuncExtra &fe, const stackEntry &entry) c
     return Value::errorVALUE();
 }
 
-// On OO.org Calc and MS Excel operations done with +, -, * and / do fail if one of the values is
-// non-numeric. This differs from formulas like SUM which just ignores non numeric values.
+// Arithmetic operators reject non-numeric values, unlike functions such as SUM.
 Value numericOrError(const ValueConverter *converter, const Value &v)
 {
+    if (v.isArray()) {
+        Value result(Value::Array);
+        for (unsigned row = 0; row < v.rows(); ++row) {
+            for (unsigned col = 0; col < v.columns(); ++col) {
+                const Value element = v.element(col, row);
+                result.setElement(col, row, element.isString() && element.asString().isEmpty() ? Value::errorVALUE() : numericOrError(converter, element));
+            }
+        }
+        return result;
+    }
     switch (v.type()) {
     case Value::Empty:
     case Value::Boolean:
@@ -1487,6 +1496,32 @@ Value numericOrError(const ValueConverter *converter, const Value &v)
         return v;
     }
     return Value::errorVALUE();
+}
+
+static Value compareValues(ValueCalc *calc, const Value &a, const Value &b, int op)
+{
+    if (a.isArray() || b.isArray()) {
+        Value result(Value::Array);
+        const unsigned rows = qMax(a.rows(), b.rows());
+        const unsigned cols = qMax(a.columns(), b.columns());
+        for (unsigned row = 0; row < rows; ++row)
+            for (unsigned col = 0; col < cols; ++col)
+                result.setElement(col, row, compareValues(calc, a.element(col, row), b.element(col, row), op));
+        return result;
+    }
+    bool value = false;
+    switch (op) {
+    case 0:
+        value = calc->naturalEqual(a, b, calc->settings()->caseSensitiveComparisons());
+        break;
+    case 1:
+        value = calc->naturalLower(a, b, calc->settings()->caseSensitiveComparisons());
+        break;
+    default:
+        value = calc->naturalGreater(a, b, calc->settings()->caseSensitiveComparisons());
+        break;
+    }
+    return Value(value);
 }
 
 Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, Value> &values) const
@@ -1549,9 +1584,9 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
             // push the result to stack
         case Opcode::Add:
             entry.reset();
-            val2 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
-            val1 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
-            val2 = calc->add(val1, val2);
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
+            val2 = val1.isArray() || val2.isArray() ? calc->twoArrayMap(val1, &ValueCalc::add, val2) : calc->add(val1, val2);
             entry.reset();
             entry.val = val2;
             stack.push(entry);
@@ -1566,28 +1601,29 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
             stack.push(entry);
             break;
 
-        case Opcode::Mul:
-            val2 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
-            val1 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
-            val2 = calc->mul(val1, val2);
+        case Opcode::Mul: {
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
+            val2 = val1.isArray() || val2.isArray() ? calc->twoArrayMap(val1, &ValueCalc::mul, val2) : calc->mul(val1, val2);
             entry.reset();
             entry.val = val2;
             stack.push(entry);
             break;
+        }
 
         case Opcode::Div:
-            val2 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
-            val1 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
-            val2 = calc->div(val1, val2);
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
+            val2 = val1.isArray() || val2.isArray() ? calc->twoArrayMap(val1, &ValueCalc::div, val2) : calc->div(val1, val2);
             entry.reset();
             entry.val = val2;
             stack.push(entry);
             break;
 
         case Opcode::Pow:
-            val2 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
-            val1 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
-            val2 = calc->pow(val1, val2);
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
+            val2 = val1.isArray() || val2.isArray() ? calc->twoArrayMap(val1, &ValueCalc::pow, val2) : calc->pow(val1, val2);
             entry.reset();
             entry.val = val2;
             stack.push(entry);
@@ -1676,8 +1712,14 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
 
             // comparison
         case Opcode::Equal:
-            val1 = d->valueOrElement(fe, stack.pop());
-            val2 = d->valueOrElement(fe, stack.pop());
+            val1 = stack.pop().val;
+            val2 = stack.pop().val;
+            if (val1.isArray() || val2.isArray()) {
+                entry.reset();
+                entry.val = compareValues(calc, val2, val1, 0);
+                stack.push(entry);
+                break;
+            }
             if (val1.isError())
                 ;
             else if (val2.isError())
@@ -1693,8 +1735,14 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
 
             // less than
         case Opcode::Less:
-            val2 = d->valueOrElement(fe, stack.pop());
-            val1 = d->valueOrElement(fe, stack.pop());
+            val2 = stack.pop().val;
+            val1 = stack.pop().val;
+            if (val1.isArray() || val2.isArray()) {
+                entry.reset();
+                entry.val = compareValues(calc, val1, val2, 1);
+                stack.push(entry);
+                break;
+            }
             if (val1.isError())
                 ;
             else if (val2.isError())
@@ -1710,8 +1758,14 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
 
             // greater than
         case Opcode::Greater: {
-            val2 = d->valueOrElement(fe, stack.pop());
-            val1 = d->valueOrElement(fe, stack.pop());
+            val2 = stack.pop().val;
+            val1 = stack.pop().val;
+            if (val1.isArray() || val2.isArray()) {
+                entry.reset();
+                entry.val = compareValues(calc, val1, val2, 2);
+                stack.push(entry);
+                break;
+            }
             if (val1.isError())
                 ;
             else if (val2.isError())
