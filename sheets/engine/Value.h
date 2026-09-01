@@ -183,6 +183,9 @@ public:
      */
     bool isNull() const;
 
+    bool isReference() const;
+    void setReference(bool reference = true);
+
     /**
      * Returns the format of the value, i.e. how should it be interpreted.
      */

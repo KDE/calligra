@@ -1751,6 +1751,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
                             val1 = cell.value();
                         values[cell] = val1;
                     }
+                    if (val1.isEmpty())
+                        val1.setReference();
                 }
                 // store the reference, so we can use it within functions
                 entry.col1 = entry.col2 = position.x();

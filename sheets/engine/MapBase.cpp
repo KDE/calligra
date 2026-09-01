@@ -501,5 +501,10 @@ SheetBase *MapBase::filterSheetName(QString &sRegion) const
 
 bool MapBase::isNamedArea(const QString &name)
 {
-    return namedAreaManager()->contains(name);
+    if (namedAreaManager()->contains(name))
+        return true;
+    const QList<QString> areas = namedAreaManager()->areaNames();
+    return std::any_of(areas.cbegin(), areas.cend(), [&](const QString &area) {
+        return area.compare(name, Qt::CaseInsensitive) == 0;
+    });
 }

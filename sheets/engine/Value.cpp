@@ -56,6 +56,7 @@ class Q_DECL_HIDDEN Value::Private : public QSharedData
 public:
     Value::Type type;
     Value::Format format;
+    bool reference = false;
 
     union { // 64 bits at max!
         // b is also secondarily used to indicate a null value if type == Empty,
@@ -80,6 +81,7 @@ public:
         : QSharedData(o)
         , type(o.type)
         , format(o.format)
+        , reference(o.reference)
     {
         switch (type) {
         case Value::Empty:
@@ -409,6 +411,17 @@ bool Value::isNull() const
     return d ? d->type == Empty && d->b : false;
 }
 
+bool Value::isReference() const
+{
+    return d && d->reference;
+}
+
+void Value::setReference(bool reference)
+{
+    d.detach();
+    d->reference = reference;
+}
+
 // get the value as boolean
 bool Value::asBoolean() const
 {
@@ -639,14 +652,18 @@ unsigned Value::count() const
 // reference to empty value
 const Value &Value::empty()
 {
+    if (ks_value_empty.d->b)
+        ks_value_empty.d.detach();
+    ks_value_empty.d->b = false;
     return ks_value_empty;
 }
 
 // reference to null value
 const Value &Value::null()
 {
-    if (!ks_value_null.isNull())
-        ks_value_null.d->b = true;
+    if (!ks_value_null.d->b)
+        ks_value_null.d.detach();
+    ks_value_null.d->b = true;
     return ks_value_null;
 }
 

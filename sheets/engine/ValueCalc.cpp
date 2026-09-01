@@ -2659,6 +2659,8 @@ bool ValueCalc::matches(const Condition &cond, Value val)
         return cond.comp == isEqual && cond.stringValue.isEmpty();
     }
     if (cond.type == numeric) {
+        if (val.isString())
+            return false;
         Number d = converter->toFloat(val);
         switch (cond.comp) {
         case isEqual:

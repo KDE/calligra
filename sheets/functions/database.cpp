@@ -171,12 +171,18 @@ void DBConditions::parse(Value conds)
         // fill in the conditions for a given column name
         for (int r = 0; r < rows; ++r) {
             Value cnd = conds.element(c, r + 1);
-            if (cnd.isEmpty())
+            if (cnd.isEmpty() && !cnd.isReference())
                 continue;
             int idx = r * cols + col;
             // if (cond[idx]) delete cond[idx];
             Condition *theCond = new Condition;
-            calc->getCond(*theCond, cnd);
+            if (cnd.isEmpty()) {
+                theCond->type = Calligra::Sheets::string;
+                theCond->comp = isEqual;
+                theCond->stringValue.clear();
+            } else {
+                calc->getCond(*theCond, cnd);
+            }
             cond[idx].append(theCond);
         }
     }
@@ -202,7 +208,7 @@ bool DBConditions::matches(unsigned row)
                 }
             }
         }
-        if (match) // all conditions in this row matched
+        if (match)
             return true;
     }
 
