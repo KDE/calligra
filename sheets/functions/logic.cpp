@@ -154,18 +154,25 @@ Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
     bool guard = asBool(args[0], calc, &ok);
     if (!ok)
         return Value::errorVALUE();
-    if (guard)
+    if (guard) {
+        if (args[1].isNull())
+            return Value(0);
+        if (args[1].isBoolean())
+            return Value(args[1].asBoolean() ? 1 : 0);
         return args[1];
+    }
     // evaluated to false
     if (args.count() == 3) {
         if (args[2].isNull()) {
             return Value(0);
         } else {
+            if (args[2].isBoolean())
+                return Value(args[2].asBoolean() ? 1 : 0);
             return args[2];
         }
     } else {
         // only two arguments
-        return Value(false);
+        return Value(0);
     }
 }
 
@@ -175,7 +182,9 @@ Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_iferror(valVector args, ValueCalc *, FuncExtra *)
 {
     if (args[0].isError())
-        return args[1];
+        return args[1].isNull() ? Value(0) : args[1];
+    if (args[0].isEmpty() && args[1].isNull())
+        return Value(0);
     return args[0];
 }
 
@@ -185,7 +194,9 @@ Value func_iferror(valVector args, ValueCalc *, FuncExtra *)
 Value func_ifna(valVector args, ValueCalc *, FuncExtra *)
 {
     if (args[0] == Value::errorNA())
-        return args[1];
+        return args[1].isNull() ? Value(0) : args[1];
+    if (args[0].isEmpty() && args[1].isNull())
+        return Value(0);
     return args[0];
 }
 

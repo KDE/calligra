@@ -244,9 +244,11 @@ Value ValueCalc::add(const Value &a, const Value &b)
     if (a.isArray() || b.isArray())
         return twoArrayMap(a, &ValueCalc::add, b);
 
-    Number aa, bb;
-    aa = converter->toFloat(a);
-    bb = converter->toFloat(b);
+    bool okA = true, okB = true;
+    Number aa = converter->asFloat(a, &okA).asFloat();
+    Number bb = converter->asFloat(b, &okB).asFloat();
+    if (!okA || !okB)
+        return Value::errorVALUE();
     Value res;
     if (((aa < 0 && bb > 0) || (aa > 0 && bb < 0)) && approxEqual(Value(aa), Value(-bb)))
         res = Value(0);
@@ -268,9 +270,11 @@ Value ValueCalc::sub(const Value &a, const Value &b)
     if (a.isArray() || b.isArray())
         return twoArrayMap(a, &ValueCalc::sub, b);
 
-    Number aa, bb;
-    aa = converter->toFloat(a);
-    bb = converter->toFloat(b);
+    bool okA = true, okB = true;
+    Number aa = converter->asFloat(a, &okA).asFloat();
+    Number bb = converter->asFloat(b, &okB).asFloat();
+    if (!okA || !okB)
+        return Value::errorVALUE();
     Value res;
     if (((aa < 0 && bb < 0) || (aa > 0 && bb > 0)) && approxEqual(Value(aa), Value(bb)))
         res = Value(0);

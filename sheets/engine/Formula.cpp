@@ -1661,11 +1661,14 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
 
             // logical not
         case Opcode::Not:
-            val1 = converter->asBoolean(d->valueOrElement(fe, stack.pop()));
-            if (val1.isError())
-                val1 = Value::errorVALUE();
-            else
-                val1 = Value(!val1.asBoolean());
+            val1 = d->valueOrElement(fe, stack.pop());
+            if (!val1.isError()) {
+                val1 = converter->asBoolean(val1);
+                if (val1.isError())
+                    val1 = Value::errorVALUE();
+                else
+                    val1 = Value(!val1.asBoolean());
+            }
             entry.reset();
             entry.val = val1;
             stack.push(entry);

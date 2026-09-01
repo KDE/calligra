@@ -87,8 +87,7 @@ void TestLogicFunctions::testAND()
 void TestLogicFunctions::testFALSE()
 {
     CHECK_EVAL("FALSE()", Value(false));
-    // Applications that implement logical values as 0/1 must map FALSE() to 0
-    CHECK_EVAL("IF(ISNUMBER(FALSE());FALSE()=0;FALSE())", Value(false));
+    CHECK_EVAL("IF(ISNUMBER(FALSE());FALSE()=0;FALSE())", Value(0));
     // note that kspread distinguishes between boolean and math
     CHECK_EVAL("FALSE()=0", Value(false));
     CHECK_EVAL("FALSE()=1", Value(false));
@@ -111,13 +110,14 @@ void TestLogicFunctions::testIF()
     CHECK_EVAL("IF(\"x\";7;8)", Value::errorVALUE());
     CHECK_EVAL("IF(\"1\";7;8)", Value::errorVALUE());
     CHECK_EVAL("IF(\"\";7;8)", Value::errorVALUE());
-    CHECK_EVAL("IF(FALSE();7)", Value(false));
+    CHECK_EVAL("IF(FALSE();7)", Value(0));
     CHECK_EVAL("IF(FALSE();7;)", Value(0));
     // Assuming A1 is an empty cell, using it in the following
     // context should be different from passing no argument at all
     CHECK_EVAL("IF(FALSE();7;A1)", Value(Value::Empty));
     CHECK_EVAL("IF(TRUE();4;1/0)", Value(4));
     CHECK_EVAL("IF(FALSE();1/0;5)", Value(5));
+    CHECK_EVAL("IF(\"foo\"+1<=1;0;1)", Value::errorVALUE());
     // Empty vs *
     CHECK_EVAL("IF(A1==2;2;4)", Value(4));
     CHECK_EVAL("IF(A1==2.5;2;4)", Value(4));
@@ -169,8 +169,7 @@ void TestLogicFunctions::testOR()
 void TestLogicFunctions::testTRUE()
 {
     CHECK_EVAL("TRUE()", Value(true));
-    // Applications that implement logical values as 0/1 must map TRUE() to 1
-    CHECK_EVAL("IF(ISNUMBER(TRUE());TRUE()=0;TRUE())", Value(true));
+    CHECK_EVAL("IF(ISNUMBER(TRUE());TRUE()=0;TRUE())", Value(1));
     // note that kspread distinguishes between boolean and math
     CHECK_EVAL("TRUE()=1", Value(false));
     CHECK_EVAL("TRUE()=0", Value(false));
