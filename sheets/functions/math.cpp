@@ -867,6 +867,8 @@ Value func_rawsubtract(valVector args, ValueCalc *, FuncExtra *)
     Number result = args[0].asFloat();
     for (int i = 1; i < args.count(); ++i)
         result -= args[i].asFloat();
+    if (std::abs(result) < 1e-14)
+        return Value(0);
     return Value(result);
 }
 

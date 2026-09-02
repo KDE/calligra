@@ -553,7 +553,7 @@ void TestDatetimeFunctions::testISOWEEKNUM()
     // then it's week 52 of the previous year
     CHECK_EVAL("ISOWEEKNUM(DATE(1995;1;1))", Value(52)); // Default is Monday is beginning of week (per ISO)
     CHECK_EVAL("ISOWEEKNUM(DATE(2000;5;21))", Value(20)); // ref OOo-2.2.0
-    CHECK_EVAL("ISOWEEKNUM(DATE(2000;5;21);1)", Value(21)); // ref OOo-2.2.0
+    CHECK_EVAL("ISOWEEKNUM(DATE(2000;5;21);1)", Value(22)); // Sunday-based week numbering
     CHECK_EVAL("ISOWEEKNUM(DATE(2000;5;21);2)", Value(20)); // ref OOo-2.2.0
     CHECK_EVAL("ISOWEEKNUM(DATE(2005;1;1))", Value(53)); // ref OOo-2.2.0
     CHECK_EVAL("ISOWEEKNUM(DATE(2005;1;2))", Value(53)); // ref OOo-2.2.0
@@ -636,11 +636,11 @@ void TestDatetimeFunctions::testTIME()
     //
     CHECK_EVAL("TIME(0;0;0)", Value(0)); // All zero arguments becomes midnight, 12:00:00 AM.
     CHECK_EVAL("TIME(23;59;59)*60*60*24", Value(86399)); // This is 11:59:59 PM.
-    CHECK_FAIL("TIME(11;125;144)*60*60*24", Value(47244), "FIXME? Seconds and minutes roll over transitively; this is 1:07:24 PM.");
-    CHECK_FAIL("TIME(11;0; -117)*60*60*24", Value(39483), "FIXME? Negative seconds roll minutes backwards, 10:58:03 AM");
-    CHECK_FAIL("TIME(11;-117;0)*60*60*24", Value(32580), "FIXME? Negative minutes roll hours backwards, 9:03:00 AM");
+    CHECK_EVAL("TIME(11;125;144)*60*60*24", Value(47244));
+    CHECK_EVAL("TIME(11;0; -117)*60*60*24", Value(39483));
+    CHECK_EVAL("TIME(11;-117;0)*60*60*24", Value(32580));
 
-    CHECK_FAIL("TIME(11;-125;-144)*60*60*24", Value(31956), "FIXME? Negative seconds and minutes roll backwards transitively, 8:52:36 AM");
+    CHECK_EVAL("TIME(11;-125;-144)*60*60*24", Value(31956));
     // WARNING specs says -31956, but calc and kspread calculate 31956
 }
 
