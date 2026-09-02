@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-03-05 11:55+0100\n"
+"PO-Revision-Date: 2026-09-01 16:56+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1140,7 +1140,7 @@ msgstr "%1 non es un file."
 #: main/KoDocument.cpp:1692
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
-msgstr "Non poteva aperir lefile per leger (verifica permissiones de lectura)"
+msgstr "Non poteva aperir le file per leger (verifica permissiones de lectura)"
 
 #: main/KoDocument.cpp:1703
 #, kde-format
@@ -2100,7 +2100,7 @@ msgstr "Autor"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
 #, kde-format
 msgid "Select a master slide design:"
-msgstr "Selige un dessigno de diapositiva patre (master):"
+msgstr "Selige un designo de diapositiva patre (master):"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
 #, kde-format
@@ -2110,7 +2110,7 @@ msgstr "Diapositiva patre (master)"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
 #, kde-format
 msgid "Select a master page design:"
-msgstr "Selige un sdessigno de pagina patre (master):"
+msgstr "Selige un designo de pagina patre (master):"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:93
