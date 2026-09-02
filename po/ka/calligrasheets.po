@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-08-31 06:23+0200\n"
+"PO-Revision-Date: 2026-09-01 05:30+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -6128,7 +6128,7 @@ msgstr "N საწყისი ხარისხია, რომელში�
 #: functions/math.xml:52
 #, kde-format
 msgid "M the increment by which to increase N for each term in the series"
-msgstr ""
+msgstr "M ბიჯია, რომლითაც გაიზრდება N რიგის თითოეული პირობისთვის"
 
 #: functions/math.xml:56
 #, kde-format
@@ -10826,6 +10826,8 @@ msgstr "ალბათობები, თითო თითოეული �
 #, kde-format
 msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
 msgstr ""
+"ქვედა ზღვარი (ან ერთადერთი მნიშვნელობა შესამოწმებლად, თუ ზედა ზღვარი "
+"გამოტოვებულია)"
 
 #: functions/statistical.xml:2068
 #, kde-format

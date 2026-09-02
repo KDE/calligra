@@ -1,20 +1,20 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2020, 2021, 2022, 2024 Giovanni Sora <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2020, 2021, 2022, 2024, 2026 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-08-28 16:02+0200\n"
+"PO-Revision-Date: 2026-09-01 17:26+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: ectx: Menu (file)
@@ -504,7 +504,7 @@ msgstr "Executa sur le latere dextere de iste pagina"
 #: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
 #, kde-format
 msgid "Run on longest side of this shape"
-msgstr "Curre sul latere plus longe de iste forma"
+msgstr "Curre sur latere plus longe de iste forma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, both)
 #: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61

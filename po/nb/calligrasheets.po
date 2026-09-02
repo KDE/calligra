@@ -8610,7 +8610,7 @@ msgstr ""
 #: functions/reference.xml:397
 #, kde-format
 msgid "Item"
-msgstr ""
+msgstr "Element"
 
 #: functions/reference.xml:401
 #, kde-format
