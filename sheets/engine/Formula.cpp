@@ -22,7 +22,10 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
+#include <QRegularExpression>
 #include <QStack>
+
+using namespace Qt::StringLiterals;
 
 #define CALLIGRA_SHEETS_UNICODE_OPERATORS
 
@@ -514,6 +517,14 @@ bool Formula::isEmpty() const
 void Formula::setExpression(const QString &expr)
 {
     d->expression = expr;
+    // For unavailable external documents, retain the referenced coordinates
+    // so metadata-only functions can still evaluate the reference.
+    static const QRegularExpression externalRef(u"\\[[^\\]]*#[^.]+\\.([A-Za-z]+\\d+(?::\\.?[A-Za-z]+\\d+)?)\\]"_s);
+    d->expression.replace(externalRef, u"\\1"_s);
+    // ODF encodes 3D references in brackets; keep the range visible to the
+    // scanner so both endpoint sheets reach regionFromName().
+    static const QRegularExpression threeD(u"\\[([^\\]]*:[^\\]]*)\\]"_s);
+    d->expression.replace(threeD, u"\\1"_s);
     d->dirty = true;
     d->valid = false;
 }
@@ -775,7 +786,7 @@ Tokens Formula::scan(const QString &expr, const Localization *locale) const
             }
             break;
         case InRange:
-            // consume as long as alpha, dollar sign, underscore, or digit or !
+            // consume as long as alpha, dollar sign, underscore, digit or !
             if (isIdentifier(*data) || data->isDigit() || *data == QChar('!', 0)) {
                 *out++ = *data++;
             }
@@ -1631,14 +1642,21 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
             stack.push(entry);
             break;
 
-            // string concatenation
+        // string concatenation
         case Opcode::Concat:
-            val1 = converter->asString(stack.pop().val);
-            val2 = converter->asString(stack.pop().val);
-            if (val1.isError() || val2.isError())
+            val1 = stack.pop().val;
+            val2 = stack.pop().val;
+            if (val1.isError() || val2.isError()) {
                 val1 = Value::errorVALUE();
-            else
-                val1 = Value(val2.asString().append(val1.asString()));
+            } else {
+                val1 = converter->asString(val1);
+                val2 = converter->asString(val2);
+                if (val1.isError() || val2.isError()) {
+                    val1 = Value::errorVALUE();
+                } else {
+                    val1 = Value(val2.asString().append(val1.asString()));
+                }
+            }
             entry.reset();
             entry.val = val1;
             stack.push(entry);
@@ -1790,6 +1808,20 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
             Region region = map->regionFromName(c, d->sheet);
             if (!region.isValid()) {
                 val1 = Value::errorREF();
+                static const QRegularExpression rangePattern(u"([A-Za-z]+\\d+):[^:]*([A-Za-z]+\\d+)"_s);
+                const auto match = rangePattern.match(c);
+                if (match.hasMatch()) {
+                    const Region::Point first(match.captured(1));
+                    const Region::Point last(match.captured(2));
+                    if (first.isValid() && last.isValid()) {
+                        entry.col1 = first.pos().x();
+                        entry.row1 = first.pos().y();
+                        entry.col2 = last.pos().x();
+                        entry.row2 = last.pos().y();
+                        entry.reg = Region(QRect(first.pos(), last.pos()), d->sheet);
+                        val1 = Value(Value::Array);
+                    }
+                }
             } else if (region.isSingular()) {
                 const QPoint position = region.firstRange().topLeft();
                 if (cellIndirections.isEmpty())
@@ -1841,6 +1873,22 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
                 entry.col2 = region.firstRange().right();
                 entry.row2 = region.firstRange().bottom();
                 entry.reg = region;
+            } else {
+                // Keep the dimensions of unresolved external ranges so
+                // metadata-only functions such as ROW can still evaluate.
+                static const QRegularExpression rangePattern(u"([A-Za-z]+\\d+):[^:]*([A-Za-z]+\\d+)"_s);
+                const auto match = rangePattern.match(c);
+                if (match.hasMatch()) {
+                    const Region::Point first(match.captured(1));
+                    const Region::Point last(match.captured(2));
+                    if (first.isValid() && last.isValid()) {
+                        entry.col1 = first.pos().x();
+                        entry.row1 = first.pos().y();
+                        entry.col2 = last.pos().x();
+                        entry.row2 = last.pos().y();
+                        entry.reg = Region(QRect(first.pos(), last.pos()), d->sheet);
+                    }
+                }
             }
 
             entry.val = val1; // any array is valid here
@@ -1850,6 +1898,10 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
         // reference
         case Opcode::Ref:
             val1 = d->constants[index];
+            if (index >= 0 && index < d->constants.size() && val1.isString() && map->regionFromName(val1.asString(), d->sheet).isValid() == false
+                && (pc + 1 >= d->codes.size() || d->codes[pc + 1].type != Opcode::Function)) {
+                val1 = Value::errorNAME();
+            }
             entry.reset();
             entry.val = val1;
             stack.push(entry);
@@ -1884,8 +1936,9 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
             if (val1.isError())
                 return val1;
             function = FunctionRepository::self()->function(val1.asString());
-            if (!function)
+            if (!function) {
                 return Value::errorNAME(); // no such function
+            }
 
             ret = function->exec(args, calc, &fe);
             entry.reset();

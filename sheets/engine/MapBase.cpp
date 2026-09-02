@@ -430,19 +430,23 @@ Region MapBase::regionFromName(const QString &expression, SheetBase *sheet) cons
         }
 
         // Single cell or cell range
+        if (sRegion.startsWith('[') && sRegion.endsWith(']')) {
+            sRegion = sRegion.mid(1, sRegion.size() - 2);
+        }
         int delimiterPos = sRegion.indexOf(':');
         if (delimiterPos > -1) {
             // range
             QString sUL = sRegion.left(delimiterPos);
             QString sLR = sRegion.mid(delimiterPos + 1);
+            if (sUL.startsWith('.'))
+                sUL.remove(0, 1);
+            if (sLR.startsWith('.'))
+                sLR.remove(0, 1);
 
             SheetBase *firstSheet = filterSheetName(sUL);
+            const bool hasExplicitLastSheet = sLR.contains('!') || sLR.contains('.');
             SheetBase *lastSheet = filterSheetName(sLR);
             // TODO: lastSheet is silently ignored if it is different from firstSheet
-
-            // Still has the sheet name separator?
-            if (sUL.contains('!') || sLR.contains('!'))
-                return res;
 
             if (!firstSheet)
                 firstSheet = sheet;
@@ -456,6 +460,8 @@ Region MapBase::regionFromName(const QString &expression, SheetBase *sheet) cons
             if (ul.isValid() && lr.isValid()) {
                 QRect range = QRect(ul.pos(), lr.pos());
                 res.add(range, firstSheet, ul.isTopFixed(), ul.isLeftFixed(), lr.isBottomFixed(), lr.isRightFixed());
+                if (hasExplicitLastSheet && lastSheet != firstSheet)
+                    res.add(range, lastSheet, ul.isTopFixed(), ul.isLeftFixed(), lr.isBottomFixed(), lr.isRightFixed());
             } else if (ul.isValid()) {
                 res.add(ul.pos(), firstSheet, ul.isTopFixed(), ul.isLeftFixed());
             } else { // lr.isValid()
@@ -463,10 +469,9 @@ Region MapBase::regionFromName(const QString &expression, SheetBase *sheet) cons
             }
         } else {
             // single cell
+            if (sRegion.startsWith('.'))
+                sRegion.remove(0, 1);
             SheetBase *targetSheet = filterSheetName(sRegion);
-            // Still has the sheet name separator?
-            if (sRegion.contains('!'))
-                return res;
             if (!targetSheet)
                 targetSheet = sheet;
             Region::Point pt(sRegion);

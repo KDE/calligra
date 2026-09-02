@@ -545,16 +545,32 @@ void DependencyManager::Private::computeDependencies(const CellBase &cell, const
 
     SheetBase *sheet = cell.sheet();
     int inAreasCall = 0;
+    int inReferenceMetadataCall = 0;
     Region providingRegion;
     for (int i = 0; i < tokens.count(); i++) {
         const Token &token = tokens[i];
 
+        if (inReferenceMetadataCall) {
+            if (token.isOperator() && token.asOperator() == Token::LeftPar)
+                inReferenceMetadataCall++;
+            else if (token.isOperator() && token.asOperator() == Token::RightPar)
+                inReferenceMetadataCall--;
+            continue;
+        }
         if (inAreasCall) {
             if (token.isOperator() && token.asOperator() == Token::LeftPar)
                 inAreasCall++;
             else if (token.isOperator() && token.asOperator() == Token::RightPar)
                 inAreasCall--;
         } else {
+            if (i > 0 && token.isOperator() && token.asOperator() == Token::LeftPar && tokens[i - 1].isIdentifier()) {
+                const QString functionName = tokens[i - 1].text();
+                if (functionName.compare("ROW", Qt::CaseInsensitive) == 0 || functionName.compare("ROWS", Qt::CaseInsensitive) == 0
+                    || functionName.compare("SHEET", Qt::CaseInsensitive) == 0 || functionName.compare("SHEETS", Qt::CaseInsensitive) == 0) {
+                    inReferenceMetadataCall = 1;
+                    continue;
+                }
+            }
             if (i > 0 && token.isOperator() && token.asOperator() == Token::LeftPar && tokens[i - 1].isIdentifier()
                 && QString::compare(tokens[i - 1].text(), "AREAS", Qt::CaseInsensitive) == 0)
                 inAreasCall = 1;

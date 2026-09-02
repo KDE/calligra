@@ -29,6 +29,8 @@ namespace Calligra
 namespace Sheets
 {
 
+using namespace Qt::StringLiterals;
+
 static void append(const QChar *from, const QChar *to, QChar **dest)
 {
     while (from < to) {

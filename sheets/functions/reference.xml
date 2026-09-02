@@ -252,6 +252,18 @@
    </Function>
 
    <Function>
+       <Name>XLOOKUP</Name>
+       <Parameter><Comment>Lookup value</Comment><Type>String/Numeric</Type></Parameter>
+       <Parameter><Comment>Lookup array</Comment><Type>Array</Type></Parameter>
+       <Parameter><Comment>Return array</Comment><Type>Array</Type></Parameter>
+       <Parameter><Comment>If not found (optional)</Comment><Type>Any</Type></Parameter>
+       <Help>
+           <Text>Searches an array for a value and returns the corresponding value from a result array.</Text>
+           <Syntax>XLOOKUP(value; lookup array; return array; if not found)</Syntax>
+       </Help>
+   </Function>
+
+   <Function>
        <Name>HLOOKUP</Name>
        <Type>String/Numeric</Type>
        <Parameter>
