@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-08-31 20:09+0200\n"
+"PO-Revision-Date: 2026-09-02 22:09+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -2289,6 +2289,8 @@ msgid ""
 "NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
 "otherwise identical."
 msgstr ""
+"NETWORKDAYS() är stavningen i OpenFormula/Excel av NETWORKDAY(). Båda är "
+"annars identiska."
 
 #: functions/datetime.xml:730
 #, kde-format
@@ -8709,11 +8711,15 @@ msgid ""
 "is recognized so documents that reference it still load, but always "
 "evaluates to an error."
 msgstr ""
+"Begär data från en annan program som kör via Dynamic Data Exchange, en "
+"Windows-baserad mekanism mellan processer som den här plattformen inte "
+"stöder. DDE() känns igen så dokument som refererar till det laddas "
+"fortfarande, men utvärderas alltid till ett fel."
 
 #: functions/reference.xml:406
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
-msgstr ""
+msgstr "DDE(server; ämne; objekt; läge)"
 
 #: functions/reference.xml:414
 #, kde-format
@@ -8723,7 +8729,7 @@ msgstr "Webbadress"
 #: functions/reference.xml:418
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr ""
+msgstr "Visar text (normalt webbadressen)"
 
 #: functions/reference.xml:422
 #, kde-format
@@ -8732,11 +8738,14 @@ msgid ""
 "text is given. Following the link is handled by the application, not by "
 "formula evaluation."
 msgstr ""
+"Returnerar texten att visa för en hyperlänk, eller själva webbadressen om "
+"ingen text att visa anges. Att följa länken hanteras av programmet, inte av "
+"formelutvärdering."
 
 #: functions/reference.xml:423
 #, kde-format
 msgid "HYPERLINK(url; display text)"
-msgstr ""
+msgstr "HYPERLINK(webbadress; text att visa)"
 
 #: functions/reference.xml:424
 #, kde-format
@@ -11090,11 +11099,12 @@ msgstr "Framgångssannolikhet"
 #, kde-format
 msgid "Number of successes (or the lower limit, if the upper limit is given)"
 msgstr ""
+"Antal lyckade försök (eller den undre gränsen, om den övre gränsen anges)"
 
 #: functions/statistical.xml:1849
 #, kde-format
 msgid "Upper limit for the number of successes"
-msgstr ""
+msgstr "Övre gräns för antalet lyckade försök"
 
 #: functions/statistical.xml:1853
 #, kde-format
@@ -11103,6 +11113,9 @@ msgid ""
 "(inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in "
 "Trials independent trials, each with success probability SP."
 msgstr ""
+"Funktionen B() returnerar sannolikheten att dra mellan T1 och T2 (inklusive) "
+"lyckade värden (eller exakt T1 lyckade värden, om T2 utelämnas) med Försök "
+"oberoende försök, vart och ett med sannolikheten SP att lyckas."
 
 #: functions/statistical.xml:1854
 #, kde-format
@@ -11126,6 +11139,9 @@ msgid ""
 "function (or, if Cumulative is FALSE, the probability density function) for "
 "the chi-square distribution."
 msgstr ""
+"Funktionen CHISQDIST() returnerar värdet av den kumulativa "
+"fördelningsfunktionen (eller, om Ackumulera är FALSK, "
+"sannolikhetsfrekvensfunktionen) för chi-kvadratfördelningen."
 
 #: functions/statistical.xml:1878
 #, kde-format
@@ -11143,6 +11159,8 @@ msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
 msgstr ""
+"Funktionen CHISQINV() returnerar inversen av CHISQDIST(tal; frihetsgrader; "
+"TRUE)."
 
 #: functions/statistical.xml:1898
 #, kde-format
@@ -11165,11 +11183,13 @@ msgid ""
 "The CRITBINOM() function returns the smallest value for which the cumulative "
 "binomial distribution is greater than or equal to the criterion value alpha."
 msgstr ""
+"Funktionen CRITBINOM() returnerar det minsta värde där den kumulativa "
+"binomialfördelningen är större än eller lika med kriterievärdet alfa."
 
 #: functions/statistical.xml:1921
 #, kde-format
 msgid "CRITBINOM(trials; SP; alpha)"
-msgstr ""
+msgstr "CRITBINOM(försök; SP; alfa)"
 
 #: functions/statistical.xml:1922
 #, kde-format
@@ -11179,7 +11199,7 @@ msgstr "CRITBINOM(20; 0,5; 0.55) returnerar 10"
 #: functions/statistical.xml:1931
 #, kde-format
 msgid "The x-value for which a y-value is estimated"
-msgstr ""
+msgstr "Det x-värde som ett y-värde uppskattas för"
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
 #, kde-format
@@ -11197,11 +11217,13 @@ msgid ""
 "The FORECAST() function estimates a future y-value along the linear trend "
 "fitted to the known x/y-values, for a given new x-value."
 msgstr ""
+"Funktionen FORECAST() uppskattar ett framtida y-värde längs den linjära "
+"trenden anpassad till de kända x/y-värdena, för ett givet nytt x-värde."
 
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr ""
+msgstr "FORECAST(x; kända y-värden; kända x-värden)"
 
 #: functions/statistical.xml:1955
 #, kde-format
@@ -11221,26 +11243,31 @@ msgid ""
 "and expected value ranges (which must have the same shape) would occur by "
 "chance."
 msgstr ""
+"Funktionen LEGACYCHITEST() returnerar sannolikheten, från chi-"
+"kvadratfördelningen, att chi-kvadratstatistiken beräknad från de givna "
+"observerade och förväntade värdeintervallen (som måste ha samma form) skulle "
+"uppstå av en slump."
 
 #: functions/statistical.xml:1964
 #, kde-format
 msgid "LEGACYCHITEST(actual range; theoretical range)"
-msgstr ""
+msgstr "LEGACYCHITEST(verkligt intervall; teoretiskt intervall)"
 
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr ""
+msgstr "Kända x-värden (standardvärdet är sekvensen 1, 2, 3, ...)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr ""
+msgstr "Huruvida en skärning ska anpassas (standardvärdet är TRUE)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
 msgid "Whether to return additional regression statistics (defaults to FALSE)"
 msgstr ""
+"Om ytterligare regressionsstatistik ska returneras (standardvärdet är FALSE)"
 
 #: functions/statistical.xml:1989
 #, kde-format
@@ -11252,11 +11279,17 @@ msgid ""
 "of the y estimate, the F statistic and its degrees of freedom, and the "
 "regression and residual sums of squares."
 msgstr ""
+"Funktionen LINEST() anpassar en rak linje y=m*x+b (endast ett känt x-"
+"intervall stöds) till givna data med hjälp av minstakvadratmetoden och "
+"returnerar {m, b}. Om Statistik är TRUE returnerar den istället ett fält med "
+"5 rader som också innehåller standardfelen för m och b, R-kvadrat och "
+"standardfelet för y-uppskattningen, F-statistiken och dess frihetsgrader, "
+"samt regressions- och residualsummorna av kvadraterna."
 
 #: functions/statistical.xml:1990
 #, kde-format
 msgid "LINEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LINEST(kända y-värden; kända x-värden; konstant; statistik)"
 
 #: functions/statistical.xml:2002
 #, kde-format
@@ -11271,11 +11304,16 @@ msgid ""
 "Stats is TRUE, it also returns the same additional regression statistics as "
 "LINEST, computed for the underlying linear fit against ln(y)."
 msgstr ""
+"Funktionen LOGEST() anpassar en exponentiell kurva y=b*m^x till givna data "
+"genom att linjärt regression av ln(y) mot x (se LINEST), och returnerar {m, "
+"b}. Om Statistik är TRUE returnerar den också samma ytterligare "
+"regressionsstatistik som LINEST, beräknad för den underliggande linjära "
+"anpassningen mot ln(y)."
 
 #: functions/statistical.xml:2019
 #, kde-format
 msgid "LOGEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LOGEST(kända y-värden; kända x-värden; konstant; statistik)"
 
 #: functions/statistical.xml:2029
 #, kde-format
@@ -11298,21 +11336,23 @@ msgid ""
 "The PERCENTRANK() function returns the rank, as a fraction of the data set, "
 "of a value in that data set. This is the inverse of PERCENTILE."
 msgstr ""
+"Funktionen PERCENTRANK() returnerar rank, som en bråkdel av datamängden, av "
+"ett värde i den datamängden. Det är inversen av PERCENTILE."
 
 #: functions/statistical.xml:2042
 #, kde-format
 msgid "PERCENTRANK(data; x; significance)"
-msgstr ""
+msgstr "PERCENTRANK(data; x; signifikans)"
 
 #: functions/statistical.xml:2056
 #, kde-format
 msgid "Probabilities, one for each value (must sum to 1)"
-msgstr ""
+msgstr "Sannolikheter, en för varje värde (måste summeras till 1)"
 
 #: functions/statistical.xml:2060
 #, kde-format
 msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
-msgstr ""
+msgstr "Undre gräns (eller det enda värdet att testa, om övre gräns utelämnas)"
 
 #: functions/statistical.xml:2068
 #, kde-format
@@ -11320,6 +11360,8 @@ msgid ""
 "The PROB() function returns the sum of the probabilities of the values that "
 "fall between (or equal) a lower and upper limit."
 msgstr ""
+"Funktionen PROB() returnerar summan av värdenas sannolikhet som faller "
+"mellan (eller är lika med) en undre och en övre gräns."
 
 #: functions/statistical.xml:2069
 #, kde-format
