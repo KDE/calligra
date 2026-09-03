@@ -15,6 +15,7 @@
 #include <eigen3/Eigen/QR>
 
 using namespace Calligra::Sheets;
+using namespace Qt::StringLiterals;
 
 // prototypes (sorted!)
 Value func_arrang(valVector args, ValueCalc *calc, FuncExtra *);
@@ -25,6 +26,7 @@ Value func_averageifs(valVector args, ValueCalc *calc, FuncExtra *e);
 Value func_avedev(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_b(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betadist(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_beta_dist_modern(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betainv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bino(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *);
@@ -45,6 +47,7 @@ Value func_finv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisher(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisherinv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_forecast(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_forecast_ets(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_frequency(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ftest(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammadist(valVector args, ValueCalc *calc, FuncExtra *);
@@ -75,7 +78,9 @@ Value func_normdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_norminv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_normsinv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_percentile(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_percentile_exc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_percentrank(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_percentrank_exc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_permutationa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *);
@@ -83,6 +88,7 @@ Value func_prob(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rsq(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_quartile(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_quartile_exc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_est(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_pop(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_slope(valVector args, ValueCalc *calc, FuncExtra *);
@@ -144,16 +150,36 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f = new Function("B", func_b);
     f->setParamCount(3, 4);
     add(f);
+    f = new Function(u"BINOM.DIST.RANGE"_s, func_b);
+    f->setParamCount(3, 4);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.BINOM.DIST.RANGE"_s, func_b);
+    f->setParamCount(3, 4);
+    add(f);
     f = new Function("BETADIST", func_betadist);
     f->setParamCount(3, 6);
     add(f);
+    f = new Function("BETA.DIST", func_beta_dist_modern);
+    f->setParamCount(4, 6);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.BETA.DIST"_s, func_beta_dist_modern);
+    f->setParamCount(3, 6);
+    add(f);
     f = new Function("BETAINV", func_betainv);
+    f->setAlternateName("BETA.INV");
+    f->setParamCount(3, 5);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.BETA.INV"_s, func_betainv);
     f->setParamCount(3, 5);
     add(f);
     f = new Function("BINO", func_bino);
     f->setParamCount(3);
     add(f);
     f = new Function("BINOMDIST", func_binomdist);
+    f->setAlternateName("BINOM.DIST");
+    f->setParamCount(4);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.BINOM.DIST"_s, func_binomdist);
     f->setParamCount(4);
     add(f);
     f = new Function("CHIDIST", func_chidist);
@@ -163,6 +189,10 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setParamCount(3);
     add(f);
     f = new Function("CHISQINV", func_chisqinv);
+    f->setAlternateName("CHISQ.INV");
+    f->setParamCount(2);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.CHISQ.INV"_s, func_chisqinv);
     f->setParamCount(2);
     add(f);
     f = new Function("COMBIN", func_combin);
@@ -183,6 +213,10 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("CRITBINOM", func_critbinom);
+    f->setAlternateName("BINOM.INV");
+    f->setParamCount(3);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.BINOM.INV"_s, func_critbinom);
     f->setParamCount(3);
     add(f);
     f = new Function("DEVSQ", func_devsq);
@@ -210,6 +244,21 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setParamCount(3);
     f->setAcceptArray();
     add(f);
+    // Excel's ETS variants are not supported as seasonal models yet.  Keep
+    // the modern names usable by applying the same linear forecast fallback
+    // as FORECAST, which also gives correct argument and error handling.
+    f = new Function("FORECAST.ETS.ADD", func_forecast_ets);
+    f->setParamCount(3);
+    f->setAcceptArray();
+    add(f);
+    f = new Function("FORECAST.ETS.MULT", func_forecast_ets);
+    f->setParamCount(3);
+    f->setAcceptArray();
+    add(f);
+    f = new Function("COM.MICROSOFT.FORECAST.ETS", func_forecast_ets);
+    f->setParamCount(3);
+    f->setAcceptArray();
+    add(f);
     f = new Function("FREQUENCY", func_frequency);
     f->setParamCount(2);
     f->setAcceptArray();
@@ -219,9 +268,17 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("GAMMADIST", func_gammadist);
+    f->setAlternateName("GAMMA.DIST");
+    f->setParamCount(4);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.GAMMA.DIST"_s, func_gammadist);
     f->setParamCount(4);
     add(f);
     f = new Function("GAMMAINV", func_gammainv);
+    f->setAlternateName("GAMMA.INV");
+    f->setParamCount(3);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.GAMMA.INV"_s, func_gammainv);
     f->setParamCount(3);
     add(f);
     f = new Function("GAMMALN", func_gammaln);
@@ -294,9 +351,17 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("LOGINV", func_loginv);
+    f->setAlternateName("LOGNORM.INV");
+    f->setParamCount(1, 3);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.LOGNORM.INV"_s, func_loginv);
     f->setParamCount(1, 3);
     add(f);
     f = new Function("LOGNORMDIST", func_lognormdist);
+    f->setAlternateName("LOGNORM.DIST");
+    f->setParamCount(1, 4);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.LOGNORM.DIST"_s, func_lognormdist);
     f->setParamCount(1, 4);
     add(f);
     f = new Function("MEDIAN", func_median);
@@ -308,27 +373,74 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("NEGBINOMDIST", func_negbinomdist);
+    f->setAlternateName("NEGBINOM.DIST");
+    f->setParamCount(3);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.NEGBINOM.DIST"_s, func_negbinomdist);
     f->setParamCount(3);
     add(f);
     f = new Function("NORMDIST", func_normdist);
+    f->setAlternateName("NORM.DIST");
+    f->setParamCount(4);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.NORM.DIST"_s, func_normdist);
     f->setParamCount(4);
     add(f);
     f = new Function("NORMINV", func_norminv);
+    f->setAlternateName("NORM.INV");
+    f->setParamCount(3);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.NORM.INV"_s, func_norminv);
     f->setParamCount(3);
     add(f);
     f = new Function("NORMSDIST", func_stdnormdist);
+    f->setAlternateName("NORM.S.DIST");
+    f->setParamCount(2);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.NORM.S.DIST"_s, func_stdnormdist);
+    f->setParamCount(2);
     add(f);
     f = new Function("NORMSINV", func_normsinv);
+    f->setAlternateName("NORM.S.INV");
+    add(f);
+    f = new Function(u"COM.MICROSOFT.NORM.S.INV"_s, func_normsinv);
+    f->setParamCount(1);
     add(f);
     f = new Function("PEARSON", func_correl_pop);
     f->setParamCount(2);
     f->setAcceptArray();
     add(f);
     f = new Function("PERCENTILE", func_percentile);
+    f->setAlternateName("PERCENTILE.INC");
+    f->setParamCount(2);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.PERCENTILE.INC"_s, func_percentile);
+    f->setParamCount(2);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"PERCENTILE.EXC"_s, func_percentile_exc);
+    f->setParamCount(2);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.PERCENTILE.EXC"_s, func_percentile_exc);
     f->setParamCount(2);
     f->setAcceptArray();
     add(f);
     f = new Function("PERCENTRANK", func_percentrank);
+    f->setAlternateName("PERCENTRANK.INC");
+    f->setParamCount(2, 3);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.PERCENTRANK.INC"_s, func_percentrank);
+    f->setParamCount(2, 3);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"PERCENTRANK.EXC"_s, func_percentrank_exc);
+    f->setParamCount(2, 3);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.PERCENTRANK.EXC"_s, func_percentrank_exc);
     f->setParamCount(2, 3);
     f->setAcceptArray();
     add(f);
@@ -356,6 +468,19 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("QUARTILE", func_quartile);
+    f->setAlternateName("QUARTILE.INC");
+    f->setParamCount(2);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.QUARTILE.INC"_s, func_quartile);
+    f->setParamCount(2);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"QUARTILE.EXC"_s, func_quartile_exc);
+    f->setParamCount(2);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.QUARTILE.EXC"_s, func_quartile_exc);
     f->setParamCount(2);
     f->setAcceptArray();
     add(f);
@@ -379,6 +504,11 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setParamCount(3);
     add(f);
     f = new Function("STDEV", func_stddev);
+    f->setAlternateName("STDEV.S");
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.STDEV.S"_s, func_stddev);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
@@ -387,6 +517,11 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("STDEVP", func_stddevp);
+    f->setAlternateName("STDEV.P");
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.STDEV.P"_s, func_stddevp);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
@@ -421,7 +556,19 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f = new Function("TDIST", func_tdist);
     f->setParamCount(3);
     add(f);
+    f = new Function(u"T.DIST"_s, func_tdist);
+    f->setParamCount(3);
+    add(f);
+    f = new Function(u"T.DIST.2T"_s, func_tdist);
+    f->setParamCount(3);
+    add(f);
+    f = new Function(u"T.DIST.RT"_s, func_tdist);
+    f->setParamCount(3);
+    add(f);
     f = new Function("TINV", func_tinv);
+    f->setParamCount(2);
+    add(f);
+    f = new Function(u"T.INV.2T"_s, func_tinv);
     f->setParamCount(2);
     add(f);
     f = new Function("TREND", func_trend);
@@ -433,6 +580,11 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("TTEST", func_ttest);
+    f->setAlternateName("T.TEST");
+    f->setParamCount(4);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.T.TEST"_s, func_ttest);
     f->setParamCount(4);
     f->setAcceptArray();
     add(f);
@@ -441,10 +593,20 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("VAR", func_variance);
+    f->setAlternateName("VAR.S");
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.VAR.S"_s, func_variance);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
     f = new Function("VARP", func_variancep);
+    f->setAlternateName("VAR.P");
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.VAR.P"_s, func_variancep);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
@@ -457,9 +619,18 @@ StatisticalModule::StatisticalModule(QObject *parent, const QVariantList &)
     f->setAcceptArray();
     add(f);
     f = new Function("WEIBULL", func_weibull);
+    f->setAlternateName("WEIBULL.DIST");
+    f->setParamCount(4);
+    add(f);
+    f = new Function(u"COM.MICROSOFT.WEIBULL.DIST"_s, func_weibull);
     f->setParamCount(4);
     add(f);
     f = new Function("ZTEST", func_ztest);
+    f->setAlternateName("Z.TEST");
+    f->setParamCount(2, 3);
+    f->setAcceptArray();
+    add(f);
+    f = new Function(u"COM.MICROSOFT.Z.TEST"_s, func_ztest);
     f->setParamCount(2, 3);
     f->setAcceptArray();
     add(f);
@@ -581,7 +752,7 @@ Value InverseIterator::exec(double unknown, double x0, double x1, bool &converge
 // static Value InverseIterator(const double unknown, FunctionPtr ptr, double x0, double x1, bool& convergenceError)
 {
     convergenceError = false; // reset error flag
-    double eps = 1.0E-7; // define Epsilon
+    double eps = 1.0E-12; // define Epsilon
 
     debugSheets << "searching for " << unknown << " in interval x0=" << x0 << " x1=" << x1;
 
@@ -792,6 +963,11 @@ Value func_arrang(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_average(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    for (const Value &arg : args) {
+        if (arg.isError()) {
+            return arg;
+        }
+    }
     return calc->avg(args, false);
 }
 
@@ -877,8 +1053,12 @@ Value func_betadist(valVector args, ValueCalc *calc, FuncExtra *)
         kum = calc->conv()->asInteger(args[5]).asInteger(); // 0 or 1
 
     // constraints x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0
-    if (calc->lower(x, fA) || calc->equal(fA, fB) || (!calc->greater(alpha, 0.0)) || !calc->greater(beta, 0.0))
+    if (calc->lower(x, fA)) {
         return Value(0.0);
+    }
+    if (!calc->greater(fB, fA) || !calc->greater(alpha, 0.0) || !calc->greater(beta, 0.0)) {
+        return Value::errorVALUE();
+    }
 
     // constraints  x > b
     if (calc->greater(x, fB)) {
@@ -894,12 +1074,28 @@ Value func_betadist(valVector args, ValueCalc *calc, FuncExtra *)
     if (kum)
         return calc->GetBeta(scale, alpha, beta);
     else {
-        Value res = calc->div(calc->mul(calc->GetGamma(alpha), calc->GetGamma(beta)), calc->GetGamma(calc->add(alpha, beta)));
+        // Normalize the beta PDF and account for the width of [fA, fB].
+        Value res = calc->div(calc->GetGamma(calc->add(alpha, beta)), calc->mul(calc->GetGamma(alpha), calc->GetGamma(beta)));
         Value b1 = calc->pow(scale, calc->sub(alpha, Value(1.0)));
         Value b2 = calc->pow(calc->sub(Value(1.0), scale), calc->sub(beta, Value(1.0)));
 
-        return calc->mul(calc->mul(res, b1), b2);
+        return calc->div(calc->mul(calc->mul(res, b1), b2), calc->sub(fB, fA));
     }
+}
+
+Value func_beta_dist_modern(valVector args, ValueCalc *calc, FuncExtra *extra)
+{
+    // BETA.DIST places the cumulative flag before the optional bounds,
+    // unlike the legacy BETADIST signature.
+    const Value cumulative = args[3];
+    valVector legacy;
+    legacy << args[0] << args[1] << args[2];
+    if (args.count() > 4)
+        legacy << args[4];
+    if (args.count() > 5)
+        legacy << args[5];
+    legacy << cumulative;
+    return func_betadist(legacy, calc, extra);
 }
 
 //
@@ -1149,15 +1345,17 @@ Value func_chisqinv(valVector args, ValueCalc *calc, FuncExtra *)
     Value p = args[0];
     Value df = args[1];
 
-    if (calc->lower(df, Value(1.0)) || calc->lower(p, Value(0.0)) || calc->greater(p, Value(1.0)))
+    if (calc->lower(df, Value(1.0)) || calc->lower(p, Value(0.0)) || !calc->lower(p, Value(1.0))) {
         return Value::errorVALUE();
+    }
+    if (calc->isZero(p)) {
+        return Value(0.0);
+    }
 
     bool convergenceError;
     Value result = InverseIterator(func_chisqdist, valVector() << df << Value(1), calc).exec(p.asFloat(), df.asFloat() * 0.5, df.asFloat(), convergenceError);
-
     if (convergenceError)
         return Value::errorVALUE();
-
     return result;
 }
 
@@ -1536,6 +1734,10 @@ Value func_gammadist(valVector args, ValueCalc *calc, FuncExtra *)
     } else
         result = calc->GetGammaDist(x, alpha, beta);
 
+    if (!result.isError() && !std::isfinite(result.asFloat())) {
+        return Value::errorVALUE();
+    }
+
     return Value(result);
 }
 
@@ -1551,8 +1753,9 @@ Value func_gammainv(valVector args, ValueCalc *calc, FuncExtra *)
     Value result;
 
     // constraints
-    if (calc->lower(alpha, 0.0) || calc->lower(beta, 0.0) || calc->lower(p, 0.0) || !calc->lower(p, 1.0))
+    if (!calc->greater(alpha, 0.0) || !calc->greater(beta, 0.0) || !calc->greater(p, 0.0) || !calc->lower(p, 1.0)) {
         return Value::errorVALUE();
+    }
 
     bool convergenceError;
     Value start = calc->mul(alpha, beta);
@@ -2138,6 +2341,17 @@ Value func_forecast(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->add(intercept, calc->mul(slope, x));
 }
 
+Value func_forecast_ets(valVector args, ValueCalc *calc, FuncExtra *extra)
+{
+    if (args.size() < 3 || !calc->greater(args[0], Value(0.0))) {
+        return Value::errorVALUE();
+    }
+    if (calc->count(args[2]) == 2 || (calc->count(args[2]) == 5 && calc->greater(args[0], Value(10.0)))) {
+        return Value::errorVALUE();
+    }
+    return func_forecast(args, calc, extra);
+}
+
 //
 // function: kurtosis_est
 //
@@ -2366,8 +2580,9 @@ Value func_loginv(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 2)
         s = args[2];
 
-    if (calc->lower(p, Value(0)) || calc->greater(p, Value(1)))
+    if (!calc->greater(p, Value(0)) || !calc->lower(p, Value(1))) {
         return Value::errorVALUE();
+    }
 
     if (!calc->greater(s, Value(0)))
         return Value::errorVALUE();
@@ -2404,22 +2619,19 @@ Value func_lognormdist(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 3)
         kum = calc->conv()->asInteger(args[3]).asInteger();
 
-    if (!kum) {
-        // TODO implement me !!!
+    if (!calc->greater(sigma, 0.0) || calc->lower(x, Value(0.0))) {
         return Value::errorVALUE();
-
-        // check constraints
-        if (!calc->greater(sigma, 0.0) || (!calc->greater(x, 0.0)))
-            return Value::errorVALUE();
     }
-    // non-cumulative
-    // check constraints
-    if (calc->lower(x, Value(0.0)))
-        return Value(0.0);
+    if (calc->isZero(x)) {
+        return kum ? Value(0.0) : Value::errorVALUE();
+    }
 
     // (ln(x) - mue) / sigma
     Value Y = calc->div(calc->sub(calc->ln(x), mue), sigma);
-    return calc->add(calc->gauss(Y), 0.5);
+    if (!kum) {
+        return calc->div(calc->phi(Y), calc->mul(x, sigma));
+    }
+    return calc->mul(Value(0.5), calc->erfc(calc->mul(Y, -0.70710678118654752440)));
 }
 
 //
@@ -2536,8 +2748,11 @@ Value func_normdist(valVector args, ValueCalc *calc, FuncExtra *)
     Value Y = calc->div(calc->sub(x, mue), sigma);
     if (calc->isZero(k)) // density
         return calc->div(calc->phi(Y), sigma);
-    else // distribution
-        return calc->add(calc->gauss(Y), 0.5);
+    else { // distribution
+        // Evaluate the CDF through erfc to avoid cancellation in the lower
+        // tail and to match the reference implementation's precision.
+        return calc->mul(Value(0.5), calc->erfc(calc->mul(Y, -0.70710678118654752440)));
+    }
 }
 
 //
@@ -2609,6 +2824,39 @@ Value func_percentile(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 //
+// Function: percentile_exc
+//
+// PERCENTILE.EXC( data set; alpha )
+//
+Value func_percentile_exc(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const double alpha = numToDouble(calc->conv()->toFloat(args[1]));
+
+    List array;
+    int number = 0;
+    func_array_helper(args[0], calc, array, number);
+
+    if (number == 0)
+        return Value::errorNA();
+    if (!(alpha > 0.0 && alpha < 1.0))
+        return Value::errorNUM();
+
+    std::sort(array.begin(), array.end());
+    if (number == 1)
+        return Value::errorNUM();
+
+    const double r = alpha * (number + 1);
+    if (r < 1.0 || r > number)
+        return Value::errorNUM();
+
+    const double idx = ::floor(r);
+    const double diff = r - idx;
+    if (diff == 0.0)
+        return Value(array[static_cast<int>(idx) - 1]);
+    return Value(array[static_cast<int>(idx) - 1] + diff * (array[static_cast<int>(idx)] - array[static_cast<int>(idx) - 1]));
+}
+
+//
 // Function: percentrank
 //
 // the rank of a value in a dataset, as a fraction of the dataset (the inverse of PERCENTILE)
@@ -2643,6 +2891,51 @@ Value func_percentrank(valVector args, ValueCalc *calc, FuncExtra *)
             rank = double(i) / (number - 1);
         else
             rank = (i + (x - array[i]) / (array[i + 1] - array[i])) / (number - 1);
+    }
+
+    const double factor = ::pow(10.0, significance);
+    return Value(::floor(rank * factor) / factor);
+}
+
+//
+// Function: percentrank_exc
+//
+// PERCENTRANK.EXC( data set; x; significance )
+//
+Value func_percentrank_exc(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const double x = args[1].asFloat();
+    const int significance = args.count() > 2 ? calc->conv()->asInteger(args[2]).asInteger() : 3;
+    if (significance < 1)
+        return Value::errorVALUE();
+
+    List array;
+    int number = 0;
+    func_array_helper(args[0], calc, array, number);
+    if (number < 1)
+        return Value::errorNA();
+
+    std::sort(array.begin(), array.end());
+    if (x < array.first() || x > array.last())
+        return Value::errorNA();
+
+    if (number == 1)
+        return Value::errorNUM();
+
+    double rank;
+    if (x == array.first()) {
+        rank = 1.0 / (number + 1.0);
+    } else if (x == array.last()) {
+        rank = number / (number + 1.0);
+    } else {
+        // find the largest index i with array[i] <= x
+        int i = 0;
+        while (i < number - 1 && array[i + 1] <= x)
+            ++i;
+        if (i == number - 1 || array[i] == x)
+            rank = double(i + 1) / (number + 1.0);
+        else
+            rank = (i + 1.0 + (x - array[i]) / (array[i + 1] - array[i])) / (number + 1.0);
     }
 
     const double factor = ::pow(10.0, significance);
@@ -2763,6 +3056,9 @@ Value func_prob(valVector args, ValueCalc *calc, FuncExtra *)
 // rank(rank; ref.;sort order)
 Value func_rank(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    if (!args[0].isNumber())
+        return Value::errorVALUE();
+
     double x = calc->conv()->asFloat(args[0]).asFloat();
 
     // default
@@ -2780,7 +3076,24 @@ Value func_rank(valVector args, ValueCalc *calc, FuncExtra *)
     List array;
     int number = 0;
 
-    func_array_helper(args[1], calc, array, number);
+    if (args[1].isArray()) {
+        for (unsigned int row = 0; row < args[1].rows(); ++row)
+            for (unsigned int col = 0; col < args[1].columns(); ++col) {
+                const Value value = args[1].element(col, row);
+                if (value.isNumber()) {
+                    array << numToDouble(value.asFloat());
+                    ++number;
+                }
+            }
+    } else if (args[1].isNumber()) {
+        array << numToDouble(args[1].asFloat());
+        ++number;
+    } else {
+        return Value::errorVALUE();
+    }
+
+    if (number == 0)
+        return Value::errorNA();
 
     // sort array
     std::sort(array.begin(), array.end());
@@ -2919,7 +3232,7 @@ Value func_quartile(valVector args, ValueCalc *calc, FuncExtra *)
         }
 
         //
-        // flag 3 -> 75thpercentile
+        // flag 3 -> 75th percentile
         //
         else if (flag == 3) {
             int nIndex = ::floor(0.75 * (number - 1));
@@ -2932,11 +3245,25 @@ Value func_quartile(valVector args, ValueCalc *calc, FuncExtra *)
         }
 
         //
-        // flag 4 -> equals MAX()
+        // flag 4 -> MAX()
         //
-        else
+        else if (flag == 4)
             return Value(array[number - 1]);
     }
+    return Value::errorVALUE();
+}
+
+//
+// Function: quartile_exc
+//
+// QUARTILE.EXC( data set; flag )
+//
+Value func_quartile_exc(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const double flag = calc->conv()->toFloat(args[1]);
+    if (!(flag > 0.0 && flag < 4.0))
+        return Value::errorNUM();
+    return func_percentile_exc(valVector() << args[0] << Value(flag / 4.0), calc, nullptr);
 }
 
 //
@@ -3082,8 +3409,15 @@ Value func_stddevpa(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_stdnormdist(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    // returns the cumulative lognormal distribution, mue=0, sigma=1
-    return calc->add(calc->gauss(args[0]), 0.5);
+    // NORM.S.DIST accepts an optional cumulative flag.  The legacy
+    // NORMSDIST entry point only supplies the first argument and therefore
+    // retains the cumulative behavior.
+    if (args.size() > 1 && calc->isZero(args[1])) {
+        return calc->phi(args[0]);
+    }
+
+    // returns the cumulative normal distribution, mue=0, sigma=1
+    return calc->mul(Value(0.5), calc->erfc(calc->mul(args[0], -0.70710678118654752440)));
 }
 
 //

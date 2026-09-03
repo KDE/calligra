@@ -51,6 +51,8 @@
 
 #include <QBuffer>
 
+using namespace Qt::StringLiterals;
+
 // This file contains functionality to load/save a Sheet
 
 namespace Calligra
@@ -852,19 +854,20 @@ int Odf::loadRowFormat(Sheet *sheet,
                        const Styles &autoStyles,
                        QList<ShapeLoadingData> &shapeData)
 {
-    static const QString sStyleName = QString::fromLatin1("style-name");
-    static const QString sNumberRowsRepeated = QString::fromLatin1("number-rows-repeated");
-    static const QString sDefaultCellStyleName = QString::fromLatin1("default-cell-style-name");
-    static const QString sVisibility = QString::fromLatin1("visibility");
-    static const QString sVisible = QString::fromLatin1("visible");
-    static const QString sCollapse = QString::fromLatin1("collapse");
-    static const QString sFilter = QString::fromLatin1("filter");
-    static const QString sPage = QString::fromLatin1("page");
-    static const QString sTableCell = QString::fromLatin1("table-cell");
-    static const QString sCoveredTableCell = QString::fromLatin1("covered-table-cell");
-    static const QString sNumberColumnsRepeated = QString::fromLatin1("number-columns-repeated");
-    static const QString sNumberMatrixColumnsSpanned = QString::fromLatin1("number-matrix-columns-spanned");
-    static const QString sNumberMatrixRowsSpanned = QString::fromLatin1("number-matrix-rows-spanned");
+    constexpr auto sStyleName = "style-name"_L1;
+    constexpr auto sNumberRowsRepeated = "number-rows-repeated"_L1;
+    constexpr auto sDefaultCellStyleName = "default-cell-style-name"_L1;
+    constexpr auto sVisibility = "visibility"_L1;
+    constexpr auto sVisible = "visible"_L1;
+    constexpr auto sCollapse = "collapse"_L1;
+    constexpr auto sFilter = "filter"_L1;
+    constexpr auto sPage = "page"_L1;
+    constexpr auto sTableCell = "table-cell"_L1;
+    constexpr auto sCoveredTableCell = "covered-table-cell"_L1;
+    constexpr auto sNumberColumnsRepeated = "number-columns-repeated"_L1;
+    constexpr auto sNumberMatrixColumnsSpanned = "number-matrix-columns-spanned"_L1;
+    constexpr auto sNumberMatrixRowsSpanned = "number-matrix-rows-spanned"_L1;
+    constexpr auto sValueType = "value-type"_L1;
 
     //    debugSheetsODF<<"Odf::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
     KoOdfLoadingContext &odfContext = tableContext.odfContext;
@@ -979,8 +982,15 @@ int Odf::loadRowFormat(Sheet *sheet,
 
         Cell cell(sheet, columnIndex, rowIndex);
         const bool isMatrixFollower = sheet->cellStorage()->isLocked(columnIndex, rowIndex);
-        if (!isMatrixFollower)
+        const bool loadMatrixFollowerValue =
+            isMatrixFollower && cellElement.localName() == sTableCell && cellElement.hasAttributeNS(KoXmlNS::office, sValueType);
+        if (!isMatrixFollower || loadMatrixFollowerValue) {
+            const auto matrix = isMatrixFollower ? sheet->cellStorage()->matrixStorage()->containedPair(QPoint(columnIndex, rowIndex)) : QPair<QRectF, bool>();
             loadCell(&cell, cellElement, tableContext, autoStyles, cellStyleName, shapeData);
+            if (isMatrixFollower && matrix.second) {
+                sheet->cellStorage()->lockCells(matrix.first.toRect());
+            }
+        }
 
         // If comment/conditions/etc are set, copy them to all the cells in range.
         if (!isMatrixFollower && !cell.conditions().isEmpty())
@@ -990,17 +1000,24 @@ int Odf::loadRowFormat(Sheet *sheet,
 
         if (!isMatrixFollower && !cell.hasDefaultContent()) {
             // Row-wise filling of PointStorages is faster than column-wise filling.
+            const Formula formula = cell.formula();
+            const QString userInput = cell.userInput();
+            const Value value = cell.value();
             QSharedPointer<QTextDocument> richText = cell.richText();
+            const QString comment = cell.comment();
+            const bool mergesCells = cell.doesMergeCells();
+            const int mergedXCells = cell.mergedXCells();
+            const int mergedYCells = cell.mergedYCells();
             for (int r = rowIndex; r <= endRow; ++r) {
                 for (int c = 0; c < numberColumns; ++c) {
                     Cell target(sheet, columnIndex + c, r);
-                    target.setFormula(cell.formula());
-                    target.setUserInput(cell.userInput());
+                    target.setFormula(formula);
+                    target.setUserInput(userInput);
                     target.setRichText(richText);
-                    target.setValue(cell.value());
-                    target.setComment(cell.comment());
-                    if (cell.doesMergeCells()) {
-                        target.mergeCells(columnIndex + c, r, cell.mergedXCells(), cell.mergedYCells());
+                    target.setValue(value);
+                    target.setComment(comment);
+                    if (mergesCells) {
+                        target.mergeCells(columnIndex + c, r, mergedXCells, mergedYCells);
                     }
                 }
             }

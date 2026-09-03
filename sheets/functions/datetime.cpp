@@ -575,6 +575,9 @@ Value func_days(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DATE
 Value func_date(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    if (args[0].isNull()) {
+        return Value::errorVALUE();
+    }
     int y = calc->conv()->asInteger(args[0]).asInteger();
     int m = calc->conv()->asInteger(args[1]).asInteger();
     int d = calc->conv()->asInteger(args[2]).asInteger();

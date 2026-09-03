@@ -486,7 +486,11 @@ Value func_floor(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: GAMMA
 Value func_gamma(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return calc->GetGamma(args[0]);
+    const double result = calc->GetGamma(args[0]).asFloat();
+    if (!std::isfinite(result)) {
+        return Value::errorNUM();
+    }
+    return Value(result);
 }
 
 // Function: ln
@@ -541,6 +545,11 @@ Value func_log10(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: sum
 Value func_sum(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    for (const Value &arg : args) {
+        if (arg.isError()) {
+            return arg;
+        }
+    }
     return calc->sum(args, false);
 }
 
@@ -1009,6 +1018,9 @@ static Value roundDigits(const Value &value, const Value &digitsValue, ValueCalc
 // Function: MROUND
 Value func_mround(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    if (args[0].isNull() || args[1].isNull()) {
+        return Value::errorVALUE();
+    }
     const Number number = calc->conv()->toFloat(args[0]);
     const Number multiple = fabsl(calc->conv()->toFloat(args[1]));
     if (multiple == 0)

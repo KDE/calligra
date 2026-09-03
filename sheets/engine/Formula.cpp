@@ -707,7 +707,9 @@ Tokens Formula::scan(const QString &expr, const Localization *locale) const
                 ++data;
             }
             // a '!' ? then this must be sheet name, e.g "Sheet4!", unless the next character is '='
-            else if (*data == QChar('!', 0) && !(data + 1)->isNull() && *(data + 1) != QChar('=', 0)) {
+            else if (*data == QChar('.', 0) && (data + 1)->isLetter()) {
+                *out++ = *data++;
+            } else if (*data == QChar('!', 0) && !(data + 1)->isNull() && *(data + 1) != QChar('=', 0)) {
                 *out++ = *data++;
                 cellStart = out;
                 state = InCell;
@@ -1117,6 +1119,22 @@ void Formula::compile(const Tokens &tokens) const
                 // repeat until no more rule applies
                 for (;;) {
                     bool ruleFound = false;
+
+                    // rule for a leading empty function argument, if token is ;
+                    // id ( ; -> id ( arg
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 2)
+                            if (token.asOperator() == Token::Semicolon) {
+                                Token par = syntaxStack.top();
+                                Token id = syntaxStack.top(1);
+                                if (par.asOperator() == Token::LeftPar)
+                                    if (id.isIdentifier()) {
+                                        ruleFound = true;
+                                        syntaxStack.push(Token(Token::Integer));
+                                        d->constants.append(Value::null());
+                                        d->codes.append(Opcode(Opcode::Load, d->constants.count() - 1));
+                                    }
+                            }
 
                     // rule for function arguments, if token is ; or )
                     // id ( arg1 ; arg2 -> id ( arg
@@ -1840,8 +1858,9 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
                         values[cell] = val1;
                     }
                 }
-                if (val1.isEmpty())
+                if (val1.isEmpty()) {
                     val1.setReference();
+                }
                 // store the reference, so we can use it within functions
                 entry.col1 = entry.col2 = position.x();
                 entry.row1 = entry.row2 = position.y();
@@ -1898,9 +1917,9 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
         // reference
         case Opcode::Ref:
             val1 = d->constants[index];
-            if (index >= 0 && index < d->constants.size() && val1.isString() && map->regionFromName(val1.asString(), d->sheet).isValid() == false
-                && (pc + 1 >= d->codes.size() || d->codes[pc + 1].type != Opcode::Function)) {
-                val1 = Value::errorNAME();
+            if (index >= 0 && index < d->constants.size() && val1.isString() && val1.asString().startsWith(u"undefined"_s, Qt::CaseInsensitive)
+                && !FunctionRepository::self()->function(val1.asString())) {
+                val1 = Value::errorVALUE();
             }
             entry.reset();
             entry.val = val1;

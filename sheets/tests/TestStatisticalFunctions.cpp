@@ -308,13 +308,13 @@ void TestStatisticalFunctions::testBETADIST()
 
     // last parameter FALSE (non - Cumulative)
     CHECK_EVAL("BETADIST( 0  ;3;4;0;1;FALSE())", Value(0)); //
-    CHECK_EVAL("BETADIST( 0.5;3;4;0;1;FALSE())", Value(0.0005208333)); // 0.000521
-    CHECK_EVAL("BETADIST( 0.9;4;3;0;1;FALSE())", Value(0.0001215000)); // 0.000122
+    CHECK_EVAL("BETADIST( 0.5;3;4;0;1;FALSE())", Value(1.875));
+    CHECK_EVAL("BETADIST( 0.9;4;3;0;1;FALSE())", Value(0.4374));
     CHECK_EVAL("BETADIST( 2  ;3;4;0;1;FALSE())", Value(0)); // constraints x > b should be 0 if non-cumulative
     CHECK_EVAL("BETADIST(-1  ;3;4;0;1;FALSE())", Value(0)); // constraints x < a
 
-    CHECK_EVAL("BETADIST(1.5;3;4;1;2;FALSE())", evaluate("BETADIST(0.5;3;4;0;1;FALSE())")); //
-    CHECK_EVAL("BETADIST(2  ;3;4;1;3;FALSE())", evaluate("BETADIST(0.5;3;4;0;1;FALSE())")); //
+    CHECK_EVAL("BETADIST(1.5;3;4;1;2;FALSE())", Value(1.875));
+    CHECK_EVAL("BETADIST(2  ;3;4;1;3;FALSE())", Value(0.9375));
 }
 
 void TestStatisticalFunctions::testBETAINV()

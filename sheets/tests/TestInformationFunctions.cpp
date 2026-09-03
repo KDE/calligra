@@ -310,7 +310,7 @@ void TestInformationFunctions::testCOUNTIF()
 
 void TestInformationFunctions::testERRORTYPE()
 {
-    CHECK_EVAL("ERRORTYPE(0)", Value::errorVALUE()); // Non-errors produce an error.
+    CHECK_EVAL("ERRORTYPE(0)", Value::errorNA()); // Non-errors produce #N/A.
     CHECK_EVAL("ERRORTYPE(NA())", Value(7)); // By convention, the ERROR.TYPE of NA() is 7.
     CHECK_EVAL("ERRORTYPE(1/0)", Value(2));
 }

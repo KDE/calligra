@@ -180,7 +180,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement &body, KoOdfLoadingContext &odfCo
             // make it slightly faster
             KoXml::load(sheetElement);
 
-            if (sheetElement.nodeName() == "table:table") {
+            if (sheetElement.namespaceURI() == KoXmlNS::table && sheetElement.localName() == "table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     const QString sheetName = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
                     SheetBase *sheet = map->addNewSheet(sheetName);
@@ -209,7 +209,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement &body, KoOdfLoadingContext &odfCo
             KoXml::load(sheetElement);
 
             // debugSheets<<"tableElement.nodeName() bis :"<<sheetElement.nodeName();
-            if (sheetElement.nodeName() == "table:table") {
+            if (sheetElement.namespaceURI() == KoXmlNS::table && sheetElement.localName() == "table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     QString name = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
                     SheetBase *sheet = map->findSheet(name);

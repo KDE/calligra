@@ -1672,6 +1672,9 @@ Value func_fvschedule(valVector args, ValueCalc *calc, FuncExtra *)
     Value pv = args[0];
     Value schedule = args[1];
 
+    if (pv.isNull()) {
+        return Value::errorVALUE();
+    }
     if (schedule.isEmpty() && schedule.isNull())
         return Value::errorVALUE();
 
@@ -1800,6 +1803,9 @@ Value func_irr(valVector args, ValueCalc *calc, FuncExtra *)
         contLoop = (rateEpsilon > maxEpsilon) && (fabs(rate) > maxEpsilon);
     } while (contLoop && (++i < maxIter));
 
+    if (!std::isfinite(rate)) {
+        return Value::errorNUM();
+    }
     return Value(rate);
 }
 

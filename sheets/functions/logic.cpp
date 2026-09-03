@@ -195,6 +195,8 @@ Value func_ifna(valVector args, ValueCalc *, FuncExtra *)
 {
     if (args[0] == Value::errorNA())
         return args[1].isNull() ? Value(0) : args[1];
+    if (args[0].isEmpty() && !args[1].isNull())
+        return Value::errorNA();
     if (args[0].isEmpty() && args[1].isNull())
         return Value(0);
     return args[0];

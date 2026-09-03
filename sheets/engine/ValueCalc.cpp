@@ -9,6 +9,7 @@
 
 #include "CalculationSettings.h"
 #include "CellBase.h"
+#include "Localization.h"
 #include "SheetsDebug.h"
 #include "ValueConverter.h"
 
@@ -59,6 +60,35 @@ static Value toValue(Number value)
         }
     }
     return Value(value);
+}
+
+static bool currencyStringToNumber(const Value &value, const Localization *locale, double &result)
+{
+    if (!value.isString()) {
+        return false;
+    }
+    QString text = value.asString();
+    const QString symbol = locale->currencySymbol();
+    const bool hasLocaleSymbol = !symbol.isEmpty() && text.contains(symbol);
+    if (!hasLocaleSymbol && !text.contains(QStringLiteral("$"))) {
+        return false;
+    }
+    text.remove(symbol);
+    text.remove(QStringLiteral("$"));
+    text.remove(locale->thousandsSeparator());
+    text.replace(locale->decimalSymbol(), QStringLiteral("."));
+    text = text.trimmed();
+    bool negative = false;
+    if (text.startsWith('(') && text.endsWith(')')) {
+        negative = true;
+        text = text.mid(1, text.size() - 2).trimmed();
+    }
+    bool ok = false;
+    result = text.toDouble(&ok);
+    if (negative) {
+        result = -result;
+    }
+    return ok;
 }
 
 // Array-walk functions registered on ValueCalc object
@@ -599,6 +629,14 @@ bool ValueCalc::naturalEqual(const Value &a, const Value &b, bool CalcS)
 {
     if (a.isNumber() && b.isNumber())
         return approxEqual(a, b);
+    if (a.isNumber() || b.isNumber()) {
+        double converted = 0.0;
+        const Value &text = a.isString() ? a : b;
+        if (currencyStringToNumber(text, settings()->locale(), converted)) {
+            const Value &number = a.isNumber() ? a : b;
+            return approxEqual(number, Value(converted));
+        }
+    }
     if (a.allowComparison(b))
         return a.equal(b, CalcS ? Qt::CaseSensitive : Qt::CaseInsensitive);
     return strEqual(a, b, CalcS);
@@ -1371,14 +1409,11 @@ Value ValueCalc::GetGamma(Value value)
     double val = conv()->asFloat(value).asFloat();
 
     bool reflect;
-
     double gamma = GammaHelp(val, reflect);
-
     gamma = ::pow(val + 5.5, val + 0.5) * gamma / ::exp(val + 5.5);
-
-    if (reflect)
+    if (reflect) {
         gamma = M_PI * val / (gamma * ::sin(M_PI * val));
-
+    }
     return Value(gamma);
 }
 

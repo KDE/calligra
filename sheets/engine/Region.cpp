@@ -863,12 +863,8 @@ Region::Point::Point(const QString &string)
         return;
     p = result;
 
-    // limit the x-value
-    // Q_ASSERT(x >= 1 && x <= KS_colMax);
-    if (x < 1)
+    if (x < 1 || x > KS_colMax)
         return;
-    if (x > KS_colMax)
-        x = KS_colMax;
 
     // Malformed ?
     if (p == length)
@@ -892,12 +888,8 @@ Region::Point::Point(const QString &string)
     bool ok;
     int y = QStringView{string}.mid(p2, p - p2).toInt(&ok);
 
-    // limit the y-value
-    // Q_ASSERT(y >= 1 && y <= KS_rowMax);
-    if (!ok || y < 1)
+    if (!ok || y < 1 || y > KS_rowMax)
         return;
-    if (y > KS_rowMax)
-        y = KS_rowMax;
 
     m_point = QPoint(x, y);
 }

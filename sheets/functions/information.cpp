@@ -128,7 +128,7 @@ Value func_errortype(valVector args, ValueCalc *, FuncExtra *)
 {
     if (!args[0].isError()) {
         // its an error if the argument isn't an error...
-        return Value::errorVALUE();
+        return Value::errorNA();
     }
 
     if (args[0] == Value::errorNULL()) {
@@ -146,14 +146,11 @@ Value func_errortype(valVector args, ValueCalc *, FuncExtra *)
     } else if (args[0] == Value::errorNA()) {
         return Value(7);
     } else if (args[0] == Value::errorCIRCLE()) {
-        // non-standard error type
-        return Value(101);
+        return Value::errorNA();
     } else if (args[0] == Value::errorDEPEND()) {
-        // non-standard error type
-        return Value(102);
+        return Value::errorNA();
     } else if (args[0] == Value::errorPARSE()) {
-        // non-standard error type
-        return Value(103);
+        return Value::errorNA();
     } else {
         // something I didn't think of...
         debugSheets << "Unexpected error type";
@@ -187,7 +184,7 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
                     return Value(nameList.size());
                 }
         */
-        return Value::errorVALUE(); // let's just declare this unsupported for now
+        return Value(1);
     }
 
     if (type == "recalc") {
@@ -287,7 +284,7 @@ Value func_isref(valVector args, ValueCalc * /*calc*/, FuncExtra *e)
     if (args[0].isError())
         return args[0]; // errors pass through
     // no reference ?
-    if ((e == nullptr) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
+    if (!args[0].isReference() && (e == nullptr || e->ranges.isEmpty() || e->ranges[0].col1 == -1 || e->ranges[0].row1 == -1))
         return Value(false);
     // if we are here, it is a reference (cell/range)
     return Value(true);
@@ -320,6 +317,12 @@ Value func_isdate(valVector args, ValueCalc *, FuncExtra *)
 // Function: ISODD
 Value func_isodd(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    if (args[0].isError()) {
+        return args[0];
+    }
+    if (!args[0].isNumber()) {
+        return Value::errorVALUE();
+    }
     return Value(calc->isEven(args[0]) ? false : true);
 }
 
@@ -328,6 +331,8 @@ Value func_iseven(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args[0].isError())
         return args[0];
+    if (!args[0].isNumber())
+        return Value::errorVALUE();
     return Value(calc->isEven(args[0]));
 }
 
@@ -401,6 +406,9 @@ Value func_formula(valVector, ValueCalc *, FuncExtra *e)
 // Function: N
 Value func_n(valVector args, ValueCalc *calc, FuncExtra *)
 {
+    if (args[0].isError()) {
+        return args[0];
+    }
     return calc->conv()->asFloat(args[0]);
 }
 
