@@ -2,13 +2,12 @@
 # Copyright (C) 2000-2026 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread package.
 #
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Josep M. Ferrer <txemaq@gmail.com>
-# SPDX-FileCopyrightText: 2000, 2001 Sebastià Pla <sastia@retemail.es>
-# SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006 Albert Astals Cid <aacid@kde.org>
+# SPDX-FileCopyrightText: 2007-2026 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2000-2001 Sebastià Pla <sastia@retemail.es>
+# SPDX-FileCopyrightText: 2002-2006 Albert Astals Cid <aacid@kde.org>
 # SPDX-FileCopyrightText: 2006 Xavier Batlle i Pèlach <tevibp@wanadoo.es>
-# SPDX-FileCopyrightText: 2006, 2013, 2014, 2016, 2020, 2022, 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
-# SPDX-FileCopyrightText: 2006, 2007, 2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
-# SPDX-FileCopyrightText: 2025 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2006, 2013-2014, 2016, 2020, 2022-2023 Antoni Bella Pérez <antonibella5@yahoo.com>
+# SPDX-FileCopyrightText: 2006-2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
@@ -6336,7 +6335,7 @@ msgid ""
 msgstr ""
 "EPS() retorna l'èpsilon de l'ordinador, és a dir, la diferència entre 1 i el "
 "nombre següent. Com que els ordinadors utilitzen un nombre finit de dígits, "
-"l'error d'arredoniiment és inherent (però normalment insignificant) en tots "
+"l'error d'arredoniment és inherent (però normalment insignificant) en tots "
 "els càlculs."
 
 #: functions/math.xml:118
@@ -6355,9 +6354,9 @@ msgid ""
 "0.5*EPS() returns the \"unit round\"; this value is interesting because it "
 "is the largest number x where (1+x)-1=0 (due to roundoff errors)."
 msgstr ""
-"0,5*EPS() retorna la «unitat d'arredoniiment»; este valor és interessant "
+"0,5*EPS() retorna la «unitat d'arredoniment»; este valor és interessant "
 "perquè és el nombre més gran en el que (1+x)-1=0 (per a errors "
-"d'arredoniiment)."
+"d'arredoniment)."
 
 #: functions/math.xml:121
 #, kde-format
@@ -6422,7 +6421,7 @@ msgid ""
 "The EVEN() function returns the number rounded up to the nearest even "
 "integer."
 msgstr ""
-"La funció EVEN() retorna el nombre arredoniit cap amunt al nombre parell "
+"La funció EVEN() retorna el nombre arredonit cap amunt al nombre parell "
 "enter més proper."
 
 #: functions/math.xml:175
@@ -6475,8 +6474,8 @@ msgid ""
 "The ODD() function returns the number rounded up (or down, for negative "
 "values) to the nearest odd integer. By definition, ODD(0) is 1."
 msgstr ""
-"La funció ODD() retorna el nombre arredoniit cap amunt (o avall, per a "
-"valors negatius) a l'enter senar més proper. Per definició, ODD(0) és 1."
+"La funció ODD() retorna el nombre arredonit cap amunt (o avall, per a valors "
+"negatius) a l'enter senar més proper. Per definició, ODD(0) és 1."
 
 #: functions/math.xml:213
 #, kde-format
@@ -7383,7 +7382,7 @@ msgstr ""
 "La funció CEILING() arredonix x cap a dalt (des de zero) al múltiple "
 "significatiu més proper que siga més gran que l'entrada. El valor "
 "predeterminat per a Significança és 1 (o -1 si el valor és negatiu), el que "
-"vol dir arredoniir cap a dalt a l'enter més proper. Si el paràmetre Mode és "
+"vol dir arredonir cap a dalt a l'enter més proper. Si el paràmetre Mode és "
 "diferent de zero, la funció arredonix diferent de zero, en comptes de pujar "
 "a l'infinit positiu."
 
@@ -7440,7 +7439,7 @@ msgstr ""
 "significatiu més proper que siga més xicotet que l'entrada.\n"
 "                 El valor predeterminat per a la Significança és 1, si x és "
 "positiu. És -1, si el valor és negatiu,\n"
-"                que és arredoniir cap amunt a l'enter més proper.\n"
+"                que és arredonir cap amunt a l'enter més proper.\n"
 "                Si es dona un mode no igual que zero, la quantitat d'x "
 "s'arredonix cap a zero a un múltiple\n"
 "                significatiu i llavors s'aplica el signe. Si no, arredonix "
@@ -7715,7 +7714,7 @@ msgid ""
 "The MROUND() function returns the value rounded to the specified multiple. "
 "The value and the multiple must have the same sign"
 msgstr ""
-"La funció MROUND() retorna el valor del paràmetre arredoniit al múltiple "
+"La funció MROUND() retorna el valor del paràmetre arredonit al múltiple "
 "donat. El valor i el múltiple han de tindre el mateix signe."
 
 #: functions/math.xml:1099
@@ -7746,8 +7745,8 @@ msgid ""
 "or omitted, value is rounded up to the nearest integer. If digits is smaller "
 "than zero, the corresponding integer part of the number is rounded."
 msgstr ""
-"La funció ROUND(valor;[dígits]) retorna el valor arredoniit. Dígits és el "
-"nombre de dígits que vols que tinga l'arredoniiment. Si dígits és zero o "
+"La funció ROUND(valor;[dígits]) retorna el valor arredonit. Dígits és el "
+"nombre de dígits que vols que tinga l'arredoniment. Si dígits és zero o "
 "s'omet, el valor s'arredonix cap amunt a l'enter més proper. Sí dígits és "
 "més xicotet que zero, s'arredonix la part corresponent de la part entera."
 
@@ -7789,9 +7788,9 @@ msgid ""
 "to round that number. If digits is zero or omitted, value is rounded up to "
 "the nearest integer."
 msgstr ""
-"La funció ROUNDUP(valor;[dígits]) retorna el valor arredoniit de manera que "
+"La funció ROUNDUP(valor;[dígits]) retorna el valor arredonit de manera que "
 "el seu valor absolut és més gran. Dígits és el nombre de dígits que voleu "
-"que tinga l'arredoniiment. Si dígits és zero o s'omet, el valor s'arredonix "
+"que tinga l'arredoniment. Si dígits és zero o s'omet, el valor s'arredonix "
 "per excés a un enter."
 
 #: functions/math.xml:1144
@@ -7827,10 +7826,10 @@ msgid ""
 "to round that number. If digits is zero or omitted, value is rounded down to "
 "the nearest integer."
 msgstr ""
-"La funció ROUNDDOWN(valor;[dígits]) retorna el valor arredoniit de manera "
-"que el seu valor absolut és més xicotet. Dígits és el nombre de dígits que "
-"voleu que tinga l'arredoniiment. Si dígits és zero o s'omet, el valor "
-"s'arredonix a la baixa a l'enter més proper."
+"La funció ROUNDDOWN(valor;[dígits]) retorna el valor arredonit de manera que "
+"el seu valor absolut és més xicotet. Dígits és el nombre de dígits que voleu "
+"que tinga l'arredoniment. Si dígits és zero o s'omet, el valor s'arredonix a "
+"la baixa a l'enter més proper."
 
 #: functions/math.xml:1167
 #, kde-format
@@ -15427,7 +15426,7 @@ msgstr "Nom de la base de dades: "
 #: ui/actions/dialogs/DatabaseDialog.cpp:90
 #, kde-format
 msgid "Host:"
-msgstr "Amfitrió:"
+msgstr "Servidor:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:99
 #, kde-format

@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PictureShape package.
 #
 # SPDX-FileCopyrightText: 2008 Rafael Carreras <rcarreras@caliu.cat>
-# SPDX-FileCopyrightText: 2009, 2012, 2014, 2015, 2016 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2009, 2012, 2014-2016 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
