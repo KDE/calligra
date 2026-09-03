@@ -33,3 +33,8 @@ Dependencies:
 - 'on': [ 'Linux', 'FreeBSD' ]
   'require':
     'frameworks/kdbusaddons': '@latest-kf6'
+
+Options:
+ test-before-installing: True
+ require-passing-tests-on: ['Linux', 'FreeBSD', 'Windows']
+ enable-lsan: True
