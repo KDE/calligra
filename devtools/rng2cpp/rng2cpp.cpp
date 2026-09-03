@@ -135,6 +135,8 @@ protected:
     }
 
 public:
+    virtual ~RNGItem() = default;
+
     /**
      * true if this item may contain text nodes
      */
@@ -1416,6 +1418,8 @@ void convert(const QString &rngfile, const QString &outdir)
     QDomDocument dom = loadDOM(rngfile);
     RNGItems items;
     RNGItemPtr start = getDefines(dom.documentElement(), items);
+    RNGItems allocatedItems = items;
+    while (expand(allocatedItems)) { }
     RNGItems collected;
     // qDebug() << "define " << items.size();
     // collect(items, collected);
@@ -1435,6 +1439,7 @@ void convert(const QString &rngfile, const QString &outdir)
     std::stable_sort(list.begin(), list.end(), rngItemPtrLessThan);
     makeCppNames(list);
     write(list, outdir);
+    qDeleteAll(allocatedItems);
     // qDebug() << list.size();
 }
 
