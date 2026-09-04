@@ -25,7 +25,7 @@ public:
     ~ToolDocker();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QWidget
+    void resizeEvent(QResizeEvent *event) override; ///< reimplemented from QWidget
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.

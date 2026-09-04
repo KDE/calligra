@@ -48,20 +48,20 @@ protected:
 
 private:
     // Fake
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override
     {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         qFatal("Shouldn't be called");
     }
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override
     {
         Q_UNUSED(element);
         Q_UNUSED(context);
         qFatal("Shouldn't be called");
         return false;
     }
-    virtual void saveOdf(KoShapeSavingContext &context) const
+    void saveOdf(KoShapeSavingContext &context) const override
     {
         Q_UNUSED(context);
         qFatal("Shouldn't be called");
