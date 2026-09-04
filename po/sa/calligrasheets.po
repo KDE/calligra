@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
+"POT-Creation-Date: 2026-09-04 00:44+0000\n"
 "PO-Revision-Date: 2024-12-25 19:37+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -286,66 +286,66 @@ msgstr "सत्यम्‌"
 msgid "false"
 msgstr "असत्य"
 
-#: engine/SheetBase.cpp:357
+#: engine/SheetBase.cpp:362
 #, kde-format
 msgid "Dependency"
 msgstr "आश्रयः"
 
-#: engine/Value.cpp:657
+#: engine/Value.cpp:674
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#वृत्त!"
 
-#: engine/Value.cpp:665
+#: engine/Value.cpp:682
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#निर्भर!"
 
-#: engine/Value.cpp:673
+#: engine/Value.cpp:690
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "# दिवि / 0 !"
 
-#: engine/Value.cpp:681
+#: engine/Value.cpp:698
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "# न/अ"
 
-#: engine/Value.cpp:689
+#: engine/Value.cpp:706
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#नामः?"
 
-#: engine/Value.cpp:697
+#: engine/Value.cpp:714
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "# नुम् !"
 
-#: engine/Value.cpp:705
+#: engine/Value.cpp:722
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#लुप्तमूल्य!"
 
-#: engine/Value.cpp:713
+#: engine/Value.cpp:730
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "# पार्से !"
 
-#: engine/Value.cpp:721
+#: engine/Value.cpp:738
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "# REF !"
 
-#: engine/Value.cpp:729
+#: engine/Value.cpp:746
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5216,12 +5216,12 @@ msgstr "ZERO_COUPON (मुख्य मूल्य; दर; वर्ष)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;.1;20) 148.64 के बराबर"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:193 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "शास्त्र"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -8101,12 +8101,12 @@ msgstr "COLUMNS(A1:C3) 3 प्रेषयति"
 msgid "COLUMNS(D2) returns 1"
 msgstr "COLUMNS(D2) 1 प्रेषयति"
 
-#: functions/reference.xml:137 functions/reference.xml:266
+#: functions/reference.xml:137 functions/reference.xml:278
 #, kde-format
 msgid "Row"
 msgstr "पंक्ति"
 
-#: functions/reference.xml:141 functions/reference.xml:292
+#: functions/reference.xml:141 functions/reference.xml:304
 #: ui/actions/dialogs/DatabaseDialog.cpp:188
 #, kde-format
 msgid "Column"
@@ -8245,8 +8245,8 @@ msgstr "सन्दर्भे अथवा वर्तमानदस्त�
 msgid "SHEETS(reference)"
 msgstr "SHEETS(सन्दर्भ)"
 
-#: functions/reference.xml:236 functions/reference.xml:258
-#: functions/reference.xml:284
+#: functions/reference.xml:236 functions/reference.xml:256
+#: functions/reference.xml:270 functions/reference.xml:296
 #, kde-format
 msgid "Lookup value"
 msgstr "मूल्यं पश्यन्तु"
@@ -8290,24 +8290,54 @@ msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr ""
 "LOOKUP(1.232; A1:A6; B1:B6) A1 = 1, A2 = 2 कृते B1 इत्यस्य मूल्यं प्रत्यागच्छति ।"
 
-#: functions/reference.xml:262 functions/reference.xml:288
+#: functions/reference.xml:257
+#, fuzzy, kde-format
+#| msgid "Lookup value"
+msgid "Lookup array"
+msgstr "मूल्यं पश्यन्तु"
+
+#: functions/reference.xml:258
+#, kde-format
+msgid "Return array"
+msgstr ""
+
+#: functions/reference.xml:259
+#, fuzzy, kde-format
+#| msgid "Method (optional)"
+msgid "If not found (optional)"
+msgstr "विधि (वैकल्पिक)"
+
+#: functions/reference.xml:261
+#, kde-format
+msgid ""
+"Searches an array for a value and returns the corresponding value from a "
+"result array."
+msgstr ""
+
+#: functions/reference.xml:262
+#, fuzzy, kde-format
+#| msgid "LOOKUP(value; lookup vector; result vector)"
+msgid "XLOOKUP(value; lookup array; return array; if not found)"
+msgstr "LOOKUP (मूल्य; लुकअप सदिश; परिणाम सदिश)"
+
+#: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format
 msgid "Data source"
 msgstr "दत्तांशस्रोतः"
 
-#: functions/reference.xml:270 functions/reference.xml:296
+#: functions/reference.xml:282 functions/reference.xml:308
 #, kde-format
 msgid "Sorted (optional)"
 msgstr "क्रमबद्धम् (वैकल्पिकम्)"
 
-#: functions/reference.xml:274
+#: functions/reference.xml:286
 #, kde-format
 msgid ""
 "Look for a matching value in the first row of the given table, and return "
 "the value of the indicated row."
 msgstr "दत्तसारणीयाः प्रथमपङ्क्तौ मेलमूल्यं अन्वेष्टुम्, सूचितपङ्क्तौ मूल्यं च प्रत्यागच्छतु ।"
 
-#: functions/reference.xml:275
+#: functions/reference.xml:287
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first row of the 'data source'. If a "
@@ -8321,19 +8351,19 @@ msgstr ""
 "(पूर्वनिर्धारितम्) तर्हि प्रथमपङ्क्तिः क्रमबद्धा इति कल्प्यते । अन्वेषणं समाप्तं भविष्यति, यदि "
 "'lookup value' मूल्यात् न्यूनं भवति, वर्तमानकाले तुलने।"
 
-#: functions/reference.xml:276
+#: functions/reference.xml:288
 #, kde-format
 msgid "HLOOKUP(Lookup value; data source; Row; Sorted)"
 msgstr "HLOOKUP(Lookup value; data source; Row; Sorted)"
 
-#: functions/reference.xml:300
+#: functions/reference.xml:312
 #, kde-format
 msgid ""
 "Look for a matching value in the first column of the given table, and return "
 "the value of the indicated column."
 msgstr "दत्तसारणीयाः प्रथमस्तम्भे मेलमूल्यं अन्वेष्टुम्, सूचितस्य स्तम्भस्य मूल्यं च प्रत्यागच्छतु ।"
 
-#: functions/reference.xml:301
+#: functions/reference.xml:313
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first column of the 'data source'. If a "
@@ -8347,37 +8377,37 @@ msgstr ""
 "(पूर्वनिर्धारितम्) तर्हि प्रथमस्तम्भः क्रमबद्धः इति कल्प्यते । अन्वेषणं समाप्तं भविष्यति, यदि "
 "'lookup value' मूल्यात् न्यूनं भवति, वर्तमानकाले तुलने।"
 
-#: functions/reference.xml:302
+#: functions/reference.xml:314
 #, kde-format
 msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
 msgstr "VLOOKUP(Lookup value; data source; Column; क्रमबद्धम्)"
 
-#: functions/reference.xml:310
+#: functions/reference.xml:322
 #, kde-format
 msgid "Formula cell"
 msgstr "सूत्रकोशिका"
 
-#: functions/reference.xml:314
+#: functions/reference.xml:326
 #, kde-format
 msgid "Row cell"
 msgstr "पङ्क्तिकोष्ठकम्"
 
-#: functions/reference.xml:318
+#: functions/reference.xml:330
 #, kde-format
 msgid "Row replacement"
 msgstr "पङ्क्तिप्रतिस्थापनम्"
 
-#: functions/reference.xml:322
+#: functions/reference.xml:334
 #, kde-format
 msgid "Column cell (optional)"
 msgstr "स्तम्भकोष्ठकः (वैकल्पिकः)"
 
-#: functions/reference.xml:326
+#: functions/reference.xml:338
 #, kde-format
 msgid "Column replacement (optional)"
 msgstr "स्तम्भप्रतिस्थापनम् (वैकल्पिकम्)"
 
-#: functions/reference.xml:330
+#: functions/reference.xml:342
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS executes the formula expression pointed to by "
@@ -8394,7 +8424,7 @@ msgstr ""
 "व्यञ्जनानां सारणीः निर्मातुं शक्यन्ते ये द्वयोः इनपुट् पैरामीटर् इत्येतयोः उपरि आश्रिताः भवन्ति "
 "।"
 
-#: functions/reference.xml:331
+#: functions/reference.xml:343
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; "
@@ -8403,22 +8433,22 @@ msgstr ""
 "MULTIPLE.OPERATIONS(सूत्र कोष्ठक; पंक्ति कोष्ठक; पंक्ति प्रतिस्थापन; स्तम्भ कोष्ठक; स्तम्भ "
 "प्रतिस्थापन)"
 
-#: functions/reference.xml:339
+#: functions/reference.xml:351
 #, kde-format
 msgid "Search value"
 msgstr "मूल्यं अन्वेष्टुम्"
 
-#: functions/reference.xml:343
+#: functions/reference.xml:355
 #, kde-format
 msgid "Search region"
 msgstr "क्षेत्रं अन्वेष्टुम्"
 
-#: functions/reference.xml:347
+#: functions/reference.xml:359
 #, kde-format
 msgid "Match type (optional)"
 msgstr "मेलप्रकारः (वैकल्पिकः)"
 
-#: functions/reference.xml:351
+#: functions/reference.xml:363
 #, kde-format
 msgid ""
 "Finds a search value in a search region, and returns its position (starting "
@@ -8438,42 +8468,42 @@ msgstr ""
 "आरोहणक्रमेण क्रमेण व्यवस्थितानि भवेयुः यदि मेलप्रकारः -1 भवति तर्हि अन्वेषणमूल्यात् अधिकं वा "
 "समं वा लघुतमं मूल्यं लभ्यते, अन्वेषणप्रदेशं च अवरोहणक्रमेण क्रमबद्धं कर्तव्यम् ।"
 
-#: functions/reference.xml:352
+#: functions/reference.xml:364
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
 msgstr "MATCH(अन्वेषणमूल्यम्; अन्वेषणक्षेत्रम्; मेलप्रकारः)"
 
-#: functions/reference.xml:360
+#: functions/reference.xml:372
 #, kde-format
 msgid "Reference or range"
 msgstr "सन्दर्भः वा परिधिः"
 
-#: functions/reference.xml:364
+#: functions/reference.xml:376
 #, kde-format
 msgid "Number of rows to offset"
 msgstr "आफ्सेट् कर्तुं पङ्क्तयः संख्या"
 
-#: functions/reference.xml:368
+#: functions/reference.xml:380
 #, kde-format
 msgid "Number of columns to offset"
 msgstr "आफ्सेट् कर्तुं स्तम्भानां संख्या"
 
-#: functions/reference.xml:372
+#: functions/reference.xml:384
 #, kde-format
 msgid "Height of the offset range (optional)"
 msgstr "आफ्सेट्-परिधिस्य ऊर्ध्वता (वैकल्पिकम्) ."
 
-#: functions/reference.xml:376
+#: functions/reference.xml:388
 #, kde-format
 msgid "Width of the offset range (optional)"
 msgstr "आफ्सेट् श्रेणीयाः विस्तारः (वैकल्पिकः)"
 
-#: functions/reference.xml:380
+#: functions/reference.xml:392
 #, kde-format
 msgid "Modifies a reference's position and dimension."
 msgstr "सन्दर्भस्य स्थितिं आयामं च परिवर्तयति ।"
 
-#: functions/reference.xml:381
+#: functions/reference.xml:393
 #, kde-format
 msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
@@ -8482,28 +8512,28 @@ msgstr ""
 "OFFSET (सन्दर्भ सन्दर्भ; पूर्णांक rowOffset; पूर्णांक columnOffset; पूर्णांक newHeight; "
 "पूर्णांक newWidth)"
 
-#: functions/reference.xml:389
+#: functions/reference.xml:401
 #, fuzzy, kde-format
 #| msgid "Spreadsheet Application"
 msgid "Server application"
 msgstr "स्प्रेडशीट अनुप्रयोग"
 
-#: functions/reference.xml:393
+#: functions/reference.xml:405
 #, kde-format
 msgid "Topic"
 msgstr ""
 
-#: functions/reference.xml:397
+#: functions/reference.xml:409
 #, kde-format
 msgid "Item"
 msgstr ""
 
-#: functions/reference.xml:401
+#: functions/reference.xml:413
 #, kde-format
 msgid "Mode"
 msgstr ""
 
-#: functions/reference.xml:405
+#: functions/reference.xml:417
 #, kde-format
 msgid ""
 "Requests data from another running application via Dynamic Data Exchange, a "
@@ -8512,22 +8542,22 @@ msgid ""
 "evaluates to an error."
 msgstr ""
 
-#: functions/reference.xml:406
+#: functions/reference.xml:418
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
 msgstr ""
 
-#: functions/reference.xml:414
+#: functions/reference.xml:426
 #, kde-format
 msgid "URL"
 msgstr ""
 
-#: functions/reference.xml:418
+#: functions/reference.xml:430
 #, kde-format
 msgid "Display text (defaults to the URL)"
 msgstr ""
 
-#: functions/reference.xml:422
+#: functions/reference.xml:434
 #, kde-format
 msgid ""
 "Returns the display text for a hyperlink, or the URL itself if no display "
@@ -8535,12 +8565,12 @@ msgid ""
 "formula evaluation."
 msgstr ""
 
-#: functions/reference.xml:423
+#: functions/reference.xml:435
 #, kde-format
 msgid "HYPERLINK(url; display text)"
 msgstr ""
 
-#: functions/reference.xml:424
+#: functions/reference.xml:436
 #, fuzzy, kde-format
 #| msgid "T(\"Calligra\") returns \"Calligra\""
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""

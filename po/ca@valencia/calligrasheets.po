@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
+"POT-Creation-Date: 2026-09-04 00:44+0000\n"
 "PO-Revision-Date: 2026-08-31 11:51+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -295,66 +295,66 @@ msgstr "cert"
 msgid "false"
 msgstr "fals"
 
-#: engine/SheetBase.cpp:357
+#: engine/SheetBase.cpp:362
 #, kde-format
 msgid "Dependency"
 msgstr "Dependència"
 
-#: engine/Value.cpp:657
+#: engine/Value.cpp:674
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#CERCLE!"
 
-#: engine/Value.cpp:665
+#: engine/Value.cpp:682
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#DEPENDÈNCIA!"
 
-#: engine/Value.cpp:673
+#: engine/Value.cpp:690
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:681
+#: engine/Value.cpp:698
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/D"
 
-#: engine/Value.cpp:689
+#: engine/Value.cpp:706
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NOM?"
 
-#: engine/Value.cpp:697
+#: engine/Value.cpp:714
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NÚM!"
 
-#: engine/Value.cpp:705
+#: engine/Value.cpp:722
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#BUIT!"
 
-#: engine/Value.cpp:713
+#: engine/Value.cpp:730
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#ANALITZA!"
 
-#: engine/Value.cpp:721
+#: engine/Value.cpp:738
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:729
+#: engine/Value.cpp:746
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5393,12 +5393,12 @@ msgstr "ZERO_COUPON(valor nominal;taxa;anys)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;0,1;20) fa 148,64"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:193 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "Manual"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -8330,12 +8330,12 @@ msgstr "COLUMNS(A1:C3) retorna 3"
 msgid "COLUMNS(D2) returns 1"
 msgstr "COLUMNS(D2) retorna 1"
 
-#: functions/reference.xml:137 functions/reference.xml:266
+#: functions/reference.xml:137 functions/reference.xml:278
 #, kde-format
 msgid "Row"
 msgstr "Fila"
 
-#: functions/reference.xml:141 functions/reference.xml:292
+#: functions/reference.xml:141 functions/reference.xml:304
 #: ui/actions/dialogs/DatabaseDialog.cpp:188
 #, kde-format
 msgid "Column"
@@ -8477,8 +8477,8 @@ msgstr "Retorna el nombre de fulls en una referència o en el document actual."
 msgid "SHEETS(reference)"
 msgstr "SHEETS(referència)"
 
-#: functions/reference.xml:236 functions/reference.xml:258
-#: functions/reference.xml:284
+#: functions/reference.xml:236 functions/reference.xml:256
+#: functions/reference.xml:270 functions/reference.xml:296
 #, kde-format
 msgid "Lookup value"
 msgstr "Valor de busca"
@@ -8523,18 +8523,48 @@ msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr ""
 "LOOKUP(1,232; A1:A6; B1:B6) per a A1 = 1, A2 = 2 retorna el valor de B1."
 
+#: functions/reference.xml:257
+#, fuzzy, kde-format
+#| msgid "Lookup value"
+msgid "Lookup array"
+msgstr "Valor de busca"
+
+#: functions/reference.xml:258
+#, kde-format
+msgid "Return array"
+msgstr ""
+
+#: functions/reference.xml:259
+#, fuzzy, kde-format
+#| msgid "Method (optional)"
+msgid "If not found (optional)"
+msgstr "Mètode (opcional)"
+
+#: functions/reference.xml:261
+#, kde-format
+msgid ""
+"Searches an array for a value and returns the corresponding value from a "
+"result array."
+msgstr ""
+
+#: functions/reference.xml:262
+#, fuzzy, kde-format
+#| msgid "LOOKUP(value; lookup vector; result vector)"
+msgid "XLOOKUP(value; lookup array; return array; if not found)"
+msgstr "LOOKUP(valor; vector superior; vector resultant)"
+
 # msgid "Database"
-#: functions/reference.xml:262 functions/reference.xml:288
+#: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format
 msgid "Data source"
 msgstr "Font de les dades"
 
-#: functions/reference.xml:270 functions/reference.xml:296
+#: functions/reference.xml:282 functions/reference.xml:308
 #, kde-format
 msgid "Sorted (optional)"
 msgstr "Ordenació (opcional)"
 
-#: functions/reference.xml:274
+#: functions/reference.xml:286
 #, kde-format
 msgid ""
 "Look for a matching value in the first row of the given table, and return "
@@ -8543,7 +8573,7 @@ msgstr ""
 "Busca un valor coincident en la primera fila de la taula donada, i retorna "
 "el valor de la fila indicada."
 
-#: functions/reference.xml:275
+#: functions/reference.xml:287
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first row of the 'data source'. If a "
@@ -8558,12 +8588,12 @@ msgstr ""
 "busca finalitzarà si el «valor de busca» és més baix que el valor amb el "
 "qual es compara."
 
-#: functions/reference.xml:276
+#: functions/reference.xml:288
 #, kde-format
 msgid "HLOOKUP(Lookup value; data source; Row; Sorted)"
 msgstr "HLOOKUP(Valor de busca; font de les dades; Fila; Ordenat)"
 
-#: functions/reference.xml:300
+#: functions/reference.xml:312
 #, kde-format
 msgid ""
 "Look for a matching value in the first column of the given table, and return "
@@ -8572,7 +8602,7 @@ msgstr ""
 "Busca un valor coincident en la primera columna de la taula donada, i "
 "retorna el valor de la columna indicada."
 
-#: functions/reference.xml:301
+#: functions/reference.xml:313
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first column of the 'data source'. If a "
@@ -8587,37 +8617,37 @@ msgstr ""
 "La busca finalitzarà si el «valor de busca» és més baix que el valor amb el "
 "qual es compara."
 
-#: functions/reference.xml:302
+#: functions/reference.xml:314
 #, kde-format
 msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
 msgstr "VLOOKUP(Valor de busca; font de les dades; Fila; Ordenat)"
 
-#: functions/reference.xml:310
+#: functions/reference.xml:322
 #, kde-format
 msgid "Formula cell"
 msgstr "Cel·la de fórmula"
 
-#: functions/reference.xml:314
+#: functions/reference.xml:326
 #, kde-format
 msgid "Row cell"
 msgstr "Cel·la de fila"
 
-#: functions/reference.xml:318
+#: functions/reference.xml:330
 #, kde-format
 msgid "Row replacement"
 msgstr "Substitució de fila"
 
-#: functions/reference.xml:322
+#: functions/reference.xml:334
 #, kde-format
 msgid "Column cell (optional)"
 msgstr "Cel·la de columna (opcional)"
 
-#: functions/reference.xml:326
+#: functions/reference.xml:338
 #, kde-format
 msgid "Column replacement (optional)"
 msgstr "Substitució de columna (opcional)"
 
-#: functions/reference.xml:330
+#: functions/reference.xml:342
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS executes the formula expression pointed to by "
@@ -8634,7 +8664,7 @@ msgstr ""
 "referències a Substitució de columna. La funció es pot utilitzar per a crear "
 "amb facilitat taules d'expressions que depenen de dos paràmetres d'entrada."
 
-#: functions/reference.xml:331
+#: functions/reference.xml:343
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; "
@@ -8643,22 +8673,22 @@ msgstr ""
 "MULTIPLE.OPERATIONS(Cel·la de fórmula; Cel·la de fila; Substitució de fila; "
 "Cel·la de columna; Substitució de columna)"
 
-#: functions/reference.xml:339
+#: functions/reference.xml:351
 #, kde-format
 msgid "Search value"
 msgstr "Valor de busca"
 
-#: functions/reference.xml:343
+#: functions/reference.xml:355
 #, kde-format
 msgid "Search region"
 msgstr "Regió de busca"
 
-#: functions/reference.xml:347
+#: functions/reference.xml:359
 #, kde-format
 msgid "Match type (optional)"
 msgstr "Tipus d'encaix (opcional)"
 
-#: functions/reference.xml:351
+#: functions/reference.xml:363
 #, kde-format
 msgid ""
 "Finds a search value in a search region, and returns its position (starting "
@@ -8680,42 +8710,42 @@ msgstr ""
 "siga més gran o igual que el valor de busca, i la regió de busca s'ha "
 "d'ordenar de manera descendent."
 
-#: functions/reference.xml:352
+#: functions/reference.xml:364
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
 msgstr "MATCH(Valor de busca; Regió de busca; Tipus d'encaix)"
 
-#: functions/reference.xml:360
+#: functions/reference.xml:372
 #, kde-format
 msgid "Reference or range"
 msgstr "Referència o interval"
 
-#: functions/reference.xml:364
+#: functions/reference.xml:376
 #, kde-format
 msgid "Number of rows to offset"
 msgstr "Nombre de files que s'han de desplaçar"
 
-#: functions/reference.xml:368
+#: functions/reference.xml:380
 #, kde-format
 msgid "Number of columns to offset"
 msgstr "Nombre de columnes que s'han de desplaçar"
 
-#: functions/reference.xml:372
+#: functions/reference.xml:384
 #, kde-format
 msgid "Height of the offset range (optional)"
 msgstr "Alçària de l'interval de desplaçament (opcional)"
 
-#: functions/reference.xml:376
+#: functions/reference.xml:388
 #, kde-format
 msgid "Width of the offset range (optional)"
 msgstr "Amplària de l'interval de desplaçament (opcional)"
 
-#: functions/reference.xml:380
+#: functions/reference.xml:392
 #, kde-format
 msgid "Modifies a reference's position and dimension."
 msgstr "Modifica la posició i dimensió d'una referència."
 
-#: functions/reference.xml:381
+#: functions/reference.xml:393
 #, kde-format
 msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
@@ -8724,27 +8754,27 @@ msgstr ""
 "OFFSET(Referència referència; Enter desplaçamentFila; Enter "
 "desplaçamentColumna; Enter novaAlçària; Enter novaAmplària)"
 
-#: functions/reference.xml:389
+#: functions/reference.xml:401
 #, kde-format
 msgid "Server application"
 msgstr "Aplicació de servidor"
 
-#: functions/reference.xml:393
+#: functions/reference.xml:405
 #, kde-format
 msgid "Topic"
 msgstr "Tema"
 
-#: functions/reference.xml:397
+#: functions/reference.xml:409
 #, kde-format
 msgid "Item"
 msgstr "Element"
 
-#: functions/reference.xml:401
+#: functions/reference.xml:413
 #, kde-format
 msgid "Mode"
 msgstr "Mode"
 
-#: functions/reference.xml:405
+#: functions/reference.xml:417
 #, kde-format
 msgid ""
 "Requests data from another running application via Dynamic Data Exchange, a "
@@ -8757,22 +8787,22 @@ msgstr ""
 "no admet. DDE() es reconeix de manera que els documents que la fan "
 "referència encara es carreguen, però sempre s'avalua com un error."
 
-#: functions/reference.xml:406
+#: functions/reference.xml:418
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
 msgstr "DDE(servidor; tema; element; mode)"
 
-#: functions/reference.xml:414
+#: functions/reference.xml:426
 #, kde-format
 msgid "URL"
 msgstr "URL"
 
-#: functions/reference.xml:418
+#: functions/reference.xml:430
 #, kde-format
 msgid "Display text (defaults to the URL)"
 msgstr "Text de visualització (predeterminat a l'URL)"
 
-#: functions/reference.xml:422
+#: functions/reference.xml:434
 #, kde-format
 msgid ""
 "Returns the display text for a hyperlink, or the URL itself if no display "
@@ -8783,12 +8813,12 @@ msgstr ""
 "proporciona cap text de visualització. El seguiment de l'enllaç és gestionat "
 "per l'aplicació, no per l'avaluació de fórmules."
 
-#: functions/reference.xml:423
+#: functions/reference.xml:435
 #, kde-format
 msgid "HYPERLINK(url; display text)"
 msgstr "HYPERLINK(url; text de visualització)"
 
-#: functions/reference.xml:424
+#: functions/reference.xml:436
 #, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
 msgstr "HYPERLINK(\"https://calligra.org\"; \"Calligra\") retorna \"Calligra\""

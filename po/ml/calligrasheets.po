@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
+"POT-Creation-Date: 2026-09-04 00:44+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -283,66 +283,66 @@ msgstr "ശരി"
 msgid "false"
 msgstr "തെറ്റ്"
 
-#: engine/SheetBase.cpp:357
+#: engine/SheetBase.cpp:362
 #, kde-format
 msgid "Dependency"
 msgstr ""
 
-#: engine/Value.cpp:657
+#: engine/Value.cpp:674
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#CIRCLE!"
 
-#: engine/Value.cpp:665
+#: engine/Value.cpp:682
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#DEPEND!"
 
-#: engine/Value.cpp:673
+#: engine/Value.cpp:690
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:681
+#: engine/Value.cpp:698
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/A"
 
-#: engine/Value.cpp:689
+#: engine/Value.cpp:706
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NAME?"
 
-#: engine/Value.cpp:697
+#: engine/Value.cpp:714
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:705
+#: engine/Value.cpp:722
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NULL!"
 
-#: engine/Value.cpp:713
+#: engine/Value.cpp:730
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#PARSE!"
 
-#: engine/Value.cpp:721
+#: engine/Value.cpp:738
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:729
+#: engine/Value.cpp:746
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5092,12 +5092,12 @@ msgstr "ZERO_COUPON(മുഖവില;തോതു്;കൊല്ലങ്ങ�
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;.1;20) സമം 148.64"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:193 part/dialogs/PreferenceDialog.cpp:433
 #, fuzzy, kde-format
 msgid "Manual"
 msgstr "മാനുഷിക പര്‍വ്വതീകരണം: "
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -7891,12 +7891,12 @@ msgstr "COLUMNS(A1:C3) നല്‍കുന്നതു് 3"
 msgid "COLUMNS(D2) returns 1"
 msgstr "COLUMNS(D2) നല്‍കുന്നതു് 1"
 
-#: functions/reference.xml:137 functions/reference.xml:266
+#: functions/reference.xml:137 functions/reference.xml:278
 #, kde-format
 msgid "Row"
 msgstr "വരി"
 
-#: functions/reference.xml:141 functions/reference.xml:292
+#: functions/reference.xml:141 functions/reference.xml:304
 #: ui/actions/dialogs/DatabaseDialog.cpp:188
 #, kde-format
 msgid "Column"
@@ -8035,8 +8035,8 @@ msgstr "TODAY() ഫങ്ഷന്‍ ഇന്നത്തെ തീയതി �
 msgid "SHEETS(reference)"
 msgstr "AREAS(reference)"
 
-#: functions/reference.xml:236 functions/reference.xml:258
-#: functions/reference.xml:284
+#: functions/reference.xml:236 functions/reference.xml:256
+#: functions/reference.xml:270 functions/reference.xml:296
 #, kde-format
 msgid "Lookup value"
 msgstr "നോട്ട മൂല്യം"
@@ -8073,24 +8073,54 @@ msgstr "LOOKUP(മൂല്യം; നോട്ട വെക്ടര്‍; ഫ
 msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr ""
 
-#: functions/reference.xml:262 functions/reference.xml:288
+#: functions/reference.xml:257
+#, fuzzy, kde-format
+#| msgid "Lookup value"
+msgid "Lookup array"
+msgstr "നോട്ട മൂല്യം"
+
+#: functions/reference.xml:258
+#, kde-format
+msgid "Return array"
+msgstr ""
+
+#: functions/reference.xml:259
+#, fuzzy, kde-format
+#| msgid "Method (optional)"
+msgid "If not found (optional)"
+msgstr "രീതി (ഐച്ഛികം)"
+
+#: functions/reference.xml:261
+#, kde-format
+msgid ""
+"Searches an array for a value and returns the corresponding value from a "
+"result array."
+msgstr ""
+
+#: functions/reference.xml:262
+#, fuzzy, kde-format
+#| msgid "LOOKUP(value; lookup vector; result vector)"
+msgid "XLOOKUP(value; lookup array; return array; if not found)"
+msgstr "LOOKUP(മൂല്യം; നോട്ട വെക്ടര്‍; ഫല വെക്ടര്‍)"
+
+#: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format
 msgid "Data source"
 msgstr "ഡാറ്റ ശ്രോതസ്സ്"
 
-#: functions/reference.xml:270 functions/reference.xml:296
+#: functions/reference.xml:282 functions/reference.xml:308
 #, kde-format
 msgid "Sorted (optional)"
 msgstr "ക്രമപ്പെടുത്തിയതു് (ഐച്ഛികം)"
 
-#: functions/reference.xml:274
+#: functions/reference.xml:286
 #, kde-format
 msgid ""
 "Look for a matching value in the first row of the given table, and return "
 "the value of the indicated row."
 msgstr ""
 
-#: functions/reference.xml:275
+#: functions/reference.xml:287
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first row of the 'data source'. If a "
@@ -8100,19 +8130,19 @@ msgid ""
 "value, currently compared to."
 msgstr ""
 
-#: functions/reference.xml:276
+#: functions/reference.xml:288
 #, kde-format
 msgid "HLOOKUP(Lookup value; data source; Row; Sorted)"
 msgstr "HLOOKUP(നോട്ട മൂല്യം; ഡാറ്റ ശ്രോതസ്സ്; വരി; ക്രമപ്പെടുത്തല്‍)"
 
-#: functions/reference.xml:300
+#: functions/reference.xml:312
 #, kde-format
 msgid ""
 "Look for a matching value in the first column of the given table, and return "
 "the value of the indicated column."
 msgstr ""
 
-#: functions/reference.xml:301
+#: functions/reference.xml:313
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first column of the 'data source'. If a "
@@ -8122,41 +8152,41 @@ msgid ""
 "value, currently compared to."
 msgstr ""
 
-#: functions/reference.xml:302
+#: functions/reference.xml:314
 #, kde-format
 msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
 msgstr "VLOOKUP(നോട്ട മൂല്യം; ഡാറ്റ ശ്രോതസ്സ്; നിര; ക്രമപ്പെടുത്തല്‍)"
 
-#: functions/reference.xml:310
+#: functions/reference.xml:322
 #, fuzzy, kde-format
 #| msgid "Formula"
 msgid "Formula cell"
 msgstr "ഫോര്‍മുല"
 
-#: functions/reference.xml:314
+#: functions/reference.xml:326
 #, fuzzy, kde-format
 #| msgid "Remove Cell"
 msgid "Row cell"
 msgstr "കളം നീക്കം ചെയ്യുക"
 
-#: functions/reference.xml:318
+#: functions/reference.xml:330
 #, fuzzy, kde-format
 #| msgid "September"
 msgid "Row replacement"
 msgstr "സെപ്റ്റംബര്‍"
 
-#: functions/reference.xml:322
+#: functions/reference.xml:334
 #, fuzzy, kde-format
 #| msgid "Mode (optional)"
 msgid "Column cell (optional)"
 msgstr "ദശ (ഐച്ഛികം)"
 
-#: functions/reference.xml:326
+#: functions/reference.xml:338
 #, fuzzy, kde-format
 msgid "Column replacement (optional)"
 msgstr "Number. Track Artist - Track Title"
 
-#: functions/reference.xml:330
+#: functions/reference.xml:342
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS executes the formula expression pointed to by "
@@ -8167,32 +8197,32 @@ msgid ""
 "parameters."
 msgstr ""
 
-#: functions/reference.xml:331
+#: functions/reference.xml:343
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; "
 "Column replacement)"
 msgstr ""
 
-#: functions/reference.xml:339
+#: functions/reference.xml:351
 #, fuzzy, kde-format
 #| msgid "Start value:"
 msgid "Search value"
 msgstr "ആരംഭമൂല്യം:"
 
-#: functions/reference.xml:343
+#: functions/reference.xml:355
 #, fuzzy, kde-format
 #| msgid "Search direction:"
 msgid "Search region"
 msgstr "തെരച്ചില്‍ ദിശ:"
 
-#: functions/reference.xml:347
+#: functions/reference.xml:359
 #, fuzzy, kde-format
 #| msgid "Type (optional)"
 msgid "Match type (optional)"
 msgstr "തരം (ഐച്ഛികം)"
 
-#: functions/reference.xml:351
+#: functions/reference.xml:363
 #, kde-format
 msgid ""
 "Finds a search value in a search region, and returns its position (starting "
@@ -8205,72 +8235,72 @@ msgid ""
 "value is found, and the search region needs to be sorted in descending order."
 msgstr ""
 
-#: functions/reference.xml:352
+#: functions/reference.xml:364
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
 msgstr ""
 
-#: functions/reference.xml:360
+#: functions/reference.xml:372
 #, fuzzy, kde-format
 msgid "Reference or range"
 msgstr "ഡിസ്ക് _വീണ്ടും വായിക്കുക"
 
-#: functions/reference.xml:364
+#: functions/reference.xml:376
 #, fuzzy, kde-format
 #| msgid "Total number of elements"
 msgid "Number of rows to offset"
 msgstr "മൊത്തം മൂലകങ്ങളുടെ എണ്ണം"
 
-#: functions/reference.xml:368
+#: functions/reference.xml:380
 #, fuzzy, kde-format
 #| msgid "Total number of elements"
 msgid "Number of columns to offset"
 msgstr "മൊത്തം മൂലകങ്ങളുടെ എണ്ണം"
 
-#: functions/reference.xml:372
+#: functions/reference.xml:384
 #, kde-format
 msgid "Height of the offset range (optional)"
 msgstr ""
 
-#: functions/reference.xml:376
+#: functions/reference.xml:388
 #, kde-format
 msgid "Width of the offset range (optional)"
 msgstr ""
 
-#: functions/reference.xml:380
+#: functions/reference.xml:392
 #, kde-format
 msgid "Modifies a reference's position and dimension."
 msgstr ""
 
-#: functions/reference.xml:381
+#: functions/reference.xml:393
 #, kde-format
 msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
 "newHeight; Integer newWidth)"
 msgstr ""
 
-#: functions/reference.xml:389
+#: functions/reference.xml:401
 #, fuzzy, kde-format
 msgid "Server application"
 msgstr "ഈ പ്രയോഗത്തിനുള്ള സഹായം"
 
-#: functions/reference.xml:393
+#: functions/reference.xml:405
 #, kde-format
 msgid "Topic"
 msgstr ""
 
-#: functions/reference.xml:397
+#: functions/reference.xml:409
 #, fuzzy, kde-format
 #| msgid "Base"
 msgid "Item"
 msgstr "അടിസ്ഥാനം"
 
-#: functions/reference.xml:401
+#: functions/reference.xml:413
 #, kde-format
 msgid "Mode"
 msgstr ""
 
-#: functions/reference.xml:405
+#: functions/reference.xml:417
 #, kde-format
 msgid ""
 "Requests data from another running application via Dynamic Data Exchange, a "
@@ -8279,23 +8309,23 @@ msgid ""
 "evaluates to an error."
 msgstr ""
 
-#: functions/reference.xml:406
+#: functions/reference.xml:418
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
 msgstr ""
 
-#: functions/reference.xml:414
+#: functions/reference.xml:426
 #, fuzzy, kde-format
 #| msgid "EUR"
 msgid "URL"
 msgstr "EUR"
 
-#: functions/reference.xml:418
+#: functions/reference.xml:430
 #, kde-format
 msgid "Display text (defaults to the URL)"
 msgstr ""
 
-#: functions/reference.xml:422
+#: functions/reference.xml:434
 #, kde-format
 msgid ""
 "Returns the display text for a hyperlink, or the URL itself if no display "
@@ -8303,12 +8333,12 @@ msgid ""
 "formula evaluation."
 msgstr ""
 
-#: functions/reference.xml:423
+#: functions/reference.xml:435
 #, kde-format
 msgid "HYPERLINK(url; display text)"
 msgstr ""
 
-#: functions/reference.xml:424
+#: functions/reference.xml:436
 #, fuzzy, kde-format
 #| msgid "RIGHT(\"hello\";2) returns \"lo\""
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""

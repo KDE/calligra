@@ -1779,14 +1779,9 @@ msgstr ""
 "错误消息：%3"
 
 #: odf/KoOdfReadStore.cpp:156
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%1"
+#, kde-format
 msgid "Could not open %1"
 msgstr ""
-"无法打开\n"
-"%1"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"

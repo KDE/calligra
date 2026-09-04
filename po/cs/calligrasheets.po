@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
+"POT-Creation-Date: 2026-09-04 00:44+0000\n"
 "PO-Revision-Date: 2026-08-31 12:20+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -288,66 +288,66 @@ msgstr "pravda"
 msgid "false"
 msgstr "nepravda"
 
-#: engine/SheetBase.cpp:357
+#: engine/SheetBase.cpp:362
 #, kde-format
 msgid "Dependency"
 msgstr "Závislost"
 
-#: engine/Value.cpp:657
+#: engine/Value.cpp:674
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#CIRCLE!"
 
-#: engine/Value.cpp:665
+#: engine/Value.cpp:682
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#DEPEND!"
 
-#: engine/Value.cpp:673
+#: engine/Value.cpp:690
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:681
+#: engine/Value.cpp:698
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/A"
 
-#: engine/Value.cpp:689
+#: engine/Value.cpp:706
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NAME?"
 
-#: engine/Value.cpp:697
+#: engine/Value.cpp:714
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:705
+#: engine/Value.cpp:722
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NULL!"
 
-#: engine/Value.cpp:713
+#: engine/Value.cpp:730
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#PARSE!"
 
-#: engine/Value.cpp:721
+#: engine/Value.cpp:738
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:729
+#: engine/Value.cpp:746
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5329,12 +5329,12 @@ msgstr "ZERO_COUPON(nominální hodnota;úroková sazba;roky)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;0,1;20) se rovná 148,64"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:193 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "Ručně"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -8236,12 +8236,12 @@ msgstr "COLUMNS(A1:C3) vrací 3"
 msgid "COLUMNS(D2) returns 1"
 msgstr "COLUMNS(D2) vrací 1"
 
-#: functions/reference.xml:137 functions/reference.xml:266
+#: functions/reference.xml:137 functions/reference.xml:278
 #, kde-format
 msgid "Row"
 msgstr "Řádek"
 
-#: functions/reference.xml:141 functions/reference.xml:292
+#: functions/reference.xml:141 functions/reference.xml:304
 #: ui/actions/dialogs/DatabaseDialog.cpp:188
 #, kde-format
 msgid "Column"
@@ -8380,8 +8380,8 @@ msgstr "Vrátí počet listů v odkazovaném nebo aktuálním dokumentu."
 msgid "SHEETS(reference)"
 msgstr "SHEETS(odkaz)"
 
-#: functions/reference.xml:236 functions/reference.xml:258
-#: functions/reference.xml:284
+#: functions/reference.xml:236 functions/reference.xml:256
+#: functions/reference.xml:270 functions/reference.xml:296
 #, kde-format
 msgid "Lookup value"
 msgstr "Vyhledat hodnotu"
@@ -8428,17 +8428,47 @@ msgstr ""
 "Funkce LOOKUP(1,232; A1:A6; B1:B6) při hodnotách A1 = 1 a A2 = 2 vrátí "
 "hodnotu z buňky B1."
 
-#: functions/reference.xml:262 functions/reference.xml:288
+#: functions/reference.xml:257
+#, fuzzy, kde-format
+#| msgid "Lookup value"
+msgid "Lookup array"
+msgstr "Vyhledat hodnotu"
+
+#: functions/reference.xml:258
+#, kde-format
+msgid "Return array"
+msgstr ""
+
+#: functions/reference.xml:259
+#, fuzzy, kde-format
+#| msgid "Method (optional)"
+msgid "If not found (optional)"
+msgstr "Metoda (volitelná)"
+
+#: functions/reference.xml:261
+#, kde-format
+msgid ""
+"Searches an array for a value and returns the corresponding value from a "
+"result array."
+msgstr ""
+
+#: functions/reference.xml:262
+#, fuzzy, kde-format
+#| msgid "LOOKUP(value; lookup vector; result vector)"
+msgid "XLOOKUP(value; lookup array; return array; if not found)"
+msgstr "LOOKUP(hodnota; vyhledávací vektor; výsledný vektor)"
+
+#: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format
 msgid "Data source"
 msgstr "Zdroj dat"
 
-#: functions/reference.xml:270 functions/reference.xml:296
+#: functions/reference.xml:282 functions/reference.xml:308
 #, kde-format
 msgid "Sorted (optional)"
 msgstr "Třídění (volitelně)"
 
-#: functions/reference.xml:274
+#: functions/reference.xml:286
 #, kde-format
 msgid ""
 "Look for a matching value in the first row of the given table, and return "
@@ -8447,7 +8477,7 @@ msgstr ""
 "Najde odpovídající hodnotu v prvním řádku dané tabulky a vrátí hodnotu z "
 "uvedeného řádku."
 
-#: functions/reference.xml:275
+#: functions/reference.xml:287
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first row of the 'data source'. If a "
@@ -8462,12 +8492,12 @@ msgstr ""
 "předpokládá se, že první řádek je seřazen. Vyhledávání se ukončí, pokud je "
 "'vyhledávací hodnota' nižší než hodnota, se kterou se právě porovnává."
 
-#: functions/reference.xml:276
+#: functions/reference.xml:288
 #, kde-format
 msgid "HLOOKUP(Lookup value; data source; Row; Sorted)"
 msgstr "HLOOKUP(vyhledávaná hodnota; zdroj dat; řádek; třídění)"
 
-#: functions/reference.xml:300
+#: functions/reference.xml:312
 #, kde-format
 msgid ""
 "Look for a matching value in the first column of the given table, and return "
@@ -8476,7 +8506,7 @@ msgstr ""
 "Najde odpovídající hodnotu v prvním sloupci dané tabulky a vrátí hodnotu z "
 "uvedeného sloupce."
 
-#: functions/reference.xml:301
+#: functions/reference.xml:313
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first column of the 'data source'. If a "
@@ -8492,37 +8522,37 @@ msgstr ""
 "ukončí, pokud je 'vyhledávaná hodnota' nižší než hodnota, se kterou se právě "
 "porovnává."
 
-#: functions/reference.xml:302
+#: functions/reference.xml:314
 #, kde-format
 msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
 msgstr "VLOOKUP(vyhledávaná hodnota; zdroj dat; sloupec; třídění)"
 
-#: functions/reference.xml:310
+#: functions/reference.xml:322
 #, kde-format
 msgid "Formula cell"
 msgstr "Buňka vzorce"
 
-#: functions/reference.xml:314
+#: functions/reference.xml:326
 #, kde-format
 msgid "Row cell"
 msgstr "Buňka řádku"
 
-#: functions/reference.xml:318
+#: functions/reference.xml:330
 #, kde-format
 msgid "Row replacement"
 msgstr "Nahrazení řady"
 
-#: functions/reference.xml:322
+#: functions/reference.xml:334
 #, kde-format
 msgid "Column cell (optional)"
 msgstr "Buňka sloupce (volitelné)"
 
-#: functions/reference.xml:326
+#: functions/reference.xml:338
 #, kde-format
 msgid "Column replacement (optional)"
 msgstr "Nahrazení sloupce (volitelné)"
 
-#: functions/reference.xml:330
+#: functions/reference.xml:342
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS executes the formula expression pointed to by "
@@ -8538,7 +8568,7 @@ msgstr ""
 "odkazy na nahrazení sloupce. Tuto funkci lze použít k snadnému vytváření "
 "tabulek vzorců, které závisí na dvou vstupních parametrech."
 
-#: functions/reference.xml:331
+#: functions/reference.xml:343
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; "
@@ -8547,22 +8577,22 @@ msgstr ""
 "MULTIPLE.OPERATIONS(buňka vzorce; buňka řádku; nahrazení řádku; buňka "
 "sloupce; nahrazení sloupce)"
 
-#: functions/reference.xml:339
+#: functions/reference.xml:351
 #, kde-format
 msgid "Search value"
 msgstr "Hledat hodnotu"
 
-#: functions/reference.xml:343
+#: functions/reference.xml:355
 #, kde-format
 msgid "Search region"
 msgstr "Hledat oblast"
 
-#: functions/reference.xml:347
+#: functions/reference.xml:359
 #, kde-format
 msgid "Match type (optional)"
 msgstr "Typ shody (volitelné)"
 
-#: functions/reference.xml:351
+#: functions/reference.xml:363
 #, kde-format
 msgid ""
 "Finds a search value in a search region, and returns its position (starting "
@@ -8583,42 +8613,42 @@ msgstr ""
 "je typ shody -1, najde se nejmenší hodnota, která je větší nebo rovna "
 "hledané hodnotě, a oblast vyhledávání musí být seřazena sestupně."
 
-#: functions/reference.xml:352
+#: functions/reference.xml:364
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
 msgstr "MATCH(hledaná hodnota; oblast vyhledávání; typ shody)"
 
-#: functions/reference.xml:360
+#: functions/reference.xml:372
 #, kde-format
 msgid "Reference or range"
 msgstr "Odkaz nebo rozsah"
 
-#: functions/reference.xml:364
+#: functions/reference.xml:376
 #, kde-format
 msgid "Number of rows to offset"
 msgstr "Počet řádků, o které se má posunout"
 
-#: functions/reference.xml:368
+#: functions/reference.xml:380
 #, kde-format
 msgid "Number of columns to offset"
 msgstr "Počet sloupců, o které se má posunout"
 
-#: functions/reference.xml:372
+#: functions/reference.xml:384
 #, kde-format
 msgid "Height of the offset range (optional)"
 msgstr "Výška posunu (volitelné)"
 
-#: functions/reference.xml:376
+#: functions/reference.xml:388
 #, kde-format
 msgid "Width of the offset range (optional)"
 msgstr "Šířka posunu (volitelné)"
 
-#: functions/reference.xml:380
+#: functions/reference.xml:392
 #, kde-format
 msgid "Modifies a reference's position and dimension."
 msgstr "Upraví umístění a rozměry odkazu."
 
-#: functions/reference.xml:381
+#: functions/reference.xml:393
 #, kde-format
 msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
@@ -8627,27 +8657,27 @@ msgstr ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
 "newHeight; Integer newWidth)"
 
-#: functions/reference.xml:389
+#: functions/reference.xml:401
 #, kde-format
 msgid "Server application"
 msgstr "Serverová aplikace"
 
-#: functions/reference.xml:393
+#: functions/reference.xml:405
 #, kde-format
 msgid "Topic"
 msgstr "Téma"
 
-#: functions/reference.xml:397
+#: functions/reference.xml:409
 #, kde-format
 msgid "Item"
 msgstr "Položka"
 
-#: functions/reference.xml:401
+#: functions/reference.xml:413
 #, kde-format
 msgid "Mode"
 msgstr "Režim"
 
-#: functions/reference.xml:405
+#: functions/reference.xml:417
 #, kde-format
 msgid ""
 "Requests data from another running application via Dynamic Data Exchange, a "
@@ -8660,22 +8690,22 @@ msgstr ""
 "Windows, který tato platforma nepodporuje. Funkce DDE() je rozpoznána, takže "
 "dokumenty, které na ni odkazují, se stále načtou, ale vždy dojde k chybě."
 
-#: functions/reference.xml:406
+#: functions/reference.xml:418
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
 msgstr "DDE(server; téma; položka; režim)"
 
-#: functions/reference.xml:414
+#: functions/reference.xml:426
 #, kde-format
 msgid "URL"
 msgstr "URL"
 
-#: functions/reference.xml:418
+#: functions/reference.xml:430
 #, kde-format
 msgid "Display text (defaults to the URL)"
 msgstr "Zobrazit text (výchozí hodnota je URL)"
 
-#: functions/reference.xml:422
+#: functions/reference.xml:434
 #, kde-format
 msgid ""
 "Returns the display text for a hyperlink, or the URL itself if no display "
@@ -8686,12 +8716,12 @@ msgstr ""
 "pokud není zadán žádný text pro zobrazení. Provedení odkazu zajišťuje "
 "aplikace, nikoli vyhodnocení vzorce."
 
-#: functions/reference.xml:423
+#: functions/reference.xml:435
 #, kde-format
 msgid "HYPERLINK(url; display text)"
 msgstr "HYPERLINK(url; zobrazený text)"
 
-#: functions/reference.xml:424
+#: functions/reference.xml:436
 #, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
 msgstr "HYPERLINK(\"https://calligra.org\"; \"Calligra\") vrací \"Calligra\""

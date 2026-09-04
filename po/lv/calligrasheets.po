@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
+"POT-Creation-Date: 2026-09-04 00:44+0000\n"
 "PO-Revision-Date: 2026-08-12 00:37+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -286,66 +286,66 @@ msgstr "patiess"
 msgid "false"
 msgstr "aplams"
 
-#: engine/SheetBase.cpp:357
+#: engine/SheetBase.cpp:362
 #, kde-format
 msgid "Dependency"
 msgstr "Atkarība"
 
-#: engine/Value.cpp:657
+#: engine/Value.cpp:674
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#APLIS!"
 
-#: engine/Value.cpp:665
+#: engine/Value.cpp:682
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#ATKAR!"
 
-#: engine/Value.cpp:673
+#: engine/Value.cpp:690
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DALĪTS/0!"
 
-#: engine/Value.cpp:681
+#: engine/Value.cpp:698
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/P"
 
-#: engine/Value.cpp:689
+#: engine/Value.cpp:706
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NOSAUKUMS?"
 
-#: engine/Value.cpp:697
+#: engine/Value.cpp:714
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:705
+#: engine/Value.cpp:722
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#TUKŠS!"
 
-#: engine/Value.cpp:713
+#: engine/Value.cpp:730
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#PARSĒŠANA!"
 
-#: engine/Value.cpp:721
+#: engine/Value.cpp:738
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#ATS!"
 
-#: engine/Value.cpp:729
+#: engine/Value.cpp:746
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5333,12 +5333,12 @@ msgstr "ZERO_COUPON(pamatvērtība;koeficients;gadi)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000;0,1;20) ir vienāds ar 148,64"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:193 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "Manuāls"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -8267,12 +8267,12 @@ msgstr "COLUMNS(A1:C3) atgriež 3"
 msgid "COLUMNS(D2) returns 1"
 msgstr "COLUMNS(D2) atgriež 1"
 
-#: functions/reference.xml:137 functions/reference.xml:266
+#: functions/reference.xml:137 functions/reference.xml:278
 #, kde-format
 msgid "Row"
 msgstr "Rinda"
 
-#: functions/reference.xml:141 functions/reference.xml:292
+#: functions/reference.xml:141 functions/reference.xml:304
 #: ui/actions/dialogs/DatabaseDialog.cpp:188
 #, kde-format
 msgid "Column"
@@ -8412,8 +8412,8 @@ msgstr "Atgriež lokšņu skaitu atsaucē vai pašreizējā dokumentā."
 msgid "SHEETS(reference)"
 msgstr "SHEETS(atsauce)"
 
-#: functions/reference.xml:236 functions/reference.xml:258
-#: functions/reference.xml:284
+#: functions/reference.xml:236 functions/reference.xml:256
+#: functions/reference.xml:270 functions/reference.xml:296
 #, kde-format
 msgid "Lookup value"
 msgstr "Uzmeklēšanas vērtība"
@@ -8458,17 +8458,47 @@ msgstr "LOOKUP(vērtība; uzmeklēšanas vektors; rezultāta vektors)"
 msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr "LOOKUP(1,232; A1:A6; B1:B6), ja A1 = 1, A2 = 2 atgriezīs B1 vērtību"
 
-#: functions/reference.xml:262 functions/reference.xml:288
+#: functions/reference.xml:257
+#, fuzzy, kde-format
+#| msgid "Lookup value"
+msgid "Lookup array"
+msgstr "Uzmeklēšanas vērtība"
+
+#: functions/reference.xml:258
+#, kde-format
+msgid "Return array"
+msgstr ""
+
+#: functions/reference.xml:259
+#, fuzzy, kde-format
+#| msgid "Method (optional)"
+msgid "If not found (optional)"
+msgstr "Metode (neobligāti)"
+
+#: functions/reference.xml:261
+#, kde-format
+msgid ""
+"Searches an array for a value and returns the corresponding value from a "
+"result array."
+msgstr ""
+
+#: functions/reference.xml:262
+#, fuzzy, kde-format
+#| msgid "LOOKUP(value; lookup vector; result vector)"
+msgid "XLOOKUP(value; lookup array; return array; if not found)"
+msgstr "LOOKUP(vērtība; uzmeklēšanas vektors; rezultāta vektors)"
+
+#: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format
 msgid "Data source"
 msgstr "Datu avots"
 
-#: functions/reference.xml:270 functions/reference.xml:296
+#: functions/reference.xml:282 functions/reference.xml:308
 #, kde-format
 msgid "Sorted (optional)"
 msgstr "Kārtots (neobligāts)"
 
-#: functions/reference.xml:274
+#: functions/reference.xml:286
 #, kde-format
 msgid ""
 "Look for a matching value in the first row of the given table, and return "
@@ -8477,7 +8507,7 @@ msgstr ""
 "Meklēt atbilstošu vērtību dotās tabulas pirmajā rindā un atgriezt norādītās "
 "rindas vērtību."
 
-#: functions/reference.xml:275
+#: functions/reference.xml:287
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first row of the 'data source'. If a "
@@ -8492,12 +8522,12 @@ msgstr ""
 "rinda ir sakārtota. Meklēšana beigsies, ja „meklēšanas vērtība“ būs zemāka "
 "par vērtību, ar kuru attiecīgajā brīdī tiek salīdzināts."
 
-#: functions/reference.xml:276
+#: functions/reference.xml:288
 #, kde-format
 msgid "HLOOKUP(Lookup value; data source; Row; Sorted)"
 msgstr "HLOOKUP(Uzmeklēšanas vērtība; datu avots; Rinda; Kārtots)"
 
-#: functions/reference.xml:300
+#: functions/reference.xml:312
 #, kde-format
 msgid ""
 "Look for a matching value in the first column of the given table, and return "
@@ -8506,7 +8536,7 @@ msgstr ""
 "Meklēt atbilstošu vērtību dotās tabulas pirmajā kolonnā un atgriež norādītās "
 "kolonnas vērtību."
 
-#: functions/reference.xml:301
+#: functions/reference.xml:313
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first column of the 'data source'. If a "
@@ -8521,37 +8551,37 @@ msgstr ""
 "sakārtota. Meklēšana beigsies, ja „meklēšanas vērtība“ būs zemāka par "
 "vērtību, ar kuru attiecīgajā brīdī tiek salīdzināts."
 
-#: functions/reference.xml:302
+#: functions/reference.xml:314
 #, kde-format
 msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
 msgstr "VLOOKUP(Uzmeklēšanas vērtība; datu avots; Kolonna; Kārtots)"
 
-#: functions/reference.xml:310
+#: functions/reference.xml:322
 #, kde-format
 msgid "Formula cell"
 msgstr "Formulas šūna"
 
-#: functions/reference.xml:314
+#: functions/reference.xml:326
 #, kde-format
 msgid "Row cell"
 msgstr "Rindas šūna"
 
-#: functions/reference.xml:318
+#: functions/reference.xml:330
 #, kde-format
 msgid "Row replacement"
 msgstr "Rindas aizvietojums"
 
-#: functions/reference.xml:322
+#: functions/reference.xml:334
 #, kde-format
 msgid "Column cell (optional)"
 msgstr "Kolonnas šūna (neobligāti)"
 
-#: functions/reference.xml:326
+#: functions/reference.xml:338
 #, kde-format
 msgid "Column replacement (optional)"
 msgstr "Kolonnas aizvietojums (neobligāti)"
 
-#: functions/reference.xml:330
+#: functions/reference.xml:342
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS executes the formula expression pointed to by "
@@ -8568,7 +8598,7 @@ msgstr ""
 "aizvietojumu“. Funkciju varat izmantot, lai viegli izveidotu izteiksmju "
 "tabulu, kas ir atkarīga no diviem ievades parametriem."
 
-#: functions/reference.xml:331
+#: functions/reference.xml:343
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; "
@@ -8577,22 +8607,22 @@ msgstr ""
 "MULTIPLE.OPERATIONS(Formulas šūna; Rindas šūna; Rindas aizvietojums; "
 "Kolonnas šūna; Kolonnas aizvietojums)"
 
-#: functions/reference.xml:339
+#: functions/reference.xml:351
 #, kde-format
 msgid "Search value"
 msgstr "Meklēšanas vērtība"
 
-#: functions/reference.xml:343
+#: functions/reference.xml:355
 #, kde-format
 msgid "Search region"
 msgstr "Meklēšanas apgabals"
 
-#: functions/reference.xml:347
+#: functions/reference.xml:359
 #, kde-format
 msgid "Match type (optional)"
 msgstr "Atbilsmes tips (neobligāti)"
 
-#: functions/reference.xml:351
+#: functions/reference.xml:363
 #, kde-format
 msgid ""
 "Finds a search value in a search region, and returns its position (starting "
@@ -8613,42 +8643,42 @@ msgstr ""
 "atrasta mazākā vērtība, kas ir lielāka vai vienāda ar meklēšanas vērtību, "
 "bet meklēšanas apgabalam jābūt kārtotam dilstošā kārtībā."
 
-#: functions/reference.xml:352
+#: functions/reference.xml:364
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
 msgstr "MATCH(Meklēšanas vērtība; Meklēšanas apgabals; Atbilsmes tips)"
 
-#: functions/reference.xml:360
+#: functions/reference.xml:372
 #, kde-format
 msgid "Reference or range"
 msgstr "Atsauce vai apgabals"
 
-#: functions/reference.xml:364
+#: functions/reference.xml:376
 #, kde-format
 msgid "Number of rows to offset"
 msgstr "Nobīdes rindu skaits"
 
-#: functions/reference.xml:368
+#: functions/reference.xml:380
 #, kde-format
 msgid "Number of columns to offset"
 msgstr "Nobīdes kolonnu skaits"
 
-#: functions/reference.xml:372
+#: functions/reference.xml:384
 #, kde-format
 msgid "Height of the offset range (optional)"
 msgstr "Nobīdes apgabala augstums (neobligāts)"
 
-#: functions/reference.xml:376
+#: functions/reference.xml:388
 #, kde-format
 msgid "Width of the offset range (optional)"
 msgstr "Nobīdes apgabala platums (neobligāts)"
 
-#: functions/reference.xml:380
+#: functions/reference.xml:392
 #, kde-format
 msgid "Modifies a reference's position and dimension."
 msgstr "Modificē atsaucas pozīciju un izmēru."
 
-#: functions/reference.xml:381
+#: functions/reference.xml:393
 #, kde-format
 msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
@@ -8657,28 +8687,28 @@ msgstr ""
 "OFFSET(Atsauce; Rindas nobīdes skaitlis; Kolonnas nobīdes skaitlis; Jaunā "
 "augstuma skaitlis; Jaunā platuma skaitlis)"
 
-#: functions/reference.xml:389
+#: functions/reference.xml:401
 #, fuzzy, kde-format
 #| msgid "Spreadsheet Application"
 msgid "Server application"
 msgstr "Izklājlapu programma"
 
-#: functions/reference.xml:393
+#: functions/reference.xml:405
 #, kde-format
 msgid "Topic"
 msgstr ""
 
-#: functions/reference.xml:397
+#: functions/reference.xml:409
 #, fuzzy, kde-format
 msgid "Item"
 msgstr "Bāze"
 
-#: functions/reference.xml:401
+#: functions/reference.xml:413
 #, kde-format
 msgid "Mode"
 msgstr ""
 
-#: functions/reference.xml:405
+#: functions/reference.xml:417
 #, kde-format
 msgid ""
 "Requests data from another running application via Dynamic Data Exchange, a "
@@ -8687,22 +8717,22 @@ msgid ""
 "evaluates to an error."
 msgstr ""
 
-#: functions/reference.xml:406
+#: functions/reference.xml:418
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
 msgstr ""
 
-#: functions/reference.xml:414
+#: functions/reference.xml:426
 #, kde-format
 msgid "URL"
 msgstr ""
 
-#: functions/reference.xml:418
+#: functions/reference.xml:430
 #, kde-format
 msgid "Display text (defaults to the URL)"
 msgstr ""
 
-#: functions/reference.xml:422
+#: functions/reference.xml:434
 #, kde-format
 msgid ""
 "Returns the display text for a hyperlink, or the URL itself if no display "
@@ -8710,12 +8740,12 @@ msgid ""
 "formula evaluation."
 msgstr ""
 
-#: functions/reference.xml:423
+#: functions/reference.xml:435
 #, kde-format
 msgid "HYPERLINK(url; display text)"
 msgstr ""
 
-#: functions/reference.xml:424
+#: functions/reference.xml:436
 #, fuzzy, kde-format
 #| msgid "T(\"Calligra\") returns \"Calligra\""
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""

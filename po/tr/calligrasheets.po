@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
-"PO-Revision-Date: 2026-08-31 20:10+0300\n"
+"POT-Creation-Date: 2026-09-04 00:44+0000\n"
+"PO-Revision-Date: 2026-09-03 22:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -287,66 +287,66 @@ msgstr "doğru"
 msgid "false"
 msgstr "yanlış"
 
-#: engine/SheetBase.cpp:357
+#: engine/SheetBase.cpp:362
 #, kde-format
 msgid "Dependency"
 msgstr "Bağımlılık"
 
-#: engine/Value.cpp:657
+#: engine/Value.cpp:674
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#DAİRE!"
 
-#: engine/Value.cpp:665
+#: engine/Value.cpp:682
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#BAĞIMLI!"
 
-#: engine/Value.cpp:673
+#: engine/Value.cpp:690
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#BÖL/0!"
 
-#: engine/Value.cpp:681
+#: engine/Value.cpp:698
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#YOK"
 
-#: engine/Value.cpp:689
+#: engine/Value.cpp:706
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#AD?"
 
-#: engine/Value.cpp:697
+#: engine/Value.cpp:714
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#SAYI!"
 
-#: engine/Value.cpp:705
+#: engine/Value.cpp:722
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#BOŞ!"
 
-#: engine/Value.cpp:713
+#: engine/Value.cpp:730
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#AYRIŞTIR!"
 
-#: engine/Value.cpp:721
+#: engine/Value.cpp:738
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#BAŞVURU!"
 
-#: engine/Value.cpp:729
+#: engine/Value.cpp:746
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -5336,12 +5336,12 @@ msgstr "ZERO_COUPON(görünür değer;oran;yıllar)"
 msgid "ZERO_COUPON(1000;.1;20) equals 148.64"
 msgstr "ZERO_COUPON(1000; .1; 20) eşittir 148,64"
 
-#: functions/information.cpp:196 part/dialogs/PreferenceDialog.cpp:433
+#: functions/information.cpp:193 part/dialogs/PreferenceDialog.cpp:433
 #, kde-format
 msgid "Manual"
 msgstr "Elle"
 
-#: functions/information.cpp:198 part/dialogs/PreferenceDialog.cpp:435
+#: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
 #: ui/dialogs/LayoutPage_Float.cpp:215
 #, kde-format
 msgid "Automatic"
@@ -8244,12 +8244,12 @@ msgstr "COLUMNS(A1:C3), 3 döndürür"
 msgid "COLUMNS(D2) returns 1"
 msgstr "COLUMNS(D2), 1 döndürür"
 
-#: functions/reference.xml:137 functions/reference.xml:266
+#: functions/reference.xml:137 functions/reference.xml:278
 #, kde-format
 msgid "Row"
 msgstr "Satır"
 
-#: functions/reference.xml:141 functions/reference.xml:292
+#: functions/reference.xml:141 functions/reference.xml:304
 #: ui/actions/dialogs/DatabaseDialog.cpp:188
 #, kde-format
 msgid "Column"
@@ -8389,8 +8389,8 @@ msgstr ""
 msgid "SHEETS(reference)"
 msgstr "SHEETS(başvuru)"
 
-#: functions/reference.xml:236 functions/reference.xml:258
-#: functions/reference.xml:284
+#: functions/reference.xml:236 functions/reference.xml:256
+#: functions/reference.xml:270 functions/reference.xml:296
 #, kde-format
 msgid "Lookup value"
 msgstr "Arama değeri"
@@ -8434,17 +8434,47 @@ msgstr "LOOKUP(değer; arama vektörü; sonuç vektörü)"
 msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr "LOOKUP(1,232; A1:A6; B1:B6), A1 = 1, A2 = 2 için B1’in döndürür."
 
-#: functions/reference.xml:262 functions/reference.xml:288
+#: functions/reference.xml:257
+#, fuzzy, kde-format
+#| msgid "Lookup value"
+msgid "Lookup array"
+msgstr "Arama değeri"
+
+#: functions/reference.xml:258
+#, kde-format
+msgid "Return array"
+msgstr ""
+
+#: functions/reference.xml:259
+#, fuzzy, kde-format
+#| msgid "Method (optional)"
+msgid "If not found (optional)"
+msgstr "Yöntem (seçmeli)"
+
+#: functions/reference.xml:261
+#, kde-format
+msgid ""
+"Searches an array for a value and returns the corresponding value from a "
+"result array."
+msgstr ""
+
+#: functions/reference.xml:262
+#, fuzzy, kde-format
+#| msgid "LOOKUP(value; lookup vector; result vector)"
+msgid "XLOOKUP(value; lookup array; return array; if not found)"
+msgstr "LOOKUP(değer; arama vektörü; sonuç vektörü)"
+
+#: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format
 msgid "Data source"
 msgstr "Veri kaynağı"
 
-#: functions/reference.xml:270 functions/reference.xml:296
+#: functions/reference.xml:282 functions/reference.xml:308
 #, kde-format
 msgid "Sorted (optional)"
 msgstr "Sıralanmış (seçimlik)"
 
-#: functions/reference.xml:274
+#: functions/reference.xml:286
 #, kde-format
 msgid ""
 "Look for a matching value in the first row of the given table, and return "
@@ -8453,7 +8483,7 @@ msgstr ""
 "Verilen tablonun ilk satırında eşleşen bir değer ara ve ilgili satırın "
 "değerini döndür."
 
-#: functions/reference.xml:275
+#: functions/reference.xml:287
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first row of the 'data source'. If a "
@@ -8467,12 +8497,12 @@ msgstr ""
 "“sıralı” seçeneği true ise ilk satır sıralı olarak varsayılır. Eğer “arama "
 "değeri” karşılaştırılmakta olan değerden küçük ise arama sonlandırılır."
 
-#: functions/reference.xml:276
+#: functions/reference.xml:288
 #, kde-format
 msgid "HLOOKUP(Lookup value; data source; Row; Sorted)"
 msgstr "HLOOKUP(sorgu değeri; veri kaynağı; Satır; Sıralı)"
 
-#: functions/reference.xml:300
+#: functions/reference.xml:312
 #, kde-format
 msgid ""
 "Look for a matching value in the first column of the given table, and return "
@@ -8481,7 +8511,7 @@ msgstr ""
 "Verilen tablonun ilk sütununda eşleşen bir değer ara ve belirtilen sütundaki "
 "değeri döndür."
 
-#: functions/reference.xml:301
+#: functions/reference.xml:313
 #, kde-format
 msgid ""
 "Looks up the 'lookup value' in the first column of the 'data source'. If a "
@@ -8496,37 +8526,37 @@ msgstr ""
 "“arama değeri” karşılaştırılmakta olan değerden küçük ise arama "
 "sonlandırılır."
 
-#: functions/reference.xml:302
+#: functions/reference.xml:314
 #, kde-format
 msgid "VLOOKUP(Lookup value; data source; Column; Sorted)"
 msgstr "VLOOKUP(Arama değeri; veri kaynağı; Sütun; Sıralı)"
 
-#: functions/reference.xml:310
+#: functions/reference.xml:322
 #, kde-format
 msgid "Formula cell"
 msgstr "Formül hücresi"
 
-#: functions/reference.xml:314
+#: functions/reference.xml:326
 #, kde-format
 msgid "Row cell"
 msgstr "Satır hücresi"
 
-#: functions/reference.xml:318
+#: functions/reference.xml:330
 #, kde-format
 msgid "Row replacement"
 msgstr "Satır değiştirme"
 
-#: functions/reference.xml:322
+#: functions/reference.xml:334
 #, kde-format
 msgid "Column cell (optional)"
 msgstr "Sütun hücresi (isteğe bağlı)"
 
-#: functions/reference.xml:326
+#: functions/reference.xml:338
 #, kde-format
 msgid "Column replacement (optional)"
 msgstr "Sütun değiştirme (isteğe bağlı)"
 
-#: functions/reference.xml:330
+#: functions/reference.xml:342
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS executes the formula expression pointed to by "
@@ -8542,7 +8572,7 @@ msgstr ""
 "SütunDeğiştirme’ye başvuru olarak değiştirir. İşlev, kolaylıkla iki girdi "
 "parametresine bağlı ifade tabloları oluşturmak için kullanılabilir."
 
-#: functions/reference.xml:331
+#: functions/reference.xml:343
 #, kde-format
 msgid ""
 "MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; "
@@ -8551,22 +8581,22 @@ msgstr ""
 "MULTIPLE.OPERATIONS(Formül hücresi; Satır hücresi; Satır değiştirme; Sütun "
 "hücresi; Sütun değiştirme)"
 
-#: functions/reference.xml:339
+#: functions/reference.xml:351
 #, kde-format
 msgid "Search value"
 msgstr "Değeri ara"
 
-#: functions/reference.xml:343
+#: functions/reference.xml:355
 #, kde-format
 msgid "Search region"
 msgstr "Bölgeyi ara"
 
-#: functions/reference.xml:347
+#: functions/reference.xml:359
 #, kde-format
 msgid "Match type (optional)"
 msgstr "Eşleşme türü (isteğe bağlı)"
 
-#: functions/reference.xml:351
+#: functions/reference.xml:363
 #, kde-format
 msgid ""
 "Finds a search value in a search region, and returns its position (starting "
@@ -8587,42 +8617,42 @@ msgstr ""
 "değerine eşit ya da daha büyük olan en küçük değer bulunur ve aram  bölgesi "
 "azalan sırada sıralı olmalıdır."
 
-#: functions/reference.xml:352
+#: functions/reference.xml:364
 #, kde-format
 msgid "MATCH(Search value; Search region; Match type)"
 msgstr "MATCH(arama_değeri; arama_bölgesi; eşleşme_türü)"
 
-#: functions/reference.xml:360
+#: functions/reference.xml:372
 #, kde-format
 msgid "Reference or range"
 msgstr "Başvuru veya erim"
 
-#: functions/reference.xml:364
+#: functions/reference.xml:376
 #, kde-format
 msgid "Number of rows to offset"
 msgstr "Ofsete kadarki satır sayısı"
 
-#: functions/reference.xml:368
+#: functions/reference.xml:380
 #, kde-format
 msgid "Number of columns to offset"
 msgstr "Ofsete kadarki sütun sayısı"
 
-#: functions/reference.xml:372
+#: functions/reference.xml:384
 #, kde-format
 msgid "Height of the offset range (optional)"
 msgstr "Ofset eriminin yüksekliği (isteğe bağlı)"
 
-#: functions/reference.xml:376
+#: functions/reference.xml:388
 #, kde-format
 msgid "Width of the offset range (optional)"
 msgstr "Ofset eriminin genişliği (isteğe bağlı)"
 
-#: functions/reference.xml:380
+#: functions/reference.xml:392
 #, kde-format
 msgid "Modifies a reference's position and dimension."
 msgstr "Bir kaynağın konumunu ve boyutunu değiştirir."
 
-#: functions/reference.xml:381
+#: functions/reference.xml:393
 #, kde-format
 msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
@@ -8631,27 +8661,27 @@ msgstr ""
 "OFFSET(Başvuru başvurusu; Tamsayı satırOfseti; Tamsayı sütunOfseti; Tamsayı "
 "yeniYükseklik; Tamsayı yeniGenişlik)"
 
-#: functions/reference.xml:389
+#: functions/reference.xml:401
 #, kde-format
 msgid "Server application"
 msgstr "Sunucu uygulaması"
 
-#: functions/reference.xml:393
+#: functions/reference.xml:405
 #, kde-format
 msgid "Topic"
 msgstr "Konu"
 
-#: functions/reference.xml:397
+#: functions/reference.xml:409
 #, kde-format
 msgid "Item"
 msgstr "Öge"
 
-#: functions/reference.xml:401
+#: functions/reference.xml:413
 #, kde-format
 msgid "Mode"
 msgstr "Kip"
 
-#: functions/reference.xml:405
+#: functions/reference.xml:417
 #, kde-format
 msgid ""
 "Requests data from another running application via Dynamic Data Exchange, a "
@@ -8664,22 +8694,22 @@ msgstr ""
 "ister. Bu, bu platform üzerinde desteklenmemektedir. DDE() yine de tanınır; "
 "böylece belgeler yüklenir; ancak her zaman bir hata döndürür."
 
-#: functions/reference.xml:406
+#: functions/reference.xml:418
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
 msgstr "DDE(sunucu; konu; öge; kip)"
 
-#: functions/reference.xml:414
+#: functions/reference.xml:426
 #, kde-format
 msgid "URL"
 msgstr "URL"
 
-#: functions/reference.xml:418
+#: functions/reference.xml:430
 #, kde-format
 msgid "Display text (defaults to the URL)"
 msgstr "Metin görüntüle (öntanımlı olarak URL)"
 
-#: functions/reference.xml:422
+#: functions/reference.xml:434
 #, kde-format
 msgid ""
 "Returns the display text for a hyperlink, or the URL itself if no display "
@@ -8690,12 +8720,12 @@ msgstr ""
 "kendisini döndürür. Bağlantıyı izleme uygulama tarafından yapılır; işlev "
 "değerlendirmesi ile değil."
 
-#: functions/reference.xml:423
+#: functions/reference.xml:435
 #, kde-format
 msgid "HYPERLINK(url; display text)"
 msgstr "HYPERLINK(url; görüntülenecek metin)"
 
-#: functions/reference.xml:424
+#: functions/reference.xml:436
 #, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
 msgstr "HYPERLINK(\"https://calligra.org\"; \"Calligra\"), “Calligra” döndürür"
@@ -11080,10 +11110,9 @@ msgid "CHISQDIST(number; degrees_freedom; cumulative)"
 msgstr "CHIDIST(sayı;bağımsızlık_derecesi)"
 
 #: functions/statistical.xml:1879
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
-msgstr "CHIDIST(13,27; 5), 0,021 döndürür"
+msgstr "CHISQDIST(13,27; 5; TRUE), 0,979 döndürür"
 
 #: functions/statistical.xml:1897
 #, fuzzy, kde-format
@@ -11098,22 +11127,19 @@ msgstr ""
 "döndürür."
 
 #: functions/statistical.xml:1898
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQINV(probability; degrees_freedom)"
-msgstr "CHIDIST(sayı;bağımsızlık_derecesi)"
+msgstr "CHISQINV(olasılık; derece_serbestliği)"
 
 #: functions/statistical.xml:1899
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
-msgstr "CHIDIST(13,27; 5), 0,021 döndürür"
+msgstr "CHISQINV(CHISQDIST(13,27; 5; TRUE); 5), 13,27 döndürür"
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "Dizi değerleri"
+msgstr "Kriter değeri"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -11128,10 +11154,9 @@ msgid "CRITBINOM(trials; SP; alpha)"
 msgstr ""
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "COMBIN(5; 5), 1 döndürür"
+msgstr "CRITBINOM(20; 0,5; 0,55), 10 döndürür"
 
 #: functions/statistical.xml:1931
 #, kde-format
@@ -11139,16 +11164,14 @@ msgid "The x-value for which a y-value is estimated"
 msgstr ""
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "Boole değerleri"
+msgstr "Bilinen Y değerleri"
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "Boole değerleri"
+msgstr "Bilinen X değerleri"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -11163,16 +11186,14 @@ msgid "FORECAST(x; known_y's; known_x's)"
 msgstr ""
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "Sıfır değerleri"
+msgstr "Gözlenen değerler"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "Nominal değer"
+msgstr "Beklenen değerler"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -11220,10 +11241,9 @@ msgid "LINEST(known_y's; known_x's; const; stats)"
 msgstr ""
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "Başlangıç ve bitiş değeri pozitif olmalıdır."
+msgstr "Bilinen Y değerleri (pozitif olmalıdır)"
 
 #: functions/statistical.xml:2018
 #, kde-format
@@ -11240,16 +11260,14 @@ msgid "LOGEST(known_y's; known_x's; const; stats)"
 msgstr ""
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "Veri Tabanı"
+msgstr "Veri kümesi"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Value (diziliş)"
+msgstr "Derecelendirilecek değer"
 
 #: functions/statistical.xml:2037
 #, kde-format
@@ -11286,10 +11304,9 @@ msgid ""
 msgstr ""
 
 #: functions/statistical.xml:2069
-#, fuzzy, kde-format
-#| msgid "ERF(Lower limit; Upper limit)"
+#, kde-format
 msgid "PROB(values; probabilities; lower limit; upper limit)"
-msgstr "ERF(Alt sınır; Üst sınır)"
+msgstr "PROB(değerler; olasılıklar; alt sınır; üst sınır)"
 
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format
