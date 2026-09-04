@@ -32,6 +32,9 @@ void TestBlockLayout::initTestCase()
 {
     m_doc = nullptr;
     m_layout = nullptr;
+    m_styleManager = nullptr;
+    m_provider = nullptr;
+    m_paragraphStyle = nullptr;
 
     m_loremIpsum = QString(
         "Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut "
@@ -42,19 +45,20 @@ void TestBlockLayout::initTestCase()
 
 void TestBlockLayout::setupTest(const QString &initText)
 {
+    cleanupTest();
     m_doc = new QTextDocument;
     Q_ASSERT(m_doc);
 
-    MockRootAreaProvider *provider = new MockRootAreaProvider();
-    Q_ASSERT(provider);
-    KoTextDocument(m_doc).setInlineTextObjectManager(new KoInlineTextObjectManager);
+    m_provider = new MockRootAreaProvider();
+    Q_ASSERT(m_provider);
+    KoTextDocument(m_doc).setInlineTextObjectManager(new KoInlineTextObjectManager(m_doc));
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12.0, QFont::Normal, false)); // do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager(nullptr);
+    m_styleManager = new KoStyleManager(m_doc);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
-    m_layout = new KoTextDocumentLayout(m_doc, provider);
+    m_layout = new KoTextDocumentLayout(m_doc, m_provider);
     Q_ASSERT(m_layout);
     m_doc->setDocumentLayout(m_layout);
 
@@ -64,15 +68,43 @@ void TestBlockLayout::setupTest(const QString &initText)
     if (initText.length() > 0) {
         QTextCursor cursor(m_doc);
         cursor.insertText(initText);
-        KoParagraphStyle style;
-        style.setFontPointSize(12.0);
-        style.setStyleId(101); // needed to do manually since we don't use the stylemanager
+        m_paragraphStyle = new KoParagraphStyle;
+        m_paragraphStyle->setFontPointSize(12.0);
+        m_paragraphStyle->setStyleId(101); // needed to do manually since we don't use the stylemanager
         QTextBlock b2 = m_doc->begin();
         while (b2.isValid()) {
-            style.applyStyle(b2);
+            m_paragraphStyle->applyStyle(b2);
             b2 = b2.next();
         }
     }
+}
+
+void TestBlockLayout::cleanupTest()
+{
+    m_block = QTextBlock();
+    // Styles added to m_styleManager are reparented to it and freed with m_doc below.
+    for (KoParagraphStyle *style : m_paragraphStyles) {
+        if (!style->parent()) {
+            delete style;
+        }
+    }
+    m_paragraphStyles.clear();
+    // m_characterStyles entries are wrapped in a QSharedPointer stored on a block format
+    // (see EndCharStyle usage below); that shared pointer owns and deletes them.
+    m_characterStyles.clear();
+    delete m_doc;
+    m_doc = nullptr;
+    m_layout = nullptr;
+    delete m_provider;
+    m_provider = nullptr;
+    delete m_paragraphStyle;
+    m_paragraphStyle = nullptr;
+    m_styleManager = nullptr;
+}
+
+void TestBlockLayout::cleanupTestCase()
+{
+    cleanupTest();
 }
 
 void TestBlockLayout::testLineBreaking()
@@ -173,7 +205,7 @@ void TestBlockLayout::testFixedLineSpacing()
 {
     setupTest(QString("Line1") + QChar(0x2028) + "Line2" + QChar(0x2028) + "Line3");
 
-    KoParagraphStyle style;
+    auto &style = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     style.setFontPointSize(12.0);
     style.setLineHeightAbsolute(28.0);
     QTextBlock block = m_doc->begin();
@@ -209,7 +241,7 @@ void TestBlockLayout::testPercentageLineSpacing()
 {
     setupTest(QString("Line1") + QChar(0x2028) + "Line2" + QChar(0x2028) + "Line3");
 
-    KoParagraphStyle style;
+    auto &style = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     style.setFontPointSize(12.0);
     style.setLineHeightPercent(150); // NOTE: This is *PercentLineHeight*, so operates on font size * linespacing
     QTextBlock block = m_doc->begin();
@@ -246,7 +278,7 @@ void TestBlockLayout::testAdvancedLineSpacing()
 {
     setupTest("Line1\nLine2\nLine3\nLine4\nLine5\nLine6\nLine7");
 
-    KoParagraphStyle style;
+    auto &style = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     style.setFontPointSize(12.0);
     style.setLineHeightPercent(80);
     QTextBlock block = m_doc->begin();
@@ -374,7 +406,7 @@ void TestBlockLayout::testEmptyLineHeights()
     QTextCharFormat smallCharFormat;
     smallCharFormat.setFontPointSize(8.0);
 
-    KoParagraphStyle style;
+    auto &style = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     style.setFontPointSize(12.0);
     style.setLineHeightPercent(100);
 
@@ -407,7 +439,7 @@ void TestBlockLayout::testEmptyLineHeights()
     // Now do the test again but with last line having bigger font
     block = m_doc->begin();
     QTextBlockFormat blockFormat = block.blockFormat();
-    KoCharacterStyle charStyle;
+    auto &charStyle = *m_characterStyles.emplace_back(new KoCharacterStyle);
     charStyle.setFontPointSize(20.0);
     blockFormat.setProperty(KoParagraphStyle::EndCharStyle,
                             QVariant::fromValue<QSharedPointer<KoCharacterStyle>>(QSharedPointer<KoCharacterStyle>(&charStyle)));
@@ -428,7 +460,7 @@ void TestBlockLayout::testEmptyLineHeights()
 
     // Now do the test again but with last line having a small font
     block = m_doc->begin();
-    KoCharacterStyle charStyle2;
+    auto &charStyle2 = *m_characterStyles.emplace_back(new KoCharacterStyle);
     charStyle2.setFontPointSize(6.0);
     blockFormat.setProperty(KoParagraphStyle::EndCharStyle,
                             QVariant::fromValue<QSharedPointer<KoCharacterStyle>>(QSharedPointer<KoCharacterStyle>(&charStyle2)));
@@ -787,18 +819,18 @@ void TestBlockLayout::testTextAlignments()
 {
     // TODO justified & justified, last line
     setupTest("Left\nRight\nﺵﻻﺆﻴﺜﺒ\nﺵﻻﺆﻴﺜﺒ\nLast Line.");
-    KoParagraphStyle start;
+    auto &start = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     start.setFontPointSize(12.0);
     start.setAlignment(Qt::AlignLeading);
-    KoParagraphStyle end;
+    auto &end = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     end.setFontPointSize(12.0);
     end.setAlignment(Qt::AlignTrailing);
 
-    KoParagraphStyle startRTL;
+    auto &startRTL = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     startRTL.setFontPointSize(12.0);
     startRTL.setAlignment(Qt::AlignLeading);
     startRTL.setTextProgressionDirection(KoText::RightLeftTopBottom);
-    KoParagraphStyle endRTL;
+    auto &endRTL = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     endRTL.setAlignment(Qt::AlignTrailing);
     endRTL.setTextProgressionDirection(KoText::RightLeftTopBottom);
     endRTL.setFontPointSize(12.0);
@@ -949,7 +981,7 @@ void TestBlockLayout::testParagraphMargins()
 {
     setupTest("Empty\nParagraph\nAnother parag\n");
 
-    KoParagraphStyle style;
+    auto &style = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     style.setFontPointSize(12.0);
     m_styleManager->add(&style);
     style.setTopMargin(QTextLength(QTextLength::FixedLength, 10));
@@ -1024,7 +1056,7 @@ void TestBlockLayout::testDropCapsLongText()
     // This is the normal use case, with a shorter line dropcaps doesn't work well
     setupTest(m_loremIpsum);
 
-    KoParagraphStyle style;
+    auto &style = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     style.setFontPointSize(12.0);
     style.setDropCaps(false);
     style.setDropCapsLength(1);
@@ -1104,7 +1136,7 @@ void TestBlockLayout::testDropCapsShortText()
 {
     setupTest(QString("Lorem ipsum")); // short enough to only get one line
 
-    KoParagraphStyle style;
+    auto &style = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     style.setFontPointSize(12.0);
     style.setDropCaps(false);
     style.setDropCapsLength(1);
@@ -1169,7 +1201,7 @@ void TestBlockLayout::testDropCapsWithNewline()
     // as it depends on the actual available font.
     setupTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text"));
 
-    KoParagraphStyle style;
+    auto &style = *m_paragraphStyles.emplace_back(new KoParagraphStyle);
     style.setFontPointSize(12.0);
     style.setDropCaps(false);
     style.setDropCapsLength(1);

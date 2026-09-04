@@ -9,11 +9,17 @@
 #define TESTBLOCKLAYOUT_H
 
 #include <QObject>
+#include <vector>
 
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 
 class KoStyleManager;
+class KoParagraphStyle;
+class KoCharacterStyle;
+class MockRootAreaProvider;
 class QTextDocument;
 
 #define ROUNDING 0.126
@@ -32,6 +38,7 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
+    void cleanupTestCase();
 
     /// make sure empty paragraphs are initialized properly
     void testEmptyParag();
@@ -77,13 +84,17 @@ private Q_SLOTS:
 
 private:
     void setupTest(const QString &initText = QString());
+    void cleanupTest();
 
-private:
     QTextDocument *m_doc;
     KoTextDocumentLayout *m_layout;
     QTextBlock m_block;
     QString m_loremIpsum;
     KoStyleManager *m_styleManager;
+    MockRootAreaProvider *m_provider;
+    KoParagraphStyle *m_paragraphStyle;
+    std::vector<KoParagraphStyle *> m_paragraphStyles;
+    std::vector<KoCharacterStyle *> m_characterStyles;
     KoTextLayoutRootArea *m_area;
 };
 

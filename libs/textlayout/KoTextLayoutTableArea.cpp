@@ -40,6 +40,7 @@ public:
     QVector<QVector<KoTextLayoutArea *>> cellAreas;
     TableIterator *startOfArea;
     TableIterator *endOfArea;
+    bool ownsHeaderCellAreas = false;
     bool lastRowHasSomething;
     QTextTable *table;
     int headerRows;
@@ -137,7 +138,9 @@ KoTextLayoutTableArea::KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea
 
 KoTextLayoutTableArea::~KoTextLayoutTableArea()
 {
-    for (int row = d->startOfArea->row; row < d->cellAreas.size(); ++row) {
+    // Header rows are shared via TableIterator::headerCellAreas; only the owning area deletes them.
+    int firstRowToDelete = d->ownsHeaderCellAreas ? 0 : d->headerRows;
+    for (int row = firstRowToDelete; row < d->cellAreas.size(); ++row) {
         for (int col = 0; col < d->cellAreas[row].size(); ++col) {
             delete d->cellAreas[row][col];
         }
@@ -364,6 +367,7 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
     layoutColumns();
 
     bool first = cursor->row == 0 && (d->cellAreas[0][0] == 0);
+    d->ownsHeaderCellAreas = first;
     if (first) { // are we at the beginning of the table
         cursor->row = 0;
         d->rowPositions[0] = top() + d->table->format().topMargin();
@@ -822,6 +826,8 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
 
             KoTextLayoutArea *cellArea = new KoTextLayoutArea(this, documentLayout());
 
+            // Replace any partial area from an earlier row in this same table area.
+            delete d->cellAreas[cell.row()][cell.column()];
             d->cellAreas[cell.row()][cell.column()] = cellArea;
 
             qreal left = d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftInnerBorderWidth();

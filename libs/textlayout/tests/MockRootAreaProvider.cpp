@@ -17,6 +17,12 @@ MockRootAreaProvider::MockRootAreaProvider()
 {
 }
 
+MockRootAreaProvider::~MockRootAreaProvider()
+{
+    qDeleteAll(m_areas);
+    m_areas.clear();
+}
+
 KoTextLayoutRootArea *
 MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraint, int requestedPosition, bool *isNewRootArea)
 {

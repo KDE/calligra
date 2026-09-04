@@ -16,6 +16,7 @@ class MockRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
 public:
     MockRootAreaProvider();
+    ~MockRootAreaProvider() override;
 
     /// reimplemented
     KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea) override;

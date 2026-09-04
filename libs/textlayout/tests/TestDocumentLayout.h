@@ -15,6 +15,8 @@
 class QTextDocument;
 class KoTextDocumentLayout;
 class KoStyleManager;
+class KoParagraphStyle;
+class MockRootAreaProvider;
 
 class TestDocumentLayout : public QObject
 {
@@ -24,6 +26,7 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
+    void cleanupTestCase();
 
     /**
      * Test the hittest of KoTextDocumentLayout.
@@ -47,11 +50,14 @@ private Q_SLOTS:
 
 private:
     void setupTest(const QString &initText = QString());
+    void cleanupTest();
 
 private:
     QTextDocument *m_doc;
     KoStyleManager *m_styleManager;
     KoTextDocumentLayout *m_layout;
+    MockRootAreaProvider *m_provider;
+    KoParagraphStyle *m_paragraphStyle;
 };
 
 #endif

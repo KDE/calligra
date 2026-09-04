@@ -25,37 +25,58 @@ void TestDocumentLayout::initTestCase()
 {
     m_doc = nullptr;
     m_layout = nullptr;
+    m_styleManager = nullptr;
+    m_provider = nullptr;
+    m_paragraphStyle = nullptr;
 }
 
 void TestDocumentLayout::setupTest(const QString &initText)
 {
+    cleanupTest();
     m_doc = new QTextDocument;
     Q_ASSERT(m_doc);
 
-    MockRootAreaProvider *provider = new MockRootAreaProvider();
-    Q_ASSERT(provider);
-    KoTextDocument(m_doc).setInlineTextObjectManager(new KoInlineTextObjectManager);
+    m_provider = new MockRootAreaProvider();
+    Q_ASSERT(m_provider);
+    KoTextDocument(m_doc).setInlineTextObjectManager(new KoInlineTextObjectManager(m_doc));
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); // do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager(nullptr);
+    m_styleManager = new KoStyleManager(m_doc);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
-    m_layout = new KoTextDocumentLayout(m_doc, provider);
+    m_layout = new KoTextDocumentLayout(m_doc, m_provider);
     Q_ASSERT(m_layout);
     m_doc->setDocumentLayout(m_layout);
 
     if (!initText.isEmpty()) {
         QTextCursor cursor(m_doc);
         cursor.insertText(initText);
-        KoParagraphStyle style;
-        style.setStyleId(101); // needed to do manually since we don't use the stylemanager
+        m_paragraphStyle = new KoParagraphStyle;
+        m_paragraphStyle->setStyleId(101); // needed to do manually since we don't use the stylemanager
         QTextBlock b2 = m_doc->begin();
         while (b2.isValid()) {
-            style.applyStyle(b2);
+            m_paragraphStyle->applyStyle(b2);
             b2 = b2.next();
         }
     }
+}
+
+void TestDocumentLayout::cleanupTest()
+{
+    delete m_doc;
+    m_doc = nullptr;
+    m_layout = nullptr;
+    delete m_provider;
+    m_provider = nullptr;
+    delete m_paragraphStyle;
+    m_paragraphStyle = nullptr;
+    m_styleManager = nullptr;
+}
+
+void TestDocumentLayout::cleanupTestCase()
+{
+    cleanupTest();
 }
 
 void TestDocumentLayout::testHitTest()

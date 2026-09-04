@@ -72,8 +72,11 @@ KoTextLayoutArea::~KoTextLayoutArea()
     qDeleteAll(d->tableAreas);
     qDeleteAll(d->footNoteAreas);
     qDeleteAll(d->preregisteredFootNoteAreas);
+    qDeleteAll(d->generatedDocAreas);
+    delete d->endNotesArea;
     delete d->startOfArea;
     delete d->endOfArea;
+    delete d->copyEndOfArea;
     delete d;
 }
 

@@ -45,6 +45,8 @@ void TestTableLayout::initTestCase()
 {
     m_doc = nullptr;
     m_layout = nullptr;
+    m_provider = nullptr;
+    m_styleManager = nullptr;
 
     m_loremIpsum = QString(
         "Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut "
@@ -57,24 +59,32 @@ void TestTableLayout::cleanupTestCase()
 {
     delete m_doc;
     m_doc = nullptr;
+    m_layout = nullptr;
+    delete m_provider;
+    m_provider = nullptr;
+    m_styleManager = nullptr;
 }
 
 QTextCursor TestTableLayout::setupTest()
 {
     delete m_doc;
+    m_layout = nullptr;
+    delete m_provider;
+    m_styleManager = nullptr;
+
     m_doc = new QTextDocument;
     Q_ASSERT(m_doc);
 
-    MockRootAreaProvider *provider = new MockRootAreaProvider();
-    Q_ASSERT(provider);
-    KoTextDocument(m_doc).setInlineTextObjectManager(new KoInlineTextObjectManager);
+    m_provider = new MockRootAreaProvider();
+    Q_ASSERT(m_provider);
+    KoTextDocument(m_doc).setInlineTextObjectManager(new KoInlineTextObjectManager(m_doc));
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); // do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager(nullptr);
+    m_styleManager = new KoStyleManager(m_doc);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
-    m_layout = new KoTextDocumentLayout(m_doc, provider);
+    m_layout = new KoTextDocumentLayout(m_doc, m_provider);
     Q_ASSERT(m_layout);
     m_doc->setDocumentLayout(m_layout);
 
@@ -244,10 +254,10 @@ void TestTableLayout::testColumnWidthUndefined()
 
 void TestTableLayout::testColumnWidthFixed()
 {
-    KoTableStyle *tableStyle = new KoTableStyle;
-    tableStyle->setWidth(QTextLength(QTextLength::FixedLength, 150.0));
+    KoTableStyle tableStyle;
+    tableStyle.setWidth(QTextLength(QTextLength::FixedLength, 150.0));
 
-    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
+    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", &tableStyle);
     KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
 
     KoTableColumnStyle column1style;
@@ -300,10 +310,10 @@ void TestTableLayout::testColumnWidthFixedZero()
 
 void TestTableLayout::testColumnWidthFixedShrink()
 {
-    KoTableStyle *tableStyle = new KoTableStyle;
-    // tableStyle->setWidth(QTextLength(QTextLength::FixedLength, 200.0)); // no table-width defined
+    KoTableStyle tableStyle;
+    // tableStyle.setWidth(QTextLength(QTextLength::FixedLength, 200.0)); // no table-width defined
 
-    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
+    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", &tableStyle);
     KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
 
     KoTableColumnStyle column1style;
@@ -355,9 +365,9 @@ void TestTableLayout::testColumnWidthRelative()
 
 void TestTableLayout::testRowHeightFixed()
 {
-    KoTableStyle *tableStyle = new KoTableStyle;
+    KoTableStyle tableStyle;
 
-    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
+    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", &tableStyle);
     KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     KoTableRowStyle row1style;
     row1style.setRowHeight(3.2);
@@ -371,9 +381,9 @@ void TestTableLayout::testRowHeightFixed()
 
 void TestTableLayout::testRowHeightMinimum()
 {
-    KoTableStyle *tableStyle = new KoTableStyle;
+    KoTableStyle tableStyle;
 
-    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
+    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", &tableStyle);
     KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     KoTableRowStyle row1style;
     row1style.setMinimumRowHeight(3.2);

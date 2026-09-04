@@ -16,6 +16,7 @@
 
 class KoStyleManager;
 class KoTableStyle;
+class MockRootAreaProvider;
 class QTextDocument;
 class QTextTable;
 
@@ -117,9 +118,9 @@ private:
                    KoTableStyle *tableStyle = nullptr);
     QTextTable *addTable(QTextCursor cursor, int rows, int columns, KoTableStyle *tableStyle = nullptr);
 
-private:
     QTextDocument *m_doc;
     KoTextDocumentLayout *m_layout;
+    MockRootAreaProvider *m_provider;
     QTextBlock m_block;
     QTextBlock mergedCellBlock() const;
     QTextBlock topRightCellBlock() const;
