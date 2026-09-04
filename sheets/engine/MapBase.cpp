@@ -85,6 +85,9 @@ MapBase::~MapBase()
         delete sheet;
     d->lstSheets.clear();
 
+    qDeleteAll(d->damages);
+    d->damages.clear();
+
     delete d->dependencyManager;
     delete d->namedAreaManager;
     delete d->recalcManager;

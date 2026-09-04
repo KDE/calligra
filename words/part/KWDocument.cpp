@@ -146,6 +146,8 @@ KWDocument::~KWDocument()
     const auto frameSets = m_frameSets;
     m_frameSets.clear();
     qDeleteAll(frameSets);
+    resourceManager()->setShapeController(nullptr);
+    delete m_shapeController;
 }
 
 bool KWDocument::isMasterDocument() const

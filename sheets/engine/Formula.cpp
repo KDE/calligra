@@ -25,6 +25,8 @@
 #include <QRegularExpression>
 #include <QStack>
 
+#include <memory>
+
 using namespace Qt::StringLiterals;
 
 #define CALLIGRA_SHEETS_UNICODE_OPERATORS
@@ -1564,7 +1566,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
     QString c;
     QVector<Value> args;
 
-    const MapBase *map = d->sheet ? d->sheet->map() : new MapBase();
+    std::unique_ptr<MapBase> temporaryMap;
+    const MapBase *map = d->sheet ? d->sheet->map() : (temporaryMap = std::make_unique<MapBase>()).get();
     const ValueConverter *converter = map->converter();
     ValueCalc *calc = map->calc();
 
@@ -1990,9 +1993,6 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
             break;
         }
     }
-
-    if (!d->sheet)
-        delete map;
 
     // more than one value in stack ? unsuccessful execution...
     if (stack.count() != 1)

@@ -54,6 +54,7 @@ public:
     KoInlineTextObjectManager *inlineTextObjectManager;
     bool rulersVisible;
     KoPAPageProvider *pageProvider;
+    KoShapeController *shapeController;
     QPointer<KoUpdater> odfProgressUpdater;
     QPointer<KoUpdater> odfMasterPageProgressUpdater;
     QPointer<KoUpdater> odfPageProgressUpdater;
@@ -78,7 +79,7 @@ KoPADocument::KoPADocument(KoPart *part)
     resourceManager()->setUndoStack(undoStack());
     resourceManager()->setOdfDocument(this);
     // this is needed so the text shape have a shape controller set when loaded, it is needed for copy and paste
-    new KoShapeController(nullptr, this);
+    d->shapeController = new KoShapeController(nullptr, this);
     QVariant variant;
     d->pageProvider = new KoPAPageProvider();
     variant.setValue<void *>(d->pageProvider);
@@ -91,6 +92,8 @@ KoPADocument::~KoPADocument()
     saveConfig();
     qDeleteAll(d->pages);
     qDeleteAll(d->masterPages);
+    resourceManager()->setShapeController(nullptr);
+    delete d->shapeController;
     delete d->pageProvider;
     delete d;
 }

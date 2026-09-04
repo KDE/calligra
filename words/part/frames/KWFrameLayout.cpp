@@ -190,6 +190,10 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     for (int c = 0; c < neededColumnsCount; ++c) {
         debugWords << "Creating KWFrame for MainTextFrame";
         KoShape *shape = createTextShape(page);
+        if (!shape) {
+            warnWords << "Unable to create a main text shape";
+            continue;
+        }
         shape->setPosition(QPoint(c * colwidth + 10.0, page.offsetInDocument() + 10.0));
         shape->setSize(QSizeF(colwidth, colheight));
         new KWFrame(shape, fs);
