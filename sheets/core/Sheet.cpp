@@ -44,7 +44,7 @@ namespace Sheets
 static QString createObjectName(const QString &sheetName)
 {
     QString objectName;
-    for (int i = 0; i < sheetName.count(); ++i) {
+    for (int i = 0; i < sheetName.size(); ++i) {
         if (sheetName[i].isLetterOrNumber() || sheetName[i] == '_')
             objectName.append(sheetName[i]);
         else
@@ -181,7 +181,7 @@ Sheet::Sheet(const Sheet &other)
     //I think this should use ODF load/save for copying
     KoShape* shape;
     const QList<KoShape*> shapes = other.d->shapes;
-    for (int i = 0; i < shapes.count(); ++i) {
+    for (int i = 0; i < shapes.size(); ++i) {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shapes[i]->shapeId());
         if (factory) {
             shape = factory->createDefaultShapeAndInit(0);
@@ -588,7 +588,7 @@ bool Sheet::cellIsEmpty(const Cell &cell, TestType _type)
                 return false;
             break;
         case ConditionalCellAttribute:
-            if (cell.conditions().conditionList().count() > 0)
+            if (cell.conditions().conditionList().size() > 0)
                 return false;
             break;
         }
@@ -688,7 +688,7 @@ QRect Sheet::usedArea(bool onlyContent) const
 
     // flake
     QRectF shapesBoundingRect;
-    for (int i = 0; i < d->shapes.count(); ++i)
+    for (int i = 0; i < d->shapes.size(); ++i)
         shapesBoundingRect |= d->shapes[i]->boundingRect();
     const QRect shapesCellRange = documentToCellCoordinates(shapesBoundingRect);
     maxCols = qMax(maxCols, shapesCellRange.right());

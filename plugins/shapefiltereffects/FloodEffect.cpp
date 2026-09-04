@@ -66,7 +66,7 @@ bool FloodEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingC
             m_color.setRgbF(r, g, b);
 
         } else {
-            m_color.setNamedColor(colorStr);
+            m_color = QColor::fromString(colorStr);
         }
         // TODO: add support for currentColor
     }

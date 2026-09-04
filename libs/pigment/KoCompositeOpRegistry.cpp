@@ -145,7 +145,7 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoI
 {
     qint32 num = m_map.count(category);
     KoIDMap::const_iterator beg = m_map.find(category);
-    KoIDMap::const_iterator end = beg + num;
+    KoIDMap::const_iterator end = std::next(beg, num);
 
     KoIDList list;
     list.reserve(num);

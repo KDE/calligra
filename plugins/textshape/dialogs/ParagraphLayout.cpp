@@ -20,9 +20,9 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
     connect(widget.center, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
     connect(widget.justify, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
     connect(widget.left, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
-    connect(widget.keepTogether, &QCheckBox::stateChanged, this, &ParagraphLayout::keepTogetherChanged);
-    connect(widget.breakAfter, &QCheckBox::stateChanged, this, &ParagraphLayout::breakAfterChanged);
-    connect(widget.breakBefore, &QCheckBox::stateChanged, this, &ParagraphLayout::breakBeforeChanged);
+    connect(widget.keepTogether, &QCheckBox::checkStateChanged, this, &ParagraphLayout::keepTogetherChanged);
+    connect(widget.breakAfter, &QCheckBox::checkStateChanged, this, &ParagraphLayout::breakAfterChanged);
+    connect(widget.breakBefore, &QCheckBox::checkStateChanged, this, &ParagraphLayout::breakBeforeChanged);
     connect(widget.threshold, &QSpinBox::valueChanged, this, &ParagraphLayout::thresholdValueChanged);
 }
 

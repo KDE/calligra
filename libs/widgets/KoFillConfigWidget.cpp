@@ -93,7 +93,7 @@ public:
     /// Apply the gradient stops using the shape background
     QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
     {
-        if (!shape || !stops.count()) {
+        if (!shape || !stops.size()) {
             return QSharedPointer<KoShapeBackground>();
         }
 
@@ -142,7 +142,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     // The button for no fill
     KoGroupButton *button = new KoGroupButton(KoGroupButton::GroupLeft, this);
     QPixmap noFillButtonIcon((const char **)buttonnone);
-    noFillButtonIcon.setMask(QBitmap(noFillButtonIcon));
+    noFillButtonIcon.setMask(QBitmap::fromPixmap(noFillButtonIcon));
     button->setIcon(noFillButtonIcon);
     button->setToolTip(i18nc("No stroke or fill", "None"));
     button->setCheckable(true);

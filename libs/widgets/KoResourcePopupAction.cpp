@@ -65,7 +65,7 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
     }
 
     KoResource *resource = nullptr;
-    if (resourceAdapter->resources().count() > 0) {
+    if (resourceAdapter->resources().size() > 0) {
         resource = resourceAdapter->resources().at(0);
     }
 
@@ -156,7 +156,7 @@ void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
 void KoResourcePopupAction::updateIcon()
 {
     QSize iconSize;
-    QToolButton *toolButton = dynamic_cast<QToolButton *>(parentWidget());
+    QToolButton *toolButton = qobject_cast<QToolButton *>(parent());
     if (toolButton) {
         iconSize = QSize(toolButton->iconSize());
     } else {

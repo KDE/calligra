@@ -7,6 +7,7 @@
 
 #include "Localization.h"
 #include "CS_Time.h"
+#include <QTimeZone>
 
 #include <QDateTime>
 #include <QRegularExpression>
@@ -170,7 +171,7 @@ QDateTime Localization::readDateTime(const QString &str, const QString &format, 
     if (ok)
         *ok = false;
     QDateTime res = d->locale.toDateTime(str, format);
-    res.setTimeSpec(Qt::UTC);
+    res.setTimeZone(QTimeZone::UTC);
     if (ok)
         *ok = res.isValid();
     return res;

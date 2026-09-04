@@ -8,6 +8,7 @@
 */
 
 #include "ValueFormatter.h"
+#include <QTimeZone>
 
 #include "CalculationSettings.h"
 #include "Localization.h"
@@ -501,7 +502,7 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, c
     if (format.contains("[h]")) {
         format.replace("[h]", "%1");
         auto res = locale->formatDateTime(_dt, format);
-        QDateTime ref(settings()->referenceDate(), QTime(), Qt::UTC);
+        QDateTime ref(settings()->referenceDate(), QTime(), QTimeZone::UTC);
         auto msecs = ref.msecsTo(_dt);
         auto hours = msecs / 3600000;
         return res.arg(hours);
@@ -509,7 +510,7 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, c
     if (format.contains("[mm]")) {
         format.replace("[mm]", "%1");
         auto res = locale->formatDateTime(_dt, format);
-        QDateTime ref(settings()->referenceDate(), QTime(), Qt::UTC);
+        QDateTime ref(settings()->referenceDate(), QTime(), QTimeZone::UTC);
         auto msecs = ref.msecsTo(_dt);
         auto mins = msecs / 60000;
         return res.arg(mins);

@@ -74,8 +74,8 @@ QSize SizeChooserGrid::sizeHint() const
 
 void SizeChooserGrid::mouseMoveEvent(QMouseEvent *ev)
 {
-    m_column = qMin(qreal(7.0), (ev->x() - m_leftMargin) / m_columnWidth);
-    m_row = qMin(qreal(7.0), (ev->y() - m_topMargin) / m_rowHeight);
+    m_column = qMin(qreal(7.0), (ev->position().x() - m_leftMargin) / m_columnWidth);
+    m_row = qMin(qreal(7.0), (ev->position().y() - m_topMargin) / m_rowHeight);
     repaint();
 }
 

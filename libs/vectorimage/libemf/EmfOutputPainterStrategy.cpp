@@ -738,7 +738,7 @@ void OutputPainterStrategy::selectObject(const quint32 ihObject)
     } else {
         QVariant obj = m_objectTable.value(ihObject);
 
-        switch (obj.type()) {
+        switch (obj.typeId()) {
         case QVariant::Pen:
             m_painter->setPen(obj.value<QPen>());
             break;
@@ -1114,7 +1114,7 @@ void OutputPainterStrategy::polyLineTo16(const QRect &bounds, const QList<QPoint
     debugVectorImage << bounds << points;
 #endif
 
-    for (int i = 0; i < points.count(); ++i) {
+    for (int i = 0; i < points.size(); ++i) {
         m_path->lineTo(points[i]);
     }
 }
@@ -1128,7 +1128,7 @@ void OutputPainterStrategy::polyBezier16(const QRect &bounds, const QList<QPoint
     Q_UNUSED(bounds);
     QPainterPath path;
     path.moveTo(points[0]);
-    for (int i = 1; i < points.count(); i += 3) {
+    for (int i = 1; i < points.size(); i += 3) {
         path.cubicTo(points[i], points[i + 1], points[i + 2]);
     }
     m_painter->drawPath(path);
@@ -1141,7 +1141,7 @@ void OutputPainterStrategy::polyBezierTo16(const QRect &bounds, const QList<QPoi
 #endif
 
     Q_UNUSED(bounds);
-    for (int i = 0; i < points.count(); i += 3) {
+    for (int i = 0; i < points.size(); i += 3) {
         m_path->cubicTo(points[i], points[i + 1], points[i + 2]);
     }
 }

@@ -13,9 +13,10 @@
 // Qt
 #include <QFont>
 #include <QIODevice>
-#include <QScopedPointer>
 #include <QStringDecoder>
 #include <QTextStream>
+
+#include <memory>
 
 #include <QDebug>
 
@@ -582,7 +583,7 @@ XFigAbstractObject *XFigParser::parseArc()
 {
     // qDebug()<<"arc";
 
-    QScopedPointer<XFigArcObject> arcObject(new XFigArcObject);
+    std::unique_ptr<XFigArcObject> arcObject(new XFigArcObject);
 
     int sub_type, line_style, thickness, pen_color, fill_color, depth, pen_style, area_fill, cap_style, direction, forwardArrow, backwardArrow, x1, y1, x2, y2,
         x3, y3;
@@ -596,19 +597,19 @@ XFigAbstractObject *XFigParser::parseArc()
         >> forwardArrow >> backwardArrow >> center_x >> center_y >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
 
     if (forwardArrow > 0) {
-        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
-        if (arrowHead.isNull()) {
+        std::unique_ptr<XFigArrowHead> arrowHead(parseArrowHead());
+        if (!arrowHead) {
             return nullptr;
         }
-        arcObject->setForwardArrow(arrowHead.take());
+        arcObject->setForwardArrow(arrowHead.release());
     }
 
     if (backwardArrow > 0) {
-        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
-        if (arrowHead.isNull()) {
+        std::unique_ptr<XFigArrowHead> arrowHead(parseArrowHead());
+        if (!arrowHead) {
             return nullptr;
         }
-        arcObject->setBackwardArrow(arrowHead.take());
+        arcObject->setBackwardArrow(arrowHead.release());
     }
 
     const XFigArcObject::Subtype subtype = (sub_type == 1) ? XFigArcObject::OpenEnded :
@@ -632,14 +633,14 @@ XFigAbstractObject *XFigParser::parseArc()
     arcObject->setFillColorId(fill_color);
     arcObject->setLine(lineType(line_style), thickness, style_val, pen_color);
 
-    return arcObject.take();
+    return arcObject.release();
 }
 
 XFigAbstractObject *XFigParser::parseEllipse()
 {
     // qDebug()<<"ellipse";
 
-    QScopedPointer<XFigEllipseObject> ellipseObject(new XFigEllipseObject);
+    std::unique_ptr<XFigEllipseObject> ellipseObject(new XFigEllipseObject);
 
     qint32 sub_type, line_style, thickness, pen_color, fill_color, depth, pen_style /*not used*/, area_fill, direction /*always 1*/, center_x, center_y,
         radius_x, radius_y, start_x, start_y, end_x, end_y;
@@ -674,14 +675,14 @@ XFigAbstractObject *XFigParser::parseEllipse()
     ellipseObject->setFillColorId(fill_color);
     ellipseObject->setLine(lineType(line_style), thickness, style_val, pen_color);
 
-    return ellipseObject.take();
+    return ellipseObject.release();
 }
 
 XFigAbstractObject *XFigParser::parsePolyline()
 {
     // qDebug()<<"polyline";
 
-    QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(nullptr);
+    std::unique_ptr<XFigAbstractPolylineObject> abstractPolylineObject(nullptr);
 
     qint32 sub_type, line_style, thickness, pen_color, fill_color, depth, pen_style, area_fill, join_style, cap_style, radius, forward_arrow, backward_arrow,
         npoints;
@@ -733,38 +734,38 @@ XFigAbstractObject *XFigParser::parsePolyline()
     }
 
     if (forward_arrow > 0) {
-        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
-        if (arrowHead.isNull()) {
+        std::unique_ptr<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead == nullptr) {
             return nullptr;
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigPolylineObject *polylineObject = static_cast<XFigPolylineObject *>(abstractPolylineObject.data());
-            polylineObject->setForwardArrow(arrowHead.take());
+            XFigPolylineObject *polylineObject = static_cast<XFigPolylineObject *>(abstractPolylineObject.get());
+            polylineObject->setForwardArrow(arrowHead.release());
         }
     }
 
     if (backward_arrow > 0) {
-        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
-        if (arrowHead.isNull()) {
+        std::unique_ptr<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead == nullptr) {
             return nullptr;
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigPolylineObject *polylineObject = static_cast<XFigPolylineObject *>(abstractPolylineObject.data());
-            polylineObject->setBackwardArrow(arrowHead.take());
+            XFigPolylineObject *polylineObject = static_cast<XFigPolylineObject *>(abstractPolylineObject.get());
+            polylineObject->setBackwardArrow(arrowHead.release());
         }
     }
 
     // points line
     const QVector<XFigPoint> points = parsePoints(npoints);
-    if (points.count() != npoints) {
+    if (points.size() != npoints) {
         return nullptr;
     }
 
     // check box:
-    if ((abstractPolylineObject->typeId() == XFigAbstractObject::BoxId) && (points.count() != 5)) {
-        qWarning() << "box object does not have 5 points, but points:" << points.count();
+    if ((abstractPolylineObject->typeId() == XFigAbstractObject::BoxId) && (points.size() != 5)) {
+        qWarning() << "box object does not have 5 points, but points:" << points.size();
         return nullptr;
     }
     abstractPolylineObject->setPoints(points);
@@ -781,7 +782,7 @@ XFigAbstractObject *XFigParser::parsePolyline()
     abstractPolylineObject->setLine(lineType(line_style), thickness, style_val, pen_color);
     abstractPolylineObject->setJoinType(joinType(join_style));
 
-    return abstractPolylineObject.take();
+    return abstractPolylineObject.release();
 }
 
 XFigAbstractObject *XFigParser::parseSpline()
@@ -806,7 +807,7 @@ XFigAbstractObject *XFigParser::parseSpline()
 
     // TODO: no idea yet how to translate the xfig splines to odf ones
     // thus simply creating polygones/polylines for now :/
-    QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(nullptr);
+    std::unique_ptr<XFigAbstractPolylineObject> abstractPolylineObject(nullptr);
 
     if ((sub_type == XFig3_2SplineOpenApproximatedId) || (sub_type == XFig3_2SplineOpenInterpolatedId) || (sub_type == XFig3_2SplineOpenXId)) {
         XFigPolylineObject *polylineObject = new XFigPolylineObject;
@@ -817,32 +818,32 @@ XFigAbstractObject *XFigParser::parseSpline()
     }
 
     if (forward_arrow > 0) {
-        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
-        if (arrowHead.isNull()) {
+        std::unique_ptr<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead == nullptr) {
             return nullptr;
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigPolylineObject *polylineObject = static_cast<XFigPolylineObject *>(abstractPolylineObject.data());
-            polylineObject->setForwardArrow(arrowHead.take());
+            XFigPolylineObject *polylineObject = static_cast<XFigPolylineObject *>(abstractPolylineObject.get());
+            polylineObject->setForwardArrow(arrowHead.release());
         }
     }
 
     if (backward_arrow > 0) {
-        QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
-        if (arrowHead.isNull()) {
+        std::unique_ptr<XFigArrowHead> arrowHead(parseArrowHead());
+        if (arrowHead == nullptr) {
             return nullptr;
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigPolylineObject *polylineObject = static_cast<XFigPolylineObject *>(abstractPolylineObject.data());
-            polylineObject->setBackwardArrow(arrowHead.take());
+            XFigPolylineObject *polylineObject = static_cast<XFigPolylineObject *>(abstractPolylineObject.get());
+            polylineObject->setBackwardArrow(arrowHead.release());
         }
     }
 
     // points line
     const QVector<XFigPoint> points = parsePoints(npoints);
-    if (points.count() != npoints) {
+    if (points.size() != npoints) {
         return nullptr;
     }
 
@@ -863,14 +864,14 @@ XFigAbstractObject *XFigParser::parseSpline()
     abstractPolylineObject->setLine(lineType(line_style), thickness, style_val, pen_color);
     abstractPolylineObject->setJoinType(XFigJoinRound);
 
-    return abstractPolylineObject.take();
+    return abstractPolylineObject.release();
 }
 
 XFigAbstractObject *XFigParser::parseText()
 {
     // qDebug()<<"text";
 
-    QScopedPointer<XFigTextObject> textObject(new XFigTextObject);
+    std::unique_ptr<XFigTextObject> textObject(new XFigTextObject);
 
     qint32 sub_type, color, depth, pen_style, font, font_flags, x, y;
     float font_size, angle, height, length;
@@ -968,14 +969,14 @@ XFigAbstractObject *XFigParser::parseText()
     }
     textObject->setText(text);
 
-    return textObject.take();
+    return textObject.release();
 }
 
 XFigAbstractObject *XFigParser::parseCompoundObject()
 {
     // qDebug()<<"compound";
 
-    QScopedPointer<XFigCompoundObject> compoundObject(new XFigCompoundObject);
+    std::unique_ptr<XFigCompoundObject> compoundObject(new XFigCompoundObject);
 
     {
         qint32 upperLeftX, upperLeftY, lowerRightX, lowerRightY;
@@ -1018,7 +1019,7 @@ XFigAbstractObject *XFigParser::parseCompoundObject()
     }
     // qDebug()<<"compound end";
 
-    return compoundObject.take();
+    return compoundObject.release();
 }
 
 XFigArrowHead *XFigParser::parseArrowHead()

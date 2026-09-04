@@ -701,7 +701,7 @@ bool DatabaseDialog::tablesDoNext()
         for (int j = 0; j < (int)info.count(); ++j) {
             QString name = info.fieldName(j);
             QSqlField field = info.field(name);
-            QTreeWidgetItem *checkItem = new QTreeWidgetItem(QStringList() << name << tables[i] << QVariant::typeToName(field.type()));
+            QTreeWidgetItem *checkItem = new QTreeWidgetItem(QStringList() << name << tables[i] << field.metaType().name());
 
             checkItem->setFlags(checkItem->flags() | Qt::ItemIsUserCheckable);
             checkItem->setCheckState(0, Qt::Unchecked);

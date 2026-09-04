@@ -69,14 +69,14 @@ bool KWCanvasItem::snapToGrid() const
 
 void KWCanvasItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->pos(), e->screenPos(), e->button(), e->buttons(), e->modifiers());
     m_toolProxy->mouseMoveEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }
 
 void KWCanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->pos(), e->screenPos(), e->button(), e->buttons(), e->modifiers());
     m_toolProxy->mousePressEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     if (!me.isAccepted() && me.button() == Qt::RightButton) {
         // XXX: Port to graphicsitem!
@@ -88,14 +88,14 @@ void KWCanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 
 void KWCanvasItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->pos(), e->screenPos(), e->button(), e->buttons(), e->modifiers());
     m_toolProxy->mouseReleaseEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }
 
 void KWCanvasItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->pos(), e->screenPos(), e->button(), e->buttons(), e->modifiers());
     m_toolProxy->mouseDoubleClickEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }

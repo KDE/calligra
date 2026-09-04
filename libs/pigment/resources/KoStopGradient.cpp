@@ -63,7 +63,7 @@ bool KoStopGradient::loadFromDevice(QIODevice *dev)
     } else if (strExt == ".svg") {
         loadSvgGradient(&buf);
     }
-    if (m_stops.count() >= 2) {
+    if (m_stops.size() >= 2) {
         setValid(true);
     }
     updatePreview();
@@ -117,9 +117,9 @@ QGradient *KoStopGradient::toQGradient() const
 
 void KoStopGradient::colorAt(KoColor &dst, qreal t) const
 {
-    if (!m_stops.count())
+    if (!m_stops.size())
         return;
-    if (t <= m_stops.first().first || m_stops.count() == 1) {
+    if (t <= m_stops.first().first || m_stops.size() == 1) {
         // we have only one stop or t is before the first stop
         // -> use the color of the first stop
         dst.fromKoColor(m_stops.first().second);
@@ -320,7 +320,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement &element)
     KoColor color;
     // load stops
     QDomNodeList list = element.childNodes();
-    for (int i = 0; i < list.count(); ++i) {
+    for (int i = 0; i < list.size(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement colorstop = list.item(i).toElement();
 
@@ -568,7 +568,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement &element)
 
             // According to the SVG spec each gradient offset has to be equal to or greater than the previous one
             // if not it needs to be adjusted to be equal
-            if (m_stops.count() > 0 && m_stops.last().first >= off) {
+            if (m_stops.size() > 0 && m_stops.last().first >= off) {
                 off = m_stops.last().first;
             }
             m_stops.append(KoGradientStop(off, color));
@@ -605,7 +605,7 @@ void KoStopGradient::parseSvgColor(QColor &color, const QString &s)
         QString rgbColor = s.trimmed();
         QColor c;
         if (rgbColor.startsWith('#'))
-            c.setNamedColor(rgbColor);
+            c = QColor::fromString(rgbColor);
         else {
             c = QColor(rgbColor);
         }

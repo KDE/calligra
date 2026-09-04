@@ -107,7 +107,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
 
     QList<KoFindOption *> options = finder->options()->options();
     foreach (KoFindOption *option, options) {
-        if (option->value().type() == QVariant::Bool) {
+        if (option->value().typeId() == QVariant::Bool) {
             QAction *action = new QAction(option->title(), menu);
             action->setStatusTip(option->description());
             action->setToolTip(option->description());
@@ -123,7 +123,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
 
     d->optionsButton->setMenu(menu);
     d->optionsButton->setPopupMode(QToolButton::InstantPopup);
-    if (menu->actions().count() == 0) {
+    if (menu->actions().size() == 0) {
         d->optionsButton->setEnabled(false);
     }
     layout->addWidget(d->optionsButton, 0, 5);
@@ -163,7 +163,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(activateSearch()));
     QAction *replaceAction = new QAction(i18n("Replace"), this);
     ac->addAction("edit_replace", replaceAction);
-    replaceAction->setShortcut(Qt::CTRL + Qt::Key_H);
+    replaceAction->setShortcut(Qt::CTRL | Qt::Key_H);
     connect(replaceAction, &QAction::triggered, this, &KoFindToolbar::activateReplace);
 
     QAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->nextButton, SIGNAL(clicked(bool)));
@@ -222,7 +222,7 @@ void KoFindToolbar::Private::matchFound()
     searchLine->setPalette(current);
     replaceLine->setPalette(current);
 
-    information->setText(i18ncp("Total number of matches", "1 match found", "%1 matches found", finder->matches().count()));
+    information->setText(i18ncp("Total number of matches", "1 match found", "%1 matches found", finder->matches().size()));
 }
 
 void KoFindToolbar::Private::noMatchFound()

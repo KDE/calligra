@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-2.0-only
 
 #include "TestValueParser.h"
+#include <QTimeZone>
 
 #include "TestKspreadCommon.h"
 
@@ -655,7 +656,7 @@ void TestValueParser::testTryParseDateTime()
     QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
-    QDateTime exp(date, time, Qt::UTC);
+    QDateTime exp(date, time, QTimeZone::UTC);
     Value expected(exp, m_calcsettings);
     Value result = m_parser->tryParseDateTime(str, &ok);
     if (ok != expectedOk && !expfail.isEmpty()) {

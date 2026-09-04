@@ -56,7 +56,7 @@ void KoLineEditAction::onTriggered(const QString &text)
         m_editBox->clear();
 
         if (m_closeParentOnTrigger) {
-            this->parentWidget()->close();
+            qobject_cast<QWidget *>(parent())->close();
             m_editBox->clearFocus();
         }
     }

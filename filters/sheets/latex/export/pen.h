@@ -85,7 +85,7 @@ public:
     }
     void setColor(QString color)
     {
-        _color.setNamedColor(color);
+        _color = QColor::fromString(color);
     }
 
     /**

@@ -80,5 +80,5 @@ void KPrFadeOverColorStrategy::saveOdfSmilAttributes(KoGenStyle &style) const
 void KPrFadeOverColorStrategy::loadOdfSmilAttributes(const KoXmlElement &element)
 {
     // use black as default
-    m_fadeColor.setNamedColor(element.attributeNS(KoXmlNS::smil, "fadeColor", "#000000"));
+    m_fadeColor = QColor::fromString(element.attributeNS(KoXmlNS::smil, "fadeColor", "#000000"));
 }

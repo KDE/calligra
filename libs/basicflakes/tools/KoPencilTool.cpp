@@ -208,7 +208,7 @@ qreal KoPencilTool::lineAngle(const QPointF &p1, const QPointF &p2)
 
 void KoPencilTool::finish(bool closePath)
 {
-    if (m_points.count() < 2)
+    if (m_points.size() < 2)
         return;
 
     KoPathShape *path = nullptr;
@@ -230,7 +230,7 @@ void KoPencilTool::finish(bool closePath)
         // Now we need to get the angle of the first line
         float lastAngle = lineAngle(complete[0], complete[1]);
 
-        uint pointCount = m_points.count();
+        uint pointCount = m_points.size();
         for (uint i = 2; i < pointCount; ++i) {
             float angle = lineAngle(complete.last(), m_points[i]);
             if (qAbs(angle - lastAngle) < combineAngle)
@@ -324,8 +324,8 @@ QList<QPointer<QWidget>> KoPencilTool::createOptionWidgets()
 
     connect(modeBox, QOverload<int>::of(&QComboBox::activated), stackedWidget, &QStackedWidget::setCurrentIndex);
     connect(modeBox, QOverload<int>::of(&QComboBox::activated), this, &KoPencilTool::selectMode);
-    connect(optimizeRaw, &QCheckBox::stateChanged, this, &KoPencilTool::setOptimize);
-    connect(optimizeCurve, &QCheckBox::stateChanged, this, &KoPencilTool::setOptimize);
+    connect(optimizeRaw, &QCheckBox::checkStateChanged, this, &KoPencilTool::setOptimize);
+    connect(optimizeCurve, &QCheckBox::checkStateChanged, this, &KoPencilTool::setOptimize);
     connect(fittingError, &QDoubleSpinBox::valueChanged, this, &KoPencilTool::setDelta);
     connect(combineAngle, &QDoubleSpinBox::valueChanged, this, &KoPencilTool::setDelta);
 

@@ -901,7 +901,7 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 
     } while (ok == true);
 
-    qDebug() << "... done" << mcol.count();
+    qDebug() << "... done" << mcol.size();
 
     foreach(t_mycolor* emp, mcol) {
         printf(" c:%3d m:%3d y:%3d k:%3d   r:%3d g:%3d b:%3d\n",
@@ -1173,7 +1173,7 @@ APPLIXSPREADImport::readHeader(QTextStream &stream)
                               QString("The Applix Spreadsheet header is not correct. "
                                       "May be it is not an applix spreadsheet file! <BR>"
                                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),
-                              "Okay");
+                              QMessageBox::Ok);
 
 
         return false;

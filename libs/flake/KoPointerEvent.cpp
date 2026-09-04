@@ -228,11 +228,11 @@ qreal KoPointerEvent::tangentialPressure() const
 int KoPointerEvent::x() const
 {
     if (d->tabletEvent)
-        return d->tabletEvent->x();
+        return d->tabletEvent->position().x();
     if (d->wheelEvent)
         return d->wheelEvent->position().x();
     else if (d->mouseEvent)
-        return d->mouseEvent->x();
+        return d->mouseEvent->position().x();
     else
         return position().x();
 }
@@ -248,11 +248,11 @@ int KoPointerEvent::xTilt() const
 int KoPointerEvent::y() const
 {
     if (d->tabletEvent)
-        return d->tabletEvent->y();
+        return d->tabletEvent->position().y();
     if (d->wheelEvent)
         return d->wheelEvent->position().y();
     else if (d->mouseEvent)
-        return d->mouseEvent->y();
+        return d->mouseEvent->position().y();
     else
         return position().y();
 }

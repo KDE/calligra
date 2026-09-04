@@ -20,6 +20,7 @@
 
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
+#include <QTimeZone>
 
 #include <KoCharacterStyle.h>
 #include <KoGenStyles.h>
@@ -267,9 +268,9 @@ bool Odf::loadCell(Cell *cell,
             if (ok) {
                 const auto settings = cell->sheet()->map()->calculationSettings();
                 if (hasTime) {
-                    const QDateTime ref(settings->referenceDate(), QTime(), Qt::UTC);
+                    const QDateTime ref(settings->referenceDate(), QTime(), QTimeZone::UTC);
                     // handle fractions of seconds so not to loose precision
-                    const QDateTime dt(QDate(year, month, day), QTime(hours, minutes, 0), Qt::UTC);
+                    const QDateTime dt(QDate(year, month, day), QTime(hours, minutes, 0), QTimeZone::UTC);
                     Number v = (Number(ref.msecsTo(dt)) / (24 * 60 * 60 * 1000)) + (seconds / (24 * 60 * 60));
                     Value value(v);
                     value.setFormat(Value::fmt_Date);
@@ -559,7 +560,7 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext &tableContext)
     // see: OpenDocument, 9.2 Drawing Shapes
     if (tableContext.cellHasAnchoredShapes(sheet, row, column)) {
         const QList<KoShape *> shapes = tableContext.cellAnchoredShapes(sheet, row, column);
-        for (int i = 0; i < shapes.count(); ++i) {
+        for (int i = 0; i < shapes.size(); ++i) {
             KoShape *const shape = shapes[i];
             const QPointF bottomRight = shape->boundingRect().bottomRight();
             qreal endX = 0.0;
@@ -1226,10 +1227,10 @@ QString Odf::encodeFormula(const QString &expr, const Localization *locale)
     Formula formula;
     Tokens tokens = formula.scan(expr, locale);
 
-    if (!tokens.valid() || tokens.count() == 0)
+    if (!tokens.valid() || tokens.size() == 0)
         return expr; // no altering on error
 
-    for (int i = 0; i < tokens.count(); ++i) {
+    for (int i = 0; i < tokens.size(); ++i) {
         const QString tokenText = tokens[i].text();
         const Token::Type type = tokens[i].type();
 

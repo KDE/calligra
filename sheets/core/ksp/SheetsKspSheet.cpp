@@ -325,7 +325,7 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument &dd)
     // backward compatibility
     QString realName = obj->sheetName();
     QString sheetName;
-    for (int i = 0; i < realName.count(); ++i) {
+    for (int i = 0; i < realName.size(); ++i) {
         if (realName[i].isLetterOrNumber() || realName[i] == ' ' || realName[i] == '.')
             sheetName.append(realName[i]);
         else

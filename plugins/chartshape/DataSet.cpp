@@ -458,7 +458,7 @@ QString DataSet::Private::formatData(const CellRegion &region, int index, int ro
 {
     QVariant v = data(region, index, role);
     QString s;
-    if (v.type() == QVariant::Double) {
+    if (v.typeId() == QVariant::Double) {
         // Don't use v.toString() else a double/float would lose precision
         // and something like "36.5207" would become "36.520660888888912".
         QTextStream ts(&s);
@@ -623,7 +623,7 @@ void DataSet::Private::setAttributesAccordingToType()
     attr.setNegativePosition(negativePosition);
     dataValueAttributes = attr;
 
-    for (int i = 0; i < sectionsDataValueAttributes.count(); ++i) {
+    for (int i = 0; i < sectionsDataValueAttributes.size(); ++i) {
         Q_ASSERT(sectionsDataValueAttributes.contains(i));
         KChart::DataValueAttributes attr = sectionsDataValueAttributes[i];
         KChart::RelativePosition positivePosition = attr.positivePosition();
@@ -1110,7 +1110,7 @@ QVariant DataSet::xData(int index, int role) const
     // ODF spec says bubble charts *must* have xdata, ydata and bubble width.
     // However LO allows for no xdata in which case it used data index (as we do here).
     QVariant data = d->data(d->xDataRegion, index, role);
-    if (data.isValid() && data.canConvert<double>() && data.convert(QVariant::Double))
+    if (data.isValid() && data.canConvert<double>() && data.convert(QMetaType(QMetaType::Double)))
         return data;
     return QVariant(index + 1);
 }

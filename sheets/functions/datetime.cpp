@@ -6,6 +6,7 @@
 // built-in date/time functions
 
 #include "DateTimeModule.h"
+#include <QTimeZone>
 
 #include "engine/CalculationSettings.h"
 #include "engine/Function.h"
@@ -298,7 +299,7 @@ Value func_days360(valVector args, ValueCalc *calc, FuncExtra *)
     QDate date1 = calc->conv()->asDate(args[0]).asDate(calc->settings());
     QDate date2 = calc->conv()->asDate(args[1]).asDate(calc->settings());
     bool european = false;
-    if (args.count() == 3)
+    if (args.size() == 3)
         european = calc->conv()->asBoolean(args[2]).asBoolean();
 
     return Value(func_days360_helper(date1, date2, european));
@@ -338,7 +339,7 @@ Value func_day(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_hour(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Time time;
-    if (args.count() == 1) {
+    if (args.size() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError())
             return v;
@@ -352,7 +353,7 @@ Value func_hour(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_minute(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Time time;
-    if (args.count() == 1) {
+    if (args.size() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError())
             return v;
@@ -366,7 +367,7 @@ Value func_minute(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_second(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Time time;
-    if (args.count() == 1) {
+    if (args.size() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError())
             return v;
@@ -384,7 +385,7 @@ Value func_weekday(valVector args, ValueCalc *calc, FuncExtra *)
         return v;
     QDate date = v.asDate(calc->settings());
     int method = 1;
-    if (args.count() == 2)
+    if (args.size() == 2)
         method = calc->conv()->asInteger(args[1]).asInteger();
 
     if (method < 1 || method > 3)
@@ -748,7 +749,7 @@ Value func_isoWeekNum(valVector args, ValueCalc *calc, FuncExtra *)
 
     int isoYear = 0;
     const int isoWeek = date.weekNumber(&isoYear);
-    if (args.count() < 2 || calc->conv()->asInteger(args[1]).asInteger() == 2)
+    if (args.size() < 2 || calc->conv()->asInteger(args[1]).asInteger() == 2)
         return Value(isoWeek);
     if (calc->conv()->asInteger(args[1]).asInteger() == 1) {
         const int jan1Offset = QDate(date.year(), 1, 1).dayOfWeek() % 7;
@@ -756,7 +757,7 @@ Value func_isoWeekNum(valVector args, ValueCalc *calc, FuncExtra *)
     }
 
     int method = 2; // default method = 2
-    if (args.count() > 1)
+    if (args.size() > 1)
         method = calc->conv()->asInteger(args[1]).asInteger();
 
     if (method < 1 || method > 2)
@@ -821,7 +822,7 @@ Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     int method = 1;
-    if (args.count() > 1)
+    if (args.size() > 1)
         method = calc->conv()->asInteger(args[1]).asInteger();
 
     if (method < 1 || method > 2)
@@ -992,7 +993,7 @@ Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *)
 
     // check if basis is valid
     int basis = 0;
-    if (args.count() > 2)
+    if (args.size() > 2)
         basis = calc->conv()->asInteger(args[2]).asInteger();
     if (basis < 0 || basis > 4)
         return Value::errorVALUE();
@@ -1035,7 +1036,7 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
     //
     // check for holidays
     //
-    if (args.count() > 2) {
+    if (args.size() > 2) {
         if (args[2].type() == Value::Array) { // parameter is array
             unsigned int row1, col1, rows, cols;
 
@@ -1127,7 +1128,7 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
     valVector holidays; // stores holidays
     int sign = 1; // sign 1 = forward, -1 = backward
     bool weekend[7] = {false, false, false, false, false, true, true};
-    if (args.count() > 3 && args[3].isArray() && args[3].count() >= 7) {
+    if (args.size() > 3 && args[3].isArray() && args[3].count() >= 7) {
         for (int i = 0; i < 7; ++i)
             weekend[i] = calc->conv()->asInteger(args[3].element(i)).asInteger() != 0;
     }
@@ -1140,7 +1141,7 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
     //
     // check for holidays
     //
-    if (args.count() > 2) {
+    if (args.size() > 2) {
         if (args[2].type() == Value::Array || args[2].type() == Value::CellRange) {
             // parameter is array
             unsigned int row1, col1, rows, cols;
@@ -1225,7 +1226,7 @@ Value func_unix2date(valVector args, ValueCalc *calc, FuncExtra *)
         return v;
 
     QDateTime datetime;
-    datetime.setTimeSpec(Qt::UTC);
+    datetime.setTimeZone(QTimeZone::UTC);
     datetime.setSecsSinceEpoch(v.asInteger());
 
     return Value(datetime, calc->settings());

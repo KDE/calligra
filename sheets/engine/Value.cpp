@@ -6,6 +6,7 @@
 #include "Value.h"
 #include "CalculationSettings.h"
 #include "ValueStorage.h"
+#include <QTimeZone>
 
 #include <KLocalizedString>
 
@@ -556,7 +557,7 @@ QString Value::errorMessage() const
 // get the value as date/time
 QDateTime Value::asDateTime(const CalculationSettings *settings) const
 {
-    QDateTime datetime(settings->referenceDate(), QTime(), Qt::UTC);
+    QDateTime datetime(settings->referenceDate(), QTime(), QTimeZone::UTC);
 
     const int days = asInteger();
     const int msecs = ::round((numToDouble(asFloat() - double(days))) * 86400000.0); // 24*60*60*1000

@@ -1009,13 +1009,11 @@ int main(int argc, char **argv)
     }
     if (!f.open(QIODevice::ReadOnly))
         qFatal("Error opening file");
-    QString errorMsg;
-    int errorLine;
-    int errorCol;
-    if (!doc.setContent(&f, &errorMsg, &errorLine, &errorCol)) {
+    const QDomDocument::ParseResult result = doc.setContent(&f);
+    if (!result) {
         f.close();
-        errorMsg = "Error parsing file: " + errorMsg + "\n";
-        errorMsg += QLatin1String("In line ") + QString::number(errorLine) + QLatin1String(", column ") + QString::number(errorCol);
+        QString errorMsg = "Error parsing file: " + result.errorMessage + "\n";
+        errorMsg += QLatin1String("In line ") + QString::number(result.errorLine) + QLatin1String(", column ") + QString::number(result.errorColumn);
         qFatal("%s", errorMsg.toLatin1().constData());
     }
     f.close();

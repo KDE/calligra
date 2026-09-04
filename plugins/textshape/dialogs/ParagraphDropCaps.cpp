@@ -23,7 +23,7 @@ ParagraphDropCaps::ParagraphDropCaps(QWidget *parent)
     widget.characters->setValue(0);
     widget.lines->setValue(2);
 
-    connect(widget.capsState, &QCheckBox::stateChanged, this, &ParagraphDropCaps::dropCapsStateChanged);
+    connect(widget.capsState, &QCheckBox::checkStateChanged, this, &ParagraphDropCaps::dropCapsStateChanged);
     connect(widget.distance, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphDropCaps::paragraphDistanceChanged);
     connect(widget.characters, &QSpinBox::valueChanged, this, &ParagraphDropCaps::dropedCharacterCountChanged);
     connect(widget.lines, &QSpinBox::valueChanged, this, &ParagraphDropCaps::dropsLineSpanChanged);

@@ -254,7 +254,7 @@ AbstractNode *AbstractNode::parent() const
 QList<AbstractNode *> AbstractNode::children() const
 {
     if (m_cachedChildren.isEmpty()) {
-        const int count = m_appendedChildren.count() + m_orderedChildren.count();
+        const int count = m_appendedChildren.size() + m_orderedChildren.size();
         for (int i = 0, k = -1; i < count; ++i) {
             if (m_orderedChildren.contains(i)) {
                 foreach (AbstractNode *n, m_orderedChildren[i])
@@ -615,7 +615,7 @@ void AbstractAtom::readAll(Context *context, MsooXmlDiagramReader *reader)
 void AbstractAtom::build(Context *context)
 {
     // typedef QList< QExplicitlySharedDataPointer< AbstractAtom > > SharedAtomList;
-    // for( int i = 0; i < m_children.count(); ++i ) m_children[ i ]->build( context );
+    // for( int i = 0; i < m_children.size(); ++i ) m_children[ i ]->build( context );
     foreach (QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
         atom->build(context);
     }
@@ -663,7 +663,7 @@ QVector<QExplicitlySharedDataPointer<AbstractAtom>> AbstractAtom::children() con
 
 int AbstractAtom::indexOfChild(AbstractAtom *node) const
 {
-    for (int i = 0; i < m_children.count(); ++i)
+    for (int i = 0; i < m_children.size(); ++i)
         if (m_children[i].data() == node)
             return i;
     return -1;
@@ -688,7 +688,7 @@ void AbstractAtom::insertChild(int index, AbstractAtom *node)
 void AbstractAtom::insertChild(int index, QExplicitlySharedDataPointer<AbstractAtom> node)
 {
     node->m_parent = this;
-    if (index < m_children.count())
+    if (index < m_children.size())
         m_children.insert(index, node);
     else
         m_children.append(node);
@@ -717,7 +717,7 @@ QList<AbstractNode *> AbstractAtom::fetchAxis(Context *context,
     QList<AbstractNode *> result;
     Q_ASSERT(context->currentNode());
     result << context->currentNode();
-    for (int i = 0; i < axisList.count(); ++i) {
+    for (int i = 0; i < axisList.size(); ++i) {
         result = fetchAxis(context, result, axisList[i], typeList.value(i), startList.value(i), countList.value(i), stepList.value(i));
     }
     return result;
@@ -806,9 +806,9 @@ QList<AbstractNode *> AbstractAtom::foreachAxis(Context *, const QList<AbstractN
     QList<AbstractNode *> result;
     const int _start = qMax(0, start - 1);
     const int _step = qMax(1, step);
-    for (int i = _start; i < list.count(); i += _step) {
+    for (int i = _start; i < list.size(); i += _step) {
         result.append(list[i]);
-        if (/*count > 0 &&*/ result.count() == count)
+        if (/*count > 0 &&*/ result.size() == count)
             break;
     }
     return result;
@@ -1141,8 +1141,8 @@ void LayoutNodeAtom::setAxis(Context *context, const QList<AbstractNode *> &axis
     Q_ASSERT(!context->m_layoutPointMap.keys().contains(this));
     // then set the new axis
     foreach (AbstractNode *node, axis) {
-        context->m_layoutPointMap.insertMulti(this, node);
-        context->m_pointLayoutMap.insertMulti(node, this);
+        context->m_layoutPointMap.insert(this, node);
+        context->m_pointLayoutMap.insert(node, this);
     }
     // job done, new layout needed
     setNeedsRelayout(true);
@@ -1300,12 +1300,12 @@ QPair<LayoutNodeAtom *, LayoutNodeAtom *> LayoutNodeAtom::neighbors() const
     foreach (QExplicitlySharedDataPointer<AbstractAtom> atom, parent()->children()) {
         if (LayoutNodeAtom *l = dynamic_cast<LayoutNodeAtom *>(atom.data())) {
             if (l == this)
-                myindex = siblingLayouts.count();
+                myindex = siblingLayouts.size();
             siblingLayouts.append(l);
         }
     }
     Q_ASSERT(myindex >= 0); // our parent should know about us else something is fundamental broken
-    if (siblingLayouts.count() < 3) // if we don't have enough neighbors then abort and return NULL for both
+    if (siblingLayouts.size() < 3) // if we don't have enough neighbors then abort and return NULL for both
         return QPair<LayoutNodeAtom *, LayoutNodeAtom *>(0, 0);
 
     // Look if our index is the first or last in the list and if that's the case then wrap around the list
@@ -1315,9 +1315,9 @@ QPair<LayoutNodeAtom *, LayoutNodeAtom *> LayoutNodeAtom::neighbors() const
     if (srcIndex < 0) {
         if (parentlayout->algorithmType() != AlgorithmAtom::CycleAlg)
             return QPair<LayoutNodeAtom *, LayoutNodeAtom *>(0, 0);
-        srcIndex = siblingLayouts.count() - 1;
+        srcIndex = siblingLayouts.size() - 1;
     }
-    if (dstIndex < siblingLayouts.count()) {
+    if (dstIndex < siblingLayouts.size()) {
         --myindex;
     } else {
         if (parentlayout->algorithmType() != AlgorithmAtom::CycleAlg)
@@ -1747,8 +1747,8 @@ void AdjustAtom::readAll(Context *, MsooXmlDiagramReader *reader)
 // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/74f86b76-37be-4087-b5b0-cf2fc68d5595/
 void AdjustAtom::applyAdjustment(Context * /* context */, LayoutNodeAtom * /* atom */)
 {
-    ASSERT_X(m_index >= 0 && m_index < context->m_shapeList.count(),
-             QString("Index is out of bounds, index=%1 min=0 max=%2").arg(m_index).arg(context->m_shapeList.count() - 1).toLocal8Bit());
+    ASSERT_X(m_index >= 0 && m_index < context->m_shapeList.size(),
+             QString("Index is out of bounds, index=%1 min=0 max=%2").arg(m_index).arg(context->m_shapeList.size() - 1).toLocal8Bit());
     // TODO
     // ShapeAtom *shape = context->m_shapeList.at(m_index);
     // if (m_value > 90) m_value = 360 - (m_value - 90);
@@ -2000,7 +2000,7 @@ void ShapeAtom::writeAtom(Context *context, KoXmlWriter *xmlWriter, KoGenStyles 
         /*
         QList<AbstractNode*> axis = context->m_parentLayout->axis();
         foreach(AbstractNode* n, axis) n->dump(context,10);
-        Q_ASSERT(axis.count() == 1);
+        Q_ASSERT(axis.size() == 1);
         Q_ASSERT(static_cast<PointNode*>(axis.first())->m_type == "sibTrans");
         const QString cxnId = static_cast<PointNode*>(axis.first())->m_cxnId;
         Q_ASSERT(!static_cast<PointNode*>(axis.first())->m_cxnId.isEmpty());
@@ -2315,8 +2315,8 @@ void PresentationOfAtom::build(Context *context)
         */
         ASSERT_X(isEmpty(), QString("Failed to proper apply the non-empty presOf %1").arg(dump()).toLocal8Bit());
     } else {
-        // ASSERT_X(nodes.count() == 1, "Oha. The axis contains more then one note. It's not clear what to do in such cases...");
-        if (nodes.count() >= 2)
+        // ASSERT_X(nodes.size() == 1, "Oha. The axis contains more then one note. It's not clear what to do in such cases...");
+        if (nodes.size() >= 2)
             warnMsooXml << "TODO The axis contains more then one note. It's not clear what to do in such cases...";
         context->setCurrentNode(nodes.first());
     }
@@ -2380,10 +2380,10 @@ bool IfAtom::testAtom(Context *context)
     if (m_name == "Name21") {
         PointNode *node = dynamic_cast<PointNode *>(context->currentNode());
         Q_ASSERT(node);
-        debugMsooXml << "RULE21: " << m_axis.count() << " nodeId: " << node->m_modelId;
+        debugMsooXml << "RULE21: " << m_axis.size() << " nodeId: " << node->m_modelId;
     }
     if (m_function == "cnt") { // Specifies a count.
-        funcValue = QString::number(axis.count());
+        funcValue = QString::number(axis.size());
     } else if (m_function == "depth") { // Specifies the depth.
         // int depth = 0;
         // for(AbstractNode* n = context->currentNode(); n; n = n->parent(), ++depth);
@@ -2413,7 +2413,7 @@ bool IfAtom::testAtom(Context *context)
         warnMsooXml << "TODO func=posOdd";
     } else if (m_function == "revPos") { // Reverse position function.
         const int position = axis.indexOf(context->currentNode()) + 1;
-        funcValue = QChar(int(axis.count()) - position);
+        funcValue = QChar(int(axis.size()) - position);
         // TODO lastIndexOf? 1-based? what index for not-found?
         warnMsooXml << "TODO func=revPos";
     } else if (m_function == "var") { // Used to reference a variable.
@@ -2998,7 +2998,7 @@ void CycleAlgorithm::virtualDoLayout()
     bool firstNodeInCenter = layout()->algorithmParam("ctrShpMap", "none") == "fNode";
 
     LayoutNodeAtom *nodeInCenter = firstNodeInCenter ? childs.takeFirst() : nullptr;
-    const qreal childsCount = childs.count();
+    const qreal childsCount = childs.size();
 
     QMap<QString, qreal> values = layout()->finalValues();
     const qreal w = values["w"];
@@ -3067,7 +3067,7 @@ void LinearAlgorithm::virtualDoLayout()
     LayoutNodeAtom *firstNSpaceNode = nullptr;
     LayoutNodeAtom *lastNSpaceNode = nullptr;
     debugMsooXml << values;
-    for (int i = 0; i < childs.count(); ++i) {
+    for (int i = 0; i < childs.size(); ++i) {
         if (direction == "fromL") {
             childs[i]->m_values["l"] = x;
             debugMsooXml << "XVAL: " << x;
@@ -3105,7 +3105,7 @@ void LinearAlgorithm::virtualDoLayout()
     debugMsooXml << widthStretchFactor;
     debugMsooXml << xOffset;
 
-    for (int i = 0; i < childs.count(); ++i) {
+    for (int i = 0; i < childs.size(); ++i) {
         if (direction == "fromL" || direction == "formR") {
             const qreal aspectRatio = childs[i]->finalValues()["h"] / childs[i]->finalValues()["w"];
             const qreal heightRatio = widthStretchFactor * aspectRatio;
@@ -3142,7 +3142,7 @@ void LinearAlgorithm::virtualDoLayout()
     ASSERT_X(!childs.isEmpty(), QString("Layout %1 does not have child-layouts").arg(layout()->m_name));
     if (childs.isEmpty()) return;
 
-    const qreal childsCount = childs.count();
+    const qreal childsCount = childs.size();
 	debugMsooXml << "REAL CHILD COUNTERRRRRRRRRRRRRR " << childsCount;
     const QSizeF usedSize = layout()->childrenUsedSize();
     const QSizeF totalSize = layout()->childrenTotalSize();

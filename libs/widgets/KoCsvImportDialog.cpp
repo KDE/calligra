@@ -111,7 +111,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget *parent)
     connect(d->dialog->m_delimiterEdit, &QLineEdit::textChanged, this, &KoCsvImportDialog::genericDelimiterChanged);
     connect(d->dialog->m_comboQuote, &QComboBox::textActivated, this, &KoCsvImportDialog::textquoteSelected);
     connect(d->dialog->m_sheet, &QTableWidget::currentCellChanged, this, &KoCsvImportDialog::currentCellChanged);
-    connect(d->dialog->m_ignoreDuplicates, &QCheckBox::stateChanged, this, &KoCsvImportDialog::ignoreDuplicatesChanged);
+    connect(d->dialog->m_ignoreDuplicates, &QCheckBox::checkStateChanged, this, &KoCsvImportDialog::ignoreDuplicatesChanged);
     connect(d->dialog->m_updateButton, &QAbstractButton::clicked, this, &KoCsvImportDialog::updateClicked);
 }
 
@@ -368,7 +368,7 @@ void KoCsvImportDialog::Private::fillTable()
                 field += x;
                 delimiterIndex++;
                 if (field.right(delimiterIndex) == delimiter) {
-                    setText(row - startRow, column - startCol, field.left(field.count() - delimiterIndex));
+                    setText(row - startRow, column - startCol, field.left(field.size() - delimiterIndex));
                     field.clear();
                     if ((ignoreDuplicates == false) || (lastCharDelimiter == false))
                         column += delimiterLength;
@@ -395,7 +395,7 @@ void KoCsvImportDialog::Private::fillTable()
                 field += x;
                 delimiterIndex++;
                 if (field.right(delimiterIndex) == delimiter) {
-                    setText(row - startRow, column - startCol, field.left(field.count() - delimiterIndex));
+                    setText(row - startRow, column - startCol, field.left(field.size() - delimiterIndex));
                     field.clear();
                     if ((ignoreDuplicates == false) || (lastCharDelimiter == false))
                         column += delimiterLength;
@@ -430,7 +430,7 @@ void KoCsvImportDialog::Private::fillTable()
                 field += x;
                 delimiterIndex++;
                 if (field.right(delimiterIndex) == delimiter) {
-                    setText(row - startRow, column - startCol, field.left(field.count() - delimiterIndex));
+                    setText(row - startRow, column - startCol, field.left(field.size() - delimiterIndex));
                     field.clear();
                     if ((ignoreDuplicates == false) || (lastCharDelimiter == false))
                         column += delimiterLength;

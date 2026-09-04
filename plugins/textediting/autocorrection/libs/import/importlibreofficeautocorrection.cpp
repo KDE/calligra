@@ -144,11 +144,10 @@ bool ImportLibreOfficeAutocorrection::importFile(Type type, const KArchiveDirect
 
 bool ImportLibreOfficeAutocorrection::loadDomElement(QDomDocument &doc, QFile *file)
 {
-    QString errorMsg;
-    int errorRow;
-    int errorCol;
-    if (!doc.setContent(file, &errorMsg, &errorRow, &errorCol)) {
-        qCDebug(AUTOCORRECTION_LOG) << "Unable to load document.Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
+    const QDomDocument::ParseResult result = doc.setContent(file);
+    if (!result) {
+        qCDebug(AUTOCORRECTION_LOG) << "Unable to load document.Parse error in line " << result.errorLine << ", col " << result.errorColumn << ": "
+                                    << result.errorMessage;
         return false;
     }
     return true;

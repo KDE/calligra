@@ -14,7 +14,7 @@ FontDecorations::FontDecorations(bool uniqueFormat, QWidget *parent)
 {
     widget.setupUi(this);
 
-    connect(widget.hyphenate, &QCheckBox::stateChanged, this, &FontDecorations::hyphenateStateChanged);
+    connect(widget.hyphenate, &QCheckBox::checkStateChanged, this, &FontDecorations::hyphenateStateChanged);
 
     widget.shadowGroupBox->setVisible(false);
     widget.positionGroupBox->setVisible(false);

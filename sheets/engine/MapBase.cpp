@@ -117,7 +117,7 @@ QList<SheetBase *> &MapBase::sheetList() const
 
 int MapBase::count() const
 {
-    return d->lstSheets.count();
+    return d->lstSheets.size();
 }
 
 SheetBase *MapBase::findSheet(const QString &_name) const
@@ -139,7 +139,7 @@ void MapBase::moveSheet(const QString &_from, const QString &_to, bool _before)
     if (!_before)
         ++to;
 
-    if (to > (int)d->lstSheets.count()) {
+    if (to > (int)d->lstSheets.size()) {
         d->lstSheets.append(sheetfrom);
         d->lstSheets.removeAt(from);
     } else if (from < to) {
@@ -317,7 +317,7 @@ void MapBase::addDamage(Damage *damage)
 
     d->damages.append(damage);
 
-    if (d->damages.count() == 1) {
+    if (d->damages.size() == 1) {
         QTimer::singleShot(0, this, &MapBase::flushDamages);
     }
 }
@@ -496,8 +496,8 @@ SheetBase *MapBase::filterSheetName(QString &sRegion) const
         QString sheetName = sRegion.left(delimiterPos);
         sheet = findSheet(sheetName);
         // try again without apostrophes
-        while (!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count() - 1] == '\'') {
-            sheetName = sheetName.mid(1, sheetName.count() - 2);
+        while (!sheet && sheetName.size() > 2 && sheetName[0] == '\'' && sheetName[sheetName.size() - 1] == '\'') {
+            sheetName = sheetName.mid(1, sheetName.size() - 2);
             sheet = findSheet(sheetName);
         }
         // remove the sheet name, incl. '!', from the string

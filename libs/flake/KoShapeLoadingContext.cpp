@@ -96,7 +96,7 @@ void KoShapeLoadingContext::addShapeId(KoShape *shape, const QString &id)
     d->drawIds.insert(id, shape);
     QMultiMap<QString, KoLoadingShapeUpdater *>::iterator it(d->updaterById.find(id));
     while (it != d->updaterById.end() && it.key() == id) {
-        d->updaterByShape.insertMulti(shape, it.value());
+        d->updaterByShape.insert(shape, it.value());
         it = d->updaterById.erase(it);
     }
 }
@@ -119,7 +119,7 @@ QPair<KoShape *, QVariant> KoShapeLoadingContext::shapeSubItemById(const QString
 // TODO make sure to remove the shape from the loading context when loading for it failed and it was deleted. This can also happen when the parent is deleted
 void KoShapeLoadingContext::updateShape(const QString &id, KoLoadingShapeUpdater *shapeUpdater)
 {
-    d->updaterById.insertMulti(id, shapeUpdater);
+    d->updaterById.insert(id, shapeUpdater);
 }
 
 void KoShapeLoadingContext::shapeLoaded(KoShape *shape)

@@ -242,8 +242,8 @@ void KoDualColorButton::mouseMoveEvent(QMouseEvent *event)
     if (!d->miniCtlFlag) {
         int delay = QApplication::startDragDistance();
 
-        if (event->x() >= d->dragPosition.x() + delay || event->x() <= d->dragPosition.x() - delay || event->y() >= d->dragPosition.y() + delay
-            || event->y() <= d->dragPosition.y() - delay) {
+        if (event->position().x() >= d->dragPosition.x() + delay || event->position().x() <= d->dragPosition.x() - delay
+            || event->position().y() >= d->dragPosition.y() + delay || event->position().y() <= d->dragPosition.y() - delay) {
             KColorMimeData::createDrag(d->tmpSelection == Foreground ? d->displayRenderer->toQColor(d->foregroundColor)
                                                                      : d->displayRenderer->toQColor(d->backgroundColor),
                                        this)

@@ -140,7 +140,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         if (m_draggedShape->shapeId().isEmpty())
             m_draggedShape->setShapeId(factory->id());
         m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
-        m_draggedShape->setAbsolutePosition(correctPosition(event->pos()));
+        m_draggedShape->setAbsolutePosition(correctPosition(event->position().toPoint()));
 
         m_parent->canvas()->shapeManager()->addShape(m_draggedShape);
     } else if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
@@ -148,7 +148,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         KoShapePaste paste(m_parent->canvas(), sm->selection()->activeLayer());
         if (paste.paste(KoOdf::Text, data)) {
             QList<KoShape *> shapes = paste.pastedShapes();
-            if (shapes.count() == 1) {
+            if (shapes.size() == 1) {
                 m_draggedShape = shapes.first();
                 m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
                 event->setDropAction(Qt::CopyAction);
@@ -163,7 +163,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 void Viewport::handleDropEvent(QDropEvent *event)
 {
     if (!m_draggedShape) {
-        m_parent->canvas()->toolProxy()->dropEvent(event, correctPosition(event->pos()));
+        m_parent->canvas()->toolProxy()->dropEvent(event, correctPosition(event->position().toPoint()));
         return;
     }
 
@@ -171,7 +171,7 @@ void Viewport::handleDropEvent(QDropEvent *event)
     m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
 
     m_draggedShape->setPosition(QPointF(0, 0)); // always save position.
-    QPointF newPos = correctPosition(event->pos());
+    QPointF newPos = correctPosition(event->position().toPoint());
     m_parent->canvas()->clipToDocument(m_draggedShape, newPos); // ensure the shape is dropped inside the document.
     m_draggedShape->setAbsolutePosition(newPos);
     KUndo2Command *cmd = m_parent->canvas()->shapeController()->addShape(m_draggedShape);
@@ -203,13 +203,13 @@ QPointF Viewport::correctPosition(const QPoint &point) const
 void Viewport::handleDragMoveEvent(QDragMoveEvent *event)
 {
     if (!m_draggedShape) {
-        m_parent->canvas()->toolProxy()->dragMoveEvent(event, correctPosition(event->pos()));
+        m_parent->canvas()->toolProxy()->dragMoveEvent(event, correctPosition(event->position().toPoint()));
         return;
     }
 
     m_draggedShape->update();
     repaint(m_draggedShape);
-    m_draggedShape->setAbsolutePosition(correctPosition(event->pos()));
+    m_draggedShape->setAbsolutePosition(correctPosition(event->position().toPoint()));
     m_draggedShape->update();
     repaint(m_draggedShape);
 }

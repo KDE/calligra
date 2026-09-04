@@ -29,7 +29,7 @@ ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget *pare
     widget.escapeUp->setDefaultAction(tool->action("escape-up"));
     widget.escapeDown->setDefaultAction(tool->action("escape-down"));
 
-    connect(widget.toggleEditMode, &QCheckBox::stateChanged, tool, &ConnectionTool::toggleConnectionPointEditMode);
+    connect(widget.toggleEditMode, &QCheckBox::checkStateChanged, tool, &ConnectionTool::toggleConnectionPointEditMode);
     connect(tool, &ConnectionTool::sendConnectionPointEditState, this, &ConnectionPointWidget::toggleEditModeCheckbox);
 }
 

@@ -97,7 +97,7 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
                 Model::PropertyList propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
                 int clickedProperty = -1;
                 // Discover which of all properties was clicked
-                for (int i = 0; i < propertyList.count(); ++i) {
+                for (int i = 0; i < propertyList.size(); ++i) {
                     if (propertyList[i].isMutable) {
                         xPos -= iconWidth + d->margin;
                     }
@@ -214,7 +214,7 @@ bool KoDocumentSectionDelegate::eventFilter(QObject *object, QEvent *event)
     case QEvent::MouseButtonPress: {
         if (d->edit) {
             QMouseEvent *me = static_cast<QMouseEvent *>(event);
-            if (!QRect(d->edit->mapToGlobal(QPoint()), d->edit->size()).contains(me->globalPos()))
+            if (!QRect(d->edit->mapToGlobal(QPoint()), d->edit->size()).contains(me->globalPosition().toPoint()))
                 Q_EMIT closeEditor(d->edit);
         }
     } break;
@@ -333,7 +333,7 @@ QRect KoDocumentSectionDelegate::iconsRect(const QStyleOptionViewItem &option, c
 
     Model::PropertyList lp = index.data(Model::PropertiesRole).value<Model::PropertyList>();
     int propscount = 0;
-    for (int i = 0, n = lp.count(); i < n; ++i)
+    for (int i = 0, n = lp.size(); i < n; ++i)
         if (lp[i].isMutable)
             propscount++;
 
@@ -432,7 +432,7 @@ void KoDocumentSectionDelegate::drawIcons(QPainter *p, const QStyleOptionViewIte
         p->translate(r.left(), r.top());
         int x = 0;
         Model::PropertyList lp = index.data(Model::PropertiesRole).value<Model::PropertyList>();
-        for (int i = 0, n = lp.count(); i < n; ++i) {
+        for (int i = 0, n = lp.size(); i < n; ++i) {
             if (lp[i].isMutable) {
                 QIcon icon = lp[i].state.toBool() ? lp[i].onIcon : lp[i].offIcon;
                 p->drawPixmap(x, 0, icon.pixmap(option.decorationSize, (option.state & QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled));

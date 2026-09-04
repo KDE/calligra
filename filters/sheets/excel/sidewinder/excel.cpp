@@ -1842,7 +1842,7 @@ void TxORecord::setData(unsigned size, const unsigned char *data, const unsigned
 
             FormatFont font = m_workbook->font(ifnt);
             Q_ASSERT(!font.isNull());
-            format.setFontFamily(font.fontFamily());
+            format.setFontFamilies({font.fontFamily()});
             format.setFontPointSize(font.fontSize());
             format.setForeground(QBrush(font.color()));
             format.setFontWeight(font.bold() ? QFont::Bold : QFont::Normal);

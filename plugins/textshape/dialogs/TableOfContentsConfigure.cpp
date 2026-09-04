@@ -85,8 +85,8 @@ void TableOfContentsConfigure::setDisplay()
     ui.useStyles->setCheckState(m_tocInfo->m_useIndexSourceStyles ? Qt::Checked : Qt::Unchecked);
 
     connect(ui.lineEditTitle, &QLineEdit::textChanged, this, &TableOfContentsConfigure::titleTextChanged);
-    connect(ui.useOutline, &QCheckBox::stateChanged, this, &TableOfContentsConfigure::useOutline);
-    connect(ui.useStyles, &QCheckBox::stateChanged, this, &TableOfContentsConfigure::useIndexSourceStyles);
+    connect(ui.useOutline, &QCheckBox::checkStateChanged, this, &TableOfContentsConfigure::useOutline);
+    connect(ui.useStyles, &QCheckBox::checkStateChanged, this, &TableOfContentsConfigure::useIndexSourceStyles);
 
     m_tocEntryStyleModel = new TableOfContentsEntryModel(KoTextDocument(m_textEditor->document()).styleManager(), m_tocInfo);
     connect(m_tocEntryStyleModel, &TableOfContentsEntryModel::tocEntryDataChanged, this, &TableOfContentsConfigure::updatePreview);
@@ -161,8 +161,8 @@ void TableOfContentsConfigure::updatePreview()
 void TableOfContentsConfigure::cleanUp()
 {
     disconnect(ui.lineEditTitle, &QLineEdit::textChanged, this, &TableOfContentsConfigure::titleTextChanged);
-    disconnect(ui.useOutline, &QCheckBox::stateChanged, this, &TableOfContentsConfigure::useOutline);
-    disconnect(ui.useStyles, &QCheckBox::stateChanged, this, &TableOfContentsConfigure::useIndexSourceStyles);
+    disconnect(ui.useOutline, &QCheckBox::checkStateChanged, this, &TableOfContentsConfigure::useOutline);
+    disconnect(ui.useStyles, &QCheckBox::checkStateChanged, this, &TableOfContentsConfigure::useIndexSourceStyles);
 
     disconnect(this, &QDialog::accepted, this, &TableOfContentsConfigure::save);
     disconnect(this, &QDialog::rejected, this, &TableOfContentsConfigure::cleanUp);

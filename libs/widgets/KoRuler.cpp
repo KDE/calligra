@@ -706,7 +706,7 @@ KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint &pos,
 
 int KoRulerPrivate::hotSpotIndex(const QPoint &pos)
 {
-    for (int counter = 0; counter < hotspots.count(); counter++) {
+    for (int counter = 0; counter < hotspots.size(); counter++) {
         bool hit;
         if (orientation == Qt::Horizontal)
             hit = qAbs(viewConverter->documentToViewX(hotspots[counter].position) - pos.x() + offset) < 3;
@@ -975,7 +975,7 @@ void KoRuler::mousePressEvent(QMouseEvent *ev)
     d->tabMoved = false;
     d->selected = KoRulerPrivate::None;
     if (ev->button() == Qt::RightButton && !d->popupActions.isEmpty())
-        QMenu::exec(d->popupActions, ev->globalPos());
+        QMenu::exec(d->popupActions, ev->globalPosition().toPoint());
     if (ev->button() != Qt::LeftButton) {
         ev->ignore();
         return;
@@ -1025,7 +1025,7 @@ void KoRuler::mousePressEvent(QMouseEvent *ev)
         d->tabs.append(t);
         d->selectOffset = 0;
         d->selected = KoRulerPrivate::Tab;
-        d->currentIndex = d->tabs.count() - 1;
+        d->currentIndex = d->tabs.size() - 1;
         d->originalIndex = -1; // new!
         update();
     }
@@ -1120,7 +1120,7 @@ void KoRuler::mouseMoveEvent(QMouseEvent *ev)
         d->tabMoved = true;
         if (d->currentIndex < 0) { // tab is deleted.
             if (ev->pos().y() < height()) { // reinstante it.
-                d->currentIndex = d->tabs.count();
+                d->currentIndex = d->tabs.size();
                 d->tabs.append(d->deletedTab);
             } else {
                 break;
@@ -1205,7 +1205,7 @@ void KoRuler::clearHotSpots()
 
 void KoRuler::setHotSpot(qreal position, int id)
 {
-    uint hotspotCount = d->hotspots.count();
+    uint hotspotCount = d->hotspots.size();
     for (uint i = 0; i < hotspotCount; ++i) {
         KoRulerPrivate::HotSpotData &hs = d->hotspots[i];
         if (hs.id == id) {

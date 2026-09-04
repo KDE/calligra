@@ -88,7 +88,7 @@ public:
     Operator asOperator() const;
 
 private:
-    Type m_type; ///< the token type
+    Type m_type = Type::TypeUnknown; ///< the token type
     QString m_text; ///< the token text representation
     int m_position; ///< the tokens position
 };
@@ -177,7 +177,7 @@ private:
 
     bool m_valid; ///< flag that shows if function is valid, i.e the function was compiled successfully
     bool m_compiled; ///< flag that shows if function was compiled
-    Error m_error; ///< the last occurred error
+    Error m_error = Error::ErrorNone; ///< the last occurred error
     QString m_text; ///< the formula text representation
     QList<QVariant> m_constants; ///< constant values
     QList<Opcode> m_codes; ///< the compiled byte code

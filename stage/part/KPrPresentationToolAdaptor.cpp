@@ -42,7 +42,7 @@ void KPrPresentationToolAdaptor::highlightPresentation(int pointx, int pointy)
         }
 
         QPoint point(pointx, pointy);
-        QMouseEvent event(QEvent::MouseMove, point, Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
+        QMouseEvent event(QEvent::MouseMove, point, point, Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
 
         m_tool->strategy()->widget()->receiveMouseMoveEvent(&event);
     }
@@ -59,7 +59,7 @@ void KPrPresentationToolAdaptor::startDrawPresentation(int pointx, int pointy, i
         }
 
         QPoint point(pointx, pointy);
-        QMouseEvent event(QEvent::MouseButtonPress, point, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QMouseEvent event(QEvent::MouseButtonPress, point, point, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
 
         m_tool->strategy()->widget()->receiveMousePressEvent(&event);
     }
@@ -69,7 +69,7 @@ void KPrPresentationToolAdaptor::drawOnPresentation(int pointx, int pointy)
 {
     if (m_viewModePresentation.isActivated() && dynamic_cast<KPrPresentationDrawStrategy *>(m_tool->strategy())) {
         QPoint point(pointx, pointy);
-        QMouseEvent event(QEvent::MouseMove, point, Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
+        QMouseEvent event(QEvent::MouseMove, point, point, Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
 
         m_tool->strategy()->widget()->receiveMouseMoveEvent(&event);
     }
@@ -79,7 +79,7 @@ void KPrPresentationToolAdaptor::stopDrawPresentation()
 {
     if (m_viewModePresentation.isActivated()) {
         QPoint point(0, 0);
-        QMouseEvent event(QEvent::MouseButtonRelease, point, Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
+        QMouseEvent event(QEvent::MouseButtonRelease, point, point, Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
 
         m_tool->strategy()->widget()->receiveMouseReleaseEvent(&event);
     }

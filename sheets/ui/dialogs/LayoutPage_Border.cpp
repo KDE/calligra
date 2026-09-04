@@ -769,7 +769,7 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
     BorderButton *horizontal = borderButtons[BorderType_Horizontal];
 
     QRect rect(OFFSETX, OFFSETY - 8, area->width() - OFFSETX, OFFSETY + 8);
-    if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
+    if (rect.contains(QPoint(_ev->position().x(), _ev->position().y()))) {
         if (((top->getPenWidth() != preview->getPenWidth()) || (top->getColor() != currentColor) || (top->getPenStyle() != preview->getPenStyle()))
             && top->isChecked()) {
             top->setPenWidth(preview->getPenWidth());
@@ -780,7 +780,7 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
             invertState(top);
     }
     rect.setCoords(OFFSETX, area->height() - OFFSETY - 8, area->width() - OFFSETX, area->height() - OFFSETY + 8);
-    if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
+    if (rect.contains(QPoint(_ev->position().x(), _ev->position().y()))) {
         if (((bottom->getPenWidth() != preview->getPenWidth()) || (bottom->getColor() != currentColor) || (bottom->getPenStyle() != preview->getPenStyle()))
             && bottom->isChecked()) {
             bottom->setPenWidth(preview->getPenWidth());
@@ -792,7 +792,7 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
     }
 
     rect.setCoords(OFFSETX - 8, OFFSETY, OFFSETX + 8, area->height() - OFFSETY);
-    if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
+    if (rect.contains(QPoint(_ev->position().x(), _ev->position().y()))) {
         if (((left->getPenWidth() != preview->getPenWidth()) || (left->getColor() != currentColor) || (left->getPenStyle() != preview->getPenStyle()))
             && left->isChecked()) {
             left->setPenWidth(preview->getPenWidth());
@@ -803,7 +803,7 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
             invertState(left);
     }
     rect.setCoords(area->width() - OFFSETX - 8, OFFSETY, area->width() - OFFSETX + 8, area->height() - OFFSETY);
-    if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
+    if (rect.contains(QPoint(_ev->position().x(), _ev->position().y()))) {
         if (((right->getPenWidth() != preview->getPenWidth()) || (right->getColor() != currentColor) || (right->getPenStyle() != preview->getPenStyle()))
             && right->isChecked()) {
             right->setPenWidth(preview->getPenWidth());
@@ -817,12 +817,12 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
     // don't work because I don't know how create a rectangle
     // for diagonal
     /*rect.setCoords(OFFSETX,OFFSETY,XLEN-OFFSETX,YHEI-OFFSETY);
-    if (rect.contains(QPoint(_ev->x(),_ev->y())))
+    if (rect.contains(QPoint(_ev->position().x(),_ev->position().y())))
             {
              invertState(fallDiagonal);
             }
     rect.setCoords(OFFSETX,YHEI-OFFSETY,XLEN-OFFSETX,OFFSETY);
-    if (rect.contains(QPoint(_ev->x(),_ev->y())))
+    if (rect.contains(QPoint(_ev->position().x(),_ev->position().y())))
             {
              invertState(goUpDiagonal);
             } */
@@ -830,7 +830,7 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
     if (m_multicell) {
         rect.setCoords(area->width() / 2 - 8, OFFSETY, area->width() / 2 + 8, area->height() - OFFSETY);
 
-        if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
+        if (rect.contains(QPoint(_ev->position().x(), _ev->position().y()))) {
             if (((vertical->getPenWidth() != preview->getPenWidth()) || (vertical->getColor() != currentColor)
                  || (vertical->getPenStyle() != preview->getPenStyle()))
                 && vertical->isChecked()) {
@@ -843,7 +843,7 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
         }
 
         rect.setCoords(OFFSETX, area->height() / 2 - 8, area->width() - OFFSETX, area->height() / 2 + 8);
-        if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
+        if (rect.contains(QPoint(_ev->position().x(), _ev->position().y()))) {
             if (((horizontal->getPenWidth() != preview->getPenWidth()) || (horizontal->getColor() != currentColor)
                  || (horizontal->getPenStyle() != preview->getPenStyle()))
                 && horizontal->isChecked()) {

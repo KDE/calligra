@@ -166,7 +166,7 @@ void Format::generate(QTextStream& out, Column* col, Row* row)
         out << "|";
 }
 
-void Format::generateTextFormat(QTextStream& out, QString text)
+void Format::generateTextFormat(QTextStream& out, const QString &text)
 {
     if (getPenStyle() > 0) {
         float red   = ((float) getPenColor().red()) / 255;

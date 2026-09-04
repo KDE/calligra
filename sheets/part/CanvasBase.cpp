@@ -210,13 +210,13 @@ void CanvasBase::mousePressed(KoPointerEvent *event)
         documentPosition = viewConverter()->viewToDocument(position) + offset;
         /*XXX TODO
         debugSheets << "----------------------------";
-        debugSheets << "event->pos():" << event->pos();
+        debugSheets << "event->position().toPoint():" << event->position().toPoint();
         debugSheets << "event->globalPos():" << event->globalPos();
         debugSheets << "position:" << position;
         debugSheets << "offset:" << offset;
         debugSheets << "documentPosition:" << documentPosition;
         event = new QMouseEvent(QEvent::MouseButtonPress, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
-        debugSheets << "newEvent->pos():" << event->pos();
+        debugSheets << "newEvent->position().toPoint():" << event->position().toPoint();
         debugSheets << "newEvent->globalPos():" << event->globalPos();*/
     }
 
@@ -320,7 +320,7 @@ void CanvasBase::tabletEvent(QTabletEvent *e)
 {
     // flake
     if (d->toolProxy)
-        d->toolProxy->tabletEvent(e, viewConverter()->viewToDocument(e->pos() + offset()));
+        d->toolProxy->tabletEvent(e, viewConverter()->viewToDocument(e->position().toPoint() + offset()));
 }
 
 QVariant CanvasBase::inputMethodQuery(Qt::InputMethodQuery query) const

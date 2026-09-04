@@ -49,7 +49,8 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject &
     QTextDocument *document = const_cast<QTextDocument *>(_document);
     int posInDocument = _posInDocument;
     bool checkBackwards = true;
-    QTextFrame::iterator startIt, endIt;
+    int startPosition = -1;
+    int endPosition = -1;
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(document->documentLayout());
     KoTextDocumentLayout *ref = lay->referencedLayout();
@@ -69,14 +70,11 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject &
             KoTextPage *p = a->page();
             if (!p || p->pageNumber() != pagenumber)
                 continue;
-            startIt = a->startTextFrameIterator();
-            endIt = a->endTextFrameIterator();
-            if (startIt.currentBlock().isValid())
-                posInDocument = startIt.currentBlock().position();
-            else if (startIt.currentFrame())
-                posInDocument = startIt.currentFrame()->firstCursorPosition().position();
-            else // abort
+            startPosition = a->startPosition();
+            endPosition = a->endPosition();
+            if (startPosition < 0)
                 break;
+            posInDocument = startPosition;
             document = ref->document();
             checkBackwards = false; // check forward
             break;
@@ -123,13 +121,9 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject &
 
             // If we search forwards and reached the end of the page then we continue searching backwards
             // at the beginning of the page.
-            if (!block.isValid() || (endIt.currentBlock().isValid() && block.position() > endIt.currentBlock().position())
-                || (endIt.currentFrame() && block.position() > endIt.currentFrame()->firstCursorPosition().block().position())) {
-                if (startIt.currentBlock().isValid())
-                    block = startIt.currentBlock();
-                else if (startIt.currentFrame())
-                    block = startIt.currentFrame()->firstCursorPosition().block();
-                else // abort
+            if (!block.isValid() || block.position() > endPosition) {
+                block = document->findBlock(startPosition);
+                if (!block.isValid())
                     break;
                 checkBackwards = true;
             }

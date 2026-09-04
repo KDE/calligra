@@ -27,7 +27,8 @@ bool KPrAnimationGroupProxyModel::setCurrentIndex(const QModelIndex &index)
     int currentGroup = sourceModel()->data(currentIndex).toInt();
     if (currentGroup != m_currentGroup) {
         m_currentGroup = currentGroup;
-        invalidateFilter();
+        beginFilterChange();
+        endFilterChange();
         revert();
         return true;
     }
@@ -36,6 +37,7 @@ bool KPrAnimationGroupProxyModel::setCurrentIndex(const QModelIndex &index)
 
 void KPrAnimationGroupProxyModel::forceUpdateModel()
 {
-    invalidateFilter();
+    beginFilterChange();
+    endFilterChange();
     revert();
 }

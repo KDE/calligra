@@ -188,7 +188,7 @@ public:
     {
         _alignY = a;
     }
-    void setBgColor(QColor b)
+    void setBgColor(const QColor &b)
     {
         _bgColor = b;
     }
@@ -204,9 +204,9 @@ public:
     {
         _angle = a;
     }
-    void setBrushColor(QString bc)
+    void setBrushColor(const QString &bc)
     {
-        _brushColor.setNamedColor(bc);
+        _brushColor = QColor::fromString(bc);
     }
     void setBrushStyle(int bs)
     {
@@ -230,9 +230,9 @@ public:
     {
         _penStyle = ps;
     }
-    void setPenColor(QString pc)
+    void setPenColor(const QString &pc)
     {
-        _penColor.setNamedColor(pc);
+        _penColor = QColor::fromString(pc);
     }
 
     /* font */
@@ -273,7 +273,7 @@ public:
     /**
      * Generate the text cell format (color and font).
      */
-    void generateTextFormat(QTextStream &out, QString text);
+    void generateTextFormat(QTextStream &out, const QString &text);
 
     /**
      * Generate the color format for a column or a row.

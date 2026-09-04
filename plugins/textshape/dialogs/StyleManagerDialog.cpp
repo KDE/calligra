@@ -49,13 +49,12 @@ void StyleManagerDialog::accept()
 void StyleManagerDialog::reject()
 {
     if (m_styleManagerWidget->unappliedStyleChanges()) {
-        int ans = QMessageBox::warning(this,
-                                       i18n("Save Changes"),
-                                       i18n("You have changes that are not applied. "
-                                            "What do you want to do with those changes?"),
-                                       QMessageBox::Apply,
-                                       QMessageBox::Discard,
-                                       QMessageBox::Cancel);
+        QMessageBox::StandardButton ans = QMessageBox::warning(this,
+                                                               i18n("Save Changes"),
+                                                               i18n("You have changes that are not applied. "
+                                                                    "What do you want to do with those changes?"),
+                                                               QMessageBox::Apply | QMessageBox::Discard | QMessageBox::Cancel,
+                                                               QMessageBox::Cancel);
         switch (ans) {
         case QMessageBox::Apply:
             if (m_styleManagerWidget->checkUniqueStyleName()) {
@@ -66,6 +65,8 @@ void StyleManagerDialog::reject()
         case QMessageBox::Discard:
             break;
         case QMessageBox::Cancel:
+            return;
+        default:
             return;
         }
     }

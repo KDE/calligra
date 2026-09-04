@@ -96,15 +96,15 @@ void KoPACanvas::paintEvent(QPaintEvent *event)
 
 void KoPACanvas::tabletEvent(QTabletEvent *event)
 {
-    koPAView()->viewMode()->tabletEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + documentOffset())));
+    koPAView()->viewMode()->tabletEvent(event, viewConverter()->viewToDocument(widgetToView(event->position().toPoint() + documentOffset())));
 }
 
 void KoPACanvas::mousePressEvent(QMouseEvent *event)
 {
-    koPAView()->viewMode()->mousePressEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + documentOffset())));
+    koPAView()->viewMode()->mousePressEvent(event, viewConverter()->viewToDocument(widgetToView(event->position().toPoint() + documentOffset())));
 
     if (!event->isAccepted() && event->button() == Qt::RightButton) {
-        showContextMenu(event->globalPos(), toolProxy()->popupActionList());
+        showContextMenu(event->globalPosition().toPoint(), toolProxy()->popupActionList());
     }
 
     event->setAccepted(true);
@@ -112,17 +112,17 @@ void KoPACanvas::mousePressEvent(QMouseEvent *event)
 
 void KoPACanvas::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    koPAView()->viewMode()->mouseDoubleClickEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + documentOffset())));
+    koPAView()->viewMode()->mouseDoubleClickEvent(event, viewConverter()->viewToDocument(widgetToView(event->position().toPoint() + documentOffset())));
 }
 
 void KoPACanvas::mouseMoveEvent(QMouseEvent *event)
 {
-    koPAView()->viewMode()->mouseMoveEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + documentOffset())));
+    koPAView()->viewMode()->mouseMoveEvent(event, viewConverter()->viewToDocument(widgetToView(event->position().toPoint() + documentOffset())));
 }
 
 void KoPACanvas::mouseReleaseEvent(QMouseEvent *event)
 {
-    koPAView()->viewMode()->mouseReleaseEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + documentOffset())));
+    koPAView()->viewMode()->mouseReleaseEvent(event, viewConverter()->viewToDocument(widgetToView(event->position().toPoint() + documentOffset())));
 }
 
 void KoPACanvas::keyPressEvent(QKeyEvent *event)

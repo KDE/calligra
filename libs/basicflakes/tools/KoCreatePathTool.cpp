@@ -466,7 +466,7 @@ QList<QPointer<QWidget>> KoCreatePathTool::createOptionWidgets()
     connect(angleEdit, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int v) {
         d_func()->angleDeltaChanged(v);
     });
-    connect(angleSnap, QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int v) {
+    connect(angleSnap, &QCheckBox::checkStateChanged, this, [this](int v) {
         d_func()->angleSnapChanged(v);
     });
 

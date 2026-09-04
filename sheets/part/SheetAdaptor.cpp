@@ -167,7 +167,7 @@ bool SheetAdaptor::setValue(int x, int y, const QVariant &value)
     if (!cell)
         return false;
     Calligra::Sheets::Value v = cell.value();
-    switch (value.type()) {
+    switch (value.typeId()) {
     case QVariant::Bool:
         v = Value(value.toBool());
         break;

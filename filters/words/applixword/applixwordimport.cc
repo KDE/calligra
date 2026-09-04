@@ -758,7 +758,7 @@ APPLIXWORDImport::readHeader(QTextStream &stream)
                               QString("The Applixword header is not correct. "
                                       "May be it is not an applixword file! <BR>"
                                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),
-                              "Okay");
+                              QMessageBox::Ok);
         return false;
     } else return true;
 }

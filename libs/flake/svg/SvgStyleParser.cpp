@@ -290,7 +290,7 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
         color = d->context.currentGC()->currentColor;
     } else {
         // QColor understands #RRGGBB and svg color names
-        color.setNamedColor(s.trimmed());
+        color = QColor::fromString(s.trimmed());
     }
 
     return true;
@@ -342,7 +342,7 @@ void SvgStyleParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
             stops.append(QPair<qreal, QColor>(offset, c));
         }
     }
-    if (stops.count())
+    if (stops.size())
         gradient->setStops(stops);
 }
 
@@ -368,11 +368,11 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
     // collect all css style attributes
     foreach (const QString &style, cssStyles) {
         const QStringList substyles = style.split(';', Qt::SkipEmptyParts);
-        if (!substyles.count())
+        if (!substyles.size())
             continue;
         for (QStringList::ConstIterator it = substyles.begin(); it != substyles.end(); ++it) {
             QStringList substyle = it->split(':');
-            if (substyle.count() != 2)
+            if (substyle.size() != 2)
                 continue;
             QString command = substyle[0].trimmed();
             QString params = substyle[1].trimmed();

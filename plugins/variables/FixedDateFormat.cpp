@@ -65,7 +65,7 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
 
     widget.formatButton->setIcon(koIcon("list-add"));
 
-    connect(widget.custom, &QCheckBox::stateChanged, this, &FixedDateFormat::customClicked);
+    connect(widget.custom, &QCheckBox::checkStateChanged, this, &FixedDateFormat::customClicked);
     connect(widget.formatList, &QListWidget::itemPressed, this, &FixedDateFormat::listClicked);
     connect(widget.correction, &QSpinBox::valueChanged, this, &FixedDateFormat::offsetChanged);
     connect(widget.formatButton, &QAbstractButton::clicked, this, &FixedDateFormat::insertCustomButtonPressed);

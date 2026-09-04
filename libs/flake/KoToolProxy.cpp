@@ -71,7 +71,7 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
     widgetScrollPoint += moved;
 
     QPointF documentPoint = parent->widgetToDocument(widgetScrollPoint);
-    QMouseEvent event(QEvent::MouseMove, widgetScrollPoint, Qt::LeftButton, Qt::LeftButton, Qt::KeyboardModifiers());
+    QMouseEvent event(QEvent::MouseMove, widgetScrollPoint, widgetScrollPoint, Qt::LeftButton, Qt::LeftButton, Qt::KeyboardModifiers());
     KoPointerEvent ev(&event, documentPoint);
     activeTool->mouseMoveEvent(&ev);
 }
@@ -163,8 +163,8 @@ void KoToolProxy::touchEvent(QTouchEvent *event)
     QVector<KoTouchPoint> touchPoints;
 
     bool isPrimary = true;
-    foreach (QTouchEvent::TouchPoint p, event->touchPoints()) {
-        QPointF docPoint = widgetToDocument(p.screenPos());
+    foreach (QTouchEvent::TouchPoint p, event->points()) {
+        QPointF docPoint = widgetToDocument(p.globalPosition());
         if (isPrimary) {
             point = docPoint;
             isPrimary = false;
@@ -172,7 +172,7 @@ void KoToolProxy::touchEvent(QTouchEvent *event)
         KoTouchPoint touchPoint;
         touchPoint.touchPoint = p;
         touchPoint.point = point;
-        touchPoint.lastPoint = widgetToDocument(p.lastNormalizedPos());
+        touchPoint.lastPoint = widgetToDocument(p.globalLastPosition());
         touchPoints << touchPoint;
     }
 
@@ -228,7 +228,7 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
         event->accept();
     }
 
-    KoInputDevice id(event->device()->type(), event->pointerType(), event->uniqueId());
+    KoInputDevice id(event->device()->type(), event->pointerType(), event->pointingDevice()->uniqueId().numericId());
     KoToolManager::instance()->priv()->switchInputDevice(id);
 
     KoPointerEvent ev(event, point);
@@ -373,8 +373,8 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
     if (d->activeTool) {
         d->activeTool->mouseReleaseEvent(&ev);
 
-        if (!event->isAccepted() && event->button() == Qt::LeftButton && event->modifiers() == 0 && qAbs(d->mouseDownPoint.x() - event->x()) < 5
-            && qAbs(d->mouseDownPoint.y() - event->y()) < 5) {
+        if (!event->isAccepted() && event->button() == Qt::LeftButton && event->modifiers() == 0 && qAbs(d->mouseDownPoint.x() - event->position().x()) < 5
+            && qAbs(d->mouseDownPoint.y() - event->position().y()) < 5) {
             // we potentially will change the selection
             Q_ASSERT(d->activeTool->canvas());
             KoShapeManager *manager = d->activeTool->canvas()->shapeManager();
@@ -407,8 +407,8 @@ void KoToolProxy::mouseReleaseEvent(KoPointerEvent *event)
     if (d->activeTool) {
         d->activeTool->mouseReleaseEvent(event);
 
-        if (!event->isAccepted() && event->button() == Qt::LeftButton && event->modifiers() == 0 && qAbs(d->mouseDownPoint.x() - event->x()) < 5
-            && qAbs(d->mouseDownPoint.y() - event->y()) < 5) {
+        if (!event->isAccepted() && event->button() == Qt::LeftButton && event->modifiers() == 0 && qAbs(d->mouseDownPoint.x() - event->position().x()) < 5
+            && qAbs(d->mouseDownPoint.y() - event->position().y()) < 5) {
             // we potentially will change the selection
             Q_ASSERT(d->activeTool->canvas());
             KoShapeManager *manager = d->activeTool->canvas()->shapeManager();

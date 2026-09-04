@@ -43,7 +43,7 @@ void DependencyManager::Private::dump() const
     for (SheetBase *sheet : consumers.keys()) {
         const QList<QPair<QRectF, CellBase>> pairs = consumers[sheet]->intersectingPairs(QRect(1, 1, KS_colMax, KS_rowMax)).values();
         QMultiHash<QString, QString> table;
-        for (int i = 0; i < pairs.count(); ++i) {
+        for (int i = 0; i < pairs.size(); ++i) {
             Region tmpRange(pairs[i].first.toRect(), sheet);
             table.insert(tmpRange.name(), pairs[i].second.name());
         }
@@ -55,7 +55,7 @@ void DependencyManager::Private::dump() const
 
     for (const CellBase &cell : depths.keys()) {
         QString cellName = cell.name();
-        while (cellName.count() < 4)
+        while (cellName.size() < 4)
             cellName.prepend(' ');
         debugSheetsFormula << "depth(" << cellName << " ) =" << depths[cell];
     }
@@ -234,7 +234,7 @@ Calligra::Sheets::Region DependencyManager::reduceToProvidingRegion(const Region
             continue;
 
         pairs = cit.value()->intersectingPairs((*it)->rect()).values();
-        for (int i = 0; i < pairs.count(); ++i)
+        for (int i = 0; i < pairs.size(); ++i)
             providingRegion.add(pairs[i].first.toRect() & (*it)->rect(), sheet);
     }
     return providingRegion;
@@ -547,7 +547,7 @@ void DependencyManager::Private::computeDependencies(const CellBase &cell, const
     int inAreasCall = 0;
     int inReferenceMetadataCall = 0;
     Region providingRegion;
-    for (int i = 0; i < tokens.count(); i++) {
+    for (int i = 0; i < tokens.size(); i++) {
         const Token &token = tokens[i];
 
         if (inReferenceMetadataCall) {
@@ -588,7 +588,7 @@ void DependencyManager::Private::computeDependencies(const CellBase &cell, const
                 Region region = sheet->map()->regionFromName(token.text(), sheet);
                 if (region.isValid()) {
                     if (isNamedArea) {
-                        if ((i > 0 && tokens[i - 1].isOperator()) || (i < tokens.count() - 1 && tokens[i + 1].isOperator())) {
+                        if ((i > 0 && tokens[i - 1].isOperator()) || (i < tokens.size() - 1 && tokens[i + 1].isOperator())) {
                             // TODO: this check is not quite correct, to really properly determine if the entire range is referenced
                             // or just a single cell we would need to actually have the compile formula, not just the tokenized one
                             // basically this is the same logic as Formula::Private::valueOrElement

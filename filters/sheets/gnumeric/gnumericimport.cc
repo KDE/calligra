@@ -719,13 +719,13 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
 QString GNUMERICFilter::convertVars(QString const & str, Sheet * table) const
 {
     QString result(str);
-    uint count = list1.count();
+    uint count = list1.size();
     if (count == 0) {
         list1 << "&[TAB]" << "&[DATE]" << "&[PAGE]"
         << "&[PAGES]" << "&[TIME]" << "&[FILE]";
         list2 << "<sheet>" << "<date>" << "<page>"
         << "<pages>" << "<time>" << "<file>";
-        count = list1.count();
+        count = list1.size();
     }
 
     for (uint i = 0; i < count; ++i) {
@@ -1672,12 +1672,11 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     }
 
     QDomDocument doc;
-    QString errorMsg;
-    int errorLine, errorColumn;
-    if (!doc.setContent(in, true, &errorMsg, &errorLine, &errorColumn)) {
+    const QDomDocument::ParseResult result = doc.setContent(in, QDomDocument::ParseOption::UseNamespaceProcessing);
+    if (!result) {
         qDebug() << "Parsing error in " << from << "! Aborting!" << Qt::endl
-        << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
-        << " Error message: " << errorMsg << Qt::endl;
+        << " In line: " << result.errorLine << ", column: " << result.errorColumn << Qt::endl
+        << " Error message: " << result.errorMessage << Qt::endl;
         in->close();
         return KoFilter::ParsingError;
     }

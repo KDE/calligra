@@ -26,7 +26,7 @@ EditCell::~EditCell() = default;
 QAction *EditCell::createAction()
 {
     QAction *res = CellAction::createAction();
-    res->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_M));
+    res->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL | Qt::Key_M));
     return res;
 }
 

@@ -704,7 +704,7 @@ void KWView::setFullscreenMode(bool status)
     // out, not layouting)
     const QList<KoShape *> selection = m_canvas->shapeManager()->selection()->selectedShapes();
     m_canvas->shapeManager()->selection()->deselectAll();
-    if (selection.count() > 0)
+    if (selection.size() > 0)
         m_canvas->shapeManager()->selection()->select(selection.at(0));
     KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
 }
@@ -743,7 +743,7 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
     m_gui->setCursor(Qt::ArrowCursor);
 
     // Handle status bar and horizontal scroll bar.
-    if (e->y() >= (m_gui->size().height() - statusBar()->size().height())) {
+    if (e->position().y() >= (m_gui->size().height() - statusBar()->size().height())) {
         mainWindow()->statusBar()->setVisible(true);
         static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     } else {
@@ -753,7 +753,7 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
 
     // Handle vertical scroll bar.
     QScrollBar *vsb = static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->verticalScrollBar();
-    if (e->x() >= (m_gui->size().width() - vsb->size().width() - 10)) {
+    if (e->position().x() >= (m_gui->size().width() - vsb->size().width() - 10)) {
         static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     } else {
         static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

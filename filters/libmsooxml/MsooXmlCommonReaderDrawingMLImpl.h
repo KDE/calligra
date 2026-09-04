@@ -16,6 +16,7 @@
 #include <QRandomGenerator>
 #include <QTime>
 #include <math.h>
+#include <memory>
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626
@@ -1837,16 +1838,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         }
 
         KoStore *storeout = m_context->import->outputStore();
-        QScopedPointer<XlsxXmlChartReaderContext> context(new XlsxXmlChartReaderContext(storeout, chartWriter));
+        std::unique_ptr<XlsxXmlChartReaderContext> context(new XlsxXmlChartReaderContext(storeout, chartWriter));
         XlsxXmlChartReader reader(this);
-        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context.data());
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context.get());
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
             return result;
         }
 
 #if defined(XLSXXMLDRAWINGREADER_CPP)
-        m_currentDrawingObject->setChart(context.take());
+        m_currentDrawingObject->setChart(context.release());
 #else
         chartWriter->saveIndex(body);
 #endif
@@ -1909,11 +1910,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
         const QString datafile = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
         const QString layoutfile = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
         /*         const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs); */
-        QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
+        std::unique_ptr<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
 
         // first read the data-model
         MSOOXML::MsooXmlDiagramReader dataReader(this);
-        const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
+        const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.get());
         if (dataReaderResult != KoFilter::OK) {
             raiseError(dataReader.errorString());
             return dataReaderResult;
@@ -1921,7 +1922,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
 
         // then read the layout definition
         MSOOXML::MsooXmlDiagramReader layoutReader(this);
-        const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
+        const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.get());
         if (layoutReaderResult != KoFilter::OK) {
             raiseError(layoutReader.errorString());
             return layoutReaderResult;
@@ -1933,7 +1934,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
 
         // and finally start the process that will produce the ODF
 #if defined(XLSXXMLDRAWINGREADER_CPP)
-        m_currentDrawingObject->setDiagram(context.take());
+        m_currentDrawingObject->setDiagram(context.release());
 #else
         context->saveIndex(
             body,

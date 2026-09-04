@@ -125,7 +125,7 @@ QString Odf::loadRegion(const QString &expression)
     // NOTE Stefan: As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
     if (expression[i] == '$')
         ++i;
-    while (i < expression.count()) {
+    while (i < expression.size()) {
         switch (state) {
         case Start: {
             if (expression[i] == '\'') { // quoted sheet name or named area
@@ -144,7 +144,7 @@ QString Odf::loadRegion(const QString &expression)
                 result.append(':');
                 temp.clear();
                 // NOTE Stefan: As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
-                if (i + 2 < expression.count() && expression[i + 1] == '$' && expression[i + 2] != '.')
+                if (i + 2 < expression.size() && expression[i + 1] == '$' && expression[i + 2] != '.')
                     ++i;
             } else if (expression[i] == ' ') { // range separator
                 result.append(temp);
@@ -159,7 +159,7 @@ QString Odf::loadRegion(const QString &expression)
             temp.append(expression[i]);
             if (expression[i] == '\'') {
                 // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i + 1] == '\'')
+                if (i + 1 < expression.size() && expression[i + 1] == '\'')
                     ++i; // eat it
                 else // the end
                     state = Start;
@@ -182,7 +182,7 @@ QString Odf::saveRegion(const QString &expression)
         InQuotes
     } state = Start;
     int i = 0;
-    while (i < expression.count()) {
+    while (i < expression.size()) {
         switch (state) {
         case Start: {
             if (expression[i] == '\'') {
@@ -192,7 +192,7 @@ QString Odf::saveRegion(const QString &expression)
                 // There has to be a sheet name.
                 if (temp.isEmpty())
                     return expression; // error
-                if (temp.count() > 2 && (temp[0] != '\'' && temp[temp.count() - 1] != '\'')) {
+                if (temp.size() > 2 && (temp[0] != '\'' && temp[temp.size() - 1] != '\'')) {
                     temp.replace('\'', "''");
                     if (temp.contains(' ') || temp.contains('.') || temp.contains(';') || temp.contains('!') || temp.contains('$') || temp.contains(']'))
                         temp = '\'' + temp + '\'';
@@ -222,7 +222,7 @@ QString Odf::saveRegion(const QString &expression)
             temp.append(expression[i]);
             if (expression[i] == '\'') {
                 // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i + 1] == '\'')
+                if (i + 1 < expression.size() && expression[i + 1] == '\'')
                     ++i; // eat it
                 else // the end
                     state = Start;

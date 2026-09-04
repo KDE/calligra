@@ -1052,7 +1052,7 @@ void View::shapeSelectionChanged()
     d->actions->shapeAnchor->setCurrentAction(anchoredToCell ? i18n("Cell") : i18n("Page"));
 
     // go on with the remaining shapes
-    for (int i = 1; i < shapes.count(); ++i) {
+    for (int i = 1; i < shapes.size(); ++i) {
         shape = shapes[i];
         data = dynamic_cast<ShapeApplicationData *>(shape->applicationData());
         Q_ASSERT(data);
@@ -1150,7 +1150,7 @@ void View::updateReadWrite(bool readwrite)
     Q_EMIT documentReadWriteToggled(readwrite);
 
     const QList<QAction *> actions = actionCollection()->actions();
-    for (int i = 0; i < actions.count(); ++i) {
+    for (int i = 0; i < actions.size(); ++i) {
         // The action collection contains also the flake tool actions. Skip them.
         if (actions[i]->parent() == this)
             actions[i]->setEnabled(readwrite);
@@ -1318,8 +1318,8 @@ void View::moveSheet(unsigned sheet, unsigned target)
 
     QStringList vs = doc()->map()->visibleSheets();
 
-    if (target >= (uint)vs.count())
-        doc()->map()->moveSheet(vs[sheet], vs[vs.count() - 1], false);
+    if (target >= (uint)vs.size())
+        doc()->map()->moveSheet(vs[sheet], vs[vs.size() - 1], false);
     else
         doc()->map()->moveSheet(vs[sheet], vs[target], true);
 
@@ -1411,7 +1411,7 @@ void View::insertSheet()
     doc()->addCommand(command);
     setActiveSheet(t);
 
-    if (doc()->map()->visibleSheets().count() > 1) {
+    if (doc()->map()->visibleSheets().size() > 1) {
         d->actions->deleteSheet->setEnabled(true);
         d->actions->hideSheet->setEnabled(true);
     }
@@ -1428,7 +1428,7 @@ void View::duplicateSheet()
     command->setSheet(activeSheet());
     doc()->addCommand(command);
 
-    if (doc()->map()->visibleSheets().count() > 1) {
+    if (doc()->map()->visibleSheets().size() > 1) {
         d->actions->deleteSheet->setEnabled(true);
         d->actions->hideSheet->setEnabled(true);
     }
@@ -1439,7 +1439,7 @@ void View::hideSheet()
     if (!d->activeSheet)
         return;
 
-    if (doc()->map()->visibleSheets().count() == 1) {
+    if (doc()->map()->visibleSheets().size() == 1) {
         KMessageBox::error(this, i18n("You cannot hide the last visible sheet."));
         return;
     }
@@ -1463,7 +1463,7 @@ void View::sheetHidden(SheetBase *sheet)
     int cur = lst.indexOf(sheet);
     SheetBase *next = nullptr;
     // find the closest unhidden one
-    for (int i = cur + 1; i < lst.count(); ++i) {
+    for (int i = cur + 1; i < lst.size(); ++i) {
         if (lst[i]->isHidden())
             continue;
         next = lst[i];
@@ -1482,7 +1482,7 @@ void View::sheetHidden(SheetBase *sheet)
     if (next)
         d->tabBar->setActiveTab(next->sheetName());
 
-    bool gotTwo = (doc()->map()->visibleSheets().count() > 1);
+    bool gotTwo = (doc()->map()->visibleSheets().size() > 1);
     d->actions->deleteSheet->setEnabled(gotTwo);
     d->actions->hideSheet->setEnabled(gotTwo);
 }
@@ -1491,7 +1491,7 @@ void View::sheetShown(SheetBase * /*sheet*/)
 {
     // damages handle the tabbar update
 
-    bool gotTwo = (doc()->map()->visibleSheets().count() > 1);
+    bool gotTwo = (doc()->map()->visibleSheets().size() > 1);
     d->actions->deleteSheet->setEnabled(gotTwo);
     d->actions->hideSheet->setEnabled(gotTwo);
 }
@@ -1510,7 +1510,7 @@ void View::setShapeAnchoring(const QString &mode)
 {
     const KoSelection *selection = d->canvas->shapeManager()->selection();
     const QList<KoShape *> shapes = selection->selectedShapes(KoFlake::StrippedSelection);
-    for (int i = 0; i < shapes.count(); ++i) {
+    for (int i = 0; i < shapes.size(); ++i) {
         const KoShape *shape = shapes[i];
         ShapeApplicationData *data = dynamic_cast<ShapeApplicationData *>(shape->applicationData());
         Q_ASSERT(data);
@@ -1824,7 +1824,7 @@ void View::resetPrintRange()
 
 void View::deleteSheet()
 {
-    if (doc()->map()->count() <= 1 || (doc()->map()->visibleSheets().count() <= 1)) {
+    if (doc()->map()->count() <= 1 || (doc()->map()->visibleSheets().size() <= 1)) {
         KMessageBox::error(this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet"));
         return;
     }
@@ -2027,7 +2027,7 @@ void View::popupTabBarMenu(const QPoint &_point)
         connect(deleteSheet, &QAction::triggered, this, &View::deleteSheet);
         menu->insertAction(d->actions->hideSheet, deleteSheet);
 
-        bool state = (doc()->map()->visibleSheets().count() > 1);
+        bool state = (doc()->map()->visibleSheets().size() > 1);
         if (d->activeSheet && d->activeSheet->isProtected()) {
             deleteSheet->setEnabled(false);
             d->actions->hideSheet->setEnabled(false);
@@ -2035,7 +2035,7 @@ void View::popupTabBarMenu(const QPoint &_point)
         } else {
             deleteSheet->setEnabled(state);
             d->actions->hideSheet->setEnabled(state);
-            d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
+            d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().size() > 0);
         }
         if (!doc() || !doc()->map() || doc()->map()->isProtected()) {
             insertSheet->setEnabled(false);
@@ -2064,7 +2064,7 @@ void View::addSheet(SheetBase *bsheet)
     // need to use setTabs instead of addTab, as the added sheet may be at a different position
     d->tabBar->setTabs(doc()->map()->visibleSheets());
 
-    const bool state = (doc()->map()->visibleSheets().count() > 1);
+    const bool state = (doc()->map()->visibleSheets().size() > 1);
     d->actions->deleteSheet->setEnabled(state);
     d->actions->hideSheet->setEnabled(state);
 
@@ -2080,7 +2080,7 @@ void View::removeSheet(SheetBase *bsheet)
     Sheet *first = dynamic_cast<Sheet *>(doc()->map()->sheet(0));
     setActiveSheet(first);
 
-    const bool state = (doc()->map()->visibleSheets().count() > 1);
+    const bool state = (doc()->map()->visibleSheets().size() > 1);
     d->actions->deleteSheet->setEnabled(state);
     d->actions->hideSheet->setEnabled(state);
 
@@ -2099,7 +2099,7 @@ void View::updateShowSheetMenu()
         if (d->activeSheet->fullMap()->isProtected())
             d->actions->showSheet->setEnabled(false);
         else
-            d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
+            d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().size() > 0);
     }
 }
 
@@ -2270,7 +2270,7 @@ void View::slotAutoScroll()
 
     if (actuallyDoScroll) {
         pos = canvas()->mapFrom(this, pos);
-        QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
+        QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, pos, canvas()->mapToGlobal(pos), Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
 
         QApplication::postEvent(canvas(), event);
         Q_EMIT autoScroll(scrollDistance);

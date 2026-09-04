@@ -623,9 +623,9 @@ QDomDocument loadDOM(const QString &url)
     f.close();
 
     QDomDocument dom;
-    QString err;
-    if (!dom.setContent(data, true, &err)) {
-        fatal() << err;
+    const QDomDocument::ParseResult result = dom.setContent(data, QDomDocument::ParseOption::UseNamespaceProcessing);
+    if (!result) {
+        fatal() << result.errorMessage;
     }
     return dom;
 }

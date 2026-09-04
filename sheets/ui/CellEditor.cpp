@@ -79,7 +79,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
     Token::Type type;
     // Search the current range the text cursor is positioned to.
     // Determine the subregion start and end, in which the range is located.
-    for (int i = 0; i < tokens.count(); ++i) {
+    for (int i = 0; i < tokens.size(); ++i) {
         token = tokens[i];
         type = token.type();
 
@@ -165,7 +165,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
             case Token::Intersect:
             case Token::Union:
                 // Append new references by pointing behind the last.
-                currentToken = tokens.count();
+                currentToken = tokens.size();
                 regionStart = rangeCounter;
                 regionEnd = rangeCounter - 1; // length = 0
                 currentRange = rangeCounter;
@@ -189,7 +189,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
         case Token::String:
         case Token::Identifier:
         case Token::Error:
-            // currentToken = tokens.count() - 1; // already set
+            // currentToken = tokens.size() - 1; // already set
             // Set the active sub-region start to the end of the selection
             // with a length of 0, which results in appending a new range
             // to the selection on calling Selection::initialize() or
@@ -200,7 +200,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
             break;
         case Token::Cell:
         case Token::Range:
-            // currentToken = tokens.count() - 1; // already set
+            // currentToken = tokens.size() - 1; // already set
             // Set the last range as active one. It is not a sub-region,
             // otherwise the state would have been InRegion.
             regionStart = rangeCounter - 1;
@@ -382,7 +382,7 @@ void CellEditor::Private::rebuildSelection()
     QSet<QString> alreadyUsedRegions;
 
     int counter = 0;
-    for (int i = 0; i < tokens.count(); ++i) {
+    for (int i = 0; i < tokens.size(); ++i) {
         const Token token = tokens[i];
         const Token::Type type = token.type();
 
@@ -518,14 +518,14 @@ void CellEditor::selectionChanged()
     uint start = 1;
     uint length = 0;
     if (!tokens.empty()) {
-        if (d->currentToken < tokens.count()) {
+        if (d->currentToken < tokens.size()) {
             Token token = tokens[d->currentToken];
             Token::Type type = token.type();
             if (type == Token::Cell || type == Token::Range) {
                 start = token.pos() + 1; // don't forget the '='!
                 length = token.text().length();
                 // Iterate to the end of the sub-region.
-                for (int i = d->currentToken + 1; i < tokens.count(); ++i) {
+                for (int i = d->currentToken + 1; i < tokens.size(); ++i) {
                     token = tokens[i];
                     type = token.type();
                     switch (type) {
@@ -549,7 +549,7 @@ void CellEditor::selectionChanged()
             }
         } else {
             // sanitize
-            d->currentToken = tokens.count();
+            d->currentToken = tokens.size();
             start = textLength;
         }
     }
@@ -712,7 +712,7 @@ QString permuteLocationFixation(const QString &regionName, int &i, bool columnFi
         result += '$';
     }
     // copy the column letter(s)
-    while (i < regionName.count()) {
+    while (i < regionName.size()) {
         if (!regionName[i].isLetter()) {
             if (regionName[i] == '$') {
                 // swallow the old fixation
@@ -728,7 +728,7 @@ QString permuteLocationFixation(const QString &regionName, int &i, bool columnFi
         result += '$';
     }
     // copy the row number(s)
-    while (i < regionName.count()) {
+    while (i < regionName.size()) {
         if (!regionName[i].isNumber()) {
             if (regionName[i] == '$') {
                 // swallow the old fixation
@@ -754,7 +754,7 @@ void CellEditor::permuteFixation()
     int index = -1;
     const int cursorPosition = textCursor().position() - 1; // - '='
     const Tokens tokens = d->highlighter->formulaTokens();
-    for (int i = 0; i < tokens.count(); ++i) {
+    for (int i = 0; i < tokens.size(); ++i) {
         const Token token = tokens[i];
         if (token.pos() > cursorPosition) {
             break; // for loop
@@ -847,7 +847,7 @@ void CellEditor::setActiveSubRegion(int index)
     int counter = 0;
     bool subRegion = false;
     const Tokens tokens = d->highlighter->formulaTokens();
-    for (int i = 0; i < tokens.count(); ++i) {
+    for (int i = 0; i < tokens.size(); ++i) {
         const Token token = tokens[i];
         switch (token.type()) {
         case Token::Cell:

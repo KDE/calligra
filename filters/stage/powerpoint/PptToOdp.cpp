@@ -277,7 +277,7 @@ QString getText(const TextContainer *tc)
     QString ret;
     if (tc->text.is<TextCharsAtom>()) {
         const QVector<quint16> textChars(tc->text.get<TextCharsAtom>()->textChars);
-        ret = QString::fromUtf16(textChars.data(), textChars.size());
+        ret = QString::fromUtf16(reinterpret_cast<const char16_t *>(textChars.data()), textChars.size());
     } else if (tc->text.is<TextBytesAtom>()) {
         // each item represents the low byte of a UTF-16 Unicode character
         // whose high byte is 0x00
@@ -1294,7 +1294,7 @@ void PptToOdp::defineTextProperties(KoGenStyle &style,
         debugPpt << "> fNoFontSubstitution:" << font->fNoFontSubstitution;
         debugPpt << "DEBUG END: FontEntityAtom";
 #endif
-        const QString name = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
+        const QString name = QString::fromUtf16(reinterpret_cast<const char16_t *>(font->lfFaceName.data()), font->lfFaceName.size());
         style.addProperty("fo:font-family", name, text);
     }
     // fo:font-size
@@ -1764,7 +1764,7 @@ void PptToOdp::defineListStyleTextProperties(KoXmlWriter &out, const QString &bu
     }
 
     if (font) {
-        QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
+        QString family = QString::fromUtf16(reinterpret_cast<const char16_t *>(font->lfFaceName.data()), font->lfFaceName.size());
         ts.addProperty("fo:font-family", family, text);
     }
 
@@ -2343,7 +2343,7 @@ QByteArray PptToOdp::createMeta()
 
 QString PptToOdp::utf16ToString(const QVector<quint16> &data)
 {
-    return QString::fromUtf16(data.data(), data.size());
+    return QString::fromUtf16(reinterpret_cast<const char16_t *>(data.data()), data.size());
 }
 
 QPair<QString, QString> PptToOdp::findHyperlink(const quint32 id)
@@ -2946,7 +2946,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer &out)
     QString nameStr;
     // take the slide name if present (usually it is not)
     if (slide->slideNameAtom) {
-        nameStr = QString::fromUtf16(slide->slideNameAtom->slideName.data(), slide->slideNameAtom->slideName.size());
+        nameStr = QString::fromUtf16(reinterpret_cast<const char16_t *>(slide->slideNameAtom->slideName.data()), slide->slideNameAtom->slideName.size());
     }
     // look for a title on the slide
     if (nameStr.isEmpty()) {
@@ -3452,27 +3452,27 @@ void PptToOdp::processDeclaration(KoXmlWriter *xmlWriter)
             QString headerText = QString::fromLatin1(headerAtom->header, headerAtom->header.size());
             QString hdrName = findDeclaration(Header, headerText);
             if (hdrName.isEmpty() ) {
-                hdrName = QString("hdr%1").arg(declaration.values(Header).count() + 1);
+                hdrName = QString("hdr%1").arg(declaration.values(Header).size() + 1);
                 insertDeclaration(Header, hdrName, headerText);
             }
             usedHeaderDeclaration.insert(slideNo,hdrName);
 #endif
         }
         if (headerFooterAtom && headerFooterAtom->fHasFooter && footerAtom) {
-            QString footerText = QString::fromUtf16(footerAtom->footer.data(), footerAtom->footer.size());
+            QString footerText = QString::fromUtf16(reinterpret_cast<const char16_t *>(footerAtom->footer.data()), footerAtom->footer.size());
             QString ftrName = findDeclaration(Footer, footerText);
             if (ftrName.isEmpty()) {
-                ftrName = QString("ftr%1").arg(QString::number(declaration.values(Footer).count() + 1));
+                ftrName = QString("ftr%1").arg(QString::number(declaration.values(Footer).size() + 1));
                 insertDeclaration(Footer, ftrName, footerText);
             }
             usedFooterDeclaration.insert(slideNo, ftrName);
         }
         if (headerFooterAtom && headerFooterAtom->fHasDate) {
             if (headerFooterAtom->fHasUserDate && userDateAtom) {
-                QString userDate = QString::fromUtf16(userDateAtom->userDate.data(), userDateAtom->userDate.size());
+                QString userDate = QString::fromUtf16(reinterpret_cast<const char16_t *>(userDateAtom->userDate.data()), userDateAtom->userDate.size());
                 QString dtdName = findDeclaration(DateTime, userDate);
                 if (dtdName.isEmpty()) {
-                    dtdName = QString("dtd%1").arg((declaration.values(DateTime).count() + 1));
+                    dtdName = QString("dtd%1").arg((declaration.values(DateTime).size() + 1));
                     insertDeclaration(DateTime, dtdName, userDate);
                 }
                 usedDateTimeDeclaration.insert(slideNo, dtdName);
@@ -3480,7 +3480,7 @@ void PptToOdp::processDeclaration(KoXmlWriter *xmlWriter)
             if (headerFooterAtom->fHasTodayDate) {
                 QString dtdName = findDeclaration(DateTime, "");
                 if (dtdName.isEmpty()) {
-                    dtdName = QString("dtd%1").arg((declaration.values(DateTime).count() + 1));
+                    dtdName = QString("dtd%1").arg((declaration.values(DateTime).size() + 1));
                     insertDeclaration(DateTime, dtdName, "");
                 }
                 usedDateTimeDeclaration.insert(slideNo, dtdName);

@@ -441,6 +441,18 @@ QTextFrame::iterator KoTextLayoutArea::endTextFrameIterator() const
     return d->endOfArea->it;
 }
 
+int KoTextLayoutArea::startPosition() const
+{
+    const QTextFrame::iterator &it = d->startOfArea->it;
+    return it.currentBlock().isValid() ? it.currentBlock().position() : it.currentFrame() ? it.currentFrame()->firstCursorPosition().position() : -1;
+}
+
+int KoTextLayoutArea::endPosition() const
+{
+    const QTextFrame::iterator &it = d->endOfArea->it;
+    return it.currentBlock().isValid() ? it.currentBlock().position() : it.currentFrame() ? it.currentFrame()->firstCursorPosition().position() : -1;
+}
+
 void KoTextLayoutArea::backtrackKeepWithNext(FrameIterator *cursor)
 {
     QTextFrame::iterator it = cursor->it;

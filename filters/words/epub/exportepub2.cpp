@@ -327,7 +327,7 @@ bool ExportEpub2::isSvm(QByteArray &content)
 bool ExportEpub2::isEmf(QByteArray &content)
 {
     const char *data = content.constData();
-    const int size = content.count();
+    const int size = content.size();
 
     // This is how the 'file' command identifies an EMF.
     // 1. Check type
@@ -353,7 +353,7 @@ bool ExportEpub2::isEmf(QByteArray &content)
 bool ExportEpub2::isWmf(QByteArray &content)
 {
     const char *data = content.constData();
-    const int size = content.count();
+    const int size = content.size();
 
     if (size < 10)
         return false;

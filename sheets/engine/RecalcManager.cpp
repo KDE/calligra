@@ -208,7 +208,7 @@ void RecalcManager::removeSheet(SheetBase *sheet)
 
 void RecalcManager::recalc(Updater *updater)
 {
-    debugSheetsFormula << "Recalculating" << d->cells.count() << " cell(s)..";
+    debugSheetsFormula << "Recalculating" << d->cells.size() << " cell(s)..";
     ElapsedTime et("Recalculating cells", ElapsedTime::PrintOnlyTime);
 
     if (updater)
@@ -216,7 +216,7 @@ void RecalcManager::recalc(Updater *updater)
 
     const QList<CellBase> cells = d->cells.values();
     d->cells.clear();
-    const int cellsCount = cells.count();
+    const int cellsCount = cells.size();
     for (int c = 0; c < cellsCount; ++c) {
         // only recalculate, if no circular dependency occurred
         if (cells.value(c).value() == Value::errorCIRCLE())
@@ -262,7 +262,7 @@ void RecalcManager::dump() const
     for (auto it(d->cells.constBegin()); it != end; ++it) {
         CellBase cell = it.value();
         QString cellName = cell.name();
-        while (cellName.count() < 4)
+        while (cellName.size() < 4)
             cellName.prepend(' ');
         debugSheetsFormula << "depth(" << cellName << " ) =" << it.key();
     }

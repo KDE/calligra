@@ -104,7 +104,7 @@ void KoResourceSelector::mousePressEvent(QMouseEvent *event)
     opt.initFrom(this);
     opt.subControls = QStyle::SC_All;
     opt.activeSubControls = QStyle::SC_ComboBoxArrow;
-    QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt, mapFromGlobal(event->globalPos()), this);
+    QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt, mapFromGlobal(event->globalPosition().toPoint()), this);
     // only clicking on combobox arrow shows popup,
     // otherwise the resourceApplied signal is send with the current resource
     if (sc == QStyle::SC_ComboBoxArrow)

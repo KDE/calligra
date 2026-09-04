@@ -113,7 +113,7 @@ void RowHeaderWidget::slotAutoScroll(const QPoint &scrollDistance)
     if (offset.y() + scrollDistance.y() < 0)
         return;
     m_pCanvas->setDocumentOffset(offset + QPoint(0, scrollDistance.y()));
-    QMouseEvent event(QEvent::MouseMove, mapFromGlobal(QCursor::pos()), Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
+    QMouseEvent event(QEvent::MouseMove, mapFromGlobal(QCursor::pos()), QCursor::pos(), Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
     QApplication::sendEvent(this, &event);
     m_pCanvas->update();
 }
@@ -263,7 +263,7 @@ void ColumnHeaderWidget::slotAutoScroll(const QPoint &scrollDistance)
     if (offset.x() + scrollDistance.x() < 0)
         return;
     m_pCanvas->setDocumentOffset(offset + QPoint(scrollDistance.x(), 0));
-    QMouseEvent event(QEvent::MouseMove, mapFromGlobal(QCursor::pos()), Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
+    QMouseEvent event(QEvent::MouseMove, mapFromGlobal(QCursor::pos()), QCursor::pos(), Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
     QApplication::sendEvent(this, &event);
     m_pCanvas->update();
 }

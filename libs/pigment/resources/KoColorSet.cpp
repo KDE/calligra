@@ -118,7 +118,7 @@ bool KoColorSet::save()
 
 qint32 KoColorSet::nColors()
 {
-    return m_colors.count();
+    return m_colors.size();
 }
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
@@ -252,7 +252,7 @@ QString KoColorSet::defaultFileExtension() const
 
 bool KoColorSet::loadGpl()
 {
-    QString s = QString::fromUtf8(m_data.data(), m_data.count());
+    QString s = QString::fromUtf8(m_data.data(), m_data.size());
 
     if (s.isEmpty() || s.isNull() || s.length() < 50) {
         warnPigment << "Illegal Gimp palette file: " << filename();
@@ -293,7 +293,7 @@ bool KoColorSet::loadGpl()
         } else if (!lines[i].isEmpty()) {
             QStringList a = lines[i].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
 
-            if (a.count() < 3) {
+            if (a.size() < 3) {
                 break;
             }
 
@@ -375,7 +375,7 @@ bool KoColorSet::loadPsp()
     KoColorSetEntry e;
     qint32 r, g, b;
 
-    QString s = QString::fromUtf8(m_data.data(), m_data.count());
+    QString s = QString::fromUtf8(m_data.data(), m_data.size());
     QStringList l = s.split('\n', Qt::SkipEmptyParts);
     if (l.size() < 4)
         return false;
@@ -389,7 +389,7 @@ bool KoColorSet::loadPsp()
     for (int i = 0; i < entries; ++i) {
         QStringList a = l[i + 3].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
 
-        if (a.count() != 3) {
+        if (a.size() != 3) {
             continue;
         }
 

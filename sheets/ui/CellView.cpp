@@ -1166,9 +1166,9 @@ void CellView::paintText(QPainter &painter, const QPointF &coordinate, const Cel
                 break;
             }
         }
-        for (int i = 0; i < textLines.count(); ++i) {
+        for (int i = 0; i < textLines.size(); ++i) {
             QStringList textColumn;
-            for (int j = 0; j < textLines[i].count(); ++j)
+            for (int j = 0; j < textLines[i].size(); ++j)
                 textColumn << QString(textLines[i][j]);
 
             const QPointF position(indent + coordinate.x() + dx, coordinate.y() + d->textY);
@@ -1922,7 +1922,7 @@ void CellView::drawText(QPainter &painter, const QStringList &textLines, const C
                           : (d->width - 2 * s_borderSpace - 0.5 * d->style.leftBorderPen().width() - 0.5 * d->style.rightBorderPen().width()) - tmpIndent;
 
     qreal offset = 1.0 - fontMetrics.ascent();
-    for (int i = 0; i < textLines.count(); ++i) {
+    for (int i = 0; i < textLines.size(); ++i) {
         QTextLayout textLayout(textLines[i], font);
         textLayout.setCacheEnabled(true);
         textLayout.setTextOption(options);
@@ -2001,7 +2001,7 @@ void CellView::Private::calculateHorizontalTextSize(const QFont &font, const QFo
     textLinesCount = 0;
     fittingHeight = true;
     fittingWidth = true;
-    for (int i = 0; i < textLines.count(); ++i) {
+    for (int i = 0; i < textLines.size(); ++i) {
         textWidth = qMax(textWidth, fontMetrics.boundingRect(textLines[i]).width());
         QTextLayout textLayout(textLines[i], font);
         textLayout.setTextOption(options);
@@ -2030,8 +2030,8 @@ void CellView::Private::calculateVerticalTextSize(const QFont &font, const QFont
     Q_UNUSED(font)
     int rows = 0;
     const QStringList textLines = displayText.split('\n');
-    for (int i = 0; i < textLines.count(); ++i)
-        rows = qMax(rows, textLines[i].count());
+    for (int i = 0; i < textLines.size(); ++i)
+        rows = qMax(rows, textLines[i].size());
     textHeight = (fontMetrics.ascent() + fontMetrics.descent()) * rows;
     textWidth = (displayText.count('\n') + 1) * fontMetrics.maxWidth();
     fittingHeight = textHeight <= this->width;
@@ -2043,7 +2043,7 @@ void CellView::Private::calculateAngledTextSize(const QFont &font, const QFontMe
     Q_UNUSED(font)
     const qreal angle = fixAngle(style.angle());
     QStringList lines = displayText.split('\n');
-    const qreal height = fontMetrics.ascent() + fontMetrics.descent() * lines.count();
+    const qreal height = fontMetrics.ascent() + fontMetrics.descent() * lines.size();
     qreal width = 0;
     foreach (const QString &line, lines) {
         width = qMax(width, fontMetrics.boundingRect(line).width());
@@ -2095,11 +2095,11 @@ void CellView::Private::truncateHorizontalText(const QFont &font, const QFontMet
         const QStringList textLines = displayText.split('\n');
         displayText.clear();
         qreal height = font.pointSizeF();
-        for (int i = 0; i < textLines.count(); ++i) {
+        for (int i = 0; i < textLines.size(); ++i) {
             if (height > this->height)
                 break;
             int count = 0;
-            while (count < textLines[i].count() && fontMetrics.boundingRect(textLines[i].left(count)).width() <= this->width)
+            while (count < textLines[i].size() && fontMetrics.boundingRect(textLines[i].left(count)).width() <= this->width)
                 ++count;
             displayText += QStringView{textLines[i]}.left(count);
             height += fontMetrics.height();

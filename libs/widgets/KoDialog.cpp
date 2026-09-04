@@ -445,7 +445,7 @@ int KoDialog::spacingHint()
 
 int KoDialog::groupSpacingHint()
 {
-    return QApplication::fontMetrics().lineSpacing();
+    return QFontMetrics(qApp->font()).lineSpacing();
 }
 
 QString KoDialog::makeStandardCaption(const QString &userCaption, QWidget *window, CaptionFlags flags)
@@ -503,7 +503,7 @@ void KoDialog::resizeLayout(QWidget *widget, int margin, int spacing) // static
         resizeLayout(widget->layout(), margin, spacing);
     }
 
-    if (widget->children().count() > 0) {
+    if (widget->children().size() > 0) {
         const QList<QObject *> list = widget->children();
         foreach (QObject *object, list) {
             if (object->isWidgetType()) {

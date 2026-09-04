@@ -76,7 +76,7 @@ bool KoPACanvasItem::event(QEvent *ev)
 
 void KoPACanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->pos(), e->screenPos(), e->button(), e->buttons(), e->modifiers());
     Q_ASSERT(koPAView());
     Q_ASSERT(koPAView()->viewMode());
     Q_ASSERT(viewConverter());
@@ -90,19 +90,19 @@ void KoPACanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 
 void KoPACanvasItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->pos(), e->screenPos(), e->button(), e->buttons(), e->modifiers());
     koPAView()->viewMode()->mouseDoubleClickEvent(&me, viewConverter()->viewToDocument(widgetToView(me.pos() + documentOffset())));
 }
 
 void KoPACanvasItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->pos(), e->screenPos(), e->button(), e->buttons(), e->modifiers());
     koPAView()->viewMode()->mouseMoveEvent(&me, viewConverter()->viewToDocument(widgetToView(me.pos() + documentOffset())));
 }
 
 void KoPACanvasItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
-    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    QMouseEvent me(e->type(), e->pos(), e->screenPos(), e->button(), e->buttons(), e->modifiers());
     koPAView()->viewMode()->mouseReleaseEvent(&me, viewConverter()->viewToDocument(widgetToView(me.pos() + documentOffset())));
 }
 

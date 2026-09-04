@@ -120,8 +120,8 @@ void KPrTimeLineView::keyPressEvent(QKeyEvent *event)
 
 void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
 {
-    int row = rowAt(event->y());
-    int column = columnAt(event->x());
+    int row = rowAt(event->position().y());
+    int column = columnAt(event->position().x());
 
     m_mainView->setSelectedRow(row);
     m_mainView->setSelectedColumn(column);
@@ -139,15 +139,15 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
             QRectF endLineRect = QRectF(lineRect.right() - RESIZE_RADIUS, lineRect.top(), RESIZE_RADIUS * 2, lineRect.height());
 
             // If the user clicks near the end of the line they could resize otherwise they move the bar.
-            if (endLineRect.contains(event->x(), event->y())) {
+            if (endLineRect.contains(event->position().x(), event->position().y())) {
                 m_resize = true;
                 m_resizedRow = row;
                 setCursor(Qt::SizeHorCursor);
             } else {
                 m_resize = false;
                 m_move = false;
-                if (lineRect.contains(event->x(), event->y())) {
-                    startDragPos = event->x() - lineRect.x();
+                if (lineRect.contains(event->position().x(), event->position().y())) {
+                    startDragPos = event->position().x() - lineRect.x();
                     m_move = true;
                     m_resizedRow = row;
                     setCursor(Qt::DragMoveCursor);
@@ -228,17 +228,17 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         }
         update();
     }
-    int row = rowAt(event->y());
-    int column = columnAt(event->x());
+    int row = rowAt(event->position().y());
+    int column = columnAt(event->position().x());
     if (column == KPrShapeAnimations::StartTime) {
         QRectF lineRect = getRowRect(row, column);
         QRectF endLineRect = QRectF(lineRect.right() - RESIZE_RADIUS, lineRect.top() + BAR_MARGIN, RESIZE_RADIUS * 2, lineRect.height() - 2 * BAR_MARGIN);
 
         // If the user is near the end of the line they could resize
-        if (endLineRect.contains(event->x(), event->y())) {
+        if (endLineRect.contains(event->position().x(), event->position().y())) {
             setCursor(Qt::SizeHorCursor);
         } else {
-            if (lineRect.contains(event->x(), event->y())) {
+            if (lineRect.contains(event->position().x(), event->position().y())) {
                 setCursor(Qt::DragMoveCursor);
             } else {
                 setCursor(Qt::ArrowCursor);

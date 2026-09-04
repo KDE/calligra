@@ -92,22 +92,22 @@ void KWCanvas::contextMenuEvent(QContextMenuEvent *e)
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
     m_view->viewMouseMoveEvent(e);
-    m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
+    m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->position().toPoint() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::mousePressEvent(QMouseEvent *e)
 {
-    m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
+    m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->position().toPoint() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseReleaseEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
+    m_toolProxy->mouseReleaseEvent(e, m_viewMode->viewToDocument(e->position().toPoint() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
+    m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->position().toPoint() + m_documentOffset, m_viewConverter));
 }
 
 bool KWCanvas::event(QEvent *e)
@@ -163,7 +163,7 @@ void KWCanvas::keyReleaseEvent(QKeyEvent *e)
 
 void KWCanvas::tabletEvent(QTabletEvent *e)
 {
-    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
+    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->position().toPoint() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::wheelEvent(QWheelEvent *e)

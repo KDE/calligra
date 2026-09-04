@@ -930,7 +930,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement, KoShapeLo
     //     int dimensions = numDimensions(chartType);
     //     debugChart << "DIMENSIONS" << dimensions;
     //     d->proxyModel->setDataDimensions(dimensions);
-    //     debugChart << d->proxyModel->dataSets().count();
+    //     debugChart << d->proxyModel->dataSets().size();
     KoXmlElement dataElem = KoXml::namedItemNS(chartElement, KoXmlNS::table, "table");
     if (!dataElem.isNull()) {
         if (!loadOdfData(dataElem, context))
@@ -1114,7 +1114,7 @@ static void saveOdfDataRow(KoXmlWriter &bodyWriter, QAbstractItemModel *table, i
         QString valType;
         QString valStr;
 
-        switch (value.type()) {
+        switch (value.typeId()) {
         case QVariant::Invalid:
             break;
         case QVariant::String:
@@ -1138,7 +1138,7 @@ static void saveOdfDataRow(KoXmlWriter &bodyWriter, QAbstractItemModel *table, i
         bodyWriter.startElement("table:table-cell");
         if (!valType.isEmpty()) {
             bodyWriter.addAttribute("office:value-type", valType);
-            if (value.type() == QVariant::Double)
+            if (value.typeId() == QVariant::Double)
                 bodyWriter.addAttribute("office:value", valStr);
 
             bodyWriter.startElement("text:p");

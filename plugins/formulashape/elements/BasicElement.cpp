@@ -153,7 +153,7 @@ BasicElement *BasicElement::childElementAt(const QPointF &p)
 
 void BasicElement::setAttribute(const QString &name, const QVariant &value)
 {
-    if (name.isEmpty() || !value.canConvert(QVariant::String))
+    if (name.isEmpty() || !value.canConvert(QMetaType(QMetaType::QString)))
         return;
 
     if (value.isNull())
@@ -209,7 +209,7 @@ void BasicElement::writeMathML(KoXmlWriter *writer, const QString &ns) const
     }
 
     // Collapse a an <mrow> with only one child element to the child element itself.
-    if ((elementType() == Row) && (childElements().count() == 1)) {
+    if ((elementType() == Row) && (childElements().size() == 1)) {
         foreach (BasicElement *tmp, childElements()) {
             tmp->writeMathML(writer, ns);
         }
@@ -487,7 +487,7 @@ void BasicElement::cleanElementTree(BasicElement *element)
         cleanElementTree(tmp);
     }
     if (element->elementType() == Row && element->parentElement() && element->parentElement()->isInferredRow()) {
-        if (element->childElements().count() == 1) {
+        if (element->childElements().size() == 1) {
             BasicElement *parent = element->parentElement();
             parent->replaceChild(element, element->childElements()[0]);
         } else if (element->isEmpty()) {

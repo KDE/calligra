@@ -5,6 +5,7 @@
 
 // built-in text functions
 #include "TextModule.h"
+#include <QTimeZone>
 
 #include "JapaneseWidthFolding.h"
 #include "engine/CalculationSettings.h"
@@ -291,7 +292,7 @@ void func_concatenate_helper(Value val, ValueCalc *calc, QString &tmp)
 Value func_concatenate(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString tmp;
-    for (int i = 0; i < args.count(); ++i)
+    for (int i = 0; i < args.size(); ++i)
         func_concatenate_helper(args[i], calc, tmp);
 
     return Value(tmp);
@@ -309,7 +310,7 @@ Value func_dollar(valVector args, ValueCalc *calc, FuncExtra *)
 
     double value = numToDouble(calc->conv()->toFloat(args[0]));
     int precision = 2;
-    if (args.count() == 2)
+    if (args.size() == 2)
         precision = calc->conv()->asInteger(args[1]).asInteger();
 
     // do round, because formatMoney doesn't
@@ -455,7 +456,7 @@ Value func_find(valVector args, ValueCalc *calc, FuncExtra *)
 
     find_text = calc->conv()->asString(args[0]).asString();
     within_text = calc->conv()->asString(args[1]).asString();
-    if (args.count() == 3)
+    if (args.size() == 3)
         start_num = calc->conv()->asInteger(args[2]).asInteger();
 
     // conforms to Excel behaviour
@@ -477,7 +478,7 @@ Value func_findb(valVector args, ValueCalc *calc, FuncExtra *)
     QString find_text = calc->conv()->asString(args[0]).asString();
     QString within_text = calc->conv()->asString(args[1]).asString();
     int start_num = 1;
-    if (args.count() == 3)
+    if (args.size() == 3)
         start_num = calc->conv()->asInteger(args[2]).asInteger();
 
     if (start_num <= 0)
@@ -503,7 +504,7 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
     bool no_commas = false;
 
     double number = numToDouble(calc->conv()->toFloat(args[0]));
-    if (args.count() > 1) {
+    if (args.size() > 1) {
         if (args[1].less(Value(0))) {
             decimalsIsNegative = true;
             decimals = -1 * ((calc->roundUp(args[1])).asInteger());
@@ -511,7 +512,7 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
             decimals = calc->conv()->asInteger(args[1]).asInteger();
         }
     }
-    if (args.count() == 3)
+    if (args.size() == 3)
         no_commas = calc->conv()->asBoolean(args[2]).asBoolean();
 
     QString result;
@@ -565,7 +566,7 @@ Value func_left(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str = calc->conv()->asString(args[0]).asString();
     int nb = 1;
-    if (args.count() == 2)
+    if (args.size() == 2)
         nb = calc->conv()->asInteger(args[1]).asInteger();
     if (nb < 0)
         return Value::errorVALUE();
@@ -580,7 +581,7 @@ Value func_leftb(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str = calc->conv()->asString(args[0]).asString();
     int nb = 1;
-    if (args.count() == 2)
+    if (args.size() == 2)
         nb = calc->conv()->asInteger(args[1]).asInteger();
     if (nb < 0)
         return Value::errorVALUE();
@@ -632,7 +633,7 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     }
 
     int len = 0x7fffffff;
-    if (args.count() == 3) {
+    if (args.size() == 3) {
         len = (uint)calc->conv()->asInteger(args[2]).asInteger();
         // the length cannot be less than zero
         if (len < 0)
@@ -660,7 +661,7 @@ Value func_midb(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     int len = 0x7fffffff;
-    if (args.count() == 3) {
+    if (args.size() == 3) {
         len = calc->conv()->asInteger(args[2]).asInteger();
         if (len < 0)
             return Value::errorVALUE();
@@ -682,10 +683,10 @@ Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *)
 
     QString decimalSep = calc->settings()->locale()->decimalSymbol();
     QString groupSep;
-    if (args.count() > 1) {
+    if (args.size() > 1) {
         decimalSep = calc->conv()->asString(args[1]).asString();
     }
-    if (args.count() > 2) {
+    if (args.size() > 2) {
         groupSep = calc->conv()->asString(args[2]).asString();
     }
     if (!groupSep.isEmpty() && decimalSep == groupSep) {
@@ -774,10 +775,10 @@ Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *)
 
     QString s = calc->conv()->asString(args[0]).asString();
     QString defText;
-    if (args.count() > 2)
+    if (args.size() > 2)
         defText = calc->conv()->asString(args[2]).asString();
     int bkref = 0;
-    if (args.count() == 4)
+    if (args.size() == 4)
         bkref = calc->conv()->asInteger(args[3]).asInteger();
     if (bkref < 0) // strange back-reference
         return Value::errorVALUE();
@@ -893,7 +894,7 @@ Value func_right(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str = calc->conv()->asString(args[0]).asString();
     int nb = 1;
-    if (args.count() == 2)
+    if (args.size() == 2)
         nb = calc->conv()->asInteger(args[1]).asInteger();
 
     if (nb < 0)
@@ -910,7 +911,7 @@ Value func_rightb(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str = calc->conv()->asString(args[0]).asString();
     int nb = 1;
-    if (args.count() == 2)
+    if (args.size() == 2)
         nb = calc->conv()->asInteger(args[1]).asInteger();
 
     if (nb < 0)
@@ -956,7 +957,7 @@ Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
     QString find_text = calc->conv()->asString(args[0]).asString();
     QString within_text = calc->conv()->asString(args[1]).asString();
     int start_num = 1;
-    if (args.count() == 3)
+    if (args.size() == 3)
         start_num = calc->conv()->asInteger(args[2]).asInteger();
 
     // conforms to Excel behaviour
@@ -979,7 +980,7 @@ Value func_searchb(valVector args, ValueCalc *calc, FuncExtra *)
     QString find_text = calc->conv()->asString(args[0]).asString();
     QString within_text = calc->conv()->asString(args[1]).asString();
     int start_num = 1;
-    if (args.count() == 3)
+    if (args.size() == 3)
         start_num = calc->conv()->asInteger(args[2]).asInteger();
 
     if (start_num <= 0)
@@ -1020,7 +1021,7 @@ Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *)
     int occurrence = 1;
     bool all = true;
 
-    if (args.count() == 4) {
+    if (args.size() == 4) {
         occurrence = calc->conv()->asInteger(args[3]).asInteger();
         all = false;
     }
@@ -1491,7 +1492,7 @@ Value func_text(valVector args, ValueCalc *calc, FuncExtra *)
     if (isDateTimeFormat(format)) {
         // use asFloat (blank -> 0) rather than asDateTime, which treats a blank value as "now"
         const double serial = calc->conv()->asFloat(args[0]).asFloat();
-        QDateTime dt(calc->settings()->referenceDate(), QTime(), Qt::UTC);
+        QDateTime dt(calc->settings()->referenceDate(), QTime(), QTimeZone::UTC);
         const int days = int(serial);
         dt = dt.addDays(days).addMSecs(qRound64((serial - days) * 86400000.0));
         return Value(renderDateTimeFormat(dt, format));

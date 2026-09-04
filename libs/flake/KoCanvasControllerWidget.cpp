@@ -102,11 +102,11 @@ void KoCanvasControllerWidget::Private::emitPointerPositionChangedSignals(QEvent
     QPoint pointerPos;
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
     if (mouseEvent) {
-        pointerPos = mouseEvent->pos();
+        pointerPos = mouseEvent->position().toPoint();
     } else {
         QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent *>(event);
         if (tabletEvent) {
-            pointerPos = tabletEvent->pos();
+            pointerPos = tabletEvent->position().toPoint();
         }
     }
 

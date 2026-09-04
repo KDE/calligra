@@ -19,6 +19,7 @@
 
 #include "LayoutPage_Float.h"
 #include "LayoutWidgets.h"
+#include <QTimeZone>
 
 #include "core/Style.h"
 #include "engine/Localization.h"
@@ -383,7 +384,7 @@ void LayoutPageFloat::initDate()
 
 void LayoutPageFloat::initTime()
 {
-    QDateTime tmpTime(QDate(1900, 1, 1), QTime(8, 5, 6, 35), Qt::UTC);
+    QDateTime tmpTime(QDate(1900, 1, 1), QTime(8, 5, 6, 35), QTimeZone::UTC);
 
     QListWidgetItem *currentItem = nullptr;
     for (int i = Format::TimesBegin; i < Format::TimesEnd; ++i) {
@@ -403,7 +404,7 @@ void LayoutPageFloat::initTime()
 
 void LayoutPageFloat::initDatetime()
 {
-    const QDateTime tmpDate(QDate(2000, 2, 9), QTime(6, 7, 8), Qt::UTC);
+    const QDateTime tmpDate(QDate(2000, 2, 9), QTime(6, 7, 8), QTimeZone::UTC);
     QListWidgetItem *currentItem = nullptr;
     for (int i = Format::DateTimesBegin; i < Format::DateTimesEnd; ++i) {
         auto s = m_formatter->dateTimeFormat(tmpDate, (Format::Type)i);

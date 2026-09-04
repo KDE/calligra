@@ -25,7 +25,7 @@
 
 #include "LatexDebug.h"
 
-Document::Document(const KoStore* in, QString fileOut):
+Document::Document(const KoStore* in, const QString &fileOut):
         XmlParser(in), _file(fileOut)
 {
     //debugLatex << fileIn;
@@ -37,8 +37,7 @@ Document::Document(const KoStore* in, QString fileOut):
     //analyze_config(config);
 }
 
-Document::~Document()
-= default;
+Document::~Document() = default;
 
 void Document::analyze()
 {

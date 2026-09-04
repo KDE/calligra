@@ -72,7 +72,7 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
     if (_color.isEmpty())
         *color = QColor();
     else
-        color->setNamedColor(_color);
+        *color = QColor::fromString(_color);
 
     return true;
 }
@@ -178,7 +178,7 @@ void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& s
     if (!styleStack.hasChildNode(ooNS::style, "tab-stops"))     // 3.11.10
         return;
     KoXmlElement tabStops = styleStack.childNode(ooNS::style, "tab-stops");
-    //qDebug() << tabStops.childNodes().count() <<" tab stops in layout.";
+    //qDebug() << tabStops.childNodes().size() <<" tab stops in layout.";
     for (KoXmlNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling()) {
         KoXmlElement tabStop = it.toElement();
         Q_ASSERT(tabStop.prefix() == QLatin1StringView("style"));

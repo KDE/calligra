@@ -47,7 +47,7 @@ public:
      * @param in tar file.
      * @param fileOut Output latex filename.
      */
-    Document(const KoStore *in, QString fileOut);
+    Document(const KoStore *in, const QString &fileOut);
 
     ~Document() override;
 

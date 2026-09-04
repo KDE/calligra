@@ -58,6 +58,9 @@ public:
     Q_DECL_DEPRECATED QTextFrame::iterator startTextFrameIterator() const;
     Q_DECL_DEPRECATED QTextFrame::iterator endTextFrameIterator() const;
 
+    int startPosition() const;
+    int endPosition() const;
+
     /// Layouts as much as we can
     bool layout(FrameIterator *cursor);
 

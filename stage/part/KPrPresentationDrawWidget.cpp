@@ -169,6 +169,6 @@ void KPrPresentationDrawWidget::updateColor(QAction *color)
 
 void KPrPresentationDrawWidget::updateColor(const QString &color)
 {
-    m_penColor.setNamedColor(color);
+    m_penColor = QColor::fromString(color);
     m_draw = false;
 }

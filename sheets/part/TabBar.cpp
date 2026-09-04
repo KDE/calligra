@@ -167,7 +167,7 @@ void TabBarPrivate::layoutTabs()
     if (tabbar->isLeftToRight()) {
         // left to right
         int x = 0;
-        for (int c = 0; c < tabs.count(); c++) {
+        for (int c = 0; c < tabs.size(); c++) {
             QRect rect;
             if (c >= firstTab - 1) {
                 QString text = tabs[c];
@@ -178,8 +178,8 @@ void TabBarPrivate::layoutTabs()
             tabRects.append(rect);
         }
 
-        lastTab = tabRects.count();
-        for (int i = 0; i < tabRects.count(); i++)
+        lastTab = tabRects.size();
+        for (int i = 0; i < tabRects.size(); i++)
             if (tabRects[i].right() - 10 + offset > tabbar->width()) {
                 lastTab = i;
                 break;
@@ -187,7 +187,7 @@ void TabBarPrivate::layoutTabs()
     } else {
         // right to left
         int x = tabbar->width() - offset;
-        for (int c = 0; c < tabs.count(); c++) {
+        for (int c = 0; c < tabs.size(); c++) {
             QRect rect;
             if (c >= firstTab - 1) {
                 QString text = tabs[c];
@@ -198,8 +198,8 @@ void TabBarPrivate::layoutTabs()
             tabRects.append(rect);
         }
 
-        lastTab = tabRects.count();
-        for (int i = tabRects.count() - 1; i > 0; i--)
+        lastTab = tabRects.size();
+        for (int i = tabRects.size() - 1; i > 0; i--)
             if (tabRects[i].left() > 0) {
                 lastTab = i + 1;
                 break;
@@ -210,7 +210,7 @@ void TabBarPrivate::layoutTabs()
 
 int TabBarPrivate::tabAt(const QPoint &pos)
 {
-    for (int i = 0; i < tabRects.count(); i++) {
+    for (int i = 0; i < tabRects.size(); i++) {
         QRect rect = tabRects[i];
         if (rect.isNull())
             continue;
@@ -408,7 +408,7 @@ void TabBar::setTabs(const QStringList &list)
 
     if (!left.isNull()) {
         d->firstTab = d->tabs.indexOf(left) + 1;
-        if (d->firstTab > (int)d->tabs.count())
+        if (d->firstTab > (int)d->tabs.size())
             d->firstTab = 1;
         if (d->firstTab <= 0)
             d->firstTab = 1;
@@ -428,12 +428,12 @@ QStringList TabBar::tabs() const
 
 unsigned TabBar::count() const
 {
-    return d->tabs.count();
+    return d->tabs.size();
 }
 
 bool TabBar::canScrollBack() const
 {
-    if (d->tabs.count() == 0)
+    if (d->tabs.size() == 0)
         return false;
 
     return d->firstTab > 1;
@@ -441,10 +441,10 @@ bool TabBar::canScrollBack() const
 
 bool TabBar::canScrollForward() const
 {
-    if (d->tabs.count() == 0)
+    if (d->tabs.size() == 0)
         return false;
 
-    return d->lastTab < (int)d->tabs.count();
+    return d->lastTab < (int)d->tabs.size();
 }
 
 void TabBar::scrollBack()
@@ -467,8 +467,8 @@ void TabBar::scrollForward()
         return;
 
     d->firstTab++;
-    if (d->firstTab > (int)d->tabs.count())
-        d->firstTab = d->tabs.count();
+    if (d->firstTab > (int)d->tabs.size())
+        d->firstTab = d->tabs.size();
 
     d->layoutTabs();
     d->updateButtons();
@@ -494,17 +494,17 @@ void TabBar::scrollLast()
     d->layoutTabs();
 
     if (!isRightToLeft()) {
-        int fullWidth = d->tabRects[d->tabRects.count() - 1].right();
+        int fullWidth = d->tabRects[d->tabRects.size() - 1].right();
         int delta = fullWidth - width() + d->offset;
-        for (int i = 0; i < d->tabRects.count(); i++)
+        for (int i = 0; i < d->tabRects.size(); i++)
             if (d->tabRects[i].x() > delta) {
                 d->firstTab = i + 1;
                 break;
             }
     } else {
         // FIXME optimize this, perhaps without loop
-        for (; d->firstTab <= (int)d->tabRects.count();) {
-            int x = d->tabRects[d->tabRects.count() - 1].x();
+        for (; d->firstTab <= (int)d->tabRects.size();) {
+            int x = d->tabRects[d->tabRects.size() - 1].x();
             if (x > 0)
                 break;
             d->firstTab++;
@@ -544,7 +544,7 @@ void TabBar::moveTab(int tab, int target)
     if (target > tab)
         target--;
 
-    if (target >= d->tabs.count())
+    if (target >= d->tabs.size())
         d->tabs.append(tabName);
     else
         d->tabs.insert(target, tabName);
@@ -599,7 +599,7 @@ void TabBar::autoScrollForward()
 
 void TabBar::paintEvent(QPaintEvent *)
 {
-    if (d->tabs.count() == 0) {
+    if (d->tabs.size() == 0) {
         update();
         return;
     }
@@ -615,7 +615,7 @@ void TabBar::paintEvent(QPaintEvent *)
         painter.translate(5, 0);
 
     // draw first all non-active, visible tabs
-    for (int c = d->tabRects.count() - 1; c >= 0; c--) {
+    for (int c = d->tabRects.size() - 1; c >= 0; c--) {
         QRect rect = d->tabRects[c];
         if (rect.isNull())
             continue;
@@ -634,11 +634,11 @@ void TabBar::paintEvent(QPaintEvent *)
 
     // draw the move marker
     if (d->targetTab > 0) {
-        int p = qMin(d->targetTab, (int)d->tabRects.count());
+        int p = qMin(d->targetTab, (int)d->tabRects.size());
         QRect rect = d->tabRects[p - 1];
         if (!rect.isNull()) {
             int x = !isRightToLeft() ? rect.x() : rect.right() - 7;
-            if (d->targetTab > (int)d->tabRects.count())
+            if (d->targetTab > (int)d->tabRects.size())
                 x = !isRightToLeft() ? rect.right() - 7 : rect.x() - 3;
             d->drawMoveMarker(painter, x, rect.y());
         }
@@ -679,7 +679,7 @@ QString TabBar::activeTab() const
 
 void TabBar::mousePressEvent(QMouseEvent *ev)
 {
-    if (d->tabs.count() == 0) {
+    if (d->tabs.size() == 0) {
         update();
         return;
     }
@@ -704,7 +704,7 @@ void TabBar::mousePressEvent(QMouseEvent *ev)
 
     if (ev->button() == Qt::RightButton)
         if (!d->readOnly)
-            Q_EMIT contextMenu(ev->globalPos());
+            Q_EMIT contextMenu(ev->globalPosition().toPoint());
 }
 
 void TabBar::mouseReleaseEvent(QMouseEvent *ev)
@@ -746,7 +746,7 @@ void TabBar::mouseMoveEvent(QMouseEvent *ev)
 
     // drag past the very latest visible tab
     // e.g move a tab to the last ordering position
-    QRect r = d->tabRects[d->tabRects.count() - 1];
+    QRect r = d->tabRects[d->tabRects.size() - 1];
     bool moveToLast = false;
     if (r.isValid()) {
         if (!isRightToLeft())
@@ -759,8 +759,8 @@ void TabBar::mouseMoveEvent(QMouseEvent *ev)
                     moveToLast = true;
     }
     if (moveToLast)
-        if (d->targetTab != (int)d->tabRects.count() + 1) {
-            d->targetTab = d->tabRects.count() + 1;
+        if (d->targetTab != (int)d->tabRects.size() + 1) {
+            d->targetTab = d->tabRects.size() + 1;
             d->autoScroll = false;
             update();
         }
@@ -789,7 +789,7 @@ void TabBar::mouseDoubleClickEvent(QMouseEvent *ev)
 
 void TabBar::wheelEvent(QWheelEvent *e)
 {
-    if (d->tabs.count() == 0) {
+    if (d->tabs.size() == 0) {
         update();
         return;
     }

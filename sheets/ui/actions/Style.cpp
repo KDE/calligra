@@ -82,7 +82,7 @@ Bold::~Bold() = default;
 QAction *Bold::createAction()
 {
     QAction *res = ToggleableCellAction::createAction();
-    res->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
+    res->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_B));
     return res;
 }
 
@@ -118,7 +118,7 @@ Italic::~Italic() = default;
 QAction *Italic::createAction()
 {
     QAction *res = ToggleableCellAction::createAction();
-    res->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    res->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
     return res;
 }
 
@@ -154,7 +154,7 @@ Underline::~Underline() = default;
 QAction *Underline::createAction()
 {
     QAction *res = ToggleableCellAction::createAction();
-    res->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
+    res->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_U));
     return res;
 }
 

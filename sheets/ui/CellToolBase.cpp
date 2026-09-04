@@ -363,11 +363,11 @@ QList<QPointer<QWidget>> CellToolBase::createOptionWidgets()
     }
 
     QDomDocument doc(QString::fromLatin1("optionWidgets"));
-    QString errorMsg;
-    int errorLine, errorCol;
-    if (!doc.setContent(&f, &errorMsg, &errorLine, &errorCol)) {
+    const QDomDocument::ParseResult result = doc.setContent(&f);
+    if (!result) {
         f.close();
-        warnSheets << "couldn't parse CellToolOptionWidgets.xml file:" << errorMsg << "on line" << errorLine << "column" << errorCol;
+        warnSheets << "couldn't parse CellToolOptionWidgets.xml file:" << result.errorMessage << "on line" << result.errorLine << "column"
+                   << result.errorColumn;
         return widgets;
     }
     f.close();

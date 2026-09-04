@@ -830,7 +830,7 @@ void ArtisticTextTool::changeFontProperty(FontProperty property, const QVariant 
             break;
         }
 
-        const int changeCount = qMin(selectedCharCount - collectedCharCount, range.text().count() - index.second);
+        const int changeCount = qMin(selectedCharCount - collectedCharCount, range.text().size() - index.second);
         const int changeStart = selectedCharStart + collectedCharCount;
         new ChangeTextFontCommand(m_currentShape, changeStart, changeCount, font, cmd);
         index.first++;
@@ -891,7 +891,7 @@ void ArtisticTextTool::toggleSubSuperScript(ArtisticTextRange::BaselineShift mod
     const int count = m_selection.selectionCount();
 
     QList<ArtisticTextRange> ranges = m_currentShape->copyText(from, count);
-    const int rangeCount = ranges.count();
+    const int rangeCount = ranges.size();
     if (!rangeCount)
         return;
 
@@ -917,7 +917,7 @@ void ArtisticTextTool::toggleSubSuperScript(ArtisticTextRange::BaselineShift mod
 void ArtisticTextTool::selectAll()
 {
     if (m_currentShape) {
-        m_selection.selectText(0, m_currentShape->plainText().count());
+        m_selection.selectText(0, m_currentShape->plainText().size());
     }
 }
 

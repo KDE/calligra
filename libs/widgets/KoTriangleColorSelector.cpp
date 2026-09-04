@@ -347,7 +347,7 @@ void KoTriangleColorSelector::generateWheel()
 void KoTriangleColorSelector::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        selectColorAt(event->x(), event->y());
+        selectColorAt(event->position().x(), event->position().y());
         d->handle = NoHandle;
     } else {
         QWidget::mouseReleaseEvent(event);
@@ -358,7 +358,7 @@ void KoTriangleColorSelector::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         d->handle = NoHandle;
-        selectColorAt(event->x(), event->y());
+        selectColorAt(event->position().x(), event->position().y());
     } else {
         QWidget::mousePressEvent(event);
     }
@@ -367,7 +367,7 @@ void KoTriangleColorSelector::mousePressEvent(QMouseEvent *event)
 void KoTriangleColorSelector::mouseMoveEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
-        selectColorAt(event->x(), event->y(), false);
+        selectColorAt(event->position().x(), event->position().y(), false);
     } else {
         QWidget::mouseMoveEvent(event);
     }

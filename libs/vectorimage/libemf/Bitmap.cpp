@@ -149,7 +149,7 @@ QImage Bitmap::image()
             m_image = m_image.rgbSwapped();
 
         // We have to mirror this bitmap in the X axis since WMF images are stored bottom-up.
-        m_image = m_image.mirrored(false, true);
+        m_image = m_image.flipped(Qt::Vertical);
     } else {
         // This bitmap is a bottom-up bitmap which uses compression.
         switch (m_header->compression()) {

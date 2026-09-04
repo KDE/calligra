@@ -307,7 +307,7 @@ void Engraver::engraveBar(Bar *bar, qreal sizeFactor)
     collectSimultanities(sheet, barIdx, simultanities, shortestNoteLength);
 
     // 'T' in the formula
-    qreal baseFactor = bar->sizeFactor() * sizeFactor - log2((qreal)qMin(shortestNoteLength, (int)Note8Length) / WholeLength);
+    qreal baseFactor = bar->sizeFactor() * sizeFactor - log2((qreal)qMin(shortestNoteLength, (int)Note8Length) / (int)WholeLength);
 
     // assign space to simultanities according to durations
     for (int i = 0; i < simultanities.size(); i++) {
@@ -316,7 +316,7 @@ void Engraver::engraveBar(Bar *bar, qreal sizeFactor)
         qreal scaleFactor = (qreal)sim.duration / sim.minChordDuration; // 'e' in the formula
         if (scaleFactor > 1)
             scaleFactor = 1;
-        qreal duration = (qreal)sim.duration / WholeLength;
+        qreal duration = (qreal)sim.duration / (int)WholeLength;
         sim.space = scaleFactor * (log2(duration) + baseFactor);
     }
 

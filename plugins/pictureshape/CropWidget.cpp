@@ -104,13 +104,13 @@ void CropWidget::paintEvent(QPaintEvent *event)
 
 void CropWidget::mousePressEvent(QMouseEvent *event)
 {
-    m_selectionRect.beginDragging(toUniformCoord(event->localPos()));
+    m_selectionRect.beginDragging(toUniformCoord(event->position()));
     m_isMousePressed = true;
 }
 
 void CropWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    QPointF pos = toUniformCoord(event->localPos());
+    QPointF pos = toUniformCoord(event->position());
     SelectionRect::HandleFlags flags = m_selectionRect.getHandleFlags(pos);
 
     switch (flags) {

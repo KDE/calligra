@@ -15,7 +15,7 @@ StarShapeConfigWidget::StarShapeConfigWidget()
     connect(widget.corners, &QSpinBox::valueChanged, this, &KoShapeConfigWidgetBase::propertyChanged);
     connect(widget.innerRadius, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
     connect(widget.outerRadius, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
-    connect(widget.convex, &QCheckBox::stateChanged, this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.convex, &QCheckBox::checkStateChanged, this, &KoShapeConfigWidgetBase::propertyChanged);
     connect(widget.convex, &QAbstractButton::clicked, this, &StarShapeConfigWidget::typeChanged);
 }
 

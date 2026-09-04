@@ -377,7 +377,7 @@ void exportNamedExpr(DocBase* kspreadDoc, QDomDocument & doc, QDomElement & pare
                      AreaList const & namedAreas)
 {
     QRect range;
-    for (int i = 0; i < namedAreas.count(); ++i) {
+    for (int i = 0; i < namedAreas.size(); ++i) {
         QDomElement namedRange = doc.createElement("table:named-range");
 
         SheetBase *sheet = kspreadDoc->map()->namedAreaManager()->sheet(namedAreas[i]);
@@ -460,7 +460,7 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
     DocBase * kspreadDoc = static_cast<DocBase *>(document);
 
     AreaList namedAreas = kspreadDoc->map()->namedAreaManager()->areaNames();
-    if (namedAreas.count() > 0) {
+    if (namedAreas.size() > 0) {
         QDomElement namedExpr = doc.createElement("table:named-expressions");
         exportNamedExpr(kspreadDoc, doc, namedExpr, namedAreas);
 
@@ -1079,7 +1079,7 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
         }
         if (n == i) {
             int ml = match.capturedLength();
-            if (ml > -1 && (i + ml) < formula.count() && formula[ i + ml ] == '!') {
+            if (ml > -1 && (i + ml) < formula.size() && formula[ i + ml ] == '!') {
                 qDebug() << "No cell ref but sheet name";
                 s += formula[i];
                 ++i;

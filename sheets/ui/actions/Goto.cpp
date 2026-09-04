@@ -32,7 +32,7 @@ QAction *Goto::createAction()
 {
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Goto"));
-    res->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
+    res->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_G));
     return res;
 }
 

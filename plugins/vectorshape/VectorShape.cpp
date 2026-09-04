@@ -338,8 +338,8 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadin
 
     m_contents = store->read(size);
     store->close();
-    if (m_contents.count() < size) {
-        debugVector << "Too few bytes read: " << m_contents.count() << " instead of " << size;
+    if (m_contents.size() < size) {
+        debugVector << "Too few bytes read: " << m_contents.size() << " instead of " << size;
         return false;
     }
 
@@ -414,7 +414,7 @@ bool VectorShape::isWmf(const QByteArray &bytes)
     debugVector << "Check for WMF";
 
     const char *data = bytes.constData();
-    const int size = bytes.count();
+    const int size = bytes.size();
 
     if (size < 10)
         return false;
@@ -444,7 +444,7 @@ bool VectorShape::isEmf(const QByteArray &bytes)
     debugVector << "Check for EMF";
 
     const char *data = bytes.constData();
-    const int size = bytes.count();
+    const int size = bytes.size();
 
     // This is how the 'file' command identifies an EMF.
     // 1. Check type
