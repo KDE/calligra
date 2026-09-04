@@ -15426,7 +15426,7 @@ msgstr "Nom de la base de dades: "
 #: ui/actions/dialogs/DatabaseDialog.cpp:90
 #, kde-format
 msgid "Host:"
-msgstr "Servidor:"
+msgstr "Amfitrió:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:99
 #, kde-format
