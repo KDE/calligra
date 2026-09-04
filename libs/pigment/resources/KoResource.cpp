@@ -7,13 +7,12 @@
  */
 #include "KoResource.h"
 
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QDomElement>
+#include <QFile>
 #include <QFileInfo>
 #include <QImage>
-
-#include "KoHashGenerator.h"
-#include "KoHashGeneratorProvider.h"
 
 struct Q_DECL_HIDDEN KoResource::Private {
     QString name;
@@ -76,8 +75,14 @@ void KoResource::setMD5(const QByteArray &md5)
 
 QByteArray KoResource::generateMD5() const
 {
-    KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-    return hashGenerator->generateHash(d->filename);
+    QFile file(d->filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return QByteArray();
+    }
+
+    QCryptographicHash hash(QCryptographicHash::Md5);
+    hash.addData(&file);
+    return hash.result();
 }
 
 QString KoResource::filename() const
