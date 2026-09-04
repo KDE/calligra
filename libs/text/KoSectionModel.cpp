@@ -5,7 +5,7 @@
 #include <climits>
 
 KoSectionModel::KoSectionModel(QTextDocument *doc)
-    : QAbstractItemModel()
+    : QAbstractItemModel(doc)
     , m_doc(doc)
 {
     KoTextDocument(m_doc).setSectionModel(this);

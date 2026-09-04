@@ -67,13 +67,12 @@ void OdfTextTrackStyles::beginEdit()
 
 void OdfTextTrackStyles::endEdit()
 {
-    if (m_documents.length() > 0) {
-        KUndo2Stack *undoStack = KoTextDocument(m_documents.first()).undoStack();
-        if (undoStack) {
-            undoStack->push(m_changeCommand);
-        }
-    } else
+    KUndo2Stack *undoStack = m_documents.length() > 0 ? KoTextDocument(m_documents.first()).undoStack() : nullptr;
+    if (undoStack) {
+        undoStack->push(m_changeCommand);
+    } else {
         delete m_changeCommand;
+    }
 
     m_changeCommand = nullptr;
 }

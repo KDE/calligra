@@ -1068,7 +1068,7 @@ void KoParagraphStyle::setListStyle(KoListStyle *style)
     QVariant variant;
     KoListStyle *cloneStyle = nullptr;
     if (style) {
-        cloneStyle = style->clone();
+        cloneStyle = style->clone(this);
         variant.setValue(cloneStyle);
 
         setProperty(ParagraphListStyleId, variant);

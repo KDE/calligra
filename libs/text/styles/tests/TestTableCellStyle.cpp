@@ -31,10 +31,9 @@ void TestTableCellStyle::testPen()
 
     format1.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
 
-    KoTableCellStyle *style = new KoTableCellStyle(format1);
-    QVERIFY(style);
+    KoTableCellStyle style(format1);
     QTextTableCellFormat format2;
-    style->applyStyle(format2);
+    style.applyStyle(format2);
     KoBorder border2 = format2.property(KoTableCellStyle::Borders).value<KoBorder>();
     QCOMPARE(border2.borderData(KoBorder::TopBorder).outerPen, QPen(Qt::red, 5.0));
     QCOMPARE(border2.borderData(KoBorder::TopBorder).innerPen, QPen(Qt::red, 7.0));
@@ -55,10 +54,9 @@ void TestTableCellStyle::testPadding()
     format1.setTopPadding(3.0);
     format1.setBottomPadding(4.0);
 
-    KoTableCellStyle *style = new KoTableCellStyle(format1);
-    QVERIFY(style);
+    KoTableCellStyle style(format1);
     QTextTableCellFormat format2;
-    style->applyStyle(format2);
+    style.applyStyle(format2);
 
     QCOMPARE(format2.leftPadding(), 1.0);
     QCOMPARE(format2.rightPadding(), 2.0);
@@ -66,8 +64,8 @@ void TestTableCellStyle::testPadding()
     QCOMPARE(format2.bottomPadding(), 4.0);
 
     QRectF rect(0.0, 0.0, 100.0, 100.0);
-    QCOMPARE(style->contentRect(rect), QRectF(1.0, 3.0, 97.0, 93.0));
-    QCOMPARE(style->boundingRect(rect), QRectF(-1.0, -3.0, 103.0, 107.0));
+    QCOMPARE(style.contentRect(rect), QRectF(1.0, 3.0, 97.0, 93.0));
+    QCOMPARE(style.boundingRect(rect), QRectF(-1.0, -3.0, 103.0, 107.0));
 }
 
 void TestTableCellStyle::testSpacing()
@@ -81,10 +79,9 @@ void TestTableCellStyle::testSpacing()
     border1.setBorderSpacing(KoBorder::BottomBorder, 12.0);
     format1.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border1));
 
-    KoTableCellStyle *style = new KoTableCellStyle(format1);
-    QVERIFY(style);
+    KoTableCellStyle style(format1);
     QTextTableCellFormat format2;
-    style->applyStyle(format2);
+    style.applyStyle(format2);
 
     KoBorder border2 = format2.property(KoTableCellStyle::Borders).value<KoBorder>();
     QCOMPARE(border2.borderSpacing(KoBorder::LeftBorder), 9.0);
@@ -93,8 +90,8 @@ void TestTableCellStyle::testSpacing()
     QCOMPARE(border2.borderSpacing(KoBorder::BottomBorder), 12.0);
 
     QRectF rect(0.0, 0.0, 100.0, 100.0);
-    QCOMPARE(style->contentRect(rect), QRectF(9.0, 6.0, 76.0, 82.0));
-    QCOMPARE(style->boundingRect(rect), QRectF(-9.0, -6.0, 124.0, 118.0));
+    QCOMPARE(style.contentRect(rect), QRectF(9.0, 6.0, 76.0, 82.0));
+    QCOMPARE(style.boundingRect(rect), QRectF(-9.0, -6.0, 124.0, 118.0));
 }
 
 void TestTableCellStyle::testMargin()
@@ -105,21 +102,20 @@ void TestTableCellStyle::testMargin()
     format1.setProperty(QTextFormat::FrameTopMargin, 9.0);
     format1.setProperty(QTextFormat::FrameBottomMargin, 3.0);
 
-    KoTableStyle *style = new KoTableStyle(format1);
-    QVERIFY(style);
+    KoTableStyle style(format1);
 
-    QCOMPARE(style->leftMargin(), 4.0);
-    QCOMPARE(style->rightMargin(), 8.0);
-    QCOMPARE(style->topMargin(), 9.0);
-    QCOMPARE(style->bottomMargin(), 3.0);
+    QCOMPARE(style.leftMargin(), 4.0);
+    QCOMPARE(style.rightMargin(), 8.0);
+    QCOMPARE(style.topMargin(), 9.0);
+    QCOMPARE(style.bottomMargin(), 3.0);
 
-    style->setLeftMargin(QTextLength(QTextLength::FixedLength, 14.0));
-    style->setRightMargin(QTextLength(QTextLength::FixedLength, 18.0));
-    style->setTopMargin(QTextLength(QTextLength::FixedLength, 19.0));
-    style->setBottomMargin(QTextLength(QTextLength::FixedLength, 13.0));
+    style.setLeftMargin(QTextLength(QTextLength::FixedLength, 14.0));
+    style.setRightMargin(QTextLength(QTextLength::FixedLength, 18.0));
+    style.setTopMargin(QTextLength(QTextLength::FixedLength, 19.0));
+    style.setBottomMargin(QTextLength(QTextLength::FixedLength, 13.0));
 
     QTextTableFormat format2;
-    style->applyStyle(format2);
+    style.applyStyle(format2);
 
     QCOMPARE(format2.doubleProperty(QTextFormat::FrameLeftMargin), 14.0);
     QCOMPARE(format2.doubleProperty(QTextFormat::FrameRightMargin), 18.0);

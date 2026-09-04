@@ -25,6 +25,9 @@ void TestSectionStyle::testSectionStyle()
     QVERIFY(style2);
     QCOMPARE(style2->leftMargin(), 1.0);
     QCOMPARE(style2->rightMargin(), 2.0);
+
+    delete style1;
+    delete style2;
 }
 
 QTEST_MAIN(TestSectionStyle)

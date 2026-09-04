@@ -49,12 +49,12 @@ public:
 
         KoTextDocument textDoc(m_document);
         auto editor = new KoTextEditor(m_document);
-        auto undoStack = new KUndo2Stack();
+        auto undoStack = new KUndo2Stack(m_document);
         textDoc.setUndoStack(undoStack);
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
         textDoc.setTextRangeManager(&m_rangeManager);
-        textDoc.setStyleManager(new KoStyleManager(nullptr));
+        textDoc.setStyleManager(new KoStyleManager(m_document));
         textDoc.setTextEditor(editor);
     }
 
@@ -168,6 +168,9 @@ void TestKoTextEditor::testRemoveSelectedText()
 
     // check whether the bookmark has gone.
     Q_ASSERT(rangeManager->textRanges().length() == 0);
+
+    // the manager keeps deleted ranges around for undo purposes; it doesn't own them.
+    delete bookmark;
 }
 
 void TestKoTextEditor::pushSectionStart(int num, KoSection *sec, KoTextEditor *editor)

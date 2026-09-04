@@ -177,6 +177,7 @@ KoStyleManager::~KoStyleManager()
 {
     delete d->footNotesConfiguration;
     delete d->endNotesConfiguration;
+    delete d->bibliographyConfiguration;
     delete d;
 }
 

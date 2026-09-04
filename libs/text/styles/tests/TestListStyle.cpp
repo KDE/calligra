@@ -39,7 +39,7 @@ void TestListStyle::testListStyle()
 
     QTextDocument doc;
     KoTextDocument kodoc(&doc);
-    kodoc.setStyleManager(new KoStyleManager(nullptr));
+    kodoc.setStyleManager(new KoStyleManager(&doc));
     QTextCursor cursor(&doc);
     cursor.insertText("foo\nbar\nBaz\n");
     QTextBlock block = doc.begin();

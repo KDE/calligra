@@ -7,6 +7,7 @@
 #include "TestKoInlineTextObjectManager.h"
 
 #include <QTest>
+#include <kundo2stack.h>
 
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
@@ -30,6 +31,8 @@ void TestKoInlineTextObjectManager::testInsertInlineObject()
     KoInlineTextObjectManager manager;
     KoTextDocument textDoc(&doc);
     textDoc.setInlineTextObjectManager(&manager);
+    KUndo2Stack undoStack;
+    textDoc.setUndoStack(&undoStack);
 
     KoTextEditor editor(&doc);
     editor.insertText(lorem);
@@ -57,6 +60,9 @@ void TestKoInlineTextObjectManager::testInsertInlineObject()
     obj->updatePosition(&doc, cursor.position(), fmt);
 
     Q_ASSERT(obj->m_position == cursor.position());
+
+    // KoInlineTextObjectManager doesn't own its inline objects.
+    delete obj;
 }
 
 void TestKoInlineTextObjectManager::testRetrieveInlineObject()
@@ -65,6 +71,8 @@ void TestKoInlineTextObjectManager::testRetrieveInlineObject()
     KoInlineTextObjectManager manager;
     KoTextDocument textDoc(&doc);
     textDoc.setInlineTextObjectManager(&manager);
+    KUndo2Stack undoStack;
+    textDoc.setUndoStack(&undoStack);
 
     KoTextEditor editor(&doc);
     editor.insertText(lorem);
@@ -76,11 +84,14 @@ void TestKoInlineTextObjectManager::testRetrieveInlineObject()
     Q_ASSERT(obj->id() == 1);
     Q_ASSERT(obj->manager() == &manager);
 
-    manager.insertInlineObject(*editor.cursor(), new DummyInlineObject(false));
+    DummyInlineObject *obj3 = new DummyInlineObject(false);
+    manager.insertInlineObject(*editor.cursor(), obj3);
     editor.insertText(lorem);
-    manager.insertInlineObject(*editor.cursor(), new DummyInlineObject(false));
+    DummyInlineObject *obj4 = new DummyInlineObject(false);
+    manager.insertInlineObject(*editor.cursor(), obj4);
     editor.insertText(lorem);
-    manager.insertInlineObject(*editor.cursor(), new DummyInlineObject(false));
+    DummyInlineObject *obj5 = new DummyInlineObject(false);
+    manager.insertInlineObject(*editor.cursor(), obj5);
     editor.insertText(lorem);
 
     // by id
@@ -99,6 +110,12 @@ void TestKoInlineTextObjectManager::testRetrieveInlineObject()
     QTextCharFormat fmt = cursor.charFormat();
     obj2 = manager.inlineTextObject(fmt);
     Q_ASSERT(obj2 == obj);
+
+    // KoInlineTextObjectManager doesn't own its inline objects.
+    delete obj;
+    delete obj3;
+    delete obj4;
+    delete obj5;
 }
 
 void TestKoInlineTextObjectManager::testRemoveInlineObject()
@@ -107,6 +124,8 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
     KoInlineTextObjectManager manager;
     KoTextDocument textDoc(&doc);
     textDoc.setInlineTextObjectManager(&manager);
+    KUndo2Stack undoStack;
+    textDoc.setUndoStack(&undoStack);
     KoTextEditor editor(&doc);
     DummyInlineObject *obj = new DummyInlineObject(true);
     manager.insertInlineObject(*editor.cursor(), obj);
@@ -121,6 +140,9 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
 
     // this should not crash, even though we were a listener
     manager.setProperty(KoInlineObject::UserGet, "bla");
+
+    // KoInlineTextObjectManager doesn't own its inline objects, even removed ones.
+    delete obj;
 }
 
 void TestKoInlineTextObjectManager::testListenToProperties()
@@ -129,6 +151,8 @@ void TestKoInlineTextObjectManager::testListenToProperties()
     KoInlineTextObjectManager manager;
     KoTextDocument textDoc(&doc);
     textDoc.setInlineTextObjectManager(&manager);
+    KUndo2Stack undoStack;
+    textDoc.setUndoStack(&undoStack);
     KoTextEditor editor(&doc);
 
     DummyInlineObject *obj1 = new DummyInlineObject(true);
@@ -140,6 +164,10 @@ void TestKoInlineTextObjectManager::testListenToProperties()
     manager.insertInlineObject(*editor.cursor(), obj2);
     manager.setProperty(KoInlineObject::UserInput, "bla2");
     Q_ASSERT(obj2->m_property.toString() == "bla2");
+
+    // KoInlineTextObjectManager doesn't own its inline objects.
+    delete obj1;
+    delete obj2;
 }
 
 QTEST_MAIN(TestKoInlineTextObjectManager)
