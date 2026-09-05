@@ -39,7 +39,10 @@ TableRowElement::TableRowElement(BasicElement *parent)
 {
 }
 
-TableRowElement::~TableRowElement() = default;
+TableRowElement::~TableRowElement()
+{
+    qDeleteAll(m_data);
+}
 
 void TableRowElement::paint(QPainter &painter, AttributeManager *am)
 {

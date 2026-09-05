@@ -55,7 +55,8 @@ void TestMultipleFiles::initTestCase()
 
 void TestMultipleFiles::cleanupTestCase()
 {
-    // overrides TestLoadingBase
+    delete m_chart;
+    m_chart = nullptr;
 }
 
 void TestMultipleFiles::init()
@@ -81,6 +82,7 @@ void TestMultipleFiles::init()
     }
     QVERIFY(success);
     QVERIFY(m_chart->document()->loadOdf(odfReadStore));
+    delete store;
 }
 
 void TestMultipleFiles::cleanup()

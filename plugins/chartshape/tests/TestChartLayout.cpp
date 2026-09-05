@@ -52,6 +52,9 @@ void TestChartLayout::initTestCase()
 {
     qInstallMessageHandler(filterMessages);
 
+    // No message boxes please: they'd block the test with no way to dismiss them headlessly.
+    ChartShape::setEnableUserInteraction(false);
+
     drm = new KoDocumentResourceManager(); // used throughout the test
 
     // Just used to check default layout

@@ -35,6 +35,7 @@ void TestKoColorSpaceRegistry::testRgbU8()
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
+    cmsCloseProfile(lcmsProfile);
 }
 
 void TestKoColorSpaceRegistry::testRgbU16()
@@ -57,6 +58,7 @@ void TestKoColorSpaceRegistry::testRgbU16()
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
+    cmsCloseProfile(lcmsProfile);
 }
 
 void TestKoColorSpaceRegistry::testLab()
@@ -84,6 +86,7 @@ void TestKoColorSpaceRegistry::testLab()
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
+    cmsCloseProfile(lcmsProfile);
 }
 
 QTEST_GUILESS_MAIN(TestKoColorSpaceRegistry)

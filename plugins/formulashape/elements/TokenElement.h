@@ -35,6 +35,7 @@ class KOFORMULA_EXPORT TokenElement : public BasicElement
 public:
     /// The standard constructor
     explicit TokenElement(BasicElement *parent = nullptr);
+    ~TokenElement() override;
 
     /**
      * Obtain a list of all child elements of this element

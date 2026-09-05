@@ -424,6 +424,8 @@ ChartShape::~ChartShape()
     delete d->legend;
     delete d->plotArea;
 
+    delete d->internalModelHelper;
+    delete d->internalModel;
     delete d->proxyModel;
 
     delete d->document;

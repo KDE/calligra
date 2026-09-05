@@ -24,6 +24,11 @@ TokenElement::TokenElement(BasicElement *parent)
     m_stretchVertically = false;
 }
 
+TokenElement::~TokenElement()
+{
+    qDeleteAll(m_glyphs);
+}
+
 const QList<BasicElement *> TokenElement::childElements() const
 {
     // only return the mglyph elements

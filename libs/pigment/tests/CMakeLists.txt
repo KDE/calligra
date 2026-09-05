@@ -15,6 +15,8 @@ macro(PIGMENT_ADD_UNIT_TEST _TEST_NAME)
         TEST_NAME "${_TEST_NAME}"
         NAME_PREFIX "libs-pigment-"
     )
+    set_tests_properties(libs-pigment-${_TEST_NAME} PROPERTIES
+        ENVIRONMENT "QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin:${CMAKE_INSTALL_PREFIX}/lib64/plugins;LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/sanitizers.supp")
 endmacro()
 
 ########### next target ###############

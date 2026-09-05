@@ -167,6 +167,10 @@ void TestKoLcmsColorProfile::testConversion()
     cmsDoTransform(tf, (quint8 *)&src, (quint8 *)&dst2, 1);
 
     Q_ASSERT(dst[0] == dst2[0]);
+
+    cmsDeleteTransform(tf);
+    cmsCloseProfile(linearRgbProfile);
+    cmsCloseProfile(sRgbProfile);
 }
 
 QTEST_MAIN(TestKoLcmsColorProfile)

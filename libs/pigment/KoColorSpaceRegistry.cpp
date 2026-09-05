@@ -256,6 +256,12 @@ void KoColorSpaceRegistry::addProfileToMap(KoColorProfile *p)
 {
     Q_ASSERT(p);
     if (p->valid()) {
+        // A profile already registered under this name is replaced and would
+        // otherwise never be freed again.
+        KoColorProfile *previous = d->profileMap.value(p->name());
+        if (previous && previous != p && previous != d->dummyProfile.get()) {
+            delete previous;
+        }
         d->profileMap[p->name()] = p;
     }
 }
@@ -264,6 +270,10 @@ void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
     Q_ASSERT(p);
     if (p->valid()) {
+        KoColorProfile *previous = d->profileMap.value(p->name());
+        if (previous && previous != p && previous != d->dummyProfile.get()) {
+            delete previous;
+        }
         d->profileMap[p->name()] = p;
         d->colorConversionSystem->insertColorProfile(p);
     }

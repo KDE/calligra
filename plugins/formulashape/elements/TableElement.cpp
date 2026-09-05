@@ -25,7 +25,10 @@ TableElement::TableElement(BasicElement *parent)
     m_framePenStyle = Qt::NoPen;
 }
 
-TableElement::~TableElement() = default;
+TableElement::~TableElement()
+{
+    qDeleteAll(m_rows);
+}
 
 void TableElement::paint(QPainter &painter, AttributeManager *am)
 {

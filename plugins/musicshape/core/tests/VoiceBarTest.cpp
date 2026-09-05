@@ -18,18 +18,21 @@ class VoiceBarTest : public QObject
 {
     Q_OBJECT
 private:
+    MusicCore::Sheet *sheet = nullptr;
     MusicCore::VoiceBar *voiceBar;
 private Q_SLOTS:
     void init()
     {
-        Sheet *sheet = new Sheet();
+        sheet = new Sheet();
         Bar *bar = new Bar(sheet);
         voiceBar = new VoiceBar(bar);
     }
 
     void cleanup()
     {
-        delete voiceBar;
+        delete sheet;
+        sheet = nullptr;
+        voiceBar = nullptr;
     }
 
     void testConstruction()

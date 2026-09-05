@@ -64,6 +64,7 @@ void TestLoadingBase::initTestCase()
         qDebug() << "Error in odfReadStore.loadAndParse(): " << errorMsg;
     QVERIFY(success);
     QVERIFY(document->loadOdf(odfReadStore));
+    delete store;
 }
 
 void TestLoadingBase::cleanupTestCase()

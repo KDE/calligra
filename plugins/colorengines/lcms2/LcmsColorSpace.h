@@ -12,6 +12,8 @@
 #include <KoColorSpaceAbstract.h>
 #include <colorprofiles/LcmsColorProfileContainer.h>
 
+#include <array>
+
 class LcmsColorProfileContainer;
 
 class KoLcmsInfo
@@ -136,7 +138,7 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
     };
 
     struct Private {
-        mutable quint8 *qcolordata; // A small buffer for conversion from and to qcolor.
+        mutable std::array<quint8, 3> qcolordata{}; // A small BGR buffer for conversion from and to QColor.
         KoLcmsDefaultTransformations *defaultTransformations;
 
         mutable cmsHPROFILE lastRGBProfile; // Last used profile to transform to/from RGB
@@ -157,7 +159,6 @@ protected:
         d->profile = asLcmsProfile(p);
         Q_ASSERT(d->profile);
         d->colorProfile = p;
-        d->qcolordata = nullptr;
         d->lastRGBProfile = nullptr;
         d->lastToRGB = nullptr;
         d->lastFromRGB = nullptr;
@@ -167,17 +168,12 @@ protected:
     ~LcmsColorSpace() override
     {
         delete d->colorProfile;
-        delete[] d->qcolordata;
         delete d->defaultTransformations;
         delete d;
     }
 
     void init()
     {
-        // Default pixel buffer for QColor conversion
-        d->qcolordata = new quint8[3];
-        Q_CHECK_PTR(d->qcolordata);
-
         Q_ASSERT(d->profile);
 
         if (KoLcmsDefaultTransformations::s_RGBProfile == nullptr) {
@@ -232,7 +228,7 @@ public:
             // Default sRGB
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->fromRGB);
 
-            cmsDoTransform(d->defaultTransformations->fromRGB, d->qcolordata, dst, 1);
+            cmsDoTransform(d->defaultTransformations->fromRGB, d->qcolordata.data(), dst, 1);
         } else {
             if (d->lastFromRGB == nullptr || (d->lastFromRGB != nullptr && d->lastRGBProfile != profile->lcmsProfile())) {
                 d->lastFromRGB = cmsCreateTransform(profile->lcmsProfile(),
@@ -243,7 +239,7 @@ public:
                                                     KoColorConversionTransformation::internalConversionFlags());
                 d->lastRGBProfile = profile->lcmsProfile();
             }
-            cmsDoTransform(d->lastFromRGB, d->qcolordata, dst, 1);
+            cmsDoTransform(d->lastFromRGB, d->qcolordata.data(), dst, 1);
         }
 
         this->setOpacity(dst, (quint8)(color.alpha()), 1);
@@ -255,7 +251,7 @@ public:
         if (profile == nullptr) {
             // Default sRGB transform
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
-            cmsDoTransform(d->defaultTransformations->toRGB, const_cast<quint8 *>(src), d->qcolordata, 1);
+            cmsDoTransform(d->defaultTransformations->toRGB, const_cast<quint8 *>(src), d->qcolordata.data(), 1);
         } else {
             if (d->lastToRGB == nullptr || (d->lastToRGB != nullptr && d->lastRGBProfile != profile->lcmsProfile())) {
                 d->lastToRGB = cmsCreateTransform(d->profile->lcmsProfile(),
@@ -266,7 +262,7 @@ public:
                                                   KoColorConversionTransformation::internalConversionFlags());
                 d->lastRGBProfile = profile->lcmsProfile();
             }
-            cmsDoTransform(d->lastToRGB, const_cast<quint8 *>(src), d->qcolordata, 1);
+            cmsDoTransform(d->lastToRGB, const_cast<quint8 *>(src), d->qcolordata.data(), 1);
         }
         c->setRgb(d->qcolordata[2], d->qcolordata[1], d->qcolordata[0]);
         c->setAlpha(this->opacityU8(src));

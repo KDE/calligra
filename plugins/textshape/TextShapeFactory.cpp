@@ -134,7 +134,7 @@ void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *man
     variant.setValue<KoInlineTextObjectManager *>(new KoInlineTextObjectManager(manager));
     manager->setResource(KoText::InlineTextObjectManager, variant);
 
-    variant.setValue<KoTextRangeManager *>(new KoTextRangeManager());
+    variant.setValue<KoTextRangeManager *>(new KoTextRangeManager(manager));
     manager->setResource(KoText::TextRangeManager, variant);
 
     if (!manager->hasResource(KoDocumentResourceManager::UndoStack)) {

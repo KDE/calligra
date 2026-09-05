@@ -69,7 +69,7 @@ TableSource::Private::Private(TableSource *parent)
 
 TableSource::Private::~Private()
 {
-    qDeleteAll(tablesByName.values());
+    qDeleteAll(tables);
 }
 
 /**
@@ -168,7 +168,6 @@ void TableSource::remove(const QString &name)
     if (table) {
         d->tablesByName.remove(table->m_name);
         d->tablesByModel.remove(table->m_model);
-        d->tables.remove(table);
         Q_EMIT tableRemoved(table);
         // Don't delete the Table instance, it might still be in use.
         table->m_model = nullptr;
@@ -189,6 +188,9 @@ void TableSource::rename(const QString &from, const QString &to)
 
 void TableSource::clear()
 {
+    // Destroy tables no longer present in the lookup maps.
+    qDeleteAll(d->tables);
+    d->tables.clear();
     d->tablesByName.clear();
     d->tablesByModel.clear();
     setSheetAccessModel(nullptr);

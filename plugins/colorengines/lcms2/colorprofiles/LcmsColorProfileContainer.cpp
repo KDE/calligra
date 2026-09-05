@@ -24,6 +24,14 @@ public:
     Private()
         : valid(false)
         , suitableForOutput(false)
+        , redTRC(nullptr)
+        , greenTRC(nullptr)
+        , blueTRC(nullptr)
+        , grayTRC(nullptr)
+        , redTRCReverse(nullptr)
+        , greenTRCReverse(nullptr)
+        , blueTRCReverse(nullptr)
+        , grayTRCReverse(nullptr)
     {
     }
 
@@ -72,7 +80,9 @@ LcmsColorProfileContainer::LcmsColorProfileContainer(IccColorProfile::Data *data
 {
     d->data = data;
     d->profile = nullptr;
-    init();
+    // Callers (e.g. IccColorProfile::init()) call init() themselves right
+    // after construction; doing it here too would parse the profile twice
+    // and leak the first generation's reverse tone curves.
 }
 
 QByteArray LcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE profile)
@@ -100,6 +110,20 @@ IccColorProfile *LcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROF
 
 LcmsColorProfileContainer::~LcmsColorProfileContainer()
 {
+    // cmsReverseToneCurve() allocates a new curve that we own; the non-reversed
+    // TRCs come from cmsReadTag() and are owned by the profile itself.
+    if (d->redTRCReverse) {
+        cmsFreeToneCurve(d->redTRCReverse);
+    }
+    if (d->greenTRCReverse) {
+        cmsFreeToneCurve(d->greenTRCReverse);
+    }
+    if (d->blueTRCReverse) {
+        cmsFreeToneCurve(d->blueTRCReverse);
+    }
+    if (d->grayTRCReverse) {
+        cmsFreeToneCurve(d->grayTRCReverse);
+    }
     cmsCloseProfile(d->profile);
     delete d;
 }

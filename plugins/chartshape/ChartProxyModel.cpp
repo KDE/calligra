@@ -585,6 +585,8 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
 
     // For every dataset, there must be an explicit <chart:series> element,
     // which we will load later.
+    qDeleteAll(d->dataSets);
+    qDeleteAll(d->removedDataSets);
     d->dataSets.clear();
     d->removedDataSets.clear();
 
@@ -659,6 +661,10 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
             ++loadedDataSetCount;
         }
     }
+
+    // Discard unmatched data sets.
+    for (int i = loadedDataSetCount; i < createdDataSets.size(); ++i)
+        delete createdDataSets.at(i);
 
     // rebuildDataMap();
     endResetModel();
@@ -765,6 +771,8 @@ Qt::Orientation ChartProxyModel::dataDirection()
 
 void ChartProxyModel::invalidateDataSets()
 {
+    // Release the previous recycle pool.
+    qDeleteAll(d->removedDataSets);
     d->removedDataSets = d->dataSets;
     d->dataSets.clear();
 }
