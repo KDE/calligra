@@ -619,7 +619,7 @@ bool KoDocument::saveFile()
     Q_EMIT clearStatusBarMessage();
 
     if (ret) {
-        KNotification *notify = new KNotification("DocumentSaved");
+        KNotification *notify = new KNotification("DocumentSaved", KNotification::CloseOnTimeout, this);
         notify->setText(i18n("Document <i>%1</i> saved", url().url()));
         notify->setUrls({url()});
         QTimer::singleShot(0, notify, &KNotification::sendEvent);
@@ -1583,7 +1583,7 @@ bool KoDocument::openFile()
     if (ok) {
         setMimeTypeAfterLoading(typeName);
 
-        KNotification *notify = new KNotification("DocumentLoaded");
+        KNotification *notify = new KNotification("DocumentLoaded", KNotification::CloseOnTimeout, this);
         notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
         notify->setUrls(QList<QUrl>{url()});
         QTimer::singleShot(0, notify, &KNotification::sendEvent);
@@ -1859,7 +1859,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
     }
 
     if (oasis && store->hasFile("VersionList.xml")) {
-        KNotification *notify = new KNotification("DocumentHasVersions");
+        KNotification *notify = new KNotification("DocumentHasVersions", KNotification::CloseOnTimeout, this);
         notify->setText(i18n("Document <i>%1</i> contains several versions. Go to File->Versions to open an old version.", store->urlOfStore().url()));
         notify->setUrls({store->urlOfStore()});
         QTimer::singleShot(0, notify, &KNotification::sendEvent);
