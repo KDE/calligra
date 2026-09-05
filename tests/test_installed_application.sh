@@ -39,7 +39,7 @@ fi
 version=$("$prog" --version | cut -d ' ' -f 2)
 echo "Testing: $prog version: $version"
 if echo "$version" | grep -Fxq "$2"; then
-    if ! $("$prog" --benchmark-loading '$3'); then
+    if ! $("$prog" --benchmark-loading "$3"); then
         echo "FAIL $prog failed"
         exit 1
     fi

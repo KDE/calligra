@@ -5,6 +5,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_FORMULA
 #define CALLIGRA_SHEETS_TEST_FORMULA
 
+#include "engine/MapBase.h"
 #include <QObject>
 #include <engine/Value.h>
 
@@ -36,6 +37,7 @@ private Q_SLOTS:
 
 private:
     Value evaluate(const QString &, Value &);
+    MapBase m_map;
     SheetBase *m_sheet;
 };
 

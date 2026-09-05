@@ -29,6 +29,8 @@
 #include <KPrShapeAnimations.h>
 #include <MockShapes.h>
 
+#include <QCoreApplication>
+#include <QEvent>
 #include <QTest>
 
 const int ANIMATIONS_COUNT = 9;
@@ -342,6 +344,7 @@ void TestShapeAnimations::timeHelperMethods()
 
 void TestShapeAnimations::cleanupTestCase()
 {
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
     qDeleteAll(shapes);
     qDeleteAll(m_animation);
 }

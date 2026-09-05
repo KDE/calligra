@@ -12,7 +12,7 @@ macro(SHEETS_ADD_UNIT_TEST _TEST_NAME)
         NAME_PREFIX "sheets-"
     )
     set_tests_properties("sheets-${_TEST_NAME}" PROPERTIES ENVIRONMENT
-        "QT_PLUGIN_PATH=${KDE_INSTALL_FULL_PLUGINDIR};XDG_DATA_DIRS=${KDE_INSTALL_FULL_DATADIR}:/usr/local/share:/usr/share")
+        "QT_QPA_PLATFORM=offscreen;QT_PLUGIN_PATH=${KDE_INSTALL_FULL_PLUGINDIR};XDG_DATA_DIRS=${KDE_INSTALL_FULL_DATADIR}:/usr/local/share:/usr/share;LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/sanitizers.supp")
 endmacro()
 
 ########### Core Functionality ###############
@@ -286,4 +286,3 @@ sheets_add_unit_test(Fods
     LINK_LIBRARIES calligrasheetspartlib Qt6::Test
 )
 target_compile_definitions(Fods PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods")
-

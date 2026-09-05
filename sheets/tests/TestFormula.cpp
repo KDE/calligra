@@ -119,9 +119,8 @@ void TestFormula::initTestCase()
     KLocalizedString::setApplicationDomain("calligrasheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
-    MapBase *map = new MapBase();
-    m_sheet = map->addNewSheet();
-    map->calculationSettings()->locale()->setLanguage(QLocale::C);
+    m_sheet = m_map.addNewSheet();
+    m_map.calculationSettings()->locale()->setLanguage(QLocale::C);
     CellBase(m_sheet, 1, 1).setCellValue(Value(6));
     CellBase(m_sheet, 1, 2).setCellValue(Value(1.5));
     CellBase(m_sheet, 30, 500).setCellValue(Value(100)); // AD500, for testIntersect() -- far from ranges used elsewhere

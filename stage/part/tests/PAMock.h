@@ -65,6 +65,7 @@ public:
         : KPrDocument(new MockPart)
     {
     }
+
     KoView *createViewInstance(QWidget * /* parent */)
     {
         return nullptr;

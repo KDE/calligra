@@ -533,9 +533,13 @@ void KWDocument::initEmpty()
 
     appendPage("Standard");
 
-    Q_ASSERT(resourceManager()->hasResource(KoText::StyleManager));
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager *>();
-    Q_ASSERT(styleManager);
+    if (!styleManager) {
+        styleManager = new KoStyleManager(resourceManager());
+        QVariant styleManagerVariant;
+        styleManagerVariant.setValue(styleManager);
+        resourceManager()->setResource(KoText::StyleManager, styleManagerVariant);
+    }
     KoParagraphStyle *parag = new KoParagraphStyle();
     parag->setName(i18n("Standard"));
     parag->setFontPointSize(12);

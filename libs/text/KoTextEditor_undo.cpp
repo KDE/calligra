@@ -73,6 +73,13 @@
 // stack.
 void KoTextEditor::Private::documentCommandAdded()
 {
+    // Documents used by standalone text shapes may not have an application
+    // undo stack. In that case there is nowhere to store the wrapper command;
+    // creating one would leave an orphaned command tree behind.
+    if (!KoTextDocument(document).undoStack()) {
+        return;
+    }
+
     class UndoTextCommand : public KUndo2Command
     {
     public:

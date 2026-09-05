@@ -3,3 +3,13 @@
 # Suppression file for ASAN/LSAN
 
 leak:QCryptographicHashPrivate::EVP::EVP
+# The pigment registry is a process-wide Qt global and is intentionally kept
+# alive until process termination. Its plugin-created color spaces and profile
+# graph are therefore reported after the test has completed.
+leak:KoColorSpaceRegistry::instance
+# Color spaces are lazily instantiated by factories and retained by the
+# process-wide registry until shutdown.
+leak:KoColorSpaceFactory::grabColorSpace
+leak:TextShape::TextShape
+# KChart keeps style objects in process-wide caches.
+leak:KChart::

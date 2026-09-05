@@ -22,9 +22,6 @@ class TestSort : public QObject
 private Q_SLOTS:
     void AscendingOrder();
     void DescendingOrder();
-
-private:
-    Map *m_map;
 };
 
 } // namespace Sheets

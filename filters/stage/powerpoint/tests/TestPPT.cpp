@@ -37,6 +37,7 @@ void TestRun::convert(QBuffer &buffer, KoStore::Backend backend)
     PptToOdp ppttoodp;
     KoFilter::ConversionStatus status = ppttoodp.convert(storage, output);
     QVERIFY(status == KoFilter::OK);
+    delete output;
 }
 
 QByteArray TestRun::readFile(const QString &path)
@@ -90,6 +91,7 @@ void TestRun::test()
     compareFiles(input, "meta.xml");
     compareFiles(input, "settings.xml");
     compareFiles(input, "META-INF/manifest.xml");
+    delete input;
 }
 
 void TestPPT::testPPT()

@@ -26,7 +26,8 @@
 
 void TestTextStatistics::testTextStatistics()
 {
-    KWDocument doc(new MockPart);
+    MockPart part;
+    KWDocument doc(&part);
     QSignalSpy spy(doc.statistics(), &KWDocumentStatistics::refreshed);
 
     doc.initEmpty();
@@ -61,7 +62,8 @@ void TestTextStatistics::testTextStatistics()
 
 void TestTextStatistics::testListenBehaviour()
 {
-    KWDocument doc(new MockPart);
+    MockPart part;
+    KWDocument doc(&part);
 
     doc.initEmpty();
     doc.mainFrameSet()->document()->setHtml("<html><body><p>Hello world</p></body></html>");

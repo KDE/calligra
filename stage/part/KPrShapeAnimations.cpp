@@ -27,6 +27,8 @@
 #include <QPainterPath>
 #include <QSet>
 
+#include <utility>
+
 // Stage Headers
 #include "KPrDocument.h"
 #include "StageDebug.h"
@@ -63,7 +65,24 @@ KPrShapeAnimations::KPrShapeAnimations(KPrDocument *document, QObject *parent)
 {
 }
 
-KPrShapeAnimations::~KPrShapeAnimations() = default;
+KPrShapeAnimations::~KPrShapeAnimations()
+{
+    for (KPrAnimationStep *step : std::as_const(m_shapeAnimations)) {
+        while (step->animationCount() > 0) {
+            auto *subStep = dynamic_cast<KPrAnimationSubStep *>(step->takeAnimation(0));
+            if (!subStep) {
+                continue;
+            }
+            while (subStep->animationCount() > 0) {
+                subStep->removeAnimation(subStep->animationAt(0));
+            }
+            delete subStep;
+        }
+        delete step;
+    }
+    qDeleteAll(m_removedSubSteps);
+    qDeleteAll(m_removedSteps);
+}
 
 Qt::ItemFlags KPrShapeAnimations::flags(const QModelIndex &index) const
 {
@@ -336,6 +355,7 @@ void KPrShapeAnimations::add(KPrShapeAnimation *animation)
         animation->setSubStep(newSubStep);
     }
     if (!m_shapeAnimations.contains(animation->step())) {
+        m_removedSteps.removeAll(animation->step());
         if ((animation->stepIndex() >= 0) && (animation->stepIndex() <= m_shapeAnimations.count())) {
             m_shapeAnimations.insert(animation->stepIndex(), animation->step());
         } else {
@@ -343,6 +363,7 @@ void KPrShapeAnimations::add(KPrShapeAnimation *animation)
         }
     }
     if (!(animation->step()->indexOfAnimation(animation->subStep()) >= 0)) {
+        m_removedSubSteps.removeAll(animation->subStep());
         if ((animation->subStepIndex() >= 0) && (animation->subStepIndex() <= animation->step()->animationCount())) {
             animation->step()->insertAnimation(animation->subStepIndex(), animation->subStep());
         } else {
@@ -377,7 +398,9 @@ void KPrShapeAnimations::remove(KPrShapeAnimation *animation)
         if (step->animationCount() <= 0) {
             animation->setStepIndex(m_shapeAnimations.indexOf(step));
             m_shapeAnimations.removeAll(step);
+            m_removedSteps.append(step);
         }
+        m_removedSubSteps.append(subStep);
     }
     animation->setAnimIndex(subStep->indexOfAnimation(animation));
     subStep->removeAnimation(animation);
@@ -387,6 +410,7 @@ void KPrShapeAnimations::remove(KPrShapeAnimation *animation)
 void KPrShapeAnimations::insertStep(const int i, KPrAnimationStep *step)
 {
     if (step) {
+        m_removedSteps.removeAll(step);
         m_shapeAnimations.insert(i, step);
     }
 }
@@ -395,6 +419,9 @@ void KPrShapeAnimations::removeStep(KPrAnimationStep *step)
 {
     if (step) {
         m_shapeAnimations.removeAll(step);
+        if (!m_removedSteps.contains(step)) {
+            m_removedSteps.append(step);
+        }
     }
 }
 
@@ -707,6 +734,9 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
         // If old substep or step is empty remove from list;
         if (oldSubStep->children().isEmpty()) {
             oldSubStep->setParent(nullptr);
+            if (!m_removedSubSteps.contains(oldSubStep)) {
+                m_removedSubSteps.append(oldSubStep);
+            }
         }
         if (oldStep->children().isEmpty()) {
             removeStep(oldStep);

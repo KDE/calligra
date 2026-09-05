@@ -166,11 +166,10 @@ Style StyleStorage::contains(const QPoint &point) const
 
         return *style;
     }
-    Style *style = new Style();
-    (*style) = composeStyle(subStyles);
+    Style style = composeStyle(subStyles);
 
-    // if (point.x() == 1 && point.y() == 1) {debugSheetsStyle <<"StyleStorage: style:"<<point<<':'; style->dump();}
-    return *style;
+    // if (point.x() == 1 && point.y() == 1) {debugSheetsStyle <<"StyleStorage: style:"<<point<<':'; style.dump();}
+    return style;
 }
 
 Style StyleStorage::contains(const QRect &rect) const

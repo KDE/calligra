@@ -11,7 +11,8 @@
 
 void TestClipToPage::testClipToPage()
 {
-    KWDocument doc(new MockPart);
+    MockPart part;
+    KWDocument doc(&part);
     KWPage page1 = doc.appendPage("Standard");
     KoPageLayout layout = page1.pageStyle().pageLayout();
     layout.width = 300;

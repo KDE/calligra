@@ -587,6 +587,9 @@ void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfigu
 
 void KoStyleManager::setBibliographyConfiguration(KoOdfBibliographyConfiguration *bibliographyConfiguration)
 {
+    if (d->bibliographyConfiguration != bibliographyConfiguration) {
+        delete d->bibliographyConfiguration;
+    }
     d->bibliographyConfiguration = bibliographyConfiguration;
 }
 

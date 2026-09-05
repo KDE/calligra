@@ -50,9 +50,9 @@ void TestFormulaParser::testConvertFormula_data()
     QTest::newRow("Sheetname") << "=IF('Sheet 1'!A1,''Sheet '1''!A2,'''Sheet 1'''!A3"
                                << "=IF('Sheet 1'!A1;'Sheet ''1'!A2;'Sheet 1'!A3";
     QTest::newRow("intersection operator without extra parenthesis") << "AREAS(B2:D4 B2)"
-                                                                     << "=AREAS(B2:D4!B2)";
+                                                                     << "=AREAS(B2:D4$65536!B2)";
     QTest::newRow("intersection operator without extra parenthesis, extra whitespace") << "AREAS(B2:D4    B2)"
-                                                                                       << "=AREAS(B2:D4!   B2)";
+                                                                                       << "=AREAS(B2:D4$65536!   B2)";
 }
 
 void TestFormulaParser::testConvertFormula()
@@ -82,6 +82,9 @@ void TestFormulaParser::testSharedFormulaReferences()
 
     static_cast<FormulaImpl *>(c1->formula)->m_formula = "=F8(H12)";
     QCOMPARE(MSOOXML::convertFormulaReference(c1, c2), QString("=F8(R50)"));
+
+    delete c1;
+    delete c2;
 }
 
 QTEST_GUILESS_MAIN(TestFormulaParser)

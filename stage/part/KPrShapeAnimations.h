@@ -298,6 +298,8 @@ private:
     bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType, KPrShapeAnimation::NodeType newType);
 
     QList<KPrAnimationStep *> m_shapeAnimations;
+    QList<KPrAnimationStep *> m_removedSteps;
+    QList<KPrAnimationSubStep *> m_removedSubSteps;
     KPrShapeAnimation *m_currentEditedAnimation;
     bool m_firstEdition;
     int m_oldBegin;

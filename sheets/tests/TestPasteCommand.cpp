@@ -21,7 +21,8 @@ using namespace Calligra::Sheets;
 
 void PasteCommandTest::testKSpreadSnippet()
 {
-    Doc doc(new MockPart);
+    MockPart part;
+    Doc doc(&part);
     Map *map = doc.map();
     Sheet *sheet = new Sheet(map, "Sheet1");
     map->addSheet(sheet);
@@ -35,13 +36,13 @@ void PasteCommandTest::testKSpreadSnippet()
     selection.setActiveSheet(sheet);
     selection.initialize(QPoint(2, 4), sheet);
 
-    QMimeData *mimedata = new QMimeData();
-    mimedata->setData("application/x-calligra-sheets-snippet", "range 1 4 1 5 Sheet1\n");
+    QMimeData mimedata;
+    mimedata.setData("application/x-calligra-sheets-snippet", "range 1 4 1 5 Sheet1\n");
 
     PasteCommand *command = new PasteCommand();
     command->setSheet(selection.activeSheet());
     command->add(selection);
-    command->setMimeData(mimedata, true);
+    command->setMimeData(&mimedata, true);
     command->setPasteFC(true);
     qDebug() << (*command);
     command->execute(&canvas);
@@ -52,6 +53,10 @@ void PasteCommandTest::testKSpreadSnippet()
     QCOMPARE(Cell(sheet, 2, 4).value(), Value(36));
     QCOMPARE(Cell(sheet, 2, 4).userInput(), QString("=2*B3+7*B3"));
     QCOMPARE(Cell(sheet, 2, 5).value(), Value(71));
+
+    // PasteCommand is owned by the document undo stack; clear it before the
+    // document is destroyed so its QMimeData is released as well.
+    doc.undoStack()->clear();
 }
 
 QTEST_MAIN(PasteCommandTest)

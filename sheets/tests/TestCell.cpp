@@ -23,6 +23,8 @@
 #include <QBuffer>
 #include <QTest>
 
+#include <memory>
+
 using namespace Calligra::Sheets;
 
 KoXmlDocument CellTest::xmlDocument(const QString &content)
@@ -43,9 +45,9 @@ void CellTest::testRichText()
 
     QBuffer buffer;
     buffer.open(QIODevice::ReadOnly);
-    KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
+    std::unique_ptr<KoStore> store(KoStore::createStore(&buffer, KoStore::Read));
 
-    KoOdfLoadingContext odfContext(stylesReader, store);
+    KoOdfLoadingContext odfContext(stylesReader, store.get());
     Odf::OdfLoadingContext context(odfContext);
 
     KoDocumentResourceManager documentResources;
@@ -102,6 +104,9 @@ void CellTest::testRichText()
         QVERIFY(!cell.richText());
         QVERIFY(cell.userInput().split('\n').count() == 1);
     }
+
+    storage->take(1, 1);
+    store->close();
 }
 
 QTEST_MAIN(CellTest)
