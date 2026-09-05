@@ -84,6 +84,7 @@ void TestKoShapeRegistry::testCreateShapes()
     shape = registry->createShapeFromOdf(pathElement, shapeContext);
     QVERIFY(shape != nullptr);
     QVERIFY(shape->shapeId() == KoPathShapeId);
+    delete shape;
 }
 
 void TestKoShapeRegistry::testCreateFramedShapes()
@@ -140,6 +141,7 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     shape = registry->createShapeFromOdf(pathElement, shapeContext);
     QVERIFY(shape != nullptr);
     QVERIFY(shape->shapeId() == KoPathShapeId);
+    delete shape;
 }
 
 QTEST_MAIN(TestKoShapeRegistry)

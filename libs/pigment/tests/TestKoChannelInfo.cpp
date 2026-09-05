@@ -28,6 +28,8 @@ void TestKoChannelInfo::testDisplayPositionToChannelIndex()
     QCOMPARE(KoChannelInfo::displayPositionToChannelIndex(1, channels), 1);
     QCOMPARE(KoChannelInfo::displayPositionToChannelIndex(2, channels), 0);
     QCOMPARE(KoChannelInfo::displayPositionToChannelIndex(3, channels), 3);
+
+    qDeleteAll(channels);
 }
 
 void TestKoChannelInfo::testdisplayOrderSorted()
@@ -43,6 +45,8 @@ void TestKoChannelInfo::testdisplayOrderSorted()
     QCOMPARE(sortedChannels[1]->displayPosition(), 1);
     QCOMPARE(sortedChannels[2]->displayPosition(), 2);
     QCOMPARE(sortedChannels[3]->displayPosition(), 3);
+
+    qDeleteAll(channels);
 }
 
 QTEST_GUILESS_MAIN(TestKoChannelInfo)

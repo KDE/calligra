@@ -94,6 +94,8 @@ protected:
     QByteArray m_manifestBuffer;
     KZip *m_pZip;
     QTemporaryFile *m_tempFile;
+    /// Backing storage for the QBuffer in d->stream while reading an encrypted file.
+    QByteArray m_decryptedBuffer;
     bool m_bPasswordUsed;
     bool m_bPasswordDeclined;
 

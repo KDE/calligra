@@ -23,6 +23,10 @@ public:
             if (stroke && !stroke->deref())
                 delete stroke;
         }
+        for (KoShapeStrokeModel *stroke : std::as_const(newStrokes)) {
+            if (stroke && !stroke->deref())
+                delete stroke;
+        }
     }
 
     void addOldStroke(KoShapeStrokeModel *oldStroke)

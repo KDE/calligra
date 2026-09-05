@@ -14,12 +14,12 @@
 
 void TestResourceManager::koShapeResource()
 {
-    KoPathShape *shape = new KoPathShape();
+    KoPathShape shape;
     int key = 9001;
 
     KoCanvasResourceManager rp(nullptr);
-    rp.setResource(key, shape);
-    QVERIFY(shape == rp.koShapeResource(key));
+    rp.setResource(key, &shape);
+    QVERIFY(&shape == rp.koShapeResource(key));
 }
 
 void TestResourceManager::testUnitChanged()

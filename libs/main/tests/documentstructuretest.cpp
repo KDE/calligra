@@ -135,5 +135,6 @@ void DocumentStructureTest::singleDocumentContents()
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    return QTest::qExec(new DocumentStructureTest, argc, argv);
+    DocumentStructureTest tc;
+    return QTest::qExec(&tc, argc, argv);
 }

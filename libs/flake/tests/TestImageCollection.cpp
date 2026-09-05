@@ -74,6 +74,8 @@ void TestImageCollection::testGetImageStore()
     QCOMPARE(id1->key(), id2->key());
     QCOMPARE(collection.count(), 1);
 
+    delete id1;
+    delete id2;
     delete store;
 }
 
@@ -177,6 +179,8 @@ void TestImageCollection::testPreload3()
 
     QPixmap pixmap5 = data.pixmap();
     QCOMPARE(pixmap5.cacheKey(), pixmap4.cacheKey());
+
+    delete store;
 }
 
 void TestImageCollection::testSameKey()
@@ -218,6 +222,8 @@ void TestImageCollection::testSameKey()
     // should reset the key so it's the same as data6
     data2.setImage(qImage3);
     QCOMPARE(data2.key(), data7.key());
+
+    delete store;
 }
 
 void TestImageCollection::testIsValid()

@@ -14,6 +14,7 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
+    void cleanupTestCase();
     void testParseConfigItemString();
     void testSelectItemSet();
     void testIndexedMap();
@@ -54,6 +55,11 @@ void TestOdfSettings::initTestCase()
     bool ok = doc.setContent(xml, true /* namespace processing */);
     QVERIFY(ok);
     settings = new KoOasisSettings(doc);
+}
+
+void TestOdfSettings::cleanupTestCase()
+{
+    delete settings;
 }
 
 void TestOdfSettings::testSelectItemSet()

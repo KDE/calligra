@@ -951,6 +951,8 @@ KoPathSegment KoPathSegment::mapped(const QTransform &matrix) const
 
     KoPathPoint *p1 = new KoPathPoint(*d->first);
     KoPathPoint *p2 = new KoPathPoint(*d->second);
+    p1->setParent(nullptr);
+    p2->setParent(nullptr);
     p1->map(matrix);
     p2->map(matrix);
 
@@ -964,6 +966,8 @@ KoPathSegment KoPathSegment::toCubic() const
 
     KoPathPoint *p1 = new KoPathPoint(*d->first);
     KoPathPoint *p2 = new KoPathPoint(*d->second);
+    p1->setParent(nullptr);
+    p2->setParent(nullptr);
 
     if (degree() == 1) {
         p1->setControlPoint2(p1->point() + 0.3 * (p2->point() - p1->point()));

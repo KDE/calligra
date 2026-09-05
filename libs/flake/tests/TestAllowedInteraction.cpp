@@ -30,6 +30,8 @@ void TestAllowedInteraction::testVisible()
     QVERIFY(!shape->isVisible(true));
     parent->setVisible(true);
     QVERIFY(shape->isVisible(true));
+
+    delete parent;
 }
 
 void TestAllowedInteraction::testSelectable()
@@ -61,6 +63,8 @@ void TestAllowedInteraction::testSelectable()
     QVERIFY(shape->isSelectable());
     parent->setVisible(true);
     QVERIFY(shape->isSelectable());
+
+    delete parent;
 }
 
 void TestAllowedInteraction::testDeletable()
@@ -92,6 +96,8 @@ void TestAllowedInteraction::testDeletable()
     QVERIFY(shape->isDeletable());
     parent->setDeletable(true);
     QVERIFY(shape->isSelectable());
+
+    delete parent;
 }
 
 void TestAllowedInteraction::testGeometryProtected()
@@ -123,6 +129,8 @@ void TestAllowedInteraction::testGeometryProtected()
     QVERIFY(!shape->isGeometryProtected());
     parent->setVisible(true);
     QVERIFY(!shape->isGeometryProtected());
+
+    delete parent;
 }
 
 void TestAllowedInteraction::testContentProtected()
@@ -154,6 +162,8 @@ void TestAllowedInteraction::testContentProtected()
     QVERIFY(!shape->isContentProtected());
     parent->setVisible(true);
     QVERIFY(!shape->isContentProtected());
+
+    delete parent;
 }
 
 void TestAllowedInteraction::testEditable()
@@ -185,6 +195,8 @@ void TestAllowedInteraction::testEditable()
     QVERIFY(!shape->isEditable());
     parent->setVisible(true);
     QVERIFY(shape->isEditable());
+
+    delete parent;
 }
 
 void TestAllowedInteraction::testShape()
@@ -270,6 +282,8 @@ void TestAllowedInteraction::testShape()
     QVERIFY(shape->isContentProtected());
     shape->setContentProtected(false);
     QVERIFY(!shape->isContentProtected());
+
+    delete shape;
 }
 
 void TestAllowedInteraction::testParentAllowedInteractions()
@@ -309,6 +323,8 @@ void TestAllowedInteraction::testParentAllowedInteractions()
 
     parent->setAllowedInteractions(KoShape::DeletionAllowed);
     QVERIFY(shape->allowedInteractions() & KoShape::DeletionAllowed);
+
+    delete parent;
 }
 
 void TestAllowedInteraction::testParentAllowedInteraction()
@@ -360,6 +376,8 @@ void TestAllowedInteraction::testParentAllowedInteraction()
 
     parent->setAllowedInteraction(KoShape::DeletionAllowed, false);
     QVERIFY(!shape->allowedInteraction(KoShape::DeletionAllowed));
+
+    delete parent;
 }
 
 void TestAllowedInteraction::testGrandParentAllowedInteractions()
@@ -403,6 +421,8 @@ void TestAllowedInteraction::testGrandParentAllowedInteractions()
 
     grandParent->setAllowedInteractions(KoShape::DeletionAllowed);
     QVERIFY(shape->allowedInteractions() & KoShape::DeletionAllowed);
+
+    delete grandParent;
 }
 
 void TestAllowedInteraction::testGrandParentAllowedInteraction()
@@ -457,6 +477,8 @@ void TestAllowedInteraction::testGrandParentAllowedInteraction()
 
     grandParent->setAllowedInteraction(KoShape::DeletionAllowed, false);
     QVERIFY(!shape->allowedInteraction(KoShape::DeletionAllowed));
+
+    delete grandParent;
 }
 
 QTEST_GUILESS_MAIN(TestAllowedInteraction)

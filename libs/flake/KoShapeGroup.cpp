@@ -220,9 +220,10 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
     case KoShape::StrokeChanged: {
         KoShapeStrokeModel *str = stroke();
         if (str) {
-            if (str->deref())
-                delete str;
+            // setStroke() derefs str itself; only delete it after, once it's detached.
             setStroke(nullptr);
+            if (!str->useCount())
+                delete str;
         }
         break;
     }

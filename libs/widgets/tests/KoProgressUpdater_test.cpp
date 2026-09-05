@@ -257,12 +257,13 @@ void KoProgressUpdaterTest::testFromWeaver()
     }
     ThreadWeaver::Queue::instance()->finish();
     QCOMPARE(jobsdone, 10);
+    QCoreApplication::processEvents();
 }
 
 void KoProgressUpdaterTest::jobDone(ThreadWeaver::JobPointer job)
 {
-    Q_UNUSED(job);
     ++jobsdone;
+    dynamic_cast<QObject *>(job.data())->deleteLater();
 }
 
 QTEST_GUILESS_MAIN(KoProgressUpdaterTest)

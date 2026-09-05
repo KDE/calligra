@@ -35,6 +35,11 @@ void TestPAPageMoveCommand::initTestCase()
 
 void TestPAPageMoveCommand::cleanupTestCase()
 {
+    // m_pages[0] stays inserted in m_doc and is deleted with it; the rest were
+    // taken back out by the last cleanup() and are otherwise never deleted.
+    for (int i = 1; i < 5; ++i) {
+        delete m_pages[i];
+    }
 }
 
 void TestPAPageMoveCommand::init()

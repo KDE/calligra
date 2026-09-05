@@ -86,6 +86,9 @@ void PriorityQueue_test::testQueue()
         queue.dump();
         n = queue.extractMinimum();
     }
+
+    qDeleteAll(list);
+    qDeleteAll(dict);
 }
 
 QTEST_MAIN(PriorityQueue_test)

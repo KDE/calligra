@@ -18,6 +18,8 @@
 
 #include <QTest>
 
+#include <memory>
+
 void TestShapeContainer::testModel()
 {
     MockContainerModel *model = new MockContainerModel();
@@ -90,6 +92,8 @@ void TestShapeContainer::testSetParent2()
 
     shape->setParent(nullptr);
     QCOMPARE(model->shapes().count(), 0);
+
+    delete shape;
 }
 
 void TestShapeContainer::testScaling()
@@ -107,8 +111,8 @@ void TestShapeContainer::testScaling()
     groupedShapes.append(shape1);
     groupedShapes.append(shape2);
 
-    KoShapeGroup *group = new KoShapeGroup();
-    KoShapeGroupCommand *groupCommand = KoShapeGroupCommand::createCommand(group, groupedShapes);
+    KoShapeGroup group;
+    std::unique_ptr<KoShapeGroupCommand> groupCommand(KoShapeGroupCommand::createCommand(&group, groupedShapes));
     groupCommand->redo();
 
     QList<KoShape *> transformShapes;
@@ -132,21 +136,23 @@ void TestShapeContainer::testScaling()
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
     }
 
-    KoShapeTransformCommand *transformCommand;
-    transformCommand = new KoShapeTransformCommand(transformShapes, oldTransformations, newTransformations);
-    transformCommand->redo();
+    KoShapeTransformCommand transformCommand(transformShapes, oldTransformations, newTransformations);
+    transformCommand.redo();
 
     for (int i = 0; i < transformShapes.size(); i++) {
         QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner), oldPositions.at(i) * 0.5);
     }
 
+    // takeLast() drops shape2, leaving shape1 as the one removed from the group below.
     transformShapes.takeLast();
-    KoShapeUngroupCommand *ungroupCmd = new KoShapeUngroupCommand(group, transformShapes);
-    ungroupCmd->redo();
+    KoShapeUngroupCommand ungroupCmd(&group, transformShapes);
+    ungroupCmd.redo();
 
     for (int i = 0; i < transformShapes.size(); i++) {
         QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner), oldPositions.at(i) * 0.5);
     }
+
+    delete shape1; // ungrouped above; shape2 stays in group and is deleted with it
 }
 
 void TestShapeContainer::testScaling2()
@@ -164,15 +170,15 @@ void TestShapeContainer::testScaling2()
     groupedShapes.append(shape1);
     groupedShapes.append(shape2);
 
-    KoShapeGroup *group = new KoShapeGroup();
-    KoShapeGroupCommand *groupCommand = KoShapeGroupCommand::createCommand(group, groupedShapes);
+    KoShapeGroup group;
+    std::unique_ptr<KoShapeGroupCommand> groupCommand(KoShapeGroupCommand::createCommand(&group, groupedShapes));
     groupCommand->redo();
 
-    KoSelection *selection = new KoSelection();
-    selection->select(shape1, true);
+    KoSelection selection1;
+    selection1.select(shape1, true);
 
     QList<KoShape *> transformShapes;
-    transformShapes.append(selection->selectedShapes());
+    transformShapes.append(selection1.selectedShapes());
 
     QTransform matrix;
     matrix.scale(0.5, 0.5);
@@ -190,22 +196,22 @@ void TestShapeContainer::testScaling2()
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
     }
 
-    KoShapeTransformCommand *transformCommand;
-    transformCommand = new KoShapeTransformCommand(transformShapes, oldTransformations, newTransformations);
-    transformCommand->redo();
+    KoShapeTransformCommand transformCommand(transformShapes, oldTransformations, newTransformations);
+    transformCommand.redo();
 
     QRectF r1(shape1->absolutePosition(KoFlake::TopLeftCorner), shape1->absolutePosition(KoFlake::BottomRightCorner));
     QRectF r2(shape2->absolutePosition(KoFlake::TopLeftCorner), shape2->absolutePosition(KoFlake::BottomRightCorner));
     QSizeF shapeSize = r1.united(r2).size();
 
-    selection = new KoSelection();
-    selection->select(shape1, true);
-    QSizeF selecSize = selection->size();
+    KoSelection selection2;
+    selection2.select(shape1, true);
+    QSizeF selecSize = selection2.size();
 
     bool works = false;
     if (qFuzzyCompare(selecSize.width(), shapeSize.width()) && qFuzzyCompare(selecSize.height(), shapeSize.height()))
         works = true;
     QCOMPARE(works, true);
+    // group deletes shape1 and shape2 on scope exit
 }
 
 QTEST_MAIN(TestShapeContainer)

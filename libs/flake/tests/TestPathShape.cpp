@@ -260,13 +260,13 @@ void TestPathShape::insertPoint()
     QVERIFY(point6->parent() == &path);
 
     // test out of bounds
-    KoPathPoint *point7 = new KoPathPoint(&path, QPointF(0, 0), KoPathPoint::Normal);
+    KoPathPoint point7(&path, QPointF(0, 0), KoPathPoint::Normal);
     // subpath index out of bounds
     KoPathPointIndex p7Index(2, 0);
-    QVERIFY(path.insertPoint(point7, p7Index) == false);
+    QVERIFY(path.insertPoint(&point7, p7Index) == false);
     // position in subpath out of bounds
     p7Index.second = 6;
-    QVERIFY(path.insertPoint(point7, p7Index) == false);
+    QVERIFY(path.insertPoint(&point7, p7Index) == false);
 
     QPainterPath ppath(QPointF(5, 5));
     ppath.lineTo(10, 10);
@@ -317,6 +317,13 @@ void TestPathShape::removePoint()
     QVERIFY(path.removePoint(path.pathPointIndex(point8)) == point8);
     // remove from end of a closed subpath
     QVERIFY(path.removePoint(path.pathPointIndex(point10)) == point10);
+
+    delete point1;
+    delete point3;
+    delete point5;
+    delete point6;
+    delete point8;
+    delete point10;
 
     QPainterPath ppath(QPointF(20, 10));
     ppath.lineTo(15, 25);
@@ -659,9 +666,15 @@ void TestPathShape::removeSubpath()
     path.curveTo(QPointF(40, 45), QPointF(30, 45), QPointF(30, 40));
     path.close();
 
-    QVERIFY(path.removeSubpath(0) != nullptr);
-    QVERIFY(path.removeSubpath(1) != nullptr);
+    KoSubpath *removed0 = path.removeSubpath(0);
+    QVERIFY(removed0 != nullptr);
+    KoSubpath *removed1 = path.removeSubpath(1);
+    QVERIFY(removed1 != nullptr);
     QVERIFY(path.removeSubpath(1) == nullptr);
+    qDeleteAll(*removed0);
+    delete removed0;
+    qDeleteAll(*removed1);
+    delete removed1;
 
     QPainterPath ppath(QPointF(15, 25));
     ppath.lineTo(10, 20);

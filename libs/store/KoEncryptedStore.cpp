@@ -688,6 +688,7 @@ bool KoEncryptedStore::openRead(const QString &name)
     const KZipFileEntry *fileZipEntry = static_cast<const KZipFileEntry *>(fileArchiveEntry);
 
     delete d->stream;
+    m_decryptedBuffer.clear();
     d->stream = fileZipEntry->createDevice();
     d->size = fileZipEntry->size();
     if (m_encryptionData.contains(name)) {
@@ -778,12 +779,12 @@ bool KoEncryptedStore::openRead(const QString &name)
             break;
         }
 
-        QByteArray *resultArray = new QByteArray(decrypted);
+        m_decryptedBuffer = decrypted;
         KCompressionDevice::CompressionType type = KCompressionDevice::compressionTypeForMimeType("application/x-gzip");
-        KCompressionDevice *resultDevice = new KCompressionDevice(new QBuffer(resultArray, nullptr), false, type);
+        KCompressionDevice *resultDevice = new KCompressionDevice(new QBuffer(&m_decryptedBuffer, nullptr), true, type);
 
         if (!resultDevice) {
-            delete resultArray;
+            m_decryptedBuffer.clear();
             return false;
         }
         resultDevice->setSkipHeaders();
@@ -801,6 +802,7 @@ bool KoEncryptedStore::closeRead()
     Q_D(KoStore);
     delete d->stream;
     d->stream = nullptr;
+    m_decryptedBuffer.clear();
     return true;
 }
 

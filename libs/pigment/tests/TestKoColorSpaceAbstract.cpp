@@ -37,7 +37,7 @@ T mixOpNoAlphaExpectedColor(T color1, T color2, const qint16 *weights)
 void TestKoColorSpaceAbstract::testMixColorsOpU8()
 {
     typedef KoColorSpaceTrait<quint8, 3, 2> U8ColorSpace;
-    KoMixColorsOpImpl<U8ColorSpace> *op = new KoMixColorsOpImpl<U8ColorSpace>;
+    KoMixColorsOpImpl<U8ColorSpace> op;
 
     quint8 pixel1[U8ColorSpace::channels_nb];
     quint8 pixel2[U8ColorSpace::channels_nb];
@@ -64,7 +64,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8()
     weights[0] = 255;
     weights[1] = 0;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -75,7 +75,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8()
     weights[0] = 0;
     weights[1] = 255;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -86,7 +86,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8()
     weights[0] = 128;
     weights[1] = 127;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -102,7 +102,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8()
     pixel2[COLOR_CHANNEL_2] = 200;
     pixel2[ALPHA_CHANNEL] = 255;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -121,7 +121,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8()
     weights[0] = 89;
     weights[1] = 166;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -133,7 +133,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8()
 void TestKoColorSpaceAbstract::testMixColorsOpF32()
 {
     typedef KoColorSpaceTrait<float, 3, 2> F32ColorSpace;
-    KoMixColorsOpImpl<F32ColorSpace> *op = new KoMixColorsOpImpl<F32ColorSpace>;
+    KoMixColorsOpImpl<F32ColorSpace> op;
 
     float pixel1[F32ColorSpace::channels_nb];
     float pixel2[F32ColorSpace::channels_nb];
@@ -160,7 +160,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
     weights[0] = 255;
     weights[1] = 0;
 
-    op->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
+    op.mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -171,7 +171,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
     weights[0] = 0;
     weights[1] = 255;
 
-    op->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
+    op.mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -182,7 +182,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
     weights[0] = 128;
     weights[1] = 127;
 
-    op->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
+    op.mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -198,7 +198,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
     pixel2[COLOR_CHANNEL_2] = 200.0f / 255.0f;
     pixel2[ALPHA_CHANNEL] = 1.0;
 
-    op->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
+    op.mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -217,7 +217,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
     weights[0] = 89;
     weights[1] = 166;
 
-    op->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
+    op.mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -236,7 +236,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
     weights[0] = 89;
     weights[1] = 166;
 
-    op->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
+    op.mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1],
              mixOpExpectedColor(pixel1[COLOR_CHANNEL_1], pixel1[ALPHA_CHANNEL], pixel2[COLOR_CHANNEL_1], pixel2[ALPHA_CHANNEL], weights));
@@ -248,7 +248,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
 void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
 {
     typedef KoColorSpaceTrait<quint8, 2, -1> U8NoAlphaColorSpace;
-    KoMixColorsOpImpl<U8NoAlphaColorSpace> *op = new KoMixColorsOpImpl<U8NoAlphaColorSpace>;
+    KoMixColorsOpImpl<U8NoAlphaColorSpace> op;
 
     quint8 pixel1[U8NoAlphaColorSpace::channels_nb];
     quint8 pixel2[U8NoAlphaColorSpace::channels_nb];
@@ -272,7 +272,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
     weights[0] = 255;
     weights[1] = 0;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
@@ -280,7 +280,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
     weights[0] = 0;
     weights[1] = 255;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
@@ -288,7 +288,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
     weights[0] = 128;
     weights[1] = 127;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
@@ -299,7 +299,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
     pixel2[COLOR_CHANNEL_1] = 100;
     pixel2[COLOR_CHANNEL_2] = 200;
 
-    op->mixColors(pixelPtrs, weights, 2, outputPixel);
+    op.mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
@@ -308,7 +308,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
 void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlphaLinear()
 {
     typedef KoColorSpaceTrait<quint8, 2, -1> U8NoAlphaColorSpace;
-    KoMixColorsOpImpl<U8NoAlphaColorSpace> *op = new KoMixColorsOpImpl<U8NoAlphaColorSpace>;
+    KoMixColorsOpImpl<U8NoAlphaColorSpace> op;
 
     quint8 pixels[2 * U8NoAlphaColorSpace::channels_nb];
     quint8 outputPixel[U8NoAlphaColorSpace::channels_nb];
@@ -330,7 +330,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlphaLinear()
     weights[0] = 255;
     weights[1] = 0;
 
-    op->mixColors(pixels, weights, 2, outputPixel);
+    op.mixColors(pixels, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
@@ -338,7 +338,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlphaLinear()
     weights[0] = 0;
     weights[1] = 255;
 
-    op->mixColors(pixels, weights, 2, outputPixel);
+    op.mixColors(pixels, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
@@ -346,7 +346,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlphaLinear()
     weights[0] = 128;
     weights[1] = 127;
 
-    op->mixColors(pixels, weights, 2, outputPixel);
+    op.mixColors(pixels, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
@@ -357,7 +357,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlphaLinear()
     pixel2[COLOR_CHANNEL_1] = 100;
     pixel2[COLOR_CHANNEL_2] = 200;
 
-    op->mixColors(pixels, weights, 2, outputPixel);
+    op.mixColors(pixels, weights, 2, outputPixel);
 
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));

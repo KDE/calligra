@@ -17,6 +17,7 @@ class TestXmlWriter : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
+    void cleanup();
     void testDocytype();
     void testEmtpyElement();
     void testAttributes();
@@ -45,6 +46,16 @@ void TestXmlWriter::initTestCase()
     QLoggingCategory::setFilterRules(
         "*.debug=false\n"
         "calligra.lib.odf=true\ncalligra.lib.store=true");
+    writer = nullptr;
+    buffer = nullptr;
+}
+
+void TestXmlWriter::cleanup()
+{
+    delete writer;
+    writer = nullptr;
+    delete buffer;
+    buffer = nullptr;
 }
 
 void TestXmlWriter::setup(const char *publicId, const char *systemId)

@@ -20,6 +20,10 @@ public:
             if (shadow && !shadow->deref())
                 delete shadow;
         }
+        for (KoShapeShadow *shadow : std::as_const(newShadows)) {
+            if (shadow && !shadow->deref())
+                delete shadow;
+        }
     }
 
     void addOldShadow(KoShapeShadow *oldShadow)
