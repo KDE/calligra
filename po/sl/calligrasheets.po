@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1745488 2026-09-04 01:29:46Z scripty $
+# $Id: calligrasheets.po 1745577 2026-09-05 01:30:49Z scripty $
 # $Source$
 #
 #
@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-08-31 11:33+0200\n"
+"PO-Revision-Date: 2026-09-04 07:38+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -8407,34 +8407,31 @@ msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr "LOOKUP(1.232; A1:A6; B1:B6) za A1 = 1, A2 = 2 vrne vrednost celice B1."
 
 #: functions/reference.xml:257
-#, fuzzy, kde-format
-#| msgid "Lookup value"
+#, kde-format
 msgid "Lookup array"
-msgstr "Iskana vrednost"
+msgstr "Iskalno polje"
 
 #: functions/reference.xml:258
 #, kde-format
 msgid "Return array"
-msgstr ""
+msgstr "Vrnjeno polje"
 
 #: functions/reference.xml:259
-#, fuzzy, kde-format
-#| msgid "Method (optional)"
+#, kde-format
 msgid "If not found (optional)"
-msgstr "Metoda (po želji)"
+msgstr "Če ni najdeno (neobvezno)"
 
 #: functions/reference.xml:261
 #, kde-format
 msgid ""
 "Searches an array for a value and returns the corresponding value from a "
 "result array."
-msgstr ""
+msgstr "Išče vrednost v polju in vrne ustrezno vrednost iz polja rezultatov."
 
 #: functions/reference.xml:262
-#, fuzzy, kde-format
-#| msgid "LOOKUP(value; lookup vector; result vector)"
+#, kde-format
 msgid "XLOOKUP(value; lookup array; return array; if not found)"
-msgstr "LOOKUP(vrednost; preiskovani vektor, vektor rezultata)"
+msgstr "XLOOKUP(vrednost; polje iskanja; vrnjeno polje; če ni najdeno)"
 
 #: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format

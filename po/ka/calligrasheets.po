@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-09-01 05:30+0200\n"
+"PO-Revision-Date: 2026-09-04 07:48+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8237,21 +8237,19 @@ msgstr ""
 "მნიშვნელობას."
 
 #: functions/reference.xml:257
-#, fuzzy, kde-format
-#| msgid "Lookup value"
+#, kde-format
 msgid "Lookup array"
-msgstr "ძებნის მნიშვნელობა"
+msgstr "ძებნის მასივი"
 
 #: functions/reference.xml:258
 #, kde-format
 msgid "Return array"
-msgstr ""
+msgstr "დასაბრუნებელი მასივი"
 
 #: functions/reference.xml:259
-#, fuzzy, kde-format
-#| msgid "Method (optional)"
+#, kde-format
 msgid "If not found (optional)"
-msgstr "Method (არასავალდებულო)"
+msgstr "თუ ნაპოვნი არაა (არასავალდებულო)"
 
 #: functions/reference.xml:261
 #, kde-format
@@ -8261,10 +8259,10 @@ msgid ""
 msgstr ""
 
 #: functions/reference.xml:262
-#, fuzzy, kde-format
-#| msgid "LOOKUP(value; lookup vector; result vector)"
+#, kde-format
 msgid "XLOOKUP(value; lookup array; return array; if not found)"
-msgstr "LOOKUP(მნიშვნელობა; ძებნის ვექტორი; შედეგის ვექტორი)"
+msgstr ""
+"XLOOKUP(მნიშვნელობა; ძებნის მასივი; დაბრუნების მასივი; თუ ნაპოვნი არაა)"
 
 #: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format

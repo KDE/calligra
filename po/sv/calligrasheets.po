@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-09-02 22:09+0200\n"
+"PO-Revision-Date: 2026-09-04 08:26+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -8486,21 +8486,19 @@ msgstr ""
 "LOOKUP(1,232; A1:A6; B1:B6) för A1 = 1, A2 = 2 returnerar värdet på B1."
 
 #: functions/reference.xml:257
-#, fuzzy, kde-format
-#| msgid "Lookup value"
+#, kde-format
 msgid "Lookup array"
-msgstr "Uppslagningsvärde"
+msgstr "Slå upp fält"
 
 #: functions/reference.xml:258
 #, kde-format
 msgid "Return array"
-msgstr ""
+msgstr "Returnera fält"
 
 #: functions/reference.xml:259
-#, fuzzy, kde-format
-#| msgid "Method (optional)"
+#, kde-format
 msgid "If not found (optional)"
-msgstr "Metod (valfri)"
+msgstr "Om inte hittad (valfri)"
 
 #: functions/reference.xml:261
 #, kde-format
@@ -8508,12 +8506,13 @@ msgid ""
 "Searches an array for a value and returns the corresponding value from a "
 "result array."
 msgstr ""
+"Söker i ett fält efter ett värde och returnerar motsvarande värde från ett "
+"resultatfält."
 
 #: functions/reference.xml:262
-#, fuzzy, kde-format
-#| msgid "LOOKUP(value; lookup vector; result vector)"
+#, kde-format
 msgid "XLOOKUP(value; lookup array; return array; if not found)"
-msgstr "LOOKUP(värde; uppslagningsvektor; resultatvektor)"
+msgstr "XLOOKUP(värde; uppslagningsvektor; resultatvektor; om inte hittad)"
 
 #: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format

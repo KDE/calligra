@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-08-31 07:04-0300\n"
+"PO-Revision-Date: 2026-09-04 06:41-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -8498,21 +8498,19 @@ msgstr ""
 "O LOOKUP(1.232; A1:A6; B1:B6) para A1 = 1, A2 = 2 retorna o valor de B1."
 
 #: functions/reference.xml:257
-#, fuzzy, kde-format
-#| msgid "Lookup value"
+#, kde-format
 msgid "Lookup array"
-msgstr "Valor da procura"
+msgstr "Matriz de procura"
 
 #: functions/reference.xml:258
 #, kde-format
 msgid "Return array"
-msgstr ""
+msgstr "Matriz de retorno"
 
 #: functions/reference.xml:259
-#, fuzzy, kde-format
-#| msgid "Method (optional)"
+#, kde-format
 msgid "If not found (optional)"
-msgstr "Método (opcional)"
+msgstr "Se não encontrado (opcional)"
 
 #: functions/reference.xml:261
 #, kde-format
@@ -8520,12 +8518,14 @@ msgid ""
 "Searches an array for a value and returns the corresponding value from a "
 "result array."
 msgstr ""
+"Procura um valor em uma matriz e retorna o valor correspondente de uma "
+"matriz de resultados."
 
 #: functions/reference.xml:262
-#, fuzzy, kde-format
-#| msgid "LOOKUP(value; lookup vector; result vector)"
+#, kde-format
 msgid "XLOOKUP(value; lookup array; return array; if not found)"
-msgstr "LOOKUP(valor, vetor de procura, vetor de resultado)"
+msgstr ""
+"XLOOKUP(valor; matriz de procura; matriz de retorno; se não encontrado)"
 
 #: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format

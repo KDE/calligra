@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-08-31 12:26+0200\n"
+"PO-Revision-Date: 2026-09-04 12:24+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -7756,10 +7756,9 @@ msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr ""
 
 #: functions/reference.xml:257
-#, fuzzy, kde-format
-#| msgid "Lookup value"
+#, kde-format
 msgid "Lookup array"
-msgstr "Valor de cerca"
+msgstr "Cerca array"
 
 #: functions/reference.xml:258
 #, kde-format
@@ -7767,10 +7766,9 @@ msgid "Return array"
 msgstr ""
 
 #: functions/reference.xml:259
-#, fuzzy, kde-format
-#| msgid "Method (optional)"
+#, kde-format
 msgid "If not found (optional)"
-msgstr "Methodo (optional)"
+msgstr "Si non trovate (optional)"
 
 #: functions/reference.xml:261
 #, kde-format

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-07-07 09:17+0200\n"
+"PO-Revision-Date: 2026-09-01 14:29+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 26.04.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -2304,12 +2304,13 @@ msgid ""
 "NETWORKDAYS() is the OpenFormula/Excel spelling of NETWORKDAY(); the two are "
 "otherwise identical."
 msgstr ""
+"NETWORKDAYS() è la sintassi OpenFormula/Excel di NETWORKDAY(); le due "
+"funzioni sono altrimenti identiche."
 
 #: functions/datetime.xml:730
-#, fuzzy, kde-format
-#| msgid "NETWORKDAY(start date; end date; holidays)"
+#, kde-format
 msgid "NETWORKDAYS(start date; end date; holidays)"
-msgstr "NETWORKDAY(data iniziale; data finale; festività)"
+msgstr "NETWORKDAYS(data di inizio; data di fine; festività)"
 
 #: functions/datetime.xml:743
 #, kde-format
@@ -5314,66 +5315,49 @@ msgstr ""
 "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" "
 
 #: functions/financial.xml:1449
-#, fuzzy, kde-format
-#| msgid "Coupon rate"
+#, kde-format
 msgid "Annual coupon rate"
-msgstr "Indice della cedola"
+msgstr "Tasso cedolare annuo"
 
 #: functions/financial.xml:1453
-#, fuzzy, kde-format
-#| msgid "Price per $100 face value"
+#, kde-format
 msgid "Price per 100 currency units of face value"
-msgstr "Prezzo per 100€ di valore nominale"
+msgstr "Prezzo per 100 unità monetarie di valore nominale"
 
 #: functions/financial.xml:1457
-#, fuzzy, kde-format
-#| msgid ""
-#| "YIELDDISC calculates the yield of a discounted security per 100 currency "
-#| "units of face value."
+#, kde-format
 msgid "Redemption value per 100 currency units of face value"
-msgstr ""
-"YIELDDISC calcola il rendimento di un titolo scontato con valore nominale "
-"100."
+msgstr "Valore di riscatto per 100 unità monetarie di valore nominale"
 
 #: functions/financial.xml:1461
-#, fuzzy, kde-format
-#| msgid "Number of payments per year"
+#, kde-format
 msgid "Number of coupon payments per year"
-msgstr "Numero di pagamenti per anno"
+msgstr "Numero di pagamenti delle cedole all'anno"
 
 #: functions/financial.xml:1469
-#, fuzzy, kde-format
-#| msgid ""
-#| "The YIELDMAT function calculates the yield of the security that pays "
-#| "interest on the maturity date."
+#, kde-format
 msgid ""
 "The YIELD function calculates the annual yield of a security that pays "
 "periodic interest."
 msgstr ""
-"La funzione YIELDMAT calcola il rendimento di un titolo che paga gli "
-"interessi alla data di scadenza."
+"La funzione YIELD calcola il rendimento annuo di un titolo che paga "
+"interessi periodici."
 
 #: functions/financial.xml:1470
-#, fuzzy, kde-format
-#| msgid ""
-#| "ODDLYIELD( Settlement; Maturity; Last; Rate; Price; Redemption; Frequency "
-#| "[; Basis = 0 ] )"
+#, kde-format
 msgid ""
 "YIELD(settlement; maturity; rate; price; redemption; frequency [; basis = 0])"
 msgstr ""
-"ODDLYIELD(pagamento; scadenza; ultima-cedola; interesse; prezzo; rimborso; "
-"frequenza [; base =0])"
+"RENDIMENTO(pagamento; scadenza; tasso; prezzo; rimborso; frequenza [; base = "
+"0])"
 
 #: functions/financial.xml:1471
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns "
-#| "0.106194684"
+#, no-c-format, kde-format
 msgid ""
 "YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) returns 0.065"
 msgstr ""
-"YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) restituisce "
-"0,106194684"
+"YIELD(DATE(1999;2;15);DATE(2007;11;15);5.75%;95.04287;100;2) restituisce "
+"0.065"
 
 #: functions/financial.xml:1502
 #, kde-format
@@ -8829,15 +8813,14 @@ msgstr ""
 "Intero nuovaAltezza; Intero nuovaLarghezza)"
 
 #: functions/reference.xml:401
-#, fuzzy, kde-format
-#| msgid "Spreadsheet Application"
+#, kde-format
 msgid "Server application"
-msgstr "Applicazione del foglio di calcolo"
+msgstr "Applicazione server"
 
 #: functions/reference.xml:405
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "Argomento"
 
 #: functions/reference.xml:409
 #, kde-format
@@ -8847,7 +8830,7 @@ msgstr "Elemento"
 #: functions/reference.xml:413
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "Modalità"
 
 #: functions/reference.xml:417
 #, kde-format
@@ -8857,22 +8840,26 @@ msgid ""
 "is recognized so documents that reference it still load, but always "
 "evaluates to an error."
 msgstr ""
+"Richiede dati da un'altra applicazione in esecuzione tramite Dynamic Data "
+"Exchange, un meccanismo interprocesso esclusivo di Windows non supportato da "
+"questa piattaforma. DDE() viene riconosciuto, quindi i documenti che vi "
+"fanno riferimento vengono comunque caricati, ma la chiamata restituisce "
+"sempre un errore."
 
 #: functions/reference.xml:418
 #, kde-format
 msgid "DDE(server; topic; item; mode)"
-msgstr ""
+msgstr "DDE(server; argomento; elemento; modalità)"
 
 #: functions/reference.xml:426
-#, fuzzy, kde-format
-#| msgid "EUR"
+#, kde-format
 msgid "URL"
-msgstr "EUR"
+msgstr "URL"
 
 #: functions/reference.xml:430
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr ""
+msgstr "Testo visualizzato (il valore predefinito è l'URL)"
 
 #: functions/reference.xml:434
 #, kde-format
@@ -8881,17 +8868,21 @@ msgid ""
 "text is given. Following the link is handled by the application, not by "
 "formula evaluation."
 msgstr ""
+"Restituisce il testo visualizzato per un collegamento ipertestuale, oppure "
+"l'URL stesso se non viene specificato alcun testo da visualizzare. "
+"L'esecuzione del collegamento viene gestita dall'applicazione, non dalla "
+"valutazione della formula."
 
 #: functions/reference.xml:435
 #, kde-format
 msgid "HYPERLINK(url; display text)"
-msgstr ""
+msgstr "HYPERLINK(url; testo visualizzato)"
 
 #: functions/reference.xml:436
-#, fuzzy, kde-format
-#| msgid "T(\"Calligra\") returns \"Calligra\""
+#, kde-format
 msgid "HYPERLINK(\"https://calligra.org\"; \"Calligra\") returns \"Calligra\""
-msgstr "T(\"Calligra\") restituisce \"Calligra\""
+msgstr ""
+"HYPERLINK(\"https://calligra.org\"; \"Calligra\") restituisce \"Calligra\""
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -11258,20 +11249,20 @@ msgid "GAMMALN(2) returns 0"
 msgstr "GAMMALN(2) restituisce 0"
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "Probabilità"
+msgstr "Probabilità di successo"
 
 #: functions/statistical.xml:1845
 #, kde-format
 msgid "Number of successes (or the lower limit, if the upper limit is given)"
 msgstr ""
+"Numero di successi (o il limite inferiore, se è indicato il limite superiore)"
 
 #: functions/statistical.xml:1849
 #, kde-format
 msgid "Upper limit for the number of successes"
-msgstr ""
+msgstr "Limite massimo per il numero di successi"
 
 #: functions/statistical.xml:1853
 #, kde-format
@@ -11280,78 +11271,69 @@ msgid ""
 "(inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in "
 "Trials independent trials, each with success probability SP."
 msgstr ""
+"La funzione B() restituisce la probabilità di ottenere un risultato compreso "
+"tra T1 e T2 (inclusi) in prove indipendenti, ciascuna con probabilità di "
+"successo SP."
 
 #: functions/statistical.xml:1854
 #, kde-format
 msgid "B(trials; SP; T1; T2)"
-msgstr ""
+msgstr "B(prove; SP; T1; T2)"
 
 #: functions/statistical.xml:1855
-#, fuzzy, kde-format
-#| msgid "BINO(12;9;0.8) returns 0.236223201"
+#, kde-format
 msgid "B(20; 0.5; 8) returns 0.120134"
-msgstr "BINO(12;9;0,8) restituisce 0,236223201"
+msgstr "B(20; 0.5; 8) restituisce 0.120134"
 
 #: functions/statistical.xml:1856
-#, fuzzy, kde-format
-#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+#, kde-format
 msgid "B(20; 0.5; 8; 10) returns 0.456511"
-msgstr "MAX(0,5; 0,4; TRUE; 0,2) restituisce 0,5"
+msgstr "B(20; 0.5; 8; 10) restituisce 0.456511"
 
 #: functions/statistical.xml:1877
-#, fuzzy, kde-format
-#| msgid ""
-#| "The PHI() function returns value of the distribution function for a "
-#| "standard normal distribution."
+#, kde-format
 msgid ""
 "The CHISQDIST() function returns the value of the cumulative distribution "
 "function (or, if Cumulative is FALSE, the probability density function) for "
 "the chi-square distribution."
 msgstr ""
-"La funzione PHI() restituisce il valore della funzione di distribuzione per "
-"una distribuzione normale standard."
+"La funzione CHISQDIST() restituisce il valore della funzione di "
+"distribuzione cumulativa (o, se cumulativa è FALSE, la funzione di densità "
+"di probabilità) per la distribuzione chi-quadrato."
 
 #: functions/statistical.xml:1878
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQDIST(number; degrees_freedom; cumulative)"
-msgstr "CHIDIST(numero;gradi_di_libertà)"
+msgstr "CHISQDIST(numero; gradi_libertà; cumulativa)"
 
 #: functions/statistical.xml:1879
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
-msgstr "CHIDIST(13,27;5) restituisce 0,021"
+msgstr "CHISQDIST(13.27; 5; TRUE) restituisce 0.979"
 
 #: functions/statistical.xml:1897
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;"
-#| "TRUE())."
+#, kde-format
 msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
 msgstr ""
-"La funzione BETAINV() restituisce l'inversa di BETADIST(x;alfa;beta;a;b;"
-"TRUE())."
+"La funzione CHISQINV() restituisce l'inverso di CHISQDIST(numero;"
+"gradi_libertà; TRUE)."
 
 #: functions/statistical.xml:1898
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQINV(probability; degrees_freedom)"
-msgstr "CHIDIST(numero;gradi_di_libertà)"
+msgstr "CHISQINV(probabilità; gradi_libertà)"
 
 #: functions/statistical.xml:1899
-#, fuzzy, kde-format
-#| msgid "CHIDIST(13.27;5) returns 0.021"
+#, kde-format
 msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
-msgstr "CHIDIST(13,27;5) restituisce 0,021"
+msgstr "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) restituisce 13.27"
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "String values"
+#, kde-format
 msgid "Criterion value"
-msgstr "Stringa di valori"
+msgstr "Valore del criterio"
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -11359,34 +11341,34 @@ msgid ""
 "The CRITBINOM() function returns the smallest value for which the cumulative "
 "binomial distribution is greater than or equal to the criterion value alpha."
 msgstr ""
+"La funzione CRITBINOM() restituisce il valore minimo per il quale la "
+"distribuzione binomiale cumulativa è maggiore o uguale al valore alfa del "
+"criterio."
 
 #: functions/statistical.xml:1921
 #, kde-format
 msgid "CRITBINOM(trials; SP; alpha)"
-msgstr ""
+msgstr "CRITBINOM(prove; SP; alfa)"
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgid "COMBIN(5;5) returns 1"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "COMBIN(5;5) restituisce 1"
+msgstr "CRITBINOM(20; 0.5; 0.55) restituisce 10"
 
 #: functions/statistical.xml:1931
 #, kde-format
 msgid "The x-value for which a y-value is estimated"
-msgstr ""
+msgstr "Il valore x per il quale viene stimato un valore y"
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known y-values"
-msgstr "Valori booleani"
+msgstr "Valori noti di Y"
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Boolean values"
+#, kde-format
 msgid "Known x-values"
-msgstr "Valori booleani"
+msgstr "Valori noti di X"
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -11394,23 +11376,23 @@ msgid ""
 "The FORECAST() function estimates a future y-value along the linear trend "
 "fitted to the known x/y-values, for a given new x-value."
 msgstr ""
+"La funzione FORECAST() stima un valore y futuro lungo la tendenza lineare "
+"adattato ai valori x/y noti, per un dato nuovo valore x."
 
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr ""
+msgstr "PREVISIONE(x; valori noti di y; valori noti di x)"
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "Valori nulli"
+msgstr "Valori osservati"
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Face value"
+#, kde-format
 msgid "Expected values"
-msgstr "Valore nominale"
+msgstr "Valori attesi"
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -11420,26 +11402,32 @@ msgid ""
 "and expected value ranges (which must have the same shape) would occur by "
 "chance."
 msgstr ""
+"La funzione LEGACYCHITEST() restituisce la probabilità, dalla distribuzione "
+"chi-quadrato, che la statistica chi-quadrato calcolata a partire dagli "
+"intervalli di valori osservati e attesi (che devono avere la stessa forma) "
+"si verifichi per caso."
 
 #: functions/statistical.xml:1964
 #, kde-format
 msgid "LEGACYCHITEST(actual range; theoretical range)"
-msgstr ""
+msgstr "LEGACYCHITEST (intervallo effettivo; intervallo teorico)"
 
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr ""
+msgstr "Valori x noti (predefinita la sequenza 1, 2, 3, ...)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr ""
+msgstr "Indica se includere un'intercetta (impostazione predefinita: TRUE)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
 msgid "Whether to return additional regression statistics (defaults to FALSE)"
 msgstr ""
+"Indica se restituire statistiche di regressione aggiuntive (impostazione "
+"predefinita: FALSE)"
 
 #: functions/statistical.xml:1989
 #, kde-format
@@ -11451,17 +11439,22 @@ msgid ""
 "of the y estimate, the F statistic and its degrees of freedom, and the "
 "regression and residual sums of squares."
 msgstr ""
+"La funzione LINEST() adatta una retta y=m*x+b (è supportato solo un singolo "
+"intervallo di x noto) ai dati forniti utilizzando il metodo dei minimi "
+"quadrati e restituisce {m, b}. Se Stats è TRUE, restituisce invece un array "
+"di 5 righe contenente anche gli errori standard di m e b, R-quadro e "
+"l'errore standard della stima di y, la statistica F e i suoi gradi di "
+"libertà, e le somme dei quadrati della regressione e dei residui."
 
 #: functions/statistical.xml:1990
 #, kde-format
 msgid "LINEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LINEST(valori noti di y; valori noti di x; costante; statistiche)"
 
 #: functions/statistical.xml:2002
-#, fuzzy, kde-format
-#| msgid "End and start value must be positive."
+#, kde-format
 msgid "Known y-values (must be positive)"
-msgstr "Il valore di partenza e quello finale devono essere positivi."
+msgstr "Valori noti di Y (devono essere positivi)"
 
 #: functions/statistical.xml:2018
 #, kde-format
@@ -11471,28 +11464,31 @@ msgid ""
 "Stats is TRUE, it also returns the same additional regression statistics as "
 "LINEST, computed for the underlying linear fit against ln(y)."
 msgstr ""
+"La funzione LOGEST() adatta una curva esponenziale y=b*m^x ai dati forniti, "
+"eseguendo una regressione lineare di ln(y) rispetto a x (vedi LINEST), e "
+"restituisce {m, b}. Se Stats è TRUE, restituisce anche le stesse statistiche "
+"di regressione aggiuntive di LINEST, calcolate per l'adattamento lineare "
+"sottostante rispetto a ln(y)."
 
 #: functions/statistical.xml:2019
 #, kde-format
 msgid "LOGEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LOGEST(valori noti di y; valori noti di x; costante; statistiche)"
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "Database"
+msgstr "Insieme di dati"
 
 #: functions/statistical.xml:2033
-#, fuzzy, kde-format
-#| msgid "Value (array)"
+#, kde-format
 msgid "Value to rank"
-msgstr "Valore (vettore)"
+msgstr "Valore"
 
 #: functions/statistical.xml:2037
 #, kde-format
 msgid "Number of significant digits (defaults to 3)"
-msgstr ""
+msgstr "Numero di cifre significative (il valore predefinito è 3)"
 
 #: functions/statistical.xml:2041
 #, kde-format
@@ -11500,21 +11496,26 @@ msgid ""
 "The PERCENTRANK() function returns the rank, as a fraction of the data set, "
 "of a value in that data set. This is the inverse of PERCENTILE."
 msgstr ""
+"La funzione PERCENTRANK() restituisce la posizione in classifica, espressa "
+"come frazione dell'insieme di dati, di un valore all'interno di tale insieme "
+"di dati. Questa è l'inversa di PERCENTILE."
 
 #: functions/statistical.xml:2042
 #, kde-format
 msgid "PERCENTRANK(data; x; significance)"
-msgstr ""
+msgstr "PERCENTRANK(dati; x; significatività)"
 
 #: functions/statistical.xml:2056
 #, kde-format
 msgid "Probabilities, one for each value (must sum to 1)"
-msgstr ""
+msgstr "Probabilità, una per ciascun valore (la somma deve essere pari a 1)"
 
 #: functions/statistical.xml:2060
 #, kde-format
 msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
 msgstr ""
+"Limite inferiore (o l'unico valore da verificare, se il limite superiore "
+"viene omesso)"
 
 #: functions/statistical.xml:2068
 #, kde-format
@@ -11522,12 +11523,13 @@ msgid ""
 "The PROB() function returns the sum of the probabilities of the values that "
 "fall between (or equal) a lower and upper limit."
 msgstr ""
+"La funzione PROB() restituisce la somma delle probabilità dei valori "
+"compresi tra (o uguali a) un limite inferiore e un limite superiore."
 
 #: functions/statistical.xml:2069
-#, fuzzy, kde-format
-#| msgid "ERF(Lower limit; Upper limit)"
+#, kde-format
 msgid "PROB(values; probabilities; lower limit; upper limit)"
-msgstr "ERF(Limite inferiore; limite superiore)"
+msgstr "PROB(valori; probabilità; limite inferiore; limite superiore)"
 
 #: functions/text.xml:15 functions/text.xml:34
 #, kde-format

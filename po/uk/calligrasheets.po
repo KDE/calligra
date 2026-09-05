@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-08-31 17:07+0300\n"
+"PO-Revision-Date: 2026-09-04 11:29+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -8528,21 +8528,19 @@ msgstr ""
 "LOOKUP(1.232; A1:A6; B1:B6), якщо A1 = 1, A2 = 2 поверне значення комірки B1."
 
 #: functions/reference.xml:257
-#, fuzzy, kde-format
-#| msgid "Lookup value"
+#, kde-format
 msgid "Lookup array"
-msgstr "Пошукове значення"
+msgstr "Пошуковий масив"
 
 #: functions/reference.xml:258
 #, kde-format
 msgid "Return array"
-msgstr ""
+msgstr "Масив-результат"
 
 #: functions/reference.xml:259
-#, fuzzy, kde-format
-#| msgid "Method (optional)"
+#, kde-format
 msgid "If not found (optional)"
-msgstr "Метод (не обов'язковий)"
+msgstr "Якщо не знайдено (не обов'язковий)"
 
 #: functions/reference.xml:261
 #, kde-format
@@ -8550,12 +8548,12 @@ msgid ""
 "Searches an array for a value and returns the corresponding value from a "
 "result array."
 msgstr ""
+"Шукає значення у масиві та повертає відповідне значення з масиву-результату."
 
 #: functions/reference.xml:262
-#, fuzzy, kde-format
-#| msgid "LOOKUP(value; lookup vector; result vector)"
+#, kde-format
 msgid "XLOOKUP(value; lookup array; return array; if not found)"
-msgstr "LOOKUP(Пошукове значення; Вектор для пошуку; Вектор результатів)"
+msgstr "XLOOKUP(значення; пошуковий масив; масив-результат; якщо не знайдено)"
 
 #: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format
