@@ -155,7 +155,8 @@ bool KoColorSet::init()
             warnPigment << "Cannot load palette" << name() << "there is no data available";
             return false;
         }
-        file.open(QIODevice::ReadOnly);
+        if (!file.open(QIODevice::ReadOnly))
+            return false;
         m_data = file.readAll();
         file.close();
     }

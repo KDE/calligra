@@ -95,7 +95,8 @@ bool NetAccess::download(const QUrl &u, QString &target, QWidget *window)
     if (target.isEmpty()) {
         QTemporaryFile tmpFile;
         tmpFile.setAutoRemove(false);
-        tmpFile.open();
+        if (!tmpFile.open())
+            return false;
         target = tmpFile.fileName();
         if (!tmpfiles) {
             tmpfiles = new QStringList;
@@ -334,7 +335,8 @@ QString NetAccess::fish_executeInternal(const QUrl &url, const QString &command,
 {
     QString target, remoteTempFileName, resultData;
     QTemporaryFile tmpFile;
-    tmpFile.open();
+    if (!tmpFile.open())
+        return {};
 
     if (url.scheme() == "fish") {
         // construct remote temp filename

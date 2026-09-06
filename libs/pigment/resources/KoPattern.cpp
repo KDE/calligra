@@ -172,7 +172,8 @@ bool KoPattern::loadFromDevice(QIODevice *dev)
 bool KoPattern::save()
 {
     QFile file(filename());
-    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return false;
     bool res = saveToDevice(&file);
     file.close();
     return res;

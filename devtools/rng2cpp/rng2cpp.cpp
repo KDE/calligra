@@ -618,7 +618,8 @@ RNGItemPtr getDefines(QDomElement e, RNGItems &items)
 QDomDocument loadDOM(const QString &url)
 {
     QFile f(url);
-    f.open(QIODevice::ReadOnly);
+    if (!f.open(QIODevice::ReadOnly))
+        fatal() << "Unable to open " << url;
     QByteArray data = f.readAll();
     f.close();
 
