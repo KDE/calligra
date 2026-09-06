@@ -384,6 +384,14 @@ void buildGraph(QHash<QByteArray, Vertex *> &vertices, KoFilterManager::Directio
         }
 }
 
+void destroyGraph(QHash<QByteArray, Vertex *> &vertices)
+{
+    for (Vertex *vertex : std::as_const(vertices)) {
+        delete vertex;
+    }
+    vertices.clear();
+}
+
 // This method runs a BFS on the graph to determine the connected
 // nodes. Make sure that the graph is "cleared" (the colors of the
 // nodes are all white)
@@ -444,10 +452,7 @@ QStringList KoFilterManager::mimeFilter(const QByteArray &mimetype, Direction di
             }
         }
     }
-    for (Vertex *vertex : std::as_const(vertices)) {
-        delete vertex;
-    }
-    vertices.clear();
+    destroyGraph(vertices);
     return lst;
 }
 
@@ -461,9 +466,7 @@ QStringList KoFilterManager::mimeFilter()
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     if (partIt == partEnd) {
-        for (Vertex *vertex : std::as_const(vertices)) {
-            delete vertex;
-        }
+        destroyGraph(vertices);
         return QStringList();
     }
 
@@ -489,6 +492,7 @@ QStringList KoFilterManager::mimeFilter()
 
     // Finally we have to get rid of our fake mimetype again
     result.removeAll("supercalifragilistic/x-pialadocious");
+    destroyGraph(vertices);
     return result;
 }
 
