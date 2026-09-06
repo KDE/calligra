@@ -80,3 +80,5 @@ public:
 };
 
 KUNDO2_EXPORT std::unique_ptr<KUndo2Command> composeKUndo2Commands(std::unique_ptr<KUndo2Command> parent, std::unique_ptr<KUndo2Command> command);
+
+KUNDO2_EXPORT void redoAndMergeIntoAccumulatingCommand(std::unique_ptr<KUndo2Command> command, std::unique_ptr<KUndo2Command> &accumulatingCommand);

@@ -132,3 +132,17 @@ std::unique_ptr<KUndo2Command> composeKUndo2Commands(std::unique_ptr<KUndo2Comma
     composite->addCommand(std::move(command));
     return composite;
 }
+
+void redoAndMergeIntoAccumulatingCommand(std::unique_ptr<KUndo2Command> command, std::unique_ptr<KUndo2Command> &accumulatingCommand)
+{
+    if (!command)
+        return;
+
+    command->redo();
+    if (!accumulatingCommand) {
+        accumulatingCommand = std::move(command);
+        return;
+    }
+
+    Q_ASSERT(accumulatingCommand->mergeWith(command.get()));
+}

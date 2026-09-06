@@ -13,6 +13,8 @@
 #include "KoPathPointData.h"
 #include <QPointF>
 
+#include <memory>
+
 class KoPathTool;
 
 /**
@@ -37,6 +39,7 @@ private:
     KoPathTool *m_tool;
     KoPathPointData m_pointData;
     KoPathPoint::PointType m_pointType;
+    std::unique_ptr<KUndo2Command> m_intermediateCommand;
 };
 
 #endif /* KOPATHCONTROLPOINTMOVESTRATEGY_H */

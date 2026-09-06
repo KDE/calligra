@@ -10,6 +10,11 @@
 #include "KoPathPoint.h"
 #include <KLocalizedString>
 
+namespace
+{
+constexpr int PathPointMoveCommandId = 0x4b50504d;
+}
+
 class KoPathPointMoveCommandPrivate
 {
 public:
@@ -106,4 +111,20 @@ void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
         // repaint new bounding rect
         path->update();
     }
+}
+
+int KoPathPointMoveCommand::id() const
+{
+    return PathPointMoveCommandId;
+}
+
+bool KoPathPointMoveCommand::mergeWith(const KUndo2Command *command)
+{
+    const auto other = dynamic_cast<const KoPathPointMoveCommand *>(command);
+    if (!other || other->d->paths != d->paths || other->d->points.keys() != d->points.keys())
+        return false;
+
+    for (auto it = d->points.begin(); it != d->points.end(); ++it)
+        it.value() += other->d->points.value(it.key());
+    return true;
 }

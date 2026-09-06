@@ -11,6 +11,8 @@
 #include "KoInteractionStrategy.h"
 #include <QPointF>
 
+#include <memory>
+
 class KoPathTool;
 
 /**
@@ -31,6 +33,7 @@ private:
     QPointF m_move;
     /// pointer to the path tool
     KoPathTool *m_tool;
+    std::unique_ptr<KUndo2Command> m_intermediateCommand;
 };
 
 #endif /* KOPATHPOINTMOVESTRATEGY_H */

@@ -11,6 +11,7 @@
 
 #include "KoPathTool.h"
 #include "commands/KoPathControlPointMoveCommand.h"
+#include <kundo2commandutils.h>
 
 KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy(KoPathTool *tool,
                                                                const KoPathPointData &pointData,
@@ -37,8 +38,7 @@ void KoPathControlPointMoveStrategy::handleMouseMove(const QPointF &mouseLocatio
 
     m_move += move;
 
-    KoPathControlPointMoveCommand cmd(m_pointData, move, m_pointType);
-    cmd.redo();
+    redoAndMergeIntoAccumulatingCommand(std::make_unique<KoPathControlPointMoveCommand>(m_pointData, move, m_pointType), m_intermediateCommand);
 }
 
 void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
@@ -48,10 +48,7 @@ void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers mod
 
 KUndo2Command *KoPathControlPointMoveStrategy::createCommand()
 {
-    KUndo2Command *cmd = nullptr;
-    if (!m_move.isNull()) {
-        cmd = new KoPathControlPointMoveCommand(m_pointData, m_move, m_pointType);
-        cmd->undo();
-    }
-    return cmd;
+    if (!m_intermediateCommand)
+        return nullptr;
+    return new KUndo2SkipFirstRedoCommand(std::move(m_intermediateCommand));
 }

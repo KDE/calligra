@@ -14,6 +14,7 @@
 #include "KoPathToolSelection.h"
 #include "KoSnapGuide.h"
 #include "commands/KoPathPointMoveCommand.h"
+#include <kundo2commandutils.h>
 
 KoPathPointMoveStrategy::KoPathPointMoveStrategy(KoPathTool *tool, const QPointF &pos)
     : KoInteractionStrategy(*(new KoInteractionStrategyPrivate(tool)))
@@ -42,8 +43,7 @@ void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     if (!selection)
         return;
 
-    KoPathPointMoveCommand cmd(selection->selectedPointsData(), move - m_move);
-    cmd.redo();
+    redoAndMergeIntoAccumulatingCommand(std::make_unique<KoPathPointMoveCommand>(selection->selectedPointsData(), move - m_move), m_intermediateCommand);
     m_move = move;
 }
 
@@ -60,12 +60,7 @@ KUndo2Command *KoPathPointMoveStrategy::createCommand()
     if (!selection)
         return nullptr;
 
-    KUndo2Command *cmd = nullptr;
-    if (!m_move.isNull()) {
-        // as the point is already at the new position we need to undo the change
-        KoPathPointMoveCommand revert(selection->selectedPointsData(), -m_move);
-        revert.redo();
-        cmd = new KoPathPointMoveCommand(selection->selectedPointsData(), m_move);
-    }
-    return cmd;
+    if (!m_intermediateCommand)
+        return nullptr;
+    return new KUndo2SkipFirstRedoCommand(std::move(m_intermediateCommand));
 }

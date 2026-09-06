@@ -9,6 +9,11 @@
 #include <KLocalizedString>
 #include <math.h>
 
+namespace
+{
+constexpr int PathControlPointMoveCommandId = 0x4b50434d;
+}
+
 KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(const KoPathPointData &pointData,
                                                              const QPointF &offset,
                                                              KoPathPoint::PointType pointType,
@@ -78,4 +83,19 @@ void KoPathControlPointMoveCommand::undo()
     m_offset *= -1.0;
     redo();
     m_offset *= -1.0;
+}
+
+int KoPathControlPointMoveCommand::id() const
+{
+    return PathControlPointMoveCommandId;
+}
+
+bool KoPathControlPointMoveCommand::mergeWith(const KUndo2Command *command)
+{
+    const auto other = dynamic_cast<const KoPathControlPointMoveCommand *>(command);
+    if (!other || other->m_pointData != m_pointData || other->m_pointType != m_pointType)
+        return false;
+
+    m_offset += other->m_offset;
+    return true;
 }

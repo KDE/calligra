@@ -31,6 +31,9 @@ public:
     /// revert the actions done in redo
     void undo() override;
 
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
+
 private:
     KoPathPointData m_pointData;
     // the offset in shape coordinates
