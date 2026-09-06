@@ -209,8 +209,8 @@ void KoPathTool::pointTypeChanged(QAction *type)
         }
 
         if (!pointToChange.isEmpty()) {
-            KoPathPointTypeCommand *cmd = new KoPathPointTypeCommand(pointToChange, static_cast<KoPathPointTypeCommand::PointType>(type->data().toInt()));
-            d->canvas->addCommand(cmd);
+            auto cmd = std::make_unique<KoPathPointTypeCommand>(pointToChange, static_cast<KoPathPointTypeCommand::PointType>(type->data().toInt()));
+            d->canvas->addCommand(std::move(cmd));
             updateActions();
         }
     }
@@ -222,8 +222,8 @@ void KoPathTool::insertPoints()
     if (m_pointSelection.size() > 1) {
         QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
         if (!segments.isEmpty()) {
-            KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, 0.5);
-            d->canvas->addCommand(cmd);
+            auto cmd = std::make_unique<KoPathPointInsertCommand>(segments, 0.5);
+            d->canvas->addCommand(std::move(cmd));
 
             foreach (KoPathPoint *p, cmd->insertedPoints()) {
                 m_pointSelection.add(p, false);
@@ -264,7 +264,7 @@ void KoPathTool::pointToLine()
         }
 
         if (!pointToChange.isEmpty()) {
-            d->canvas->addCommand(new KoPathPointTypeCommand(pointToChange, KoPathPointTypeCommand::Line));
+            d->canvas->addCommand(std::make_unique<KoPathPointTypeCommand>(pointToChange, KoPathPointTypeCommand::Line));
             updateActions();
         }
     }
@@ -285,7 +285,7 @@ void KoPathTool::pointToCurve()
         }
 
         if (!pointToChange.isEmpty()) {
-            d->canvas->addCommand(new KoPathPointTypeCommand(pointToChange, KoPathPointTypeCommand::Curve));
+            d->canvas->addCommand(std::make_unique<KoPathPointTypeCommand>(pointToChange, KoPathPointTypeCommand::Curve));
             updateActions();
         }
     }
@@ -297,7 +297,7 @@ void KoPathTool::segmentToLine()
     if (m_pointSelection.size() > 1) {
         QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
         if (segments.size() > 0) {
-            d->canvas->addCommand(new KoPathSegmentTypeCommand(segments, KoPathSegmentTypeCommand::Line));
+            d->canvas->addCommand(std::make_unique<KoPathSegmentTypeCommand>(segments, KoPathSegmentTypeCommand::Line));
             updateActions();
         }
     }
@@ -309,7 +309,7 @@ void KoPathTool::segmentToCurve()
     if (m_pointSelection.size() > 1) {
         QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
         if (segments.size() > 0) {
-            d->canvas->addCommand(new KoPathSegmentTypeCommand(segments, KoPathSegmentTypeCommand::Curve));
+            d->canvas->addCommand(std::make_unique<KoPathSegmentTypeCommand>(segments, KoPathSegmentTypeCommand::Curve));
             updateActions();
         }
     }
@@ -325,7 +325,7 @@ void KoPathTool::convertToPath()
             shapesToConvert.append(parameterShape);
     }
     if (shapesToConvert.count())
-        d->canvas->addCommand(new KoParameterToPathCommand(shapesToConvert));
+        d->canvas->addCommand(std::make_unique<KoParameterToPathCommand>(shapesToConvert));
     updateOptionsWidget();
 }
 
@@ -341,8 +341,8 @@ void KoPathTool::joinPoints()
             && (pd1.pointIndex.second == 0 || pd1.pointIndex.second == pathShape->subpathPointCount(pd1.pointIndex.first) - 1)
             && !pathShape->isClosedSubpath(pd2.pointIndex.first)
             && (pd2.pointIndex.second == 0 || pd2.pointIndex.second == pathShape->subpathPointCount(pd2.pointIndex.first) - 1)) {
-            KoSubpathJoinCommand *cmd = new KoSubpathJoinCommand(pd1, pd2);
-            d->canvas->addCommand(cmd);
+            auto cmd = std::make_unique<KoSubpathJoinCommand>(pd1, pd2);
+            d->canvas->addCommand(std::move(cmd));
         }
         updateActions();
     }
@@ -373,8 +373,8 @@ void KoPathTool::mergePoints()
         return;
 
     // now we can start merging the endpoints
-    KoPathPointMergeCommand *cmd = new KoPathPointMergeCommand(pd1, pd2);
-    d->canvas->addCommand(cmd);
+    auto cmd = std::make_unique<KoPathPointMergeCommand>(pd1, pd2);
+    d->canvas->addCommand(std::move(cmd));
     updateActions();
 }
 
@@ -382,7 +382,7 @@ void KoPathTool::breakAtPoint()
 {
     Q_D(KoToolBase);
     if (m_pointSelection.hasSelection()) {
-        d->canvas->addCommand(new KoPathBreakAtPointCommand(m_pointSelection.selectedPointsData()));
+        d->canvas->addCommand(std::make_unique<KoPathBreakAtPointCommand>(m_pointSelection.selectedPointsData()));
         updateActions();
     }
 }
@@ -394,7 +394,7 @@ void KoPathTool::breakAtSegment()
     if (m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2) {
         QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
         if (segments.size() == 1) {
-            d->canvas->addCommand(new KoPathSegmentBreakCommand(segments.at(0)));
+            d->canvas->addCommand(std::make_unique<KoPathSegmentBreakCommand>(segments.at(0)));
             updateActions();
         }
     }
@@ -739,8 +739,9 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     if (s->isValid()) {
         QList<KoPathPointData> segments;
         segments.append(KoPathPointData(s->path, s->path->pathPointIndex(s->segmentStart)));
-        KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, s->positionOnSegment);
-        d->canvas->addCommand(cmd);
+        auto command = std::make_unique<KoPathPointInsertCommand>(segments, s->positionOnSegment);
+        KoPathPointInsertCommand *cmd = command.get();
+        d->canvas->addCommand(std::move(command));
 
         foreach (KoPathPoint *p, cmd->insertedPoints()) {
             m_pointSelection.add(p, false);

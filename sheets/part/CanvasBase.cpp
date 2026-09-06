@@ -106,9 +106,9 @@ bool CanvasBase::snapToGrid() const
     return false; // FIXME
 }
 
-void CanvasBase::addCommand(KUndo2Command *command)
+void CanvasBase::addCommand(std::unique_ptr<KUndo2Command> &&command)
 {
-    doc()->addCommand(command);
+    doc()->addCommand(std::move(command));
 }
 
 KoShapeManager *CanvasBase::shapeManager() const

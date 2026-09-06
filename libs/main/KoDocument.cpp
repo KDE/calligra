@@ -2299,6 +2299,12 @@ void KoDocument::addCommand(KUndo2Command *command)
         d->undoStack->push(command);
 }
 
+void KoDocument::addCommand(std::unique_ptr<KUndo2Command> &&command)
+{
+    if (command)
+        d->undoStack->push(std::move(command));
+}
+
 void KoDocument::beginMacro(const KUndo2MagicString &text)
 {
     d->undoStack->beginMacro(text);

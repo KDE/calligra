@@ -102,7 +102,7 @@ Doc::Doc(KoPart *part)
         warnSheets << "chart shape factory not found";
     }
 
-    connect(map(), &Map::commandAdded, this, &KoDocument::addCommand);
+    connect(map(), &Map::commandAdded, this, static_cast<void (KoDocument::*)(KUndo2Command *)>(&KoDocument::addCommand));
 
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();

@@ -44,7 +44,8 @@ public: // KoCanvasBase interface methods.
     void gridSize(qreal *horizontal, qreal *vertical) const override;
 
     /// reimplemented method from superclass
-    void addCommand(KUndo2Command *command) override;
+    using KoCanvasBase::addCommand;
+    void addCommand(std::unique_ptr<KUndo2Command> &&command) override;
 
     /// reimplemented method from superclass
     KoShapeManager *shapeManager() const override;

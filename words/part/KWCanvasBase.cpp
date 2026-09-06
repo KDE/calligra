@@ -72,9 +72,9 @@ void KWCanvasBase::gridSize(qreal *horizontal, qreal *vertical) const
     *vertical = m_document->gridData().gridY();
 }
 
-void KWCanvasBase::addCommand(KUndo2Command *command)
+void KWCanvasBase::addCommand(std::unique_ptr<KUndo2Command> &&command)
 {
-    m_document->addCommand(command);
+    m_document->addCommand(std::move(command));
 }
 
 KoShapeManager *KWCanvasBase::shapeManager() const

@@ -29,6 +29,8 @@ using namespace Qt::StringLiterals;
 class MockCanvas : public KoCanvasBase
 {
 public:
+    using KoCanvasBase::addCommand;
+
     KUndo2QStack stack;
     KoShapeManager *manager;
     MockCanvas()
@@ -49,10 +51,10 @@ public:
         return false;
     }
 
-    void addCommand(KUndo2Command *c) override
+    void addCommand(std::unique_ptr<KUndo2Command> &&c) override
     {
         //         c->redo();
-        stack.push(c);
+        stack.push(std::move(c));
     }
     KoShapeManager *shapeManager() const override
     {

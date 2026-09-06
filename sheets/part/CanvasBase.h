@@ -71,7 +71,8 @@ public:
     /// reimplemented method from KoCanvasBase
     bool snapToGrid() const override;
     /// reimplemented method from KoCanvasBase
-    void addCommand(KUndo2Command *command) override;
+    using KoCanvasBase::addCommand;
+    void addCommand(std::unique_ptr<KUndo2Command> &&command) override;
     /// reimplemented method from KoCanvasBase
     KoShapeManager *shapeManager() const override;
     /// reimplemented method from KoCanvasBase

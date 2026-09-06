@@ -12,11 +12,13 @@
 
 #include <QPoint>
 
+#include <memory>
+
+#include <kundo2stack.h>
+
 #include "flake_export.h"
 
 class QGraphicsObject;
-class KUndo2Command;
-
 class KoUnit;
 class KoCanvasResourceManager;
 class KoShapeManager;
@@ -85,7 +87,11 @@ public:
      * it when the undo limit is reached, or when deleting the command history itself.
      * @param command the command to add
      */
-    virtual void addCommand(KUndo2Command *command) = 0;
+    virtual void addCommand(std::unique_ptr<KUndo2Command> &&command) = 0;
+    void addCommand(KUndo2Command *command)
+    {
+        addCommand(std::unique_ptr<KUndo2Command>(command));
+    }
 
     /**
      * return the current shapeManager

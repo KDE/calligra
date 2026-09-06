@@ -114,7 +114,7 @@ KoInteractionStrategy *PointHandle::handleMousePress(KoPointerEvent *event)
 
         QList<KoPathPointData> pointData;
         pointData.append(KoPathPointData(m_activePoint->parent(), m_activePoint->parent()->pathPointIndex(m_activePoint)));
-        m_tool->canvas()->addCommand(new KoPathPointTypeCommand(pointData, pointType));
+        m_tool->canvas()->addCommand(std::make_unique<KoPathPointTypeCommand>(pointData, pointType));
     }
     return nullptr;
 }

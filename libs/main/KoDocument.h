@@ -13,6 +13,8 @@
 #include <QDateTime>
 #include <QList>
 
+#include <memory>
+
 #include "komain_export.h"
 #include <KoDocumentBase.h>
 #include <KoXmlReaderForward.h>
@@ -573,6 +575,8 @@ public:
     /// If set, the document shall be saved even if it is not marked as modified.
     /// @see setAlwaysAllowSaving()
     bool alwaysAllowSaving() const;
+
+    void addCommand(std::unique_ptr<KUndo2Command> &&command);
 
     /// Set alwaysAllowSaving to @p allow.
     /// Enables applications to always allow saving even when document is not modified.

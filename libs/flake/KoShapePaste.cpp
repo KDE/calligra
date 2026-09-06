@@ -160,7 +160,7 @@ bool KoShapePaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
         }
     }
 
-    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Paste Shapes"));
+    auto cmd = std::make_unique<KUndo2Command>(kundo2_i18n("Paste Shapes"));
     if (!cmd) {
         qDeleteAll(d->pastedShapes);
         d->pastedShapes.clear();
@@ -172,10 +172,10 @@ bool KoShapePaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
         if (!shape->parent()) {
             shape->setParent(d->layer);
         }
-        d->canvas->shapeController()->addShapeDirect(shape, cmd);
+        d->canvas->shapeController()->addShapeDirect(shape, cmd.get());
     }
 
-    d->canvas->addCommand(cmd);
+    d->canvas->addCommand(std::move(cmd));
 
     return true;
 }

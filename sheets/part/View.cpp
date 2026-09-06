@@ -696,7 +696,7 @@ void View::initView()
 
     // Setup the map model.
     d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas, this);
-    connect(d->mapViewModel, &MapModel::addCommandRequested, doc(), &KoDocument::addCommand);
+    connect(d->mapViewModel, &MapModel::addCommandRequested, doc(), static_cast<void (KoDocument::*)(KUndo2Command *)>(&KoDocument::addCommand));
     connect(d->mapViewModel, &MapViewModel::activeSheetChanged, this, [this](Sheet *sheet) {
         setActiveSheet(sheet);
     });

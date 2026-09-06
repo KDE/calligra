@@ -90,9 +90,9 @@ void Canvas::setDocumentOffset(const QPoint &offset)
     updateOffset();
 }
 
-void Canvas::addCommand(KUndo2Command *command)
+void Canvas::addCommand(std::unique_ptr<KUndo2Command> &&command)
 {
-    m_doc->addCommand(m_view->activeSection(), command);
+    m_doc->addCommand(m_view->activeSection(), command.release());
     updateOriginAndSize();
 }
 

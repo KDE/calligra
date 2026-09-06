@@ -113,7 +113,7 @@ public:
     {
         return true;
     }
-    void addCommand(KUndo2Command *) override
+    void addCommand(std::unique_ptr<KUndo2Command> &&) override
     {
     }
     KoShapeManager *shapeManager() const override

@@ -37,8 +37,6 @@
 #include <KoTextRangeManager.h>
 #include <kundo2stack.h>
 
-#include "commands/RenameSectionCommand.h"
-
 #include "TextDebug.h"
 
 using namespace Qt::StringLiterals;
@@ -240,11 +238,11 @@ void TestKoTextEditor::testRenameSectionAnnihilation()
     KoSection *section = doc.sectionModel()->createSection(editor->constCursor(), nullptr, u"old"_s);
     KUndo2QStack *undoStack = KoTextDocument(doc.m_document).undoStack();
 
-    undoStack->push(std::make_unique<RenameSectionCommand>(section, u"new"_s, doc.m_document));
+    editor->renameSection(section, u"new"_s);
     QCOMPARE(section->name(), u"new"_s);
     QCOMPARE(undoStack->count(), 1);
 
-    undoStack->push(std::make_unique<RenameSectionCommand>(section, u"old"_s, doc.m_document));
+    editor->renameSection(section, u"old"_s);
     QCOMPARE(section->name(), u"old"_s);
     QCOMPARE(undoStack->count(), 0);
 }

@@ -107,9 +107,9 @@ bool KoPACanvasBase::snapToGrid() const
     return d->doc->gridData().snapToGrid();
 }
 
-void KoPACanvasBase::addCommand(KUndo2Command *command)
+void KoPACanvasBase::addCommand(std::unique_ptr<KUndo2Command> &&command)
 {
-    d->doc->addCommand(command);
+    d->doc->addCommand(std::move(command));
 }
 
 KoShapeManager *KoPACanvasBase::shapeManager() const
