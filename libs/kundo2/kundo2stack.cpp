@@ -230,7 +230,7 @@ bool KUndo2Command::canAnnihilateWith(const KUndo2Command *command) const
 
 void KUndo2Command::redo()
 {
-    for (int i = 0; i < d->child_list.size(); ++i)
+    for (size_t i = 0; i < d->child_list.size(); ++i)
         d->child_list.at(i)->redo();
 }
 
@@ -573,7 +573,7 @@ void KUndo2QStack::purgeRedoState()
     bool redoStateChanged = false;
     bool cleanStateChanged = false;
 
-    while (m_index < m_command_list.size()) {
+    while (m_index < static_cast<int>(m_command_list.size())) {
         m_command_list.pop_back();
         redoStateChanged = true;
     }
@@ -742,7 +742,7 @@ bool KUndo2QStack::push(KUndo2Command *cmd)
     } else {
         if (m_index > 0)
             cur = m_command_list.at(m_index - 1).get();
-        while (m_index < m_command_list.size())
+        while (m_index < static_cast<int>(m_command_list.size()))
             m_command_list.pop_back();
         if (m_clean_index > m_index)
             m_clean_index = -1; // we've deleted the clean state
@@ -964,7 +964,7 @@ void KUndo2QStack::undo()
 
 void KUndo2QStack::redo()
 {
-    if (m_index == m_command_list.size())
+    if (m_index == static_cast<int>(m_command_list.size()))
         return;
 
     if (!m_macro_stack.isEmpty()) {
@@ -1018,8 +1018,8 @@ void KUndo2QStack::setIndex(int idx)
 
     if (idx < 0)
         idx = 0;
-    else if (idx > m_command_list.size())
-        idx = m_command_list.size();
+    else if (idx > static_cast<int>(m_command_list.size()))
+        idx = static_cast<int>(m_command_list.size());
 
     int i = m_index;
     while (i < idx) {
@@ -1075,7 +1075,7 @@ bool KUndo2QStack::canRedo() const
 {
     if (!m_macro_stack.isEmpty())
         return false;
-    return m_index < m_command_list.size();
+    return m_index < static_cast<int>(m_command_list.size());
 }
 
 /*!
@@ -1104,7 +1104,7 @@ QString KUndo2QStack::redoText() const
 {
     if (!m_macro_stack.isEmpty())
         return QString();
-    if (m_index < m_command_list.size())
+    if (m_index < static_cast<int>(m_command_list.size()))
         return m_command_list.at(m_index)->actionText();
     return QString();
 }
@@ -1195,7 +1195,7 @@ void KUndo2QStack::beginMacro(const KUndo2MagicString &text)
     cmd->setText(text);
 
     if (m_macro_stack.isEmpty()) {
-        while (m_index < m_command_list.size())
+        while (m_index < static_cast<int>(m_command_list.size()))
             m_command_list.pop_back();
         if (m_clean_index > m_index)
             m_clean_index = -1; // we've deleted the clean state
@@ -1264,7 +1264,7 @@ const KUndo2Command *KUndo2QStack::command(int index) const
 
 QString KUndo2QStack::text(int idx) const
 {
-    if (idx < 0 || idx >= m_command_list.size())
+    if (idx < 0 || idx >= static_cast<int>(m_command_list.size()))
         return QString();
     return m_command_list.at(idx)->text().toString();
 }
