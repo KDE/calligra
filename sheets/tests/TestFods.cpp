@@ -7,6 +7,7 @@
 #include "MockPart.h"
 
 #include <core/Cell.h>
+#include <core/CellStorage.h>
 #include <core/Map.h>
 #include <core/Sheet.h>
 #include <engine/FunctionModuleRegistry.h>
@@ -77,30 +78,24 @@ void TestFods::testFods()
         auto *sheet = dynamic_cast<Sheet *>(sheetBase);
         if (!sheet)
             continue;
-        const QRect area = sheet->usedArea(true);
-        for (int row = area.top(); row <= area.bottom(); ++row) {
-            for (int col = area.left(); col <= area.right(); ++col) {
-                // column C ("Correct") is the fods template's own self-check column
-                if (col != 3)
-                    continue;
-                Cell cell(sheet, col, row);
-                if (cell.isNull() || !cell.isFormula())
-                    continue;
-                const QString formula = cell.userInput().trimmed();
-                if (formula.startsWith(QLatin1String("=AND(")) || formula.startsWith(QLatin1String("=OR(")))
-                    continue;
-                const Value value = cell.value();
-                if (value.isBoolean() && !value.asBoolean()) {
-                    Cell a(sheet, 1, row);
-                    Cell b(sheet, 2, row);
-                    failures << QStringLiteral("%1!%2%3: %4 (A%3=%5 B%3=%6)")
-                                    .arg(sheet->sheetName())
-                                    .arg(col)
-                                    .arg(row)
-                                    .arg(formula)
-                                    .arg(valueToString(a.value()))
-                                    .arg(valueToString(b.value()));
-                }
+        for (Cell cell = sheet->fullCellStorage()->firstInColumn(3, CellStorage::VisitContent); !cell.isNull();
+             cell = sheet->fullCellStorage()->nextInColumn(3, cell.row(), CellStorage::VisitContent)) {
+            if (!cell.isFormula())
+                continue;
+            const int row = cell.row();
+            const QString formula = cell.userInput().trimmed();
+            if (formula.startsWith(QLatin1String("=AND(")) || formula.startsWith(QLatin1String("=OR(")))
+                continue;
+            const Value value = cell.value();
+            if (value.isBoolean() && !value.asBoolean()) {
+                Cell a(sheet, 1, row);
+                Cell b(sheet, 2, row);
+                failures << QStringLiteral("%1!C%2: %3 (A%2=%4 B%2=%5)")
+                                .arg(sheet->sheetName())
+                                .arg(row)
+                                .arg(formula)
+                                .arg(valueToString(a.value()))
+                                .arg(valueToString(b.value()));
             }
         }
     }
