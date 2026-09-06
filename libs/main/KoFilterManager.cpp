@@ -460,8 +460,12 @@ QStringList KoFilterManager::mimeFilter()
     QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
-    if (partIt == partEnd)
+    if (partIt == partEnd) {
+        for (Vertex *vertex : std::as_const(vertices)) {
+            delete vertex;
+        }
         return QStringList();
+    }
 
     // To find *all* reachable mimetypes, we have to resort to
     // a small hat trick, in order to avoid multiple searches:

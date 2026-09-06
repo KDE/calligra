@@ -51,6 +51,8 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
 {
     KoInlineTextObjectManager *manager = nullptr;
     KoTextRangeManager *locationManager = nullptr;
+    bool ownsManager = false;
+    bool ownsLocationManager = false;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
         if (variant.isValid()) {
@@ -65,11 +67,19 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
     }
     if (!manager) {
         manager = new KoInlineTextObjectManager();
+        ownsManager = true;
     }
     if (!locationManager) {
         locationManager = new KoTextRangeManager();
+        ownsLocationManager = true;
     }
     TextShape *text = new TextShape(manager, locationManager);
+    if (ownsManager) {
+        manager->setParent(text->textShapeData()->document());
+    }
+    if (ownsLocationManager) {
+        locationManager->setParent(text->textShapeData()->document());
+    }
     if (documentResources) {
         KoTextDocument document(text->textShapeData()->document());
 

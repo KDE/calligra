@@ -7,6 +7,9 @@ macro(FLAKE_ADD_UNIT_TEST _TEST_NAME)
         TEST_NAME "${_TEST_NAME}"
         NAME_PREFIX "libs-flake-"
     )
+    set_tests_properties(libs-flake-${_TEST_NAME} PROPERTIES
+        ENVIRONMENT "QT_QPA_PLATFORM=offscreen;LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/sanitizers.supp"
+    )
 endmacro()
 
 ########### next target ###############

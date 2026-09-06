@@ -12,6 +12,8 @@
 #include <QDateTime>
 #include <QRegularExpression>
 
+using namespace Qt::StringLiterals;
+
 #ifdef _MSC_VER
 // HACK to get this to compile on msvc
 #include <QSharedDataPointer>
@@ -160,6 +162,10 @@ QDateTime Localization::readDateTime(const QString &str, bool *ok) const
         res = readDateTime(str, format, ok);
         if (res.isValid())
             break;
+    }
+    if (!res.isValid()) {
+        res = QLocale::c().toDateTime(str, u"d MMM yyyy HH:mm:ss"_s);
+        res.setTimeZone(QTimeZone::UTC);
     }
     if (ok)
         *ok = res.isValid();
