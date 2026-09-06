@@ -2,10 +2,10 @@
 # Copyright (C) 2000-2026 This_file_is_part_of_KDE
 #
 # SPDX-FileCopyrightText: 2000 Sebastià Pla <sastia@retemail.es>
-# SPDX-FileCopyrightText: 2002, 2003, 2005, 2006 Albert Astals Cid <aacid@kde.org>
-# SPDX-FileCopyrightText: 2003, 2006, 2013, 2015, 2020, 2021, 2022, 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
+# SPDX-FileCopyrightText: 2002-2003, 2005-2006 Albert Astals Cid <aacid@kde.org>
+# SPDX-FileCopyrightText: 2003, 2006, 2013, 2015, 2020-2023 Antoni Bella Pérez <antonibella5@yahoo.com>
 # SPDX-FileCopyrightText: 2006 Xavier Batlle i Pèlach <tevibp@wanadoo.es>
-# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2006-2011 Rafael Carreras <rcarreras@caliu.cat>
 # SPDX-FileCopyrightText: 2007-2024, 2026 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
@@ -5054,7 +5054,7 @@ msgstr "Punta xafada"
 #: widgets/KoStrokeConfigWidget.cpp:90
 #, kde-format
 msgid "Round cap"
-msgstr "Punta arredoniida"
+msgstr "Punta arredonida"
 
 #: widgets/KoStrokeConfigWidget.cpp:97
 #, kde-format
@@ -5069,7 +5069,7 @@ msgstr "Unió en biaix"
 #: widgets/KoStrokeConfigWidget.cpp:115
 #, kde-format
 msgid "Round join"
-msgstr "Unió arredoniida"
+msgstr "Unió arredonida"
 
 #: widgets/KoStrokeConfigWidget.cpp:122
 #, kde-format

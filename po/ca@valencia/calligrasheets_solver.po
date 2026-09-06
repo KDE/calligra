@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the kspreadsolver package.
 #
 # SPDX-FileCopyrightText: 2002 Albert Astals Cid <aacid@kde.org>
-# SPDX-FileCopyrightText: 2007, 2008 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2007-2008 Rafael Carreras <rcarreras@caliu.cat>
 # SPDX-FileCopyrightText: 2013 Antoni Bella Pérez <antonibella5@yahoo.com>
 # SPDX-FileCopyrightText: 2016, 2022 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""

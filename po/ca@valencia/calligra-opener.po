@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the kword package.
 #
 # SPDX-FileCopyrightText: 2011 Rafael Carreras <rcarreras@caliu.cat>
-# SPDX-FileCopyrightText: 2015, 2016 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2015-2016 Josep M. Ferrer <txemaq@gmail.com>
 # SPDX-FileCopyrightText: 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
 msgstr ""
