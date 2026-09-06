@@ -7,6 +7,8 @@ set(kundo2_LIB_SRCS
 	kundo2model.cpp
 	kundo2magicstring.cpp
 	kundo2commandextradata.cpp
+	kundo2commandutils.cpp
+	kundo2undostore.cpp
 )
 
 add_library(kundo2 SHARED ${kundo2_LIB_SRCS})
@@ -44,7 +46,16 @@ install(FILES
     kundo2command.h
     kundo2commandextradata.h
     kundo2magicstring.h
+    kundo2cumulativeundodata.h
+    kundo2commandutils.h
+    kundo2undostore.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel
 )
 
+endif()
+
+if (BUILD_TESTING)
+    ecm_add_test(tests/TestKUndo2Command.cpp
+        TEST_NAME libs-kundo2-TestKUndo2Command
+        LINK_LIBRARIES kundo2 Qt6::Test)
 endif()

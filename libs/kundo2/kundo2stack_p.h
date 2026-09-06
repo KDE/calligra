@@ -46,6 +46,9 @@
 #include <QList>
 #include <QString>
 
+#include <memory>
+#include <vector>
+
 #include "kundo2stack.h"
 
 class KUndo2Command;
@@ -68,7 +71,7 @@ public:
         : id(-1)
     {
     }
-    QList<KUndo2Command *> child_list;
+    std::vector<std::unique_ptr<KUndo2Command>> child_list;
     QString actionText;
     KUndo2MagicString text;
     int id;

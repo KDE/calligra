@@ -55,7 +55,11 @@
 #include <QTime>
 #include <QVector>
 
+#include <memory>
+#include <vector>
+
 #include "kundo2_export.h"
+#include "kundo2cumulativeundodata.h"
 
 class QAction;
 class KUndo2CommandPrivate;
@@ -89,14 +93,17 @@ public:
     virtual void setTimedID(int timedID);
     virtual bool mergeWith(const KUndo2Command *other);
     virtual bool timedMergeWith(KUndo2Command *other);
+    virtual bool canAnnihilateWith(const KUndo2Command *other) const;
 
     int childCount() const;
     const KUndo2Command *child(int index) const;
 
     bool hasParent();
     virtual void setTime();
+    virtual void setTime(const QTime &time);
     virtual QTime time();
     virtual void setEndTime();
+    virtual void setEndTime(const QTime &time);
     virtual QTime endTime();
 
     virtual QVector<KUndo2Command *> mergeCommandsVector();
@@ -122,6 +129,7 @@ public:
      * Add the @p command as a child to this command
      */
     void addCommand(KUndo2Command *command);
+    void addCommand(std::unique_ptr<KUndo2Command> &&command);
 
 private:
     Q_DISABLE_COPY(KUndo2Command)
@@ -182,6 +190,8 @@ public:
 
     void setUseCumulativeUndoRedo(bool value);
     bool useCumulativeUndoRedo();
+    void setCumulativeUndoData(const KUndo2CumulativeUndoData &data);
+    KUndo2CumulativeUndoData cumulativeUndoData() const;
     void setTimeT1(double value);
     double timeT1();
     void setTimeT2(double value);
@@ -211,7 +221,8 @@ protected:
 
 private:
     // from QUndoStackPrivate
-    QList<KUndo2Command *> m_command_list;
+    std::vector<std::unique_ptr<KUndo2Command>> m_command_list;
+    std::vector<std::unique_ptr<KUndo2Command>> m_merged_commands;
     QList<KUndo2Command *> m_macro_stack;
     int m_index;
     int m_clean_index;
@@ -221,6 +232,7 @@ private:
     double m_timeT1;
     double m_timeT2;
     int m_strokesN;
+    int m_maxGroupDuration;
     int m_lastMergedSetCount;
     int m_lastMergedIndex;
 
