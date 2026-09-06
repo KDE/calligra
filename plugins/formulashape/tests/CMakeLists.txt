@@ -39,10 +39,10 @@ formulashape_add_unit_test(LoadAndSave
 
 ########### Layout Test ###############
 
-# formulashape_add_unit_test(Layout
-#     TestLayout.cpp
-#     LINK_LIBRARIES koformula Qt6::Test
-# )
+formulashape_add_unit_test(Layout
+    TestLayout.cpp
+    LINK_LIBRARIES koformula Qt6::Test
+)
 
 ########### Cursor Test ###############
 

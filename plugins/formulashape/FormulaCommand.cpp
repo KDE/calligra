@@ -210,7 +210,7 @@ FormulaCommandReplaceRow::FormulaCommandReplaceRow(FormulaData *data, FormulaCur
     for (int i = 0; i < newlength; i++) {
         tmpRow = new TableRowElement();
         for (int j = 0; j < columnnumber; j++) {
-            tmpRow->insertChild(i, new TableDataElement());
+            tmpRow->insertChild(j, new TableDataElement());
         }
         m_newRows << tmpRow;
     }
@@ -255,6 +255,7 @@ FormulaCommandReplaceRow::~FormulaCommandReplaceRow()
 
 void FormulaCommandReplaceRow::redo()
 {
+    m_done = true;
     for (int i = 0; i < m_oldRows.count(); i++) {
         m_table->removeChild(m_oldRows[i]);
     }
@@ -269,6 +270,7 @@ void FormulaCommandReplaceRow::redo()
 
 void FormulaCommandReplaceRow::undo()
 {
+    m_done = false;
     if (m_empty) {
         m_table->removeChild(m_empty);
     } else {
@@ -363,6 +365,7 @@ FormulaCommandReplaceColumn::~FormulaCommandReplaceColumn()
 
 void FormulaCommandReplaceColumn::redo()
 {
+    m_done = true;
     if (m_empty) {
         for (int i = 0; i < m_oldRows.count(); i++) {
             m_table->removeChild(m_oldRows[i]);
@@ -383,6 +386,7 @@ void FormulaCommandReplaceColumn::redo()
 
 void FormulaCommandReplaceColumn::undo()
 {
+    m_done = false;
     if (m_empty) {
         m_table->removeChild(m_empty);
         for (int i = 0; i < m_oldRows.count(); ++i) {

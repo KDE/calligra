@@ -13,6 +13,11 @@ class TestCursor : public QObject
 private Q_SLOTS:
     // General Layout Elements
     void moveCursor();
+    void nestedRowBoundaries();
+    void scriptBoundaries();
+    void tableBoundaries();
+    void emptyElementBoundaries();
+    void structuralCommands();
     void editCommands();
 };
 

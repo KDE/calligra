@@ -18,6 +18,10 @@ private Q_SLOTS:
     // General Layout Elements
     void fencedElement_data();
     void fencedElement();
+
+    void fixedElements();
+    void tableElement();
+    void emptyElements();
 };
 
 #endif // _TESTLAYOUT_H_
