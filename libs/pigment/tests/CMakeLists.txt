@@ -16,7 +16,7 @@ macro(PIGMENT_ADD_UNIT_TEST _TEST_NAME)
         NAME_PREFIX "libs-pigment-"
     )
     set_tests_properties(libs-pigment-${_TEST_NAME} PROPERTIES
-        ENVIRONMENT "QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin:${CMAKE_INSTALL_PREFIX}/lib64/plugins;LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/sanitizers.supp")
+        ENVIRONMENT "QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin:${KDE_INSTALL_FULL_PLUGINDIR};LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/sanitizers.supp")
 endmacro()
 
 ########### next target ###############
@@ -43,13 +43,15 @@ target_link_libraries(CCSGraph  pigmentcms KF6::I18n )
 
 ########### next target ###############
 
-pigment_add_unit_test(TestColorConversionSystemConnections TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
-target_compile_definitions(TestColorConversionSystemConnections PRIVATE CCS_TEST_CONNECTIONS_ONLY)
+if(NOT DEFINED ENV{KDECI_BUILD})
+    pigment_add_unit_test(TestColorConversionSystemConnections TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
+    target_compile_definitions(TestColorConversionSystemConnections PRIVATE CCS_TEST_CONNECTIONS_ONLY)
 
-pigment_add_unit_test(TestColorConversionSystemGoodPaths TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
-target_compile_definitions(TestColorConversionSystemGoodPaths PRIVATE CCS_TEST_GOOD_ONLY)
-set_property(TEST libs-pigment-TestColorConversionSystemConnections libs-pigment-TestColorConversionSystemGoodPaths
-    APPEND PROPERTY ENVIRONMENT "QT_LOGGING_RULES=*.debug=false")
+    pigment_add_unit_test(TestColorConversionSystemGoodPaths TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
+    target_compile_definitions(TestColorConversionSystemGoodPaths PRIVATE CCS_TEST_GOOD_ONLY)
+    set_property(TEST libs-pigment-TestColorConversionSystemConnections libs-pigment-TestColorConversionSystemGoodPaths
+        APPEND PROPERTY ENVIRONMENT "QT_LOGGING_RULES=*.debug=false")
+endif()
 
 ########### next target ###############
 

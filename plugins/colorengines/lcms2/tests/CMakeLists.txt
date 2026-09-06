@@ -30,7 +30,7 @@ macro(COLORENGINE_LCMS_ADD_UNIT_TEST _TEST_NAME)
         NAME_PREFIX "colorengine-lcms-"
     )
     set_tests_properties(colorengine-lcms-${_TEST_NAME} PROPERTIES
-        ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin:${CMAKE_INSTALL_PREFIX}/lib64/plugins;XDG_DATA_DIRS=${CMAKE_INSTALL_PREFIX}/share:/usr/local/share:/usr/share;LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/sanitizers.supp"
+        ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin:${KDE_INSTALL_FULL_PLUGINDIR};XDG_DATA_DIRS=${CMAKE_INSTALL_PREFIX}/share:/usr/local/share:/usr/share;LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/sanitizers.supp"
     )
 endmacro()
 

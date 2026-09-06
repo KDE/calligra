@@ -295,6 +295,32 @@ Time Localization::readTime(const QString &str, const QString &format, bool *ok)
         }
         auto qt = d->locale.toTime(timeString, f);
         Time time(qt);
+        if (!time.isValid() && f.contains("ap"_L1)) {
+            // QLocale changed its handling of hour zero in 12-hour input in
+            // Qt 6.12. Keep the accepted Sheets syntax independent of Qt.
+            const auto separator = QRegularExpression::escape(d->timeSep);
+            const auto decimal = QRegularExpression::escape(d->locale.decimalPoint());
+            const QRegularExpression fallback(
+                QStringLiteral("^\\s*(\\d+)%1(\\d+)(?:%1(\\d+)(?:%2(\\d+))?)?\\s*(%3|%4)\\s*$")
+                    .arg(separator, decimal, QRegularExpression::escape(d->locale.amText()), QRegularExpression::escape(d->locale.pmText())),
+                QRegularExpression::CaseInsensitiveOption);
+            const auto fallbackMatch = fallback.match(str);
+            if (fallbackMatch.hasMatch()) {
+                int hour = fallbackMatch.captured(1).toInt();
+                const int minute = fallbackMatch.captured(2).toInt();
+                const int second = fallbackMatch.captured(3).isEmpty() ? 0 : fallbackMatch.captured(3).toInt();
+                const QString fraction = fallbackMatch.captured(4);
+                int msec = fraction.isEmpty() ? 0 : fraction.leftJustified(3, u'0').left(3).toInt();
+                const bool pm = fallbackMatch.captured(5).compare(d->locale.pmText(), Qt::CaseInsensitive) == 0;
+                if (hour == 0)
+                    hour = 12;
+                if (pm && hour < 12)
+                    hour += 12;
+                if (!pm && hour == 12)
+                    hour = 0;
+                time = Time(QTime(hour, minute, second, msec));
+            }
+        }
         if (ok)
             *ok = time.isValid();
         return time;
