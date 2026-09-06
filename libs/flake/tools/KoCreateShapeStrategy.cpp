@@ -15,6 +15,7 @@
 #include "KoShapeManager.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeRubberSelectStrategy_p.h"
+#include "KoToolManager.h"
 #include "KoViewConverter.h"
 
 #include <QPainter>
@@ -72,6 +73,13 @@ KUndo2Command *KoCreateShapeStrategy::createCommand()
         KoSelection *selection = parent->canvas()->shapeManager()->selection();
         selection->deselectAll();
         selection->select(shape);
+        const QString preferredTool = KoToolManager::instance()->preferredToolForSelection({shape});
+        QMetaObject::invokeMethod(
+            KoToolManager::instance(),
+            [preferredTool] {
+                KoToolManager::instance()->switchToolRequested(preferredTool);
+            },
+            Qt::QueuedConnection);
     }
     return cmd;
 }

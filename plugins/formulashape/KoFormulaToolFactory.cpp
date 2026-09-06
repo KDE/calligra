@@ -16,7 +16,7 @@ KoFormulaToolFactory::KoFormulaToolFactory()
 {
     setToolTip(i18n("Formula editing"));
     setToolType(dynamicToolType());
-    setIconName(koIconName("edittext"));
+    setIconName(koIconName("insert-math-expression"));
     setPriority(1);
     setActivationShapeId(KoFormulaShapeId);
 }
