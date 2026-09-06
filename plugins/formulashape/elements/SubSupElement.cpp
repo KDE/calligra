@@ -18,30 +18,19 @@
 
 SubSupElement::SubSupElement(BasicElement *parent, ElementType elementType)
     : FixedElement(parent)
+    , m_baseElement(std::make_unique<RowElement>(this))
 {
-    m_baseElement = new RowElement(this);
     if (elementType != SupScript) {
-        m_subScript = new RowElement(this);
-    } else {
-        m_subScript = nullptr;
+        m_subScript = std::make_unique<RowElement>(this);
     }
     if (elementType != SubScript) {
-        m_superScript = new RowElement(this);
-    } else {
-        m_superScript = nullptr;
+        m_superScript = std::make_unique<RowElement>(this);
     }
     m_elementType = elementType;
 }
 
 SubSupElement::~SubSupElement()
 {
-    delete m_baseElement;
-    if (m_subScript) {
-        delete m_subScript;
-    }
-    if (m_superScript) {
-        delete m_superScript;
-    }
 }
 
 void SubSupElement::paint(QPainter &painter, AttributeManager *am)
@@ -96,12 +85,12 @@ void SubSupElement::layout(const AttributeManager *am)
 const QList<BasicElement *> SubSupElement::childElements() const
 {
     QList<BasicElement *> tmp;
-    tmp << m_baseElement;
+    tmp << m_baseElement.get();
     if (m_subScript) {
-        tmp << m_subScript;
+        tmp << m_subScript.get();
     }
     if (m_superScript) {
-        tmp << m_superScript;
+        tmp << m_superScript.get();
     }
     return tmp;
 }
@@ -111,14 +100,14 @@ bool SubSupElement::replaceChild(BasicElement *oldelement, BasicElement *newelem
     // TODO: investigate, if we really need this check
     if (newelement->elementType() == Row) {
         RowElement *newrow = static_cast<RowElement *>(newelement);
-        if (oldelement == m_baseElement) {
-            m_baseElement = newrow;
+        if (oldelement == m_baseElement.get()) {
+            m_baseElement.reset(newrow);
             return true;
-        } else if (oldelement == m_subScript) {
-            m_subScript = newrow;
+        } else if (oldelement == m_subScript.get()) {
+            m_subScript.reset(newrow);
             return true;
-        } else if (oldelement == m_superScript) {
-            m_superScript = newrow;
+        } else if (oldelement == m_superScript.get()) {
+            m_superScript.reset(newrow);
             return true;
         }
     }
@@ -144,19 +133,19 @@ bool SubSupElement::readMathMLContent(const KoXmlElement &parent)
     {
         switch (counter) {
         case 0:
-            loadElement(tmp, &m_baseElement);
+            loadElement(tmp, m_baseElement);
             break;
         case 1:
             if (m_elementType == SupScript) {
-                loadElement(tmp, &m_superScript);
+                loadElement(tmp, m_superScript);
             } else {
                 // Valid for both Subscript and Subsupscript
-                loadElement(tmp, &m_subScript);
+                loadElement(tmp, m_subScript);
             }
             break;
         case 2:
             if (m_elementType == SubSupScript) {
-                loadElement(tmp, &m_superScript);
+                loadElement(tmp, m_superScript);
             } else {
                 debugFormula << "Too many arguments to " << ElementFactory::elementName(m_elementType);
             }

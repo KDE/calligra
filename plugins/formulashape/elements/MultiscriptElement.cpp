@@ -19,17 +19,12 @@
 MultiscriptElement::MultiscriptElement(BasicElement *parent)
     : FixedElement(parent)
 {
-    m_baseElement = new RowElement(this);
+    m_baseElement = std::make_unique<RowElement>(this);
 }
 
 MultiscriptElement::~MultiscriptElement()
 {
-    delete m_baseElement;
     // Delete all of the scripts
-    while (!m_preScripts.isEmpty())
-        delete m_preScripts.takeFirst();
-    while (!m_postScripts.isEmpty())
-        delete m_postScripts.takeFirst();
 }
 
 void MultiscriptElement::paint(QPainter &painter, AttributeManager *am)
@@ -43,11 +38,11 @@ void MultiscriptElement::ensureEvenNumberElements()
 {
     if (m_postScripts.size() % 2 == 1) {
         // Odd number - add a None element to the end
-        m_postScripts.append(nullptr);
+        m_postScripts.push_back(nullptr);
     }
     if (m_preScripts.size() % 2 == 1) {
         // Odd number - add a None element to the end
-        m_preScripts.append(nullptr);
+        m_preScripts.push_back(nullptr);
     }
 }
 
@@ -71,7 +66,8 @@ void MultiscriptElement::layout(const AttributeManager *am)
     qreal maxSubScriptDepth = 0.0;
     qreal maxSubScriptBaseLine = 0.0;
     bool isSuperscript = true; // Toggle after each element time
-    foreach (BasicElement *script, m_postScripts) {
+    for (const auto &scriptOwner : m_postScripts) {
+        BasicElement *script = scriptOwner.get();
         isSuperscript = !isSuperscript; // Toggle each time
         if (!script)
             continue; // Null means no element - just a blank
@@ -84,7 +80,8 @@ void MultiscriptElement::layout(const AttributeManager *am)
             maxSubScriptBaseLine = qMax(script->baseLine(), maxSubScriptBaseLine);
         }
     }
-    foreach (BasicElement *script, m_preScripts) {
+    for (const auto &scriptOwner : m_preScripts) {
+        BasicElement *script = scriptOwner.get();
         isSuperscript = !isSuperscript; // Toggle each time
         if (!script)
             continue; // Null means no element - just a blank
@@ -114,16 +111,16 @@ void MultiscriptElement::layout(const AttributeManager *am)
     // We start from the far left, and work to the far right.
     for (int i = m_preScripts.size() - 1; i >= 0; i--) {
         // We start from the end, and work in.
-        // m_preScripts[0] is subscript etc.  So even i is subscript, odd i is superscript
+        // m_preScripts[0].get() is subscript etc.  So even i is subscript, odd i is superscript
         if (i % 2 == 0) {
             // i is even, so subscript
-            if (!m_preScripts[i]) {
+            if (!m_preScripts[i].get()) {
                 xOffset += lastSuperScriptWidth;
             } else {
                 // For a given vertical line, this is processed after the superscript
-                qreal offset = qMax(qreal(0.0), (lastSuperScriptWidth - m_preScripts[i]->width()) / qreal(2.0));
-                m_preScripts[i]->setOrigin(QPointF(offset + xOffset, yOffsetSub - m_preScripts[i]->baseLine()));
-                xOffset += qMax(lastSuperScriptWidth, m_preScripts[i]->width());
+                qreal offset = qMax(qreal(0.0), (lastSuperScriptWidth - m_preScripts[i].get()->width()) / qreal(2.0));
+                m_preScripts[i].get()->setOrigin(QPointF(offset + xOffset, yOffsetSub - m_preScripts[i].get()->baseLine()));
+                xOffset += qMax(lastSuperScriptWidth, m_preScripts[i].get()->width());
             }
             if (i != 0) // No halfthinspace between the first element and the base element
                 xOffset += halfthinspace;
@@ -132,14 +129,14 @@ void MultiscriptElement::layout(const AttributeManager *am)
             // For a given vertical line, we process the superscript first, then
             // the subscript.  We need to look at the subscript (i-1) as well
             // to find out how to align them
-            if (!m_preScripts[i])
+            if (!m_preScripts[i].get())
                 lastSuperScriptWidth = 0.0;
             else {
-                lastSuperScriptWidth = m_preScripts[i]->width();
+                lastSuperScriptWidth = m_preScripts[i].get()->width();
                 qreal offset = 0.0;
-                if (m_preScripts[i - 1]) // the subscript directly below us.
-                    offset = qMax(qreal(0.0), (m_preScripts[i - 1]->width() - lastSuperScriptWidth) / qreal(2.0));
-                m_preScripts[i]->setOrigin(QPointF(offset + xOffset, maxSuperScriptBaseLine - m_preScripts[i]->baseLine()));
+                if (m_preScripts[i - 1].get()) // the subscript directly below us.
+                    offset = qMax(qreal(0.0), (m_preScripts[i - 1].get()->width() - lastSuperScriptWidth) / qreal(2.0));
+                m_preScripts[i].get()->setOrigin(QPointF(offset + xOffset, maxSuperScriptBaseLine - m_preScripts[i].get()->baseLine()));
             }
         }
     }
@@ -152,31 +149,31 @@ void MultiscriptElement::layout(const AttributeManager *am)
     // the subscript before the superscript
     for (int i = 0; i < m_postScripts.size(); i++) {
         // We start from the start, and work out.
-        // m_preScripts[0] is subscript etc.  So even i is subscript, odd i is superscript
+        // m_preScripts[0].get() is subscript etc.  So even i is subscript, odd i is superscript
         if (i % 2 == 0) {
             // i is even, so subscript
             // For a given vertical line, we process the subscript first, then
             // the superscript.  We need to look at the superscript (i+1) as well
             // to find out how to align them
 
-            if (!m_postScripts[i]) {
+            if (!m_postScripts[i].get()) {
                 lastSubScriptWidth = 0.0;
             } else {
-                lastSubScriptWidth = m_postScripts[i]->width();
+                lastSubScriptWidth = m_postScripts[i].get()->width();
                 // For a given vertical line, this is processed after the superscript
                 qreal offset = 0.0;
-                if (m_postScripts.size() > i + 1 && m_postScripts[i + 1] != nullptr) // the subscript directly below us.
-                    offset = qMax(qreal(0.0), (m_postScripts[i + 1]->width() - lastSubScriptWidth) / qreal(2.0));
-                m_postScripts[i]->setOrigin(QPointF(offset + xOffset, yOffsetSub - m_postScripts[i]->baseLine()));
+                if (m_postScripts.size() > i + 1 && m_postScripts[i + 1].get() != nullptr) // the subscript directly below us.
+                    offset = qMax(qreal(0.0), (m_postScripts[i + 1].get()->width() - lastSubScriptWidth) / qreal(2.0));
+                m_postScripts[i].get()->setOrigin(QPointF(offset + xOffset, yOffsetSub - m_postScripts[i].get()->baseLine()));
             }
         } else {
             // i is odd, so superscript
-            if (!m_postScripts[i])
+            if (!m_postScripts[i].get())
                 xOffset += lastSubScriptWidth;
             else {
-                qreal offset = qMax(qreal(0.0), (lastSubScriptWidth - m_postScripts[i]->width()) / qreal(2.0));
-                m_postScripts[i]->setOrigin(QPointF(offset + xOffset, maxSuperScriptBaseLine - m_postScripts[i]->baseLine()));
-                xOffset += qMax(lastSubScriptWidth, m_postScripts[i]->width());
+                qreal offset = qMax(qreal(0.0), (lastSubScriptWidth - m_postScripts[i].get()->width()) / qreal(2.0));
+                m_postScripts[i].get()->setOrigin(QPointF(offset + xOffset, maxSuperScriptBaseLine - m_postScripts[i].get()->baseLine()));
+                xOffset += qMax(lastSubScriptWidth, m_postScripts[i].get()->width());
             }
             if (i != m_postScripts.size() - 1)
                 xOffset += halfthinspace; // Don't add an unneeded space at the very end
@@ -199,27 +196,29 @@ const QList<BasicElement *> MultiscriptElement::childElements() const
 {
     QList<BasicElement *> list;
 
-    list << m_baseElement;
+    list << m_baseElement.get();
 
     // postscript elements
-    foreach (BasicElement *tmp, m_postScripts) {
+    for (const auto &tmpOwner : m_postScripts) {
+        BasicElement *tmp = tmpOwner.get();
         if (tmp)
             list << tmp;
     }
 
     // prescript elements
 #if 1
-    foreach (BasicElement *tmp, m_preScripts) {
+    for (const auto &tmpOwner : m_preScripts) {
+        BasicElement *tmp = tmpOwner.get();
         if (tmp)
             list << tmp;
     }
 #else
     // What is this strange construction?
-    for (int i = m_preScripts.count() - 2; i >= 0; i -= 2) {
-        if (m_preScripts[i])
-            list << m_preScripts[i];
-        if (m_preScripts[i + 1])
-            list << m_preScripts[i + 1];
+    for (int i = m_preScripts.size() - 2; i >= 0; i -= 2) {
+        if (m_preScripts[i].get())
+            list << m_preScripts[i].get();
+        if (m_preScripts[i + 1].get())
+            list << m_preScripts[i + 1].get();
     }
 #endif
 
@@ -250,9 +249,9 @@ bool MultiscriptElement::readMathMLContent(const KoXmlElement &parent)
             // you use "none"
             // To represent "none" we use a nullptr
             if (prescript)
-                m_preScripts.append(nullptr);
+                m_preScripts.push_back(nullptr);
             else
-                m_postScripts.append(nullptr);
+                m_postScripts.push_back(nullptr);
             continue;
         } else if (tmp.tagName() == "mprescripts") {
             prescript = true;
@@ -261,21 +260,20 @@ bool MultiscriptElement::readMathMLContent(const KoXmlElement &parent)
             continue;
         }
 
-        tmpElement = ElementFactory::createElement(tmp.tagName(), this);
+        auto element = ElementFactory::createElement(tmp.tagName(), this);
+        tmpElement = element.get();
         if (!tmpElement->readMathML(tmp)) {
-            delete tmpElement;
             return false;
         }
 
         // The very first element is the base
         if (!baseElement) {
-            delete m_baseElement;
-            m_baseElement = tmpElement;
+            m_baseElement.reset(element.release());
             baseElement = true;
         } else if (prescript)
-            m_preScripts.append(tmpElement);
+            m_preScripts.push_back(std::unique_ptr<BasicElement>(element.release()));
         else
-            m_postScripts.append(tmpElement);
+            m_postScripts.push_back(std::unique_ptr<BasicElement>(element.release()));
     }
 
     ensureEvenNumberElements();
@@ -287,7 +285,8 @@ void MultiscriptElement::writeMathMLContent(KoXmlWriter *writer, const QString &
 {
     m_baseElement->writeMathML(writer, ns); // Just save the children in
                                             // the right order
-    foreach (BasicElement *tmp, m_postScripts) {
+    for (const auto &tmpOwner : m_postScripts) {
+        BasicElement *tmp = tmpOwner.get();
         if (tmp)
             tmp->writeMathML(writer, ns);
         else {
@@ -297,12 +296,13 @@ void MultiscriptElement::writeMathMLContent(KoXmlWriter *writer, const QString &
             writer->endElement();
         }
     }
-    if (m_preScripts.isEmpty())
+    if (m_preScripts.empty())
         return;
     QString s = ns.isEmpty() ? QString::fromLatin1("mprescripts") : ns.toLatin1() + QString::fromLatin1(":mprescripts");
     writer->startElement(s.toLatin1());
     writer->endElement();
-    foreach (BasicElement *tmp, m_preScripts) {
+    for (const auto &tmpOwner : m_preScripts) {
+        BasicElement *tmp = tmpOwner.get();
         if (tmp)
             tmp->writeMathML(writer, ns);
         else {
@@ -316,11 +316,11 @@ void MultiscriptElement::writeMathMLContent(KoXmlWriter *writer, const QString &
 
 // int MultiscriptElement::length() const
 // {
-//     if (!m_postScripts.isEmpty() && m_postScripts.last()==0) {
+//     if (!m_postScripts.empty() && m_postScripts.last()==0) {
 //         //the last element is empty, so there are no cursor positions around it
-//         return 2*(m_preScripts.count()+m_postScripts.count())-1;
+//         return 2*(m_preScripts.size()+m_postScripts.size())-1;
 //     } else {
-//         return 2*(m_preScripts.count()+m_postScripts.count()+1)-1;
+//         return 2*(m_preScripts.size()+m_postScripts.size()+1)-1;
 //     }
 // }
 
@@ -335,7 +335,8 @@ bool MultiscriptElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &old
     int childposition = newcursor.position() / 2;
     // this should be cached
     int prescriptCount = 0;
-    foreach (BasicElement *tmp, m_preScripts) {
+    for (const auto &tmpOwner : m_preScripts) {
+        BasicElement *tmp = tmpOwner.get();
         if (tmp) {
             prescriptCount++;
         }
@@ -345,67 +346,77 @@ bool MultiscriptElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &old
         if (newcursor.direction() == MoveUp || newcursor.direction() == MoveDown) {
             return false;
         }
-        if (m_postScripts.isEmpty() && m_preScripts.isEmpty()) {
+        if (m_postScripts.empty() && m_preScripts.empty()) {
             // this should not happen
-            return moveSingleSituation(newcursor, oldcursor, childElements().indexOf(m_baseElement));
+            return moveSingleSituation(newcursor, oldcursor, childElements().indexOf(m_baseElement.get()));
         }
         if (newcursor.direction() == MoveLeft) {
-            if (!m_preScripts.isEmpty()) {
+            if (!m_preScripts.empty()) {
                 // we search for the first non nullptr element to the left
                 int i;
-                for (i = 0; i < m_preScripts.count(); i++) {
-                    if (m_preScripts[i]) {
+                for (i = 0; i < m_preScripts.size(); i++) {
+                    if (m_preScripts[i].get()) {
                         break;
                     }
                 }
-                if ((i < m_preScripts.count()) && m_preScripts[i]) {
-                    return moveHorSituation(newcursor, oldcursor, childElements().indexOf(m_preScripts[i]), childElements().indexOf(m_baseElement));
+                if ((i < m_preScripts.size()) && m_preScripts[i].get()) {
+                    return moveHorSituation(newcursor, oldcursor, childElements().indexOf(m_preScripts[i].get()), childElements().indexOf(m_baseElement.get()));
                 }
             }
             return moveSingleSituation(newcursor, oldcursor, 0);
         } else if (newcursor.direction() == MoveRight) {
-            if (!m_postScripts.isEmpty()) {
+            if (!m_postScripts.empty()) {
                 // we search for the first non nullptr element to the left
                 int i;
-                for (i = 0; i < m_postScripts.count(); i++) {
-                    if (m_postScripts[i]) {
+                for (i = 0; i < m_postScripts.size(); i++) {
+                    if (m_postScripts[i].get()) {
                         break;
                     }
                 }
-                if (m_postScripts[i]) {
-                    return moveHorSituation(newcursor, oldcursor, childElements().indexOf(m_baseElement), childElements().indexOf(m_postScripts[i]));
+                if (m_postScripts[i].get()) {
+                    return moveHorSituation(newcursor,
+                                            oldcursor,
+                                            childElements().indexOf(m_baseElement.get()),
+                                            childElements().indexOf(m_postScripts[i].get()));
                 }
             }
-            return moveSingleSituation(newcursor, oldcursor, childElements().indexOf(m_baseElement));
+            return moveSingleSituation(newcursor, oldcursor, childElements().indexOf(m_baseElement.get()));
         }
     } else {
         int groupposition;
+        auto scriptIndex = [](const auto &scripts, BasicElement *element) {
+            for (size_t i = 0; i < scripts.size(); ++i) {
+                if (scripts[i].get() == element)
+                    return static_cast<int>(i);
+            }
+            return -1;
+        };
         bool prescript = true;
         if (childposition < prescriptCount) {
             // determine the position in the pre-/postscripts we are in
-            groupposition = m_preScripts.indexOf(childElements()[childposition]);
+            groupposition = scriptIndex(m_preScripts, childElements()[childposition]);
         } else {
-            groupposition = m_postScripts.indexOf(childElements()[childposition]);
+            groupposition = scriptIndex(m_postScripts, childElements()[childposition]);
             prescript = false;
         }
         int pair = groupposition / 2;
         if (newcursor.direction() == MoveUp || newcursor.direction() == MoveDown) {
             //             debugFormula << groupposition<<" - "<<prescriptCount<< "-" <<pair;
             if (prescript) {
-                if (m_preScripts[pair * 2] && m_preScripts[pair * 2 + 1]) {
+                if (m_preScripts[pair * 2].get() && m_preScripts[pair * 2 + 1].get()) {
                     return moveVertSituation(newcursor,
                                              oldcursor,
-                                             childElements().indexOf(m_preScripts[pair * 2 + 1]),
-                                             childElements().indexOf(m_preScripts[pair * 2]));
+                                             childElements().indexOf(m_preScripts[pair * 2 + 1].get()),
+                                             childElements().indexOf(m_preScripts[pair * 2].get()));
                 } else {
                     return false;
                 }
             } else {
-                if (m_postScripts[pair * 2] && m_postScripts[pair * 2 + 1]) {
+                if (m_postScripts[pair * 2].get() && m_postScripts[pair * 2 + 1].get()) {
                     return moveVertSituation(newcursor,
                                              oldcursor,
-                                             childElements().indexOf(m_postScripts[pair * 2 + 1]),
-                                             childElements().indexOf(m_postScripts[pair * 2]));
+                                             childElements().indexOf(m_postScripts[pair * 2 + 1].get()),
+                                             childElements().indexOf(m_postScripts[pair * 2].get()));
                 } else {
                     return false;
                 }
@@ -414,40 +425,40 @@ bool MultiscriptElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &old
             if (prescript) {
                 // we are in the prescripts
                 int i = groupposition + 2;
-                if (!((i < m_preScripts.count()) && m_preScripts[i])) {
-                    for (i = groupposition + 1; i < m_preScripts.count(); i++) {
-                        if (m_preScripts[i]) {
+                if (!((i < m_preScripts.size()) && m_preScripts[i].get())) {
+                    for (i = groupposition + 1; i < m_preScripts.size(); i++) {
+                        if (m_preScripts[i].get()) {
                             break;
                         }
                     }
                 }
-                if ((i < m_preScripts.count()) && m_preScripts[i]) {
+                if ((i < m_preScripts.size()) && m_preScripts[i].get()) {
                     return moveHorSituation(newcursor,
                                             oldcursor,
-                                            childElements().indexOf(m_preScripts[i]),
-                                            childElements().indexOf(m_preScripts[groupposition]));
+                                            childElements().indexOf(m_preScripts[i].get()),
+                                            childElements().indexOf(m_preScripts[groupposition].get()));
                 } else {
-                    return moveSingleSituation(newcursor, oldcursor, childElements().indexOf(m_preScripts[groupposition]));
+                    return moveSingleSituation(newcursor, oldcursor, childElements().indexOf(m_preScripts[groupposition].get()));
                 }
             } else {
                 // we are in the postscripts
                 int i = groupposition - 1;
-                if (!(i >= 0) && m_postScripts[i]) {
+                if (!(i >= 0) && m_postScripts[i].get()) {
                     for (i = groupposition - 2; i >= 0; i--) {
-                        if (m_postScripts[i]) {
+                        if (m_postScripts[i].get()) {
                             break;
                         }
                     }
                 }
-                if ((i >= 0) && m_postScripts[i]) {
+                if ((i >= 0) && m_postScripts[i].get()) {
                     return moveHorSituation(newcursor,
                                             oldcursor,
-                                            childElements().indexOf(m_postScripts[i]),
-                                            childElements().indexOf(m_postScripts[groupposition]));
+                                            childElements().indexOf(m_postScripts[i].get()),
+                                            childElements().indexOf(m_postScripts[groupposition].get()));
                 } else {
                     return moveHorSituation(newcursor,
                                             oldcursor,
-                                            childElements().indexOf(m_baseElement),
+                                            childElements().indexOf(m_baseElement.get()),
                                             childElements().indexOf(elementNext(newcursor.position())));
                 }
             }
@@ -455,42 +466,42 @@ bool MultiscriptElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &old
             if (prescript) {
                 // we are in the prescripts
                 int i = groupposition - 2;
-                if (!((i >= 0) && m_preScripts[i])) {
+                if (!((i >= 0) && m_preScripts[i].get())) {
                     for (i = groupposition - 1; i >= 0; i--) {
-                        if (m_preScripts[i]) {
+                        if (m_preScripts[i].get()) {
                             break;
                         }
                     }
                 }
-                if ((i >= 0) && m_preScripts[i]) {
+                if ((i >= 0) && m_preScripts[i].get()) {
                     //                    debugFormula << "Going from "<< groupposition <<" to " <<i;
                     return moveHorSituation(newcursor,
                                             oldcursor,
-                                            childElements().indexOf(m_preScripts[groupposition]),
-                                            childElements().indexOf(m_preScripts[i]));
+                                            childElements().indexOf(m_preScripts[groupposition].get()),
+                                            childElements().indexOf(m_preScripts[i].get()));
                 } else {
                     return moveHorSituation(newcursor,
                                             oldcursor,
                                             childElements().indexOf(elementNext(newcursor.position())),
-                                            childElements().indexOf(m_baseElement));
+                                            childElements().indexOf(m_baseElement.get()));
                 }
             } else {
                 // we are in the postscripts
                 int i = groupposition + 2;
-                if (!((i < m_postScripts.count()) && m_postScripts[i])) {
-                    for (i = groupposition + 1; i < m_postScripts.count(); i++) {
-                        if (m_postScripts[i]) {
+                if (!((i < m_postScripts.size()) && m_postScripts[i].get())) {
+                    for (i = groupposition + 1; i < m_postScripts.size(); i++) {
+                        if (m_postScripts[i].get()) {
                             break;
                         }
                     }
                 }
-                if ((i < m_postScripts.count()) && m_postScripts[i]) {
+                if ((i < m_postScripts.size()) && m_postScripts[i].get()) {
                     return moveHorSituation(newcursor,
                                             oldcursor,
-                                            childElements().indexOf(m_postScripts[groupposition]),
-                                            childElements().indexOf(m_postScripts[i]));
+                                            childElements().indexOf(m_postScripts[groupposition].get()),
+                                            childElements().indexOf(m_postScripts[i].get()));
                 } else {
-                    return moveSingleSituation(newcursor, oldcursor, childElements().indexOf(m_preScripts[groupposition]));
+                    return moveSingleSituation(newcursor, oldcursor, childElements().indexOf(m_preScripts[groupposition].get()));
                 }
             }
         }

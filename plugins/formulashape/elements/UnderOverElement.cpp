@@ -17,41 +17,30 @@
 
 UnderOverElement::UnderOverElement(BasicElement *parent, ElementType elementType)
     : FixedElement(parent)
+    , m_baseElement(std::make_unique<RowElement>(this))
 {
     if (elementType != Under) {
-        m_overElement = new RowElement(this);
-    } else {
-        m_overElement = nullptr;
+        m_overElement = std::make_unique<RowElement>(this);
     }
     if (elementType != Over) {
-        m_underElement = new RowElement(this);
-    } else {
-        m_underElement = nullptr;
+        m_underElement = std::make_unique<RowElement>(this);
     }
-    m_baseElement = new RowElement(this);
     m_elementType = elementType;
 }
 
 UnderOverElement::~UnderOverElement()
 {
-    delete m_baseElement;
-    if (m_underElement) {
-        delete m_underElement;
-    }
-    if (m_overElement) {
-        delete m_overElement;
-    }
 }
 
 const QList<BasicElement *> UnderOverElement::childElements() const
 {
     QList<BasicElement *> tmp;
-    tmp << m_baseElement;
+    tmp << m_baseElement.get();
     if (m_overElement) {
-        tmp << m_overElement;
+        tmp << m_overElement.get();
     }
     if (m_underElement) {
-        tmp << m_underElement;
+        tmp << m_underElement.get();
     }
     return tmp;
 }
@@ -70,9 +59,9 @@ void UnderOverElement::layout(const AttributeManager *am)
     //     qreal accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
 
     // Set whether to stretch the element.  Set it to true if it doesn't exist to make it easy to check if any are non-stretchy
-    bool underStretchy = m_elementType == Over || am->boolOf("stretchy", m_underElement);
-    bool overStretchy = m_elementType == Under || am->boolOf("stretchy", m_overElement);
-    bool baseStretchy = (underStretchy && overStretchy) || am->boolOf("stretchy", m_baseElement); // For sanity, make sure at least one is not stretchy
+    bool underStretchy = m_elementType == Over || am->boolOf("stretchy", m_underElement.get());
+    bool overStretchy = m_elementType == Under || am->boolOf("stretchy", m_overElement.get());
+    bool baseStretchy = (underStretchy && overStretchy) || am->boolOf("stretchy", m_baseElement.get()); // For sanity, make sure at least one is not stretchy
 
     qreal largestWidth = 0;
     if (!baseStretchy)
@@ -125,11 +114,11 @@ bool UnderOverElement::readMathMLContent(const KoXmlElement &parent)
     forEachElement(tmp, parent)
     {
         if (counter == 0) {
-            loadElement(tmp, &m_baseElement);
+            loadElement(tmp, m_baseElement);
         } else if (counter == 1 && m_elementType != Over) {
-            loadElement(tmp, &m_underElement);
+            loadElement(tmp, m_underElement);
         } else if ((counter == 2 && m_elementType == UnderOver) || (counter == 1 && m_elementType == Over)) {
-            loadElement(tmp, &m_overElement);
+            loadElement(tmp, m_overElement);
         } else if ((counter == 3 && m_elementType == UnderOver) || (counter == 2)) {
             debugFormula << "Too many arguments to " << ElementFactory::elementName(m_elementType) << "counter =" << counter;
             return false;

@@ -10,6 +10,7 @@
 
 #include "FixedElement.h"
 #include "koformula_export.h"
+#include <memory>
 
 /**
  * @short Implementation of the msub, msup, msubsup elements
@@ -66,13 +67,13 @@ protected:
 
 private:
     /// The base element
-    RowElement *m_baseElement;
+    std::unique_ptr<RowElement> m_baseElement;
 
     /// The subscript right to the m_baseElement
-    RowElement *m_subScript;
+    std::unique_ptr<RowElement> m_subScript;
 
     /// The superscript right to the m_baseElement
-    RowElement *m_superScript;
+    std::unique_ptr<RowElement> m_superScript;
 
     /// Whether this is a SubScript, SupScript or SubSupScript
     ElementType m_elementType;

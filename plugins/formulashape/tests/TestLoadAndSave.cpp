@@ -64,9 +64,9 @@ static void addRow(const char *input, const char *output, bool expectedFail = fa
     QTest::newRow("Load and Save") << inputStr << outputStr << expectedFail;
 }
 
-void test(BasicElement *element)
+template<typename Element>
+void test(std::unique_ptr<Element> element)
 {
-    const std::unique_ptr<BasicElement> elementGuard(element);
     QFETCH(QString, input);
     QFETCH(QString, output);
     QFETCH(bool, expectedFail);
@@ -75,7 +75,7 @@ void test(BasicElement *element)
     if (expectedFail) {
         QEXPECT_FAIL("", "", Continue);
     }
-    QCOMPARE(loadAndSave(element, input), output);
+    QCOMPARE(loadAndSave(element.get(), input), output);
 }
 
 void TestLoadAndSave::identifierElement_data()
@@ -1232,37 +1232,37 @@ void TestLoadAndSave::actionElement_data()
 
 void TestLoadAndSave::identifierElement()
 {
-    test(new IdentifierElement);
+    test(std::make_unique<IdentifierElement>());
 }
 
 void TestLoadAndSave::numberElement()
 {
-    test(new NumberElement);
+    test(std::make_unique<NumberElement>());
 }
 
 void TestLoadAndSave::operatorElement()
 {
-    test(new OperatorElement);
+    test(std::make_unique<OperatorElement>());
 }
 
 void TestLoadAndSave::textElement()
 {
-    test(new TextElement);
+    test(std::make_unique<TextElement>());
 }
 
 void TestLoadAndSave::spaceElement()
 {
-    test(new SpaceElement);
+    test(std::make_unique<SpaceElement>());
 }
 
 void TestLoadAndSave::stringElement()
 {
-    test(new StringElement);
+    test(std::make_unique<StringElement>());
 }
 
 void TestLoadAndSave::glyphElement()
 {
-    test(new GlyphElement);
+    test(std::make_unique<GlyphElement>());
 }
 
 void TestLoadAndSave::mathVariant()
@@ -1307,108 +1307,108 @@ void TestLoadAndSave::color()
 
 void TestLoadAndSave::rowElement()
 {
-    test(new RowElement);
+    test(std::make_unique<RowElement>());
 }
 
 void TestLoadAndSave::fractionElement()
 {
-    test(new FractionElement);
+    test(std::make_unique<FractionElement>());
 }
 
 void TestLoadAndSave::rootElement()
 {
-    test(new RootElement);
+    test(std::make_unique<RootElement>());
 }
 
 void TestLoadAndSave::styleElement()
 {
-    test(new StyleElement);
+    test(std::make_unique<StyleElement>());
 }
 
 void TestLoadAndSave::errorElement()
 {
-    test(new ErrorElement);
+    test(std::make_unique<ErrorElement>());
 }
 
 void TestLoadAndSave::paddedElement()
 {
-    test(new PaddedElement);
+    test(std::make_unique<PaddedElement>());
 }
 
 void TestLoadAndSave::phantomElement()
 {
-    test(new PhantomElement);
+    test(std::make_unique<PhantomElement>());
 }
 
 void TestLoadAndSave::fencedElement()
 {
-    test(new FencedElement);
+    test(std::make_unique<FencedElement>());
 }
 
 void TestLoadAndSave::encloseElement()
 {
-    test(new EncloseElement);
+    test(std::make_unique<EncloseElement>());
 }
 
 void TestLoadAndSave::subElement()
 {
-    test(new SubSupElement(nullptr, SubScript));
+    test(std::make_unique<SubSupElement>(nullptr, SubScript));
 }
 
 void TestLoadAndSave::supElement()
 {
-    test(new SubSupElement(nullptr, SupScript));
+    test(std::make_unique<SubSupElement>(nullptr, SupScript));
 }
 
 void TestLoadAndSave::subsupElement()
 {
-    test(new SubSupElement(nullptr, SubSupScript));
+    test(std::make_unique<SubSupElement>(nullptr, SubSupScript));
 }
 
 void TestLoadAndSave::underElement()
 {
-    test(new UnderOverElement(nullptr, Under));
+    test(std::make_unique<UnderOverElement>(nullptr, Under));
 }
 
 void TestLoadAndSave::overElement()
 {
-    test(new UnderOverElement(nullptr, Over));
+    test(std::make_unique<UnderOverElement>(nullptr, Over));
 }
 
 void TestLoadAndSave::underoverElement()
 {
-    test(new UnderOverElement(nullptr, UnderOver));
+    test(std::make_unique<UnderOverElement>(nullptr, UnderOver));
 }
 
 void TestLoadAndSave::multiscriptsElement()
 {
-    test(new MultiscriptElement);
+    test(std::make_unique<MultiscriptElement>());
 }
 
 void TestLoadAndSave::tableElement()
 {
-    test(new TableElement);
+    test(std::make_unique<TableElement>());
 }
 
 void TestLoadAndSave::trElement()
 {
-    test(new TableRowElement);
+    test(std::make_unique<TableRowElement>());
 }
 
 #if 0 // NYI
 void TestLoadAndSave::labeledtrElement()
 {
-    test( new TableRowElement );
+    test(std::make_unique<TableRowElement>());
 }
 #endif
 void TestLoadAndSave::tdElement()
 {
-    test(new TableDataElement);
+    test(std::make_unique<TableDataElement>());
 }
 
 void TestLoadAndSave::actionElement()
 {
-    test(new ActionElement);
+    test(std::make_unique<ActionElement>());
 }
 
 QTEST_MAIN(TestLoadAndSave)

@@ -27,7 +27,22 @@ TableElement::TableElement(BasicElement *parent)
 
 TableElement::~TableElement()
 {
-    qDeleteAll(m_rows);
+}
+
+void TableElement::adoptRow(BasicElement *row)
+{
+    m_ownedRows.emplace_back(row);
+}
+
+void TableElement::releaseRow(BasicElement *row)
+{
+    for (auto it = m_ownedRows.begin(); it != m_ownedRows.end(); ++it) {
+        if (it->get() == row) {
+            it->release();
+            m_ownedRows.erase(it);
+            return;
+        }
+    }
 }
 
 void TableElement::paint(QPainter &painter, AttributeManager *am)
@@ -302,22 +317,23 @@ QString TableElement::attributesDefaultValue(const QString &attribute) const
 
 bool TableElement::readMathMLContent(const KoXmlElement &element)
 {
-    BasicElement *tmpElement = nullptr;
     KoXmlElement tmp;
     forEachElement(tmp, element) // iterate over the elements
     {
-        tmpElement = ElementFactory::createElement(tmp.tagName(), this);
+        auto tmpElement = ElementFactory::createElement(tmp.tagName(), this);
         if (tmpElement->elementType() != TableRow) {
-            delete tmpElement;
             return false;
         }
 
-        m_rows << static_cast<TableRowElement *>(tmpElement);
+        auto *row = static_cast<TableRowElement *>(tmpElement.get());
+        m_rows << row;
+        adoptRow(row);
         if (!tmpElement->readMathML(tmp)) {
             m_rows.removeLast();
-            delete tmpElement;
+            releaseRow(row);
             return false;
         }
+        tmpElement.release();
     }
 
     return true;
@@ -335,6 +351,7 @@ bool TableElement::insertChild(int position, BasicElement *child)
     if (child->elementType() == TableRow && !child->childElements().isEmpty() && child->childElements()[0]->elementType() == TableData) {
         TableRowElement *tmp = static_cast<TableRowElement *>(child);
         m_rows.insert(position, tmp);
+        adoptRow(tmp);
         tmp->setParentElement(this);
         // TODO: there must be a more efficient way for this
         determineDimensions();
@@ -355,6 +372,7 @@ bool TableElement::removeChild(BasicElement *child)
         return false;
     } else {
         m_rows.removeAll(tmp);
+        releaseRow(tmp);
         tmp->setParentElement(nullptr);
     }
     return true;

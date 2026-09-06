@@ -9,6 +9,7 @@
 #include "FormulaCursor.h"
 #include "FormulaData.h"
 #include "KoFormulaTool.h"
+#include "TokenElement.h"
 #include <FormulaEditor.h>
 #include <KoCanvasBase.h>
 #include <KoDocument.h>
@@ -17,6 +18,8 @@
 #include <KoUnit.h>
 #include <QTest>
 
+using namespace Qt::StringLiterals;
+
 class MockCanvas : public KoCanvasBase
 {
 public:
@@ -24,9 +27,10 @@ public:
     KoShapeManager *manager;
     MockCanvas()
         : KoCanvasBase(nullptr)
+        , manager(new KoShapeManager(this))
     {
-        manager = new KoShapeManager(this);
     }
+
     ~MockCanvas() override
     {
     }
@@ -112,6 +116,51 @@ void TestCursor::moveCursor()
     //(abcde)
     canvas.stack.redo();
     //(12)(abcde)
+    QCOMPARE(root->childElements().count(), 2);
+    canvas.stack.clear();
+}
+
+void TestCursor::editCommands()
+{
+    MockCanvas canvas;
+    KoFormulaShape shape(nullptr);
+    canvas.shapeManager()->addShape(&shape);
+    canvas.shapeManager()->selection()->select(&shape);
+    KoFormulaTool tool(&canvas);
+    QSet<KoShape *> selectedShapes{&shape};
+    tool.activate(KoToolBase::DefaultActivation, selectedShapes);
+
+    FormulaEditor *editor = tool.formulaEditor();
+    canvas.addCommand(new FormulaCommandUpdate(&shape, editor->insertText(u"ab"_s)));
+    auto *root = editor->formulaData()->formulaElement();
+    auto *token = static_cast<TokenElement *>(root->childElements().first());
+    QCOMPARE(token->text(), u"ab"_s);
+
+    editor->cursor().moveTo(token, 1);
+    canvas.addCommand(new FormulaCommandUpdate(&shape, editor->remove(true)));
+    QCOMPARE(token->text(), u"b"_s);
+    canvas.stack.undo();
+    QCOMPARE(token->text(), u"ab"_s);
+    canvas.stack.redo();
+    QCOMPARE(token->text(), u"b"_s);
+
+    FormulaCursor selection(token, true, 0, 1);
+    editor->setCursor(selection);
+    canvas.addCommand(new FormulaCommandUpdate(&shape, editor->insertText(u"x"_s)));
+    QCOMPARE(token->text(), u"x"_s);
+    canvas.stack.undo();
+    QCOMPARE(token->text(), u"b"_s);
+    canvas.stack.redo();
+    QCOMPARE(token->text(), u"x"_s);
+
+    editor->cursor().moveTo(token, token->endPosition());
+    auto *fraction = editor->insertMathML(u"<mfrac><mi>a</mi><mi>b</mi></mfrac>"_s);
+    QVERIFY(fraction);
+    canvas.addCommand(new FormulaCommandUpdate(&shape, fraction));
+    QCOMPARE(root->childElements().count(), 2);
+    canvas.stack.undo();
+    QCOMPARE(root->childElements().count(), 1);
+    canvas.stack.redo();
     QCOMPARE(root->childElements().count(), 2);
     canvas.stack.clear();
 }

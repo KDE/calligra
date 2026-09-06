@@ -41,7 +41,22 @@ TableRowElement::TableRowElement(BasicElement *parent)
 
 TableRowElement::~TableRowElement()
 {
-    qDeleteAll(m_data);
+}
+
+void TableRowElement::adoptData(BasicElement *data)
+{
+    m_ownedData.emplace_back(data);
+}
+
+void TableRowElement::releaseData(BasicElement *data)
+{
+    for (auto it = m_ownedData.begin(); it != m_ownedData.end(); ++it) {
+        if (it->get() == data) {
+            it->release();
+            m_ownedData.erase(it);
+            return;
+        }
+    }
 }
 
 void TableRowElement::paint(QPainter &painter, AttributeManager *am)
@@ -256,22 +271,23 @@ QList<Align> TableRowElement::alignments(Qt::Orientation orientation)
 
 bool TableRowElement::readMathMLContent(const KoXmlElement &element)
 {
-    BasicElement *tmpElement = nullptr;
     KoXmlElement tmp;
     forEachElement(tmp, element)
     {
-        tmpElement = ElementFactory::createElement(tmp.tagName(), this);
+        auto tmpElement = ElementFactory::createElement(tmp.tagName(), this);
         if (tmpElement->elementType() != TableData) {
-            delete tmpElement;
             return false;
         }
 
-        m_data << static_cast<TableDataElement *>(tmpElement);
+        auto *data = static_cast<TableDataElement *>(tmpElement.get());
+        m_data << data;
+        adoptData(tmpElement.get());
         if (!tmpElement->readMathML(tmp)) {
             m_data.removeLast();
-            delete tmpElement;
+            releaseData(data);
             return false;
         }
+        tmpElement.release();
     }
 
     return true;
@@ -294,6 +310,7 @@ bool TableRowElement::insertChild(int position, BasicElement *child)
     if (child->elementType() == TableData) {
         TableDataElement *tmp = static_cast<TableDataElement *>(child);
         m_data.insert(position, tmp);
+        adoptData(tmp);
         tmp->setParentElement(this);
         return true;
     } else {
@@ -311,6 +328,7 @@ bool TableRowElement::removeChild(BasicElement *child)
         return false;
     } else {
         m_data.removeAll(tmp);
+        releaseData(tmp);
         tmp->setParentElement(nullptr);
     }
     return true;

@@ -160,19 +160,16 @@ int FixedElement::positionOfChild(BasicElement *child) const
     }
 }
 
-bool FixedElement::loadElement(KoXmlElement &tmp, RowElement **child)
+bool FixedElement::loadElement(KoXmlElement &tmp, std::unique_ptr<RowElement> &child)
 {
-    BasicElement *element;
-    element = ElementFactory::createElement(tmp.tagName(), this);
+    auto element = ElementFactory::createElement(tmp.tagName(), this);
     if (!element->readMathML(tmp)) {
-        delete element;
         return false;
     }
     if (element->elementType() == Row) {
-        delete (*child);
-        (*child) = static_cast<RowElement *>(element);
+        child.reset(static_cast<RowElement *>(element.release()));
     } else {
-        (*child)->insertChild(0, element);
+        child->insertChild(0, element.release());
     }
     return true;
 }

@@ -12,6 +12,8 @@
 
 #include "BasicElement.h"
 #include "koformula_export.h"
+#include <memory>
+#include <vector>
 
 class FormulaCursor;
 
@@ -34,6 +36,9 @@ class KOFORMULA_EXPORT RowElement : public BasicElement
 public:
     /// The standard constructor
     explicit RowElement(BasicElement *parent = nullptr);
+
+    RowElement(const RowElement &) = delete;
+    RowElement &operator=(const RowElement &) = delete;
 
     /// The standard destructor
     ~RowElement() override;
@@ -127,6 +132,11 @@ protected:
 
     /// A list of the child elements
     QList<BasicElement *> m_childElements;
+    /// Ownership of currently attached children
+    std::vector<std::unique_ptr<BasicElement>> m_ownedChildElements;
+
+    void adoptChild(BasicElement *child);
+    void releaseChild(BasicElement *child);
 };
 
 #endif // ROWELEMENT_H

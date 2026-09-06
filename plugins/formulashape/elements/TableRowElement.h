@@ -14,6 +14,8 @@
 #include "AttributeManager.h"
 #include "BasicElement.h"
 #include "koformula_export.h"
+#include <memory>
+#include <vector>
 
 class TableDataElement;
 
@@ -102,6 +104,10 @@ private:
 
     /// The list of entries in this row of the table
     QList<TableDataElement *> m_data;
+    std::vector<std::unique_ptr<BasicElement>> m_ownedData;
+
+    void adoptData(BasicElement *data);
+    void releaseData(BasicElement *data);
 };
 
 #endif

@@ -20,16 +20,14 @@
 
 FractionElement::FractionElement(BasicElement *parent)
     : FixedElement(parent)
+    , m_numerator(std::make_unique<RowElement>(this))
+    , m_denominator(std::make_unique<RowElement>(this))
 {
-    m_numerator = new RowElement(this);
-    m_denominator = new RowElement(this);
     m_lineThickness = 1.0;
 }
 
 FractionElement::~FractionElement()
 {
-    delete m_numerator;
-    delete m_denominator;
 }
 
 void FractionElement::paint(QPainter &painter, AttributeManager *am)
@@ -119,7 +117,7 @@ void FractionElement::layoutBevelledFraction(const AttributeManager *am)
 const QList<BasicElement *> FractionElement::childElements() const
 {
     QList<BasicElement *> list;
-    list << m_numerator << m_denominator;
+    list << m_numerator.get() << m_denominator.get();
     return list;
 }
 
@@ -158,19 +156,19 @@ QList<BasicElement *> FractionElement::elementsBetween(int pos1, int pos2) const
 {
     QList<BasicElement *> tmp;
     if (pos1 == 0 && pos2 > 0) {
-        tmp.append(m_numerator);
+        tmp.append(m_numerator.get());
     }
     if (pos1 < 3 && pos2 == 3) {
-        tmp.append(m_denominator);
+        tmp.append(m_denominator.get());
     }
     return tmp;
 }
 
 int FractionElement::positionOfChild(BasicElement *child) const
 {
-    if (m_numerator == child) {
+    if (m_numerator.get() == child) {
         return 0;
-    } else if (m_denominator == child) {
+    } else if (m_denominator.get() == child) {
         return 2;
     }
     return -1;
@@ -220,11 +218,11 @@ bool FractionElement::replaceChild(BasicElement *oldelement, BasicElement *newel
     // TODO: investigate, if we really need this
     if (newelement->elementType() == Row) {
         RowElement *newrow = static_cast<RowElement *>(newelement);
-        if (oldelement == m_numerator) {
-            m_numerator = newrow;
+        if (oldelement == m_numerator.get()) {
+            m_numerator.reset(newrow);
             return true;
-        } else if (oldelement == m_denominator) {
-            m_denominator = newrow;
+        } else if (oldelement == m_denominator.get()) {
+            m_denominator.reset(newrow);
             return true;
         }
     }
@@ -250,9 +248,9 @@ bool FractionElement::readMathMLContent(const KoXmlElement &parent)
     forEachElement(tmp, parent)
     {
         if (counter == 0) {
-            loadElement(tmp, &m_numerator);
+            loadElement(tmp, m_numerator);
         } else if (counter == 1) {
-            loadElement(tmp, &m_denominator);
+            loadElement(tmp, m_denominator);
         } else {
             debugFormula << "Too many arguments to mfrac";
         }

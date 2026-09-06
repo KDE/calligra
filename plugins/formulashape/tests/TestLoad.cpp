@@ -87,9 +87,10 @@ static void addRow(const QString &input, int output, int outputRecursive)
     QTest::newRow(name.toLatin1()) << input << output << outputRecursive;
 }
 
-void test(BasicElement *element)
+template<typename Element>
+void test(Element *element)
 {
-    const std::unique_ptr<BasicElement> elementGuard(element);
+    const std::unique_ptr<Element> elementGuard(element);
     QFETCH(QString, input);
     QFETCH(int, output);
     QFETCH(int, outputRecursive);

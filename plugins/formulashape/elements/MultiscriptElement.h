@@ -11,6 +11,9 @@
 #include "FixedElement.h"
 #include "koformula_export.h"
 
+#include <memory>
+#include <vector>
+
 /**
  * @short Implementation of the mmultiscript element
  */
@@ -73,21 +76,21 @@ protected:
 
 private:
     /// The BasicElement representing the base element of the multiscript
-    BasicElement *m_baseElement;
+    std::unique_ptr<BasicElement> m_baseElement;
 
     /// A list of BasicElements representing the sub- and super-scripts left to the base
     /// element.  The first item in the list is subscript, second is superscript, third
     /// subscript and so on.
     /// The first 2 items are drawn closest to the item, then moving increasingly
     /// further away
-    QList<BasicElement *> m_preScripts;
+    std::vector<std::unique_ptr<BasicElement>> m_preScripts;
 
     /// A list of BasicElements representing the sub- and super-scripts right to the base
     /// element.  The first item in the list is subscript, second is superscript, third
     /// subscript and so on.
     /// The first 2 items are drawn closest to the item, then moving increasingly
     /// further away
-    QList<BasicElement *> m_postScripts;
+    std::vector<std::unique_ptr<BasicElement>> m_postScripts;
 };
 
 #endif // MULTISCRIPTELEMENT_H

@@ -10,6 +10,7 @@
 #include "BasicElement.h"
 #include "koformula_export.h"
 #include <KoXmlReader.h>
+#include <memory>
 
 class FormulaCursor;
 class QPainterPath;
@@ -38,7 +39,7 @@ public:
 
     QLineF cursorLine(int position) const override;
 
-    bool loadElement(KoXmlElement &tmp, RowElement **child);
+    bool loadElement(KoXmlElement &tmp, std::unique_ptr<RowElement> &child);
 
     QPainterPath selectionRegion(const int pos1, const int pos2) const override;
 

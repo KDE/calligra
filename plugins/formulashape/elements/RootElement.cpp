@@ -23,15 +23,13 @@
 
 RootElement::RootElement(BasicElement *parent)
     : FixedElement(parent)
+    , m_radicand(std::make_unique<RowElement>(this))
+    , m_exponent(std::make_unique<RowElement>(this))
 {
-    m_radicand = new RowElement(this);
-    m_exponent = new RowElement(this);
 }
 
 RootElement::~RootElement()
 {
-    delete m_radicand;
-    delete m_exponent;
 }
 
 void RootElement::paint(QPainter &painter, AttributeManager *am)
@@ -81,7 +79,7 @@ void RootElement::layout(const AttributeManager *am)
 const QList<BasicElement *> RootElement::childElements() const
 {
     QList<BasicElement *> tmp;
-    tmp << m_exponent << m_radicand;
+    tmp << m_exponent.get() << m_radicand.get();
     return tmp;
 }
 
@@ -137,11 +135,11 @@ bool RootElement::replaceChild(BasicElement *oldelement, BasicElement *newelemen
 {
     if (newelement->elementType() == Row) {
         RowElement *newrow = static_cast<RowElement *>(newelement);
-        if (oldelement == m_exponent) {
-            m_exponent = newrow;
+        if (oldelement == m_exponent.get()) {
+            m_exponent.reset(newrow);
             return true;
-        } else if (oldelement == m_radicand) {
-            m_radicand = newrow;
+        } else if (oldelement == m_radicand.get()) {
+            m_radicand.reset(newrow);
             return true;
         }
     }
@@ -160,9 +158,9 @@ bool RootElement::readMathMLContent(const KoXmlElement &element)
     forEachElement(tmp, element)
     {
         if (counter == 0) {
-            loadElement(tmp, &m_radicand);
+            loadElement(tmp, m_radicand);
         } else if (counter == 1) {
-            loadElement(tmp, &m_exponent);
+            loadElement(tmp, m_exponent);
         } else {
             debugFormula << "Too many arguments to mroot";
         }

@@ -25,7 +25,22 @@ RowElement::RowElement(BasicElement *parent)
 
 RowElement::~RowElement()
 {
-    qDeleteAll(m_childElements);
+}
+
+void RowElement::adoptChild(BasicElement *child)
+{
+    m_ownedChildElements.emplace_back(child);
+}
+
+void RowElement::releaseChild(BasicElement *child)
+{
+    for (auto it = m_ownedChildElements.begin(); it != m_ownedChildElements.end(); ++it) {
+        if (it->get() == child) {
+            it->release();
+            m_ownedChildElements.erase(it);
+            return;
+        }
+    }
 }
 
 void RowElement::paint(QPainter &painter, AttributeManager *am)
@@ -109,6 +124,7 @@ bool RowElement::insertChild(int position, BasicElement *child)
 {
     if (0 <= position && position <= endPosition()) {
         m_childElements.insert(position, child);
+        adoptChild(child);
         child->setParentElement(this);
         return true;
     } else {
@@ -120,6 +136,7 @@ bool RowElement::removeChild(BasicElement *child)
 {
     bool tmp = m_childElements.removeOne(child);
     if (tmp) {
+        releaseChild(child);
         child->setParentElement(nullptr);
     }
     return tmp;
@@ -232,14 +249,12 @@ bool RowElement::readMathMLContent(const KoXmlElement &parent)
     }
 
     // Read the actual content.
-    BasicElement *tmpElement = nullptr;
     KoXmlElement tmp;
     forEachElement(tmp, realParent)
     {
-        tmpElement = ElementFactory::createElement(tmp.tagName(), this);
+        auto tmpElement = ElementFactory::createElement(tmp.tagName(), this);
         Q_ASSERT(tmpElement);
         if (!tmpElement->readMathML(tmp)) {
-            delete tmpElement;
             return false;
         }
 
@@ -248,29 +263,28 @@ bool RowElement::readMathMLContent(const KoXmlElement &parent)
         if (tmpElement->elementType() == Row) {
             if (tmpElement->childElements().count() == 0) {
                 // We don't load in this case, empty elements in rows are not needed.
-                delete tmpElement;
             } else if (tmpElement->childElements().count() == 1) {
                 // An mrow with 1 child is equivalent to the child itself.
                 // So dig it out and place it directly in this row.
                 //
                 // TODO: Investigate, if we should load them nevertheless.
-                RowElement *row = static_cast<RowElement *>(tmpElement);
+                RowElement *row = static_cast<RowElement *>(tmpElement.get());
                 BasicElement *child = row->childElements()[0];
                 row->removeChild(child);
-                delete row;
+                tmpElement.reset();
 
                 // insertChild(childElements().count(), child);
-                m_childElements << child;
+                insertChild(m_childElements.count(), child);
             } else {
                 // If the mrow has > 1 child, then enter it
-                m_childElements << tmpElement;
+                insertChild(m_childElements.count(), tmpElement.release());
             }
         } else {
             // All other elements than mrow are immediately entered.
-            m_childElements << tmpElement;
+            insertChild(m_childElements.count(), tmpElement.release());
         }
 #else
-        m_childElements << tmpElement;
+        insertChild(m_childElements.count(), tmpElement.release());
 #endif
     }
     return true;

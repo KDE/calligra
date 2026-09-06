@@ -320,13 +320,13 @@ private:
     qreal m_baseLine;
 
     /// Factor with which this element is scaled down by
-    qreal m_scaleFactor;
+    qreal m_scaleFactor = 1.0;
 
     /// Scale level with which this element is scaled down by
-    qreal m_scaleLevel;
+    qreal m_scaleLevel = 1;
 
     /// Indicates whether this element has displaystyle set
-    bool m_displayStyle;
+    bool m_displayStyle = true;
 };
 
 #endif // BASICELEMENT_H

@@ -50,6 +50,10 @@ void FormulaEditor::paint(QPainter &painter) const
 
 FormulaCommand *FormulaEditor::insertText(const QString &text)
 {
+    if (text.isEmpty()) {
+        return nullptr;
+    }
+
     FormulaCommand *undo = nullptr;
     m_inputBuffer = text;
     if (m_cursor.insideToken()) {
@@ -60,9 +64,13 @@ FormulaCommand *FormulaEditor::insertText(const QString &text)
             undo = new FormulaCommandReplaceText(token, m_cursor.position(), 0, text);
         }
     } else {
-        TokenElement *token = static_cast<TokenElement *>(ElementFactory::createElement(tokenType(text[0]), nullptr));
+        auto tokenOwner = ElementFactory::createElement(tokenType(text[0]), nullptr);
+        TokenElement *token = static_cast<TokenElement *>(tokenOwner.get());
         token->insertText(0, text);
         undo = insertElement(token);
+        if (undo) {
+            tokenOwner.release();
+        }
         if (undo) {
             undo->setRedoCursorPosition(FormulaCursor(token, text.length()));
         }
@@ -78,13 +86,13 @@ FormulaCommand *FormulaEditor::insertMathML(const QString &data)
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
     tmpDocument.setContent(QString(data), false, nullptr, nullptr, nullptr);
-    BasicElement *element = ElementFactory::createElement(tmpDocument.documentElement().tagName(), nullptr);
+    auto element = ElementFactory::createElement(tmpDocument.documentElement().tagName(), nullptr);
     element->readMathML(tmpDocument.documentElement()); // and load the new formula
-    FormulaCommand *command = insertElement(element);
-    debugFormula << "Inserting " << tmpDocument.documentElement().tagName();
-    if (command == nullptr) {
-        delete element;
+    FormulaCommand *command = insertElement(element.get());
+    if (command) {
+        element.release();
     }
+    debugFormula << "Inserting " << tmpDocument.documentElement().tagName();
     return command;
 }
 
@@ -141,8 +149,16 @@ FormulaCommand *FormulaEditor::insertElement(BasicElement *element)
         } else {
             undo = new FormulaCommandReplaceElements(tmprow, m_cursor.position(), 0, list, false);
         }
-    } else if (m_cursor.insideToken() && element->elementType() == Glyph) {
-        // TODO: implement the insertion of glyphs
+    } else if (m_cursor.insideToken() && element->elementType() != Glyph && (m_cursor.isHome() || m_cursor.isEnd())) {
+        auto *token = m_cursor.currentElement();
+        auto *row = dynamic_cast<RowElement *>(token->parentElement());
+        if (row) {
+            const int childIndex = row->childElements().indexOf(token);
+            const int position = childIndex + (m_cursor.isEnd() ? 1 : 0);
+            QList<BasicElement *> list;
+            list << element;
+            undo = new FormulaCommandReplaceElements(row, position, 0, list, false);
+        }
     }
     if (undo) {
         undo->setText(kundo2_i18n("Insert formula elements."));

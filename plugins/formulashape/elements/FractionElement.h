@@ -13,6 +13,7 @@
 #include "FixedElement.h"
 #include "koformula_export.h"
 #include <QLineF>
+#include <memory>
 
 /**
  * @short Implementation of the MathML mfrac element
@@ -87,10 +88,10 @@ private:
     void layoutBevelledFraction(const AttributeManager *am);
 
     /// The element representing the fraction's numerator
-    RowElement *m_numerator;
+    std::unique_ptr<RowElement> m_numerator;
 
     /// The element representing the fraction's denominator
-    RowElement *m_denominator;
+    std::unique_ptr<RowElement> m_denominator;
 
     /// The line that separates the denominator and the numerator
     QLineF m_fractionLine;

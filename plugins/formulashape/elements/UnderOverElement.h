@@ -11,6 +11,7 @@
 
 #include "FixedElement.h"
 #include "koformula_export.h"
+#include <memory>
 
 /**
  * @short Implementation of the MathML mover, munder and moverunder elements
@@ -64,13 +65,13 @@ protected:
 
 private:
     /// The element used as basis for the under and the over element
-    RowElement *m_baseElement;
+    std::unique_ptr<RowElement> m_baseElement;
 
     /// The element that is layouted under the base element
-    RowElement *m_underElement;
+    std::unique_ptr<RowElement> m_underElement;
 
     /// The element that is layouted over the base element
-    RowElement *m_overElement;
+    std::unique_ptr<RowElement> m_overElement;
 
     /// The type - one of Under, Over, UnderOver
     ElementType m_elementType;

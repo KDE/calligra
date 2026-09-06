@@ -13,6 +13,8 @@
 #include "BasicElement.h"
 #include "koformula_export.h"
 #include <QPainterPath>
+#include <memory>
+#include <vector>
 
 class TableRowElement;
 
@@ -109,6 +111,10 @@ private:
 
     /// The rows a matrix contains
     QList<TableRowElement *> m_rows;
+    std::vector<std::unique_ptr<BasicElement>> m_ownedRows;
+
+    void adoptRow(BasicElement *row);
+    void releaseRow(BasicElement *row);
 
     /// Buffer for the pen style used for the table's frame
     Qt::PenStyle m_framePenStyle;

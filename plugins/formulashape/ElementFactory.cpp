@@ -36,68 +36,68 @@
 #include "UnderOverElement.h"
 #include "UnknownElement.h"
 
-BasicElement *ElementFactory::createElement(const QString &tagName, BasicElement *parent)
+std::unique_ptr<BasicElement> ElementFactory::createElement(const QString &tagName, BasicElement *parent)
 {
     //    warnFormulaElement << "Creating element: " << tagName;
     if (tagName == "mi")
-        return new IdentifierElement(parent);
+        return std::make_unique<IdentifierElement>(parent);
     else if (tagName == "mo")
-        return new OperatorElement(parent);
+        return std::make_unique<OperatorElement>(parent);
     else if (tagName == "mn")
-        return new NumberElement(parent);
+        return std::make_unique<NumberElement>(parent);
     else if (tagName == "mtext")
-        return new TextElement(parent);
+        return std::make_unique<TextElement>(parent);
     else if (tagName == "ms")
-        return new StringElement(parent);
+        return std::make_unique<StringElement>(parent);
     else if (tagName == "mspace")
-        return new SpaceElement(parent);
+        return std::make_unique<SpaceElement>(parent);
     else if (tagName == "mglyph")
-        return new GlyphElement(parent);
+        return std::make_unique<GlyphElement>(parent);
     else if (tagName == "mrow")
-        return new RowElement(parent);
+        return std::make_unique<RowElement>(parent);
     else if (tagName == "mfrac")
-        return new FractionElement(parent);
+        return std::make_unique<FractionElement>(parent);
     else if (tagName == "msqrt")
-        return new SquareRootElement(parent);
+        return std::make_unique<SquareRootElement>(parent);
     else if (tagName == "mroot")
-        return new RootElement(parent);
+        return std::make_unique<RootElement>(parent);
     else if (tagName == "mstyle")
-        return new StyleElement(parent);
+        return std::make_unique<StyleElement>(parent);
     else if (tagName == "merror")
-        return new ErrorElement(parent);
+        return std::make_unique<ErrorElement>(parent);
     else if (tagName == "mpadded")
-        return new PaddedElement(parent);
+        return std::make_unique<PaddedElement>(parent);
     else if (tagName == "mphantom")
-        return new PhantomElement(parent);
+        return std::make_unique<PhantomElement>(parent);
     else if (tagName == "mtable")
-        return new TableElement(parent);
+        return std::make_unique<TableElement>(parent);
     else if (tagName == "mtr")
-        return new TableRowElement(parent);
+        return std::make_unique<TableRowElement>(parent);
     else if (tagName == "mtd")
-        return new TableDataElement(parent);
+        return std::make_unique<TableDataElement>(parent);
     else if (tagName == "mfenced")
-        return new FencedElement(parent);
+        return std::make_unique<FencedElement>(parent);
     else if (tagName == "menclose")
-        return new EncloseElement(parent);
+        return std::make_unique<EncloseElement>(parent);
     else if (tagName == "msub")
-        return new SubSupElement(parent, SubScript);
+        return std::make_unique<SubSupElement>(parent, SubScript);
     else if (tagName == "msup")
-        return new SubSupElement(parent, SupScript);
+        return std::make_unique<SubSupElement>(parent, SupScript);
     else if (tagName == "msubsup")
-        return new SubSupElement(parent, SubSupScript);
+        return std::make_unique<SubSupElement>(parent, SubSupScript);
     else if (tagName == "munder")
-        return new UnderOverElement(parent, Under);
+        return std::make_unique<UnderOverElement>(parent, Under);
     else if (tagName == "mover")
-        return new UnderOverElement(parent, Over);
+        return std::make_unique<UnderOverElement>(parent, Over);
     else if (tagName == "munderover")
-        return new UnderOverElement(parent, UnderOver);
+        return std::make_unique<UnderOverElement>(parent, UnderOver);
     else if (tagName == "mmultiscripts")
-        return new MultiscriptElement(parent);
+        return std::make_unique<MultiscriptElement>(parent);
     else if (tagName == "annotation")
-        return new AnnotationElement(parent);
+        return std::make_unique<AnnotationElement>(parent);
 
     warnFormulaElement << "Do not know how to create the following element: " << tagName;
-    return new UnknownElement(parent);
+    return std::make_unique<UnknownElement>(parent);
 }
 
 QString ElementFactory::elementName(ElementType type)

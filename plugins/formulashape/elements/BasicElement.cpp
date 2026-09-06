@@ -25,12 +25,9 @@
 BasicElement::BasicElement(BasicElement *p)
     : m_parentElement(p)
 {
-    m_scaleFactor = 1.0;
-    m_scaleLevel = 1;
     m_boundingRect.setTopLeft(QPointF(0.0, 0.0));
     m_boundingRect.setWidth(7.0); // standard values
     m_boundingRect.setHeight(10.0);
-    m_displayStyle = true;
     setBaseLine(10.0);
 }
 

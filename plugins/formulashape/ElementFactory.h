@@ -11,6 +11,7 @@
 
 #include "koformula_export.h"
 #include <QString>
+#include <memory>
 
 class BasicElement;
 
@@ -73,7 +74,7 @@ public:
      * @param parent The parent element of the newly created element
      * @return A pointer to the new BasicElement derived element
      */
-    static BasicElement *createElement(const QString &tagName, BasicElement *parent);
+    static std::unique_ptr<BasicElement> createElement(const QString &tagName, BasicElement *parent);
 
     /**
      * Obtain the MathML name of a ElementType.

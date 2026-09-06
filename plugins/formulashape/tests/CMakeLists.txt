@@ -13,6 +13,11 @@ endmacro()
 
 ########### AttributeManager Test ###############
 
+formulashape_add_unit_test(ElementFactory
+    TestElementFactory.cpp
+    LINK_LIBRARIES koformula Qt6::Test
+)
+
 formulashape_add_unit_test(AttributeManager
     TestAttributeManager.cpp
     LINK_LIBRARIES koformula Qt6::Test

@@ -14,6 +14,7 @@
 #include "BasicElement.h"
 #include "FixedElement.h"
 #include "koformula_export.h"
+#include <memory>
 
 #include <QPainterPath>
 
@@ -82,10 +83,10 @@ protected:
 
 private:
     /// The element that is the radicand of the root
-    RowElement *m_radicand;
+    std::unique_ptr<RowElement> m_radicand;
 
     /// The element that is the exponent of the root
-    RowElement *m_exponent;
+    std::unique_ptr<RowElement> m_exponent;
 
     /// The point the artwork relates to.
     QPointF m_rootOffset;
