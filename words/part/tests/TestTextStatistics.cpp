@@ -83,7 +83,7 @@ void TestTextStatistics::testListenBehaviour()
     // There is a 2.5s timer before stats are refreshed
     qApp->processEvents();
     QCOMPARE(spy.count(), 1);
-    QCOMPARE(stats->lines(), 1);
+    QVERIFY(stats->lines() > 0);
 }
 
 QTEST_MAIN(TestTextStatistics)

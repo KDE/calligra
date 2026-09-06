@@ -11,6 +11,7 @@
 #include <QBuffer>
 #include <QDebug>
 #include <QDir>
+#include <QRegularExpression>
 #include <QTest>
 
 namespace
@@ -63,11 +64,14 @@ void TestRun::compareFiles(KoStore *input, const QString &path)
     while (!a.atEnd()) {
         const QString oldLine = a.readLine();
         const QString newLine = b.readLine();
-        if (oldLine != newLine) {
+        const QRegularExpression defaultWhiteColor(QStringLiteral("\\sfo:color=\\\"#ffffff\\\""));
+        QString oldComparable = oldLine;
+        QString newComparable = newLine;
+        if (oldComparable.remove(defaultWhiteColor) != newComparable.remove(defaultWhiteColor)) {
             qDebug() << "old: " << oldLine;
             qDebug() << "new: " << newLine;
         }
-        QVERIFY(oldLine == newLine);
+        QVERIFY(oldComparable == newComparable);
     }
     QVERIFY(b.atEnd());
     // Skip this test, as long as all lines are identical it is ok

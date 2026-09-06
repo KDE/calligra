@@ -3,6 +3,9 @@
 # Suppression file for ASAN/LSAN
 
 leak:QCryptographicHashPrivate::EVP::EVP
+# Qt initializes an OpenSSL provider on first hash use and OpenSSL retains a
+# small process-wide allocation until termination.
+leak:QCryptographicHash::QCryptographicHash
 # The pigment registry is a process-wide Qt global and is intentionally kept
 # alive until process termination. Its plugin-created color spaces and profile
 # graph are therefore reported after the test has completed.

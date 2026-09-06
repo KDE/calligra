@@ -287,8 +287,13 @@ Time Localization::readTime(const QString &str, const QString &format, bool *ok)
                 *ok = false;
             return time;
         }
-        // just use QTime
-        auto qt = d->locale.toTime(str, f);
+        // QLocale rejects hour zero in 12-hour input.
+        QString timeString = str;
+        if (f.contains("ap"_L1)) {
+            const QRegularExpression zeroHour(QStringLiteral("^\\s*0(?=\\D)"));
+            timeString.replace(zeroHour, QStringLiteral("12"));
+        }
+        auto qt = d->locale.toTime(timeString, f);
         Time time(qt);
         if (ok)
             *ok = time.isValid();

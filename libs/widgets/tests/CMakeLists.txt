@@ -29,6 +29,7 @@ kowidgets_add_unit_test(zoomcontroller_test zoomcontroller_test.cpp  LINK_LIBRAR
 kowidgets_add_unit_test(KoResourceTaggingTest KoResourceTaggingTest.cpp  LINK_LIBRARIES kowidgets Qt6::Test)
 set_tests_properties(libs-kowidgets-KoResourceTaggingTest PROPERTIES
     ENVIRONMENT "QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin;LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/sanitizers.supp")
+set_property(TEST libs-kowidgets-KoResourceTaggingTest APPEND PROPERTY ENVIRONMENT "QT_LOGGING_RULES=*.debug=false")
 
 ########### next target ###############
 

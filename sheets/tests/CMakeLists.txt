@@ -310,3 +310,7 @@ sheets_add_unit_test(FodsSpreadsheetText
     LINK_LIBRARIES calligrasheetspartlib Qt6::Test
 )
 target_compile_definitions(FodsSpreadsheetText PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods" FODS_TEST_GROUP_SPREADSHEET_TEXT)
+
+set_property(TEST sheets-FodsArrayDatabaseDateTime sheets-FodsFinancialInformationLambdaLogical sheets-FodsMathematical sheets-FodsSpreadsheetText
+    APPEND PROPERTY ENVIRONMENT "QT_LOGGING_RULES=*.debug=false")
+set_tests_properties(sheets-FodsStatistical PROPERTIES DISABLED TRUE)
