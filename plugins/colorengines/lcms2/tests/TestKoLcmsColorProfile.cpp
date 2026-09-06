@@ -135,9 +135,10 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
 void TestKoLcmsColorProfile::testConversion()
 {
     const KoColorSpace *sRgb = KoColorSpaceRegistry::instance()->rgb16("sRGB built-in");
-    Q_ASSERT(sRgb);
     const KoColorSpace *linearRgb = KoColorSpaceRegistry::instance()->rgb16("scRGB (linear)");
-    Q_ASSERT(linearRgb);
+    if (!sRgb || !linearRgb) {
+        QSKIP("The requested RGB profiles are not available");
+    }
 
     quint16 src[4];
     src[0] = 257;
@@ -162,11 +163,27 @@ void TestKoLcmsColorProfile::testConversion()
     QByteArray rawData = linearRgb->profile()->rawData();
     cmsHPROFILE linearRgbProfile = cmsOpenProfileFromMem((void *)rawData.constData(), rawData.size());
 
+    if (!sRgbProfile || !linearRgbProfile) {
+        if (sRgbProfile) {
+            cmsCloseProfile(sRgbProfile);
+        }
+        if (linearRgbProfile) {
+            cmsCloseProfile(linearRgbProfile);
+        }
+        QSKIP("The lcms profiles could not be opened");
+    }
+
     cmsHTRANSFORM tf = cmsCreateTransform(linearRgbProfile, TYPE_BGRA_16, sRgbProfile, TYPE_BGRA_16, INTENT_RELATIVE_COLORIMETRIC, cmsFLAGS_NOOPTIMIZE);
+
+    if (!tf) {
+        cmsCloseProfile(linearRgbProfile);
+        cmsCloseProfile(sRgbProfile);
+        QSKIP("The lcms profiles do not support BGRA16 conversion");
+    }
 
     cmsDoTransform(tf, (quint8 *)&src, (quint8 *)&dst2, 1);
 
-    Q_ASSERT(dst[0] == dst2[0]);
+    QCOMPARE(dst[0], dst2[0]);
 
     cmsDeleteTransform(tf);
     cmsCloseProfile(linearRgbProfile);
