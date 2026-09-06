@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QAtomicInt>
 #include <QBuffer>
+#include <QByteArrayView>
 #include <QCryptographicHash>
 #include <QFile>
 #include <QFileInfo>
@@ -312,7 +313,7 @@ void VideoData::copyToTemporary(QIODevice &device)
         qint64 bytes = device.read(buf, sizeof(buf));
         if (bytes <= 0)
             break; // done!
-        md5.addData(buf, bytes);
+        md5.addData(QByteArrayView(buf, bytes));
         do {
             bytes -= d->temporaryFile->write(buf, bytes);
         } while (bytes > 0);
@@ -326,8 +327,8 @@ void VideoData::copyToTemporary(QIODevice &device)
 qint64 VideoData::generateKey(const QByteArray &bytes)
 {
     quint64 answer = 1;
-    const int max = qMin(8, bytes.count());
-    for (int x = 0; x < max; ++x)
+    const qsizetype max = qMin<qsizetype>(8, bytes.size());
+    for (qsizetype x = 0; x < max; ++x)
         answer += static_cast<quint64>(bytes[x]) << (8 * x);
     return answer;
 }

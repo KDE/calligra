@@ -1003,6 +1003,7 @@ bool Axis::showRuler() const
 
 void Axis::setShowRuler(bool show)
 {
+    Q_UNUSED(show);
     KChart::RulerAttributes attr = d->kdAxis->rulerAttributes();
     attr.setShowRulerLine(!attr.showRulerLine());
     d->kdAxis->setRulerAttributes(attr);
@@ -2085,6 +2086,7 @@ void Axis::setAngleOffset(qreal angle)
 
 void Axis::setHoleSize(qreal value)
 {
+    Q_UNUSED(value);
     // TODO KChart does not support
 }
 
@@ -2162,7 +2164,7 @@ void Axis::updateKChartAxisPosition()
         debugChartAxis << name() << "Not a cartesian chart" << d->plotArea->chartType();
         return;
     }
-    KChart::CartesianAxis::Position pos;
+    KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Bottom;
     if (d->plotArea->xAxis() == this) {
         if (d->plotArea->isVertical()) {
             pos = KChart::CartesianAxis::Left;

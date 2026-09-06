@@ -268,7 +268,8 @@ void SectionsIO::save()
     doc.appendChild(root);
     saveTheStructure(doc, root, m_rootSection, contextToRemove);
     QFile file(structureFileName());
-    file.open(QIODevice::WriteOnly);
+    if (!file.open(QIODevice::WriteOnly))
+        return;
     file.write(doc.toString().toUtf8());
     file.close();
 

@@ -13,7 +13,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "ui/splash/hi256-app-calligrakarbon.xpm"
 #include <QHideEvent>
 #include <QLoggingCategory>
 #include <QSplashScreen>
@@ -25,6 +24,8 @@
 #include <ui/KarbonAboutData.h>
 
 #ifdef MAINTANER_WANTED_SPLASH
+#include "ui/splash/hi256-app-calligrakarbon.xpm"
+
 class KoSplashScreen : public QSplashScreen
 {
 public:

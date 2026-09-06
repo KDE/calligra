@@ -44,7 +44,8 @@ Canvas::Canvas()
 {
     m_tool = &m_createTool;
     setBackgroundRole(QPalette::Base);
-    m_file.open(QIODevice::WriteOnly | QIODevice::Unbuffered);
+    if (!m_file.open(QIODevice::WriteOnly | QIODevice::Unbuffered))
+        qWarning() << "Could not open trace file" << m_file.fileName();
     m_out.setDevice(&m_file);
 }
 
@@ -100,7 +101,8 @@ void Canvas::replay()
         QString filename(QCoreApplication::arguments().at(1));
         qDebug() << "parameter:" << filename;
         QFile file(filename);
-        file.open(QIODevice::ReadOnly | QIODevice::Text);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+            return;
         QTextStream in(&file);
         while (!in.atEnd()) {
             m_list.push_back(in.readLine());

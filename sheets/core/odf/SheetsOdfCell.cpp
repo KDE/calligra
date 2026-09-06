@@ -1020,7 +1020,8 @@ void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
         xmlWriter.addAttribute("office:value", saveString);
         break;
     }
-    case Value::fmt_Date: {
+    case Value::fmt_Date:
+    case Value::fmt_DateTime: {
         xmlWriter.addAttribute("office:value-type", "date");
         xmlWriter.addAttribute("office:date-value", saveString);
         break;

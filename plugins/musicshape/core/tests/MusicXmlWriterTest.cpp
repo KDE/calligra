@@ -259,7 +259,10 @@ bool validateOutput(Sheet *sheet, const char *fname)
     xmlWriter.endDocument();
 
     QFile validFile(QFINDTESTDATA(QString("files/%1").arg(fname)));
-    validFile.open(QIODevice::ReadOnly);
+    if (!validFile.open(QIODevice::ReadOnly)) {
+        delete dev;
+        return false;
+    }
     KoXmlDocument valid;
     KoXml::setDocument(valid, &validFile, true);
 
@@ -270,9 +273,10 @@ bool validateOutput(Sheet *sheet, const char *fname)
     bool res = compareNodes(valid, result);
     if (!res) {
         QFile f(QFINDTESTDATA(QString("files/out_%1").arg(fname)));
-        f.open(QIODevice::WriteOnly);
-        f.write(((QBuffer *)dev)->data());
-        f.close();
+        if (f.open(QIODevice::WriteOnly)) {
+            f.write(((QBuffer *)dev)->data());
+            f.close();
+        }
     }
 
     delete dev;

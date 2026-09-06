@@ -208,13 +208,15 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         return false;
 
     QTemporaryFile tmpChangeFile;
-    tmpChangeFile.open();
+    if (!tmpChangeFile.open())
+        return false;
     KoXmlWriter *changeWriter = new KoXmlWriter(&tmpChangeFile, 1);
     if (!changeWriter)
         return false;
 
     QTemporaryFile tmpTextBodyFile;
-    tmpTextBodyFile.open();
+    if (!tmpTextBodyFile.open())
+        return false;
     KoXmlWriter *tmpBodyWriter = new KoXmlWriter(&tmpTextBodyFile, 1);
     if (!tmpBodyWriter)
         return false;

@@ -54,6 +54,7 @@ void ComponentsKoCanvasController::setZoomWithWheel(bool zoom)
 
 void ComponentsKoCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
+    Q_UNUSED(recalculateCenter);
     setDocumentSize(sz);
     Q_EMIT documentSizeChanged(sz);
 }

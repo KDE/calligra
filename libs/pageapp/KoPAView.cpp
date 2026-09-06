@@ -532,7 +532,11 @@ void KoPAView::importDocument()
         QString tmpFile;
         if (KIO::NetAccess::download(url, tmpFile, nullptr)) {
             QFile file(tmpFile);
-            file.open(QIODevice::ReadOnly);
+            if (!file.open(QIODevice::ReadOnly)) {
+                KMessageBox::error(nullptr, i18n("Could not import\n%1", url.url(QUrl::PreferLocalFile)));
+                delete dialog;
+                return;
+            }
             QByteArray ba;
             ba = file.readAll();
 

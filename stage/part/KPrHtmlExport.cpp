@@ -44,7 +44,8 @@ void KPrHtmlExport::exportHtml(const KPrHtmlExport::Parameter &parameters)
 void KPrHtmlExport::extractStyle()
 {
     KZip zip(m_parameters.styleUrl.toLocalFile());
-    zip.open(QIODevice::ReadOnly);
+    if (!zip.open(QIODevice::ReadOnly))
+        return;
     zip.directory()->copyTo(m_tmpDirPath, true);
 }
 
@@ -78,7 +79,8 @@ void KPrHtmlExport::exportImageToTmpDir()
 void KPrHtmlExport::generateHtml()
 {
     QFile file(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligrastage/templates/exportHTML/slides.html")));
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly))
+        return;
     QString slideContent = file.readAll();
     file.close();
     // Create html slide file
@@ -107,7 +109,8 @@ void KPrHtmlExport::generateToc()
     }
     toc.append("</ul>");
     QFile file(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligrastage/templates/exportHTML/toc.html")));
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly))
+        return;
     QString content = file.readAll();
     file.close();
     content.replace("::TITLE::", m_parameters.title);
@@ -120,7 +123,8 @@ void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString
 {
     const QString filePath = m_tmpDirPath + QLatin1Char('/') + fileName;
     QFile file(filePath);
-    file.open(QIODeviceBase::WriteOnly);
+    if (!file.open(QIODeviceBase::WriteOnly))
+        return;
     QTextStream stream(&file);
     stream << htmlBody;
 }

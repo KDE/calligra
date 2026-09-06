@@ -44,7 +44,7 @@ struct Layout::Private : public KoShape {
     void triggerRelayout();
 
 protected:
-    virtual void shapeChanged(ChangeType type, KoShape *shape);
+    void shapeChanged(ChangeType type, KoShape *shape) override;
 
 private:
     // Fake

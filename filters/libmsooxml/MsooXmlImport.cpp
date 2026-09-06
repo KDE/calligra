@@ -377,7 +377,11 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
 
             OOXML_POLE::Stream *dataStream = new OOXML_POLE::Stream(&storage, "/EncryptedPackage");
             QTemporaryFile *outf = new QTemporaryFile;
-            outf->open();
+            if (!outf->open()) {
+                delete outf;
+                delete dataStream;
+                return nullptr;
+            }
 
             aes.clear();
             bytes_read = dataStream->read(buffer, 8);
@@ -498,7 +502,11 @@ QTemporaryFile *MsooXmlImport::tryDecryptFile(QString &filename)
 
             OOXML_POLE::Stream *dataStream = new OOXML_POLE::Stream(&storage, "/EncryptedPackage");
             QTemporaryFile *outf = new QTemporaryFile;
-            outf->open();
+            if (!outf->open()) {
+                delete outf;
+                delete dataStream;
+                return nullptr;
+            }
 
             bytes_read = dataStream->read(buffer, 8);
             quint64 totSize = readU64(buffer);

@@ -201,6 +201,7 @@ void SpreadsheetImpl::setCurrentIndex(int newValue)
 
 void SpreadsheetImpl::updateDocumentSize(const QSize &size)
 {
+    Q_UNUSED(size);
     QRectF activeRect =
         d->canvas->viewConverter()->documentToView(d->canvas->activeSheet()->cellCoordinatesToDocument(d->canvas->activeSheet()->usedArea(true)));
     zoomController()->setDocumentSize(activeRect.size(), false);

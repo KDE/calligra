@@ -297,7 +297,6 @@ bool Parser::parseRegion2()
 // }
 /************************ENDRegionParser*******************************/
 
-static QString columnName(uint column);
 // static int rangeCharToInt(char c);
 
 /**

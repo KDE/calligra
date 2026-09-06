@@ -320,10 +320,13 @@ QList<AbstractNode *> AbstractNode::descendant() const
 QList<AbstractNode *> AbstractNode::peers() const
 {
     QList<AbstractNode *> list;
-    if (m_parent)
-        foreach (AbstractNode *node, m_parent->children())
-            if (node != this)
+    if (m_parent) {
+        foreach (AbstractNode *node, m_parent->children()) {
+            if (node != this) {
                 list.append(node);
+            }
+        }
+    }
     return list;
 }
 
@@ -1158,11 +1161,13 @@ void LayoutNodeAtom::setNeedsReinit(bool needsReinit)
     if (m_needsReinit == needsReinit)
         return;
     m_needsReinit = needsReinit;
-    if (m_needsReinit) // if we need to be re-initialized then our children need to be too
-        foreach (QExplicitlySharedDataPointer<AbstractAtom> child, children())
+    if (m_needsReinit) { // if we need to be re-initialized then our children need to be too
+        foreach (QExplicitlySharedDataPointer<AbstractAtom> child, children()) {
             if (LayoutNodeAtom *childLayoutAtom = dynamic_cast<LayoutNodeAtom *>(child.data())) {
                 childLayoutAtom->setNeedsReinit(true);
             }
+        }
+    }
 }
 
 void LayoutNodeAtom::setNeedsRelayout(bool needsRelayout)
@@ -1284,10 +1289,13 @@ QVector<QExplicitlySharedDataPointer<LayoutNodeAtom>> LayoutNodeAtom::childrenLa
 QVector<QExplicitlySharedDataPointer<LayoutNodeAtom>> LayoutNodeAtom::descendantLayouts() const
 {
     QVector<QExplicitlySharedDataPointer<LayoutNodeAtom>> result = childrenLayouts();
-    foreach (QExplicitlySharedDataPointer<AbstractAtom> atom, children())
-        if (LayoutNodeAtom *l = dynamic_cast<LayoutNodeAtom *>(atom.data()))
-            foreach (QExplicitlySharedDataPointer<LayoutNodeAtom> atom, l->descendantLayouts())
+    foreach (QExplicitlySharedDataPointer<AbstractAtom> atom, children()) {
+        if (LayoutNodeAtom *l = dynamic_cast<LayoutNodeAtom *>(atom.data())) {
+            foreach (QExplicitlySharedDataPointer<LayoutNodeAtom> atom, l->descendantLayouts()) {
                 result.append(atom);
+            }
+        }
+    }
     return result;
 }
 

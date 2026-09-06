@@ -60,6 +60,7 @@ char *toString(const Value &value)
 
 QString TestOpenFormula::convertToOpenFormula(const QString &expr)
 {
+    Q_UNUSED(expr);
     // TODO - formula encoding is done differently (needs a valid cell), use that!
     QString formula = QString(); /* Cell().encodeFormula(expr); */
     return formula;

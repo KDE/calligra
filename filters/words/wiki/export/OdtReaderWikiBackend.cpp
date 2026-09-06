@@ -161,7 +161,7 @@ void OdtReaderWikiBackend::elementTextListItem(KoXmlStreamReader &reader, OdfRea
 
     if (reader.isStartElement()) {
         KoOdfListStyle *listStyle = wikiContext->popListStyle();
-        char symbol;
+        char symbol = '*';
         if (listStyle->listLevelStyleType() == "text:list-level-style-bullet") {
             symbol = '*';
         } else if (listStyle->listLevelStyleType() == "text:list-level-style-number") {

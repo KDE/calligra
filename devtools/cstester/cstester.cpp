@@ -42,7 +42,7 @@ KoDocument *openFile(const QString &filename)
 {
     const QString mimetype = QMimeDatabase().mimeTypeForFile(filename).name();
 
-    KoPart *part;
+    KoPart *part = nullptr;
     QString error;
     const auto metaDatas = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
     if (!metaDatas.isEmpty()) {
@@ -57,6 +57,9 @@ KoDocument *openFile(const QString &filename)
         qWarning() << "Error creating document" << mimetype << error;
         return nullptr;
     }
+
+    if (!part)
+        return nullptr;
 
     KoDocument *document = part->document();
 

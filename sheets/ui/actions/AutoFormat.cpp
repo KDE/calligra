@@ -80,7 +80,10 @@ void AutoFormat::applyFormat(const QString &name)
     }
 
     QFile file(xmlname);
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly)) {
+        KMessageBox::error(m_canvasWidget, i18n("Could not open sheet-style XML file %1.", xmlname));
+        return;
+    }
     KoXmlDocument doc;
     doc.setContent(&file);
     file.close();
