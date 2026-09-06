@@ -8,6 +8,7 @@
 #include <QBuffer>
 #include <QDebug>
 #include <QTest>
+#include <memory>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -65,6 +66,7 @@ static void addRow(const char *input, const char *output, bool expectedFail = fa
 
 void test(BasicElement *element)
 {
+    const std::unique_ptr<BasicElement> elementGuard(element);
     QFETCH(QString, input);
     QFETCH(QString, output);
     QFETCH(bool, expectedFail);
@@ -74,7 +76,6 @@ void test(BasicElement *element)
         QEXPECT_FAIL("", "", Continue);
     }
     QCOMPARE(loadAndSave(element, input), output);
-    delete element;
 }
 
 void TestLoadAndSave::identifierElement_data()

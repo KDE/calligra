@@ -262,8 +262,10 @@ bool MultiscriptElement::readMathMLContent(const KoXmlElement &parent)
         }
 
         tmpElement = ElementFactory::createElement(tmp.tagName(), this);
-        if (!tmpElement->readMathML(tmp))
+        if (!tmpElement->readMathML(tmp)) {
+            delete tmpElement;
             return false;
+        }
 
         // The very first element is the base
         if (!baseElement) {

@@ -170,14 +170,14 @@ void FormulaCommandReplaceElements::undo()
     }
 }
 
-FormulaCommandLoad::FormulaCommandLoad(FormulaData *data, FormulaElement *newelement, KUndo2Command *parent)
+FormulaCommandLoad::FormulaCommandLoad(FormulaData *data, std::unique_ptr<FormulaElement> newelement, KUndo2Command *parent)
     : FormulaCommand(parent)
 {
     m_data = data;
-    m_newel = newelement;
-    m_oldel = data->formulaElement();
-    setUndoCursorPosition(FormulaCursor(m_oldel, 0));
-    setRedoCursorPosition(FormulaCursor(m_newel, 0));
+    m_newel = std::move(newelement);
+    m_oldel = data->takeFormulaElement();
+    setUndoCursorPosition(FormulaCursor(m_oldel.get(), 0));
+    setRedoCursorPosition(FormulaCursor(m_newel.get(), 0));
 }
 
 FormulaCommandLoad::~FormulaCommandLoad()
@@ -190,13 +190,13 @@ FormulaCommandLoad::~FormulaCommandLoad()
 void FormulaCommandLoad::redo()
 {
     m_done = true;
-    m_data->setFormulaElement(m_newel);
+    m_data->swapFormulaElement(m_newel);
 }
 
 void FormulaCommandLoad::undo()
 {
     m_done = false;
-    m_data->setFormulaElement(m_oldel);
+    m_data->swapFormulaElement(m_oldel);
 }
 
 FormulaCommandReplaceRow::FormulaCommandReplaceRow(FormulaData *data, FormulaCursor oldposition, TableElement *table, int number, int oldlength, int newlength)

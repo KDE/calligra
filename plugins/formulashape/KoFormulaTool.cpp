@@ -376,9 +376,9 @@ void KoFormulaTool::loadFormula()
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
     tmpDocument.setContent(&file, false, nullptr, nullptr, nullptr);
-    FormulaElement *formulaElement = new FormulaElement(); // create a new root element
+    auto formulaElement = std::make_unique<FormulaElement>(); // create a new root element
     formulaElement->readMathML(tmpDocument.documentElement()); // and load the new formula
-    FormulaCommand *command = new FormulaCommandLoad(m_formulaShape->formulaData(), formulaElement);
+    FormulaCommand *command = new FormulaCommandLoad(m_formulaShape->formulaData(), std::move(formulaElement));
     canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
 }
 

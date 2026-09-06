@@ -7,6 +7,7 @@
 
 #include <QBuffer>
 #include <QTest>
+#include <memory>
 
 #include <KoXmlReader.h>
 
@@ -88,6 +89,7 @@ static void addRow(const QString &input, int output, int outputRecursive)
 
 void test(BasicElement *element)
 {
+    const std::unique_ptr<BasicElement> elementGuard(element);
     QFETCH(QString, input);
     QFETCH(int, output);
     QFETCH(int, outputRecursive);
@@ -104,8 +106,6 @@ void test(BasicElement *element)
 #endif
     QCOMPARE(element->childElements().count(), output);
     QCOMPARE(numElements, outputRecursive);
-
-    delete element;
 }
 
 void TestLoad::identifierElement_data()

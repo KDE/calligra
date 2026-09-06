@@ -165,6 +165,7 @@ bool FixedElement::loadElement(KoXmlElement &tmp, RowElement **child)
     BasicElement *element;
     element = ElementFactory::createElement(tmp.tagName(), this);
     if (!element->readMathML(tmp)) {
+        delete element;
         return false;
     }
     if (element->elementType() == Row) {

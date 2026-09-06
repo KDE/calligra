@@ -239,6 +239,7 @@ bool RowElement::readMathMLContent(const KoXmlElement &parent)
         tmpElement = ElementFactory::createElement(tmp.tagName(), this);
         Q_ASSERT(tmpElement);
         if (!tmpElement->readMathML(tmp)) {
+            delete tmpElement;
             return false;
         }
 
@@ -247,6 +248,7 @@ bool RowElement::readMathMLContent(const KoXmlElement &parent)
         if (tmpElement->elementType() == Row) {
             if (tmpElement->childElements().count() == 0) {
                 // We don't load in this case, empty elements in rows are not needed.
+                delete tmpElement;
             } else if (tmpElement->childElements().count() == 1) {
                 // An mrow with 1 child is equivalent to the child itself.
                 // So dig it out and place it directly in this row.

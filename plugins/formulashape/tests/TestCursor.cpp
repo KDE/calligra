@@ -20,17 +20,15 @@
 class MockCanvas : public KoCanvasBase
 {
 public:
-    KUndo2QStack *stack;
+    KUndo2QStack stack;
     KoShapeManager *manager;
     MockCanvas()
         : KoCanvasBase(nullptr)
     {
-        stack = new KUndo2QStack();
         manager = new KoShapeManager(this);
     }
     ~MockCanvas() override
     {
-        delete stack;
     }
 
     void gridSize(qreal *, qreal *) const override
@@ -44,7 +42,7 @@ public:
     void addCommand(KUndo2Command *c) override
     {
         //         c->redo();
-        stack->push(c);
+        stack.push(c);
     }
     KoShapeManager *shapeManager() const override
     {
@@ -83,21 +81,21 @@ public:
 
 void TestCursor::moveCursor()
 {
-    MockCanvas *canvas = new MockCanvas();
-    KoFormulaShape *shape = new KoFormulaShape(nullptr); // FIXME: Do we need a real resourceManager here?
-    canvas->shapeManager()->addShape(shape);
-    canvas->shapeManager()->selection()->select(shape);
-    QCOMPARE(canvas->shapeManager()->selection()->count(), 1);
-    KoFormulaTool *tool = new KoFormulaTool(canvas);
+    MockCanvas canvas;
+    KoFormulaShape shape(nullptr);
+    canvas.shapeManager()->addShape(&shape);
+    canvas.shapeManager()->selection()->select(&shape);
+    QCOMPARE(canvas.shapeManager()->selection()->count(), 1);
+    KoFormulaTool tool(&canvas);
     QSet<KoShape *> selectedShapes;
-    selectedShapes << shape;
-    tool->activate(KoToolBase::DefaultActivation, selectedShapes);
-    FormulaEditor *editor = tool->formulaEditor();
+    selectedShapes << &shape;
+    tool.activate(KoToolBase::DefaultActivation, selectedShapes);
+    FormulaEditor *editor = tool.formulaEditor();
     FormulaElement *root = editor->formulaData()->formulaElement();
-    canvas->addCommand(new FormulaCommandUpdate(shape, editor->insertText("ade")));
+    canvas.addCommand(new FormulaCommandUpdate(&shape, editor->insertText("ade")));
     editor->cursor().moveTo(root->childElements()[0], 1);
     //(a|de)
-    canvas->addCommand(new FormulaCommandUpdate(shape, editor->insertText("bc")));
+    canvas.addCommand(new FormulaCommandUpdate(&shape, editor->insertText("bc")));
     editor->cursor().moveTo(root->childElements()[0], 6);
     //(abcde|)
     editor->cursor().move(MoveLeft);
@@ -107,15 +105,15 @@ void TestCursor::moveCursor()
     editor->cursor().move(MoveLeft);
     //|(abcde)
     QCOMPARE(editor->cursor().position(), 0);
-    canvas->addCommand(new FormulaCommandUpdate(shape, editor->insertText("123")));
+    canvas.addCommand(new FormulaCommandUpdate(&shape, editor->insertText("123")));
     QCOMPARE(root->childElements().count(), 2);
     //(12)(abcde)
-    canvas->stack->undo();
+    canvas.stack.undo();
     //(abcde)
-    canvas->stack->redo();
+    canvas.stack.redo();
     //(12)(abcde)
     QCOMPARE(root->childElements().count(), 2);
-    canvas->stack->clear();
+    canvas.stack.clear();
 }
 
 QTEST_MAIN(TestCursor)

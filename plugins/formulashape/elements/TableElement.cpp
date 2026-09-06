@@ -307,11 +307,17 @@ bool TableElement::readMathMLContent(const KoXmlElement &element)
     forEachElement(tmp, element) // iterate over the elements
     {
         tmpElement = ElementFactory::createElement(tmp.tagName(), this);
-        if (tmpElement->elementType() != TableRow)
+        if (tmpElement->elementType() != TableRow) {
+            delete tmpElement;
             return false;
+        }
 
         m_rows << static_cast<TableRowElement *>(tmpElement);
-        tmpElement->readMathML(tmp);
+        if (!tmpElement->readMathML(tmp)) {
+            m_rows.removeLast();
+            delete tmpElement;
+            return false;
+        }
     }
 
     return true;

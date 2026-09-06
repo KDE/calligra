@@ -10,6 +10,7 @@
 #include <KoShape.h>
 #define KoFormulaShapeId "FormulaShapeID"
 #include <KoFrameShape.h>
+#include <memory>
 
 class KoStore;
 class KoDocumentResourceManager;
@@ -87,15 +88,15 @@ private:
     bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement, const KoOdfLoadingContext &odfLoadingContext);
 
     /// The data this shape displays
-    FormulaData *m_formulaData;
+    std::unique_ptr<FormulaData> m_formulaData;
 
     /// The renderer that takes care of painting the shape's formula
-    FormulaRenderer *m_formulaRenderer;
+    std::unique_ptr<FormulaRenderer> m_formulaRenderer;
 
     /// True if this formula is inline, i.e. not embedded in a formula document.
     bool m_isInline;
 
-    FormulaDocument *m_document;
+    std::unique_ptr<FormulaDocument> m_document;
     KoDocumentResourceManager *m_resourceManager;
 };
 

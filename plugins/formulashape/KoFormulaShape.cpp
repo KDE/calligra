@@ -29,20 +29,16 @@
 
 KoFormulaShape::KoFormulaShape(KoDocumentResourceManager *documentResourceManager)
     : KoFrameShape(KoXmlNS::draw, "object")
+    , m_formulaData(std::make_unique<FormulaData>(std::make_unique<FormulaElement>()))
+    , m_formulaRenderer(std::make_unique<FormulaRenderer>())
+    , m_isInline(false)
 {
-    FormulaElement *element = new FormulaElement();
-    m_formulaData = new FormulaData(element);
-    m_formulaRenderer = new FormulaRenderer();
-    m_isInline = false;
-
-    m_document = new FormulaDocument(this);
+    m_document = std::make_unique<FormulaDocument>(this);
     m_resourceManager = documentResourceManager;
 }
 
 KoFormulaShape::~KoFormulaShape()
 {
-    delete m_formulaData;
-    delete m_formulaRenderer;
 }
 
 void KoFormulaShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
@@ -72,12 +68,12 @@ void KoFormulaShape::resize(const QSizeF &)
 
 FormulaData *KoFormulaShape::formulaData() const
 {
-    return m_formulaData;
+    return m_formulaData.get();
 }
 
 FormulaRenderer *KoFormulaShape::formulaRenderer() const
 {
-    return m_formulaRenderer;
+    return m_formulaRenderer.get();
 }
 
 bool KoFormulaShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -105,10 +101,9 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoa
     }
 
     // Create a new root element, load the formula and replace the old one.
-    FormulaElement *formulaElement = new FormulaElement();
+    auto formulaElement = std::make_unique<FormulaElement>();
     formulaElement->readMathML(topLevelElement);
-    delete m_formulaData->formulaElement();
-    m_formulaData->setFormulaElement(formulaElement);
+    m_formulaData->swapFormulaElement(formulaElement);
     m_formulaData->notifyDataChange(nullptr, false);
 
     m_isInline = true;
@@ -236,10 +231,9 @@ bool KoFormulaShape::loadOdfEmbedded(const KoXmlElement &topLevelElement, KoShap
     }
 #endif
     // Create a new root element, load the formula and replace the old one.
-    FormulaElement *formulaElement = new FormulaElement();
+    auto formulaElement = std::make_unique<FormulaElement>();
     formulaElement->readMathML(topLevelElement);
-    delete m_formulaData->formulaElement();
-    m_formulaData->setFormulaElement(formulaElement);
+    m_formulaData->swapFormulaElement(formulaElement);
     m_formulaData->notifyDataChange(nullptr, false);
 
     return true;

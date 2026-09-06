@@ -15,6 +15,7 @@
 #include <QList>
 #include <QMetaType>
 #include <kundo2command.h>
+#include <memory>
 class BasicElement;
 class TokenElement;
 class FormulaData;
@@ -128,7 +129,7 @@ private:
 class FormulaCommandLoad : public FormulaCommand
 {
 public:
-    FormulaCommandLoad(FormulaData *data, FormulaElement *newelement, KUndo2Command *parent = nullptr);
+    FormulaCommandLoad(FormulaData *data, std::unique_ptr<FormulaElement> newelement, KUndo2Command *parent = nullptr);
 
     ~FormulaCommandLoad() override;
 
@@ -140,8 +141,8 @@ public:
 
 private:
     FormulaData *m_data;
-    FormulaElement *m_oldel;
-    FormulaElement *m_newel;
+    std::unique_ptr<FormulaElement> m_oldel;
+    std::unique_ptr<FormulaElement> m_newel;
 };
 
 class FormulaCommandReplaceRow : public FormulaCommand

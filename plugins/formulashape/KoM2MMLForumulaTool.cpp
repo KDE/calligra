@@ -183,7 +183,7 @@ void KoM2MMLFormulaTool::setMathML(const QString &mathml, const QString &mode)
 {
     KoXmlDocument tmpDocument;
     tmpDocument.setContent(QString(mathml), false, nullptr, nullptr, nullptr);
-    FormulaElement *formulaElement = new FormulaElement(); // create a new root element
+    auto formulaElement = std::make_unique<FormulaElement>(); // create a new root element
     formulaElement->readMathML(tmpDocument.documentElement()); // and load the new formula
 
     AnnotationElement *annot = new AnnotationElement;
@@ -193,7 +193,7 @@ void KoM2MMLFormulaTool::setMathML(const QString &mathml, const QString &mode)
 
     debugFormula << mathml;
 
-    canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, new FormulaCommandLoad(m_formulaShape->formulaData(), formulaElement)));
+    canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, new FormulaCommandLoad(m_formulaShape->formulaData(), std::move(formulaElement))));
     m_errorLabel->setText("");
 }
 

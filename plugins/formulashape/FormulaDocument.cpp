@@ -47,15 +47,12 @@ FormulaDocument::Private::~Private() = default;
 
 FormulaDocument::FormulaDocument(KoFormulaShape *parent)
     : KoDocument(new FormulaPart(nullptr))
-    , d(new Private)
+    , d(std::make_unique<Private>())
 {
     d->parent = parent;
 }
 
-FormulaDocument::~FormulaDocument()
-{
-    delete d;
-}
+FormulaDocument::~FormulaDocument() = default;
 
 bool FormulaDocument::loadOdf(KoOdfReadStore &odfStore)
 {

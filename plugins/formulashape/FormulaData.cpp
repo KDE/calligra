@@ -11,17 +11,14 @@
 #include "KoFormulaShape.h"
 #include <KoXmlWriter.h>
 
-FormulaData::FormulaData(FormulaElement *element)
+FormulaData::FormulaData(std::unique_ptr<FormulaElement> element)
     : QObject()
+    , m_element(std::move(element))
 {
-    m_element = element;
 }
 
 FormulaData::~FormulaData()
 {
-    if (m_element) {
-        delete m_element;
-    }
 }
 
 void FormulaData::notifyDataChange(FormulaCommand *command, bool undo)
@@ -29,14 +26,24 @@ void FormulaData::notifyDataChange(FormulaCommand *command, bool undo)
     Q_EMIT dataChanged(command, undo);
 }
 
-void FormulaData::setFormulaElement(FormulaElement *element)
+void FormulaData::setFormulaElement(std::unique_ptr<FormulaElement> element)
 {
-    m_element = element;
+    m_element = std::move(element);
+}
+
+std::unique_ptr<FormulaElement> FormulaData::takeFormulaElement()
+{
+    return std::move(m_element);
+}
+
+void FormulaData::swapFormulaElement(std::unique_ptr<FormulaElement> &element)
+{
+    m_element.swap(element);
 }
 
 FormulaElement *FormulaData::formulaElement() const
 {
-    return m_element;
+    return m_element.get();
 }
 
 void FormulaData::writeElementTree()

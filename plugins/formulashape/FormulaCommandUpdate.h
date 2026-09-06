@@ -24,6 +24,7 @@ class FormulaCommandUpdate : public KUndo2Command
 {
 public:
     FormulaCommandUpdate(KoFormulaShape *shape, FormulaCommand *command);
+    ~FormulaCommandUpdate() override;
 
     /// Execute the command
     void redo() override;

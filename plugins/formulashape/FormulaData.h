@@ -13,6 +13,7 @@
 #include "koformula_export.h"
 #include <QObject>
 #include <kundo2command.h>
+#include <memory>
 
 class FormulaCommand;
 
@@ -24,7 +25,7 @@ class KOFORMULA_EXPORT FormulaData : public QObject
 {
     Q_OBJECT
 public:
-    explicit FormulaData(FormulaElement *element);
+    explicit FormulaData(std::unique_ptr<FormulaElement> element);
 
     ~FormulaData() override;
 
@@ -33,7 +34,9 @@ public:
 
     /// emit a dataChanged signal
     void notifyDataChange(FormulaCommand *command, bool undo);
-    void setFormulaElement(FormulaElement *element);
+    void setFormulaElement(std::unique_ptr<FormulaElement> element);
+    std::unique_ptr<FormulaElement> takeFormulaElement();
+    void swapFormulaElement(std::unique_ptr<FormulaElement> &element);
 
 Q_SIGNALS:
     void dataChanged(FormulaCommand *element, bool undo);
@@ -45,7 +48,7 @@ public Q_SLOTS:
     void saveMathML(KoShapeSavingContext &context);
 
 private:
-    FormulaElement *m_element;
+    std::unique_ptr<FormulaElement> m_element;
 };
 
 #endif // FORMULADATA_H

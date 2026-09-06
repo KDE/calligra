@@ -18,6 +18,11 @@ FormulaCommandUpdate::FormulaCommandUpdate(KoFormulaShape *shape, FormulaCommand
     setText(m_command->text());
 }
 
+FormulaCommandUpdate::~FormulaCommandUpdate()
+{
+    delete m_command;
+}
+
 void FormulaCommandUpdate::redo()
 {
     m_shape->update();

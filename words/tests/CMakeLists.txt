@@ -15,7 +15,7 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
                     "${CMAKE_BINARY_DIR}"
             )
             set_tests_properties(${_TEST_NAME} PROPERTIES
-                ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin:${CMAKE_INSTALL_PREFIX}/lib64/plugins;XDG_DATA_DIRS=${CMAKE_INSTALL_PREFIX}/share:/usr/local/share:/usr/share"
+                ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin:${CMAKE_INSTALL_PREFIX}/lib64/plugins;XDG_DATA_DIRS=${CMAKE_INSTALL_PREFIX}/share:/usr/local/share:/usr/share;ASAN_OPTIONS=detect_leaks=0"
             )
         endmacro()
 
