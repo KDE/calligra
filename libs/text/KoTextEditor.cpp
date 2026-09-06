@@ -69,7 +69,9 @@
 #include <QTextList>
 #include <QTextTable>
 #include <QTextTableCell>
+
 #include <kundo2command.h>
+#include <utility>
 
 #include "KoTextDebug.h"
 #include "TextDebug.h"
@@ -477,7 +479,7 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
     bookmark->setName(name);
     bookmark->setManager(KoTextDocument(d->document).textRangeManager());
 
-    addCommand(new AddTextRangeCommand(bookmark, topCommand));
+    addCommand(std::make_unique<AddTextRangeCommand>(bookmark, topCommand));
 
     endEditBlock();
 
@@ -497,7 +499,7 @@ KoAnnotation *KoTextEditor::addAnnotation(KoShape *annotationShape)
     annotation->setName(name);
     annotation->setAnnotationShape(annotationShape);
 
-    addCommand(new AddAnnotationCommand(annotation, topCommand));
+    addCommand(std::make_unique<AddAnnotationCommand>(annotation, topCommand));
 
     endEditBlock();
 
@@ -553,8 +555,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
 
-    InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, topCommand);
-    Q_UNUSED(insertInlineObjectCommand);
+    std::make_unique<InsertInlineObjectCommand>(inliner, d->document, topCommand).release();
     d->caret.endEditBlock();
 
     if (!cmd) {
@@ -581,13 +582,13 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 void KoTextEditor::removeAnchors(const QList<KoShapeAnchor *> &anchors, KUndo2Command *parent)
 {
     Q_ASSERT(parent);
-    addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
+    addCommand(std::make_unique<DeleteAnchorsCommand>(anchors, d->document, parent));
 }
 
 void KoTextEditor::removeAnnotations(const QList<KoAnnotation *> &annotations, KUndo2Command *parent)
 {
     Q_ASSERT(parent);
-    addCommand(new DeleteAnnotationsCommand(annotations, d->document, parent));
+    addCommand(std::make_unique<DeleteAnnotationsCommand>(annotations, d->document, parent));
 }
 
 void KoTextEditor::insertFrameBreak()
@@ -630,7 +631,7 @@ void KoTextEditor::paste(KoCanvasBase *canvas, const QMimeData *mimeData, bool p
 
     KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
 
-    addCommand(new TextPasteCommand(mimeData, d->document, shapeController, canvas, nullptr, pasteAsText));
+    addCommand(std::make_unique<TextPasteCommand>(mimeData, d->document, shapeController, canvas, nullptr, pasteAsText));
 }
 
 void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
@@ -668,9 +669,9 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
     }
 
     if (previous) {
-        addCommand(new DeleteCommand(DeleteCommand::PreviousChar, d->document, shapeController, parent));
+        addCommand(std::make_unique<DeleteCommand>(DeleteCommand::PreviousChar, d->document, shapeController, parent));
     } else {
-        addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, shapeController, parent));
+        addCommand(std::make_unique<DeleteCommand>(DeleteCommand::NextChar, d->document, shapeController, parent));
     }
 }
 
@@ -680,7 +681,7 @@ void KoTextEditor::toggleListNumbering(bool numberingEnabled)
         return;
     }
 
-    addCommand(new ListItemNumberingCommand(block(), numberingEnabled));
+    addCommand(std::make_unique<ListItemNumberingCommand>(block(), numberingEnabled));
     Q_EMIT textFormatChanged();
 }
 
@@ -707,7 +708,7 @@ void KoTextEditor::setListProperties(const KoListLevelProperties &llp, ChangeLis
         }
     }
 
-    addCommand(new ChangeListCommand(d->caret, llp, flags, parent));
+    addCommand(std::make_unique<ChangeListCommand>(d->caret, llp, flags, parent));
     Q_EMIT textFormatChanged();
 }
 
@@ -996,7 +997,7 @@ void KoTextEditor::insertTableRowAbove()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        addCommand(new InsertTableRowCommand(this, table, false));
+        addCommand(std::make_unique<InsertTableRowCommand>(this, table, false));
     }
 }
 
@@ -1008,7 +1009,7 @@ void KoTextEditor::insertTableRowBelow()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        addCommand(new InsertTableRowCommand(this, table, true));
+        addCommand(std::make_unique<InsertTableRowCommand>(this, table, true));
     }
 }
 
@@ -1020,7 +1021,7 @@ void KoTextEditor::insertTableColumnLeft()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        addCommand(new InsertTableColumnCommand(this, table, false));
+        addCommand(std::make_unique<InsertTableColumnCommand>(this, table, false));
     }
 }
 
@@ -1032,7 +1033,7 @@ void KoTextEditor::insertTableColumnRight()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        addCommand(new InsertTableColumnCommand(this, table, true));
+        addCommand(std::make_unique<InsertTableColumnCommand>(this, table, true));
     }
 }
 
@@ -1044,7 +1045,7 @@ void KoTextEditor::deleteTableColumn()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        addCommand(new DeleteTableColumnCommand(this, table));
+        addCommand(std::make_unique<DeleteTableColumnCommand>(this, table));
     }
 }
 
@@ -1056,7 +1057,7 @@ void KoTextEditor::deleteTableRow()
 
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        addCommand(new DeleteTableRowCommand(this, table));
+        addCommand(std::make_unique<DeleteTableRowCommand>(this, table));
     }
 }
 
@@ -1097,16 +1098,14 @@ void KoTextEditor::splitTableCells()
 
 void KoTextEditor::adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand)
 {
-    ResizeTableCommand *cmd = new ResizeTableCommand(table, true, column, width, parentCommand);
-
-    addCommand(cmd);
+    auto cmd = std::make_unique<ResizeTableCommand>(table, true, column, width, parentCommand);
+    addCommand(std::move(cmd));
 }
 
 void KoTextEditor::adjustTableRowHeight(QTextTable *table, int column, qreal height, KUndo2Command *parentCommand)
 {
-    ResizeTableCommand *cmd = new ResizeTableCommand(table, false, column, height, parentCommand);
-
-    addCommand(cmd);
+    auto cmd = std::make_unique<ResizeTableCommand>(table, false, column, height, parentCommand);
+    addCommand(std::move(cmd));
 }
 
 void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight)
@@ -1146,11 +1145,12 @@ KoInlineNote *KoTextEditor::insertFootNote()
         return nullptr;
     }
 
-    InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Footnote, d->document);
-    addCommand(cmd);
+    auto cmd = std::make_unique<InsertNoteCommand>(KoInlineNote::Footnote, d->document);
+    KoInlineNote *note = cmd->m_inlineNote;
+    addCommand(std::move(cmd));
 
     Q_EMIT cursorPositionChanged();
-    return cmd->m_inlineNote;
+    return note;
 }
 
 KoInlineNote *KoTextEditor::insertEndNote()
@@ -1159,11 +1159,12 @@ KoInlineNote *KoTextEditor::insertEndNote()
         return nullptr;
     }
 
-    InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Endnote, d->document);
-    addCommand(cmd);
+    auto cmd = std::make_unique<InsertNoteCommand>(KoInlineNote::Endnote, d->document);
+    KoInlineNote *note = cmd->m_inlineNote;
+    addCommand(std::move(cmd));
 
     Q_EMIT cursorPositionChanged();
-    return cmd->m_inlineNote;
+    return note;
 }
 
 void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
@@ -1440,8 +1441,7 @@ void KoTextEditor::newSection()
         return;
     }
 
-    NewSectionCommand *cmd = new NewSectionCommand(d->document);
-    addCommand(cmd);
+    addCommand(std::make_unique<NewSectionCommand>(d->document));
     Q_EMIT cursorPositionChanged();
 }
 
@@ -1450,7 +1450,7 @@ void KoTextEditor::splitSectionsStartings(int sectionIdToInsertBefore)
     if (isEditProtected()) {
         return;
     }
-    addCommand(new SplitSectionsCommand(d->document, SplitSectionsCommand::Startings, sectionIdToInsertBefore));
+    addCommand(std::make_unique<SplitSectionsCommand>(d->document, SplitSectionsCommand::Startings, sectionIdToInsertBefore));
     Q_EMIT cursorPositionChanged();
 }
 
@@ -1459,7 +1459,7 @@ void KoTextEditor::splitSectionsEndings(int sectionIdToInsertAfter)
     if (isEditProtected()) {
         return;
     }
-    addCommand(new SplitSectionsCommand(d->document, SplitSectionsCommand::Endings, sectionIdToInsertAfter));
+    addCommand(std::make_unique<SplitSectionsCommand>(d->document, SplitSectionsCommand::Endings, sectionIdToInsertAfter));
     Q_EMIT cursorPositionChanged();
 }
 
@@ -1468,7 +1468,7 @@ void KoTextEditor::renameSection(KoSection *section, const QString &newName)
     if (isEditProtected()) {
         return;
     }
-    addCommand(new RenameSectionCommand(section, newName, document()));
+    addCommand(std::make_unique<RenameSectionCommand>(section, newName, document()));
 }
 
 void KoTextEditor::newLine()

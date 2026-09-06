@@ -13,6 +13,8 @@
 #include "TextDebug.h"
 #include <QTextDocument>
 
+#include <utility>
+
 QHash<QObject *, OdfTextTrackStyles *> OdfTextTrackStyles::instances;
 
 OdfTextTrackStyles *OdfTextTrackStyles::instance(KoStyleManager *manager)
@@ -43,7 +45,6 @@ void OdfTextTrackStyles::unregisterDocument(QTextDocument *qDoc)
 OdfTextTrackStyles::OdfTextTrackStyles(KoStyleManager *manager)
     : QObject(manager)
     , m_styleManager(manager)
-    , m_changeCommand(nullptr)
 {
     connect(manager, &KoStyleManager::editHasBegun, this, &OdfTextTrackStyles::beginEdit);
     connect(manager, &KoStyleManager::editHasEnded, this, &OdfTextTrackStyles::endEdit);
@@ -62,19 +63,17 @@ OdfTextTrackStyles::~OdfTextTrackStyles() = default;
 void OdfTextTrackStyles::beginEdit()
 {
     Q_ASSERT(m_changeCommand == nullptr);
-    m_changeCommand = new ChangeStylesMacroCommand(m_documents, m_styleManager.data());
+    m_changeCommand = std::make_unique<ChangeStylesMacroCommand>(m_documents, m_styleManager.data());
 }
 
 void OdfTextTrackStyles::endEdit()
 {
     KUndo2Stack *undoStack = m_documents.length() > 0 ? KoTextDocument(m_documents.first()).undoStack() : nullptr;
     if (undoStack) {
-        undoStack->push(m_changeCommand);
+        undoStack->push(std::move(m_changeCommand));
     } else {
-        delete m_changeCommand;
+        m_changeCommand.reset();
     }
-
-    m_changeCommand = nullptr;
 }
 
 void OdfTextTrackStyles::recordStyleChange(int id, const KoParagraphStyle *origStyle, const KoParagraphStyle *newStyle)

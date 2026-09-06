@@ -872,6 +872,11 @@ bool KUndo2QStack::push(KUndo2Command *cmd)
     return cmd;
 }
 
+bool KUndo2QStack::push(std::unique_ptr<KUndo2Command> &&cmd)
+{
+    return push(cmd.release());
+}
+
 /*!
     Marks the stack as clean and emits cleanChanged() if the stack was
     not already clean.

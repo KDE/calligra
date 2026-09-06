@@ -17,6 +17,8 @@
 #include <QSet>
 #include <QTextDocument>
 
+#include <memory>
+
 /**
  * OdfTextTrackStyles is used to update a list of qtextdocument with
  * any changes made in the style manager.
@@ -60,7 +62,7 @@ public:
 private:
     QList<QTextDocument *> m_documents;
     QPointer<KoStyleManager> m_styleManager;
-    ChangeStylesMacroCommand *m_changeCommand;
+    std::unique_ptr<ChangeStylesMacroCommand> m_changeCommand;
 };
 
 #endif

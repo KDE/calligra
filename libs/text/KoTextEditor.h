@@ -19,7 +19,9 @@
 
 #include <QMetaType>
 #include <QTextCursor>
+
 #include <QTextFrame>
+#include <memory>
 
 class KoListLevelProperties;
 class KoCharacterStyle;
@@ -279,6 +281,8 @@ public Q_SLOTS:
                            KUndo2Command *parent = nullptr);
 
 public:
+    void addCommand(std::unique_ptr<KUndo2Command> &&command);
+
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods
     // -------------------------------------------------------------

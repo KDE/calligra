@@ -160,6 +160,7 @@ public:
     void clear();
 
     bool push(KUndo2Command *cmd);
+    bool push(std::unique_ptr<KUndo2Command> &&cmd);
 
     bool canUndo() const;
     bool canRedo() const;

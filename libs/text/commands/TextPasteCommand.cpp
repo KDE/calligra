@@ -74,7 +74,7 @@ void TextPasteCommand::redo()
         editor->beginEditBlock(); // this is needed so Qt does not merge successive paste actions together
         m_first = false;
         if (editor->hasSelection()) { // TODO
-            editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController, this));
+            editor->addCommand(std::make_unique<DeleteCommand>(DeleteCommand::NextChar, m_document.data(), m_shapeController, this));
         }
 
         // check for mime type

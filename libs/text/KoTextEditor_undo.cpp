@@ -19,6 +19,8 @@
 #include <QPointer>
 #include <QTextDocument>
 
+#include <utility>
+
 #include "TextDebug.h"
 
 /** Calligra's undo/redo framework.
@@ -216,6 +218,15 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, c
 /// to push several commands which are then going to be nested, provided these children are pushed from within the redo method of their parent.
 void KoTextEditor::addCommand(KUndo2Command *command)
 {
+    addCommand(std::unique_ptr<KUndo2Command>(command));
+}
+
+void KoTextEditor::addCommand(std::unique_ptr<KUndo2Command> &&command)
+{
+    KUndo2Command *rawCommand = command.get();
+    if (!rawCommand) {
+        return;
+    }
     debugText << "we receive a command to add on the stack.";
     debugText << "commandStack count: " << d->commandStack.count();
     debugText << "customCommandCount counter: " << d->customCommandCount << " will increase";
@@ -228,30 +239,36 @@ void KoTextEditor::addCommand(KUndo2Command *command)
     // it on the commandStack to parent UndoTextCommands. We need to call the redo method manually though.
     ++d->customCommandCount;
     debugText << "we will now go to custom state";
-    d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty()) ? command->text() : kundo2_i18n("Text"));
+    d->updateState(KoTextEditor::Private::Custom, (!rawCommand->text().isEmpty()) ? rawCommand->text() : kundo2_i18n("Text"));
     debugText << "but will set the addCommand to false. we don't want a new headCommand";
     d->addNewCommand = false;
     debugText << "commandStack count is: " << d->commandStack.count();
     if (d->commandStack.isEmpty()) {
         debugText << "the commandStack is empty. this means we are the top most command";
-        d->commandStack.push(command);
+        d->commandStack.push(rawCommand);
         debugText << "command pushed on the commandStack. count: " << d->commandStack.count();
         KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
-        if (stack && !command->hasParent()) {
+        if (stack && !rawCommand->hasParent()) {
             debugText << "we have an application stack and the command is not a sub command of a non text command (which have been pushed outside kotext";
-            stack->push(command);
+            stack->push(std::move(command));
             debugText << "so we pushed it on the application's' stack";
         } else {
             debugText << "we either have no application's stack, or our command is actually the child of a non kotext command";
-            command->redo();
+            if (rawCommand->hasParent()) {
+                command.release();
+            }
+            rawCommand->redo();
             debugText << "still called redo on it";
         }
     } else {
         debugText << "the commandStack is not empty, our command is actually nested in another kotext command. we don't push on the application stack but only "
                      "on the commandStack";
-        d->commandStack.push(command);
+        d->commandStack.push(rawCommand);
         debugText << "commandStack count after push: " << d->commandStack.count();
-        command->redo();
+        if (rawCommand->hasParent()) {
+            command.release();
+        }
+        rawCommand->redo();
         debugText << "called redo still";
     }
 
@@ -260,7 +277,7 @@ void KoTextEditor::addCommand(KUndo2Command *command)
     // NoOp and decrease the customCommandCount counter.
     debugText << "the command has been executed. we need to clean up the commandStack of the auto generated headCommands";
     debugText << "before cleaning. commandStack count: " << d->commandStack.count();
-    while (d->commandStack.top() != command) {
+    while (d->commandStack.top() != rawCommand) {
         d->commandStack.pop();
     }
     debugText << "after cleaning. commandStack count: " << d->commandStack.count() << " will set NoOp";

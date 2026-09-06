@@ -551,7 +551,7 @@ void KoTextEditor::mergeAutoStyle(const QTextCharFormat &deltaCharFormat)
 
 void KoTextEditor::applyDirectFormatting(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat, const KoListLevelProperties &llp)
 {
-    addCommand(new ParagraphFormattingCommand(this, deltaCharFormat, deltaBlockFormat, llp));
+    addCommand(std::make_unique<ParagraphFormattingCommand>(this, deltaCharFormat, deltaBlockFormat, llp));
     Q_EMIT textFormatChanged();
 }
 

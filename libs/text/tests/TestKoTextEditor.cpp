@@ -17,6 +17,8 @@
 #include <QTextTable>
 #include <QUuid>
 
+#include <memory>
+
 #include <KoBookmark.h>
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentResourceManager.h>
@@ -89,6 +91,37 @@ public:
     KoInlineTextObjectManager m_inlineObjectManager;
     KoTextRangeManager m_rangeManager;
     KoDocumentRdfBase m_rdfBase;
+};
+
+class TestEditorCommand final : public KUndo2Command
+{
+public:
+    TestEditorCommand(int *redoCount, int *undoCount, int *destroyed)
+        : m_redoCount(redoCount)
+        , m_undoCount(undoCount)
+        , m_destroyed(destroyed)
+    {
+    }
+
+    ~TestEditorCommand() override
+    {
+        ++*m_destroyed;
+    }
+
+    void redo() override
+    {
+        ++*m_redoCount;
+    }
+
+    void undo() override
+    {
+        ++*m_undoCount;
+    }
+
+private:
+    int *m_redoCount;
+    int *m_undoCount;
+    int *m_destroyed;
 };
 
 const QString lorem(
@@ -171,6 +204,29 @@ void TestKoTextEditor::testRemoveSelectedText()
 
     // the manager keeps deleted ranges around for undo purposes; it doesn't own them.
     delete bookmark;
+}
+
+void TestKoTextEditor::testUniqueCommandOwnership()
+{
+    int redoCount = 0;
+    int undoCount = 0;
+    int destroyed = 0;
+    {
+        TestDocument doc;
+        auto command = std::make_unique<TestEditorCommand>(&redoCount, &undoCount, &destroyed);
+        doc.textEditor()->addCommand(std::move(command));
+
+        KUndo2QStack *undoStack = KoTextDocument(doc.m_document).undoStack();
+        QCOMPARE(undoStack->count(), 1);
+        QCOMPARE(redoCount, 1);
+        QVERIFY(!command);
+
+        undoStack->undo();
+        QCOMPARE(undoCount, 1);
+        undoStack->redo();
+        QCOMPARE(redoCount, 2);
+    }
+    QCOMPARE(destroyed, 1);
 }
 
 void TestKoTextEditor::pushSectionStart(int num, KoSection *sec, KoTextEditor *editor)

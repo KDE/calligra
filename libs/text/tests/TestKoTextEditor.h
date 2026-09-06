@@ -24,6 +24,7 @@ private Q_SLOTS:
     // FIXME: see cpp file: why it is commented out
     //     void testInsertInlineObject();
     void testRemoveSelectedText();
+    void testUniqueCommandOwnership();
 
     // Section tests
     void testBasicSectionCreation();
