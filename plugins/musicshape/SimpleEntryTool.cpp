@@ -744,7 +744,8 @@ void SimpleEntryTool::importSheet()
     if (file.isEmpty() || file.isNull())
         return;
     QFile f(file);
-    f.open(QIODevice::ReadOnly);
+    if (!f.open(QIODevice::ReadOnly))
+        return;
     KoXmlDocument doc;
     KoXml::setDocument(doc, &f, true);
     KoXmlElement e = doc.documentElement();
@@ -773,7 +774,8 @@ void SimpleEntryTool::exportSheet()
 
     // debugMusic << b.data();
     QFile f(file);
-    f.open(QIODevice::WriteOnly);
+    if (!f.open(QIODevice::WriteOnly))
+        return;
     QXmlStreamWriter w(&f);
 
     QXmlStreamReader xml(&b);

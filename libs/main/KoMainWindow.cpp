@@ -1597,7 +1597,10 @@ void KoMainWindow::slotEmailFile()
         // a little open, close, delete dance to make sure we have a nice filename
         // to use, but won't block windows from creating a new file with this name.
         QTemporaryFile *tmpfile = new QTemporaryFile();
-        tmpfile->open();
+        if (!tmpfile->open()) {
+            delete tmpfile;
+            return;
+        }
         QString fileName = tmpfile->fileName();
         tmpfile->close();
         delete tmpfile;

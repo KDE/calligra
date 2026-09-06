@@ -172,7 +172,8 @@ void KoVersionDialog::slotOpen()
 
     QTemporaryFile tmp;
     tmp.setAutoRemove(false);
-    tmp.open();
+    if (!tmp.open())
+        return;
     tmp.write(version->data);
     tmp.flush();
     tmp.setPermissions(QFile::ReadUser);

@@ -1019,11 +1019,13 @@ int main(int argc, char **argv)
     f.close();
 
     QFile hFile("records.h");
-    hFile.open(QIODevice::WriteOnly);
+    if (!hFile.open(QIODevice::WriteOnly))
+        qFatal("Error opening records.h for writing");
     QTextStream hOut(&hFile);
 
     QFile cppFile("records.cpp");
-    cppFile.open(QIODevice::WriteOnly);
+    if (!cppFile.open(QIODevice::WriteOnly))
+        qFatal("Error opening records.cpp for writing");
     QTextStream cppOut(&cppFile);
 
     hOut << "// This file was automatically generated from records.xml\n"

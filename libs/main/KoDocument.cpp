@@ -314,7 +314,8 @@ public:
             extension = '.' + ext; // keep the '.'
         QTemporaryFile tempFile(QDir::tempPath() + "/" + qAppName() + QLatin1String("_XXXXXX") + extension);
         tempFile.setAutoRemove(false);
-        tempFile.open();
+        if (!tempFile.open())
+            return;
         m_file = tempFile.fileName();
 
         const QUrl destURL = QUrl::fromLocalFile(m_file);
@@ -351,7 +352,8 @@ public:
             if (m_file.isEmpty() || !m_bTemp) {
                 QTemporaryFile tempFile;
                 tempFile.setAutoRemove(false);
-                tempFile.open();
+                if (!tempFile.open())
+                    return;
                 m_file = tempFile.fileName();
                 m_bTemp = true;
             }
@@ -1027,7 +1029,8 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &url
         return mimeType;
 
     QFile f(url.toLocalFile());
-    f.open(QIODevice::ReadOnly);
+    if (!f.open(QIODevice::ReadOnly))
+        return mimeType;
     QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
     QMimeType mime = QMimeDatabase().mimeTypeForData(ba);
     f.close();
@@ -2610,7 +2613,10 @@ bool KoDocument::saveToUrl()
             d->m_uploadJob = nullptr;
         }
         QTemporaryFile *tempFile = new QTemporaryFile();
-        tempFile->open();
+        if (!tempFile->open()) {
+            delete tempFile;
+            return false;
+        }
         QString uploadFile = tempFile->fileName();
         delete tempFile;
         QUrl uploadUrl;

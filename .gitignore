@@ -33,3 +33,6 @@ BROWSE
 .clangd
 .cache
 /cmake-build*
+
+plugins/textediting/autocorrection/libs/autotests/data/custom-fr-generated.xml
+plugins/textediting/autocorrection/libs/autotests/data/empty-generated.xml

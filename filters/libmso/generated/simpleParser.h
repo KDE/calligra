@@ -1928,33 +1928,33 @@ public:
 class PFMasks : public StreamOffset
 {
 public:
-    bool hasBullet;
-    bool bulletHasFont;
-    bool bulletHasColor;
-    bool bulletHasSize;
-    bool bulletFont;
-    bool bulletColor;
-    bool bulletSize;
-    bool bulletChar;
-    bool leftMargin;
-    bool unused;
-    bool indent;
-    bool align;
-    bool lineSpacing;
-    bool spaceBefore;
-    bool spaceAfter;
-    bool defaultTabSize;
-    bool fontAlign;
-    bool charWrap;
-    bool wordWrap;
-    bool overflow;
-    bool tabStops;
-    bool textDirection;
-    bool reserved;
-    bool bulletBlip;
-    bool bulletScheme;
-    bool bulletHasScheme;
-    quint8 reserved2;
+    bool hasBullet = false;
+    bool bulletHasFont = false;
+    bool bulletHasColor = false;
+    bool bulletHasSize = false;
+    bool bulletFont = false;
+    bool bulletColor = false;
+    bool bulletSize = false;
+    bool bulletChar = false;
+    bool leftMargin = false;
+    bool unused = false;
+    bool indent = false;
+    bool align = false;
+    bool lineSpacing = false;
+    bool spaceBefore = false;
+    bool spaceAfter = false;
+    bool defaultTabSize = false;
+    bool fontAlign = false;
+    bool charWrap = false;
+    bool wordWrap = false;
+    bool overflow = false;
+    bool tabStops = false;
+    bool textDirection = false;
+    bool reserved = false;
+    bool bulletBlip = false;
+    bool bulletScheme = false;
+    bool bulletHasScheme = false;
+    quint8 reserved2 = 0;
     PFMasks(void * /*dummy*/ = nullptr)
     {
     }
@@ -4363,35 +4363,35 @@ public:
 class TextPFException : public StreamOffset
 {
 public:
-    bool _has_bulletChar;
-    bool _has_bulletFontRef;
-    bool _has_bulletSize;
-    bool _has_textAlignment;
-    bool _has_lineSpacing;
-    bool _has_spaceBefore;
-    bool _has_spaceAfter;
-    bool _has_leftMargin;
-    bool _has_indent;
-    bool _has_defaultTabSize;
-    bool _has_fontAlign;
-    bool _has_textDirection;
+    bool _has_bulletChar = false;
+    bool _has_bulletFontRef = false;
+    bool _has_bulletSize = false;
+    bool _has_textAlignment = false;
+    bool _has_lineSpacing = false;
+    bool _has_spaceBefore = false;
+    bool _has_spaceAfter = false;
+    bool _has_leftMargin = false;
+    bool _has_indent = false;
+    bool _has_defaultTabSize = false;
+    bool _has_fontAlign = false;
+    bool _has_textDirection = false;
     PFMasks masks;
     QSharedPointer<BulletFlags> bulletFlags;
-    qint16 bulletChar;
-    quint16 bulletFontRef;
-    qint16 bulletSize;
+    qint16 bulletChar = 0;
+    quint16 bulletFontRef = 0;
+    qint16 bulletSize = 0;
     QSharedPointer<ColorIndexStruct> bulletColor;
-    quint16 textAlignment;
-    qint16 lineSpacing;
-    qint16 spaceBefore;
-    qint16 spaceAfter;
-    quint16 leftMargin;
-    quint16 indent;
-    quint16 defaultTabSize;
+    quint16 textAlignment = 0;
+    qint16 lineSpacing = 0;
+    qint16 spaceBefore = 0;
+    qint16 spaceAfter = 0;
+    quint16 leftMargin = 0;
+    quint16 indent = 0;
+    quint16 defaultTabSize = 0;
     QSharedPointer<TabStops> tabStops;
-    quint16 fontAlign;
+    quint16 fontAlign = 0;
     QSharedPointer<PFWrapFlags> wrapFlags;
-    quint16 textDirection;
+    quint16 textDirection = 0;
     TextPFException(void * /*dummy*/ = nullptr)
     {
     }

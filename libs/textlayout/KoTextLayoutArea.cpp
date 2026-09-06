@@ -264,7 +264,7 @@ QVector<KoCharAreaInfo> KoTextLayoutArea::generateCharAreaInfos() const
                 break; // this and following lines are part of a next layoutArea
             }
             qreal xLeading;
-            qreal xTrailing;
+            qreal xTrailing = line.cursorToX(line.textStart(), QTextLine::Trailing);
             for (int j = line.textStart(); j < line.textStart() + line.textLength(); ++j) {
                 // TODO: support RTL
                 xLeading = line.cursorToX(j, QTextLine::Leading);

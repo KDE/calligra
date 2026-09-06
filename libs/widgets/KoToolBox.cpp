@@ -78,8 +78,6 @@ KoToolBox::KoToolBox()
 
     d->buttonGroup = new QButtonGroup(this);
 
-    // Get screen the widget exists in, but fall back to primary screen if invalid.
-    const int primaryScreen = 0; // In QT, primary screen should always be the first index of QGuiApplication::screens()
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KoToolBox");
     d->iconSize = cfg.readEntry("iconSize", buttonSize());
 

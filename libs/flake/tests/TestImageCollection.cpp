@@ -196,7 +196,7 @@ void TestImageCollection::testSameKey()
     QCOMPARE(data.key(), data2.key());
 
     QFile file(QFINDTESTDATA("logo-calligra.png"));
-    file.open(QIODevice::ReadOnly);
+    QVERIFY(file.open(QIODevice::ReadOnly));
     QByteArray imageData = file.readAll();
     KoImageData data3;
     data3.setImage(imageData);

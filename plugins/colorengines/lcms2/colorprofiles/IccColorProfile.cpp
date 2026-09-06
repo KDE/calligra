@@ -248,7 +248,8 @@ void IccColorProfile::delinearizeFloatValueFast(QVector<qreal> &Value) const
 bool IccColorProfile::load()
 {
     QFile file(fileName());
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
     QByteArray rawData = file.readAll();
     setRawData(rawData);
     file.close();
