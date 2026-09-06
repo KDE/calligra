@@ -281,8 +281,32 @@ target_link_libraries(BenchmarkRTree calligrasheetsengine Qt6::Test)
 
 ########### next target ###############
 
-sheets_add_unit_test(Fods
+sheets_add_unit_test(FodsArrayDatabaseDateTime
     TestFods.cpp
     LINK_LIBRARIES calligrasheetspartlib Qt6::Test
 )
-target_compile_definitions(Fods PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods")
+target_compile_definitions(FodsArrayDatabaseDateTime PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods" FODS_TEST_GROUP_ARRAY_DATABASE_DATE_TIME)
+
+sheets_add_unit_test(FodsFinancialInformationLambdaLogical
+    TestFods.cpp
+    LINK_LIBRARIES calligrasheetspartlib Qt6::Test
+)
+target_compile_definitions(FodsFinancialInformationLambdaLogical PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods" FODS_TEST_GROUP_FINANCIAL_INFORMATION_LAMBDA_LOGICAL)
+
+sheets_add_unit_test(FodsMathematical
+    TestFods.cpp
+    LINK_LIBRARIES calligrasheetspartlib Qt6::Test
+)
+target_compile_definitions(FodsMathematical PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods" FODS_TEST_GROUP_MATHEMATICAL)
+
+sheets_add_unit_test(FodsStatistical
+    TestFods.cpp
+    LINK_LIBRARIES calligrasheetspartlib Qt6::Test
+)
+target_compile_definitions(FodsStatistical PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods" FODS_TEST_GROUP_STATISTICAL)
+
+sheets_add_unit_test(FodsSpreadsheetText
+    TestFods.cpp
+    LINK_LIBRARIES calligrasheetspartlib Qt6::Test
+)
+target_compile_definitions(FodsSpreadsheetText PRIVATE FODS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/fods" FODS_TEST_GROUP_SPREADSHEET_TEXT)

@@ -36,6 +36,21 @@ static QString valueToString(const Value &v)
     return QStringLiteral("<empty>");
 }
 
+static bool isSelectedGroup(const QString &name)
+{
+#if defined(FODS_TEST_GROUP_ARRAY_DATABASE_DATE_TIME)
+    return name.startsWith("array/"_L1) || name.startsWith("database/"_L1) || name.startsWith("date_time/"_L1);
+#elif defined(FODS_TEST_GROUP_FINANCIAL_INFORMATION_LAMBDA_LOGICAL)
+    return name.startsWith("financial/"_L1) || name.startsWith("information/"_L1) || name.startsWith("lambda/"_L1) || name.startsWith("logical/"_L1);
+#elif defined(FODS_TEST_GROUP_MATHEMATICAL)
+    return name.startsWith("mathematical/"_L1);
+#elif defined(FODS_TEST_GROUP_STATISTICAL)
+    return name.startsWith("statistical/"_L1);
+#else
+    return name.startsWith("spreadsheet/"_L1) || name.startsWith("text/"_L1) || name.startsWith("fods/"_L1);
+#endif
+}
+
 void TestFods::initTestCase()
 {
     KLocalizedString::setApplicationDomain("calligrasheets");
@@ -50,6 +65,8 @@ void TestFods::testFods_data()
     while (it.hasNext()) {
         const QString filePath = it.next();
         const QString name = QDir(QStringLiteral(FODS_TEST_DATA_DIR)).relativeFilePath(filePath);
+        if (!isSelectedGroup(name))
+            continue;
         if (name == "financial/pv.fods"_L1 || name == "financial/npv.fods"_L1 || name == "financial/pmt.fods"_L1 || name == "text/fods/bahttext.fods"_L1
             || name == "text/fods/clean.fods"_L1 || name == "text/fods/numbervalue.fods"_L1 || name == "text/fods/lower.fods"_L1
             || name == "date_time/fods/datedif.fods"_L1 || name == "array/fods/frequency.fods"_L1 || name == "spreadsheet/fods/column.fods"
