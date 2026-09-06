@@ -37,7 +37,11 @@
 #include <KoTextRangeManager.h>
 #include <kundo2stack.h>
 
+#include "commands/RenameSectionCommand.h"
+
 #include "TextDebug.h"
+
+using namespace Qt::StringLiterals;
 /**
  * Convenient class to create a document and assign
  * stuff like KoTextRangeManager, etc. automatically.
@@ -227,6 +231,22 @@ void TestKoTextEditor::testUniqueCommandOwnership()
         QCOMPARE(redoCount, 2);
     }
     QCOMPARE(destroyed, 1);
+}
+
+void TestKoTextEditor::testRenameSectionAnnihilation()
+{
+    TestDocument doc;
+    KoTextEditor *editor = doc.textEditor();
+    KoSection *section = doc.sectionModel()->createSection(editor->constCursor(), nullptr, u"old"_s);
+    KUndo2QStack *undoStack = KoTextDocument(doc.m_document).undoStack();
+
+    undoStack->push(std::make_unique<RenameSectionCommand>(section, u"new"_s, doc.m_document));
+    QCOMPARE(section->name(), u"new"_s);
+    QCOMPARE(undoStack->count(), 1);
+
+    undoStack->push(std::make_unique<RenameSectionCommand>(section, u"old"_s, doc.m_document));
+    QCOMPARE(section->name(), u"old"_s);
+    QCOMPARE(undoStack->count(), 0);
 }
 
 void TestKoTextEditor::pushSectionStart(int num, KoSection *sec, KoTextEditor *editor)

@@ -67,3 +67,9 @@ bool ListItemNumberingCommand::mergeWith(const KUndo2Command *other)
     Q_UNUSED(other);
     return false;
 }
+
+bool ListItemNumberingCommand::canAnnihilateWith(const KUndo2Command *other) const
+{
+    const auto *command = dynamic_cast<const ListItemNumberingCommand *>(other);
+    return command && command->m_block == m_block && m_numbered == command->m_wasNumbered && m_wasNumbered == command->m_numbered;
+}

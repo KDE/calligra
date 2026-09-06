@@ -92,13 +92,19 @@ QString KoSectionModel::possibleNewName()
 
 bool KoSectionModel::setName(KoSection *section, const QString &name)
 {
-    if (section->name() == name || isValidNewName(name)) {
-        section->setName(name);
-        // TODO: we don't have name in columns, but need something to notify views about change
-        Q_EMIT dataChanged(m_modelIndex[section], m_modelIndex[section]);
-        return true;
+    if (section->name() != name && !isValidNewName(name)) {
+        return false;
     }
-    return false;
+
+    if (section->name() != name) {
+        m_sectionNames.remove(section->name());
+        section->setName(name);
+        m_sectionNames.insert(name, section);
+    }
+
+    // TODO: we don't have name in columns, but need something to notify views about change
+    Q_EMIT dataChanged(m_modelIndex[section], m_modelIndex[section]);
+    return true;
 }
 
 void KoSectionModel::allowMovingEndBound()

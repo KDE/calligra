@@ -57,3 +57,9 @@ bool RenameSectionCommand::mergeWith(const KUndo2Command *other)
     m_newName = command->m_oldName;
     return true;
 }
+
+bool RenameSectionCommand::canAnnihilateWith(const KUndo2Command *other) const
+{
+    const auto *command = dynamic_cast<const RenameSectionCommand *>(other);
+    return command && command->m_section == m_section && m_oldName == command->m_newName;
+}

@@ -25,6 +25,7 @@ private Q_SLOTS:
     //     void testInsertInlineObject();
     void testRemoveSelectedText();
     void testUniqueCommandOwnership();
+    void testRenameSectionAnnihilation();
 
     // Section tests
     void testBasicSectionCreation();

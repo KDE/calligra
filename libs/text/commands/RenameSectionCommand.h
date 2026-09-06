@@ -24,6 +24,7 @@ public:
     void redo() override;
 
     bool mergeWith(const KUndo2Command *other) override;
+    bool canAnnihilateWith(const KUndo2Command *other) const override;
     int id() const override;
 
 private:

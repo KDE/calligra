@@ -39,6 +39,7 @@ public:
     }
     /// reimplemnted from KUndo2Command
     bool mergeWith(const KUndo2Command *other) override;
+    bool canAnnihilateWith(const KUndo2Command *other) const override;
 
 private:
     void setNumbered(bool numbered);
