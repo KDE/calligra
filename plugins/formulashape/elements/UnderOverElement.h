@@ -23,6 +23,9 @@ public:
     /// The standard constructor
     explicit UnderOverElement(BasicElement *parent = nullptr, ElementType elementType = UnderOver);
 
+    UnderOverElement(const UnderOverElement &) = delete;
+    UnderOverElement &operator=(const UnderOverElement &) = delete;
+
     /// The standard destructor
     ~UnderOverElement() override;
 

@@ -23,6 +23,9 @@ public:
     /// The standard constructor
     explicit MultiscriptElement(BasicElement *parent = nullptr);
 
+    MultiscriptElement(const MultiscriptElement &) = delete;
+    MultiscriptElement &operator=(const MultiscriptElement &) = delete;
+
     /// The destructor
     ~MultiscriptElement() override;
 

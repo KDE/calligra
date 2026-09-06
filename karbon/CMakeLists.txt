@@ -1,14 +1,6 @@
 project(karbon)
 
-#Set the correct compiler options
-if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-   # 32 bit
-   message(STATUS "Karbon detected that you use a 32 bit processor.")
-else()
-   # 64 bit (well, anything else than 32 bit, but someone use something else than 32 or 64 bit ?)
-   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-   message(STATUS "Karbon detected that you use a 64 bit processor. Added -fPIC to the CXX_FLAGS.")
-endif()
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"karbon\")
 
@@ -72,4 +64,3 @@ endif()
 target_link_libraries(karbon karbonui)
 
 install(TARGETS karbon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-

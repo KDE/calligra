@@ -28,6 +28,9 @@ public:
     /// The standard constructor
     explicit FractionElement(BasicElement *parent = nullptr);
 
+    FractionElement(const FractionElement &) = delete;
+    FractionElement &operator=(const FractionElement &) = delete;
+
     /// The standard destructor
     ~FractionElement() override;
 

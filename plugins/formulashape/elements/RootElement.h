@@ -27,6 +27,9 @@ public:
     /// The standard constructor
     explicit RootElement(BasicElement *parent = nullptr);
 
+    RootElement(const RootElement &) = delete;
+    RootElement &operator=(const RootElement &) = delete;
+
     /// The standard destructor
     ~RootElement() override;
 

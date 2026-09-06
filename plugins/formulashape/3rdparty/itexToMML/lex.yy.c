@@ -2405,7 +2405,7 @@ int itex2MML_displaymode = 0;
 #define RAISEBOX1 19
 #define RAISEBOX2 20
 
-#ifndef YY_NO_UNISTD_H
+#if !defined(_WIN32) && !defined(YY_NO_UNISTD_H)
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
  * The user has a chance to override it with an option.
@@ -6435,4 +6435,3 @@ static int s_itex2MML_read (char * buffer, int max_size)
 	}
 	return result;
 }
-

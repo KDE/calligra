@@ -21,6 +21,9 @@ public:
     /// The standard constructor
     explicit SubSupElement(BasicElement *parent = nullptr, ElementType elementType = SubSupScript);
 
+    SubSupElement(const SubSupElement &) = delete;
+    SubSupElement &operator=(const SubSupElement &) = delete;
+
     /// The destructor
     ~SubSupElement() override;
 

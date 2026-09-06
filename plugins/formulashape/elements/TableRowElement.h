@@ -31,6 +31,10 @@ class KOFORMULA_EXPORT TableRowElement : public BasicElement
 public:
     /// The standard constructor
     explicit TableRowElement(BasicElement *parent = nullptr);
+
+    TableRowElement(const TableRowElement &) = delete;
+    TableRowElement &operator=(const TableRowElement &) = delete;
+
     /// The standard destructor
     ~TableRowElement() override;
 
