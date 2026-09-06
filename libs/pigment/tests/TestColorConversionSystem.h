@@ -29,11 +29,13 @@ class TestColorConversionSystem : public QObject
 public:
     TestColorConversionSystem();
 private Q_SLOTS:
-    void testConnections_data();
+#ifndef CCS_TEST_GOOD_ONLY
     void testConnections();
-    void testGoodConnections_data();
+#endif
+#ifndef CCS_TEST_CONNECTIONS_ONLY
     void testGoodConnections();
     void testFailedConnections();
+#endif
 
 private:
     QList<ModelDepthProfile> listModels;

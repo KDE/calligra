@@ -43,7 +43,11 @@ target_link_libraries(CCSGraph  pigmentcms KF6::I18n )
 
 ########### next target ###############
 
-pigment_add_unit_test(TestColorConversionSystem TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
+pigment_add_unit_test(TestColorConversionSystemConnections TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
+target_compile_definitions(TestColorConversionSystemConnections PRIVATE CCS_TEST_CONNECTIONS_ONLY)
+
+pigment_add_unit_test(TestColorConversionSystemGoodPaths TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
+target_compile_definitions(TestColorConversionSystemGoodPaths PRIVATE CCS_TEST_GOOD_ONLY)
 
 ########### next target ###############
 
