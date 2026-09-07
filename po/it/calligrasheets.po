@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-07-07 09:17+0200\n"
+"PO-Revision-Date: 2026-09-05 07:44+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -5882,7 +5882,7 @@ msgid ""
 "get its return type."
 msgstr ""
 "La funzione TYPE() restituisce 1 se il valore è un numero, 2 se è un testo, "
-"4 se è un valore logico, 16 se è un errore o 64 se è un array. Se "
+"4 se è un valore logico, 16 se è un errore o 64 se è un vettore. Se "
 "l'argomento è una cella che contiene una formula, sarà restituito numero "
 "corrispondente al tipo del risultato della formula."
 
@@ -8339,7 +8339,7 @@ msgid ""
 msgstr ""
 "Se viene assegnato un insieme di celle, restituisce il valore immagazzinato "
 "in una data riga/colonna. Se viene assegnata una cella che contiene un "
-"array, viene restituito un elemento dell'array."
+"array, viene restituito un elemento del vettore."
 
 #: functions/reference.xml:146
 #, kde-format
@@ -8362,8 +8362,8 @@ msgid ""
 "INDEX(A1;2;2), if A1 is a result of array calculation, returns its (2,2) "
 "element."
 msgstr ""
-"INDEX(A1; 2; 2), se A1 è il risultato di un calcolo su un array, ritorna "
-"l'elemento (2,2) dell'array."
+"INDEX(A1; 2; 2), se A1 è il risultato di un calcolo su un vettore, "
+"restituisce l'elemento (2,2) del vettore."
 
 #: functions/reference.xml:164
 #, kde-format

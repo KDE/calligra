@@ -2210,7 +2210,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <listitem
 ><para
 ><action
->Canvia l'alçada de la fila seleccionada.</action>
+>Canvia l'altura de la fila seleccionada.</action>
 </para
 ></listitem>
 </varlistentry>
@@ -2225,7 +2225,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <listitem
 ><para
 ><action
->Canvia l'alçada de la fila seleccionada per a mostrar completament les cel·les.</action>
+>Canvia l'altura de la fila seleccionada per a mostrar completament les cel·les.</action>
 </para
 ></listitem>
 </varlistentry>

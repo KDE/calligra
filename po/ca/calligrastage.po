@@ -1,9 +1,9 @@
 # Translation of calligrastage.po to Catalan
-# Copyright (C) 2000-2024 This_file_is_part_of_KDE
+# Copyright (C) 2000-2026 This_file_is_part_of_KDE
 #
 # SPDX-FileCopyrightText: 2000-2001 Sebastià Pla <sastia@retemail.es>
 # SPDX-FileCopyrightText: 2002-2006 Albert Astals Cid <aacid@kde.org>
-# SPDX-FileCopyrightText: 2006-2009, 2011-2016, 2020-2021, 2023-2024 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2006-2009, 2011-2016, 2020-2021, 2023-2024, 2026 Josep M. Ferrer <txemaq@gmail.com>
 # SPDX-FileCopyrightText: 2006-2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
 # SPDX-FileCopyrightText: 2013, 2015, 2021, 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2024-08-23 11:09+0200\n"
+"PO-Revision-Date: 2026-09-06 18:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 25.04.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -974,13 +974,13 @@ msgstr "Mantindrà constant l'amplada de l'escapçat"
 #: part/tools/animationtool/wdg_tool_crop.ui:84
 #, kde-format
 msgid "&Height:"
-msgstr "A&lçada:"
+msgstr "A&ltura:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
 #: part/tools/animationtool/wdg_tool_crop.ui:87
 #, kde-format
 msgid "Will keep the height of the crop constant"
-msgstr "Mantindrà constant l'alçada de l'escapçat"
+msgstr "Mantindrà constant l'altura de l'escapçat"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: part/tools/animationtool/wdg_tool_crop.ui:94

@@ -16510,7 +16510,7 @@ all changes will be overwritten on the next script run
 >Sintaxi</term>
 <listitem
 ><para
->OFFSET(Referència referència; Enter desplaçamentFila; Enter desplaçamentColumna; Enter novaAlçada; Enter novaAmplada)</para
+>OFFSET(Referència referència; Enter desplaçamentFila; Enter desplaçamentColumna; Enter novaAltura; Enter novaAmplada)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -16543,7 +16543,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Alçada de l'interval de desplaçament (opcional)</seg
+>Altura de l'interval de desplaçament (opcional)</seg
 ><seg
 >Nombre enter (com 1, 132, 2344)</seg
 ></seglistitem>

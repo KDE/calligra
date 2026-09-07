@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-08-31 11:18+0200\n"
+"PO-Revision-Date: 2026-09-06 18:46+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -8639,7 +8639,7 @@ msgstr "Nombre de columnes a desplaçar"
 #: functions/reference.xml:372
 #, kde-format
 msgid "Height of the offset range (optional)"
-msgstr "Alçada de l'interval de desplaçament (opcional)"
+msgstr "Altura de l'interval de desplaçament (opcional)"
 
 #: functions/reference.xml:376
 #, kde-format
@@ -8658,7 +8658,7 @@ msgid ""
 "newHeight; Integer newWidth)"
 msgstr ""
 "OFFSET(Referència referència; Enter desplaçamentFila; Enter "
-"desplaçamentColumna; Enter novaAlçada; Enter novaAmplada)"
+"desplaçamentColumna; Enter novaAltura; Enter novaAmplada)"
 
 #: functions/statistical.xml:5
 #, kde-format
@@ -10618,7 +10618,7 @@ msgstr ""
 "velocitat a la qual poden córrer 30 persones altes i l'altre que conté la "
 "velocitat a la qual poden córrer 30 persones baixes, un prova t podrà "
 "determinar la probabilitat que qualsevol diferència entre els dos grups es "
-"deu a les seves alçades."
+"deu a les seves altures."
 
 #: functions/statistical.xml:1486
 #, kde-format
@@ -13940,7 +13940,7 @@ msgstr "Coincidències de majúscules a les cerques"
 #: part/HeaderItems.cpp:155 part/HeaderWidgets.cpp:150
 #, kde-format
 msgid "Height: %1 %2"
-msgstr "Alçada: %1 %2"
+msgstr "Altura: %1 %2"
 
 #: part/HeaderItems.cpp:157 part/HeaderWidgets.cpp:152
 #, kde-format
@@ -14634,7 +14634,7 @@ msgstr "Redimensiona la fila..."
 #: ui/actions/AdjustRowCol.cpp:376
 #, kde-format
 msgid "Change the height of a row"
-msgstr "Canvia l'alçada d'una fila"
+msgstr "Canvia l'altura d'una fila"
 
 #: ui/actions/AdjustRowCol.cpp:376
 #, kde-format
@@ -16164,7 +16164,7 @@ msgstr "Redimensiona la fila"
 #: ui/actions/dialogs/Resize2Dialog.cpp:42
 #, kde-format
 msgid "Height:"
-msgstr "Alçada:"
+msgstr "Altura:"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:78
 #, kde-format
