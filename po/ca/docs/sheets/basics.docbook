@@ -597,7 +597,7 @@ selected area. For more complex sorting select <menuchoice
 >Mou amunt</guibutton
 > i <guibutton
 >Mou avall</guibutton
->. Utilitzant l'exemple de la captura de pantalla anterior, escollint la columna B com la primera clau i la columna C com la segona, s'ordenarien les dades per país, per a cada país i per l'alçada.</para>
+>. Utilitzant l'exemple de la captura de pantalla anterior, escollint la columna B com la primera clau i la columna C com la segona, s'ordenarien les dades per país, per a cada país i per l'altura.</para>
 <para
 >Desmarqueu l'opció <guilabel
 >Distingeix majúscules i minúscules</guilabel

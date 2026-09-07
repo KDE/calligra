@@ -648,7 +648,7 @@ better-->
 ></term>
 <listitem
 ><para
->Establiu aquí la mida de la cel·la, amb una amplada i una alçada personalitzada o escolliu els valors per omissió.</para>
+>Establiu aquí la mida de la cel·la, amb una amplada i una altura personalitzada o escolliu els valors per omissió.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -847,7 +847,7 @@ better-->
 >Posició</guilabel
 > en el diàleg <guilabel
 >Format de cel·la</guilabel
-> us permet modificar la mida de les cel·les seleccionades. Tingueu present que en canviar l'alçada de tan sols una cel·la es canviarà l'alçada de totes les cel·les en aquesta fila, i igualment un canvi en l'amplada afectarà tota la columna.</para>
+> us permet modificar la mida de les cel·les seleccionades. Tingueu present que en canviar l'altura de tan sols una cel·la es canviarà l'altura de totes les cel·les en aquesta fila, i igualment un canvi en l'amplada afectarà tota la columna.</para>
 <para
 >També podeu seleccionar les files o columnes a canviar i després seleccionar <guimenuitem
 >Canvia la mida de la fila...</guimenuitem
@@ -867,10 +867,10 @@ better-->
 ></menuchoice
 >.</para>
 <para
->Si moveu el cursor del ratolí de manera que el seu consell resti fora de la línia entre dos dels números de fila a l'esquerra de la finestra de &sheets; el cursor canviarà per a mostrar dues línies paral·leles amb una petita fletxa que surt d'aquestes. Quan el cursor està en aquest estat podeu mantenir premut el &BER; i arrossegar la vora entre les dues files, canviant l'alçada de la fila superior. Es pot utilitzar una tècnica similar per a canviar l'amplada d'una columna.</para>
+>Si moveu el cursor del ratolí de manera que el seu consell resti fora de la línia entre dos dels números de fila a l'esquerra de la finestra de &sheets; el cursor canviarà per a mostrar dues línies paral·leles amb una petita fletxa que surt d'aquestes. Quan el cursor està en aquest estat podeu mantenir premut el &BER; i arrossegar la vora entre les dues files, canviant l'altura de la fila superior. Es pot utilitzar una tècnica similar per a canviar l'amplada d'una columna.</para>
 
 <para
->Per a establir l'alçada de la fila o l'amplada de la columna al mínim necessari per a mostrar el contingut, escolliu la fila o la columna i feu clic dret sobre l'etiqueta de fila o de columna. En el menú que aparegui, seleccioneu <guimenuitem
+>Per a establir l'altura de la fila o l'amplada de la columna al mínim necessari per a mostrar el contingut, escolliu la fila o la columna i feu clic dret sobre l'etiqueta de fila o de columna. En el menú que aparegui, seleccioneu <guimenuitem
 >Ajusta fila</guimenuitem
 > o <guimenuitem
 >Ajusta columna</guimenuitem

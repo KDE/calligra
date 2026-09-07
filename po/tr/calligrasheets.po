@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-09-03 22:01+0300\n"
+"PO-Revision-Date: 2026-09-06 18:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8435,21 +8435,19 @@ msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
 msgstr "LOOKUP(1,232; A1:A6; B1:B6), A1 = 1, A2 = 2 için B1’in döndürür."
 
 #: functions/reference.xml:257
-#, fuzzy, kde-format
-#| msgid "Lookup value"
+#, kde-format
 msgid "Lookup array"
-msgstr "Arama değeri"
+msgstr "Bakılacak diziliş"
 
 #: functions/reference.xml:258
 #, kde-format
 msgid "Return array"
-msgstr ""
+msgstr "Döndürülecek diziliş"
 
 #: functions/reference.xml:259
-#, fuzzy, kde-format
-#| msgid "Method (optional)"
+#, kde-format
 msgid "If not found (optional)"
-msgstr "Yöntem (seçmeli)"
+msgstr "Bulunmazsa şu (isteğe bağlı)"
 
 #: functions/reference.xml:261
 #, kde-format
@@ -8459,10 +8457,9 @@ msgid ""
 msgstr ""
 
 #: functions/reference.xml:262
-#, fuzzy, kde-format
-#| msgid "LOOKUP(value; lookup vector; result vector)"
+#, kde-format
 msgid "XLOOKUP(value; lookup array; return array; if not found)"
-msgstr "LOOKUP(değer; arama vektörü; sonuç vektörü)"
+msgstr "XLOOKUP(değer; bakılacak_diziliş; döndürülecek_diziliş; bulunmazsa şu)"
 
 #: functions/reference.xml:274 functions/reference.xml:300
 #, kde-format
@@ -11080,34 +11077,29 @@ msgid "B(trials; SP; T1; T2)"
 msgstr ""
 
 #: functions/statistical.xml:1855
-#, fuzzy, kde-format
-#| msgid "BINO(12;9;0.8) returns 0.236223201"
+#, kde-format
 msgid "B(20; 0.5; 8) returns 0.120134"
-msgstr "BINO(12; 9; 0,8), 0,236223201 döndürür"
+msgstr "B(20; 0,5; 8), 0,120134 döndürür"
 
 #: functions/statistical.xml:1856
-#, fuzzy, kde-format
-#| msgid "MAX(0.5; 0.4; TRUE; 0.2) returns 0.5"
+#, kde-format
 msgid "B(20; 0.5; 8; 10) returns 0.456511"
-msgstr "MAK(0,5; 0,4; TRUE; 0,2), 0,5 döndürür"
+msgstr "B(20; 0,5; 8; 10), 0,456511 döndürür"
 
 #: functions/statistical.xml:1877
-#, fuzzy, kde-format
-#| msgid ""
-#| "The PHI() function returns value of the distribution function for a "
-#| "standard normal distribution."
+#, kde-format
 msgid ""
 "The CHISQDIST() function returns the value of the cumulative distribution "
 "function (or, if Cumulative is FALSE, the probability density function) for "
 "the chi-square distribution."
 msgstr ""
-"PHI() işlevi, bir standart normal dağılım için dağılım işlevinin döndürür."
+"CHISQDIST() işlevi, ki kare dağılımı için kümülatif dağılım işlevinin "
+"değerini (kümülatif YANLIŞ ise olasılık yoğunluğu işlevini) döndürür."
 
 #: functions/statistical.xml:1878
-#, fuzzy, kde-format
-#| msgid "CHIDIST(number;degrees_freedom)"
+#, kde-format
 msgid "CHISQDIST(number; degrees_freedom; cumulative)"
-msgstr "CHIDIST(sayı;bağımsızlık_derecesi)"
+msgstr "CHISQDIST(sayı; serbestlik_açısı; kümülatif)"
 
 #: functions/statistical.xml:1879
 #, kde-format
@@ -11115,16 +11107,13 @@ msgid "CHISQDIST(13.27; 5; TRUE) returns 0.979"
 msgstr "CHISQDIST(13,27; 5; TRUE), 0,979 döndürür"
 
 #: functions/statistical.xml:1897
-#, fuzzy, kde-format
-#| msgid ""
-#| "The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;"
-#| "TRUE())."
+#, kde-format
 msgid ""
 "The CHISQINV() function returns the inverse of CHISQDIST(number; "
 "degrees_freedom; TRUE)."
 msgstr ""
-"BETAINV() işlevi, BETADIST(x;alpha;beta;a;b;TRUE()) değerinin tersini "
-"döndürür."
+"CHISQINV() işlivi, CHISQDIST(sayı; serbestlik_açısı; DOĞRU) işlevinin "
+"tersini döndürür."
 
 #: functions/statistical.xml:1898
 #, kde-format
