@@ -429,7 +429,7 @@ msgstr "Extension de lignes"
 #: flake/SnapGuideConfigWidget.ui:56
 #, kde-format
 msgid "Bounding box of shape"
-msgstr "Boîte de formes"
+msgstr "Boite de formes"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:72
@@ -5230,7 +5230,7 @@ msgstr "%1 (%2)"
 #: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
 msgid "Toolbox"
-msgstr "Boîte à outils"
+msgstr "Boite à outils"
 
 #: widgets/KoToolBoxDocker.cpp:134
 #, kde-format

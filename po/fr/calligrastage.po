@@ -1726,7 +1726,7 @@ msgstr "Fermeture verticale"
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Box"
-msgstr "Boîte"
+msgstr "Boite"
 
 #: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:30
 #: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:26

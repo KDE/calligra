@@ -1074,7 +1074,7 @@ msgstr "Insérer"
 #: dialogs/AxisScalingDialog.ui:13 dialogs/CellRegionDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr "Boîte de dialogue"
+msgstr "Boite de dialogue"
 
 #. i18n: ectx: property (text), widget (QCheckBox, logarithmicScaling)
 #: dialogs/AxisScalingDialog.ui:19
