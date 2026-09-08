@@ -590,7 +590,7 @@ msgstr "Le cadre affecte le texte par son : "
 #: part/dialogs/KWRunAroundProperties.ui:99
 #, kde-format
 msgid "Bounding box"
-msgstr "Boîte de délimitation"
+msgstr "Boite de délimitation"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
 #: part/dialogs/KWRunAroundProperties.ui:106
