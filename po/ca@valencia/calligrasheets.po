@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-04 00:44+0000\n"
-"PO-Revision-Date: 2026-09-04 09:59+0200\n"
+"PO-Revision-Date: 2026-09-06 18:46+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -15835,7 +15835,7 @@ msgstr ""
 #: ui/actions/dialogs/ConsolidateDialog.cpp:155
 #, kde-format
 msgid "The source range intersects the destination range."
-msgstr "L'interval d'origen creua l'interval de destinació."
+msgstr "L'interval d'origen interseca l'interval de destinació."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:199
 #, kde-format
@@ -15871,7 +15871,7 @@ msgstr "Nom de la base de dades: "
 #: ui/actions/dialogs/DatabaseDialog.cpp:90
 #, kde-format
 msgid "Host:"
-msgstr "Servidor:"
+msgstr "Amfitrió:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:99
 #, kde-format
