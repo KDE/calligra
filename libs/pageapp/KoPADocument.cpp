@@ -22,6 +22,7 @@
 #include <KoGuidesData.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoOasisSettings.h>
+#include <KoOdfForm.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
@@ -150,6 +151,19 @@ bool KoPADocument::loadOdf(KoOdfReadStore &odfStore)
         return false;
     }
 
+    setForm(KoOdfForm());
+    const KoXmlElement forms = KoXml::namedItemNS(realBody, KoXmlNS::office, "forms");
+    if (!forms.isNull()) {
+        KoXmlElement formElement;
+        forEachElement(formElement, forms)
+        {
+            if (formElement.namespaceURI() == KoXmlNS::form && formElement.localName() == "form") {
+                form().loadOdf(formElement);
+                break;
+            }
+        }
+    }
+
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, odfTagName(false));
 
     if (body.isNull()) {
@@ -215,6 +229,11 @@ bool KoPADocument::saveOdf(SavingContext &documentContext)
     saveOdfDocumentStyles(paContext);
 
     bodyWriter->startElement("office:body");
+    if (!form().isEmpty()) {
+        bodyWriter->startElement("office:forms");
+        form().saveOdf(*bodyWriter);
+        bodyWriter->endElement();
+    }
     bodyWriter->startElement(odfTagName(true));
 
     if (!saveOdfProlog(paContext)) {

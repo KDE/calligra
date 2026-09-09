@@ -30,6 +30,7 @@
 #include "SheetAccessModel.h"
 
 #include <KoGenStyles.h>
+#include <KoOdfForm.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoProgressUpdater.h>
@@ -79,6 +80,19 @@ bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
         doc->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
         doc->map()->deleteLoadingInfo();
         return false;
+    }
+
+    doc->setForm(KoOdfForm());
+    const KoXmlElement forms = KoXml::namedItemNS(realBody, KoXmlNS::office, "forms");
+    if (!forms.isNull()) {
+        KoXmlElement formElement;
+        forEachElement(formElement, forms)
+        {
+            if (formElement.namespaceURI() == KoXmlNS::form && formElement.localName() == "form") {
+                doc->form().loadOdf(formElement);
+                break;
+            }
+        }
     }
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
 
@@ -153,6 +167,19 @@ bool Odf::loadFlatXmlDocument(DocBase *doc, const KoXmlDocument &flatDoc)
         doc->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
         doc->map()->deleteLoadingInfo();
         return false;
+    }
+
+    doc->setForm(KoOdfForm());
+    const KoXmlElement forms = KoXml::namedItemNS(realBody, KoXmlNS::office, "forms");
+    if (!forms.isNull()) {
+        KoXmlElement formElement;
+        forEachElement(formElement, forms)
+        {
+            if (formElement.namespaceURI() == KoXmlNS::form && formElement.localName() == "form") {
+                doc->form().loadOdf(formElement);
+                break;
+            }
+        }
     }
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
 
@@ -254,6 +281,11 @@ bool Odf::saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext)
 
     // todo fixme just add a element for testing saving content.xml
     bodyWriter->startElement("office:body");
+    if (!doc->form().isEmpty()) {
+        bodyWriter->startElement("office:forms");
+        doc->form().saveOdf(*bodyWriter);
+        bodyWriter->endElement();
+    }
     bodyWriter->startElement("office:spreadsheet");
 
     // Saving the map.

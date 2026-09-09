@@ -33,6 +33,7 @@ class KoUnit;
 class KoGridData;
 class KoGuidesData;
 class KoXmlWriter;
+class KoOdfForm;
 
 class QDomDocument;
 
@@ -732,6 +733,10 @@ public:
     virtual bool closeUrl(bool promptToSave = true);
 
     virtual bool saveAs(const QUrl &url);
+
+    const KoOdfForm &form() const;
+    KoOdfForm &form();
+    void setForm(const KoOdfForm &form);
 
 public Q_SLOTS:
 
