@@ -4,6 +4,8 @@ The program rng2cpp compiles a given Relax NG (.rng) file into C++ headers. In C
 
 The generated code has an API with class names that resemble the names of the ODF tags. <text:h/> becomes writeodf::text_h, <office:automatic-styles> becomes writeodf::office_automatic_styles.
 
+The same invocation also generates readodf.h and readodf.cpp. It provides read-side value wrappers with camel-case class and method names (for example readodf::FormForm and readodf::FormText), loadOdf() validation, attribute accessors, typed color/vector accessors, and child collection APIs. Loading copies the XML attributes into the wrapper state; saveOdf() serializes that state through KoXmlWriter.
+
 The generated code has advantages of directly using KoXMLWriter.
  - function names instead of strings gives autocompletion and catches typing errors at compile time.
  - since elements are added into other elements, the nesting is checked at compile time.
@@ -11,6 +13,5 @@ The generated code has advantages of directly using KoXMLWriter.
  - elements are automatically closed if another item (text or element or other) is added to its parent
 
 Future improvements:
- - also generate code for reading elements
  - also generate code from OOXML Relax NG files
  - check data types (bool, int, string) at compile time
