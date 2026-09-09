@@ -20,6 +20,7 @@
 // calligra
 #include <KoInlineTextObjectManager.h>
 #include <KoOasisSettings.h>
+#include <KoOdfForm.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
@@ -43,6 +44,8 @@
 
 // Qt includes
 #include <QTextCursor>
+
+using namespace Qt::StringLiterals;
 
 #include <KoDocumentRdfBase.h>
 
@@ -74,6 +77,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         loadUpdater->setProgress(0);
     }
 
+    m_document->setForm(KoOdfForm());
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     if (realBody.isNull()) {
@@ -103,6 +107,18 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         m_document->setIsMasterDocument(true);
     }
     // FIXME: text:use-soft-page-breaks
+
+    const KoXmlElement forms = KoXml::namedItemNS(body, KoXmlNS::office, "forms"_L1);
+    if (!forms.isNull()) {
+        KoXmlElement form;
+        forEachElement(form, forms)
+        {
+            if (form.namespaceURI() == KoXmlNS::form && form.localName() == "form"_L1) {
+                m_document->form().loadOdf(form);
+                break;
+            }
+        }
+    }
 
     if (updater)
         updater->setProgress(20);

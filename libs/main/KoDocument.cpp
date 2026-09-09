@@ -19,6 +19,7 @@
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFileDialog.h"
 #include "KoFilterManager.h"
+#include "KoOdfForm.h"
 #include "KoPart.h"
 #include "KoView.h"
 
@@ -196,6 +197,7 @@ public:
 
     KoDocumentInfo *docInfo;
     KoDocumentRdfBase *docRdf;
+    KoOdfForm form;
 
     KoProgressUpdater *progressUpdater;
     KoProgressProxy *progressProxy;
@@ -478,6 +480,21 @@ KoDocument::~KoDocument()
 KoPart *KoDocument::documentPart() const
 {
     return d->parentPart;
+}
+
+const KoOdfForm &KoDocument::form() const
+{
+    return d->form;
+}
+
+KoOdfForm &KoDocument::form()
+{
+    return d->form;
+}
+
+void KoDocument::setForm(const KoOdfForm &form)
+{
+    d->form = form;
 }
 
 bool KoDocument::exportDocument(const QUrl &_url)

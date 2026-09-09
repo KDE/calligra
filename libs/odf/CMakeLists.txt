@@ -30,6 +30,7 @@ set(koodf_LIB_SRCS
     KoEmbeddedDocumentLoader.cpp
     KoBorder.cpp
     Ko3dScene.cpp
+    KoOdfForm.cpp
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp

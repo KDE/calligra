@@ -9,11 +9,13 @@
  */
 
 #include "KWOdfWriter.h"
+
 #include "KWDocument.h"
 #include "KWPage.h"
 
 #include "frames/KWTextFrameSet.h"
 #include <KoGenStyles.h>
+#include <KoOdfForm.h>
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
@@ -41,6 +43,8 @@
 #include <QTemporaryFile>
 #include <QTextCursor>
 #include <WordsDebug.h>
+
+using namespace Qt::StringLiterals;
 
 static const struct {
     const char *tag;
@@ -252,6 +256,12 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         bodyWriter->addAttribute("text:global", "true");
     }
     // FIXME: text:use-soft-page-breaks
+
+    if (!m_document->form().isEmpty()) {
+        bodyWriter->startElement("office:forms");
+        m_document->form().saveOdf(*bodyWriter);
+        bodyWriter->endElement();
+    }
 
     calculateZindexOffsets();
 
