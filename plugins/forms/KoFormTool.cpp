@@ -83,30 +83,32 @@ QWidget *KoFormTool::createOptionWidget()
 {
     auto *widget = new QWidget();
     m_options = widget;
-    widget->setWindowTitle(i18n("Form Properties"));
+    widget->setWindowTitle(i18nc("@title:form properties", "Form Properties"));
     auto *layout = new QVBoxLayout(widget);
     auto *form = new QFormLayout();
     layout->addLayout(form);
     m_type = new QLabel(widget);
     form->addRow(i18nc("@label:form property", "&Type:"), m_type);
     m_name = new QLineEdit(widget);
-    form->addRow(i18n("&Name:"), m_name);
+    form->addRow(i18nc("@label:form property", "&Name:"), m_name);
     m_title = new QLineEdit(widget);
-    form->addRow(i18n("&Help text:"), m_title);
+    form->addRow(i18nc("@label:form property", "&Help text:"), m_title);
     const auto addBoolean = [form, widget](const QString &label) {
         auto *box = new QComboBox(widget);
-        box->addItem(i18n("No"), false);
-        box->addItem(i18n("Yes"), true);
+        box->addItem(i18nc("@item:form boolean", "No"), false);
+        box->addItem(i18nc("@item:form boolean", "Yes"), true);
         form->addRow(label, box);
         return box;
     };
-    m_enabled = addBoolean(i18n("&Enabled:"));
-    m_readOnly = addBoolean(i18n("&Read-only:"));
-    m_printable = addBoolean(i18n("&Printable:"));
-    m_tabStop = addBoolean(i18n("&Tab stop:"));
+    m_enabled = addBoolean(i18nc("@label:form property", "&Enabled:"));
+    m_readOnly = addBoolean(i18nc("@label:form property", "&Read-only:"));
+    m_printable = addBoolean(i18nc("@label:form property", "&Printable:"));
+    m_tabStop = addBoolean(i18nc("@label:form property", "&Tab stop:"));
     m_tabIndex = new QSpinBox(widget);
     m_tabIndex->setRange(0, 32767);
-    form->addRow(i18n("Tab &order:"), m_tabIndex);
+    form->addRow(i18nc("@label:form property", "Tab &order:"), m_tabIndex);
+    m_specificForm = new QFormLayout();
+    layout->addLayout(m_specificForm);
     layout->addStretch();
     connect(m_name, &QLineEdit::editingFinished, this, &KoFormTool::commitProperties);
     connect(m_title, &QLineEdit::editingFinished, this, &KoFormTool::commitProperties);
@@ -127,12 +129,79 @@ QWidget *KoFormTool::createOptionWidget()
     return widget;
 }
 
+void KoFormTool::rebuildSpecificProperties()
+{
+    while (m_specificForm && m_specificForm->rowCount() > 0) {
+        m_specificForm->removeRow(0);
+    }
+    m_specificProperties.clear();
+    if (!m_shape || !m_shape->formControl()) {
+        return;
+    }
+    const auto addText = [this](const QString &key, const QString &label) {
+        auto *edit = new QLineEdit(m_options);
+        m_specificForm->addRow(label, edit);
+        m_specificProperties.insert(key, edit);
+        connect(edit, &QLineEdit::editingFinished, this, &KoFormTool::commitProperties);
+    };
+    const auto addBoolean = [this](const QString &key, const QString &label) {
+        auto *box = new QComboBox(m_options);
+        box->addItem(i18nc("@item:form boolean", "No"), false);
+        box->addItem(i18nc("@item:form boolean", "Yes"), true);
+        m_specificForm->addRow(label, box);
+        m_specificProperties.insert(key, box);
+        connect(box, qOverload<int>(&QComboBox::currentIndexChanged), this, &KoFormTool::commitProperties);
+    };
+    switch (m_shape->controlKind()) {
+    case KoOdfForm::ControlKind::Text:
+    case KoOdfForm::ControlKind::Textarea:
+    case KoOdfForm::ControlKind::FormattedText:
+    case KoOdfForm::ControlKind::Password:
+    case KoOdfForm::ControlKind::File:
+        addText(u"max-length"_s, i18nc("@label:form property", "Max. length:"));
+        addBoolean(u"multi-line"_s, i18nc("@label:form property", "Multi-line:"));
+        break;
+    case KoOdfForm::ControlKind::Number:
+    case KoOdfForm::ControlKind::ValueRange:
+        addText(u"min-value"_s, i18nc("@label:form property", "Minimum:"));
+        addText(u"max-value"_s, i18nc("@label:form property", "Maximum:"));
+        addText(u"step-size"_s, i18nc("@label:form property", "Step:"));
+        break;
+    case KoOdfForm::ControlKind::Button:
+        addBoolean(u"default-button"_s, i18nc("@label:form property", "Default button:"));
+        addBoolean(u"toggle"_s, i18nc("@label:form property", "Toggle button:"));
+        break;
+    case KoOdfForm::ControlKind::Checkbox:
+    case KoOdfForm::ControlKind::Radio:
+        addBoolean(u"selected"_s, i18nc("@label:form property", "Selected:"));
+        addBoolean(u"tristate"_s, i18nc("@label:form property", "Tri-state:"));
+        break;
+    case KoOdfForm::ControlKind::Combobox:
+        addBoolean(u"autocomplete"_s, i18nc("@label:form property", "Auto-complete:"));
+        break;
+    case KoOdfForm::ControlKind::Listbox:
+        addBoolean(u"multiple"_s, i18nc("@label:form property", "Multiple selection:"));
+        addBoolean(u"dropdown"_s, i18nc("@label:form property", "Drop-down:"));
+        addText(u"list-source"_s, i18nc("@label:form property", "List source:"));
+        break;
+    case KoOdfForm::ControlKind::Image:
+    case KoOdfForm::ControlKind::ImageFrame:
+        addText(u"image-data"_s, i18nc("@label:form property", "Image data:"));
+        addText(u"image-position"_s, i18nc("@label:form property", "Image position:"));
+        addText(u"image-align"_s, i18nc("@label:form property", "Image alignment:"));
+        break;
+    default:
+        break;
+    }
+}
+
 void KoFormTool::updateProperties()
 {
     if (!m_options) {
         return;
     }
     const auto *control = m_shape ? m_shape->formControl() : nullptr;
+    rebuildSpecificProperties();
     m_options->setEnabled(control != nullptr);
     const QSignalBlocker nameBlocker(m_name);
     const QSignalBlocker typeBlocker(m_type);
@@ -150,6 +219,14 @@ void KoFormTool::updateProperties()
     m_printable->setCurrentIndex(control && control->printable());
     m_tabStop->setCurrentIndex(control && control->tabStop());
     m_tabIndex->setValue(control ? control->tabIndex() : 0);
+    for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
+        const QSignalBlocker blocker(it.value());
+        if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
+            edit->setText(control ? control->formAttribute(it.key()) : QString());
+        } else if (auto *box = qobject_cast<QComboBox *>(it.value())) {
+            box->setCurrentIndex(control && control->formAttribute(it.key()) == "true"_L1);
+        }
+    }
 }
 
 void KoFormTool::commitProperties()
@@ -160,8 +237,22 @@ void KoFormTool::commitProperties()
     }
     if (before->name() == m_name->text() && before->title() == m_title->text() && before->disabled() == !m_enabled->currentData().toBool()
         && before->readOnly() == m_readOnly->currentData().toBool() && before->printable() == m_printable->currentData().toBool()
-        && before->tabStop() == m_tabStop->currentData().toBool() && before->tabIndex() == m_tabIndex->value())
-        return;
+        && before->tabStop() == m_tabStop->currentData().toBool() && before->tabIndex() == m_tabIndex->value()) {
+        bool changed = false;
+        for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
+            const QString value = [&] {
+                if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
+                    return edit->text();
+                }
+                return it.value()->property("currentData").toString();
+            }();
+            Q_UNUSED(value);
+            changed = true;
+        }
+        if (!changed) {
+            return;
+        }
+    }
     KoOdfForm::GenericControl properties;
     static_cast<KoOdfForm::Control &>(properties) = *before;
     properties.setName(m_name->text());
@@ -171,6 +262,15 @@ void KoFormTool::commitProperties()
     properties.setPrintable(m_printable->currentData().toBool());
     properties.setTabStop(m_tabStop->currentData().toBool());
     properties.setTabIndex(m_tabIndex->value());
+    for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
+        QString value;
+        if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
+            value = edit->text();
+        } else if (auto *box = qobject_cast<QComboBox *>(it.value())) {
+            value = box->currentData().toBool() ? u"true"_s : u"false"_s;
+        }
+        properties.setFormAttribute(it.key(), value);
+    }
     QPointer<KoFormTool> tool(this);
     canvas()->addCommand(new ChangeFormPropertiesCommand(m_shape, properties, [tool]() {
         if (tool) {
@@ -221,7 +321,7 @@ void KoFormTool::shapeSelectionChanged()
 KoFormToolFactory::KoFormToolFactory()
     : KoToolFactoryBase(u"FormTool"_s)
 {
-    setToolTip(i18n("Form properties"));
+    setToolTip(i18nc("@info:tooltip", "Form properties"));
     setIconName(u"document-properties"_s);
     setToolType(dynamicToolType());
     setPriority(1);

@@ -6,6 +6,7 @@
 
 #include <KoToolBase.h>
 #include <KoToolFactoryBase.h>
+#include <QHash>
 #include <QPointer>
 
 class KoFormShape;
@@ -13,6 +14,8 @@ class QLabel;
 class QLineEdit;
 class QComboBox;
 class QSpinBox;
+class QFormLayout;
+class QWidget;
 
 class KoFormTool : public KoToolBase
 {
@@ -38,6 +41,7 @@ private:
     void updateProperties();
     void commitProperties();
     void shapeSelectionChanged();
+    void rebuildSpecificProperties();
     KoFormShape *m_shape = nullptr;
     QPointer<QWidget> m_options;
     QLabel *m_type = nullptr;
@@ -48,6 +52,8 @@ private:
     QComboBox *m_printable = nullptr;
     QComboBox *m_tabStop = nullptr;
     QSpinBox *m_tabIndex = nullptr;
+    QFormLayout *m_specificForm = nullptr;
+    QHash<QString, QWidget *> m_specificProperties;
 };
 
 class KoFormToolFactory : public KoToolFactoryBase
