@@ -55,6 +55,7 @@ void KoShapeCreateCommand::redo()
         d->shapeParent->addShape(d->shape);
     // the parent has to be there when it is added to the KoShapeBasedDocumentBase
     d->controller->addShape(d->shape);
+    d->shape->shapeAddedToDocument(d->controller);
     d->shapeParent = d->shape->parent(); // update parent if the 'addShape' changed it
     d->deleteShape = false;
 }
@@ -66,6 +67,7 @@ void KoShapeCreateCommand::undo()
     Q_ASSERT(d->controller);
     // the parent has to be there when it is removed from the KoShapeBasedDocumentBase
     d->controller->removeShape(d->shape);
+    d->shape->shapeRemovedFromDocument(d->controller);
     if (d->shapeParent)
         d->shapeParent->removeShape(d->shape);
     d->deleteShape = true;

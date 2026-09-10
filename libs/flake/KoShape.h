@@ -30,6 +30,7 @@ class QPainterPath;
 class QTransform;
 
 class KoShapeContainer;
+class KoShapeBasedDocumentBase;
 class KoShapeStrokeModel;
 class KoShapeUserData;
 class KoViewConverter;
@@ -1145,6 +1146,9 @@ public:
      * Returns the private object for use within the flake lib
      */
     KoShapePrivate *priv();
+
+    virtual void shapeAddedToDocument(KoShapeBasedDocumentBase *document);
+    virtual void shapeRemovedFromDocument(KoShapeBasedDocumentBase *document);
 
 protected:
     /// constructor

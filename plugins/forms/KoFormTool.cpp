@@ -143,7 +143,7 @@ void KoFormTool::updateProperties()
     const QSignalBlocker tabStopBlocker(m_tabStop);
     const QSignalBlocker tabIndexBlocker(m_tabIndex);
     m_name->setText(control ? control->name() : QString());
-    m_type->setText(m_shape ? m_shape->controlKind() : QString());
+    m_type->setText(m_shape ? m_shape->controlKindName() : QString());
     m_title->setText(control ? control->title() : QString());
     m_enabled->setCurrentIndex(control && !control->disabled());
     m_readOnly->setCurrentIndex(control && control->readOnly());

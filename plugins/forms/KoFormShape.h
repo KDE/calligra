@@ -23,16 +23,20 @@ public:
     void saveOdf(KoShapeSavingContext &context) const override;
 
     QString controlId() const;
-    QString controlKind() const;
-    void setControlKind(const QString &kind);
+    KoOdfForm::ControlKind controlKind() const;
+    QString controlKindName() const;
+    void setControlKind(KoOdfForm::ControlKind kind);
+    void initializeControl(KoOdfForm::ControlKind kind, KoDocument *document);
     void setControlId(const QString &id);
     const KoOdfForm::Control *formControl() const;
     void setControlProperties(const KoOdfForm::Control &properties);
+    void shapeAddedToDocument(KoShapeBasedDocumentBase *document) override;
+    void shapeRemovedFromDocument(KoShapeBasedDocumentBase *document) override;
 
 private:
     QPointer<KoDocument> m_document;
     QString m_controlId;
-    QString m_controlKind;
+    KoOdfForm::ControlKind m_controlKind = KoOdfForm::ControlKind::Unknown;
     QImage m_image;
     std::unique_ptr<KoOdfForm::Control> m_formControl;
 };

@@ -2309,6 +2309,14 @@ void KoShape::shapeChanged(ChangeType type, KoShape *shape)
     Q_UNUSED(shape);
 }
 
+void KoShape::shapeAddedToDocument(KoShapeBasedDocumentBase *)
+{
+}
+
+void KoShape::shapeRemovedFromDocument(KoShapeBasedDocumentBase *)
+{
+}
+
 KoSnapData KoShape::snapData() const
 {
     return KoSnapData();

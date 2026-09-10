@@ -70,6 +70,7 @@ void KoShapeDeleteCommand::redo()
     for (int i = 0; i < d->shapes.count(); i++) {
         // the parent has to be there when it is removed from the KoShapeBasedDocumentBase
         d->controller->removeShape(d->shapes[i]);
+        d->shapes[i]->shapeRemovedFromDocument(d->controller);
         if (d->oldParents.at(i))
             d->oldParents.at(i)->removeShape(d->shapes[i]);
     }
@@ -87,6 +88,7 @@ void KoShapeDeleteCommand::undo()
             d->oldParents.at(i)->addShape(d->shapes[i]);
         // the parent has to be there when it is added to the KoShapeBasedDocumentBase
         d->controller->addShape(d->shapes[i]);
+        d->shapes[i]->shapeAddedToDocument(d->controller);
     }
     d->deleteShapes = false;
 }
