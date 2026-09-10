@@ -247,11 +247,199 @@ void KoOdfForm::Control::setInputRequired(bool v)
 }
 void KoOdfForm::Control::setTabIndex(int v)
 {
-    m_tabIndex = v;
+    m_tabIndex = qMax(0, v);
 }
 void KoOdfForm::Control::setTabStop(bool v)
 {
     m_tabStop = v;
+}
+
+QString KoOdfForm::Text::maxLength() const
+{
+    return formAttribute(u"max-length"_s);
+}
+
+bool KoOdfForm::Text::multiLine() const
+{
+    return formAttribute(u"multi-line"_s) == "true"_L1;
+}
+
+QString KoOdfForm::Text::echoChar() const
+{
+    return formAttribute(u"echo-char"_s);
+}
+
+void KoOdfForm::Text::setMaxLength(const QString &value)
+{
+    bool valid = false;
+    const int length = value.toInt(&valid);
+    if (value.isEmpty() || (valid && length >= 0)) {
+        setFormAttribute(u"max-length"_s, value);
+    }
+}
+
+void KoOdfForm::Text::setMultiLine(bool value)
+{
+    setFormAttribute(u"multi-line"_s, value ? u"true"_s : u"false"_s);
+}
+
+void KoOdfForm::Text::setEchoChar(const QString &value)
+{
+    setFormAttribute(u"echo-char"_s, value);
+}
+
+QString KoOdfForm::Number::minValue() const
+{
+    return formAttribute(u"min-value"_s);
+}
+
+QString KoOdfForm::Number::maxValue() const
+{
+    return formAttribute(u"max-value"_s);
+}
+
+QString KoOdfForm::Number::stepSize() const
+{
+    return formAttribute(u"step-size"_s);
+}
+
+void KoOdfForm::Number::setMinValue(const QString &value)
+{
+    bool valid = false;
+    value.toDouble(&valid);
+    if (value.isEmpty() || valid) {
+        setFormAttribute(u"min-value"_s, value);
+    }
+}
+
+void KoOdfForm::Number::setMaxValue(const QString &value)
+{
+    bool valid = false;
+    value.toDouble(&valid);
+    if (value.isEmpty() || valid) {
+        setFormAttribute(u"max-value"_s, value);
+    }
+}
+
+void KoOdfForm::Number::setStepSize(const QString &value)
+{
+    bool valid = false;
+    const double step = value.toDouble(&valid);
+    if (value.isEmpty() || (valid && step > 0)) {
+        setFormAttribute(u"step-size"_s, value);
+    }
+}
+
+bool KoOdfForm::Button::defaultButton() const
+{
+    return formAttribute(u"default-button"_s) == "true"_L1;
+}
+
+bool KoOdfForm::Button::toggle() const
+{
+    return formAttribute(u"toggle"_s) == "true"_L1;
+}
+
+void KoOdfForm::Button::setDefaultButton(bool value)
+{
+    setFormAttribute(u"default-button"_s, value ? u"true"_s : u"false"_s);
+}
+
+void KoOdfForm::Button::setToggle(bool value)
+{
+    setFormAttribute(u"toggle"_s, value ? u"true"_s : u"false"_s);
+}
+
+bool KoOdfForm::Checkbox::selected() const
+{
+    return formAttribute(u"current-selected"_s) == "true"_L1 || formAttribute(u"selected"_s) == "true"_L1 || formAttribute(u"current-state"_s) == "checked"_L1
+        || formAttribute(u"state"_s) == "checked"_L1;
+}
+
+bool KoOdfForm::Checkbox::tristate() const
+{
+    return formAttribute(u"tristate"_s) == "true"_L1;
+}
+
+void KoOdfForm::Checkbox::setSelected(bool value)
+{
+    setFormAttribute(u"selected"_s, value ? u"true"_s : u"false"_s);
+    setFormAttribute(u"current-selected"_s, value ? u"true"_s : u"false"_s);
+}
+
+void KoOdfForm::Checkbox::setTristate(bool value)
+{
+    setFormAttribute(u"tristate"_s, value ? u"true"_s : u"false"_s);
+}
+
+bool KoOdfForm::Combobox::autoComplete() const
+{
+    return formAttribute(u"autocomplete"_s) == "true"_L1;
+}
+
+void KoOdfForm::Combobox::setAutoComplete(bool value)
+{
+    setFormAttribute(u"autocomplete"_s, value ? u"true"_s : u"false"_s);
+}
+
+bool KoOdfForm::Listbox::multiple() const
+{
+    return formAttribute(u"multiple"_s) == "true"_L1;
+}
+
+bool KoOdfForm::Listbox::dropdown() const
+{
+    return formAttribute(u"dropdown"_s) == "true"_L1;
+}
+
+QString KoOdfForm::Listbox::listSource() const
+{
+    return formAttribute(u"list-source"_s);
+}
+
+void KoOdfForm::Listbox::setMultiple(bool value)
+{
+    setFormAttribute(u"multiple"_s, value ? u"true"_s : u"false"_s);
+}
+
+void KoOdfForm::Listbox::setDropdown(bool value)
+{
+    setFormAttribute(u"dropdown"_s, value ? u"true"_s : u"false"_s);
+}
+
+void KoOdfForm::Listbox::setListSource(const QString &value)
+{
+    setFormAttribute(u"list-source"_s, value);
+}
+
+QString KoOdfForm::Image::imageData() const
+{
+    return formAttribute(u"image-data"_s);
+}
+
+QString KoOdfForm::Image::imagePosition() const
+{
+    return formAttribute(u"image-position"_s);
+}
+
+QString KoOdfForm::Image::imageAlign() const
+{
+    return formAttribute(u"image-align"_s);
+}
+
+void KoOdfForm::Image::setImageData(const QString &value)
+{
+    setFormAttribute(u"image-data"_s, value);
+}
+
+void KoOdfForm::Image::setImagePosition(const QString &value)
+{
+    setFormAttribute(u"image-position"_s, value);
+}
+
+void KoOdfForm::Image::setImageAlign(const QString &value)
+{
+    setFormAttribute(u"image-align"_s, value);
 }
 bool KoOdfForm::Property::loadOdf(const KoXmlElement &e)
 {

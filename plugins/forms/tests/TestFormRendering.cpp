@@ -277,6 +277,29 @@ private Q_SLOTS:
         QCOMPARE(copy->formAttribute(u"for"_s), u"label2"_s);
     }
 
+    void specializedProperties()
+    {
+        KoOdfForm::Text text;
+        text.setMaxLength(u"12"_s);
+        text.setMultiLine(true);
+        text.setEchoChar(u"*"_s);
+        QCOMPARE(text.maxLength(), u"12"_s);
+        QVERIFY(text.multiLine());
+        QCOMPARE(text.echoChar(), u"*"_s);
+        text.setMaxLength(u"invalid"_s);
+        QCOMPARE(text.maxLength(), u"12"_s);
+
+        KoOdfForm::Number number;
+        number.setMinValue(u"1.5"_s);
+        number.setMaxValue(u"10"_s);
+        number.setStepSize(u"0.5"_s);
+        QCOMPARE(number.minValue(), u"1.5"_s);
+        QCOMPARE(number.maxValue(), u"10"_s);
+        QCOMPARE(number.stepSize(), u"0.5"_s);
+        number.setStepSize(u"0"_s);
+        QCOMPARE(number.stepSize(), u"0.5"_s);
+    }
+
     void checkStatesAndZoom()
     {
         auto form = loadForm(u"checkbox"_s, u"f:state='unchecked' f:current-state='checked' f:disabled='true'"_s);
