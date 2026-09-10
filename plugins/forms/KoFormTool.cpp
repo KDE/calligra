@@ -183,6 +183,12 @@ void KoFormTool::rebuildSpecificProperties()
             commitProperties();
         });
     };
+    addText(u"data-field"_s, i18nc("@label:form relationship", "Data field:"));
+    addText(u"linked-cell"_s, i18nc("@label:form relationship", "Linked cell:"));
+    addText(u"xforms-bind"_s, i18nc("@label:form relationship", "XForms binding:"));
+    if (m_shape->controlKind() == KoOdfForm::ControlKind::FixedText || m_shape->controlKind() == KoOdfForm::ControlKind::Frame) {
+        addText(u"for"_s, i18nc("@label:form relationship", "Target control:"));
+    }
     switch (m_shape->controlKind()) {
     case KoOdfForm::ControlKind::Text:
     case KoOdfForm::ControlKind::Textarea:
@@ -258,7 +264,17 @@ void KoFormTool::updateProperties()
     for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
         const QSignalBlocker blocker(it.value());
         if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
-            edit->setText(control ? control->formAttribute(it.key()) : QString());
+            if (!control) {
+                edit->clear();
+            } else if (it.key() == "data-field"_L1) {
+                edit->setText(control->dataField());
+            } else if (it.key() == "linked-cell"_L1) {
+                edit->setText(control->linkedCell());
+            } else if (it.key() == "xforms-bind"_L1) {
+                edit->setText(control->xformsBind());
+            } else {
+                edit->setText(control->formAttribute(it.key()));
+            }
         } else if (auto *box = qobject_cast<QComboBox *>(it.value())) {
             box->setCurrentIndex(control && control->formAttribute(it.key()) == "true"_L1);
         }
@@ -313,7 +329,15 @@ void KoFormTool::commitProperties()
         } else if (auto *box = qobject_cast<QComboBox *>(it.value())) {
             value = box->currentData().toBool() ? u"true"_s : u"false"_s;
         }
-        properties.setFormAttribute(it.key(), value);
+        if (it.key() == "data-field"_L1) {
+            properties.setDataField(value);
+        } else if (it.key() == "linked-cell"_L1) {
+            properties.setLinkedCell(value);
+        } else if (it.key() == "xforms-bind"_L1) {
+            properties.setXformsBind(value);
+        } else {
+            properties.setFormAttribute(it.key(), value);
+        }
     }
     if (m_entries) {
         const auto oldEntries = before->entries();
