@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2026-08-16 16:11+0200\n"
 "Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1364,37 +1364,37 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Deutsches KDE-Übersetzungsteam"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr "Kopie"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "Standard"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, kde-format
 msgid "Document Title"
 msgstr "Dokumenttitel"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 1"
 msgstr "Überschrift 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 2"
 msgstr "Überschrift 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Head 3"
 msgstr "Überschrift 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, kde-format
 msgid "Bullet List"
 msgstr "Aufzählungszeichen"

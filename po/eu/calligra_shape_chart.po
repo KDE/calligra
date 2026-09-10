@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2024-08-31 18:57+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -216,7 +216,7 @@ msgstr "Azpititulua"
 msgid "Footer"
 msgstr "Orri-oina"
 
-#: ChartShape.cpp:752
+#: ChartShape.cpp:754
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -225,17 +225,17 @@ msgstr ""
 "Dokumentu honek urrutiko dokumentu baterako kanpoko esteka bat du\n"
 "%1"
 
-#: ChartShape.cpp:753
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Baieztatzea beharrezkoa da"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:756
 #, kde-format
 msgid "Download"
 msgstr "Zama-jaitsi"
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:757
 #, kde-format
 msgid "Skip"
 msgstr "Saihestu"

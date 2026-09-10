@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-20 00:44+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2025-10-05 12:19+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -126,22 +126,22 @@ msgstr "لم يستطع فتح الملف المطلوب %1"
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "لم يستطع قراءة دليل ZIP للملف المطلوب %1"
 
-#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
+#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:452
 #, kde-format
 msgid "Enter password"
 msgstr "أدخل كلمة السر"
 
-#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
+#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:453
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr "هذا المستند مُعمَّى، رجاء أدخل كلمة السر لفك تعميته:"
 
-#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
+#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:454
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr "كلمة سر غير صحيحة، رجاء أدخل كلمة السر لفك تعمية هذا المستند:"
 
-#: libmsooxml/MsooXmlImport.cpp:624
+#: libmsooxml/MsooXmlImport.cpp:632
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "لم يستطع إيجاد مسار للنوع %1"

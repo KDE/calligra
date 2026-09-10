@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2026-05-29 17:09-0400\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -18,37 +18,37 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.9\n"
 
-#: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
+#: ChapterVariable.cpp:195 UserVariableOptionsWidget.cpp:56
 #, kde-format
 msgid "Format:"
 msgstr "فورمات:"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number"
 msgstr "نومۇرى"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Name"
 msgstr "ئاتى"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number and name"
 msgstr "نومۇرى ۋە ئاتى"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number without separator"
 msgstr "ئايرىغۇچ يوق نومۇر"
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:201
 #, kde-format
 msgid "Number and name without separator"
 msgstr "ئايرىغۇچ يوق نومۇرى ۋە ئاتى"
 
-#: ChapterVariable.cpp:211
+#: ChapterVariable.cpp:205
 #, kde-format
 msgid "Level:"
 msgstr "دەرىجە:"

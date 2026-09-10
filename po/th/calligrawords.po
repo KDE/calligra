@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2008-04-29 13:35+0700\n"
 "Last-Translator:  <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -1389,37 +1389,37 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "ถนอมทรัพย์ นพบูรณ์"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr ""
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr ""
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, fuzzy, kde-format
 msgid "Document Title"
 msgstr "เก็บค่าที่ตั้งไว้"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, fuzzy, kde-format
 msgid "Head 1"
 msgstr "กรอบ"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, fuzzy, kde-format
 msgid "Head 2"
 msgstr "กรอบ"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, fuzzy, kde-format
 msgid "Head 3"
 msgstr "กรอบ"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, kde-format
 msgid "Bullet List"
 msgstr ""

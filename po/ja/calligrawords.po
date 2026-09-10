@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2014-11-29 23:33-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -1371,37 +1371,37 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Taiki Komoda,Noboru Sinohara,Yukiko Bando"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr "コピー"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "標準"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, kde-format
 msgid "Document Title"
 msgstr "文書のタイトル"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 1"
 msgstr "見出し 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 2"
 msgstr "見出し 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Head 3"
 msgstr "見出し 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, kde-format
 msgid "Bullet List"
 msgstr "ビュレットリスト"

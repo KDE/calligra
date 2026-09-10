@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2024-08-25 15:42+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -40,37 +40,37 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Cambiar as filas"
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Engadir texto"
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Inserir unha fila"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Retirar a fila"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Inserir unha columna"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Retirar a columna"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Inserir elementos de fórmula."
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "Retirar elementos de fórmula"
@@ -149,7 +149,7 @@ msgstr "Cargar…"
 msgid "Save..."
 msgstr "Gardar…"
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -158,17 +158,17 @@ msgstr ""
 "Este documento contén unha ligazón a un documento externo\n"
 "%1"
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Requírese confirmación"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr "Descargar"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr "Omitir"

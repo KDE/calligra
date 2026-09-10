@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2009-04-22 00:14+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -42,47 +42,47 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr ""
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr ""
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 #, fuzzy
 #| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "जोडू"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 #, fuzzy
 #| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "जोडू"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 #, fuzzy
 #| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "जोडू"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 #, fuzzy
 #| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "जोडू"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 #, fuzzy
 #| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "जोडू"
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 #, fuzzy
 #| msgid "Insert"
 msgctxt "(qtundo-format)"
@@ -167,24 +167,24 @@ msgstr ""
 msgid "Save..."
 msgstr "सहेजू..."
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr ""
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr ""
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr ""

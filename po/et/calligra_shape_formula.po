@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2019-12-15 22:52+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -38,37 +38,37 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Muuda ridu"
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Lisa tekst"
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Lisa rida"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Eemalda rida"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Lisa veerg"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Eemalda veerg"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Lisa valemi elemente"
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "Eemalda valemi elemendid"
@@ -152,7 +152,7 @@ msgstr "Laadi..."
 msgid "Save..."
 msgstr "Salvesta..."
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -161,17 +161,17 @@ msgstr ""
 "See dokument sisaldab välist linki mujal asuvale dokumendile\n"
 "%1"
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Kinnituse nõudmine"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr "Laadi alla"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr "Jäta vahele"

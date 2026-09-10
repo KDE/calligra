@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2013-07-24 03:15+0300\n"
 "Last-Translator: Liudas Ališauskas <liudas@akmc.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -40,37 +40,37 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Keisti eilutes"
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Pridėti tekstą"
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Įterpti eilutę"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Pašalinti eilutę"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Įterpti stulpelį"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Pašalinti stulpelį"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Įterpti formulės elementus."
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "Pašalinti formulės elementus"
@@ -154,7 +154,7 @@ msgstr "Įkelti..."
 msgid "Save..."
 msgstr "Išsaugoti..."
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -163,17 +163,17 @@ msgstr ""
 "Šiame dokumente yra išorinė nuoroda į nuotolinį dokumentą\n"
 "%1"
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Reikia patvirtinimo"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr "Atsisiųsti"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr "Praleisti"

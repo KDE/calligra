@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2021-06-06 19:42+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -18,37 +18,37 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 20.12.3\n"
 
-#: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
+#: ChapterVariable.cpp:195 UserVariableOptionsWidget.cpp:56
 #, kde-format
 msgid "Format:"
 msgstr "형식:"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number"
 msgstr "숫자"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Name"
 msgstr "이름"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number and name"
 msgstr ""
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number without separator"
 msgstr ""
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:201
 #, kde-format
 msgid "Number and name without separator"
 msgstr ""
 
-#: ChapterVariable.cpp:211
+#: ChapterVariable.cpp:205
 #, kde-format
 msgid "Level:"
 msgstr "단계:"

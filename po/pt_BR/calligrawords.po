@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2025-02-08 10:52-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1364,37 +1364,37 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Marcus Gama, Aracele Torres, André Marcelo Alvarenga"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr "Copiar"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "Padrão"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, kde-format
 msgid "Document Title"
 msgstr "Título do documento"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 1"
 msgstr "Cabeçalho 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 2"
 msgstr "Cabeçalho 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Head 3"
 msgstr "Cabeçalho 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, kde-format
 msgid "Bullet List"
 msgstr "Lista com marcadores"

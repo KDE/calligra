@@ -1,7 +1,7 @@
 # translation of kword.po to Slovenian
 # Translation of kword.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrawords.po 1723087 2025-11-17 12:44:32Z scripty $
+# $Id: calligrawords.po 1746075 2026-09-10 01:32:43Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 2000.
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2024-08-25 08:04+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1367,37 +1367,37 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Marko Samastur,Gregor Rakar,Roman Maurer,Andrej Vernekar,Matjaž Jeran"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "Standardno"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, kde-format
 msgid "Document Title"
 msgstr "Naslov dokumenta"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 1"
 msgstr "Naslov 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 2"
 msgstr "Naslov 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Head 3"
 msgstr "Naslov 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, kde-format
 msgid "Bullet List"
 msgstr "Seznam z alinejami"

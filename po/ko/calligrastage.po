@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2022-04-16 21:34+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -419,39 +419,39 @@ msgstr "현재 슬라이드 %1/%2"
 msgid "End of Slide Show"
 msgstr "슬라이드 쇼의 끝"
 
-#: part/KPrShapeAnimations.cpp:191
+#: part/KPrShapeAnimations.cpp:210
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:215
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr "마우스 클릭 시 시작"
 
-#: part/KPrShapeAnimations.cpp:193
+#: part/KPrShapeAnimations.cpp:212
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
 msgstr "이전 애니메이션 이후 시작"
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:214
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
 msgstr "이전 애니메이션과 같이 시작"
 
-#: part/KPrShapeAnimations.cpp:206
+#: part/KPrShapeAnimations.cpp:225
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr "%1초 후에 시작합니다. 지속 시간은 %2초입니다."
 
-#: part/KPrShapeAnimations.cpp:225
+#: part/KPrShapeAnimations.cpp:244
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, kde-format
 msgid "Animation"
 msgstr "애니메이션"
 
-#: part/KPrShapeAnimations.cpp:229
+#: part/KPrShapeAnimations.cpp:248
 #, kde-format
 msgid "Shape"
 msgstr "도형"

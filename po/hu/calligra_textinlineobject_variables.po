@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2012-06-28 22:48+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -18,37 +18,37 @@ msgstr ""
 "X-Generator: Lokalize 1.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
+#: ChapterVariable.cpp:195 UserVariableOptionsWidget.cpp:56
 #, kde-format
 msgid "Format:"
 msgstr "Formátum:"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number"
 msgstr "Szám"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Name"
 msgstr "Név"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number and name"
 msgstr "Szám és név"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number without separator"
 msgstr "Szám elválasztó nélkül"
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:201
 #, kde-format
 msgid "Number and name without separator"
 msgstr "Szám és név elválasztó nélkül"
 
-#: ChapterVariable.cpp:211
+#: ChapterVariable.cpp:205
 #, kde-format
 msgid "Level:"
 msgstr "Szint:"

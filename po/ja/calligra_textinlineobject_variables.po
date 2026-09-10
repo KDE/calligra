@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2014-11-15 03:12-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -21,37 +21,37 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
+#: ChapterVariable.cpp:195 UserVariableOptionsWidget.cpp:56
 #, kde-format
 msgid "Format:"
 msgstr "書式:"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number"
 msgstr "数値"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Name"
 msgstr "名前"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number and name"
 msgstr "数値と名前"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number without separator"
 msgstr "セパレータを除いた数字"
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:201
 #, kde-format
 msgid "Number and name without separator"
 msgstr "セパレータを除いた数字と名前"
 
-#: ChapterVariable.cpp:211
+#: ChapterVariable.cpp:205
 #, kde-format
 msgid "Level:"
 msgstr "レベル:"

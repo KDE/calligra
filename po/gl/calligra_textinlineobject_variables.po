@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VariablesPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2023-09-03 14:12+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -20,37 +20,37 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 23.04.3\n"
 
-#: ChapterVariable.cpp:201 UserVariableOptionsWidget.cpp:56
+#: ChapterVariable.cpp:195 UserVariableOptionsWidget.cpp:56
 #, kde-format
 msgid "Format:"
 msgstr "Formato:"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number"
 msgstr "Número"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Name"
 msgstr "Nome"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number and name"
 msgstr "Número e nome"
 
-#: ChapterVariable.cpp:206
+#: ChapterVariable.cpp:200
 #, kde-format
 msgid "Number without separator"
 msgstr "Número sen separador"
 
-#: ChapterVariable.cpp:207
+#: ChapterVariable.cpp:201
 #, kde-format
 msgid "Number and name without separator"
 msgstr "Número e nome sen separador"
 
-#: ChapterVariable.cpp:211
+#: ChapterVariable.cpp:205
 #, kde-format
 msgid "Level:"
 msgstr "Nivel:"

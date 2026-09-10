@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2024-12-24 20:39+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -214,7 +214,7 @@ msgstr "उपशीर्षकम्"
 msgid "Footer"
 msgstr "पादलेखः"
 
-#: ChartShape.cpp:752
+#: ChartShape.cpp:754
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -223,17 +223,17 @@ msgstr ""
 "अस्मिन् दस्तावेजे दूरस्थदस्तावेजस्य बाह्यलिङ्कः अस्ति\n"
 "%1"
 
-#: ChartShape.cpp:753
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Confirmation Required"
 msgstr "पुष्टिकरणम् आवश्यकम्"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:756
 #, kde-format
 msgid "Download"
 msgstr "अवाहरन"
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:757
 #, kde-format
 msgid "Skip"
 msgstr "क्षिपते"

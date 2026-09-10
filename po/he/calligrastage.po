@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrastage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2025-10-05 12:17+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -434,39 +434,39 @@ msgstr "שקופית נוכחית %1 מתוך %2"
 msgid "End of Slide Show"
 msgstr "סוף מצגת השקופיות"
 
-#: part/KPrShapeAnimations.cpp:191
+#: part/KPrShapeAnimations.cpp:210
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:215
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr "התחלה בלחיצת עכבר"
 
-#: part/KPrShapeAnimations.cpp:193
+#: part/KPrShapeAnimations.cpp:212
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
 msgstr "התחלה אחרי ההנפשה הקודמת"
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:214
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
 msgstr "התחלה עם ההנפשה הקודמת"
 
-#: part/KPrShapeAnimations.cpp:206
+#: part/KPrShapeAnimations.cpp:225
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr "להתחיל לאחר %1 שניות. משך של %2 שניות."
 
-#: part/KPrShapeAnimations.cpp:225
+#: part/KPrShapeAnimations.cpp:244
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, kde-format
 msgid "Animation"
 msgstr "הנפשה"
 
-#: part/KPrShapeAnimations.cpp:229
+#: part/KPrShapeAnimations.cpp:248
 #, kde-format
 msgid "Shape"
 msgstr "צורה"

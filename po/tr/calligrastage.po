@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2026-05-06 00:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -430,39 +430,39 @@ msgstr "Geçerli Slayt %1/%2"
 msgid "End of Slide Show"
 msgstr "Slayt Gösterisinin Sonu"
 
-#: part/KPrShapeAnimations.cpp:191
+#: part/KPrShapeAnimations.cpp:210
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:215
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr "fare tıklamasıyla başlat"
 
-#: part/KPrShapeAnimations.cpp:193
+#: part/KPrShapeAnimations.cpp:212
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
 msgstr "önceki canlandırmadan sonra başlat"
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:214
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
 msgstr "önceki canlandırmayla birlikte başlat"
 
-#: part/KPrShapeAnimations.cpp:206
+#: part/KPrShapeAnimations.cpp:225
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr "%1 saniye sonra başlat. %2 saniye süresince."
 
-#: part/KPrShapeAnimations.cpp:225
+#: part/KPrShapeAnimations.cpp:244
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, kde-format
 msgid "Animation"
 msgstr "Canlandır"
 
-#: part/KPrShapeAnimations.cpp:229
+#: part/KPrShapeAnimations.cpp:248
 #, kde-format
 msgid "Shape"
 msgstr "Şekil"

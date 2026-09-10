@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2008-11-26 17:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
@@ -202,24 +202,24 @@ msgstr ""
 msgid "Footer"
 msgstr ""
 
-#: ChartShape.cpp:752
+#: ChartShape.cpp:754
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
 
-#: ChartShape.cpp:753
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Confirmation Required"
 msgstr ""
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:756
 #, kde-format
 msgid "Download"
 msgstr ""
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:757
 #, kde-format
 msgid "Skip"
 msgstr ""

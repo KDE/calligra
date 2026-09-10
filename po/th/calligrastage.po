@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2008-04-29 15:06+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -453,14 +453,14 @@ msgstr "การนำเสนอภาพนิ่งปัจจุบัน
 msgid "End of Slide Show"
 msgstr "นำเสนอภาพนิ่ง"
 
-#: part/KPrShapeAnimations.cpp:191
+#: part/KPrShapeAnimations.cpp:210
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:215
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:193
+#: part/KPrShapeAnimations.cpp:212
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, fuzzy, kde-format
@@ -468,7 +468,7 @@ msgstr ""
 msgid "start after previous animation"
 msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:214
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, fuzzy, kde-format
@@ -476,19 +476,19 @@ msgstr "สร้างการเคลื่อนไหวของการ
 msgid "start with previous animation"
 msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
 
-#: part/KPrShapeAnimations.cpp:206
+#: part/KPrShapeAnimations.cpp:225
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr ""
 
-#: part/KPrShapeAnimations.cpp:225
+#: part/KPrShapeAnimations.cpp:244
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, fuzzy, kde-format
 #| msgid "Create Appear Animation"
 msgid "Animation"
 msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
 
-#: part/KPrShapeAnimations.cpp:229
+#: part/KPrShapeAnimations.cpp:248
 #, kde-format
 msgid "Shape"
 msgstr "รูปร่าง"

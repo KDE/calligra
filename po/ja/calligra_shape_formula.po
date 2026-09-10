@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2015-06-23 23:44-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -39,37 +39,37 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "行を変更"
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "テキストを追加"
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "行を挿入"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "行を削除"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "列を挿入"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "列を削除"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "数式要素を挿入。"
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "数式要素を削除"
@@ -153,7 +153,7 @@ msgstr "読み込み..."
 msgid "Save..."
 msgstr "保存..."
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -162,17 +162,17 @@ msgstr ""
 "このドキュメントはリモートドキュメントへの外部リンクを含みます\n"
 "%1"
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr "確認が必要です"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr "ダウンロード"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr "スキップ"

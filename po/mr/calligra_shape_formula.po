@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2013-03-11 15:42+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -39,41 +39,41 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr ""
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr ""
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 #, fuzzy
 #| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "अंतर्भूत करा"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr ""
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 #, fuzzy
 #| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "अंतर्भूत करा"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr ""
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr ""
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr ""
@@ -156,24 +156,24 @@ msgstr "लोड..."
 msgid "Save..."
 msgstr "साठवा..."
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr "खात्री आवश्यक आहे"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr "डाउनलोड"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr "वगळा"

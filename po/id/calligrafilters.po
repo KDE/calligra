@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-20 00:44+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2022-09-27 18:25+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -126,24 +126,24 @@ msgstr "Tidak bisa membuka file %1 yang diminta"
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "Tidak bisa membaca direktori ZIP-nya file %1 yang diminta"
 
-#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
+#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:452
 #, kde-format
 msgid "Enter password"
 msgstr "Masukkan sandi"
 
-#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
+#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:453
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr ""
 "Dokumen ini telah dienkripsi, mohon masukkan sandi untuk mendekripsinya:"
 
-#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
+#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:454
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr ""
 "Sandi tak benar, mohon masukkan sandi untuk mendekripsikan dokumen ini:"
 
-#: libmsooxml/MsooXmlImport.cpp:624
+#: libmsooxml/MsooXmlImport.cpp:632
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "Tidak bisa menemukan alur untuk tipe %1"

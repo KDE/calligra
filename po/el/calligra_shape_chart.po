@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2020-10-11 13:48+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -218,7 +218,7 @@ msgstr "Υπότιτλος"
 msgid "Footer"
 msgstr "Υποσέλιδο"
 
-#: ChartShape.cpp:752
+#: ChartShape.cpp:754
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -228,17 +228,17 @@ msgstr ""
 "έγγραφο\n"
 "%1"
 
-#: ChartShape.cpp:753
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Απαιτείται επιβεβαίωση"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:756
 #, kde-format
 msgid "Download"
 msgstr "Λήψη"
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:757
 #, kde-format
 msgid "Skip"
 msgstr "Παράλειψη"

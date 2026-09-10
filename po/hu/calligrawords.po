@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2025-11-07 21:24+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1359,37 +1359,37 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Kiszel Kristóf,Úr Balázs"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr "Másolás"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr "Standard"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, kde-format
 msgid "Document Title"
 msgstr "Dokumentumcím"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 1"
 msgstr "Fejléc 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 2"
 msgstr "Fejléc 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Head 3"
 msgstr "Fejléc 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, kde-format
 msgid "Bullet List"
 msgstr "Felsorolásjeles lista"

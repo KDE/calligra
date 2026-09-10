@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2024-08-30 12:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -41,37 +41,37 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Satırları değiştir"
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Metin ekle"
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Satır ekle"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Satırı sil"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Sütun ekle"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Sütunu sil"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Formül ögeleri ekle."
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
 msgstr "Formül ögeleri kaldır"
@@ -150,7 +150,7 @@ msgstr "Yükle…"
 msgid "Save..."
 msgstr "Kaydet…"
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -159,17 +159,17 @@ msgstr ""
 "Bu belge, uzak bir belgeye bir dış bağlantı içeriyor\n"
 "%1"
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Onay Gerekiyor"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr "İndir"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr "Atla"

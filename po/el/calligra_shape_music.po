@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MusicShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2017-04-29 00:28+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -531,12 +531,12 @@ msgctxt "@title:window"
 msgid "Import"
 msgstr "Εισαγωγή"
 
-#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:762
 #, kde-format
 msgid "MusicXML files (*.xml)"
 msgstr "MusicXML αρχεία (*.xml)"
 
-#: SimpleEntryTool.cpp:761
+#: SimpleEntryTool.cpp:762
 #, kde-format
 msgctxt "@title:window"
 msgid "Export"

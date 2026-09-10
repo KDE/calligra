@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2008-01-01 23:07+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -132,7 +132,7 @@ msgctxt "(qtundo-format)"
 msgid "Combine paths"
 msgstr "Іншая таўшчыня лініі"
 
-#: flake/commands/KoPathControlPointMoveCommand.cpp:27
+#: flake/commands/KoPathControlPointMoveCommand.cpp:32
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move control point"
@@ -155,8 +155,8 @@ msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "Палі"
 
-#: flake/commands/KoPathPointMoveCommand.cpp:31
-#: flake/commands/KoPathPointMoveCommand.cpp:47
+#: flake/commands/KoPathPointMoveCommand.cpp:36
+#: flake/commands/KoPathPointMoveCommand.cpp:52
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move points"
@@ -302,9 +302,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr "Змяніць табуляцыю"
 
-#: flake/commands/KoShapeShadowCommand.cpp:55
-#: flake/commands/KoShapeShadowCommand.cpp:72
-#: flake/commands/KoShapeShadowCommand.cpp:83
+#: flake/commands/KoShapeShadowCommand.cpp:59
+#: flake/commands/KoShapeShadowCommand.cpp:76
+#: flake/commands/KoShapeShadowCommand.cpp:87
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
@@ -322,9 +322,9 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Паменшыць памер"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:59
-#: flake/commands/KoShapeStrokeCommand.cpp:76
-#: flake/commands/KoShapeStrokeCommand.cpp:87
+#: flake/commands/KoShapeStrokeCommand.cpp:63
+#: flake/commands/KoShapeStrokeCommand.cpp:80
+#: flake/commands/KoShapeStrokeCommand.cpp:91
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
@@ -687,25 +687,25 @@ msgstr "..."
 msgid "Convert To Path"
 msgstr "Пераўтварыць у грэцкія знакі"
 
-#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1129
 #, fuzzy, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
 msgstr "Чырвоны"
 
-#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1129
 #: main/KoUndoStackAction.cpp:41
 #, fuzzy, kde-format
 msgid "Undo %1"
 msgstr "Чырвоны"
 
-#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1153
 #, fuzzy, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
 msgstr "Чырвоны"
 
-#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1153
 #: main/KoUndoStackAction.cpp:41
 #, fuzzy, kde-format
 msgid "Redo %1"
@@ -716,13 +716,13 @@ msgstr "Чырвоны"
 msgid "<empty>"
 msgstr ""
 
-#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
+#: kundo2/kundo2stack.cpp:1409 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
 #, fuzzy, kde-format
 msgid "Redo"
 msgstr "Чырвоны"
 
-#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1433
+#: kundo2/kundo2stack.cpp:1428 main/KoMainWindow.cpp:1433
 #: main/KoUndoStackAction.cpp:25
 #, fuzzy, kde-format
 msgid "Undo"
@@ -964,17 +964,17 @@ msgstr "Заўсёды адчыняць гэты шаблон пры запус�
 msgid "Always use this template"
 msgstr "Заўсёды выкарыстаць гэты шаблон"
 
-#: main/KoDocument.cpp:550
+#: main/KoDocument.cpp:552
 #, fuzzy, kde-format
 msgid "Making backup..."
 msgstr "Стварэнне рэзервовай копіі..."
 
-#: main/KoDocument.cpp:565
+#: main/KoDocument.cpp:567
 #, fuzzy, kde-format
 msgid "Saving..."
 msgstr "Запіс..."
 
-#: main/KoDocument.cpp:593
+#: main/KoDocument.cpp:595
 #, fuzzy, kde-format
 msgid ""
 "Could not save\n"
@@ -983,7 +983,7 @@ msgstr ""
 "Не атрымоўваецца захаваць\n"
 "%1"
 
-#: main/KoDocument.cpp:595
+#: main/KoDocument.cpp:597
 #, fuzzy, kde-format
 msgid ""
 "Could not save %1\n"
@@ -992,50 +992,50 @@ msgstr ""
 "Не атрымоўваецца захаваць %1\n"
 "Чыннік: %2"
 
-#: main/KoDocument.cpp:623
+#: main/KoDocument.cpp:625
 #, fuzzy, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "Назоў дакумента"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:713
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:716
 #, fuzzy, kde-format
 msgid "Autosaving..."
 msgstr "Аўтазахаванне..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:728
 #, fuzzy, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Адбылася памылка пры аўтазахаванні. Магчыма, дыск перапоўнены."
 
-#: main/KoDocument.cpp:814
+#: main/KoDocument.cpp:816
 #, fuzzy, kde-format
 msgid "Could not create the file for saving"
 msgstr "Не атрымоўваецца адкрыць файл для запісу"
 
-#: main/KoDocument.cpp:858 main/KoDocument.cpp:880 main/KoDocument.cpp:910
-#: main/KoDocument.cpp:944
+#: main/KoDocument.cpp:860 main/KoDocument.cpp:882 main/KoDocument.cpp:912
+#: main/KoDocument.cpp:946
 #, fuzzy, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Не атрымоўваецца захаваць '%1'. Магчыма, дыск перапоўнены."
 
-#: main/KoDocument.cpp:865
+#: main/KoDocument.cpp:867
 #, fuzzy, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Не атрымоўваецца захаваць '%1'. Магчыма, дыск перапоўнены."
 
-#: main/KoDocument.cpp:873 main/KoDocument.cpp:919 main/KoDocument.cpp:1977
+#: main/KoDocument.cpp:875 main/KoDocument.cpp:921 main/KoDocument.cpp:1980
 #, fuzzy, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Не атрымоўваецца захаваць '%1'. Магчыма, дыск перапоўнены."
 
-#: main/KoDocument.cpp:1219
+#: main/KoDocument.cpp:1222
 #, fuzzy, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1044,7 +1044,7 @@ msgstr ""
 "Некарэктны URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1235
+#: main/KoDocument.cpp:1238
 #, fuzzy, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1053,102 +1053,102 @@ msgstr ""
 "Існуе аўтазахаванне гэтага дакумента.\n"
 "Адкрыць аўтазахаванне?"
 
-#: main/KoDocument.cpp:1311 main/KoDocument.cpp:1672 main/KoMainWindow.cpp:673
+#: main/KoDocument.cpp:1314 main/KoDocument.cpp:1675 main/KoMainWindow.cpp:673
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файл %1 не існуе."
 
-#: main/KoDocument.cpp:1435
+#: main/KoDocument.cpp:1438
 #, fuzzy, kde-format
 msgid "Opening Document"
 msgstr "Адкрыць дакумент"
 
-#: main/KoDocument.cpp:1451
+#: main/KoDocument.cpp:1454
 #, fuzzy, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Не атрымоўваецца адкрыць файл для запісу"
 
-#: main/KoDocument.cpp:1455
+#: main/KoDocument.cpp:1458
 #, fuzzy, kde-format
 msgid "Could not create the output document"
 msgstr "Не атрымоўваецца адкрыць файл для запісу"
 
-#: main/KoDocument.cpp:1459
+#: main/KoDocument.cpp:1462
 #, fuzzy, kde-format
 msgid "File not found"
 msgstr "Файл не знойдзены"
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1466
 #, fuzzy, kde-format
 msgid "Cannot create storage"
 msgstr "Немагчыма захаваць дадзеныя"
 
-#: main/KoDocument.cpp:1467
+#: main/KoDocument.cpp:1470
 #, fuzzy, kde-format
 msgid "Bad MIME type"
 msgstr "Няправільны тып MIME"
 
-#: main/KoDocument.cpp:1471
+#: main/KoDocument.cpp:1474
 #, fuzzy, kde-format
 msgid "Error in embedded document"
 msgstr "Памылка ва ўкаранёным дакуменце"
 
-#: main/KoDocument.cpp:1475
+#: main/KoDocument.cpp:1478
 #, fuzzy, kde-format
 msgid "Format not recognized"
 msgstr "Недапушчальны фармат"
 
-#: main/KoDocument.cpp:1479
+#: main/KoDocument.cpp:1482
 #, fuzzy, kde-format
 msgid "Not implemented"
 msgstr "Не рэалізавана"
 
-#: main/KoDocument.cpp:1483
+#: main/KoDocument.cpp:1486
 #, fuzzy, kde-format
 msgid "Parsing error"
 msgstr "Памылка разбору"
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1490
 #, fuzzy, kde-format
 msgid "Document is password protected"
 msgstr "Дакумент абаронены паролем"
 
-#: main/KoDocument.cpp:1491
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Invalid file format"
 msgstr ""
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1502
 #, fuzzy, kde-format
 msgid "Internal error"
 msgstr "Унутраная памылка"
 
-#: main/KoDocument.cpp:1503
+#: main/KoDocument.cpp:1506
 #, fuzzy, kde-format
 msgid "Out of memory"
 msgstr "Бракуе памяці"
 
-#: main/KoDocument.cpp:1507
+#: main/KoDocument.cpp:1510
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1511
+#: main/KoDocument.cpp:1514
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1518
 #, kde-format
 msgid "Failed to download remote file"
 msgstr ""
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1527
 #, fuzzy, kde-format
 msgid "Unknown error"
 msgstr "Невядомая памылка"
 
-#: main/KoDocument.cpp:1529
+#: main/KoDocument.cpp:1532
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1159,18 +1159,18 @@ msgstr ""
 "%1\n"
 "Чыннік: %2"
 
-#: main/KoDocument.cpp:1587
+#: main/KoDocument.cpp:1590
 #, fuzzy, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Назоў дакумента"
 
-#: main/KoDocument.cpp:1644 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1647 odf/KoOdfReadStore.cpp:98
 #: odf/KoOdfReadStore.cpp:143
 #, kde-format
 msgid "Could not find %1"
 msgstr "Не атрымалася знайсці %1"
 
-#: main/KoDocument.cpp:1656
+#: main/KoDocument.cpp:1659
 #, fuzzy, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1179,22 +1179,22 @@ msgstr ""
 "Памылка апрацоўкі файла %1 у радку %2, пазіцыі %3\n"
 "Паведамленне аб памылцы: %4"
 
-#: main/KoDocument.cpp:1679
+#: main/KoDocument.cpp:1682
 #, fuzzy, kde-format
 msgid "%1 is not a file."
 msgstr "%1 не з'яўляецца файлам."
 
-#: main/KoDocument.cpp:1694
+#: main/KoDocument.cpp:1697
 #, fuzzy, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Не атрымоўваецца адкрыць файл для чытання (праверце правы на чытанне)."
 
-#: main/KoDocument.cpp:1705
+#: main/KoDocument.cpp:1708
 #, fuzzy, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Не атрымоўваецца прачытаць загаловак файла."
 
-#: main/KoDocument.cpp:1736
+#: main/KoDocument.cpp:1739
 #, fuzzy, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1203,30 +1203,30 @@ msgstr ""
 "Памылка апрацоўкі дадзеных файла ў радку %1, калонцы %2\n"
 "Паведамленне аб памылцы: %3"
 
-#: main/KoDocument.cpp:1757
+#: main/KoDocument.cpp:1760
 #, fuzzy, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Няслушны фармат файла KOffice. %1"
 
-#: main/KoDocument.cpp:1838
+#: main/KoDocument.cpp:1841
 #, fuzzy, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Няслушны фармат дакумента: няма файла 'maindoc.xml'."
 
-#: main/KoDocument.cpp:1863
+#: main/KoDocument.cpp:1866
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2063 main/KoDocument.cpp:2517 main/KoDocument.cpp:2546
-#: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
+#: main/KoDocument.cpp:2066 main/KoDocument.cpp:2526 main/KoDocument.cpp:2555
+#: pigment/resources/KoColorSet.cpp:316 pigment/resources/KoColorSet.cpp:412
 #, fuzzy, kde-format
 msgid "Untitled"
 msgstr "Безназоўны"
 
-#: main/KoDocument.cpp:2066 main/KoMainWindow.cpp:1136
+#: main/KoDocument.cpp:2069 main/KoMainWindow.cpp:1136
 #, fuzzy, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1234,12 +1234,12 @@ msgid ""
 msgstr ""
 "<p>Дакумент <b>'%1'</b> быў зменены.</p><p>Вы жадаеце захаваць яго?</p>"
 
-#: main/KoDocument.cpp:2149
+#: main/KoDocument.cpp:2152
 #, fuzzy, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Унутраная памылка: не рэалізаваны метад saveXML"
 
-#: main/KoDocument.cpp:2182
+#: main/KoDocument.cpp:2185
 #, fuzzy, kde-format
 msgid ""
 "Could not open\n"
@@ -1248,7 +1248,7 @@ msgstr ""
 "Не атрымоўваецца адкрыць\n"
 "%1"
 
-#: main/KoDocument.cpp:2184
+#: main/KoDocument.cpp:2187
 #, fuzzy, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1257,32 +1257,32 @@ msgstr ""
 "Не атрымоўваецца адкрыць файл %1\n"
 "Чыннік: %2"
 
-#: main/KoDocument.cpp:2237
+#: main/KoDocument.cpp:2240
 #, fuzzy
 msgid "a word processing"
 msgstr "дакумент"
 
-#: main/KoDocument.cpp:2238
+#: main/KoDocument.cpp:2241
 #, fuzzy
 msgid "a spreadsheet"
 msgstr "электронная табліца"
 
-#: main/KoDocument.cpp:2239
+#: main/KoDocument.cpp:2242
 #, fuzzy
 msgid "a presentation"
 msgstr "прэзентацыя"
 
-#: main/KoDocument.cpp:2240
+#: main/KoDocument.cpp:2243
 #, fuzzy
 msgid "a chart"
 msgstr "дыяграма"
 
-#: main/KoDocument.cpp:2241
+#: main/KoDocument.cpp:2244
 #, fuzzy
 msgid "a drawing"
 msgstr "малюнак"
 
-#: main/KoDocument.cpp:2549
+#: main/KoDocument.cpp:2558
 #, fuzzy, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1290,7 +1290,7 @@ msgid ""
 msgstr ""
 "<p>Дакумент <b>'%1'</b> быў зменены.</p><p>Вы жадаеце захаваць яго?</p>"
 
-#: main/KoDocument.cpp:2552
+#: main/KoDocument.cpp:2561
 #, fuzzy, kde-format
 msgid "Close Document"
 msgstr "Іншы дакумент"
@@ -1320,7 +1320,7 @@ msgstr "Не атрымоўваецца экспартаваць файл."
 msgid "Missing Export Filter"
 msgstr "Адсутнічае фільтр экспарту"
 
-#: main/KoFilterManager.cpp:538
+#: main/KoFilterManager.cpp:546
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1329,7 +1329,7 @@ msgstr ""
 "Не атрымліваецца імпартаваць файл тыпу\n"
 "%1"
 
-#: main/KoFilterManager.cpp:541
+#: main/KoFilterManager.cpp:549
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Адсутнічае фільтр імпарту"
@@ -1518,17 +1518,17 @@ msgstr "Экспарт..."
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
+#: main/KoMainWindow.cpp:1616 pageapp/KoPADocumentStructureDocker.cpp:102
 #, fuzzy, kde-format
 msgid "Document"
 msgstr "Дакумент"
 
-#: main/KoMainWindow.cpp:1621
+#: main/KoMainWindow.cpp:1624
 #, fuzzy, kde-format
 msgid "Document - %1"
 msgstr "Дакумента - %1"
 
-#: main/KoMainWindow.cpp:1651
+#: main/KoMainWindow.cpp:1654
 #, fuzzy, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1537,17 +1537,17 @@ msgstr ""
 "Усё змены будуць згубленыя!\n"
 "Вы жадаеце працягнуць?"
 
-#: main/KoMainWindow.cpp:1653
+#: main/KoMainWindow.cpp:1656
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Папярэджанне"
 
-#: main/KoMainWindow.cpp:2016
+#: main/KoMainWindow.cpp:2019
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Паказаць панель прылад %1 "
 
-#: main/KoMainWindow.cpp:2018
+#: main/KoMainWindow.cpp:2021
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Схаваць панель прылад %1 "
@@ -1763,7 +1763,7 @@ msgstr "Дата і час"
 msgid "Saved By"
 msgstr "Захаваны"
 
-#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:208
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:209
 #, kde-format
 msgid "Comment"
 msgstr "Каментар"
@@ -1788,7 +1788,7 @@ msgstr "&Адкрыць"
 msgid "A new version could not be added"
 msgstr ""
 
-#: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
+#: main/KoVersionDialog.cpp:221 main/KoVersionDialog.cpp:223
 #, kde-format
 msgid "Date: %1"
 msgstr "Дата: %1"
@@ -2572,7 +2572,7 @@ msgstr "Пацвердзіць запіс"
 msgid "Import Slideshow"
 msgstr "Імпарт стыляў"
 
-#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
+#: pageapp/KoPAView.cpp:536 pageapp/KoPAView.cpp:548 pageapp/KoPAView.cpp:551
 #, fuzzy, kde-format
 msgid ""
 "Could not import\n"
@@ -2581,7 +2581,7 @@ msgstr ""
 "Не атрымоўваецца адкрыць\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:659
+#: pageapp/KoPAView.cpp:663
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
@@ -3696,17 +3696,17 @@ msgid ""
 "Please try and save the document again to prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:736
+#: store/KoEncryptedStore.cpp:737
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:941
+#: store/KoEncryptedStore.cpp:943
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:956
+#: store/KoEncryptedStore.cpp:958
 #, fuzzy, kde-format
 msgid "Do you want to save the password?"
 msgstr "Выдаліць шаблон?"
@@ -3716,7 +3716,7 @@ msgstr "Выдаліць шаблон?"
 msgid "File '%1' is not readable"
 msgstr "Файл %1 не існуе."
 
-#: store/KoNetAccess.cpp:370
+#: store/KoNetAccess.cpp:372
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr ""
@@ -3753,9 +3753,9 @@ msgid "Delete"
 msgstr "Выдаліць"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
-#: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
-#: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
+#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:89
+#: text/KoTextEditor_undo.cpp:175 text/KoTextEditor_undo.cpp:213
+#: text/KoTextEditor_undo.cpp:242 text/KoTextEditor_undo.cpp:292
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Text"
@@ -3952,105 +3952,105 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "Падвойны"
 
-#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:182 text/KoTextEditor.cpp:1482
 #: text/KoTextEditor.cpp:1484
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "Звычайны тэкст абзаца"
 
-#: text/KoTextEditor.cpp:474
+#: text/KoTextEditor.cpp:476
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "Дадаць закладку"
 
-#: text/KoTextEditor.cpp:489
+#: text/KoTextEditor.cpp:491
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "Пазіцыя"
 
-#: text/KoTextEditor.cpp:513
+#: text/KoTextEditor.cpp:515
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "Уставіць тэкст"
 
-#: text/KoTextEditor.cpp:539
+#: text/KoTextEditor.cpp:541
 #, fuzzy
 #| msgid "Insert page"
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "Уставіць старонку"
 
-#: text/KoTextEditor.cpp:604
+#: text/KoTextEditor.cpp:605
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "Уставіць разрыў радкі"
 
-#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
-#: text/KoTextEditor.cpp:929
+#: text/KoTextEditor.cpp:913 text/KoTextEditor.cpp:915
+#: text/KoTextEditor.cpp:930
 #, fuzzy
 #| msgid "Insert page"
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "Уставіць старонку"
 
-#: text/KoTextEditor.cpp:1069
+#: text/KoTextEditor.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Палі"
 
-#: text/KoTextEditor.cpp:1086
+#: text/KoTextEditor.cpp:1087
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "Вертыкальна"
 
-#: text/KoTextEditor.cpp:1114
+#: text/KoTextEditor.cpp:1113
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "Іншая таўшчыня лініі"
 
-#: text/KoTextEditor.cpp:1130
+#: text/KoTextEditor.cpp:1129
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr ""
 
-#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
-#: text/KoTextEditor.cpp:1197
+#: text/KoTextEditor.cpp:1178 text/KoTextEditor.cpp:1180
+#: text/KoTextEditor.cpp:1198
 #, fuzzy
 #| msgid "Insert page"
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "Уставіць старонку"
 
-#: text/KoTextEditor.cpp:1236
+#: text/KoTextEditor.cpp:1237
 #, fuzzy
 #| msgid "Insert page"
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "Уставіць старонку"
 
-#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
-#: text/KoTextEditor.cpp:1274
+#: text/KoTextEditor.cpp:1254 text/KoTextEditor.cpp:1256
+#: text/KoTextEditor.cpp:1275
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "Уставіць разрыў радкі"
 
-#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
+#: text/KoTextEditor.cpp:1312 text/KoTextEditor.cpp:1314
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "Пазіцыя"
 
-#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
-#: text/KoTextEditor.cpp:1380
+#: text/KoTextEditor.cpp:1341 text/KoTextEditor.cpp:1343
+#: text/KoTextEditor.cpp:1381
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr ""
@@ -5294,13 +5294,13 @@ msgstr ""
 msgid "Undelete"
 msgstr "Выдаліць"
 
-#: widgets/KoToolBox.cpp:310
+#: widgets/KoToolBox.cpp:308
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "&Па прамоўчцы"
 
-#: widgets/KoToolBox.cpp:315
+#: widgets/KoToolBox.cpp:313
 #, kde-format
 msgid "%1x%2"
 msgstr ""

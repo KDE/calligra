@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2010-05-02 06:03+0200\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -42,49 +42,49 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Regen ännern"
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 #, fuzzy
 #| msgid "Add text"
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Text tofögen"
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 #, fuzzy
 #| msgid "Insert row"
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Reeg infögen"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 #, fuzzy
 #| msgid "Remove row"
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Reeg wegmaken"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 #, fuzzy
 #| msgid "Insert column"
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Striep infögen"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 #, fuzzy
 #| msgid "Remove column"
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Striep wegmaken"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 #, fuzzy
 #| msgid "Insert formula elements."
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Formelelementen infögen"
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 #, fuzzy
 #| msgid "Remove formula elements"
 msgctxt "(qtundo-format)"
@@ -170,7 +170,7 @@ msgstr "Laden..."
 msgid "Save..."
 msgstr "Sekern..."
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -179,17 +179,17 @@ msgstr ""
 "Dit Dokment bargt en Link na en feern Dokment.\n"
 "%1"
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Verlööf nödig"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr "Daalladen"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr "Utlaten"

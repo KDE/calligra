@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2024-12-16 22:43+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -219,7 +219,7 @@ msgstr "Subtítulo"
 msgid "Footer"
 msgstr "Rodapé"
 
-#: ChartShape.cpp:752
+#: ChartShape.cpp:754
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -228,17 +228,17 @@ msgstr ""
 "Este documento contén unha ligazón a un documento externo\n"
 "%1"
 
-#: ChartShape.cpp:753
+#: ChartShape.cpp:755
 #, kde-format
 msgid "Confirmation Required"
 msgstr "Precísase confirmación"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:756
 #, kde-format
 msgid "Download"
 msgstr "Descargar"
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:757
 #, kde-format
 msgid "Skip"
 msgstr "Omitir"

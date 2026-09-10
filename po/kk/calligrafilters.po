@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-20 00:44+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2013-05-28 05:21+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -129,22 +129,22 @@ msgstr "Сұралған %1 файлы жоқ"
 msgid "Could not read ZIP directory of the requested file %1"
 msgstr "Сұралған %1 файлының ZIP каталогы оқылған жоқ"
 
-#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:448
+#: libmsooxml/MsooXmlImport.cpp:329 libmsooxml/MsooXmlImport.cpp:452
 #, kde-format
 msgid "Enter password"
 msgstr "Паролін келтіру"
 
-#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:449
+#: libmsooxml/MsooXmlImport.cpp:330 libmsooxml/MsooXmlImport.cpp:453
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
 msgstr "Бұл шифрланған құжат, ашу үшін паролін келтіріңіз:"
 
-#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:450
+#: libmsooxml/MsooXmlImport.cpp:331 libmsooxml/MsooXmlImport.cpp:454
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr "Параль дұрыс емес, құжаттың шифрын шешу паролін келтіріңіз:"
 
-#: libmsooxml/MsooXmlImport.cpp:624
+#: libmsooxml/MsooXmlImport.cpp:632
 #, kde-format
 msgid "Could not find path for type %1"
 msgstr "%1 түрінің жолы табылмады"

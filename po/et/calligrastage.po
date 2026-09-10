@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2020-02-06 15:10+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -428,39 +428,39 @@ msgstr "Aktiivne slaid %1 / %2"
 msgid "End of Slide Show"
 msgstr "Slaidiseansi lõpp"
 
-#: part/KPrShapeAnimations.cpp:191
+#: part/KPrShapeAnimations.cpp:210
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:215
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:510
 #, kde-format
 msgid "start on mouse click"
 msgstr "käivitamine hiireklõpsuga"
 
-#: part/KPrShapeAnimations.cpp:193
+#: part/KPrShapeAnimations.cpp:212
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:218
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
 #, kde-format
 msgid "start after previous animation"
 msgstr "käivitamine pärast eelmist animatsiooni"
 
-#: part/KPrShapeAnimations.cpp:195
+#: part/KPrShapeAnimations.cpp:214
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:221
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:516
 #, kde-format
 msgid "start with previous animation"
 msgstr "käivitamine koos eelmise animatsiooniga"
 
-#: part/KPrShapeAnimations.cpp:206
+#: part/KPrShapeAnimations.cpp:225
 #, kde-format
 msgid "Start after %1 seconds. Duration of %2 seconds."
 msgstr "Käivitamine %1 sekundi pärast. Kestus %2 sekundit."
 
-#: part/KPrShapeAnimations.cpp:225
+#: part/KPrShapeAnimations.cpp:244
 #: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
 #, kde-format
 msgid "Animation"
 msgstr "Animatsioon"
 
-#: part/KPrShapeAnimations.cpp:229
+#: part/KPrShapeAnimations.cpp:248
 #, kde-format
 msgid "Shape"
 msgstr "Kujund"

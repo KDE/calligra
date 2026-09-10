@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2025-11-30 15:16+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
@@ -142,7 +142,7 @@ msgctxt "(qtundo-format)"
 msgid "Combine paths"
 msgstr "வழக்கம் வரி அகலம்"
 
-#: flake/commands/KoPathControlPointMoveCommand.cpp:27
+#: flake/commands/KoPathControlPointMoveCommand.cpp:32
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move control point"
@@ -165,8 +165,8 @@ msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "ஓரங்கள்"
 
-#: flake/commands/KoPathPointMoveCommand.cpp:31
-#: flake/commands/KoPathPointMoveCommand.cpp:47
+#: flake/commands/KoPathPointMoveCommand.cpp:36
+#: flake/commands/KoPathPointMoveCommand.cpp:52
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move points"
@@ -311,9 +311,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
 msgstr "பட்டியலாக்கியை மாற்று"
 
-#: flake/commands/KoShapeShadowCommand.cpp:55
-#: flake/commands/KoShapeShadowCommand.cpp:72
-#: flake/commands/KoShapeShadowCommand.cpp:83
+#: flake/commands/KoShapeShadowCommand.cpp:59
+#: flake/commands/KoShapeShadowCommand.cpp:76
+#: flake/commands/KoShapeShadowCommand.cpp:87
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
@@ -331,9 +331,9 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "உரையை அழி"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:59
-#: flake/commands/KoShapeStrokeCommand.cpp:76
-#: flake/commands/KoShapeStrokeCommand.cpp:87
+#: flake/commands/KoShapeStrokeCommand.cpp:63
+#: flake/commands/KoShapeStrokeCommand.cpp:80
+#: flake/commands/KoShapeStrokeCommand.cpp:91
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
@@ -701,28 +701,28 @@ msgstr "குழுவை &சேர்..."
 msgid "Convert To Path"
 msgstr "கிரேக்கமாக மாற்று"
 
-#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1129
 #, fuzzy, kde-format
 #| msgid "Undo: %1"
 msgctxt "Default text for undo action"
 msgid "Undo"
 msgstr "செய்ததுதவிர்: %1"
 
-#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1129
 #: main/KoUndoStackAction.cpp:41
 #, fuzzy, kde-format
 #| msgid "&Undo: %1"
 msgid "Undo %1"
 msgstr "&செய்ததுதவிர்: %1"
 
-#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1153
 #, fuzzy, kde-format
 #| msgid "Red"
 msgctxt "Default text for redo action"
 msgid "Redo"
 msgstr "சிவப்பு"
 
-#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1153
 #: main/KoUndoStackAction.cpp:41
 #, fuzzy, kde-format
 #| msgid "Redo: %1"
@@ -734,14 +734,14 @@ msgstr "மறுபடி செய்: %1"
 msgid "<empty>"
 msgstr ""
 
-#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
+#: kundo2/kundo2stack.cpp:1409 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
 #, fuzzy, kde-format
 #| msgid "Red"
 msgid "Redo"
 msgstr "சிவப்பு"
 
-#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1433
+#: kundo2/kundo2stack.cpp:1428 main/KoMainWindow.cpp:1433
 #: main/KoUndoStackAction.cpp:25
 #, fuzzy, kde-format
 #| msgid "Undo: %1"
@@ -994,17 +994,17 @@ msgstr "எப்பொழுதும் %1 வார்ப்புருவ�
 msgid "Always use this template"
 msgstr "எப்பொழுதும் %1 வார்ப்புருவுடன் துவங்கு"
 
-#: main/KoDocument.cpp:550
+#: main/KoDocument.cpp:552
 #, kde-format
 msgid "Making backup..."
 msgstr "காப்பு உருவாக்கல்"
 
-#: main/KoDocument.cpp:565
+#: main/KoDocument.cpp:567
 #, kde-format
 msgid "Saving..."
 msgstr "சேமித்தல்..."
 
-#: main/KoDocument.cpp:593
+#: main/KoDocument.cpp:595
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -1013,7 +1013,7 @@ msgstr ""
 "சேமிக்க முடியவில்லை\n"
 "%1"
 
-#: main/KoDocument.cpp:595
+#: main/KoDocument.cpp:597
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -1022,52 +1022,52 @@ msgstr ""
 "%1 சேமிக்க முடியவில்லை\n"
 "காரணம்: %2"
 
-#: main/KoDocument.cpp:623
+#: main/KoDocument.cpp:625
 #, fuzzy, kde-format
 #| msgid "Document Title"
 msgid "Document <i>%1</i> saved"
 msgstr "ஆவண தலைப்பு"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:713
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:716
 #, kde-format
 msgid "Autosaving..."
 msgstr "தானாக சேமித்தல்..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:728
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "தானாக சேமித்தலின்போது பிழை! பிரிவினை முழுமையாகிவிட்டதா?"
 
-#: main/KoDocument.cpp:814
+#: main/KoDocument.cpp:816
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "சேமிப்பதற்கு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:858 main/KoDocument.cpp:880 main/KoDocument.cpp:910
-#: main/KoDocument.cpp:944
+#: main/KoDocument.cpp:860 main/KoDocument.cpp:882 main/KoDocument.cpp:912
+#: main/KoDocument.cpp:946
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "'%1'க்கு எழுத இயலவில்லை.பகுதியாக்கம் முழுமையாகிவிட்டதா?"
 
-#: main/KoDocument.cpp:865
+#: main/KoDocument.cpp:867
 #, fuzzy, kde-format
 #| msgid "Not able to write '%1'. Partition full?"
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "'%1'க்கு எழுத இயலவில்லை.பகுதியாக்கம் முழுமையாகிவிட்டதா?"
 
-#: main/KoDocument.cpp:873 main/KoDocument.cpp:919 main/KoDocument.cpp:1977
+#: main/KoDocument.cpp:875 main/KoDocument.cpp:921 main/KoDocument.cpp:1980
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "'%1' க்கு எழுத இயலவில்லை. பகுதியாக்கம் முழுமையாகிவிட்டதா?"
 
-#: main/KoDocument.cpp:1219
+#: main/KoDocument.cpp:1222
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1076,7 +1076,7 @@ msgstr ""
 "தவறான URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1235
+#: main/KoDocument.cpp:1238
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1085,106 +1085,106 @@ msgstr ""
 "இந்த ஆவணத்திற்கு தன்னியக்கமாக சேமிக்கபட்ட கோப்பு ஒன்று உள்ளது.\n"
 "பதிலாக அதை திறக்க வேண்டுமா ?"
 
-#: main/KoDocument.cpp:1311 main/KoDocument.cpp:1672 main/KoMainWindow.cpp:673
+#: main/KoDocument.cpp:1314 main/KoDocument.cpp:1675 main/KoMainWindow.cpp:673
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "கோப்பு %1 இல்லை."
 
-#: main/KoDocument.cpp:1435
+#: main/KoDocument.cpp:1438
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening Document"
 msgstr "ஆவணத்தை திற "
 
-#: main/KoDocument.cpp:1451
+#: main/KoDocument.cpp:1454
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the filter plugin"
 msgstr "சேமிப்பதற்கு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:1455
+#: main/KoDocument.cpp:1458
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the output document"
 msgstr "சேமிப்பதற்கு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:1459
+#: main/KoDocument.cpp:1462
 #, fuzzy, kde-format
 msgid "File not found"
 msgstr "கோப்பின் இடம்"
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1466
 #, fuzzy, kde-format
 msgid "Cannot create storage"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
-#: main/KoDocument.cpp:1467
+#: main/KoDocument.cpp:1470
 #, kde-format
 msgid "Bad MIME type"
 msgstr ""
 
-#: main/KoDocument.cpp:1471
+#: main/KoDocument.cpp:1474
 #, fuzzy, kde-format
 msgid "Error in embedded document"
 msgstr "உள்ளக ஆவணங்களை சேமிப்பதில் தவறு"
 
-#: main/KoDocument.cpp:1475
+#: main/KoDocument.cpp:1478
 #, kde-format
 msgid "Format not recognized"
 msgstr ""
 
-#: main/KoDocument.cpp:1479
+#: main/KoDocument.cpp:1482
 #, kde-format
 msgid "Not implemented"
 msgstr ""
 
-#: main/KoDocument.cpp:1483
+#: main/KoDocument.cpp:1486
 #, kde-format
 msgid "Parsing error"
 msgstr ""
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1490
 #, kde-format
 msgid "Document is password protected"
 msgstr ""
 
-#: main/KoDocument.cpp:1491
+#: main/KoDocument.cpp:1494
 #, fuzzy, kde-format
 #| msgid "Locale format"
 msgid "Invalid file format"
 msgstr "பக்க வடிவம்"
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1502
 #, fuzzy, kde-format
 msgid "Internal error"
 msgstr "இணையம்"
 
-#: main/KoDocument.cpp:1503
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Out of memory"
 msgstr ""
 
-#: main/KoDocument.cpp:1507
+#: main/KoDocument.cpp:1510
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1511
+#: main/KoDocument.cpp:1514
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1518
 #, fuzzy, kde-format
 msgid "Failed to download remote file"
 msgstr "%1 கோப்பினை திறக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1527
 #, kde-format
 msgid "Unknown error"
 msgstr ""
 
-#: main/KoDocument.cpp:1529
+#: main/KoDocument.cpp:1532
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1194,19 +1194,19 @@ msgstr ""
 "%1 கோப்பினை திறக்க முடியவில்லை\n"
 "காரணம்: %2"
 
-#: main/KoDocument.cpp:1587
+#: main/KoDocument.cpp:1590
 #, fuzzy, kde-format
 #| msgid "Document Title"
 msgid "Document <i>%1</i> loaded"
 msgstr "ஆவண தலைப்பு"
 
-#: main/KoDocument.cpp:1644 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1647 odf/KoOdfReadStore.cpp:98
 #: odf/KoOdfReadStore.cpp:143
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 கண்டுபிடிக்க இயலவில்லை"
 
-#: main/KoDocument.cpp:1656
+#: main/KoDocument.cpp:1659
 #, fuzzy, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1215,22 +1215,22 @@ msgstr ""
 "%1 பாகுபடுத்தல் தவறு முக்கிய ஆவணத்தின் வரி, %2ல் கிடக்கை ஏற்பட்டுள்ளது\n"
 "பிழை தகவல்கள்: %3"
 
-#: main/KoDocument.cpp:1679
+#: main/KoDocument.cpp:1682
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 ஒரு கோப்பு அல்ல."
 
-#: main/KoDocument.cpp:1694
+#: main/KoDocument.cpp:1697
 #, fuzzy, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "வாசிப்பதற்கு கோப்பினை திறக்க முடியவில்லை (படிக்கும் அனுமதிகளை பரிசோதிக்கவும்)"
 
-#: main/KoDocument.cpp:1705
+#: main/KoDocument.cpp:1708
 #, fuzzy, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "கோப்பின் தொடக்கத்தை படிக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:1736
+#: main/KoDocument.cpp:1739
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1239,31 +1239,31 @@ msgstr ""
 "பாகுபடுத்தல் தவறு முக்கிய ஆவணத்தின் வரி %1ல்,கிடக்கை %2ல் ஏற்பட்டுள்ளது\n"
 "பிழை தகவல்கள்: %3"
 
-#: main/KoDocument.cpp:1757
+#: main/KoDocument.cpp:1760
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "செல்லாத KOffice கோப்பு: %1"
 
-#: main/KoDocument.cpp:1838
+#: main/KoDocument.cpp:1841
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "செல்லாத ஆவணம்: 'maindoc.xml' எண்ற கோப்பு இல்லை"
 
-#: main/KoDocument.cpp:1863
+#: main/KoDocument.cpp:1866
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2063 main/KoDocument.cpp:2517 main/KoDocument.cpp:2546
-#: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
+#: main/KoDocument.cpp:2066 main/KoDocument.cpp:2526 main/KoDocument.cpp:2555
+#: pigment/resources/KoColorSet.cpp:316 pigment/resources/KoColorSet.cpp:412
 #, kde-format
 msgid "Untitled"
 msgstr "தலைப்பில்லாதது"
 
-#: main/KoDocument.cpp:2066 main/KoMainWindow.cpp:1136
+#: main/KoDocument.cpp:2069 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1272,12 +1272,12 @@ msgstr ""
 "<p>ஆவணம் <b>'%1'</b> மாற்றியமைக்கப்பட்டுள்ளது.</p><p>நீங்கள் இதை சேமிக்க "
 "விரும்புகிறீர்களா?</p>"
 
-#: main/KoDocument.cpp:2149
+#: main/KoDocument.cpp:2152
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "உள்ளகத் தவறு: saveXML இன்னும் இயற்றபடவில்லை"
 
-#: main/KoDocument.cpp:2182
+#: main/KoDocument.cpp:2185
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1286,7 +1286,7 @@ msgstr ""
 "திறக்க முடியவில்லை\n"
 "%1"
 
-#: main/KoDocument.cpp:2184
+#: main/KoDocument.cpp:2187
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1295,32 +1295,32 @@ msgstr ""
 "%1 கோப்பினை திறக்க முடியவில்லை\n"
 "காரணம்: %2"
 
-#: main/KoDocument.cpp:2237
+#: main/KoDocument.cpp:2240
 msgid "a word processing"
 msgstr ""
 
-#: main/KoDocument.cpp:2238
+#: main/KoDocument.cpp:2241
 #, fuzzy
 #| msgid "Page Preview"
 msgid "a spreadsheet"
 msgstr "பக்க வெள்ளோட்டம்"
 
-#: main/KoDocument.cpp:2239
+#: main/KoDocument.cpp:2242
 #, fuzzy
 msgid "a presentation"
 msgstr "இரட்டிப்பான திசைத்தன்மை"
 
-#: main/KoDocument.cpp:2240
+#: main/KoDocument.cpp:2243
 #, fuzzy
 msgid "a chart"
 msgstr "சார்ட்ரியுஸ்"
 
-#: main/KoDocument.cpp:2241
+#: main/KoDocument.cpp:2244
 #, fuzzy
 msgid "a drawing"
 msgstr "கரும் ஆரஞ்சு"
 
-#: main/KoDocument.cpp:2549
+#: main/KoDocument.cpp:2558
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1332,7 +1332,7 @@ msgstr ""
 "<p>ஆவணம் <b>'%1'</b> மாற்றியமைக்கப்பட்டுள்ளது.</p><p>நீங்கள் இதை சேமிக்க "
 "விரும்புகிறீர்களா?</p>"
 
-#: main/KoDocument.cpp:2552
+#: main/KoDocument.cpp:2561
 #, fuzzy, kde-format
 #| msgid "Create Document"
 msgid "Close Document"
@@ -1364,7 +1364,7 @@ msgstr "கோப்பினை ஏற்ற முடியவில்லை.
 msgid "Missing Export Filter"
 msgstr "ஏற்றுமதி வடிகட்டி காணவில்லை."
 
-#: main/KoFilterManager.cpp:538
+#: main/KoFilterManager.cpp:546
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1373,7 +1373,7 @@ msgstr ""
 "%1 \n"
 "வகை கோப்பினை இறக்குமதி செய்ய முடியவில்லை"
 
-#: main/KoFilterManager.cpp:541
+#: main/KoFilterManager.cpp:549
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "இறக்குமதி வடிகட்டி காணவில்லை."
@@ -1568,17 +1568,17 @@ msgstr "ஏற்றுமதி..."
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
+#: main/KoMainWindow.cpp:1616 pageapp/KoPADocumentStructureDocker.cpp:102
 #, fuzzy, kde-format
 msgid "Document"
 msgstr "ஆவணத்தை திற "
 
-#: main/KoMainWindow.cpp:1621
+#: main/KoMainWindow.cpp:1624
 #, fuzzy, kde-format
 msgid "Document - %1"
 msgstr "ஆவண தலைப்பு"
 
-#: main/KoMainWindow.cpp:1651
+#: main/KoMainWindow.cpp:1654
 #, fuzzy, kde-format
 #| msgid ""
 #| "You will lose all your changes!\n"
@@ -1590,17 +1590,17 @@ msgstr ""
 "நீங்கள் மாற்றம் செய்தவையை இழக்க நேரிடும்!\n"
 "உங்களுக்கு தொடர வேண்டுமா?"
 
-#: main/KoMainWindow.cpp:1653
+#: main/KoMainWindow.cpp:1656
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "கரும் ஆரஞ்சு"
 
-#: main/KoMainWindow.cpp:2016
+#: main/KoMainWindow.cpp:2019
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 கருவிப்பட்டையை காட்டு"
 
-#: main/KoMainWindow.cpp:2018
+#: main/KoMainWindow.cpp:2021
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "கருவிப்பட்டி %1 யை மறை"
@@ -1822,7 +1822,7 @@ msgstr "தேதி(மாறாதது)"
 msgid "Saved By"
 msgstr "அலை"
 
-#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:208
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:209
 #, kde-format
 msgid "Comment"
 msgstr "குறிப்புரை"
@@ -1847,7 +1847,7 @@ msgstr ""
 msgid "A new version could not be added"
 msgstr ""
 
-#: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
+#: main/KoVersionDialog.cpp:221 main/KoVersionDialog.cpp:223
 #, fuzzy, kde-format
 msgid "Date: %1"
 msgstr "தேதி"
@@ -2673,7 +2673,7 @@ msgstr "சேமிப்பதை உறுதிசெய்"
 msgid "Import Slideshow"
 msgstr "பாணிகளை இறக்கு"
 
-#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
+#: pageapp/KoPAView.cpp:536 pageapp/KoPAView.cpp:548 pageapp/KoPAView.cpp:551
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -2685,7 +2685,7 @@ msgstr ""
 "திறக்க முடியவில்லை\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:659
+#: pageapp/KoPAView.cpp:663
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
@@ -3841,17 +3841,17 @@ msgid ""
 "Please try and save the document again to prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:736
+#: store/KoEncryptedStore.cpp:737
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:941
+#: store/KoEncryptedStore.cpp:943
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:956
+#: store/KoEncryptedStore.cpp:958
 #, fuzzy, kde-format
 msgid "Do you want to save the password?"
 msgstr "நீங்கள் கண்டிப்பாக அந்த படிமஅச்சை நீக்க வேண்டுமா?"
@@ -3861,7 +3861,7 @@ msgstr "நீங்கள் கண்டிப்பாக அந்த பட
 msgid "File '%1' is not readable"
 msgstr "கோப்பு %1 இல்லை."
 
-#: store/KoNetAccess.cpp:370
+#: store/KoNetAccess.cpp:372
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr ""
@@ -3897,9 +3897,9 @@ msgid "Delete"
 msgstr "உரையை அழி"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
-#: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
-#: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
+#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:89
+#: text/KoTextEditor_undo.cpp:175 text/KoTextEditor_undo.cpp:213
+#: text/KoTextEditor_undo.cpp:242 text/KoTextEditor_undo.cpp:292
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Text"
@@ -4109,112 +4109,112 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "இரட்டை"
 
-#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:182 text/KoTextEditor.cpp:1482
 #: text/KoTextEditor.cpp:1484
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
 msgstr "சாதாரண பத்தி உரை"
 
-#: text/KoTextEditor.cpp:474
+#: text/KoTextEditor.cpp:476
 #, fuzzy
 #| msgid "Bookmark"
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "புத்தகக்குறி"
 
-#: text/KoTextEditor.cpp:489
+#: text/KoTextEditor.cpp:491
 #, fuzzy
 #| msgid "Add Fraction"
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr "பின்னம் எண்ணை சேர்க"
 
-#: text/KoTextEditor.cpp:513
+#: text/KoTextEditor.cpp:515
 #, fuzzy
 #| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr "உரையை செருகு"
 
-#: text/KoTextEditor.cpp:539
+#: text/KoTextEditor.cpp:541
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr "உரையை செருகு"
 
-#: text/KoTextEditor.cpp:604
+#: text/KoTextEditor.cpp:605
 #, fuzzy
 #| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr "கோடு இடைவெளியை செருகு"
 
-#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
-#: text/KoTextEditor.cpp:929
+#: text/KoTextEditor.cpp:913 text/KoTextEditor.cpp:915
+#: text/KoTextEditor.cpp:930
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr "உரையை செருகு"
 
-#: text/KoTextEditor.cpp:1069
+#: text/KoTextEditor.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "ஓரங்கள்"
 
-#: text/KoTextEditor.cpp:1086
+#: text/KoTextEditor.cpp:1087
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "நெடுக்கோடு"
 
-#: text/KoTextEditor.cpp:1114
+#: text/KoTextEditor.cpp:1113
 #, fuzzy
 #| msgid "Custom Line Width"
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr "வழக்கம் வரி அகலம்"
 
-#: text/KoTextEditor.cpp:1130
+#: text/KoTextEditor.cpp:1129
 #, fuzzy
 #| msgid "Change Text Format"
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr "உரை வடிவத்தை மாற்று"
 
-#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
-#: text/KoTextEditor.cpp:1197
+#: text/KoTextEditor.cpp:1178 text/KoTextEditor.cpp:1180
+#: text/KoTextEditor.cpp:1198
 #, fuzzy
 #| msgid "Include in table of contents"
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr "அட்டவணையின் உள்ளடக்கத்தை சேர்"
 
-#: text/KoTextEditor.cpp:1236
+#: text/KoTextEditor.cpp:1237
 #, fuzzy
 #| msgid "Include in table of contents"
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr "அட்டவணையின் உள்ளடக்கத்தை சேர்"
 
-#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
-#: text/KoTextEditor.cpp:1274
+#: text/KoTextEditor.cpp:1254 text/KoTextEditor.cpp:1256
+#: text/KoTextEditor.cpp:1275
 #, fuzzy
 #| msgid "Insert Line Break"
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr "கோடு இடைவெளியை செருகு"
 
-#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
+#: text/KoTextEditor.cpp:1312 text/KoTextEditor.cpp:1314
 #, fuzzy
 #| msgid "Add Fraction"
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr "பின்னம் எண்ணை சேர்க"
 
-#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
-#: text/KoTextEditor.cpp:1380
+#: text/KoTextEditor.cpp:1341 text/KoTextEditor.cpp:1343
+#: text/KoTextEditor.cpp:1381
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr ""
@@ -5502,13 +5502,13 @@ msgstr ""
 msgid "Undelete"
 msgstr "உரையை அழி"
 
-#: widgets/KoToolBox.cpp:310
+#: widgets/KoToolBox.cpp:308
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "&முன்னிருந்த"
 
-#: widgets/KoToolBox.cpp:315
+#: widgets/KoToolBox.cpp:313
 #, kde-format
 msgid "%1x%2"
 msgstr ""

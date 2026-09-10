@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2011-07-12 00:15+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@gmail.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -38,42 +38,42 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Tukar baris"
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Tambah teks"
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Selit"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Buang"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Selit"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Buang"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Selit."
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
@@ -153,24 +153,24 @@ msgstr "Muat."
 msgid "Save..."
 msgstr "Simpan."
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, fuzzy, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr "ke  a 1"
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, fuzzy, kde-format
 msgid "Confirmation Required"
 msgstr "Pengesahan Diperlukan"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, fuzzy, kde-format
 msgid "Download"
 msgstr "Muat Turun"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, fuzzy, kde-format
 msgid "Skip"
 msgstr "Langkau"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FormulaShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2010-11-18 16:09+0100\n"
 "Last-Translator: Djan Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -42,49 +42,49 @@ msgctxt "(qtundo-format)"
 msgid "Change rows"
 msgstr "Candjî royes"
 
-#: FormulaEditor.cpp:71
+#: FormulaEditor.cpp:79
 #, fuzzy
 #| msgid "Add text"
 msgctxt "(qtundo-format)"
 msgid "Add text"
 msgstr "Radjouter tecse"
 
-#: FormulaEditor.cpp:104
+#: FormulaEditor.cpp:112
 #, fuzzy
 #| msgid "Insert row"
 msgctxt "(qtundo-format)"
 msgid "Insert row"
 msgstr "Sititchî roye"
 
-#: FormulaEditor.cpp:109
+#: FormulaEditor.cpp:117
 #, fuzzy
 #| msgid "Remove row"
 msgctxt "(qtundo-format)"
 msgid "Remove row"
 msgstr "Oister roye"
 
-#: FormulaEditor.cpp:117
+#: FormulaEditor.cpp:125
 #, fuzzy
 #| msgid "Insert column"
 msgctxt "(qtundo-format)"
 msgid "Insert column"
 msgstr "Sititchî colone"
 
-#: FormulaEditor.cpp:122
+#: FormulaEditor.cpp:130
 #, fuzzy
 #| msgid "Remove column"
 msgctxt "(qtundo-format)"
 msgid "Remove column"
 msgstr "Oister colone"
 
-#: FormulaEditor.cpp:148
+#: FormulaEditor.cpp:164
 #, fuzzy
 #| msgid "Insert formula elements."
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
 msgstr "Sititchî des elemints del formule."
 
-#: FormulaEditor.cpp:184
+#: FormulaEditor.cpp:200
 #, fuzzy
 #| msgid "Remove formula elements"
 msgctxt "(qtundo-format)"
@@ -170,7 +170,7 @@ msgstr "Tcherdjî..."
 msgid "Save..."
 msgstr "Schaper..."
 
-#: KoFormulaShape.cpp:200
+#: KoFormulaShape.cpp:195
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
@@ -179,17 +179,17 @@ msgstr ""
 "I gn a dins c' documint ene dfoûtrinne hårdêye viè on documint då lon\n"
 "%1"
 
-#: KoFormulaShape.cpp:201
+#: KoFormulaShape.cpp:196
 #, kde-format
 msgid "Confirmation Required"
 msgstr "I fåt racertiner"
 
-#: KoFormulaShape.cpp:202
+#: KoFormulaShape.cpp:197
 #, kde-format
 msgid "Download"
 msgstr "Aberweter"
 
-#: KoFormulaShape.cpp:203
+#: KoFormulaShape.cpp:198
 #, kde-format
 msgid "Skip"
 msgstr "Passer"

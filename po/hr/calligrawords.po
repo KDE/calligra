@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2009-09-29 21:20+0200\n"
 "Last-Translator: Marko Dimjasevic <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -1429,39 +1429,39 @@ msgstr ""
 "Darko Bednjanec, Denis Lackovic, Hrvoje Spoljar, Igor Jagec, Jerko Škifić, "
 "Nikola Planinac, Vjekoslav Matausic, Marko Dimjašević"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, kde-format
 msgid "Standard"
 msgstr ""
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Document Title"
 msgid "Document Title"
 msgstr "Naslov dokumenta"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, kde-format
 msgid "Head 1"
 msgstr "Naslov 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, kde-format
 msgid "Head 2"
 msgstr "Naslov 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, kde-format
 msgid "Head 3"
 msgstr "Naslov 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, fuzzy, kde-format
 #| msgid "Bullet"
 msgid "Bullet List"

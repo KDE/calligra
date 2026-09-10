@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2023-02-27 22:43+0100\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -534,12 +534,12 @@ msgctxt "@title:window"
 msgid "Import"
 msgstr "Importa"
 
-#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:761
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:762
 #, kde-format
 msgid "MusicXML files (*.xml)"
 msgstr "Fitxers MusicXML (*.xml)"
 
-#: SimpleEntryTool.cpp:761
+#: SimpleEntryTool.cpp:762
 #, kde-format
 msgctxt "@title:window"
 msgid "Export"

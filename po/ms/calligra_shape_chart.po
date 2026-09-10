@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2011-05-24 19:58+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@gmail.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -203,24 +203,24 @@ msgstr "Tajuk"
 msgid "Footer"
 msgstr "Pengaki"
 
-#: ChartShape.cpp:752
+#: ChartShape.cpp:754
 #, kde-format
 msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
 
-#: ChartShape.cpp:753
+#: ChartShape.cpp:755
 #, fuzzy, kde-format
 msgid "Confirmation Required"
 msgstr "Pengesahan Diperlukan"
 
-#: ChartShape.cpp:754
+#: ChartShape.cpp:756
 #, fuzzy, kde-format
 msgid "Download"
 msgstr "Muatturun"
 
-#: ChartShape.cpp:755
+#: ChartShape.cpp:757
 #, fuzzy, kde-format
 msgid "Skip"
 msgstr "Langkau"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2011-06-25 12:31+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -1441,48 +1441,48 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Ingimar Róbertsson, Arnar Leósson"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, fuzzy, kde-format
 #| msgid "Copy%1-%2"
 msgid "Copy"
 msgstr "Afrita"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Standard"
 msgid "Standard"
 msgstr "Venjulegt"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Document Title"
 msgid "Document Title"
 msgstr "Titill skjals"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 1"
 msgid "Head 1"
 msgstr "Haus 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 2"
 msgid "Head 2"
 msgstr "Haus 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 3"
 msgid "Head 3"
 msgstr "Haus 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Bullet List"

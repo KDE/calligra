@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2008-03-26 18:26+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -1441,47 +1441,47 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "रविशंकर श्रीवास्तव, जी. करूणाकर"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr "नक़ल"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Standard"
 msgid "Standard"
 msgstr "मानक"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Document Title"
 msgid "Document Title"
 msgstr "दस्तावेज़ शीर्षक"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 1"
 msgid "Head 1"
 msgstr "शीर्षक १"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 2"
 msgid "Head 2"
 msgstr "शीर्षक २"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 3"
 msgid "Head 3"
 msgstr "शीर्षक ३"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Bullet List"

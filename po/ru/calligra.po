@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-31 00:43+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2026-08-07 10:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -150,7 +150,7 @@ msgstr ""
 "Объединение контуров\n"
 "объединение контуров"
 
-#: flake/commands/KoPathControlPointMoveCommand.cpp:27
+#: flake/commands/KoPathControlPointMoveCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Move control point"
 msgstr ""
@@ -178,8 +178,8 @@ msgstr ""
 "Объединение точек\n"
 "объединение точек"
 
-#: flake/commands/KoPathPointMoveCommand.cpp:31
-#: flake/commands/KoPathPointMoveCommand.cpp:47
+#: flake/commands/KoPathPointMoveCommand.cpp:36
+#: flake/commands/KoPathPointMoveCommand.cpp:52
 msgctxt "(qtundo-format)"
 msgid "Move points"
 msgstr ""
@@ -355,9 +355,9 @@ msgstr ""
 "Изменение формы обтекания\n"
 "изменение формы обтекания"
 
-#: flake/commands/KoShapeShadowCommand.cpp:55
-#: flake/commands/KoShapeShadowCommand.cpp:72
-#: flake/commands/KoShapeShadowCommand.cpp:83
+#: flake/commands/KoShapeShadowCommand.cpp:59
+#: flake/commands/KoShapeShadowCommand.cpp:76
+#: flake/commands/KoShapeShadowCommand.cpp:87
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
 msgstr ""
@@ -378,9 +378,9 @@ msgstr ""
 "Изменение размера объектов\n"
 "изменение размера объектов"
 
-#: flake/commands/KoShapeStrokeCommand.cpp:59
-#: flake/commands/KoShapeStrokeCommand.cpp:76
-#: flake/commands/KoShapeStrokeCommand.cpp:87
+#: flake/commands/KoShapeStrokeCommand.cpp:63
+#: flake/commands/KoShapeStrokeCommand.cpp:80
+#: flake/commands/KoShapeStrokeCommand.cpp:91
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr ""
@@ -758,25 +758,25 @@ msgstr "..."
 msgid "Convert To Path"
 msgstr "Преобразовать в контур"
 
-#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1129
 #, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
 msgstr "Отменить"
 
-#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1075
+#: kundo2/kundo2group.cpp:347 kundo2/kundo2stack.cpp:1129
 #: main/KoUndoStackAction.cpp:41
 #, kde-format
 msgid "Undo %1"
 msgstr "Отменить %1"
 
-#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1153
 #, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
 msgstr "Повторить"
 
-#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1099
+#: kundo2/kundo2group.cpp:372 kundo2/kundo2stack.cpp:1153
 #: main/KoUndoStackAction.cpp:41
 #, kde-format
 msgid "Redo %1"
@@ -787,13 +787,13 @@ msgstr "Повторить %1"
 msgid "<empty>"
 msgstr "Пусто"
 
-#: kundo2/kundo2stack.cpp:1338 main/KoMainWindow.cpp:1434
+#: kundo2/kundo2stack.cpp:1409 main/KoMainWindow.cpp:1434
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Повторить"
 
-#: kundo2/kundo2stack.cpp:1357 main/KoMainWindow.cpp:1433
+#: kundo2/kundo2stack.cpp:1428 main/KoMainWindow.cpp:1433
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1046,17 +1046,17 @@ msgstr "Всегда открывать этот шаблон при запус�
 msgid "Always use this template"
 msgstr "Всегда использовать этот шаблон"
 
-#: main/KoDocument.cpp:550
+#: main/KoDocument.cpp:552
 #, kde-format
 msgid "Making backup..."
 msgstr "Создание резервной копии..."
 
-#: main/KoDocument.cpp:565
+#: main/KoDocument.cpp:567
 #, kde-format
 msgid "Saving..."
 msgstr "Сохранение..."
 
-#: main/KoDocument.cpp:593
+#: main/KoDocument.cpp:595
 #, kde-format
 msgid ""
 "Could not save\n"
@@ -1065,7 +1065,7 @@ msgstr ""
 "Не удалось сохранить\n"
 "%1"
 
-#: main/KoDocument.cpp:595
+#: main/KoDocument.cpp:597
 #, kde-format
 msgid ""
 "Could not save %1\n"
@@ -1074,12 +1074,12 @@ msgstr ""
 "Не удалось сохранить %1\n"
 "Причина: %2"
 
-#: main/KoDocument.cpp:623
+#: main/KoDocument.cpp:625
 #, kde-format
 msgid "Document <i>%1</i> saved"
 msgstr "Документ <i>%1</i> сохранён"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:713
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -1088,38 +1088,38 @@ msgstr ""
 "Не указан пароль от этого зашифрованного файла. Автосохранение прервано. "
 "Попробуйте сохранить файл вручную."
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:716
 #, kde-format
 msgid "Autosaving..."
 msgstr "Автосохранение..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:728
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Произошла ошибка при автосохранении. Возможно, диск переполнен."
 
-#: main/KoDocument.cpp:814
+#: main/KoDocument.cpp:816
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Не удалось создать файл для сохранения"
 
-#: main/KoDocument.cpp:858 main/KoDocument.cpp:880 main/KoDocument.cpp:910
-#: main/KoDocument.cpp:944
+#: main/KoDocument.cpp:860 main/KoDocument.cpp:882 main/KoDocument.cpp:912
+#: main/KoDocument.cpp:946
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Не удаётся сохранить «%1». Возможно, диск переполнен."
 
-#: main/KoDocument.cpp:865
+#: main/KoDocument.cpp:867
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Не удаётся сохранить метаданные RDF. Возможно, диск переполнен."
 
-#: main/KoDocument.cpp:873 main/KoDocument.cpp:919 main/KoDocument.cpp:1977
+#: main/KoDocument.cpp:875 main/KoDocument.cpp:921 main/KoDocument.cpp:1980
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Не удаётся сохранить «%1». Возможно, диск переполнен."
 
-#: main/KoDocument.cpp:1219
+#: main/KoDocument.cpp:1222
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1128,7 +1128,7 @@ msgstr ""
 "Неверный адрес\n"
 "%1"
 
-#: main/KoDocument.cpp:1235
+#: main/KoDocument.cpp:1238
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1137,102 +1137,102 @@ msgstr ""
 "Существует автосохранение этого документа.\n"
 "Открыть автосохранение?"
 
-#: main/KoDocument.cpp:1311 main/KoDocument.cpp:1672 main/KoMainWindow.cpp:673
+#: main/KoDocument.cpp:1314 main/KoDocument.cpp:1675 main/KoMainWindow.cpp:673
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файл %1 не существует."
 
-#: main/KoDocument.cpp:1435
+#: main/KoDocument.cpp:1438
 #, kde-format
 msgid "Opening Document"
 msgstr "Открытие документа"
 
-#: main/KoDocument.cpp:1451
+#: main/KoDocument.cpp:1454
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Не удалось создать модуль фильтра"
 
-#: main/KoDocument.cpp:1455
+#: main/KoDocument.cpp:1458
 #, kde-format
 msgid "Could not create the output document"
 msgstr "Не удалось создать выходной документ"
 
-#: main/KoDocument.cpp:1459
+#: main/KoDocument.cpp:1462
 #, kde-format
 msgid "File not found"
 msgstr "Файл не найден"
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1466
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Невозможно сохранить данные"
 
-#: main/KoDocument.cpp:1467
+#: main/KoDocument.cpp:1470
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Неправильный тип MIME"
 
-#: main/KoDocument.cpp:1471
+#: main/KoDocument.cpp:1474
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Ошибка во внедрённом документе"
 
-#: main/KoDocument.cpp:1475
+#: main/KoDocument.cpp:1478
 #, kde-format
 msgid "Format not recognized"
 msgstr "Недопустимый формат"
 
-#: main/KoDocument.cpp:1479
+#: main/KoDocument.cpp:1482
 #, kde-format
 msgid "Not implemented"
 msgstr "Не реализовано"
 
-#: main/KoDocument.cpp:1483
+#: main/KoDocument.cpp:1486
 #, kde-format
 msgid "Parsing error"
 msgstr "Ошибка разбора"
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1490
 #, kde-format
 msgid "Document is password protected"
 msgstr "Документ защищён паролем"
 
-#: main/KoDocument.cpp:1491
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Invalid file format"
 msgstr "Неверный формат файла"
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1502
 #, kde-format
 msgid "Internal error"
 msgstr "Внутренняя ошибка"
 
-#: main/KoDocument.cpp:1503
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Out of memory"
 msgstr "Не хватает памяти"
 
-#: main/KoDocument.cpp:1507
+#: main/KoDocument.cpp:1510
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "Отсутствует модуль фильтра"
 
-#: main/KoDocument.cpp:1511
+#: main/KoDocument.cpp:1514
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "Попытка загрузить документ недопустимого типа"
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1518
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "Не удалось загрузить удалённый файл"
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1527
 #, kde-format
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
-#: main/KoDocument.cpp:1529
+#: main/KoDocument.cpp:1532
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1243,18 +1243,18 @@ msgstr ""
 "Причина: %1.\n"
 "%3"
 
-#: main/KoDocument.cpp:1587
+#: main/KoDocument.cpp:1590
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Документ <i>%1</i> загружен"
 
-#: main/KoDocument.cpp:1644 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1647 odf/KoOdfReadStore.cpp:98
 #: odf/KoOdfReadStore.cpp:143
 #, kde-format
 msgid "Could not find %1"
 msgstr "Не удалось найти %1"
 
-#: main/KoDocument.cpp:1656
+#: main/KoDocument.cpp:1659
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1263,22 +1263,22 @@ msgstr ""
 "Ошибка обработки файла %1 в строке %2, позиции %3\n"
 "Сообщение об ошибке: %4"
 
-#: main/KoDocument.cpp:1679
+#: main/KoDocument.cpp:1682
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 не является файлом."
 
-#: main/KoDocument.cpp:1694
+#: main/KoDocument.cpp:1697
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Не удалось открыть файл для чтения (проверьте права на чтение)."
 
-#: main/KoDocument.cpp:1705
+#: main/KoDocument.cpp:1708
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Не удалось прочитать заголовок файла."
 
-#: main/KoDocument.cpp:1736
+#: main/KoDocument.cpp:1739
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1287,17 +1287,17 @@ msgstr ""
 "Ошибка обработки данных основного документа в строке %1, позиции %2\n"
 "Сообщение об ошибке: %3"
 
-#: main/KoDocument.cpp:1757
+#: main/KoDocument.cpp:1760
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Неверный формат файла Calligra: %1"
 
-#: main/KoDocument.cpp:1838
+#: main/KoDocument.cpp:1841
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Неверный формат документа: нет файла «maindoc.xml»."
 
-#: main/KoDocument.cpp:1863
+#: main/KoDocument.cpp:1866
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1306,25 +1306,25 @@ msgstr ""
 "Документ <i>%1</i> содержит несколько версий. Чтобы открыть старую версию, "
 "перейдите к пункту меню «Файл -> Версии»."
 
-#: main/KoDocument.cpp:2063 main/KoDocument.cpp:2517 main/KoDocument.cpp:2546
-#: pigment/resources/KoColorSet.cpp:315 pigment/resources/KoColorSet.cpp:411
+#: main/KoDocument.cpp:2066 main/KoDocument.cpp:2526 main/KoDocument.cpp:2555
+#: pigment/resources/KoColorSet.cpp:316 pigment/resources/KoColorSet.cpp:412
 #, kde-format
 msgid "Untitled"
 msgstr "Безымянный"
 
-#: main/KoDocument.cpp:2066 main/KoMainWindow.cpp:1136
+#: main/KoDocument.cpp:2069 main/KoMainWindow.cpp:1136
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Документ <b>%1</b> был изменён.</p><p>Сохранить его?</p>"
 
-#: main/KoDocument.cpp:2149
+#: main/KoDocument.cpp:2152
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Внутренняя ошибка: не реализован метод saveXML"
 
-#: main/KoDocument.cpp:2182
+#: main/KoDocument.cpp:2185
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1333,7 +1333,7 @@ msgstr ""
 "Не удалось открыть\n"
 "%1"
 
-#: main/KoDocument.cpp:2184
+#: main/KoDocument.cpp:2187
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1342,27 +1342,27 @@ msgstr ""
 "Не удалось открыть %1\n"
 "Причина: %2"
 
-#: main/KoDocument.cpp:2237
+#: main/KoDocument.cpp:2240
 msgid "a word processing"
 msgstr "документ"
 
-#: main/KoDocument.cpp:2238
+#: main/KoDocument.cpp:2241
 msgid "a spreadsheet"
 msgstr "электронная таблица"
 
-#: main/KoDocument.cpp:2239
+#: main/KoDocument.cpp:2242
 msgid "a presentation"
 msgstr "презентация"
 
-#: main/KoDocument.cpp:2240
+#: main/KoDocument.cpp:2243
 msgid "a chart"
 msgstr "диаграмма"
 
-#: main/KoDocument.cpp:2241
+#: main/KoDocument.cpp:2244
 msgid "a drawing"
 msgstr "рисунок"
 
-#: main/KoDocument.cpp:2549
+#: main/KoDocument.cpp:2558
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1371,7 +1371,7 @@ msgstr ""
 "Документ «%1» был изменён.\n"
 "Сохранить изменения или отклонить их?"
 
-#: main/KoDocument.cpp:2552
+#: main/KoDocument.cpp:2561
 #, kde-format
 msgid "Close Document"
 msgstr "Закрыть документ"
@@ -1401,7 +1401,7 @@ msgstr "Не удалось экспортировать файл."
 msgid "Missing Export Filter"
 msgstr "Отсутствует фильтр экспорта"
 
-#: main/KoFilterManager.cpp:538
+#: main/KoFilterManager.cpp:546
 #, kde-format
 msgid ""
 "Could not import file of type\n"
@@ -1410,7 +1410,7 @@ msgstr ""
 "Не удалось импортировать файл типа\n"
 "%1"
 
-#: main/KoFilterManager.cpp:541
+#: main/KoFilterManager.cpp:549
 #, kde-format
 msgid "Missing Import Filter"
 msgstr "Отсутствует фильтр импорта"
@@ -1599,17 +1599,17 @@ msgstr "Экспортировать как PDF"
 msgid "Cannot export to the specified file"
 msgstr "Не удалось экспортировать в выбранный файл"
 
-#: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
+#: main/KoMainWindow.cpp:1616 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
 msgid "Document"
 msgstr "Документ"
 
-#: main/KoMainWindow.cpp:1621
+#: main/KoMainWindow.cpp:1624
 #, kde-format
 msgid "Document - %1"
 msgstr "Документ — %1"
 
-#: main/KoMainWindow.cpp:1651
+#: main/KoMainWindow.cpp:1654
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1618,17 +1618,17 @@ msgstr ""
 "Изменения, сделанные со времени последнего сохранения, будут утеряны.\n"
 "Продолжить?"
 
-#: main/KoMainWindow.cpp:1653
+#: main/KoMainWindow.cpp:1656
 #, kde-format
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: main/KoMainWindow.cpp:2016
+#: main/KoMainWindow.cpp:2019
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показать панель инструментов %1 "
 
-#: main/KoMainWindow.cpp:2018
+#: main/KoMainWindow.cpp:2021
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Скрыть панель инструментов %1 "
@@ -1844,7 +1844,7 @@ msgstr "Дата и время"
 msgid "Saved By"
 msgstr "Сохранён"
 
-#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:208
+#: main/KoVersionDialog.cpp:50 main/KoVersionDialog.cpp:209
 #, kde-format
 msgid "Comment"
 msgstr "Комментарий"
@@ -1869,7 +1869,7 @@ msgstr "&Открыть"
 msgid "A new version could not be added"
 msgstr "Не удалось добавить новую версию"
 
-#: main/KoVersionDialog.cpp:220 main/KoVersionDialog.cpp:222
+#: main/KoVersionDialog.cpp:221 main/KoVersionDialog.cpp:223
 #, kde-format
 msgid "Date: %1"
 msgstr "Дата: %1"
@@ -2679,7 +2679,7 @@ msgstr "Настроить..."
 msgid "Import Slideshow"
 msgstr "Импорт презентации"
 
-#: pageapp/KoPAView.cpp:544 pageapp/KoPAView.cpp:547
+#: pageapp/KoPAView.cpp:536 pageapp/KoPAView.cpp:548 pageapp/KoPAView.cpp:551
 #, kde-format
 msgid ""
 "Could not import\n"
@@ -2688,7 +2688,7 @@ msgstr ""
 "Не удалось импортировать\n"
 "%1"
 
-#: pageapp/KoPAView.cpp:659
+#: pageapp/KoPAView.cpp:663
 msgctxt "(qtundo-format)"
 msgid "Change page layout"
 msgstr ""
@@ -3830,17 +3830,17 @@ msgstr ""
 "Не удаётся записать manifest-файл. Документ останется нечитаемым. Попробуйте "
 "сохранить документ ещё раз, чтобы не потерять проделанную работу."
 
-#: store/KoEncryptedStore.cpp:736
+#: store/KoEncryptedStore.cpp:737
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Введите пароль для открытия этого файла."
 
-#: store/KoEncryptedStore.cpp:941
+#: store/KoEncryptedStore.cpp:943
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Введите пароль для шифрования документа."
 
-#: store/KoEncryptedStore.cpp:956
+#: store/KoEncryptedStore.cpp:958
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Сохранить пароль?"
@@ -3850,7 +3850,7 @@ msgstr "Сохранить пароль?"
 msgid "File '%1' is not readable"
 msgstr "Файл «%1» недоступен для чтения"
 
-#: store/KoNetAccess.cpp:370
+#: store/KoNetAccess.cpp:372
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr "Ошибка: неизвестный протокол «%1»"
@@ -3887,9 +3887,9 @@ msgid "Delete"
 msgstr "Удалить"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:80
-#: text/KoTextEditor_undo.cpp:166 text/KoTextEditor_undo.cpp:204
-#: text/KoTextEditor_undo.cpp:224 text/KoTextEditor_undo.cpp:268
+#: text/commands/DeleteCommand.cpp:484 text/KoTextEditor_undo.cpp:89
+#: text/KoTextEditor_undo.cpp:175 text/KoTextEditor_undo.cpp:213
+#: text/KoTextEditor_undo.cpp:242 text/KoTextEditor_undo.cpp:292
 msgctxt "(qtundo-format)"
 msgid "Text"
 msgstr ""
@@ -4112,7 +4112,7 @@ msgctxt "Underline Style"
 msgid "Double"
 msgstr "Двойное"
 
-#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1482
+#: text/KoTextEditor.cpp:182 text/KoTextEditor.cpp:1482
 #: text/KoTextEditor.cpp:1484
 msgctxt "(qtundo-format)"
 msgid "New Paragraph"
@@ -4120,109 +4120,109 @@ msgstr ""
 "Новый абзац\n"
 "новый абзац"
 
-#: text/KoTextEditor.cpp:474
+#: text/KoTextEditor.cpp:476
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr ""
 "Добавление закладки\n"
 "добавление закладки"
 
-#: text/KoTextEditor.cpp:489
+#: text/KoTextEditor.cpp:491
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
 msgstr ""
 "Добавление комментария\n"
 "добавление комментария"
 
-#: text/KoTextEditor.cpp:513
+#: text/KoTextEditor.cpp:515
 msgctxt "(qtundo-format)"
 msgid "Insert Index"
 msgstr ""
 "Вставка указателя\n"
 "вставку указателя"
 
-#: text/KoTextEditor.cpp:539
+#: text/KoTextEditor.cpp:541
 msgctxt "(qtundo-format)"
 msgid "Insert Variable"
 msgstr ""
 "Вставка переменной\n"
 "вставку переменной"
 
-#: text/KoTextEditor.cpp:604
+#: text/KoTextEditor.cpp:605
 msgctxt "(qtundo-format)"
 msgid "Insert Break"
 msgstr ""
 "Вставка разрыва\n"
 "вставку разрыва"
 
-#: text/KoTextEditor.cpp:912 text/KoTextEditor.cpp:914
-#: text/KoTextEditor.cpp:929
+#: text/KoTextEditor.cpp:913 text/KoTextEditor.cpp:915
+#: text/KoTextEditor.cpp:930
 msgctxt "(qtundo-format)"
 msgid "Insert Table"
 msgstr ""
 "Вставка таблицу\n"
 "вставку таблицы"
 
-#: text/KoTextEditor.cpp:1069
+#: text/KoTextEditor.cpp:1070
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr ""
 "Объединение ячеек\n"
 "объединение ячеек"
 
-#: text/KoTextEditor.cpp:1086
+#: text/KoTextEditor.cpp:1087
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr ""
 "Разделение ячеек\n"
 "разделение ячеек"
 
-#: text/KoTextEditor.cpp:1114
+#: text/KoTextEditor.cpp:1113
 msgctxt "(qtundo-format)"
 msgid "Adjust Table Width"
 msgstr ""
 "Регулировка ширины таблицы\n"
 "регулировку ширины таблицы"
 
-#: text/KoTextEditor.cpp:1130
+#: text/KoTextEditor.cpp:1129
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
 msgstr ""
 "Изменение форматирования рамки\n"
 "изменение форматирования рамки"
 
-#: text/KoTextEditor.cpp:1177 text/KoTextEditor.cpp:1179
-#: text/KoTextEditor.cpp:1197
+#: text/KoTextEditor.cpp:1178 text/KoTextEditor.cpp:1180
+#: text/KoTextEditor.cpp:1198
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
 msgstr ""
 "Вставка содержания\n"
 "вставку содержания"
 
-#: text/KoTextEditor.cpp:1236
+#: text/KoTextEditor.cpp:1237
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
 msgstr ""
 "Изменение содержания\n"
 "изменение содержания"
 
-#: text/KoTextEditor.cpp:1253 text/KoTextEditor.cpp:1255
-#: text/KoTextEditor.cpp:1274
+#: text/KoTextEditor.cpp:1254 text/KoTextEditor.cpp:1256
+#: text/KoTextEditor.cpp:1275
 msgctxt "(qtundo-format)"
 msgid "Insert Bibliography"
 msgstr ""
 "Вставка списка литературы\n"
 "вставку списка литературы"
 
-#: text/KoTextEditor.cpp:1311 text/KoTextEditor.cpp:1313
+#: text/KoTextEditor.cpp:1312 text/KoTextEditor.cpp:1314
 msgctxt "(qtundo-format)"
 msgid "Add Citation"
 msgstr ""
 "Добавление цитаты\n"
 "добавление цитаты"
 
-#: text/KoTextEditor.cpp:1340 text/KoTextEditor.cpp:1342
-#: text/KoTextEditor.cpp:1380
+#: text/KoTextEditor.cpp:1341 text/KoTextEditor.cpp:1343
+#: text/KoTextEditor.cpp:1381
 msgctxt "(qtundo-format)"
 msgid "Typing"
 msgstr ""
@@ -5519,13 +5519,13 @@ msgstr "Очистить список восстановленных файло�
 msgid "Undelete"
 msgstr "Восстановить"
 
-#: widgets/KoToolBox.cpp:310
+#: widgets/KoToolBox.cpp:308
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "По умолчанию"
 
-#: widgets/KoToolBox.cpp:315
+#: widgets/KoToolBox.cpp:313
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"

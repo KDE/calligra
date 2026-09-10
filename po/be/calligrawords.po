@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2007-01-26 06:23+0100\n"
 "Last-Translator: Siarhei Liantsevich <serzh.by@gmail.com>\n"
 "Language-Team: Belarusian\n"
@@ -1363,37 +1363,37 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Сяржук Лянцэвіч"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, fuzzy, kde-format
 msgid "Copy"
 msgstr "Копія%1-%2"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, fuzzy, kde-format
 msgid "Standard"
 msgstr "Звычайны"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, fuzzy, kde-format
 msgid "Document Title"
 msgstr "Назоў дакумента"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, fuzzy, kde-format
 msgid "Head 1"
 msgstr "Загаловак 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, fuzzy, kde-format
 msgid "Head 2"
 msgstr "Загаловак 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, fuzzy, kde-format
 msgid "Head 3"
 msgstr "Загаловак 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, fuzzy, kde-format
 msgid "Bullet List"
 msgstr "Маркіраваны спіс"

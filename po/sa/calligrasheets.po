@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-04 00:44+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2024-12-25 19:37+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -120,7 +120,7 @@ msgstr "अस्मिन् दस्तावेजे पत्रिका�
 msgid "Invalid document. Sheet name is empty."
 msgstr "अमान्य दस्तावेज। पत्रनाम रिक्तम् अस्ति।"
 
-#: core/Map.cpp:241 engine/MapBase.cpp:182
+#: core/Map.cpp:241 engine/MapBase.cpp:185
 #, kde-format
 msgid "Sheet%1"
 msgstr "पत्र%1"
@@ -151,27 +151,27 @@ msgstr "शीर्षक१"
 msgid "Default"
 msgstr "मूलभूतम्‌"
 
-#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
+#: core/ValueFormatter.cpp:548 core/ValueFormatter.cpp:554
 #, kde-format
 msgid "AM"
 msgstr "अस्मि"
 
-#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
+#: core/ValueFormatter.cpp:548 core/ValueFormatter.cpp:554
 #, kde-format
 msgid "PM"
 msgstr "PM"
 
-#: core/ValueFormatter.cpp:557
+#: core/ValueFormatter.cpp:558
 #, kde-format
 msgid "h"
 msgstr "ज"
 
-#: core/ValueFormatter.cpp:559
+#: core/ValueFormatter.cpp:560
 #, kde-format
 msgid "min"
 msgstr "मि"
 
-#: core/ValueFormatter.cpp:561
+#: core/ValueFormatter.cpp:562
 #, kde-format
 msgid "s"
 msgstr "स"
@@ -179,7 +179,7 @@ msgstr "स"
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/actions/dialogs/ValidityDialog.cpp:62
-#: ui/dialogs/LayoutPage_Float.cpp:120
+#: ui/dialogs/LayoutPage_Float.cpp:121
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
@@ -276,12 +276,12 @@ msgstr "उदाहरणानि"
 msgid "Related Functions"
 msgstr "सम्बन्धित कार्य"
 
-#: engine/Localization.cpp:765
+#: engine/Localization.cpp:803
 #, kde-format
 msgid "true"
 msgstr "सत्यम्‌"
 
-#: engine/Localization.cpp:766
+#: engine/Localization.cpp:804
 #, kde-format
 msgid "false"
 msgstr "असत्य"
@@ -291,61 +291,61 @@ msgstr "असत्य"
 msgid "Dependency"
 msgstr "आश्रयः"
 
-#: engine/Value.cpp:674
+#: engine/Value.cpp:675
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#वृत्त!"
 
-#: engine/Value.cpp:682
+#: engine/Value.cpp:683
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#निर्भर!"
 
-#: engine/Value.cpp:690
+#: engine/Value.cpp:691
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "# दिवि / 0 !"
 
-#: engine/Value.cpp:698
+#: engine/Value.cpp:699
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "# न/अ"
 
-#: engine/Value.cpp:706
+#: engine/Value.cpp:707
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#नामः?"
 
-#: engine/Value.cpp:714
+#: engine/Value.cpp:715
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "# नुम् !"
 
-#: engine/Value.cpp:722
+#: engine/Value.cpp:723
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#लुप्तमूल्य!"
 
-#: engine/Value.cpp:730
+#: engine/Value.cpp:731
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "# पार्से !"
 
-#: engine/Value.cpp:738
+#: engine/Value.cpp:739
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "# REF !"
 
-#: engine/Value.cpp:746
+#: engine/Value.cpp:747
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -875,14 +875,14 @@ msgstr "CARY(12;0) 0 प्रेषयति"
 #: functions/statistical.xml:1823 functions/statistical.xml:1865
 #: functions/text.xml:11 functions/text.xml:30 functions/text.xml:838
 #: ui/actions/dialogs/ValidityDialog.cpp:60 ui/actions/Style.cpp:283
-#: ui/dialogs/LayoutPage_Float.cpp:63
+#: ui/dialogs/LayoutPage_Float.cpp:64
 #, kde-format
 msgid "Number"
 msgstr "संख्या"
 
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:233
-#: ui/actions/Style.cpp:70 ui/dialogs/LayoutPage_Float.cpp:51
+#: ui/actions/Style.cpp:70 ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "प्रारूप"
@@ -1229,7 +1229,7 @@ msgstr "तिथि एवं समय"
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:739
 #: ui/actions/dialogs/ValidityDialog.cpp:63 ui/actions/Style.cpp:423
-#: ui/dialogs/LayoutPage_Float.cpp:98
+#: ui/dialogs/LayoutPage_Float.cpp:99
 #, kde-format
 msgid "Date"
 msgstr "दिनाङ्कः"
@@ -1302,7 +1302,7 @@ msgstr "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) 59 प्रत्याग
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
 #: functions/datetime.xml:475 ui/actions/dialogs/ValidityDialog.cpp:64
-#: ui/actions/Style.cpp:456 ui/dialogs/LayoutPage_Float.cpp:105
+#: ui/actions/Style.cpp:456 ui/dialogs/LayoutPage_Float.cpp:106
 #, kde-format
 msgid "Time"
 msgstr "कालः"
@@ -3957,7 +3957,7 @@ msgid "Fractional Dollar"
 msgstr "भिन्नात्मक डॉलर"
 
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/LayoutPage_Float.cpp:89
+#: ui/dialogs/LayoutPage_Float.cpp:90
 #, kde-format
 msgid "Fraction"
 msgstr "अंशः"
@@ -5222,7 +5222,7 @@ msgid "Manual"
 msgstr "शास्त्र"
 
 #: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
-#: ui/dialogs/LayoutPage_Float.cpp:215
+#: ui/dialogs/LayoutPage_Float.cpp:216
 #, kde-format
 msgid "Automatic"
 msgstr "स्वतः"
@@ -14884,12 +14884,17 @@ msgstr "स्वतः"
 msgid "Could not find sheet-style XML file '%1'."
 msgstr ""
 
-#: ui/actions/AutoFormat.cpp:91
+#: ui/actions/AutoFormat.cpp:84
+#, kde-format
+msgid "Could not open sheet-style XML file %1."
+msgstr ""
+
+#: ui/actions/AutoFormat.cpp:94
 #, kde-format
 msgid "Parsing error in sheet-style XML file %1."
 msgstr ""
 
-#: ui/actions/AutoFormat.cpp:133
+#: ui/actions/AutoFormat.cpp:136
 #, fuzzy
 #| msgid "Format"
 msgctxt "(qtundo-format)"
@@ -17543,7 +17548,7 @@ msgstr "वैज्ञानिक"
 msgid "Set the cell formatting to a scientific format"
 msgstr ""
 
-#: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:83
+#: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:84
 #, kde-format
 msgid "Scientific"
 msgstr "वैज्ञानिक"
@@ -17566,7 +17571,7 @@ msgstr "प्रतिशतं"
 msgid "Set the cell formatting to look like a percentage"
 msgstr ""
 
-#: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:69
+#: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:70
 #, kde-format
 msgid "Percent"
 msgstr "प्रतिशतं"
@@ -17589,7 +17594,7 @@ msgstr "कोष्ठक प्रारूप"
 msgid "Set the cell formatting to look like your local currency"
 msgstr ""
 
-#: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:76
+#: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:77
 #, kde-format
 msgid "Money"
 msgstr "मुद्रा"
@@ -18431,7 +18436,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
-#: ui/dialogs/LayoutPage_Float.cpp:132 ui/dialogs/LayoutPage_Pattern.cpp:142
+#: ui/dialogs/LayoutPage_Float.cpp:133 ui/dialogs/LayoutPage_Pattern.cpp:142
 #, kde-format
 msgid "Preview"
 msgstr "पूर्वावलोकनम्"
@@ -18488,12 +18493,12 @@ msgstr "प्रतिमानम्‌"
 msgid "Customize"
 msgstr "अनुकूलितं कुर्वन्तु"
 
-#: ui/dialogs/LayoutPage_Float.cpp:57
+#: ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
 msgid "Generic"
 msgstr "सामान्यम्"
 
-#: ui/dialogs/LayoutPage_Float.cpp:59
+#: ui/dialogs/LayoutPage_Float.cpp:60
 #, kde-format
 msgid ""
 "This is the default format and Calligra Sheets autodetects the actual data "
@@ -18506,7 +18511,7 @@ msgstr ""
 "इत्यनेन कोष्ठकस्य अन्तः संख्याः, तिथयः, समयाः च न्याय्यः भवन्ति, left इत्यनेन अन्यत् किमपि "
 "न्याय्यं भवति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:65
+#: ui/dialogs/LayoutPage_Float.cpp:66
 #, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -18517,7 +18522,7 @@ msgstr ""
 "Locale -> Country/Region & Language -> Numbers ट्याब् इत्यत्र चयनितं संकेतनं उपयुज्यते "
 "। सङ्ख्याः पूर्वनिर्धारितरूपेण सम्यक् न्याय्याः सन्ति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:71
+#: ui/dialogs/LayoutPage_Float.cpp:72
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -18534,7 +18539,7 @@ msgstr ""
 "भविष्यति । Generic cell format इत्यत्र पुनः स्विच् कृत्वा पुनः 12 इत्यत्र आनयिष्यति ।\n"
 "Format Toolbar इत्यस्मिन् Percent चिह्नस्य अपि उपयोगं कर्तुं शक्नुवन्ति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:79
 #, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -18551,7 +18556,7 @@ msgstr ""
 "भवान् Format Toolbar मध्ये Currency चिह्नस्य उपयोगं अपि कर्तुं शक्नोति यत् सेलस्वरूपणं स्वस्य "
 "वर्तमानमुद्रायाः सदृशं दृश्यते इति सेट् कर्तुं शक्नोति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:85
+#: ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -18562,7 +18567,7 @@ msgstr ""
 "इति परिवर्तितं भविष्यति । Generic cell format इत्यस्य उपयोगेन पुनः गमनेन पुनः 0.0012 "
 "प्रदर्शितं भविष्यति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:91
+#: ui/dialogs/LayoutPage_Float.cpp:92
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -18584,7 +18589,7 @@ msgstr ""
 "संख्यारूपेण 1.4 अस्ति तथा च भवान् Fraction तथा Sixteenths 1/16 चिनोति तर्हि कोष्ठकः "
 "\"1 6/16\" इति प्रदर्शयिष्यति यत् समीपस्थं निकटतमं Sixteenth fraction अस्ति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:100
+#: ui/dialogs/LayoutPage_Float.cpp:101
 #, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -18600,7 +18605,7 @@ msgstr ""
 "यथा भवन्तः सङ्ख्याः अधः कर्षितुं शक्नुवन्ति तथा भवन्तः तिथयः अपि अधः कर्षितुं शक्नुवन्ति तथा "
 "च अग्रिमाः कोष्ठकाः अपि तिथयः प्राप्नुयुः ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:107
+#: ui/dialogs/LayoutPage_Float.cpp:108
 #, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -18620,12 +18625,12 @@ msgstr ""
 "यदा कोष्ठके सङ्ख्या समयरूपेण अर्थं न ददाति तदा Calligra Sheets 00:00 00:00 "
 "प्रदर्शयिष्यति यत् भवतः System Settings मध्ये अस्ति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:113
+#: ui/dialogs/LayoutPage_Float.cpp:114
 #, kde-format
 msgid "Datetime"
 msgstr "तिथिसमय"
 
-#: ui/dialogs/LayoutPage_Float.cpp:115
+#: ui/dialogs/LayoutPage_Float.cpp:116
 #, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
@@ -18641,7 +18646,7 @@ msgstr ""
 "यथा भवन्तः सङ्ख्याः अधः कर्षितुं शक्नुवन्ति तथा भवन्तः तिथयः अपि अधः कर्षितुं शक्नुवन्ति तथा "
 "च अग्रिमाः कोष्ठकाः अपि तिथिसमयान् प्राप्नुयुः ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:122
+#: ui/dialogs/LayoutPage_Float.cpp:123
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -18655,17 +18660,17 @@ msgstr ""
 "न्याय्यं भविष्यति । यदा संख्याः पाठरूपेण प्रारूपिताः भवन्ति तदा तेषां उपयोगः गणनासु सूत्रेषु "
 "वा कर्तुं न शक्यते । कोष्ठस्य न्याय्यतायाः मार्गः अपि परिवर्तयति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:127
+#: ui/dialogs/LayoutPage_Float.cpp:128
 #, kde-format
 msgid "Custom"
 msgstr "आचारः"
 
-#: ui/dialogs/LayoutPage_Float.cpp:128
+#: ui/dialogs/LayoutPage_Float.cpp:129
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr "इष्टस्वरूपम् अद्यापि कार्यं न करोति । अग्रिमे विमोचनं सक्षमं कर्तुं ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:136
+#: ui/dialogs/LayoutPage_Float.cpp:137
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -18674,12 +18679,12 @@ msgstr ""
 "एतेन भवतः पसन्दस्य पूर्वावलोकनं प्रदर्शितं भविष्यति येन भवन्तः ज्ञातुं शक्नुवन्ति यत् एतत् किं "
 "करोति तत् प्रमाणीकरणार्थं OK बटन् नुदितुं पूर्वं ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:146
+#: ui/dialogs/LayoutPage_Float.cpp:147
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "अंशस्य, तिथिस्य, समयस्य वा प्रारूपस्य प्रारूपस्य विकल्पान् प्रदर्शयति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:156
+#: ui/dialogs/LayoutPage_Float.cpp:157
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -18688,12 +18693,12 @@ msgstr ""
 "अत्र भवान् चेक्ड् प्रारूपे प्रत्येकस्य कोष्ठकसामग्रीणां अन्ते $HK चिह्नम् इत्यादिकं Postfix "
 "योजयितुं शक्नोति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:159
+#: ui/dialogs/LayoutPage_Float.cpp:160
 #, kde-format
 msgid "variable"
 msgstr "चरः"
 
-#: ui/dialogs/LayoutPage_Float.cpp:163
+#: ui/dialogs/LayoutPage_Float.cpp:164
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -18704,7 +18709,7 @@ msgstr ""
 "शक्नोति । Format toolbar इत्यस्मिन् Increase precision अथवा Decrease precision "
 "इति चिह्नानां उपयोगेन अपि एतत् परिवर्तयितुं शक्यते । "
 
-#: ui/dialogs/LayoutPage_Float.cpp:168
+#: ui/dialogs/LayoutPage_Float.cpp:169
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -18713,7 +18718,7 @@ msgstr ""
 "अत्र भवान् चेक्ड् प्रारूपेण प्रत्येकस्य कोष्ठकसामग्रीणां आरम्भे $ चिह्नम् इत्यादिकं Prefix योजयितुं "
 "शक्नोति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:172
+#: ui/dialogs/LayoutPage_Float.cpp:173
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -18722,72 +18727,72 @@ msgstr ""
 "सकारात्मकमूल्यानि अग्रणी + चिह्नेन प्रदर्शितानि सन्ति वा नकारात्मकमूल्यानि रक्तवर्णेन "
 "दर्शितानि वा इति भवान् चिन्वितुं शक्नोति ।"
 
-#: ui/dialogs/LayoutPage_Float.cpp:178
+#: ui/dialogs/LayoutPage_Float.cpp:179
 #, kde-format
 msgid "Postfix:"
 msgstr "उत्तरनिर्धारणम् :"
 
-#: ui/dialogs/LayoutPage_Float.cpp:182
+#: ui/dialogs/LayoutPage_Float.cpp:183
 #, kde-format
 msgid "Prefix:"
 msgstr "उपसर्गः :"
 
-#: ui/dialogs/LayoutPage_Float.cpp:186
+#: ui/dialogs/LayoutPage_Float.cpp:187
 #, kde-format
 msgid "Precision:"
 msgstr "सटीकता :"
 
-#: ui/dialogs/LayoutPage_Float.cpp:203
+#: ui/dialogs/LayoutPage_Float.cpp:204
 #, kde-format
 msgid "Format:"
 msgstr "प्रारूपः :"
 
-#: ui/dialogs/LayoutPage_Float.cpp:207
+#: ui/dialogs/LayoutPage_Float.cpp:208
 #, kde-format
 msgid "Currency:"
 msgstr "मुद्रा:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:313
+#: ui/dialogs/LayoutPage_Float.cpp:314
 #, kde-format
 msgid "Halves 1/2"
 msgstr "अर्धानि १/२"
 
-#: ui/dialogs/LayoutPage_Float.cpp:314
+#: ui/dialogs/LayoutPage_Float.cpp:315
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "त्रैमासिक 1/4"
 
-#: ui/dialogs/LayoutPage_Float.cpp:315
+#: ui/dialogs/LayoutPage_Float.cpp:316
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "अष्टमम् १/८"
 
-#: ui/dialogs/LayoutPage_Float.cpp:316
+#: ui/dialogs/LayoutPage_Float.cpp:317
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "षोडशः १/१६"
 
-#: ui/dialogs/LayoutPage_Float.cpp:317
+#: ui/dialogs/LayoutPage_Float.cpp:318
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "दशमांशः १/१०"
 
-#: ui/dialogs/LayoutPage_Float.cpp:318
+#: ui/dialogs/LayoutPage_Float.cpp:319
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "शतभागः १/१००"
 
-#: ui/dialogs/LayoutPage_Float.cpp:319
+#: ui/dialogs/LayoutPage_Float.cpp:320
 #, kde-format
 msgid "One digit 5/9"
 msgstr "एकः अङ्कः ५/९"
 
-#: ui/dialogs/LayoutPage_Float.cpp:320
+#: ui/dialogs/LayoutPage_Float.cpp:321
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "द्वौ अङ्कौ १५/२२"
 
-#: ui/dialogs/LayoutPage_Float.cpp:321
+#: ui/dialogs/LayoutPage_Float.cpp:322
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "त्रयः अङ्काः १५३/६५२"

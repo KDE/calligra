@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kcells\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-04 00:44+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2026-03-11 15:48+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -128,7 +128,7 @@ msgstr "Tässä tiedostossa ei ole taulukkoa."
 msgid "Invalid document. Sheet name is empty."
 msgstr "Virheellinen tiedosto. Taulukon nimi on tyhjä."
 
-#: core/Map.cpp:241 engine/MapBase.cpp:182
+#: core/Map.cpp:241 engine/MapBase.cpp:185
 #, kde-format
 msgid "Sheet%1"
 msgstr "Taulukko%1"
@@ -159,27 +159,27 @@ msgstr "Otsikko1"
 msgid "Default"
 msgstr "Oletus"
 
-#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
+#: core/ValueFormatter.cpp:548 core/ValueFormatter.cpp:554
 #, kde-format
 msgid "AM"
 msgstr "AP"
 
-#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
+#: core/ValueFormatter.cpp:548 core/ValueFormatter.cpp:554
 #, kde-format
 msgid "PM"
 msgstr "IP"
 
-#: core/ValueFormatter.cpp:557
+#: core/ValueFormatter.cpp:558
 #, kde-format
 msgid "h"
 msgstr "t"
 
-#: core/ValueFormatter.cpp:559
+#: core/ValueFormatter.cpp:560
 #, kde-format
 msgid "min"
 msgstr "min"
 
-#: core/ValueFormatter.cpp:561
+#: core/ValueFormatter.cpp:562
 #, kde-format
 msgid "s"
 msgstr "s"
@@ -187,7 +187,7 @@ msgstr "s"
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/actions/dialogs/ValidityDialog.cpp:62
-#: ui/dialogs/LayoutPage_Float.cpp:120
+#: ui/dialogs/LayoutPage_Float.cpp:121
 #, kde-format
 msgid "Text"
 msgstr "Teksti"
@@ -285,12 +285,12 @@ msgid "Related Functions"
 msgstr "Samantapaisia funktioita"
 
 # *** TARKISTA: Kannattaisiko nämä ”true” ja ”false” jättää kääntämättä (ts. ovatko arvoja vai lähinnä vain näytettäviä viestejä)?
-#: engine/Localization.cpp:765
+#: engine/Localization.cpp:803
 #, kde-format
 msgid "true"
 msgstr "true"
 
-#: engine/Localization.cpp:766
+#: engine/Localization.cpp:804
 #, kde-format
 msgid "false"
 msgstr "false"
@@ -301,61 +301,61 @@ msgid "Dependency"
 msgstr "Riippuvuus"
 
 # *** TARKISTA: Mitä mahdollisia sivuseurauksia #-virhekoodien kääntämisestä on?
-#: engine/Value.cpp:674
+#: engine/Value.cpp:675
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#KEHÄ!"
 
-#: engine/Value.cpp:682
+#: engine/Value.cpp:683
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#RIIPPUVUUS!"
 
-#: engine/Value.cpp:690
+#: engine/Value.cpp:691
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#JAKO/0!"
 
-#: engine/Value.cpp:698
+#: engine/Value.cpp:699
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#EIKÄYT"
 
-#: engine/Value.cpp:706
+#: engine/Value.cpp:707
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NIMI?"
 
-#: engine/Value.cpp:714
+#: engine/Value.cpp:715
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:722
+#: engine/Value.cpp:723
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#TYHJÄ!"
 
-#: engine/Value.cpp:730
+#: engine/Value.cpp:731
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#JÄSENNYS!"
 
-#: engine/Value.cpp:738
+#: engine/Value.cpp:739
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#VIITTAUS!"
 
-#: engine/Value.cpp:746
+#: engine/Value.cpp:747
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -903,14 +903,14 @@ msgstr "CARY(12;0) palauttaa 0"
 #: functions/statistical.xml:1823 functions/statistical.xml:1865
 #: functions/text.xml:11 functions/text.xml:30 functions/text.xml:838
 #: ui/actions/dialogs/ValidityDialog.cpp:60 ui/actions/Style.cpp:283
-#: ui/dialogs/LayoutPage_Float.cpp:63
+#: ui/dialogs/LayoutPage_Float.cpp:64
 #, kde-format
 msgid "Number"
 msgstr "Luku"
 
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:233
-#: ui/actions/Style.cpp:70 ui/dialogs/LayoutPage_Float.cpp:51
+#: ui/actions/Style.cpp:70 ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Muotoilu"
@@ -1256,7 +1256,7 @@ msgstr "Päivämäärä ja aika"
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:739
 #: ui/actions/dialogs/ValidityDialog.cpp:63 ui/actions/Style.cpp:423
-#: ui/dialogs/LayoutPage_Float.cpp:98
+#: ui/dialogs/LayoutPage_Float.cpp:99
 #, kde-format
 msgid "Date"
 msgstr "Päivämäärä"
@@ -1330,7 +1330,7 @@ msgstr "DAYS360(\"22.2.2002\"; \"21.4.2002\"; FALSE) palauttaa 59"
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
 #: functions/datetime.xml:475 ui/actions/dialogs/ValidityDialog.cpp:64
-#: ui/actions/Style.cpp:456 ui/dialogs/LayoutPage_Float.cpp:105
+#: ui/actions/Style.cpp:456 ui/dialogs/LayoutPage_Float.cpp:106
 #, kde-format
 msgid "Time"
 msgstr "Aika"
@@ -4018,7 +4018,7 @@ msgid "Fractional Dollar"
 msgstr "Dollari murtolukuna"
 
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/LayoutPage_Float.cpp:89
+#: ui/dialogs/LayoutPage_Float.cpp:90
 #, kde-format
 msgid "Fraction"
 msgstr "Murtoluku"
@@ -5230,7 +5230,7 @@ msgid "Manual"
 msgstr "Käsin"
 
 #: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
-#: ui/dialogs/LayoutPage_Float.cpp:215
+#: ui/dialogs/LayoutPage_Float.cpp:216
 #, kde-format
 msgid "Automatic"
 msgstr "Automaattinen"
@@ -14990,13 +14990,19 @@ msgstr "Automaattimuotoilu…"
 msgid "Could not find sheet-style XML file '%1'."
 msgstr "Taulukkotyylistä XML-tiedostoa ”%1” ei löydy."
 
-#: ui/actions/AutoFormat.cpp:91
+#: ui/actions/AutoFormat.cpp:84
+#, fuzzy, kde-format
+#| msgid "Could not find sheet-style XML file '%1'."
+msgid "Could not open sheet-style XML file %1."
+msgstr "Taulukkotyylistä XML-tiedostoa ”%1” ei löydy."
+
+#: ui/actions/AutoFormat.cpp:94
 #, fuzzy, kde-format
 #| msgid "Parsing error in sheet-style XML file %1."
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "Jäsennysvirhe taulukkotyylisessä XML-tiedostossa %1."
 
-#: ui/actions/AutoFormat.cpp:133
+#: ui/actions/AutoFormat.cpp:136
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Auto-Format"
@@ -18023,7 +18029,7 @@ msgstr ""
 msgid "Set the cell formatting to a scientific format"
 msgstr "Muuta solun muotoilu prosenttimuotoon"
 
-#: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:83
+#: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:84
 #, kde-format
 msgid "Scientific"
 msgstr "Tieteellinen"
@@ -18047,7 +18053,7 @@ msgstr "Prosenttimuoto"
 msgid "Set the cell formatting to look like a percentage"
 msgstr "Muuta solun muotoilu prosenttimuotoon"
 
-#: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:69
+#: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:70
 #, kde-format
 msgid "Percent"
 msgstr "Prosentti"
@@ -18074,7 +18080,7 @@ msgstr "Valuuttamuoto"
 msgid "Set the cell formatting to look like your local currency"
 msgstr "Muuta solun muotoilu paikalliseen valuuttamuotoon"
 
-#: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:76
+#: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:77
 #, kde-format
 msgid "Money"
 msgstr "Valuutta"
@@ -19056,7 +19062,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
-#: ui/dialogs/LayoutPage_Float.cpp:132 ui/dialogs/LayoutPage_Pattern.cpp:142
+#: ui/dialogs/LayoutPage_Float.cpp:133 ui/dialogs/LayoutPage_Pattern.cpp:142
 #, kde-format
 msgid "Preview"
 msgstr "Esikatselu"
@@ -19113,12 +19119,12 @@ msgstr "Kuvio"
 msgid "Customize"
 msgstr "Muokkaa"
 
-#: ui/dialogs/LayoutPage_Float.cpp:57
+#: ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
 msgid "Generic"
 msgstr "Yleiset"
 
-#: ui/dialogs/LayoutPage_Float.cpp:59
+#: ui/dialogs/LayoutPage_Float.cpp:60
 #, kde-format
 msgid ""
 "This is the default format and Calligra Sheets autodetects the actual data "
@@ -19130,7 +19136,7 @@ msgstr ""
 "automaattisesti solun sisällöstä. Oletusarvoisesti Calligra Sheets tasaa "
 "solussa oikealle luvut, päiväykset ja kellonajat ja vasemmalle kaiken muun."
 
-#: ui/dialogs/LayoutPage_Float.cpp:65
+#: ui/dialogs/LayoutPage_Float.cpp:66
 #, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -19141,7 +19147,7 @@ msgstr ""
 "oletusarvoisesti oikealle."
 
 # En kyllä ihan tajua, mitä ”will be multiplied by 100%” tarkoittaa? Periaatteessahan kai 12 × 100 % = 12 × 12 = 144!
-#: ui/dialogs/LayoutPage_Float.cpp:71
+#: ui/dialogs/LayoutPage_Float.cpp:72
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -19158,7 +19164,7 @@ msgstr ""
 "muodossa 1,200 %. Palauttamalla muotoilun yleiseksi solussa näkyy taas 12."
 
 # converts -> muotoilee, koska minusta mitään ”muunnosta” ei tapahdu
-#: ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:79
 #, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -19175,7 +19181,7 @@ msgstr ""
 "kuvakkeella."
 
 # changes -> muotoilee, koska minusta mitään ”muunnosta” ei tapahdu
-#: ui/dialogs/LayoutPage_Float.cpp:85
+#: ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -19186,7 +19192,7 @@ msgstr ""
 "0,0012 muuttuu muotoon 1,2E-03. Yleiseen muotoon palattaessa muotona on taas "
 "0,0012."
 
-#: ui/dialogs/LayoutPage_Float.cpp:91
+#: ui/dialogs/LayoutPage_Float.cpp:92
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -19208,7 +19214,7 @@ msgstr ""
 "ja teet samat valinnat, solussa näkyy ”1 6/16”, mikä on lähin "
 "kuudestoistaosavastine."
 
-#: ui/dialogs/LayoutPage_Float.cpp:100
+#: ui/dialogs/LayoutPage_Float.cpp:101
 #, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -19223,7 +19229,7 @@ msgstr ""
 "Kuten lukuja, myös päiväyksiä voi vetää alaspäin, jolloin seuraavatkin solut "
 "esitetään päivämäärinä."
 
-#: ui/dialogs/LayoutPage_Float.cpp:107
+#: ui/dialogs/LayoutPage_Float.cpp:108
 #, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -19242,12 +19248,12 @@ msgstr ""
 "muuntaa järkevästi kellonajaksi, Calligra Sheets näyttää 00.00 "
 "järjestelmäasetusten mukaisessa yleisessä muodossa."
 
-#: ui/dialogs/LayoutPage_Float.cpp:113
+#: ui/dialogs/LayoutPage_Float.cpp:114
 #, kde-format
 msgid "Datetime"
 msgstr "Päiväys ja aika"
 
-#: ui/dialogs/LayoutPage_Float.cpp:115
+#: ui/dialogs/LayoutPage_Float.cpp:116
 #, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
@@ -19263,7 +19269,7 @@ msgstr ""
 "esitetään päivämäärinä."
 
 # id:n viimeinen virke toistaa vain jo edellä sanotun, jätin kääntämättä
-#: ui/dialogs/LayoutPage_Float.cpp:122
+#: ui/dialogs/LayoutPage_Float.cpp:123
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -19277,17 +19283,17 @@ msgstr ""
 "asettaminen tasaa luvun vasemmalle. Tekstiksi muotoiltuja lukuja ei myöskään "
 "voi käyttää laskennassa tai kaavoissa."
 
-#: ui/dialogs/LayoutPage_Float.cpp:127
+#: ui/dialogs/LayoutPage_Float.cpp:128
 #, kde-format
 msgid "Custom"
 msgstr "Oma"
 
-#: ui/dialogs/LayoutPage_Float.cpp:128
+#: ui/dialogs/LayoutPage_Float.cpp:129
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr "Oma muotoilu ei toimi vielä. Otetaan käyttöön tulevassa julkaisussa."
 
-#: ui/dialogs/LayoutPage_Float.cpp:136
+#: ui/dialogs/LayoutPage_Float.cpp:137
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
@@ -19296,12 +19302,12 @@ msgstr ""
 "Tämä näyttää esikatselun valinnastasi, jotta voit tarkistaa kaiken olevan "
 "kunnossa ennen kuin otat muutokset käyttöön painamalla OK."
 
-#: ui/dialogs/LayoutPage_Float.cpp:146
+#: ui/dialogs/LayoutPage_Float.cpp:147
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "Näyttää murto-osien, päiväysten ja kellonaikojen muotoiluvalinnat."
 
-#: ui/dialogs/LayoutPage_Float.cpp:156
+#: ui/dialogs/LayoutPage_Float.cpp:157
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
@@ -19310,12 +19316,12 @@ msgstr ""
 "Tässä voit määrittää kunkin  valittua muotoilua käyttävän solun sisällön "
 "loppuun tulevan jälkiliitteen (esim. ”$HK”)"
 
-#: ui/dialogs/LayoutPage_Float.cpp:159
+#: ui/dialogs/LayoutPage_Float.cpp:160
 #, kde-format
 msgid "variable"
 msgstr "muuttuja"
 
-#: ui/dialogs/LayoutPage_Float.cpp:163
+#: ui/dialogs/LayoutPage_Float.cpp:164
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -19326,7 +19332,7 @@ msgstr ""
 "numeerisissa arvoissa. Tätä voi muuttaa myös Muotoilu-työkalurivin Lisää "
 "tarkkuutta- ja Vähennä tarkkuutta-painikkein."
 
-#: ui/dialogs/LayoutPage_Float.cpp:168
+#: ui/dialogs/LayoutPage_Float.cpp:169
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
@@ -19335,7 +19341,7 @@ msgstr ""
 "Tässä voit määrittää kunkin  valittua muotoilua käyttävän solun sisällön "
 "alkuun tulevan etuliitteen (esim. ”$”)"
 
-#: ui/dialogs/LayoutPage_Float.cpp:172
+#: ui/dialogs/LayoutPage_Float.cpp:173
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -19344,72 +19350,72 @@ msgstr ""
 "Voit valita, lisätäänkö positiivisten lukuarvojen edelle ”+” tai näytetäänkö "
 "negatiiviset lukuarvot punaisella."
 
-#: ui/dialogs/LayoutPage_Float.cpp:178
+#: ui/dialogs/LayoutPage_Float.cpp:179
 #, kde-format
 msgid "Postfix:"
 msgstr "Jälkiliite:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:182
+#: ui/dialogs/LayoutPage_Float.cpp:183
 #, kde-format
 msgid "Prefix:"
 msgstr "Etuliite:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:186
+#: ui/dialogs/LayoutPage_Float.cpp:187
 #, kde-format
 msgid "Precision:"
 msgstr "Tarkkuus:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:203
+#: ui/dialogs/LayoutPage_Float.cpp:204
 #, kde-format
 msgid "Format:"
 msgstr "Muoto:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:207
+#: ui/dialogs/LayoutPage_Float.cpp:208
 #, kde-format
 msgid "Currency:"
 msgstr "Valuutta:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:313
+#: ui/dialogs/LayoutPage_Float.cpp:314
 #, kde-format
 msgid "Halves 1/2"
 msgstr "Puolikkaina 1/2"
 
-#: ui/dialogs/LayoutPage_Float.cpp:314
+#: ui/dialogs/LayoutPage_Float.cpp:315
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "Neljäsosina 1/4"
 
-#: ui/dialogs/LayoutPage_Float.cpp:315
+#: ui/dialogs/LayoutPage_Float.cpp:316
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "Kahdeksasosina 1/8"
 
-#: ui/dialogs/LayoutPage_Float.cpp:316
+#: ui/dialogs/LayoutPage_Float.cpp:317
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "Kuudestoistaosina 1/16"
 
-#: ui/dialogs/LayoutPage_Float.cpp:317
+#: ui/dialogs/LayoutPage_Float.cpp:318
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "Kymmenesosina 1/10"
 
-#: ui/dialogs/LayoutPage_Float.cpp:318
+#: ui/dialogs/LayoutPage_Float.cpp:319
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "Sadasosina 1/100"
 
-#: ui/dialogs/LayoutPage_Float.cpp:319
+#: ui/dialogs/LayoutPage_Float.cpp:320
 #, kde-format
 msgid "One digit 5/9"
 msgstr "Yhteen numeroon asti 5/9"
 
-#: ui/dialogs/LayoutPage_Float.cpp:320
+#: ui/dialogs/LayoutPage_Float.cpp:321
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "Kahteen numeroon asti 21/25"
 
-#: ui/dialogs/LayoutPage_Float.cpp:321
+#: ui/dialogs/LayoutPage_Float.cpp:322
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "Kolmeen numeroon asti 153/652"

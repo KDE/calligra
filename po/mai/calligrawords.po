@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2009-04-22 00:20+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -1453,47 +1453,47 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "संगीता कुमारी"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, kde-format
 msgid "Copy"
 msgstr "कापी करू"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Standard"
 msgid "Standard"
 msgstr "मानक"
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Document Title"
 msgid "Document Title"
 msgstr "दस्ताबेज शीर्षक"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Header 1"
 msgid "Head 1"
 msgstr "हेडर 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Header 2"
 msgid "Head 2"
 msgstr "हेडर 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Header 3"
 msgid "Head 3"
 msgstr "हेडर 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, kde-format
 msgid "Bullet List"
 msgstr ""

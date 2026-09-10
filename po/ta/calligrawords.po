@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2008-02-08 20:05+0530\n"
 "Last-Translator: ஸ்ரீராமதாஸ் <shriramadhas@gmail.com>\n"
 "Language-Team: தமிழ் <ubuntu-l10n-tam@lists.ubuntu.com>\n"
@@ -1436,48 +1436,48 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "தங்கம் அருண்"
 
-#: part/KWDocument.cpp:492
+#: part/KWDocument.cpp:494
 #, fuzzy, kde-format
 #| msgid "Copy%1-%2"
 msgid "Copy"
 msgstr "நகல்%1-%2"
 
-#: part/KWDocument.cpp:538 part/KWStatusBar.cpp:154
+#: part/KWDocument.cpp:544 part/KWStatusBar.cpp:154
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Standard"
 msgid "Standard"
 msgstr "தரம் "
 
-#: part/KWDocument.cpp:544
+#: part/KWDocument.cpp:550
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Document Title"
 msgid "Document Title"
 msgstr "ஆவணம் தலைப்பு"
 
-#: part/KWDocument.cpp:551
+#: part/KWDocument.cpp:557
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 1"
 msgid "Head 1"
 msgstr "தலைப்பு 1"
 
-#: part/KWDocument.cpp:557
+#: part/KWDocument.cpp:563
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 2"
 msgid "Head 2"
 msgstr "தலைப்பு 2"
 
-#: part/KWDocument.cpp:563
+#: part/KWDocument.cpp:569
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Head 3"
 msgid "Head 3"
 msgstr "தலைப்பு 3"
 
-#: part/KWDocument.cpp:569
+#: part/KWDocument.cpp:575
 #, fuzzy, kde-format
 #| msgctxt "Style name"
 #| msgid "Bullet List"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-04 00:44+0000\n"
+"POT-Creation-Date: 2026-09-10 00:46+0000\n"
 "PO-Revision-Date: 2026-08-10 15:37+0300\n"
 "Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -131,7 +131,7 @@ msgstr "Этот документ не содержит ни одного лис
 msgid "Invalid document. Sheet name is empty."
 msgstr "Неверный формат документа. Название листа пустое."
 
-#: core/Map.cpp:241 engine/MapBase.cpp:182
+#: core/Map.cpp:241 engine/MapBase.cpp:185
 #, kde-format
 msgid "Sheet%1"
 msgstr "Лист%1"
@@ -162,27 +162,27 @@ msgstr "Заголовок1"
 msgid "Default"
 msgstr "По умолчанию"
 
-#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
+#: core/ValueFormatter.cpp:548 core/ValueFormatter.cpp:554
 #, kde-format
 msgid "AM"
 msgstr "AM"
 
-#: core/ValueFormatter.cpp:547 core/ValueFormatter.cpp:553
+#: core/ValueFormatter.cpp:548 core/ValueFormatter.cpp:554
 #, kde-format
 msgid "PM"
 msgstr "PM"
 
-#: core/ValueFormatter.cpp:557
+#: core/ValueFormatter.cpp:558
 #, kde-format
 msgid "h"
 msgstr "ч"
 
-#: core/ValueFormatter.cpp:559
+#: core/ValueFormatter.cpp:560
 #, kde-format
 msgid "min"
 msgstr "мин"
 
-#: core/ValueFormatter.cpp:561
+#: core/ValueFormatter.cpp:562
 #, kde-format
 msgid "s"
 msgstr "c"
@@ -190,7 +190,7 @@ msgstr "c"
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/actions/dialogs/ValidityDialog.cpp:62
-#: ui/dialogs/LayoutPage_Float.cpp:120
+#: ui/dialogs/LayoutPage_Float.cpp:121
 #, kde-format
 msgid "Text"
 msgstr "Текст"
@@ -288,12 +288,12 @@ msgstr "Примеры"
 msgid "Related Functions"
 msgstr "См. также"
 
-#: engine/Localization.cpp:765
+#: engine/Localization.cpp:803
 #, kde-format
 msgid "true"
 msgstr "истина"
 
-#: engine/Localization.cpp:766
+#: engine/Localization.cpp:804
 #, kde-format
 msgid "false"
 msgstr "ложь"
@@ -303,61 +303,61 @@ msgstr "ложь"
 msgid "Dependency"
 msgstr "Зависимости"
 
-#: engine/Value.cpp:674
+#: engine/Value.cpp:675
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#CIRCLE!"
 
-#: engine/Value.cpp:682
+#: engine/Value.cpp:683
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#DEPEND!"
 
-#: engine/Value.cpp:690
+#: engine/Value.cpp:691
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:698
+#: engine/Value.cpp:699
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/A"
 
-#: engine/Value.cpp:706
+#: engine/Value.cpp:707
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NAME?"
 
-#: engine/Value.cpp:714
+#: engine/Value.cpp:715
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:722
+#: engine/Value.cpp:723
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NULL!"
 
-#: engine/Value.cpp:730
+#: engine/Value.cpp:731
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#PARSE!"
 
-#: engine/Value.cpp:738
+#: engine/Value.cpp:739
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:746
+#: engine/Value.cpp:747
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -907,14 +907,14 @@ msgstr "CARY(12;0) возвратит 0"
 #: functions/statistical.xml:1823 functions/statistical.xml:1865
 #: functions/text.xml:11 functions/text.xml:30 functions/text.xml:838
 #: ui/actions/dialogs/ValidityDialog.cpp:60 ui/actions/Style.cpp:283
-#: ui/dialogs/LayoutPage_Float.cpp:63
+#: ui/dialogs/LayoutPage_Float.cpp:64
 #, kde-format
 msgid "Number"
 msgstr "Число"
 
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:233
-#: ui/actions/Style.cpp:70 ui/dialogs/LayoutPage_Float.cpp:51
+#: ui/actions/Style.cpp:70 ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Формат"
@@ -1272,7 +1272,7 @@ msgstr "Дата и время"
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:739
 #: ui/actions/dialogs/ValidityDialog.cpp:63 ui/actions/Style.cpp:423
-#: ui/dialogs/LayoutPage_Float.cpp:98
+#: ui/dialogs/LayoutPage_Float.cpp:99
 #, kde-format
 msgid "Date"
 msgstr "Дата"
@@ -1345,7 +1345,7 @@ msgstr "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) возвратит 59"
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
 #: functions/datetime.xml:475 ui/actions/dialogs/ValidityDialog.cpp:64
-#: ui/actions/Style.cpp:456 ui/dialogs/LayoutPage_Float.cpp:105
+#: ui/actions/Style.cpp:456 ui/dialogs/LayoutPage_Float.cpp:106
 #, kde-format
 msgid "Time"
 msgstr "Время"
@@ -4081,7 +4081,7 @@ msgid "Fractional Dollar"
 msgstr "Дробный доллар"
 
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/LayoutPage_Float.cpp:89
+#: ui/dialogs/LayoutPage_Float.cpp:90
 #, kde-format
 msgid "Fraction"
 msgstr "Дробный"
@@ -5407,7 +5407,7 @@ msgid "Manual"
 msgstr "Вручную"
 
 #: functions/information.cpp:195 part/dialogs/PreferenceDialog.cpp:435
-#: ui/dialogs/LayoutPage_Float.cpp:215
+#: ui/dialogs/LayoutPage_Float.cpp:216
 #, kde-format
 msgid "Automatic"
 msgstr "Автоматически"
@@ -15199,12 +15199,18 @@ msgstr "Автоформат..."
 msgid "Could not find sheet-style XML file '%1'."
 msgstr "Невозможно найти файл стиля XML «%1»."
 
-#: ui/actions/AutoFormat.cpp:91
+#: ui/actions/AutoFormat.cpp:84
+#, fuzzy, kde-format
+#| msgid "Could not find sheet-style XML file '%1'."
+msgid "Could not open sheet-style XML file %1."
+msgstr "Невозможно найти файл стиля XML «%1»."
+
+#: ui/actions/AutoFormat.cpp:94
 #, kde-format
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "Неверный формат файла стиля XML «%1»."
 
-#: ui/actions/AutoFormat.cpp:133
+#: ui/actions/AutoFormat.cpp:136
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr ""
@@ -17692,7 +17698,7 @@ msgstr "Научный формат"
 msgid "Set the cell formatting to a scientific format"
 msgstr "Установить для ячейки научный формат"
 
-#: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:83
+#: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:84
 #, kde-format
 msgid "Scientific"
 msgstr "Научный"
@@ -17714,7 +17720,7 @@ msgstr "Процентный формат"
 msgid "Set the cell formatting to look like a percentage"
 msgstr "Установить для ячейки процентный формат"
 
-#: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:69
+#: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:70
 #, kde-format
 msgid "Percent"
 msgstr "Процентный"
@@ -17736,7 +17742,7 @@ msgstr "Денежный формат"
 msgid "Set the cell formatting to look like your local currency"
 msgstr "Установить для ячейки денежный формат (согласно локали)"
 
-#: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:76
+#: ui/actions/Style.cpp:390 ui/dialogs/LayoutPage_Float.cpp:77
 #, kde-format
 msgid "Money"
 msgstr "Денежный"
@@ -18648,7 +18654,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:343
-#: ui/dialogs/LayoutPage_Float.cpp:132 ui/dialogs/LayoutPage_Pattern.cpp:142
+#: ui/dialogs/LayoutPage_Float.cpp:133 ui/dialogs/LayoutPage_Pattern.cpp:142
 #, kde-format
 msgid "Preview"
 msgstr "Просмотр"
@@ -18705,12 +18711,12 @@ msgstr "Тип линии"
 msgid "Customize"
 msgstr "Настроить линию"
 
-#: ui/dialogs/LayoutPage_Float.cpp:57
+#: ui/dialogs/LayoutPage_Float.cpp:58
 #, kde-format
 msgid "Generic"
 msgstr "Общий"
 
-#: ui/dialogs/LayoutPage_Float.cpp:59
+#: ui/dialogs/LayoutPage_Float.cpp:60
 #, kde-format
 msgid ""
 "This is the default format and Calligra Sheets autodetects the actual data "
@@ -18723,7 +18729,7 @@ msgstr ""
 "Calligra Sheets выравнивает числа, дату и время по правому краю, а по левому "
 "краю выравнивает всё остальное."
 
-#: ui/dialogs/LayoutPage_Float.cpp:65
+#: ui/dialogs/LayoutPage_Float.cpp:66
 #, kde-format
 msgid ""
 "The number notation uses the notation you globally choose in System Settings "
@@ -18734,7 +18740,7 @@ msgstr ""
 "Региональные и специальные возможности -> Страна/область и язык -> Числа. По "
 "умолчанию для чисел используется выравнивание по правому краю."
 
-#: ui/dialogs/LayoutPage_Float.cpp:71
+#: ui/dialogs/LayoutPage_Float.cpp:72
 #, kde-format
 msgid ""
 "When you have a number in the current cell and you switch from the dcell "
@@ -18751,7 +18757,7 @@ msgstr ""
 "Применить процентный формат можно по нажатию кнопки со знаком % на панели "
 "инструментов."
 
-#: ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:79
 #, kde-format
 msgid ""
 "The Money format converts your number into money notation using the settings "
@@ -18767,7 +18773,7 @@ msgstr ""
 "Чтобы применить денежный формат, нажмите кнопку с изображением денег на "
 "панели инструментов."
 
-#: ui/dialogs/LayoutPage_Float.cpp:85
+#: ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid ""
 "The scientific format changes your number using the scientific notation. For "
@@ -18778,7 +18784,7 @@ msgstr ""
 "будет показано как 1,2E-03. Переключение на общий формат снова покажет число "
 "0,0012."
 
-#: ui/dialogs/LayoutPage_Float.cpp:91
+#: ui/dialogs/LayoutPage_Float.cpp:92
 #, kde-format
 msgid ""
 "The fraction format changes your number into a fraction. For example, 0.1 "
@@ -18802,7 +18808,7 @@ msgstr ""
 "ячейке будет показано «1 6/16» — дробь, округлённая до ближайшего целого "
 "числителя."
 
-#: ui/dialogs/LayoutPage_Float.cpp:100
+#: ui/dialogs/LayoutPage_Float.cpp:101
 #, kde-format
 msgid ""
 "To enter a date, you should enter it in one of the formats set in System "
@@ -18817,7 +18823,7 @@ msgstr ""
 "выбрать из списка на панели подходящий формат: краткий или полный.\n"
 "Так же, как и для чисел, возможно использовать автозаполнение и для дат."
 
-#: ui/dialogs/LayoutPage_Float.cpp:107
+#: ui/dialogs/LayoutPage_Float.cpp:108
 #, kde-format
 msgid ""
 "This formats your cell content as a time. To enter a time, you should enter "
@@ -18835,12 +18841,12 @@ msgstr ""
 "выбрать из списка на панели справа. Если число в ячейке не является "
 "временем, оно будет преобразовано в 00:00."
 
-#: ui/dialogs/LayoutPage_Float.cpp:113
+#: ui/dialogs/LayoutPage_Float.cpp:114
 #, kde-format
 msgid "Datetime"
 msgstr "Дата и время"
 
-#: ui/dialogs/LayoutPage_Float.cpp:115
+#: ui/dialogs/LayoutPage_Float.cpp:116
 #, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
@@ -18857,7 +18863,7 @@ msgstr ""
 "Так же, как и для чисел, возможно использовать автозаполнение и для дат и "
 "времени."
 
-#: ui/dialogs/LayoutPage_Float.cpp:122
+#: ui/dialogs/LayoutPage_Float.cpp:123
 #, kde-format
 msgid ""
 "This formats your cell content as text. This can be useful if you want a "
@@ -18871,42 +18877,42 @@ msgstr ""
 "индексов. Значения в этом формате выравниваются по левому краю и "
 "интерпретируются в формулах как текст."
 
-#: ui/dialogs/LayoutPage_Float.cpp:127
+#: ui/dialogs/LayoutPage_Float.cpp:128
 #, kde-format
 msgid "Custom"
 msgstr "Пользовательский"
 
-#: ui/dialogs/LayoutPage_Float.cpp:128
+#: ui/dialogs/LayoutPage_Float.cpp:129
 #, kde-format
 msgid "The custom format does not work yet. To be enabled in the next release."
 msgstr ""
 "Поддержка пользовательского формата будет реализована в будущих версиях."
 
-#: ui/dialogs/LayoutPage_Float.cpp:136
+#: ui/dialogs/LayoutPage_Float.cpp:137
 #, kde-format
 msgid ""
 "This will display a preview of your choice so you can know what it does "
 "before clicking the OK button to validate it."
 msgstr "Показ примера форматирования до того как вы нажмёте кнопку OK."
 
-#: ui/dialogs/LayoutPage_Float.cpp:146
+#: ui/dialogs/LayoutPage_Float.cpp:147
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
 msgstr "Список вариантов форматирования дробей, дат и времени."
 
-#: ui/dialogs/LayoutPage_Float.cpp:156
+#: ui/dialogs/LayoutPage_Float.cpp:157
 #, kde-format
 msgid ""
 "You can add here a Postfix such as a $HK symbol to the end of each cell "
 "content in the checked format."
 msgstr "Здесь можно указать суффикс после значений (например, руб.)."
 
-#: ui/dialogs/LayoutPage_Float.cpp:159
+#: ui/dialogs/LayoutPage_Float.cpp:160
 #, kde-format
 msgid "variable"
 msgstr "переменная"
 
-#: ui/dialogs/LayoutPage_Float.cpp:163
+#: ui/dialogs/LayoutPage_Float.cpp:164
 #, kde-format
 msgid ""
 "You can control how many digits are displayed after the decimal point for "
@@ -18917,14 +18923,14 @@ msgstr ""
 "точность кнопками «Увеличить точность» и «Уменьшить точность» на панели "
 "инструментов Формат."
 
-#: ui/dialogs/LayoutPage_Float.cpp:168
+#: ui/dialogs/LayoutPage_Float.cpp:169
 #, kde-format
 msgid ""
 "You can add here a Prefix such as a $ symbol at the start of each cell "
 "content in the checked format."
 msgstr "Здесь можно указать префикс перед значениями (например, $)."
 
-#: ui/dialogs/LayoutPage_Float.cpp:172
+#: ui/dialogs/LayoutPage_Float.cpp:173
 #, kde-format
 msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
@@ -18933,72 +18939,72 @@ msgstr ""
 "Здесь можно выбрать как будут показаны положительные и отрицательные числа: "
 "знак и подсветка красным."
 
-#: ui/dialogs/LayoutPage_Float.cpp:178
+#: ui/dialogs/LayoutPage_Float.cpp:179
 #, kde-format
 msgid "Postfix:"
 msgstr "Суффикс:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:182
+#: ui/dialogs/LayoutPage_Float.cpp:183
 #, kde-format
 msgid "Prefix:"
 msgstr "Префикс:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:186
+#: ui/dialogs/LayoutPage_Float.cpp:187
 #, kde-format
 msgid "Precision:"
 msgstr "Точность:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:203
+#: ui/dialogs/LayoutPage_Float.cpp:204
 #, kde-format
 msgid "Format:"
 msgstr "Формат:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:207
+#: ui/dialogs/LayoutPage_Float.cpp:208
 #, kde-format
 msgid "Currency:"
 msgstr "Денежная сумма:"
 
-#: ui/dialogs/LayoutPage_Float.cpp:313
+#: ui/dialogs/LayoutPage_Float.cpp:314
 #, kde-format
 msgid "Halves 1/2"
 msgstr "1/2"
 
-#: ui/dialogs/LayoutPage_Float.cpp:314
+#: ui/dialogs/LayoutPage_Float.cpp:315
 #, kde-format
 msgid "Quarters 1/4"
 msgstr "1/4"
 
-#: ui/dialogs/LayoutPage_Float.cpp:315
+#: ui/dialogs/LayoutPage_Float.cpp:316
 #, kde-format
 msgid "Eighths 1/8"
 msgstr "1/8"
 
-#: ui/dialogs/LayoutPage_Float.cpp:316
+#: ui/dialogs/LayoutPage_Float.cpp:317
 #, kde-format
 msgid "Sixteenths 1/16"
 msgstr "1/16"
 
-#: ui/dialogs/LayoutPage_Float.cpp:317
+#: ui/dialogs/LayoutPage_Float.cpp:318
 #, kde-format
 msgid "Tenths 1/10"
 msgstr "1/10"
 
-#: ui/dialogs/LayoutPage_Float.cpp:318
+#: ui/dialogs/LayoutPage_Float.cpp:319
 #, kde-format
 msgid "Hundredths 1/100"
 msgstr "1/100"
 
-#: ui/dialogs/LayoutPage_Float.cpp:319
+#: ui/dialogs/LayoutPage_Float.cpp:320
 #, kde-format
 msgid "One digit 5/9"
 msgstr "Одна цифра 5/9"
 
-#: ui/dialogs/LayoutPage_Float.cpp:320
+#: ui/dialogs/LayoutPage_Float.cpp:321
 #, kde-format
 msgid "Two digits 15/22"
 msgstr "Две цифры 15/22"
 
-#: ui/dialogs/LayoutPage_Float.cpp:321
+#: ui/dialogs/LayoutPage_Float.cpp:322
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "Три цифры 153/652"
