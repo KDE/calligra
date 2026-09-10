@@ -81,6 +81,7 @@ calligra_define_feature(FEATURE_RDF  UNMAINTAINED "RDF feature")
 # plugins
 calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin" REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_FORMS "OpenDocument forms plugin" REQUIRES LIB_CALLIGRA)
 
 # parts
 calligra_define_product(PART_WORDS "Words engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN PLUGIN_TEXTSHAPE)

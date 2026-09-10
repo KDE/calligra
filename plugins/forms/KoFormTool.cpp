@@ -62,12 +62,14 @@ KoFormTool::KoFormTool(KoCanvasBase *canvas)
 
 void KoFormTool::activate(ToolActivation, const QSet<KoShape *> &shapes)
 {
-    if (canvas() && canvas()->shapeManager())
+    if (canvas() && canvas()->shapeManager()) {
         connect(canvas()->shapeManager(), &KoShapeManager::selectionChanged, this, &KoFormTool::shapeSelectionChanged, Qt::UniqueConnection);
+    }
     m_shape = nullptr;
     for (KoShape *shape : shapes) {
-        if ((m_shape = dynamic_cast<KoFormShape *>(shape)))
+        if ((m_shape = dynamic_cast<KoFormShape *>(shape))) {
             break;
+        }
     }
     if (!m_shape) {
         Q_EMIT done();
@@ -86,7 +88,7 @@ QWidget *KoFormTool::createOptionWidget()
     auto *form = new QFormLayout();
     layout->addLayout(form);
     m_type = new QLabel(widget);
-    form->addRow(i18n("&Type:"), m_type);
+    form->addRow(i18nc("@label:form property", "&Type:"), m_type);
     m_name = new QLineEdit(widget);
     form->addRow(i18n("&Name:"), m_name);
     m_title = new QLineEdit(widget);
@@ -127,8 +129,9 @@ QWidget *KoFormTool::createOptionWidget()
 
 void KoFormTool::updateProperties()
 {
-    if (!m_options)
+    if (!m_options) {
         return;
+    }
     const auto *control = m_shape ? m_shape->formControl() : nullptr;
     m_options->setEnabled(control != nullptr);
     const QSignalBlocker nameBlocker(m_name);
@@ -152,8 +155,9 @@ void KoFormTool::updateProperties()
 void KoFormTool::commitProperties()
 {
     const auto *before = m_shape ? m_shape->formControl() : nullptr;
-    if (!before)
+    if (!before) {
         return;
+    }
     if (before->name() == m_name->text() && before->title() == m_title->text() && before->disabled() == !m_enabled->currentData().toBool()
         && before->readOnly() == m_readOnly->currentData().toBool() && before->printable() == m_printable->currentData().toBool()
         && before->tabStop() == m_tabStop->currentData().toBool() && before->tabIndex() == m_tabIndex->value())
@@ -169,23 +173,26 @@ void KoFormTool::commitProperties()
     properties.setTabIndex(m_tabIndex->value());
     QPointer<KoFormTool> tool(this);
     canvas()->addCommand(new ChangeFormPropertiesCommand(m_shape, properties, [tool]() {
-        if (tool)
+        if (tool) {
             tool->updateProperties();
+        }
     }));
 }
 
 void KoFormTool::deactivate()
 {
-    if (canvas() && canvas()->shapeManager())
+    if (canvas() && canvas()->shapeManager()) {
         disconnect(canvas()->shapeManager(), &KoShapeManager::selectionChanged, this, &KoFormTool::shapeSelectionChanged);
+    }
     m_shape = nullptr;
     updateProperties();
 }
 
 void KoFormTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!event || !canvas() || !canvas()->shapeManager())
+    if (!event || !canvas() || !canvas()->shapeManager()) {
         return;
+    }
 
     auto *shape = dynamic_cast<KoFormShape *>(canvas()->shapeManager()->shapeAt(event->point));
     if (shape && shape != m_shape) {
@@ -199,12 +206,14 @@ void KoFormTool::shapeSelectionChanged()
     KoFormShape *shape = nullptr;
     if (canvas() && canvas()->shapeManager()) {
         for (KoShape *candidate : canvas()->shapeManager()->selection()->selectedShapes()) {
-            if ((shape = dynamic_cast<KoFormShape *>(candidate)))
+            if ((shape = dynamic_cast<KoFormShape *>(candidate))) {
                 break;
+            }
         }
     }
-    if (m_shape == shape)
+    if (m_shape == shape) {
         return;
+    }
     m_shape = shape;
     updateProperties();
 }

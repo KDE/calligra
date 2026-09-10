@@ -24,6 +24,7 @@ public:
 
     QString controlId() const;
     QString controlKind() const;
+    void setControlKind(const QString &kind);
     void setControlId(const QString &id);
     const KoOdfForm::Control *formControl() const;
     void setControlProperties(const KoOdfForm::Control &properties);
