@@ -16,6 +16,7 @@ class QComboBox;
 class QSpinBox;
 class QFormLayout;
 class QWidget;
+class QListWidget;
 
 class KoFormTool : public KoToolBase
 {
@@ -53,7 +54,9 @@ private:
     QComboBox *m_tabStop = nullptr;
     QSpinBox *m_tabIndex = nullptr;
     QFormLayout *m_specificForm = nullptr;
+    int m_specificStartRow = 0;
     QHash<QString, QWidget *> m_specificProperties;
+    QListWidget *m_entries = nullptr;
 };
 
 class KoFormToolFactory : public KoToolFactoryBase

@@ -844,6 +844,11 @@ QVector<KoOdfForm::Control::Entry> KoOdfForm::Control::entries() const
     return m_entries;
 }
 
+void KoOdfForm::Control::setEntries(const QVector<Entry> &entries)
+{
+    m_entries = entries;
+}
+
 void KoOdfForm::Control::saveChildren(KoXmlWriter &writer) const
 {
     if (!m_childrenXml.isEmpty())
