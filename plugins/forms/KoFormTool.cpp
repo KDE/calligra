@@ -21,11 +21,12 @@
 #include <QPushButton>
 #include <QSignalBlocker>
 #include <QSpinBox>
-#include <QTimer>
 #include <QVBoxLayout>
+#include <chrono>
 #include <functional>
 
 using namespace Qt::StringLiterals;
+using namespace std::chrono_literals;
 
 namespace
 {
@@ -61,6 +62,7 @@ private:
 
 KoFormTool::KoFormTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
+    , m_previewCompressor(200ms, KoSignalCompressor::Mode::FirstInactive, this)
 {
 }
 
@@ -114,8 +116,9 @@ QWidget *KoFormTool::createOptionWidget()
     m_specificForm = form;
     m_specificStartRow = form->rowCount();
     layout->addStretch();
-    connect(m_name, &QLineEdit::editingFinished, this, &KoFormTool::commitProperties);
-    connect(m_title, &QLineEdit::editingFinished, this, &KoFormTool::commitProperties);
+    connect(m_name, &QLineEdit::textChanged, &m_previewCompressor, &KoSignalCompressor::start);
+    connect(m_title, &QLineEdit::textChanged, &m_previewCompressor, &KoSignalCompressor::start);
+    connect(&m_previewCompressor, &KoSignalCompressor::timeout, this, &KoFormTool::commitProperties);
     connect(m_enabled, qOverload<int>(&QComboBox::currentIndexChanged), this, [this] {
         commitProperties();
     });
@@ -147,7 +150,7 @@ void KoFormTool::rebuildSpecificProperties()
         auto *edit = new QLineEdit(m_options);
         m_specificForm->addRow(label, edit);
         m_specificProperties.insert(key, edit);
-        connect(edit, &QLineEdit::editingFinished, this, &KoFormTool::commitProperties);
+        connect(edit, &QLineEdit::textChanged, &m_previewCompressor, &KoSignalCompressor::start);
     };
     const auto addBoolean = [this](const QString &key, const QString &label) {
         auto *box = new QComboBox(m_options);
@@ -266,6 +269,22 @@ void KoFormTool::updateProperties()
         if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
             if (!control) {
                 edit->clear();
+            } else if (it.key() == "max-length"_L1) {
+                edit->setText(static_cast<const KoOdfForm::Text *>(control)->maxLength());
+            } else if (it.key() == "min-value"_L1) {
+                edit->setText(static_cast<const KoOdfForm::Number *>(control)->minValue());
+            } else if (it.key() == "max-value"_L1) {
+                edit->setText(static_cast<const KoOdfForm::Number *>(control)->maxValue());
+            } else if (it.key() == "step-size"_L1) {
+                edit->setText(static_cast<const KoOdfForm::Number *>(control)->stepSize());
+            } else if (it.key() == "list-source"_L1) {
+                edit->setText(static_cast<const KoOdfForm::Listbox *>(control)->listSource());
+            } else if (it.key() == "image-data"_L1) {
+                edit->setText(static_cast<const KoOdfForm::Image *>(control)->imageData());
+            } else if (it.key() == "image-position"_L1) {
+                edit->setText(static_cast<const KoOdfForm::Image *>(control)->imagePosition());
+            } else if (it.key() == "image-align"_L1) {
+                edit->setText(static_cast<const KoOdfForm::Image *>(control)->imageAlign());
             } else if (it.key() == "data-field"_L1) {
                 edit->setText(control->dataField());
             } else if (it.key() == "linked-cell"_L1) {
@@ -276,7 +295,39 @@ void KoFormTool::updateProperties()
                 edit->setText(control->formAttribute(it.key()));
             }
         } else if (auto *box = qobject_cast<QComboBox *>(it.value())) {
-            box->setCurrentIndex(control && control->formAttribute(it.key()) == "true"_L1);
+            QString value;
+            if (control) {
+                value = control->formAttribute(it.key());
+                if (it.key() == "default-button"_L1) {
+                    value = static_cast<const KoOdfForm::Button *>(control)->defaultButton() ? u"true"_s : u"false"_s;
+                } else if (it.key() == "toggle"_L1) {
+                    value = static_cast<const KoOdfForm::Button *>(control)->toggle() ? u"true"_s : u"false"_s;
+                } else if (it.key() == "selected"_L1
+                           && (m_shape->controlKind() == KoOdfForm::ControlKind::Checkbox || m_shape->controlKind() == KoOdfForm::ControlKind::Radio)) {
+                    value = (m_shape->controlKind() == KoOdfForm::ControlKind::Checkbox ? static_cast<const KoOdfForm::Checkbox *>(control)->selected()
+                                                                                        : static_cast<const KoOdfForm::Radio *>(control)->selected())
+                        ? u"true"_s
+                        : u"false"_s;
+                } else if (it.key() == "autocomplete"_L1) {
+                    value = static_cast<const KoOdfForm::Combobox *>(control)->autoComplete() ? u"true"_s : u"false"_s;
+                } else if (it.key() == "multiple"_L1) {
+                    value = static_cast<const KoOdfForm::Listbox *>(control)->multiple() ? u"true"_s : u"false"_s;
+                } else if (it.key() == "dropdown"_L1) {
+                    value = static_cast<const KoOdfForm::Listbox *>(control)->dropdown() ? u"true"_s : u"false"_s;
+                }
+                if (it.key() == "selected"_L1 && m_shape->controlKind() == KoOdfForm::ControlKind::Checkbox) {
+                    value = control->formAttribute(u"current-state"_s);
+                    if (value.isEmpty()) {
+                        value = control->formAttribute(u"state"_s);
+                    }
+                    box->setCurrentIndex(value == "checked"_L1);
+                    continue;
+                }
+                if (it.key() == "selected"_L1 && m_shape->controlKind() == KoOdfForm::ControlKind::Radio) {
+                    value = control->formAttribute(u"current-selected"_s);
+                }
+            }
+            box->setCurrentIndex(value == "true"_L1);
         }
     }
     if (m_entries) {
@@ -335,6 +386,46 @@ void KoFormTool::commitProperties()
             properties.setLinkedCell(value);
         } else if (it.key() == "xforms-bind"_L1) {
             properties.setXformsBind(value);
+        } else if (it.key() == "max-length"_L1) {
+            KoOdfForm::Text typed;
+            static_cast<KoOdfForm::Control &>(typed) = properties;
+            typed.setMaxLength(value);
+            static_cast<KoOdfForm::Control &>(properties) = typed;
+        } else if (it.key() == "min-value"_L1 || it.key() == "max-value"_L1 || it.key() == "step-size"_L1) {
+            KoOdfForm::Number typed;
+            static_cast<KoOdfForm::Control &>(typed) = properties;
+            if (it.key() == "min-value"_L1) {
+                typed.setMinValue(value);
+            } else if (it.key() == "max-value"_L1) {
+                typed.setMaxValue(value);
+            } else {
+                typed.setStepSize(value);
+            }
+            static_cast<KoOdfForm::Control &>(properties) = typed;
+        } else if (it.key() == "default-button"_L1) {
+            properties.setFormAttribute(u"default-button"_s, value);
+        } else if (it.key() == "toggle"_L1) {
+            properties.setFormAttribute(u"toggle"_s, value);
+        } else if (it.key() == "autocomplete"_L1) {
+            properties.setFormAttribute(u"autocomplete"_s, value);
+        } else if (it.key() == "multiple"_L1) {
+            properties.setFormAttribute(u"multiple"_s, value);
+        } else if (it.key() == "dropdown"_L1) {
+            properties.setFormAttribute(u"dropdown"_s, value);
+        } else if (it.key() == "list-source"_L1) {
+            properties.setFormAttribute(u"list-source"_s, value);
+        } else if (it.key() == "image-data"_L1) {
+            properties.setFormAttribute(u"image-data"_s, value);
+        } else if (it.key() == "image-position"_L1) {
+            properties.setFormAttribute(u"image-position"_s, value);
+        } else if (it.key() == "image-align"_L1) {
+            properties.setFormAttribute(u"image-align"_s, value);
+        } else if (it.key() == "selected"_L1 && m_shape->controlKind() == KoOdfForm::ControlKind::Checkbox) {
+            properties.setFormAttribute(u"state"_s, value == "true"_L1 ? u"checked"_s : u"unchecked"_s);
+            properties.setFormAttribute(u"current-state"_s, value == "true"_L1 ? u"checked"_s : u"unchecked"_s);
+        } else if (it.key() == "selected"_L1 && m_shape->controlKind() == KoOdfForm::ControlKind::Radio) {
+            properties.setFormAttribute(u"selected"_s, value);
+            properties.setFormAttribute(u"current-selected"_s, value);
         } else {
             properties.setFormAttribute(it.key(), value);
         }
@@ -351,7 +442,9 @@ void KoFormTool::commitProperties()
     QPointer<KoFormTool> tool(this);
     canvas()->addCommand(new ChangeFormPropertiesCommand(m_shape, properties, [tool]() {
         if (tool) {
-            QTimer::singleShot(0, tool, &KoFormTool::updateProperties);
+            if (tool->m_shape) {
+                tool->canvas()->updateCanvas(tool->m_shape->boundingRect());
+            }
         }
     }));
 }
