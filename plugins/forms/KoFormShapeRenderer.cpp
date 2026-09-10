@@ -155,12 +155,12 @@ static void paintFormControlByName(QPainter &painter,
         QString state = attribute(u"current-state"_s);
         if (state.isNull())
             state = attribute(u"state"_s);
-        QString selected = attribute(u"current-selected"_s);
-        if (selected.isNull())
-            selected = attribute(u"selected"_s);
+        const bool selectedValue = control
+            && (kind == KoOdfForm::ControlKind::Radio ? static_cast<const KoOdfForm::Radio *>(control)->selected()
+                                                      : static_cast<const KoOdfForm::Checkbox *>(control)->selected());
         if (kind == KoOdfForm::ControlKind::Checkbox && state == "unknown"_L1)
             button.state |= QStyle::State_NoChange;
-        else if ((kind == KoOdfForm::ControlKind::Checkbox && state == "checked"_L1) || (kind == KoOdfForm::ControlKind::Radio && selected == "true"_L1))
+        else if ((kind == KoOdfForm::ControlKind::Checkbox && state == "checked"_L1) || (kind == KoOdfForm::ControlKind::Radio && selectedValue))
             button.state |= QStyle::State_On;
         else
             button.state |= QStyle::State_Off;
@@ -170,7 +170,7 @@ static void paintFormControlByName(QPainter &painter,
         static_cast<QStyleOption &>(button) = base;
         button.text = label;
         button.state |= QStyle::State_Raised;
-        if (attribute(u"default-button"_s) == "true"_L1)
+        if (control && static_cast<const KoOdfForm::Button *>(control)->defaultButton())
             button.features |= QStyleOptionButton::DefaultButton;
         if (attribute(u"toggle"_s) == "true"_L1 && attribute(u"current-state"_s) == "checked"_L1)
             button.state |= QStyle::State_On;
@@ -237,8 +237,9 @@ static void paintFormControlByName(QPainter &painter,
         slider.orientation = attribute(u"orientation"_s) == "vertical"_L1 ? Qt::Vertical : Qt::Horizontal;
         if (slider.orientation == Qt::Horizontal)
             slider.state |= QStyle::State_Horizontal;
-        slider.minimum = attribute(u"min-value"_s).toInt();
-        slider.maximum = attribute(u"max-value"_s).isEmpty() ? 100 : attribute(u"max-value"_s).toInt();
+        const auto *number = static_cast<const KoOdfForm::Number *>(control);
+        slider.minimum = number ? number->minValue().toInt() : 0;
+        slider.maximum = number && !number->maxValue().isEmpty() ? number->maxValue().toInt() : 100;
         slider.maximum = qMax(slider.minimum, slider.maximum);
         slider.sliderValue = slider.sliderPosition = qBound(slider.minimum, text.toInt(), slider.maximum);
         slider.singleStep = qMax(1, attribute(u"step-size"_s).toInt());

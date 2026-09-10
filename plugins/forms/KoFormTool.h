@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <KoSignalCompressor.h>
 #include <KoToolBase.h>
 #include <KoToolFactoryBase.h>
 #include <QHash>
@@ -57,6 +58,7 @@ private:
     int m_specificStartRow = 0;
     QHash<QString, QWidget *> m_specificProperties;
     QListWidget *m_entries = nullptr;
+    KoSignalCompressor m_previewCompressor;
 };
 
 class KoFormToolFactory : public KoToolFactoryBase
