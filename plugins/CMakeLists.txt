@@ -49,6 +49,10 @@ if (SHOULD_BUILD_PLUGIN_PICTURESHAPE)
     add_subdirectory( pictureshape )
 endif ()
 
+if (SHOULD_BUILD_PLUGIN_FORMS)
+    add_subdirectory( forms )
+endif ()
+
 if (SHOULD_BUILD_PLUGIN_TEXTSHAPE)
     add_subdirectory( textshape )
 endif()

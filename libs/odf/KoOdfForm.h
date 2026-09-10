@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * SPDX-FileCopyrightText: 2026 Carl Schwan <carl@carlschwan.eu>
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef KOODFFORM_H
@@ -6,8 +7,10 @@
 
 #include "koodf_export.h"
 #include <QByteArray>
+#include <QMap>
 #include <QString>
 #include <QVector>
+#include <memory>
 
 class KoXmlElement;
 class KoXmlWriter;
@@ -25,6 +28,17 @@ public:
         QString name() const;
         QString id() const;
         QString title() const;
+        QString label() const;
+        void setLabel(const QString &label);
+        /** Additional form attributes, including control-specific appearance and state. */
+        QString formAttribute(const QString &name) const;
+        void setFormAttribute(const QString &name, const QString &value);
+        struct Entry {
+            QString label;
+            bool selected = false;
+        };
+        /** List options, combo-box items, or grid column headings, in document order. */
+        QVector<Entry> entries() const;
         QString value() const;
         QString currentValue() const;
         QString dataField() const;
@@ -52,11 +66,14 @@ public:
         void setTabStop(bool);
 
     protected:
-        void loadCommonAttributes(const KoXmlElement &);
+        void saveChildren(KoXmlWriter &) const;
         void saveCommonAttributes(KoXmlWriter &) const;
         QString m_name, m_id, m_title, m_value, m_currentValue, m_dataField, m_linkedCell, m_xformsBind;
         bool m_disabled = false, m_printable = true, m_readOnly = false, m_inputRequired = false, m_tabStop = true;
         int m_tabIndex = 0;
+        QMap<QString, QString> m_formAttributes;
+        QVector<Entry> m_entries;
+        QByteArray m_childrenXml;
     };
 
     class KOODF_EXPORT Text : public Control
@@ -283,6 +300,11 @@ public:
     bool loadOdf(const KoXmlElement &element);
     void saveOdf(KoXmlWriter &writer) const;
     bool isEmpty() const;
+    QString controlKind(const QString &id) const;
+    /** Returns an owned copy of the referenced control, or nullptr if it is unknown. */
+    std::unique_ptr<Control> controlById(const QString &id) const;
+    /** Updates common properties without replacing the concrete control type or ID. */
+    bool setControlProperties(const QString &id, const Control &properties);
     QString name() const;
     QString command() const;
     QString datasource() const;
@@ -314,6 +336,16 @@ private:
     QVector<Radio> m_radios;
     QVector<Combobox> m_comboboxes;
     QVector<Listbox> m_listboxes;
+    QVector<Password> m_passwords;
+    QVector<Hidden> m_hiddenControls;
+    QVector<File> m_files;
+    QVector<FixedText> m_fixedTexts;
+    QVector<ValueRange> m_valueRanges;
+    QVector<Image> m_images;
+    QVector<ImageFrame> m_imageFrames;
+    QVector<Frame> m_frames;
+    QVector<Grid> m_grids;
+    QVector<GenericControl> m_genericControls;
     QVector<Model> m_models;
 };
 

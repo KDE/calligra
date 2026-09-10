@@ -21,6 +21,70 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 
+namespace
+{
+class InlineObjectTestLayout : public KoTextDocumentLayout
+{
+public:
+    InlineObjectTestLayout(QTextDocument *document, KoTextLayoutRootAreaProvider *provider)
+        : KoTextDocumentLayout(document, provider)
+    {
+    }
+
+    int resizeCalls = 0;
+    int paintCalls = 0;
+
+protected:
+    void positionInlineObject(QTextInlineObject, int, const QTextFormat &) override
+    {
+    }
+
+    void resizeInlineObject(QTextInlineObject object, int, const QTextFormat &) override
+    {
+        ++resizeCalls;
+        object.setWidth(70);
+        object.setAscent(20);
+        object.setDescent(0);
+    }
+
+    void drawInlineObject(QPainter *, const QRectF &, QTextInlineObject, int, const QTextFormat &) override
+    {
+        ++paintCalls;
+    }
+};
+}
+
+void TestDocumentLayout::testInlineObjectCallbacks()
+{
+    MockRootAreaProvider provider;
+    QTextDocument document;
+    auto *layout = new InlineObjectTestLayout(&document, &provider);
+    document.setDocumentLayout(layout);
+
+    QTextCursor cursor(&document);
+    QTextCharFormat format;
+    format.setObjectType(QTextFormat::UserObject + 1);
+    cursor.insertText(QString(2, QChar::ObjectReplacementCharacter), format);
+
+    QTextLayout *blockLayout = document.begin().layout();
+    blockLayout->beginLayout();
+    QTextLine line = blockLayout->createLine();
+    QVERIFY(line.isValid());
+    line.setLineWidth(300);
+    blockLayout->endLayout();
+
+    // Without a registered handler Qt lays these out as two ordinary glyphs,
+    // leaving inline shapes hidden and skipping both layout and paint callbacks.
+    QCOMPARE(layout->resizeCalls, 2);
+    QCOMPARE(line.naturalTextWidth(), 140.0);
+
+    QImage image(300, 50, QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent);
+    QPainter painter(&image);
+    line.draw(&painter, QPointF());
+    QCOMPARE(layout->paintCalls, 2);
+}
+
 void TestDocumentLayout::initTestCase()
 {
     m_doc = nullptr;
