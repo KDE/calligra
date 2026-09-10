@@ -14,10 +14,14 @@
 
 #include <QComboBox>
 #include <QFormLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QListWidget>
+#include <QPushButton>
 #include <QSignalBlocker>
 #include <QSpinBox>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <functional>
 
@@ -107,8 +111,8 @@ QWidget *KoFormTool::createOptionWidget()
     m_tabIndex = new QSpinBox(widget);
     m_tabIndex->setRange(0, 32767);
     form->addRow(i18nc("@label:form property", "Tab &order:"), m_tabIndex);
-    m_specificForm = new QFormLayout();
-    layout->addLayout(m_specificForm);
+    m_specificForm = form;
+    m_specificStartRow = form->rowCount();
     layout->addStretch();
     connect(m_name, &QLineEdit::editingFinished, this, &KoFormTool::commitProperties);
     connect(m_title, &QLineEdit::editingFinished, this, &KoFormTool::commitProperties);
@@ -131,10 +135,11 @@ QWidget *KoFormTool::createOptionWidget()
 
 void KoFormTool::rebuildSpecificProperties()
 {
-    while (m_specificForm && m_specificForm->rowCount() > 0) {
-        m_specificForm->removeRow(0);
+    while (m_specificForm && m_specificForm->rowCount() > m_specificStartRow) {
+        m_specificForm->removeRow(m_specificForm->rowCount() - 1);
     }
     m_specificProperties.clear();
+    m_entries = nullptr;
     if (!m_shape || !m_shape->formControl()) {
         return;
     }
@@ -151,6 +156,32 @@ void KoFormTool::rebuildSpecificProperties()
         m_specificForm->addRow(label, box);
         m_specificProperties.insert(key, box);
         connect(box, qOverload<int>(&QComboBox::currentIndexChanged), this, &KoFormTool::commitProperties);
+    };
+    const auto addEntries = [this](const QString &label) {
+        m_entries = new QListWidget(m_options);
+        m_entries->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
+        m_entries->setMaximumHeight(120);
+        m_specificForm->addRow(label, m_entries);
+        auto *buttons = new QWidget(m_options);
+        auto *buttonLayout = new QHBoxLayout(buttons);
+        auto *add = new QPushButton(i18nc("@button", "Add"), buttons);
+        auto *remove = new QPushButton(i18nc("@button", "Remove"), buttons);
+        buttonLayout->addWidget(add);
+        buttonLayout->addWidget(remove);
+        m_specificForm->addRow(QString(), buttons);
+        connect(add, &QPushButton::clicked, this, [this] {
+            auto *item = new QListWidgetItem(i18nc("@item:form", "New item"), m_entries);
+            item->setFlags(item->flags() | Qt::ItemIsEditable);
+            m_entries->setCurrentItem(item);
+            m_entries->editItem(item);
+        });
+        connect(remove, &QPushButton::clicked, this, [this] {
+            delete m_entries->takeItem(m_entries->currentRow());
+            commitProperties();
+        });
+        connect(m_entries, &QListWidget::itemChanged, this, [this] {
+            commitProperties();
+        });
     };
     switch (m_shape->controlKind()) {
     case KoOdfForm::ControlKind::Text:
@@ -178,11 +209,16 @@ void KoFormTool::rebuildSpecificProperties()
         break;
     case KoOdfForm::ControlKind::Combobox:
         addBoolean(u"autocomplete"_s, i18nc("@label:form property", "Auto-complete:"));
+        addEntries(i18nc("@label:form property", "Items:"));
         break;
     case KoOdfForm::ControlKind::Listbox:
         addBoolean(u"multiple"_s, i18nc("@label:form property", "Multiple selection:"));
         addBoolean(u"dropdown"_s, i18nc("@label:form property", "Drop-down:"));
         addText(u"list-source"_s, i18nc("@label:form property", "List source:"));
+        addEntries(i18nc("@label:form property", "Items:"));
+        break;
+    case KoOdfForm::ControlKind::Grid:
+        addEntries(i18nc("@label:form property", "Columns:"));
         break;
     case KoOdfForm::ControlKind::Image:
     case KoOdfForm::ControlKind::ImageFrame:
@@ -227,6 +263,14 @@ void KoFormTool::updateProperties()
             box->setCurrentIndex(control && control->formAttribute(it.key()) == "true"_L1);
         }
     }
+    if (m_entries) {
+        const QSignalBlocker blocker(m_entries);
+        m_entries->clear();
+        for (const auto &entry : control->entries()) {
+            auto *item = new QListWidgetItem(entry.label, m_entries);
+            item->setFlags(item->flags() | Qt::ItemIsEditable);
+        }
+    }
 }
 
 void KoFormTool::commitProperties()
@@ -238,7 +282,7 @@ void KoFormTool::commitProperties()
     if (before->name() == m_name->text() && before->title() == m_title->text() && before->disabled() == !m_enabled->currentData().toBool()
         && before->readOnly() == m_readOnly->currentData().toBool() && before->printable() == m_printable->currentData().toBool()
         && before->tabStop() == m_tabStop->currentData().toBool() && before->tabIndex() == m_tabIndex->value()) {
-        bool changed = false;
+        bool changed = m_entries != nullptr;
         for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
             const QString value = [&] {
                 if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
@@ -271,10 +315,19 @@ void KoFormTool::commitProperties()
         }
         properties.setFormAttribute(it.key(), value);
     }
+    if (m_entries) {
+        const auto oldEntries = before->entries();
+        QVector<KoOdfForm::Control::Entry> entries;
+        entries.reserve(m_entries->count());
+        for (int i = 0; i < m_entries->count(); ++i) {
+            entries.append({m_entries->item(i)->text(), i < oldEntries.size() ? oldEntries.at(i).selected : false});
+        }
+        properties.setEntries(entries);
+    }
     QPointer<KoFormTool> tool(this);
     canvas()->addCommand(new ChangeFormPropertiesCommand(m_shape, properties, [tool]() {
         if (tool) {
-            tool->updateProperties();
+            QTimer::singleShot(0, tool, &KoFormTool::updateProperties);
         }
     }));
 }

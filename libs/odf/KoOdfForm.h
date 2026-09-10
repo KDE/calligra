@@ -67,6 +67,7 @@ public:
         };
         /** List options, combo-box items, or grid column headings, in document order. */
         QVector<Entry> entries() const;
+        void setEntries(const QVector<Entry> &entries);
         QString value() const;
         QString currentValue() const;
         QString dataField() const;
