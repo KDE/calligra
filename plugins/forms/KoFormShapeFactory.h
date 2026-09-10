@@ -13,5 +13,6 @@ public:
     KoFormShapeFactory();
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = nullptr) const override;
+    KoShape *createShape(const KoProperties *properties, KoDocumentResourceManager *documentResources = nullptr) const override;
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
 };
