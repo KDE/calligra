@@ -84,6 +84,9 @@ KoFormShape::KoFormShape()
 
 void KoFormShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
+    if (m_formControl && !m_formControl->printable()) {
+        return;
+    }
     paintFormControl(painter, converter, size(), m_controlKind, formControl(), m_image);
 }
 
