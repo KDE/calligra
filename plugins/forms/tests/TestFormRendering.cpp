@@ -13,14 +13,19 @@
 #include <QProxyStyle>
 #include <QStyleOption>
 #include <QTest>
+#include <array>
 
 using namespace Qt::StringLiterals;
 
 namespace
 {
-const QStringList kinds = {u"text"_s,     u"textarea"_s, u"formatted-text"_s, u"password"_s,    u"hidden"_s, u"file"_s,     u"fixed-text"_s,
-                           u"number"_s,   u"date"_s,     u"time"_s,           u"value-range"_s, u"button"_s, u"checkbox"_s, u"radio"_s,
-                           u"combobox"_s, u"listbox"_s,  u"image"_s,          u"image-frame"_s, u"frame"_s,  u"grid"_s,     u"generic-control"_s};
+constexpr auto kinds = std::to_array<KoOdfForm::ControlKind>(
+    {KoOdfForm::ControlKind::Text,          KoOdfForm::ControlKind::Textarea,   KoOdfForm::ControlKind::FormattedText, KoOdfForm::ControlKind::Password,
+     KoOdfForm::ControlKind::Hidden,        KoOdfForm::ControlKind::File,       KoOdfForm::ControlKind::FixedText,     KoOdfForm::ControlKind::Number,
+     KoOdfForm::ControlKind::Date,          KoOdfForm::ControlKind::Time,       KoOdfForm::ControlKind::ValueRange,    KoOdfForm::ControlKind::Button,
+     KoOdfForm::ControlKind::Checkbox,      KoOdfForm::ControlKind::Radio,      KoOdfForm::ControlKind::Combobox,      KoOdfForm::ControlKind::Listbox,
+     KoOdfForm::ControlKind::Image,         KoOdfForm::ControlKind::ImageFrame, KoOdfForm::ControlKind::Frame,         KoOdfForm::ControlKind::Grid,
+     KoOdfForm::ControlKind::GenericControl});
 
 KoOdfForm loadForm(const QString &kind, const QString &attributes = {}, const QString &children = {})
 {
@@ -132,8 +137,10 @@ private Q_SLOTS:
     void allControls_data()
     {
         QTest::addColumn<QString>("kind");
-        for (const auto &kind : kinds)
-            QTest::newRow(kind.toUtf8().constData()) << kind;
+        for (const auto kind : kinds) {
+            const auto name = KoOdfForm::controlKindName(kind);
+            QTest::newRow(name.toUtf8().constData()) << name;
+        }
     }
 
     void allControls()
@@ -173,7 +180,7 @@ private Q_SLOTS:
         const auto transform = painter.transform();
         const auto font = painter.font();
         KoViewConverter converter;
-        paintFormControl(painter, converter, QSizeF(200, 80), kind, copy.get(), {});
+        paintFormControl(painter, converter, QSizeF(200, 80), KoOdfForm::controlKindFromString(kind), copy.get(), {});
         QCOMPARE(painter.transform(), transform);
         QCOMPARE(painter.font(), font);
         painter.end();
@@ -213,6 +220,61 @@ private Q_SLOTS:
         render(restored);
         QVERIFY(m_style->complexControls.contains(QStyle::CC_ComboBox));
         QVERIFY(m_style->texts.contains(u"Second"_s));
+    }
+
+    void addRemoveControlRoundTrip()
+    {
+        KoOdfForm form;
+        const QString id = form.addControl(u"checkbox"_s);
+        QVERIFY(!id.isEmpty());
+        QVERIFY(form.controlById(id));
+        QVERIFY(form.removeControl(id));
+        QVERIFY(!form.controlById(id));
+        QVERIFY(!form.removeControl(id));
+
+        const QString first = form.addControl(u"text"_s);
+        const QString second = form.addControl(u"radio"_s);
+        QVERIFY(first != second);
+        QBuffer buffer;
+        QVERIFY(buffer.open(QIODevice::WriteOnly));
+        KoXmlWriter writer(&buffer);
+        writer.startElement("root");
+        writer.addAttribute("xmlns:form", "urn:oasis:names:tc:opendocument:xmlns:form:1.0");
+        form.saveOdf(writer);
+        writer.endElement();
+        KoXmlDocument xml;
+        QVERIFY(xml.setContent(buffer.data(), true));
+        KoOdfForm restored;
+        QVERIFY(restored.loadOdf(xml.documentElement().firstChildElement()));
+        QCOMPARE(restored.controlKind(first), u"text"_s);
+        QCOMPARE(restored.controlKind(second), u"radio"_s);
+    }
+
+    void relationshipsRoundTrip()
+    {
+        KoOdfForm form = loadForm(u"radio"_s, u"f:name='choices' f:value='yes' f:for='label1'"_s);
+        auto control = form.controlById(u"control1"_s);
+        QVERIFY(control);
+        QCOMPARE(control->name(), u"choices"_s);
+        QCOMPARE(control->formAttribute(u"for"_s), u"label1"_s);
+        control->setFormAttribute(u"for"_s, u"label2"_s);
+        QVERIFY(form.setControlProperties(u"control1"_s, *control));
+
+        QBuffer buffer;
+        QVERIFY(buffer.open(QIODevice::WriteOnly));
+        KoXmlWriter writer(&buffer);
+        writer.startElement("root");
+        writer.addAttribute("xmlns:form", "urn:oasis:names:tc:opendocument:xmlns:form:1.0");
+        form.saveOdf(writer);
+        writer.endElement();
+        KoXmlDocument xml;
+        QVERIFY(xml.setContent(buffer.data(), true));
+        KoOdfForm restored;
+        QVERIFY(restored.loadOdf(xml.documentElement().firstChildElement()));
+        auto copy = restored.controlById(u"control1"_s);
+        QVERIFY(copy);
+        QCOMPARE(copy->name(), u"choices"_s);
+        QCOMPARE(copy->formAttribute(u"for"_s), u"label2"_s);
     }
 
     void checkStatesAndZoom()
@@ -273,18 +335,20 @@ private Q_SLOTS:
         QPainter painter(&image);
         KoViewConverter converter;
         converter.setZoom(1.5);
-        for (int i = 0; i < kinds.size(); ++i) {
+        for (int i = 0; i < int(kinds.size()); ++i) {
+            const QString kind = KoOdfForm::controlKindName(kinds[i]);
             painter.save();
             painter.translate(20 + (i % 3) * 300, 30 + (i / 3) * 150);
             painter.setPen(Qt::black);
-            painter.drawText(QPoint(0, 0), kinds[i]);
+            painter.drawText(QPoint(0, 0), kind);
             painter.translate(0, 12);
-            const QString children =
-                kinds[i] == "listbox"_L1 ? u"<f:option f:label='First'/><f:option f:label='Second' f:current-selected='true'/>"_s : QString();
-            auto form =
-                loadForm(kinds[i], u"f:value='42' f:current-state='checked' f:current-selected='true' f:spin-button='true' f:dropdown='true'"_s, children);
+            const QString children = kinds[i] == KoOdfForm::ControlKind::Listbox
+                ? u"<f:option f:label='First'/><f:option f:label='Second' f:current-selected='true'/>"_s
+                : QString();
+            auto form = loadForm(kind, u"f:value='42' f:current-state='checked' f:current-selected='true' f:spin-button='true' f:dropdown='true'"_s, children);
             auto control = form.controlById(u"control1"_s);
-            const bool tall = kinds[i] == "grid"_L1 || kinds[i] == "frame"_L1 || kinds[i] == "textarea"_L1 || kinds[i] == "image-frame"_L1;
+            const bool tall = kinds[i] == KoOdfForm::ControlKind::Grid || kinds[i] == KoOdfForm::ControlKind::Frame
+                || kinds[i] == KoOdfForm::ControlKind::Textarea || kinds[i] == KoOdfForm::ControlKind::ImageFrame;
             paintFormControl(painter, converter, QSizeF(175, tall ? 65 : 25), kinds[i], control.get(), {});
             painter.restore();
         }
@@ -302,7 +366,7 @@ private:
         QPainter painter(&image);
         KoViewConverter converter;
         converter.setZoom(zoom);
-        paintFormControl(painter, converter, QSizeF(200, 60), form.controlKind(u"control1"_s), control.get(), {});
+        paintFormControl(painter, converter, QSizeF(200, 60), form.controlKindEnum(u"control1"_s), control.get(), {});
     }
     RecordingStyle *m_style = nullptr;
 };

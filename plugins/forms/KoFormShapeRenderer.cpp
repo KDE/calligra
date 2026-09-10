@@ -93,14 +93,31 @@ void drawList(QPainter &painter, QStyle *style, const QStyleOption &base, const 
 }
 }
 
+static void paintFormControlByName(QPainter &painter,
+                                   const KoViewConverter &converter,
+                                   const QSizeF &size,
+                                   KoOdfForm::ControlKind kind,
+                                   const KoOdfForm::Control *control,
+                                   const QImage &image);
+
 void paintFormControl(QPainter &painter,
                       const KoViewConverter &converter,
                       const QSizeF &size,
-                      const QString &kind,
+                      KoOdfForm::ControlKind kind,
                       const KoOdfForm::Control *control,
                       const QImage &image)
 {
-    if (kind == "hidden"_L1 || size.isEmpty())
+    paintFormControlByName(painter, converter, size, kind, control, image);
+}
+
+static void paintFormControlByName(QPainter &painter,
+                                   const KoViewConverter &converter,
+                                   const QSizeF &size,
+                                   KoOdfForm::ControlKind kind,
+                                   const KoOdfForm::Control *control,
+                                   const QImage &image)
+{
+    if (kind == KoOdfForm::ControlKind::Hidden || size.isEmpty())
         return;
     const QSize widgetSize(qMax(1, qRound(size.width() * stylePixelsPerPoint)), qMax(1, qRound(size.height() * stylePixelsPerPoint)));
     painter.save();
@@ -131,7 +148,7 @@ void paintFormControl(QPainter &painter,
         return control ? control->formAttribute(name) : QString();
     };
 
-    if (kind == "checkbox"_L1 || kind == "radio"_L1) {
+    if (kind == KoOdfForm::ControlKind::Checkbox || kind == KoOdfForm::ControlKind::Radio) {
         QStyleOptionButton button;
         static_cast<QStyleOption &>(button) = base;
         button.text = label;
@@ -141,14 +158,14 @@ void paintFormControl(QPainter &painter,
         QString selected = attribute(u"current-selected"_s);
         if (selected.isNull())
             selected = attribute(u"selected"_s);
-        if (kind == "checkbox"_L1 && state == "unknown"_L1)
+        if (kind == KoOdfForm::ControlKind::Checkbox && state == "unknown"_L1)
             button.state |= QStyle::State_NoChange;
-        else if ((kind == "checkbox"_L1 && state == "checked"_L1) || (kind == "radio"_L1 && selected == "true"_L1))
+        else if ((kind == KoOdfForm::ControlKind::Checkbox && state == "checked"_L1) || (kind == KoOdfForm::ControlKind::Radio && selected == "true"_L1))
             button.state |= QStyle::State_On;
         else
             button.state |= QStyle::State_Off;
-        style->drawControl(kind == "checkbox"_L1 ? QStyle::CE_CheckBox : QStyle::CE_RadioButton, &button, &painter);
-    } else if (kind == "button"_L1 || kind == "image"_L1) {
+        style->drawControl(kind == KoOdfForm::ControlKind::Checkbox ? QStyle::CE_CheckBox : QStyle::CE_RadioButton, &button, &painter);
+    } else if (kind == KoOdfForm::ControlKind::Button || kind == KoOdfForm::ControlKind::Image) {
         QStyleOptionButton button;
         static_cast<QStyleOption &>(button) = base;
         button.text = label;
@@ -160,13 +177,14 @@ void paintFormControl(QPainter &painter,
         if (!image.isNull()) {
             button.icon = QPixmap::fromImage(image);
             button.iconSize =
-                image.size().scaled(kind == "image"_L1 ? rect.adjusted(4, 4, -4, -4).size() : rect.size().boundedTo(QSize(32, 32)), Qt::KeepAspectRatio);
-        } else if (kind == "image"_L1) {
+                image.size().scaled(kind == KoOdfForm::ControlKind::Image ? rect.adjusted(4, 4, -4, -4).size() : rect.size().boundedTo(QSize(32, 32)),
+                                    Qt::KeepAspectRatio);
+        } else if (kind == KoOdfForm::ControlKind::Image) {
             button.icon = style->standardIcon(QStyle::SP_FileIcon);
             button.iconSize = QSize(16, 16);
         }
         style->drawControl(QStyle::CE_PushButton, &button, &painter);
-    } else if (kind == "fixed-text"_L1) {
+    } else if (kind == KoOdfForm::ControlKind::FixedText) {
         style->drawItemText(&painter,
                             rect,
                             Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap,
@@ -174,14 +192,14 @@ void paintFormControl(QPainter &painter,
                             base.state.testFlag(QStyle::State_Enabled),
                             label,
                             QPalette::WindowText);
-    } else if (kind == "frame"_L1) {
+    } else if (kind == KoOdfForm::ControlKind::Frame) {
         QStyleOptionGroupBox group;
         static_cast<QStyleOption &>(group) = base;
         group.text = label;
         group.lineWidth = qMax(1, style->pixelMetric(QStyle::PM_DefaultFrameWidth, &group));
         group.subControls = QStyle::SC_GroupBoxFrame | QStyle::SC_GroupBoxLabel;
         style->drawComplexControl(QStyle::CC_GroupBox, &group, &painter);
-    } else if (kind == "image-frame"_L1) {
+    } else if (kind == KoOdfForm::ControlKind::ImageFrame) {
         drawField(painter, style, base, {});
         const QRect contents = rect.adjusted(3, 3, -3, -3);
         if (!image.isNull() && !contents.isEmpty()) {
@@ -191,7 +209,7 @@ void paintFormControl(QPainter &painter,
             style->standardIcon(QStyle::SP_FileIcon)
                 .paint(&painter, contents, Qt::AlignCenter, base.state.testFlag(QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled);
         }
-    } else if (kind == "grid"_L1) {
+    } else if (kind == KoOdfForm::ControlKind::Grid) {
         drawField(painter, style, base, {});
         const auto columns = control->entries();
         const QRect contents = rect.adjusted(2, 2, -2, -2);
@@ -213,7 +231,7 @@ void paintFormControl(QPainter &painter,
         painter.setPen(base.palette.color(QPalette::Mid));
         for (int y = contents.top() + headerHeight; y < contents.bottom(); y += headerHeight)
             painter.drawLine(contents.left(), y, contents.right(), y);
-    } else if (kind == "value-range"_L1) {
+    } else if (kind == KoOdfForm::ControlKind::ValueRange) {
         QStyleOptionSlider slider;
         static_cast<QStyleOption &>(slider) = base;
         slider.orientation = attribute(u"orientation"_s) == "vertical"_L1 ? Qt::Vertical : Qt::Horizontal;
@@ -245,9 +263,9 @@ void paintFormControl(QPainter &painter,
             slider.upsideDown = isSlider && slider.orientation == Qt::Vertical;
             style->drawComplexControl(isSlider ? QStyle::CC_Slider : QStyle::CC_ScrollBar, &slider, &painter);
         }
-    } else if (kind == "combobox"_L1 || kind == "listbox"_L1) {
+    } else if (kind == KoOdfForm::ControlKind::Combobox || kind == KoOdfForm::ControlKind::Listbox) {
         const auto entries = control->entries();
-        if (kind == "listbox"_L1) {
+        if (kind == KoOdfForm::ControlKind::Listbox) {
             for (const auto &entry : entries) {
                 if (entry.selected) {
                     text = entry.label;
@@ -260,7 +278,7 @@ void paintFormControl(QPainter &painter,
             QStyleOptionComboBox combo;
             static_cast<QStyleOption &>(combo) = base;
             combo.currentText = text;
-            combo.editable = kind == "combobox"_L1 && !control->readOnly();
+            combo.editable = kind == KoOdfForm::ControlKind::Combobox && !control->readOnly();
             style->drawComplexControl(QStyle::CC_ComboBox, &combo, &painter);
             if (combo.editable) {
                 QStyleOption field = base;
@@ -277,7 +295,7 @@ void paintFormControl(QPainter &painter,
             }
         } else {
             QStyleOption list = base;
-            if (kind == "combobox"_L1) {
+            if (kind == KoOdfForm::ControlKind::Combobox) {
                 QStyleOption field = base;
                 field.rect.setHeight(qMin(rect.height(), base.fontMetrics.height() + 8));
                 drawField(painter, style, field, text);
@@ -286,7 +304,7 @@ void paintFormControl(QPainter &painter,
             if (!list.rect.isEmpty())
                 drawList(painter, style, list, entries);
         }
-    } else if (kind == "file"_L1) {
+    } else if (kind == KoOdfForm::ControlKind::File) {
         QStyleOptionButton browse;
         static_cast<QStyleOption &>(browse) = base;
         browse.text = i18n("Browse…");
@@ -298,12 +316,14 @@ void paintFormControl(QPainter &painter,
         if (!field.rect.isEmpty())
             drawField(painter, style, field, text);
     } else {
-        if (kind == "password"_L1) {
+        if (kind == KoOdfForm::ControlKind::Password) {
             const QString echo = attribute(u"echo-char"_s);
             const QChar mask = echo.isEmpty() ? QChar(style->styleHint(QStyle::SH_LineEdit_PasswordCharacter, &base)) : echo.front();
             text = QString(text.size(), mask);
         }
-        if ((kind == "number"_L1 || kind == "date"_L1 || kind == "time"_L1 || kind == "formatted-text"_L1) && attribute(u"spin-button"_s) == "true"_L1) {
+        if ((kind == KoOdfForm::ControlKind::Number || kind == KoOdfForm::ControlKind::Date || kind == KoOdfForm::ControlKind::Time
+             || kind == KoOdfForm::ControlKind::FormattedText)
+            && attribute(u"spin-button"_s) == "true"_L1) {
             QStyleOptionSpinBox spin;
             static_cast<QStyleOption &>(spin) = base;
             spin.buttonSymbols = QAbstractSpinBox::UpDownArrows;
@@ -319,7 +339,7 @@ void paintFormControl(QPainter &painter,
                                 text,
                                 QPalette::Text);
         } else {
-            drawField(painter, style, base, text, kind == "textarea"_L1);
+            drawField(painter, style, base, text, kind == KoOdfForm::ControlKind::Textarea);
         }
     }
     painter.restore();
