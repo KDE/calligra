@@ -14,6 +14,6 @@ class KoViewConverter;
 void paintFormControl(QPainter &painter,
                       const KoViewConverter &converter,
                       const QSizeF &size,
-                      const QString &kind,
+                      KoOdfForm::ControlKind kind,
                       const KoOdfForm::Control *control,
                       const QImage &image);

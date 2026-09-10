@@ -19,6 +19,34 @@ class KoXmlWriter;
 class KOODF_EXPORT KoOdfForm
 {
 public:
+    enum class ControlKind {
+        Unknown,
+        Text,
+        Textarea,
+        FormattedText,
+        Number,
+        Date,
+        Time,
+        Button,
+        Checkbox,
+        Radio,
+        Combobox,
+        Listbox,
+        Password,
+        Hidden,
+        File,
+        FixedText,
+        ValueRange,
+        Image,
+        ImageFrame,
+        Frame,
+        Grid,
+        GenericControl,
+    };
+
+    static ControlKind controlKindFromString(const QString &kind);
+    static QString controlKindName(ControlKind kind);
+
     class KOODF_EXPORT Control
     {
     public:
@@ -301,6 +329,11 @@ public:
     void saveOdf(KoXmlWriter &writer) const;
     bool isEmpty() const;
     QString controlKind(const QString &id) const;
+    ControlKind controlKindEnum(const QString &id) const;
+    QString addControl(const QString &kind);
+    QString addControl(ControlKind kind, const QString &id = {});
+    /** Removes a control and returns whether a control with this ID existed. */
+    bool removeControl(const QString &id);
     /** Returns an owned copy of the referenced control, or nullptr if it is unknown. */
     std::unique_ptr<Control> controlById(const QString &id) const;
     /** Updates common properties without replacing the concrete control type or ID. */

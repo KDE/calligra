@@ -8,6 +8,7 @@
 
 #include <KoDocument.h>
 #include <KoDocumentResourceManager.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>
@@ -24,69 +25,54 @@ using namespace Qt::StringLiterals;
 
 namespace
 {
-std::unique_ptr<KoOdfForm::Control> createControl(const QString &kind)
+std::unique_ptr<KoOdfForm::Control> createControl(KoOdfForm::ControlKind kind)
 {
-    if (kind == "text"_L1) {
+    switch (kind) {
+    case KoOdfForm::ControlKind::Text:
         return std::make_unique<KoOdfForm::Text>();
-    }
-    if (kind == "textarea"_L1) {
+    case KoOdfForm::ControlKind::Textarea:
         return std::make_unique<KoOdfForm::Textarea>();
-    }
-    if (kind == "formatted-text"_L1) {
+    case KoOdfForm::ControlKind::FormattedText:
         return std::make_unique<KoOdfForm::FormattedText>();
-    }
-    if (kind == "number"_L1) {
+    case KoOdfForm::ControlKind::Number:
         return std::make_unique<KoOdfForm::Number>();
-    }
-    if (kind == "date"_L1) {
+    case KoOdfForm::ControlKind::Date:
         return std::make_unique<KoOdfForm::Date>();
-    }
-    if (kind == "time"_L1) {
+    case KoOdfForm::ControlKind::Time:
         return std::make_unique<KoOdfForm::Time>();
-    }
-    if (kind == "button"_L1) {
+    case KoOdfForm::ControlKind::Button:
         return std::make_unique<KoOdfForm::Button>();
-    }
-    if (kind == "checkbox"_L1) {
+    case KoOdfForm::ControlKind::Checkbox:
         return std::make_unique<KoOdfForm::Checkbox>();
-    }
-    if (kind == "radio"_L1) {
+    case KoOdfForm::ControlKind::Radio:
         return std::make_unique<KoOdfForm::Radio>();
-    }
-    if (kind == "combobox"_L1) {
+    case KoOdfForm::ControlKind::Combobox:
         return std::make_unique<KoOdfForm::Combobox>();
-    }
-    if (kind == "listbox"_L1) {
+    case KoOdfForm::ControlKind::Listbox:
         return std::make_unique<KoOdfForm::Listbox>();
-    }
-    if (kind == "password"_L1) {
+    case KoOdfForm::ControlKind::Password:
         return std::make_unique<KoOdfForm::Password>();
-    }
-    if (kind == "hidden"_L1) {
+    case KoOdfForm::ControlKind::Hidden:
         return std::make_unique<KoOdfForm::Hidden>();
-    }
-    if (kind == "file"_L1) {
+    case KoOdfForm::ControlKind::File:
         return std::make_unique<KoOdfForm::File>();
-    }
-    if (kind == "fixed-text"_L1) {
+    case KoOdfForm::ControlKind::FixedText:
         return std::make_unique<KoOdfForm::FixedText>();
-    }
-    if (kind == "value-range"_L1) {
+    case KoOdfForm::ControlKind::ValueRange:
         return std::make_unique<KoOdfForm::ValueRange>();
-    }
-    if (kind == "image"_L1) {
+    case KoOdfForm::ControlKind::Image:
         return std::make_unique<KoOdfForm::Image>();
-    }
-    if (kind == "image-frame"_L1) {
+    case KoOdfForm::ControlKind::ImageFrame:
         return std::make_unique<KoOdfForm::ImageFrame>();
-    }
-    if (kind == "frame"_L1) {
+    case KoOdfForm::ControlKind::Frame:
         return std::make_unique<KoOdfForm::Frame>();
-    }
-    if (kind == "grid"_L1) {
+    case KoOdfForm::ControlKind::Grid:
         return std::make_unique<KoOdfForm::Grid>();
+    case KoOdfForm::ControlKind::Unknown:
+    case KoOdfForm::ControlKind::GenericControl:
+        return std::make_unique<KoOdfForm::GenericControl>();
     }
-    return std::make_unique<KoOdfForm::GenericControl>();
+    return nullptr;
 }
 }
 
@@ -105,14 +91,14 @@ bool KoFormShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &co
 {
     loadOdfAttributes(element, context, OdfAllAttributes);
     m_controlId = element.attributeNS(KoXmlNS::draw, u"control"_s);
-    m_controlKind.clear();
+    m_controlKind = KoOdfForm::ControlKind::Unknown;
     m_formControl.reset();
     m_image = {};
     m_document.clear();
     if (auto *resources = context.documentResourceManager()) {
         if (auto *document = dynamic_cast<KoDocument *>(resources->odfDocument())) {
             m_document = document;
-            m_controlKind = document->form().controlKind(m_controlId);
+            m_controlKind = document->form().controlKindEnum(m_controlId);
             m_formControl = document->form().controlById(m_controlId);
         }
     }
@@ -143,16 +129,35 @@ QString KoFormShape::controlId() const
     return m_controlId;
 }
 
-QString KoFormShape::controlKind() const
+KoOdfForm::ControlKind KoFormShape::controlKind() const
 {
     return m_controlKind;
 }
 
-void KoFormShape::setControlKind(const QString &kind)
+QString KoFormShape::controlKindName() const
+{
+    return KoOdfForm::controlKindName(m_controlKind);
+}
+
+void KoFormShape::setControlKind(KoOdfForm::ControlKind kind)
 {
     m_controlKind = kind;
     m_formControl = createControl(kind);
-    m_formControl->setLabel(kind);
+    m_formControl->setLabel(KoOdfForm::controlKindName(kind));
+    notifyChanged();
+    update();
+}
+
+void KoFormShape::initializeControl(KoOdfForm::ControlKind kind, KoDocument *document)
+{
+    if (!document) {
+        setControlKind(kind);
+        return;
+    }
+    m_document = document;
+    m_controlKind = kind;
+    m_controlId = document->form().addControl(KoOdfForm::controlKindName(kind));
+    m_formControl = document->form().controlById(m_controlId);
     notifyChanged();
     update();
 }
@@ -162,7 +167,7 @@ void KoFormShape::setControlId(const QString &id)
     if (m_controlId == id)
         return;
     m_controlId = id;
-    m_controlKind.clear();
+    m_controlKind = KoOdfForm::ControlKind::Unknown;
     m_formControl.reset();
     m_image = {};
     notifyChanged();
@@ -188,4 +193,28 @@ void KoFormShape::setControlProperties(const KoOdfForm::Control &properties)
     setPrintable(m_formControl->printable());
     notifyChanged();
     update();
+}
+
+void KoFormShape::shapeAddedToDocument(KoShapeBasedDocumentBase *document)
+{
+    auto *odfDocument = dynamic_cast<KoDocument *>(document);
+    if (!odfDocument || m_controlId.isEmpty() || m_controlKind == KoOdfForm::ControlKind::Unknown) {
+        return;
+    }
+    if (odfDocument->form().controlKindEnum(m_controlId) == KoOdfForm::ControlKind::Unknown) {
+        odfDocument->form().addControl(m_controlKind, m_controlId);
+        if (m_formControl) {
+            odfDocument->form().setControlProperties(m_controlId, *m_formControl);
+        }
+    }
+    m_document = odfDocument;
+}
+
+void KoFormShape::shapeRemovedFromDocument(KoShapeBasedDocumentBase *document)
+{
+    auto *odfDocument = dynamic_cast<KoDocument *>(document);
+    if (!odfDocument || m_controlId.isEmpty()) {
+        return;
+    }
+    odfDocument->form().removeControl(m_controlId);
 }

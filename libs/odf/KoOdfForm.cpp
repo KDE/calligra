@@ -4,15 +4,46 @@
  */
 
 #include "KoOdfForm.h"
+
 #include "KoXmlNS.h"
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
+#include <array>
 
 #include <QDomDocument>
 #include <QTextStream>
+#include <algorithm>
 #include <type_traits>
 
 using namespace Qt::StringLiterals;
+
+namespace
+{
+using ControlKind = KoOdfForm::ControlKind;
+constexpr std::array<std::pair<QLatin1StringView, ControlKind>, 21> controlKinds = {{
+    {"text"_L1, ControlKind::Text},
+    {"textarea"_L1, ControlKind::Textarea},
+    {"formatted-text"_L1, ControlKind::FormattedText},
+    {"number"_L1, ControlKind::Number},
+    {"date"_L1, ControlKind::Date},
+    {"time"_L1, ControlKind::Time},
+    {"button"_L1, ControlKind::Button},
+    {"checkbox"_L1, ControlKind::Checkbox},
+    {"radio"_L1, ControlKind::Radio},
+    {"combobox"_L1, ControlKind::Combobox},
+    {"listbox"_L1, ControlKind::Listbox},
+    {"password"_L1, ControlKind::Password},
+    {"hidden"_L1, ControlKind::Hidden},
+    {"file"_L1, ControlKind::File},
+    {"fixed-text"_L1, ControlKind::FixedText},
+    {"value-range"_L1, ControlKind::ValueRange},
+    {"image"_L1, ControlKind::Image},
+    {"image-frame"_L1, ControlKind::ImageFrame},
+    {"frame"_L1, ControlKind::Frame},
+    {"grid"_L1, ControlKind::Grid},
+    {"generic-control"_L1, ControlKind::GenericControl},
+}};
+}
 
 bool KoOdfForm::Control::loadOdf(const KoXmlElement &e)
 {
@@ -426,59 +457,204 @@ bool KoOdfForm::isEmpty() const
 
 QString KoOdfForm::controlKind(const QString &id) const
 {
-    if (id.isEmpty())
-        return {};
-    const auto matches = [&id](const auto &controls, const QString &kind) {
+    return controlKindName(controlKindEnum(id));
+}
+
+KoOdfForm::ControlKind KoOdfForm::controlKindEnum(const QString &id) const
+{
+    if (id.isEmpty()) {
+        return ControlKind::Unknown;
+    }
+    const auto matches = [&id](const auto &controls, ControlKind kind) {
         for (const auto &control : controls) {
-            if (control.id() == id)
+            if (control.id() == id) {
                 return kind;
+            }
         }
-        return QString();
+        return ControlKind::Unknown;
     };
-    QString kind;
-    if (!(kind = matches(m_texts, u"text"_s)).isEmpty())
+    ControlKind kind;
+    if ((kind = matches(m_texts, ControlKind::Text)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_textareas, u"textarea"_s)).isEmpty())
+    if ((kind = matches(m_textareas, ControlKind::Textarea)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_formattedTexts, u"formatted-text"_s)).isEmpty())
+    if ((kind = matches(m_formattedTexts, ControlKind::FormattedText)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_numbers, u"number"_s)).isEmpty())
+    if ((kind = matches(m_numbers, ControlKind::Number)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_dates, u"date"_s)).isEmpty())
+    if ((kind = matches(m_dates, ControlKind::Date)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_times, u"time"_s)).isEmpty())
+    if ((kind = matches(m_times, ControlKind::Time)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_buttons, u"button"_s)).isEmpty())
+    if ((kind = matches(m_buttons, ControlKind::Button)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_checkboxes, u"checkbox"_s)).isEmpty())
+    if ((kind = matches(m_checkboxes, ControlKind::Checkbox)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_radios, u"radio"_s)).isEmpty())
+    if ((kind = matches(m_radios, ControlKind::Radio)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_comboboxes, u"combobox"_s)).isEmpty())
+    if ((kind = matches(m_comboboxes, ControlKind::Combobox)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_listboxes, u"listbox"_s)).isEmpty())
+    if ((kind = matches(m_listboxes, ControlKind::Listbox)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_passwords, u"password"_s)).isEmpty())
+    if ((kind = matches(m_passwords, ControlKind::Password)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_hiddenControls, u"hidden"_s)).isEmpty())
+    if ((kind = matches(m_hiddenControls, ControlKind::Hidden)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_files, u"file"_s)).isEmpty())
+    if ((kind = matches(m_files, ControlKind::File)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_fixedTexts, u"fixed-text"_s)).isEmpty())
+    if ((kind = matches(m_fixedTexts, ControlKind::FixedText)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_valueRanges, u"value-range"_s)).isEmpty())
+    if ((kind = matches(m_valueRanges, ControlKind::ValueRange)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_images, u"image"_s)).isEmpty())
+    if ((kind = matches(m_images, ControlKind::Image)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_imageFrames, u"image-frame"_s)).isEmpty())
+    if ((kind = matches(m_imageFrames, ControlKind::ImageFrame)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_frames, u"frame"_s)).isEmpty())
+    if ((kind = matches(m_frames, ControlKind::Frame)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_grids, u"grid"_s)).isEmpty())
+    if ((kind = matches(m_grids, ControlKind::Grid)) != ControlKind::Unknown)
         return kind;
-    if (!(kind = matches(m_genericControls, u"generic-control"_s)).isEmpty())
+    if ((kind = matches(m_genericControls, ControlKind::GenericControl)) != ControlKind::Unknown)
         return kind;
+    return ControlKind::Unknown;
+}
+
+KoOdfForm::ControlKind KoOdfForm::controlKindFromString(const QString &kind)
+{
+    for (const auto &[name, value] : controlKinds) {
+        if (kind == name) {
+            return value;
+        }
+    }
+    return ControlKind::Unknown;
+}
+
+QString KoOdfForm::controlKindName(ControlKind kind)
+{
+    for (const auto &[name, value] : controlKinds) {
+        if (kind == value) {
+            return name.toString();
+        }
+    }
     return {};
+}
+
+QString KoOdfForm::addControl(const QString &kind)
+{
+    return addControl(controlKindFromString(kind));
+}
+
+QString KoOdfForm::addControl(ControlKind kindValue, const QString &requestedId)
+{
+    QString id;
+    if (!requestedId.isEmpty() && controlKindEnum(requestedId) == ControlKind::Unknown) {
+        id = requestedId;
+    } else {
+        for (int index = 1;; ++index) {
+            id = u"control%1"_s.arg(index);
+            if (controlKindEnum(id) == ControlKind::Unknown) {
+                break;
+            }
+        }
+    }
+    const QString kind = controlKindName(kindValue);
+    const auto setDefaults = [&id, &kind](auto &control) {
+        control.setId(id);
+        control.setName(kind);
+    };
+    const auto append = [&setDefaults]<typename T>(QVector<T> &controls) {
+        T control;
+        setDefaults(control);
+        controls.append(control);
+    };
+    switch (kindValue) {
+    case ControlKind::Text:
+        append(m_texts);
+        break;
+    case ControlKind::Textarea:
+        append(m_textareas);
+        break;
+    case ControlKind::FormattedText:
+        append(m_formattedTexts);
+        break;
+    case ControlKind::Number:
+        append(m_numbers);
+        break;
+    case ControlKind::Date:
+        append(m_dates);
+        break;
+    case ControlKind::Time:
+        append(m_times);
+        break;
+    case ControlKind::Button:
+        append(m_buttons);
+        break;
+    case ControlKind::Checkbox:
+        append(m_checkboxes);
+        break;
+    case ControlKind::Radio:
+        append(m_radios);
+        break;
+    case ControlKind::Combobox:
+        append(m_comboboxes);
+        break;
+    case ControlKind::Listbox:
+        append(m_listboxes);
+        break;
+    case ControlKind::Password:
+        append(m_passwords);
+        break;
+    case ControlKind::Hidden:
+        append(m_hiddenControls);
+        break;
+    case ControlKind::File:
+        append(m_files);
+        break;
+    case ControlKind::FixedText:
+        append(m_fixedTexts);
+        break;
+    case ControlKind::ValueRange:
+        append(m_valueRanges);
+        break;
+    case ControlKind::Image:
+        append(m_images);
+        break;
+    case ControlKind::ImageFrame:
+        append(m_imageFrames);
+        break;
+    case ControlKind::Frame:
+        append(m_frames);
+        break;
+    case ControlKind::Grid:
+        append(m_grids);
+        break;
+    case ControlKind::GenericControl:
+    case ControlKind::Unknown:
+        append(m_genericControls);
+        break;
+    }
+    return id;
+}
+
+bool KoOdfForm::removeControl(const QString &id)
+{
+    if (id.isEmpty()) {
+        return false;
+    }
+    const auto remove = [&id](auto &controls) {
+        const auto it = std::find_if(controls.begin(), controls.end(), [&id](const auto &control) {
+            return control.id() == id;
+        });
+        if (it == controls.end()) {
+            return false;
+        }
+        controls.erase(it);
+        return true;
+    };
+    return remove(m_texts) || remove(m_textareas) || remove(m_formattedTexts) || remove(m_numbers) || remove(m_dates) || remove(m_times) || remove(m_buttons)
+        || remove(m_checkboxes) || remove(m_radios) || remove(m_comboboxes) || remove(m_listboxes) || remove(m_passwords) || remove(m_hiddenControls)
+        || remove(m_files) || remove(m_fixedTexts) || remove(m_valueRanges) || remove(m_images) || remove(m_imageFrames) || remove(m_frames) || remove(m_grids)
+        || remove(m_genericControls);
 }
 std::unique_ptr<KoOdfForm::Control> KoOdfForm::controlById(const QString &id) const
 {
