@@ -42,6 +42,33 @@
 #include <QTimer>
 #include <TextLayoutDebug.h>
 
+namespace
+{
+// Qt only recognizes object-replacement characters when the document layout has
+// a registered QTextObjectInterface. KoTextDocumentLayout performs the actual
+// sizing and painting in its resizeInlineObject/drawInlineObject overrides.
+class InlineObjectHandler : public QObject, public QTextObjectInterface
+{
+    Q_OBJECT
+    Q_INTERFACES(QTextObjectInterface)
+
+public:
+    explicit InlineObjectHandler(QObject *parent)
+        : QObject(parent)
+    {
+    }
+
+    QSizeF intrinsicSize(QTextDocument *, int, const QTextFormat &) override
+    {
+        return {};
+    }
+
+    void drawObject(QPainter *, const QRectF &, QTextDocument *, int, const QTextFormat &) override
+    {
+    }
+};
+}
+
 extern int qt_defaultDpiY();
 
 KoInlineObjectExtent::KoInlineObjectExtent(qreal ascent, qreal descent)
@@ -134,6 +161,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
 {
     d->paintDevice = new KoPostscriptPaintDevice();
     d->provider = provider;
+    registerHandler(QTextFormat::UserObject + 1, new InlineObjectHandler(this));
     setPaintDevice(d->paintDevice);
 
     d->styleManager = KoTextDocument(document()).styleManager();
@@ -1009,3 +1037,5 @@ void KoTextDocumentLayout::updateProgress(const QTextFrame::iterator &it)
         Q_EMIT layoutProgressChanged(percent);
     }
 }
+
+#include "KoTextDocumentLayout.moc"
