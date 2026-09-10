@@ -1,7 +1,7 @@
 {
     "KPlugin": {
-        "Name": "OpenDocument Forms",
-        "Description": "OpenDocument form controls",
+        "Name": "Forms",
+        "Description": "Form controls",
         "ServiceTypes": ["Calligra/Shape"]
     },
     "X-Flake-MinVersion": "28",
