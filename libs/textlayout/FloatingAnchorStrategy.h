@@ -10,6 +10,8 @@
 
 #include "AnchorStrategy.h"
 
+#include <memory>
+
 class KoTextLayoutRootArea;
 class KoTextShapeData;
 class QTextBlock;
@@ -46,7 +48,7 @@ private:
 
     void updateObstruction(qreal documentOffset);
 
-    KoTextLayoutObstruction *m_obstruction; // the obstruction representation of the subject
+    std::unique_ptr<KoTextLayoutObstruction> m_obstruction; // the obstruction representation of the subject
     KoAnchorTextRange *m_anchorRange;
 };
 
