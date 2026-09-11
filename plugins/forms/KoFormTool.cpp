@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KoFormTool.h"
+#include "KoFormEventsWidget.h"
 #include "KoFormShape.h"
 
 #include <KLocalizedString>
@@ -14,6 +15,7 @@
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QFont>
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -148,6 +150,12 @@ QWidget *KoFormTool::createOptionWidget()
     m_tabIndex->setRange(0, 32767);
     form->addRow(i18nc("@label:form property", "Tab &order:"), m_tabIndex);
     m_specificForm = form;
+    m_eventOptions = new QWidget();
+    m_eventOptions->setWindowTitle(i18nc("@title:form events", "Events"));
+    auto *eventLayout = new QVBoxLayout(m_eventOptions);
+    m_events = new KoFormEventsWidget(m_eventOptions);
+    eventLayout->addWidget(m_events);
+    connect(m_events, &KoFormEventsWidget::eventsChanged, this, &KoFormTool::commitProperties);
     m_specificStartRow = form->rowCount();
     layout->addStretch();
     connect(m_name, &QLineEdit::textChanged, &m_previewCompressor, &KoSignalCompressor::start);
@@ -170,6 +178,12 @@ QWidget *KoFormTool::createOptionWidget()
     return widget;
 }
 
+QList<QPointer<QWidget>> KoFormTool::createOptionWidgets()
+{
+    QWidget *properties = createOptionWidget();
+    return {properties, m_eventOptions};
+}
+
 void KoFormTool::rebuildSpecificProperties()
 {
     while (m_specificForm && m_specificForm->rowCount() > m_specificStartRow) {
@@ -178,11 +192,14 @@ void KoFormTool::rebuildSpecificProperties()
     m_specificProperties.clear();
     m_entries = nullptr;
     if (!m_shape || !m_shape->formControl()) {
+        while (m_eventForm && m_eventForm->rowCount() > 0) {
+            m_eventForm->removeRow(m_eventForm->rowCount() - 1);
+        }
         return;
     }
-    const auto addText = [this](const QString &key, const QString &label) {
+    const auto addText = [this](const QString &key, const QString &label, QFormLayout *targetForm = nullptr) {
         auto *edit = new QLineEdit(m_options);
-        m_specificForm->addRow(label, edit);
+        (targetForm ? targetForm : m_specificForm)->addRow(label, edit);
         m_specificProperties.insert(key, edit);
         connect(edit, &QLineEdit::textChanged, &m_previewCompressor, &KoSignalCompressor::start);
     };
@@ -328,6 +345,9 @@ void KoFormTool::updateProperties()
     m_printable->setChecked(control && control->printable());
     m_tabStop->setChecked(control && control->tabStop());
     m_tabIndex->setValue(control ? control->tabIndex() : 0);
+    if (m_events) {
+        m_events->setEvents(control ? control->eventHandlers() : QMap<QString, QString>());
+    }
     for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
         const QSignalBlocker blocker(it.value());
         if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
@@ -355,6 +375,8 @@ void KoFormTool::updateProperties()
                 edit->setText(control->linkedCell());
             } else if (it.key() == "xforms-bind"_L1) {
                 edit->setText(control->xformsBind());
+            } else if (it.key().startsWith("event-"_L1)) {
+                edit->setText(control->eventHandler(it.key().mid(6)));
             } else {
                 edit->setText(control->formAttribute(it.key()));
             }
@@ -461,6 +483,15 @@ void KoFormTool::commitProperties()
     properties.setPrintable(m_printable->isChecked());
     properties.setTabStop(m_tabStop->isChecked());
     properties.setTabIndex(m_tabIndex->value());
+    if (m_events) {
+        const auto eventHandlers = m_events->events();
+        for (const auto &event : before->eventHandlers().keys()) {
+            properties.setEventHandler(event, eventHandlers.value(event));
+        }
+        for (auto it = eventHandlers.cbegin(); it != eventHandlers.cend(); ++it) {
+            properties.setEventHandler(it.key(), it.value());
+        }
+    }
     for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
         QString value;
         if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
@@ -478,6 +509,8 @@ void KoFormTool::commitProperties()
             properties.setLinkedCell(value);
         } else if (it.key() == "xforms-bind"_L1) {
             properties.setXformsBind(value);
+        } else if (it.key().startsWith("event-"_L1)) {
+            properties.setEventHandler(it.key().mid(6), value);
         } else if (it.key() == "max-length"_L1) {
             KoOdfForm::Text typed;
             static_cast<KoOdfForm::Control &>(typed) = properties;
