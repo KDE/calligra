@@ -116,7 +116,6 @@ StencilBoxDocker::~StencilBoxDocker()
             delete factory;
         }
     }
-    qDeleteAll(m_modelMap);
 }
 
 void StencilBoxDocker::collectionsLoaded()
@@ -225,7 +224,7 @@ bool StencilBoxDockerLoader::addCollection(const QString &path)
     QString family = dg.readEntry("Name");
 
     if (!m_modelMap.contains(family)) {
-        CollectionItemModel *model = new CollectionItemModel();
+        CollectionItemModel *model = new CollectionItemModel(q);
         m_modelMap.insert(family, model);
     }
 
