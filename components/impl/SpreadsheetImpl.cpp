@@ -215,7 +215,7 @@ int SpreadsheetImpl::indexCount() const
 
 QUrl SpreadsheetImpl::urlAtPoint(QPoint point)
 {
-    for (const QPair<QRectF, QUrl> &link : d->links) {
+    for (const QPair<QRectF, QUrl> &link : std::as_const(d->links)) {
         QRectF hitTarget{link.first.x() - Private::wiggleFactor,
                          link.first.y() - Private::wiggleFactor,
                          link.first.width() + Private::wiggleFactor * 2,
