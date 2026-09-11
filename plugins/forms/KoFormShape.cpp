@@ -20,8 +20,14 @@
 #include <KoImageData.h>
 #include <KoOdfLoadingContext.h>
 #include <QPainter>
+#include <QSet>
 
 using namespace Qt::StringLiterals;
+
+namespace
+{
+QSet<KoFormShape *> s_formShapes;
+}
 
 namespace
 {
@@ -76,10 +82,63 @@ std::unique_ptr<KoOdfForm::Control> createControl(KoOdfForm::ControlKind kind)
 }
 }
 
+QList<FormPdfField> collectFormPdfFields(const QList<KoShape *> &shapes, int pageNumber)
+{
+    QList<FormPdfField> fields;
+    for (KoShape *shape : shapes) {
+        auto *formShape = dynamic_cast<KoFormShape *>(shape);
+        if (!formShape || !formShape->formControl() || !formShape->formControl()->printable()) {
+            continue;
+        }
+        const auto *control = formShape->formControl();
+        FormPdfField field;
+        field.id = formShape->controlId();
+        field.name = control->name();
+        field.label = control->label();
+        field.kind = formShape->controlKind();
+        field.rect = formShape->boundingRect();
+        field.page = pageNumber;
+        field.value = control->value();
+        field.currentValue = control->currentValue();
+        field.dataField = control->dataField();
+        field.linkedCell = control->linkedCell();
+        field.xformsBind = control->xformsBind();
+        field.target = control->formAttribute(u"for"_s);
+        field.entries = control->entries();
+        field.readOnly = control->readOnly();
+        field.required = control->inputRequired();
+        field.printable = control->printable();
+        field.tabIndex = control->tabIndex();
+        fields.append(std::move(field));
+    }
+    return fields;
+}
+
 KoFormShape::KoFormShape()
 {
+    s_formShapes.insert(this);
     setShapeId(u"FormShape"_s);
     setSize(QSizeF(80, 24));
+}
+
+KoFormShape::~KoFormShape()
+{
+    s_formShapes.remove(this);
+}
+
+KoDocument *KoFormShape::document() const
+{
+    return m_document;
+}
+
+QList<KoShape *> registeredFormShapes()
+{
+    QList<KoShape *> shapes;
+    shapes.reserve(s_formShapes.size());
+    for (KoFormShape *shape : s_formShapes) {
+        shapes.append(shape);
+    }
+    return shapes;
 }
 
 void KoFormShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)

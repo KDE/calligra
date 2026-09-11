@@ -249,6 +249,12 @@ endif()
 
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(qpdf CONFIG QUIET)
+set_package_properties(qpdf PROPERTIES
+    TYPE RECOMMENDED
+    PURPOSE "Enables interactive PDF form export"
+    URL "https://qpdf.sourceforge.io/"
+)
 
 find_package(Qt6Keychain)
 set_package_properties(Qt6Keychain PROPERTIES
