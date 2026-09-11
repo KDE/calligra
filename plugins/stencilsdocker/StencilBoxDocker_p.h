@@ -15,7 +15,8 @@ class StencilBoxDockerLoader : public QObject
     Q_OBJECT
 public:
     StencilBoxDockerLoader(StencilBoxDocker *parent)
-        : q(parent)
+        : QObject(parent)
+        , q(parent)
     {
     }
 

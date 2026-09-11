@@ -142,7 +142,7 @@ void CollectionTreeWidget::regenerateFilteredMap()
     while (i.hasNext()) {
         i.next();
         i.value()->setViewMode(m_viewMode);
-        QSortFilterProxyModel *proxy = new QSortFilterProxyModel();
+        QSortFilterProxyModel *proxy = new QSortFilterProxyModel(this);
         proxy->setSourceModel(i.value());
         m_filteredMap.insert(i.key(), proxy);
     }
