@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2026 Carl Schwan <carl@carlschwan.eu>
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
+#include "KoFormShape.h"
 #include "KoFormShapeRenderer.h"
 
 #include <KoViewConverter.h>
@@ -298,6 +299,39 @@ private Q_SLOTS:
         QCOMPARE(number.stepSize(), u"0.5"_s);
         number.setStepSize(u"0"_s);
         QCOMPARE(number.stepSize(), u"0.5"_s);
+    }
+
+    void pdfMetadata()
+    {
+        KoFormShape text;
+        text.setControlId(u"field1"_s);
+        text.setControlKind(KoOdfForm::ControlKind::Text);
+        KoOdfForm::GenericControl properties;
+        properties.setId(u"field1"_s);
+        properties.setName(u"First name"_s);
+        properties.setValue(u"Default"_s);
+        properties.setCurrentValue(u"Current"_s);
+        properties.setDataField(u"person.first"_s);
+        properties.setLinkedCell(u"Sheet1.A1"_s);
+        properties.setXformsBind(u"first-name"_s);
+        properties.setFormAttribute(u"for"_s, u"label1"_s);
+        text.setControlProperties(properties);
+        text.setPosition(QPointF(10, 20));
+        text.setSize(QSizeF(100, 24));
+        QList<KoShape *> shapes{&text};
+        const auto fields = collectFormPdfFields(shapes, 2);
+        QCOMPARE(fields.size(), 1);
+        const auto &field = fields.constFirst();
+        QCOMPARE(field.page, 2);
+        QCOMPARE(field.id, u"field1"_s);
+        QCOMPARE(field.name, u"First name"_s);
+        QCOMPARE(field.value, u"Default"_s);
+        QCOMPARE(field.currentValue, u"Current"_s);
+        QCOMPARE(field.dataField, u"person.first"_s);
+        QCOMPARE(field.linkedCell, u"Sheet1.A1"_s);
+        QCOMPARE(field.xformsBind, u"first-name"_s);
+        QCOMPARE(field.target, u"label1"_s);
+        QCOMPARE(field.rect, text.boundingRect());
     }
 
     void checkStatesAndZoom()

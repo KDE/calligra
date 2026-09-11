@@ -21,6 +21,7 @@
 #include "KoFileDialog.h"
 #include "KoFilterManager.h"
 #include "KoPart.h"
+#include "KoPdfExportRegistry.h"
 #include "KoPrintJob.h"
 #include "KoResourcePaths.h"
 #include "KoVersionDialog.h"
@@ -244,7 +245,9 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KoComponentDa
 
     QString doc;
     const QStringList allFiles = KoResourcePaths::findAllResources("data", "calligra/calligra_shell.rc");
-    setXMLFile(findMostRecentXMLFile(allFiles, doc));
+    if (!allFiles.isEmpty()) {
+        setXMLFile(findMostRecentXMLFile(allFiles, doc));
+    }
     setLocalXMLFile(KoResourcePaths::locateLocal("data", "calligra/calligra_shell.rc"));
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
@@ -1415,6 +1418,10 @@ KoPrintJob *KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QSt
     }
 
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
+    QString formExportError;
+    if (!exportPdfForms(pdfFileName, rootDocument(), &formExportError) && !formExportError.isEmpty()) {
+        KMessageBox::error(this, formExportError, i18nc("@title:window", "PDF form export failed"));
+    }
     return printJob;
 }
 
