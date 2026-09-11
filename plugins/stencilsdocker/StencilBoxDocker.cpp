@@ -14,6 +14,7 @@
 
 #include <KoCanvasController.h>
 #include <KoCreateShapesTool.h>
+#include <KoDocumentResourceManager.h>
 #include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoShape.h>
@@ -47,6 +48,9 @@
 #include <QStandardPaths>
 #include <QToolButton>
 #include <QVBoxLayout>
+
+#include <memory>
+#include <utility>
 
 #define StencilShapeId "StencilShape"
 
@@ -104,6 +108,14 @@ StencilBoxDocker::StencilBoxDocker(QWidget *parent)
 
 StencilBoxDocker::~StencilBoxDocker()
 {
+    for (auto *model : std::as_const(m_modelMap)) {
+        const QList<KoCollectionItem> templates = model->shapeTemplateList();
+        for (const KoCollectionItem &item : templates) {
+            KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(item.id);
+            KoShapeRegistry::instance()->remove(item.id);
+            delete factory;
+        }
+    }
     qDeleteAll(m_modelMap);
 }
 
@@ -225,6 +237,7 @@ bool StencilBoxDockerLoader::addCollection(const QString &path)
     KStatefulBrush brushBackground(KColorScheme::Window, KColorScheme::NormalBackground);
     const QColor blackColor = brushForeground.brush(q->palette()).color();
     const QColor whiteColor = brushBackground.brush(q->palette()).color();
+    KoDocumentResourceManager thumbnailResources;
 
     foreach (const QString &stencil, stencils) {
         if (stencil == "collection.desktop")
@@ -274,7 +287,7 @@ bool StencilBoxDockerLoader::addCollection(const QString &path)
             QPixmap pix(22, 22);
             pix.fill(Qt::white);
             if (!QPixmapCache::find(source, &pix)) {
-                KoShape *shape = factory->createDefaultShape();
+                const std::unique_ptr<KoShape> shape(factory->createDefaultShape(&thumbnailResources));
                 if (shape) {
                     KoZoomHandler converter;
                     qreal diffx = 20 / converter.documentToViewX(shape->size().width());
@@ -287,7 +300,6 @@ bool StencilBoxDockerLoader::addCollection(const QString &path)
                     shape->paint(painter, converter, paintContext);
                     painter.end();
                     QPixmapCache::insert(source, pix);
-                    delete shape;
                 }
             }
             img = pix.toImage();
