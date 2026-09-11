@@ -11,7 +11,6 @@
 #include <QIcon>
 #include <QListView>
 #include <QMap>
-#include <QThread>
 
 class CollectionItemModel;
 class CollectionTreeWidget;
@@ -51,7 +50,6 @@ private:
     QVBoxLayout *m_layout;
     QHBoxLayout *m_panelLayout;
 
-    QThread loaderThread;
     StencilBoxDockerLoader *m_loader;
 
 private Q_SLOTS:
@@ -59,10 +57,6 @@ private Q_SLOTS:
     void manageStencilsFolder();
     // void regenerateProxyMap();
     void collectionsLoaded();
-    void threadStarted();
-
-Q_SIGNALS:
-    void startLoading();
 };
 
 #endif // KOSHAPECOLLECTIONDOCKER_H
