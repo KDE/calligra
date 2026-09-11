@@ -1062,9 +1062,30 @@ QString KoOdfForm::Control::formAttribute(const QString &name) const
     return m_formAttributes.value(name);
 }
 
+QString KoOdfForm::Control::eventHandler(const QString &event) const
+{
+    return m_formAttributes.value(u"event-"_s + event);
+}
+
+QMap<QString, QString> KoOdfForm::Control::eventHandlers() const
+{
+    QMap<QString, QString> result;
+    for (auto it = m_formAttributes.cbegin(); it != m_formAttributes.cend(); ++it) {
+        if (it.key().startsWith("event-"_L1)) {
+            result.insert(it.key().mid(6), it.value());
+        }
+    }
+    return result;
+}
+
 void KoOdfForm::Control::setFormAttribute(const QString &name, const QString &value)
 {
     m_formAttributes.insert(name, value);
+}
+
+void KoOdfForm::Control::setEventHandler(const QString &event, const QString &handler)
+{
+    setFormAttribute(u"event-"_s + event, handler);
 }
 
 QVector<KoOdfForm::Control::Entry> KoOdfForm::Control::entries() const
