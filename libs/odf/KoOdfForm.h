@@ -337,6 +337,8 @@ public:
     bool removeControl(const QString &id);
     /** Returns an owned copy of the referenced control, or nullptr if it is unknown. */
     std::unique_ptr<Control> controlById(const QString &id) const;
+    QString labelForControl(const QString &id) const;
+    QVector<QString> radioGroup(const QString &name) const;
     /** Updates common properties without replacing the concrete control type or ID. */
     bool setControlProperties(const QString &id, const Control &properties);
     QString name() const;
