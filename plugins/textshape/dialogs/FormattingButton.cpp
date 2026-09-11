@@ -57,7 +57,7 @@ class ItemChooserAction : public QWidgetAction
 {
     Q_OBJECT
 public:
-    ItemChooserAction(int columns);
+    ItemChooserAction(int columns, QObject *parent);
     QWidget *m_widget;
     QGridLayout *m_containerLayout;
     int m_cnt;
@@ -67,8 +67,8 @@ public:
     void addBlanks(int n);
 };
 
-ItemChooserAction::ItemChooserAction(int columns)
-    : QWidgetAction(nullptr)
+ItemChooserAction::ItemChooserAction(int columns, QObject *parent)
+    : QWidgetAction(parent)
     , m_cnt(0)
     , m_columns(columns)
 {
@@ -158,7 +158,7 @@ ItemChooserAction *FormattingButton::addItemChooser(int columns, const QString &
 {
     m_menu->addSection(title);
 
-    ItemChooserAction *styleAction = new ItemChooserAction(columns);
+    ItemChooserAction *styleAction = new ItemChooserAction(columns, m_menu);
 
     m_menu->addAction(styleAction);
     connect(m_menu, &QMenu::aboutToShow, this, &FormattingButton::recalcMenuSize);
@@ -197,7 +197,7 @@ QAction *FormattingButton::addItemMenuItem(ItemChooserAction *chooser, int id, c
     if (m_styleMap.contains(id)) {
         QToolButton *button = dynamic_cast<QToolButton *>(m_styleMap.value(id));
         if (button) {
-            QAction *a = new QAction(text, nullptr);
+            QAction *a = new QAction(text, button);
             button->addAction(a);
             return a;
         }

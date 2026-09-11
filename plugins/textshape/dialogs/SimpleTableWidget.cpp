@@ -59,6 +59,11 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     connect(widget.border, &FormattingButton::doneWithFocus, this, &SimpleTableWidget::doneWithFocus);
 }
 
+SimpleTableWidget::~SimpleTableWidget()
+{
+    qDeleteAll(m_cellStyles);
+}
+
 void SimpleTableWidget::restartPainting()
 {
     emitTableBorderDataUpdated(m_lastStyleEmitted);

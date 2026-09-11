@@ -22,20 +22,22 @@ SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape 
 {
 }
 
+SimpleRootAreaProvider::~SimpleRootAreaProvider() = default;
+
 KoTextLayoutRootArea *
 SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int requestedPosition, bool *isNewRootArea)
 {
     if (m_area == nullptr) {
         *isNewRootArea = true;
-        m_area = new KoTextLayoutRootArea(documentLayout);
+        m_area = std::make_unique<KoTextLayoutRootArea>(documentLayout);
         m_area->setAssociatedShape(m_textShape);
-        m_textShapeData->setRootArea(m_area);
+        m_textShapeData->setRootArea(m_area.get());
 
-        return m_area;
+        return m_area.get();
     }
     if (requestedPosition == 0) {
         *isNewRootArea = false;
-        return m_area;
+        return m_area.get();
     }
     return nullptr;
 }
