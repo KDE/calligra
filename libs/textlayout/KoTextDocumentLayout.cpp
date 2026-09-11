@@ -827,6 +827,8 @@ bool KoTextDocumentLayout::doLayout()
 
         if (shouldLayout) {
             QRectF rect = d->provider->suggestRect(rootArea);
+            qDeleteAll(d->freeObstructions);
+            d->freeObstructions.clear();
             d->freeObstructions = d->provider->relevantObstructions(rootArea);
 
             rootArea->setReferenceRect(rect.left(), rect.right(), d->y + rect.top(), d->y + rect.bottom());

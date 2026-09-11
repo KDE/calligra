@@ -292,18 +292,24 @@ void KoTextSharedLoadingData::addCharacterStyles(KoShapeLoadingContext &context,
 {
     QVector<OdfCharStyle> characterStyles(loadCharacterStyles(context, styleElements));
 
-    foreach (const OdfCharStyle &odfStyle, characterStyles) {
+    for (auto &odfStyle : characterStyles) {
+        auto ownedStyle = std::unique_ptr<KoCharacterStyle>(odfStyle.style);
+        const QString styleName = ownedStyle->name();
+        if (styleManager) {
+            odfStyle.style = styleManager->add(std::move(ownedStyle));
+            if (!odfStyle.style) {
+                odfStyle.style = styleManager->characterStyle(styleName);
+            }
+        } else {
+            odfStyle.style = ownedStyle.release();
+            d->characterStylesToDelete.append(odfStyle.style);
+        }
+
         if (styleTypes & ContentDotXml) {
             d->characterContentDotXmlStyles.insert(odfStyle.odfName, odfStyle.style);
         }
         if (styleTypes & StylesDotXml) {
             d->characterStylesDotXmlStyles.insert(odfStyle.odfName, odfStyle.style);
-        }
-
-        if (styleManager) {
-            styleManager->add(odfStyle.style);
-        } else {
-            d->characterStylesToDelete.append(odfStyle.style);
         }
     }
 
