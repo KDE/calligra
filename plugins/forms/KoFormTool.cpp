@@ -38,22 +38,29 @@ namespace
 class ChangeFormPropertiesCommand : public KUndo2Command
 {
 public:
-    ChangeFormPropertiesCommand(KoFormShape *shape, const KoOdfForm::Control &properties, std::function<void()> refresh)
+    ChangeFormPropertiesCommand(KoFormShape *shape,
+                                const KoOdfForm::Control &properties,
+                                const QMap<QString, QString> &formEvents,
+                                std::function<void()> refresh)
         : m_shape(shape)
         , m_refresh(std::move(refresh))
+        , m_afterFormEvents(formEvents)
     {
         setText(kundo2_i18n("Change form properties"));
         static_cast<KoOdfForm::Control &>(m_before) = *shape->formControl();
         static_cast<KoOdfForm::Control &>(m_after) = properties;
+        m_beforeFormEvents = shape->formEventHandlers();
     }
     void redo() override
     {
         m_shape->setControlProperties(m_after);
+        m_shape->setFormEventHandlers(m_afterFormEvents);
         m_refresh();
     }
     void undo() override
     {
         m_shape->setControlProperties(m_before);
+        m_shape->setFormEventHandlers(m_beforeFormEvents);
         m_refresh();
     }
 
@@ -62,6 +69,8 @@ private:
     std::function<void()> m_refresh;
     KoOdfForm::GenericControl m_before;
     KoOdfForm::GenericControl m_after;
+    QMap<QString, QString> m_beforeFormEvents;
+    QMap<QString, QString> m_afterFormEvents;
 };
 }
 
@@ -156,6 +165,12 @@ QWidget *KoFormTool::createOptionWidget()
     m_events = new KoFormEventsWidget(m_eventOptions);
     eventLayout->addWidget(m_events);
     connect(m_events, &KoFormEventsWidget::eventsChanged, this, &KoFormTool::commitProperties);
+    m_formEventOptions = new QWidget();
+    m_formEventOptions->setWindowTitle(i18nc("@title:form events", "Form Events"));
+    auto *formEventLayout = new QVBoxLayout(m_formEventOptions);
+    m_formEvents = new KoFormEventsWidget(m_formEventOptions);
+    formEventLayout->addWidget(m_formEvents);
+    connect(m_formEvents, &KoFormEventsWidget::eventsChanged, this, &KoFormTool::commitProperties);
     m_specificStartRow = form->rowCount();
     layout->addStretch();
     connect(m_name, &QLineEdit::textChanged, &m_previewCompressor, &KoSignalCompressor::start);
@@ -181,7 +196,7 @@ QWidget *KoFormTool::createOptionWidget()
 QList<QPointer<QWidget>> KoFormTool::createOptionWidgets()
 {
     QWidget *properties = createOptionWidget();
-    return {properties, m_eventOptions};
+    return {properties, m_eventOptions, m_formEventOptions};
 }
 
 void KoFormTool::rebuildSpecificProperties()
@@ -348,6 +363,9 @@ void KoFormTool::updateProperties()
     if (m_events) {
         m_events->setEvents(control ? control->eventHandlers() : QMap<QString, QString>());
     }
+    if (m_formEvents) {
+        m_formEvents->setEvents(m_shape ? m_shape->formEventHandlers() : QMap<QString, QString>());
+    }
     for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
         const QSignalBlocker blocker(it.value());
         if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
@@ -453,9 +471,12 @@ void KoFormTool::commitProperties()
     if (!before) {
         return;
     }
+    const auto beforeFormEvents = m_shape->formEventHandlers();
+    const auto currentFormEvents = m_formEvents ? m_formEvents->events() : QMap<QString, QString>();
+    const auto currentControlEvents = m_events ? m_events->events() : QMap<QString, QString>();
     if (before->name() == m_name->text() && before->title() == m_title->text() && before->disabled() == !m_enabled->isChecked()
         && before->readOnly() == m_readOnly->isChecked() && before->printable() == m_printable->isChecked() && before->tabStop() == m_tabStop->isChecked()
-        && before->tabIndex() == m_tabIndex->value()) {
+        && before->tabIndex() == m_tabIndex->value() && beforeFormEvents == currentFormEvents && before->eventHandlers() == currentControlEvents) {
         bool changed = m_entries != nullptr;
         for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
             const QString value = [&] {
@@ -484,7 +505,7 @@ void KoFormTool::commitProperties()
     properties.setTabStop(m_tabStop->isChecked());
     properties.setTabIndex(m_tabIndex->value());
     if (m_events) {
-        const auto eventHandlers = m_events->events();
+        const auto &eventHandlers = currentControlEvents;
         for (const auto &event : before->eventHandlers().keys()) {
             properties.setEventHandler(event, eventHandlers.value(event));
         }
@@ -568,7 +589,7 @@ void KoFormTool::commitProperties()
         properties.setEntries(entries);
     }
     QPointer<KoFormTool> tool(this);
-    canvas()->addCommand(new ChangeFormPropertiesCommand(m_shape, properties, [tool]() {
+    canvas()->addCommand(std::make_unique<ChangeFormPropertiesCommand>(m_shape, properties, currentFormEvents, [tool]() {
         if (tool) {
             if (tool->m_shape) {
                 tool->canvas()->updateCanvas(tool->m_shape->boundingRect());
