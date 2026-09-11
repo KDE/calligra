@@ -10,8 +10,8 @@
 
 StatisticsPreferencesPopup::StatisticsPreferencesPopup(QWidget *parent)
     : QMenu(parent)
+    , w(std::make_unique<Ui::StatisticsPreferencesPopup>())
 {
-    w = new Ui::StatisticsPreferencesPopup();
     w->setupUi(this);
     connect(w->check_words, &QCheckBox::checkStateChanged, this, &StatisticsPreferencesPopup::wordsDisplayChange);
     connect(w->check_sentences, &QCheckBox::checkStateChanged, this, &StatisticsPreferencesPopup::sentencesDisplayChange);
@@ -22,6 +22,8 @@ StatisticsPreferencesPopup::StatisticsPreferencesPopup(QWidget *parent)
     connect(w->check_east, &QCheckBox::checkStateChanged, this, &StatisticsPreferencesPopup::eastDisplayChange);
     connect(w->check_flesch, &QCheckBox::checkStateChanged, this, &StatisticsPreferencesPopup::fleschDisplayChange);
 }
+
+StatisticsPreferencesPopup::~StatisticsPreferencesPopup() = default;
 
 QSize StatisticsPreferencesPopup::sizeHint() const
 {
