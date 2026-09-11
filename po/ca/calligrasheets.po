@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-06 18:46+0200\n"
+"PO-Revision-Date: 2026-09-10 12:23+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -15234,10 +15234,9 @@ msgid "Could not find sheet-style XML file '%1'."
 msgstr "No s'ha pogut trobar el fitxer XML d'estil de full «%1»."
 
 #: ui/actions/AutoFormat.cpp:84
-#, fuzzy, kde-format
-#| msgid "Could not find sheet-style XML file '%1'."
+#, kde-format
 msgid "Could not open sheet-style XML file %1."
-msgstr "No s'ha pogut trobar el fitxer XML d'estil de full «%1»."
+msgstr "No s'ha pogut obrir el fitxer XML d'estil de full «%1»."
 
 #: ui/actions/AutoFormat.cpp:94
 #, kde-format

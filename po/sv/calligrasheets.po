@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-04 08:26+0200\n"
+"PO-Revision-Date: 2026-09-10 20:06+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15146,10 +15146,9 @@ msgid "Could not find sheet-style XML file '%1'."
 msgstr "Kunde inte hitta sidstil-XML-fil '%1'."
 
 #: ui/actions/AutoFormat.cpp:84
-#, fuzzy, kde-format
-#| msgid "Could not find sheet-style XML file '%1'."
+#, kde-format
 msgid "Could not open sheet-style XML file %1."
-msgstr "Kunde inte hitta sidstil-XML-fil '%1'."
+msgstr "Kunde inte öppna sidstil-XML-fil %1."
 
 #: ui/actions/AutoFormat.cpp:94
 #, kde-format

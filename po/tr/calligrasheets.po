@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-06 18:56+0300\n"
+"PO-Revision-Date: 2026-09-10 19:43+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8455,6 +8455,8 @@ msgid ""
 "Searches an array for a value and returns the corresponding value from a "
 "result array."
 msgstr ""
+"Bir dizilişte bir değeri arar ve sonuç dizilişinden karşılık gelen değeri "
+"döndürür."
 
 #: functions/reference.xml:262
 #, kde-format
@@ -11070,11 +11072,14 @@ msgid ""
 "(inclusive) successes -- or exactly T1 successes, if T2 is omitted -- in "
 "Trials independent trials, each with success probability SP."
 msgstr ""
+"B() işlevi, her birinin başarı olasılığı SP olan bağımsız denemelerde, T1 ve "
+"T2 (dâhil) arasında başarı elde etme olasılığını —veya T2 atlandığında tam "
+"olarak T1 başarı elde etme olasılığını— döndürür."
 
 #: functions/statistical.xml:1854
 #, kde-format
 msgid "B(trials; SP; T1; T2)"
-msgstr ""
+msgstr "B(denemeler; SP; T1; T2)"
 
 #: functions/statistical.xml:1855
 #, kde-format
@@ -11136,11 +11141,13 @@ msgid ""
 "The CRITBINOM() function returns the smallest value for which the cumulative "
 "binomial distribution is greater than or equal to the criterion value alpha."
 msgstr ""
+"CRITBINOM() işlevi, kümülatif binom dağılımının alfa kriter değerinden büyük "
+"veya eşit olduğu en küçük değeri döndürür."
 
 #: functions/statistical.xml:1921
 #, kde-format
 msgid "CRITBINOM(trials; SP; alpha)"
-msgstr ""
+msgstr "CRITBINOM(denemeler; SP; alfa)"
 
 #: functions/statistical.xml:1922
 #, kde-format
@@ -11150,7 +11157,7 @@ msgstr "CRITBINOM(20; 0,5; 0,55), 10 döndürür"
 #: functions/statistical.xml:1931
 #, kde-format
 msgid "The x-value for which a y-value is estimated"
-msgstr ""
+msgstr "Bir Y değerinin tahmin edildiği X değeri"
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
 #, kde-format
@@ -11168,11 +11175,13 @@ msgid ""
 "The FORECAST() function estimates a future y-value along the linear trend "
 "fitted to the known x/y-values, for a given new x-value."
 msgstr ""
+"FORECAST() işlevi, verilen yeni bir X değeri için bilinen X/Y değerlerine "
+"uyarlanan doğrusal eğilim boyunca gelecekteki bir Y değerini tahmin eder."
 
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr ""
+msgstr "FORECAST(x; bilinen_y’ler; bilinen_x’ler)"
 
 #: functions/statistical.xml:1955
 #, kde-format
@@ -11192,26 +11201,31 @@ msgid ""
 "and expected value ranges (which must have the same shape) would occur by "
 "chance."
 msgstr ""
+"LEGACYCHITEST() işlevi, verilen gözlenen ve beklenen değer erimlerinden "
+"(aynı şekle sahip olmaları gerekir) hesaplanan ki kare istatistiğinin, ki "
+"kare dağılımına göre şans eseri gerçekleşme olasılığını döndürür."
 
 #: functions/statistical.xml:1964
 #, kde-format
 msgid "LEGACYCHITEST(actual range; theoretical range)"
-msgstr ""
+msgstr "LEGACYCHITEST(asıl_erim; kuramsal_erim)"
 
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr ""
+msgstr "Bilinen X değerleri (öntanımlı olarak 1, 2, 3, … dizisidir)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr ""
+msgstr "Bir kesişimin hesaplanıp hesaplanmayacağı (öntanımlı değer DOĞRU)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
 msgid "Whether to return additional regression statistics (defaults to FALSE)"
 msgstr ""
+"Ek regresyon istatistiklerinin döndürülüp döndürülmeyeceği (öntanımlı değer "
+"YANLIŞ)"
 
 #: functions/statistical.xml:1989
 #, kde-format
@@ -11223,11 +11237,17 @@ msgid ""
 "of the y estimate, the F statistic and its degrees of freedom, and the "
 "regression and residual sums of squares."
 msgstr ""
+"LINEST() işlevi, en küçük kareler yöntemini kullanarak verilen verilere bir "
+"Y = m*X + b doğrusu uydurur (yalnızca tek bir bilinen X erimi desteklenir) "
+"ve {m, b} döndürür. İstatistikler DOĞRU ise bunun yerine m’nin ve b’nin "
+"standart hatalarını, R kareyi ve Y tahmininin standart hatasını, F "
+"istatistiğini ve serbestlik derecelerini, ayrıca regresyon ve artık kareler "
+"toplamlarını içeren 5 satırlık bir diziliş döndürür."
 
 #: functions/statistical.xml:1990
 #, kde-format
 msgid "LINEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LINEST(bilinen_y’ler; bilinen_x’ler; sabit; istatistikler)"
 
 #: functions/statistical.xml:2002
 #, kde-format
@@ -11242,11 +11262,15 @@ msgid ""
 "Stats is TRUE, it also returns the same additional regression statistics as "
 "LINEST, computed for the underlying linear fit against ln(y)."
 msgstr ""
+"LOGEST() işlevi, ln(Y)’yi X’e göre doğrusal regresyona sokarak (bkz. LINEST) "
+"verilen verilere bir Y = b*m^X üstel eğrisi uydurur ve {m, b} döndürür. "
+"İstatistikler DOĞRU ise ln(Y) üzerindeki temel doğrusal uyum için "
+"hesaplanan, LINEST ile aynı ek regresyon istatistiklerini de döndürür."
 
 #: functions/statistical.xml:2019
 #, kde-format
 msgid "LOGEST(known_y's; known_x's; const; stats)"
-msgstr ""
+msgstr "LOGEST(bilinen_y’ler; bilinen_x’ler; sabit; istatistikler)"
 
 #: functions/statistical.xml:2029
 #, kde-format
@@ -11261,7 +11285,7 @@ msgstr "Derecelendirilecek değer"
 #: functions/statistical.xml:2037
 #, kde-format
 msgid "Number of significant digits (defaults to 3)"
-msgstr ""
+msgstr "Anlamlı "
 
 #: functions/statistical.xml:2041
 #, kde-format
@@ -11273,7 +11297,7 @@ msgstr ""
 #: functions/statistical.xml:2042
 #, kde-format
 msgid "PERCENTRANK(data; x; significance)"
-msgstr ""
+msgstr "PERCENTRANK(veri; x; önem)"
 
 #: functions/statistical.xml:2056
 #, kde-format
@@ -15046,10 +15070,9 @@ msgid "Could not find sheet-style XML file '%1'."
 msgstr "Sayfa biçemi XML dosyası “%1” bulunamadı."
 
 #: ui/actions/AutoFormat.cpp:84
-#, fuzzy, kde-format
-#| msgid "Could not find sheet-style XML file '%1'."
+#, kde-format
 msgid "Could not open sheet-style XML file %1."
-msgstr "Sayfa biçemi XML dosyası “%1” bulunamadı."
+msgstr "Sayfa biçemi XML dosyası “%1” açılamadı."
 
 #: ui/actions/AutoFormat.cpp:94
 #, kde-format
