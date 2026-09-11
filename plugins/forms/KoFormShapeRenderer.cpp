@@ -215,6 +215,7 @@ static void paintFormControlByName(QPainter &painter,
         const QRect contents = rect.adjusted(2, 2, -2, -2);
         const int headerHeight = base.fontMetrics.height() + 8;
         const int columnCount = qMax(1, int(columns.size()));
+        const int rowCount = qMax(1, control->formAttribute(u"row-count"_s).toInt());
         for (int i = 0; i < columnCount; ++i) {
             QStyleOptionHeader header;
             static_cast<QStyleOption &>(header) = base;
@@ -229,8 +230,13 @@ static void paintFormControlByName(QPainter &painter,
             painter.drawLine(left, contents.top() + headerHeight, left, contents.bottom());
         }
         painter.setPen(base.palette.color(QPalette::Mid));
-        for (int y = contents.top() + headerHeight; y < contents.bottom(); y += headerHeight)
-            painter.drawLine(contents.left(), y, contents.right(), y);
+        const int rowHeight = qMax(1, (contents.height() - headerHeight) / rowCount);
+        for (int row = 1; row <= rowCount; ++row) {
+            const int y = contents.top() + headerHeight + row * rowHeight;
+            if (y < contents.bottom()) {
+                painter.drawLine(contents.left(), y, contents.right(), y);
+            }
+        }
     } else if (kind == KoOdfForm::ControlKind::ValueRange) {
         QStyleOptionSlider slider;
         static_cast<QStyleOption &>(slider) = base;

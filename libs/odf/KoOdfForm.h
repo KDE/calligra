@@ -63,7 +63,9 @@ public:
         void setFormAttribute(const QString &name, const QString &value);
         struct Entry {
             QString label;
+            QString value;
             bool selected = false;
+            QString element = QStringLiteral("option");
         };
         /** List options, combo-box items, or grid column headings, in document order. */
         QVector<Entry> entries() const;

@@ -98,7 +98,9 @@ bool KoOdfForm::Control::loadOdf(const KoXmlElement &e)
             continue;
         if (child.localName() == "option"_L1 || child.localName() == "item"_L1 || child.localName() == "column"_L1) {
             Entry entry;
+            entry.element = child.localName();
             entry.label = child.attributeNS(KoXmlNS::form, u"label"_s, child.text());
+            entry.value = child.attributeNS(KoXmlNS::form, u"value"_s);
             entry.selected = child.attributeNS(KoXmlNS::form, u"current-selected"_s, child.attributeNS(KoXmlNS::form, u"selected"_s)) == "true"_L1;
             m_entries.append(entry);
         }
@@ -1077,6 +1079,21 @@ void KoOdfForm::Control::setEntries(const QVector<Entry> &entries)
 
 void KoOdfForm::Control::saveChildren(KoXmlWriter &writer) const
 {
+    if (!m_entries.isEmpty()) {
+        for (const Entry &entry : m_entries) {
+            const QByteArray elementName = QByteArrayLiteral("form:") + entry.element.toUtf8();
+            writer.startElement(elementName.constData());
+            if (!entry.label.isEmpty()) {
+                writer.addAttribute("form:label", entry.label);
+            }
+            if (!entry.value.isEmpty()) {
+                writer.addAttribute("form:value", entry.value);
+            }
+            writer.addAttribute("form:selected", entry.selected ? "true" : "false");
+            writer.endElement();
+        }
+        return;
+    }
     if (!m_childrenXml.isEmpty())
         writer.addCompleteElement(m_childrenXml.constData());
 }
