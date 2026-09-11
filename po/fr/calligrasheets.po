@@ -225,7 +225,7 @@ msgstr "N'importe quel type de valeur"
 #: engine/FunctionDescription.cpp:47
 #, kde-format
 msgid "A string representing a date (like \"2/22/2012\")"
-msgstr "Chaîne représentant une date (comme « 22/02/2012 »)"
+msgstr "Chaine représentant une date (comme « 22/02/2012 »)"
 
 #: engine/FunctionDescription.cpp:52
 #, kde-format
@@ -1011,7 +1011,7 @@ msgstr "Plage définissant la base de données"
 #: functions/database.xml:241 functions/database.xml:264
 #, kde-format
 msgid "String marking the column in the database"
-msgstr "Chaîne définissant la colonne dans la base de données"
+msgstr "Chaine définissant la colonne dans la base de données"
 
 #: functions/database.xml:19 functions/database.xml:41
 #: functions/database.xml:63 functions/database.xml:86
@@ -11480,7 +11480,7 @@ msgstr "La fonction TEXT (« KSpread » ; 10) renvoie « KSpread »"
 #: functions/text.xml:404 functions/text.xml:420 functions/text.xml:433
 #, kde-format
 msgid "String"
-msgstr "Chaîne"
+msgstr "Chaine"
 
 #: functions/text.xml:174
 #, kde-format
@@ -11510,7 +11510,7 @@ msgstr "Première chaine"
 #: functions/text.xml:188
 #, kde-format
 msgid "String to compare with"
-msgstr "Chaîne à comparer"
+msgstr "Chaine à comparer"
 
 #: functions/text.xml:192
 #, kde-format
@@ -11744,7 +11744,7 @@ msgstr "FINDB (texte cherché ; dans le texte ; numéro de départ)"
 #: functions/text.xml:634 functions/text.xml:649 functions/text.xml:666
 #, kde-format
 msgid "Source string"
-msgstr "Chaîne source"
+msgstr "Chaine source"
 
 #: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
