@@ -183,8 +183,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProviderBase::relevantObstructions(Ko
             QTransform matrix = shape->absoluteTransformation(nullptr);
             matrix = matrix * currentShape->absoluteTransformation(nullptr).inverted();
             matrix.translate(0, rootArea->top());
-            KoTextLayoutObstruction *obstruction = new KoTextLayoutObstruction(shape, matrix);
-            obstructions.append(obstruction);
+            obstructions.append(new KoTextLayoutObstruction(shape, matrix));
         }
     }
 
