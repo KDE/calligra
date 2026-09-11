@@ -59,6 +59,8 @@ private:
     QFormLayout *m_eventForm = nullptr;
     QPointer<QWidget> m_eventOptions;
     KoFormEventsWidget *m_events = nullptr;
+    QPointer<QWidget> m_formEventOptions;
+    KoFormEventsWidget *m_formEvents = nullptr;
     int m_specificStartRow = 0;
     QHash<QString, QWidget *> m_specificProperties;
     QListWidget *m_entries = nullptr;

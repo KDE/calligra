@@ -260,6 +260,21 @@ void KoFormShape::setControlProperties(const KoOdfForm::Control &properties)
     update();
 }
 
+QMap<QString, QString> KoFormShape::formEventHandlers() const
+{
+    return m_document ? m_document->form().eventHandlers() : QMap<QString, QString>();
+}
+
+void KoFormShape::setFormEventHandlers(const QMap<QString, QString> &handlers)
+{
+    if (!m_document) {
+        return;
+    }
+    m_document->form().setEventHandlers(handlers);
+    notifyChanged();
+    update();
+}
+
 void KoFormShape::shapeAddedToDocument(KoShapeBasedDocumentBase *document)
 {
     auto *odfDocument = dynamic_cast<KoDocument *>(document);

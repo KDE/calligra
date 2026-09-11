@@ -351,6 +351,10 @@ public:
     QString datasource() const;
     QString method() const;
     QString xformsSubmission() const;
+    QString eventHandler(const QString &event) const;
+    QMap<QString, QString> eventHandlers() const;
+    void setEventHandler(const QString &event, const QString &handler);
+    void setEventHandlers(const QMap<QString, QString> &handlers);
     QVector<Text> texts() const;
     QVector<Textarea> textareas() const;
     QVector<FormattedText> formattedTexts() const;
@@ -366,6 +370,7 @@ public:
 
 private:
     QString m_name, m_command, m_datasource, m_method, m_xformsSubmission;
+    QMap<QString, QString> m_eventHandlers;
     QVector<Text> m_texts;
     QVector<Textarea> m_textareas;
     QVector<FormattedText> m_formattedTexts;
