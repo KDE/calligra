@@ -69,6 +69,7 @@ public:
     QSet<QWidget *> currentAuxWidgets;
     int activeId;
     QTabBar *tabBar;
+    KoTabBarProxyStyle tabBarStyle;
     QStackedWidget *stack;
     bool iconTextFitted;
     int fittingIterations;
@@ -126,8 +127,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->tabBar = new QTabBar;
     d->tabBar->setDocumentMode(true);
     d->tabBar->setShape(QTabBar::RoundedWest);
-    auto style = new KoTabBarProxyStyle;
-    d->tabBar->setStyle(style);
+    d->tabBar->setStyle(&d->tabBarStyle);
     d->tabBar->setAutoFillBackground(true);
     QPalette palette = d->tabBar->palette();
     palette.setColor(QPalette::Window, palette.color(QPalette::Base));

@@ -16,6 +16,7 @@
 #include <QStringList>
 
 #include <memory>
+#include <utility>
 
 #include "DebugPigment.h"
 #include "KoBasicHistogramProducers.h"
@@ -134,6 +135,11 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     const QSet<KoColorSpaceFactory *> factories(factoryList.cbegin(), factoryList.cend());
     for (KoColorSpaceFactory *factory : factories) {
         delete factory;
+    }
+    for (KoColorSpaceFactory *factory : std::as_const(d->localFactories)) {
+        if (!factories.contains(factory)) {
+            delete factory;
+        }
     }
     d->localFactories.clear();
 

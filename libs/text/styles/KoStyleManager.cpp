@@ -38,6 +38,8 @@
 #include <QBuffer>
 #include <QUrl>
 
+#include <type_traits>
+
 class Q_DECL_HIDDEN KoStyleManager::Private
 {
 public:
@@ -86,6 +88,30 @@ public:
 
 // static
 int KoStyleManager::Private::s_stylesNumber = 100;
+
+namespace
+{
+template<typename T>
+T *addOwned(KoStyleManager *manager, std::unique_ptr<T> style, void (KoStyleManager::*add)(T *))
+{
+    if (!style) {
+        return nullptr;
+    }
+
+    T *rawStyle = style.get();
+    (manager->*add)(rawStyle);
+    if constexpr (std::is_base_of_v<QObject, T>) {
+        if (rawStyle->parent() == manager) {
+            style.release();
+            return rawStyle;
+        }
+    } else {
+        style.release();
+        return rawStyle;
+    }
+    return nullptr;
+}
+}
 
 KoStyleManager::KoStyleManager(QObject *parent)
     : QObject(parent)
@@ -443,6 +469,11 @@ void KoStyleManager::add(KoCharacterStyle *style)
     Q_EMIT characterStyleAdded(style);
 }
 
+KoCharacterStyle *KoStyleManager::add(std::unique_ptr<KoCharacterStyle> style)
+{
+    return addOwned(this, std::move(style), &KoStyleManager::add);
+}
+
 void KoStyleManager::add(KoParagraphStyle *style)
 {
     if (d->paragStyles.key(style, -1) != -1) {
@@ -475,6 +506,11 @@ void KoStyleManager::add(KoParagraphStyle *style)
     Q_EMIT paragraphStyleAdded(style);
 }
 
+KoParagraphStyle *KoStyleManager::add(std::unique_ptr<KoParagraphStyle> style)
+{
+    return addOwned(this, std::move(style), &KoStyleManager::add);
+}
+
 void KoStyleManager::add(KoListStyle *style)
 {
     if (d->listStyles.key(style, -1) != -1)
@@ -485,6 +521,11 @@ void KoStyleManager::add(KoListStyle *style)
 
     ++d->s_stylesNumber;
     Q_EMIT listStyleAdded(style);
+}
+
+KoListStyle *KoStyleManager::add(std::unique_ptr<KoListStyle> style)
+{
+    return addOwned(this, std::move(style), &KoStyleManager::add);
 }
 
 void KoStyleManager::addAutomaticListStyle(KoListStyle *style)
@@ -507,6 +548,11 @@ void KoStyleManager::add(KoTableStyle *style)
     Q_EMIT tableStyleAdded(style);
 }
 
+KoTableStyle *KoStyleManager::add(std::unique_ptr<KoTableStyle> style)
+{
+    return addOwned(this, std::move(style), &KoStyleManager::add);
+}
+
 void KoStyleManager::add(KoTableColumnStyle *style)
 {
     if (d->tableColumnStyles.key(style, -1) != -1)
@@ -517,6 +563,11 @@ void KoStyleManager::add(KoTableColumnStyle *style)
     Q_EMIT tableColumnStyleAdded(style);
 }
 
+KoTableColumnStyle *KoStyleManager::add(std::unique_ptr<KoTableColumnStyle> style)
+{
+    return addOwned(this, std::move(style), &KoStyleManager::add);
+}
+
 void KoStyleManager::add(KoTableRowStyle *style)
 {
     if (d->tableRowStyles.key(style, -1) != -1)
@@ -525,6 +576,11 @@ void KoStyleManager::add(KoTableRowStyle *style)
     d->tableRowStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
     Q_EMIT tableRowStyleAdded(style);
+}
+
+KoTableRowStyle *KoStyleManager::add(std::unique_ptr<KoTableRowStyle> style)
+{
+    return addOwned(this, std::move(style), &KoStyleManager::add);
 }
 
 void KoStyleManager::add(KoTableCellStyle *style)
@@ -538,6 +594,11 @@ void KoStyleManager::add(KoTableCellStyle *style)
     Q_EMIT tableCellStyleAdded(style);
 }
 
+KoTableCellStyle *KoStyleManager::add(std::unique_ptr<KoTableCellStyle> style)
+{
+    return addOwned(this, std::move(style), &KoStyleManager::add);
+}
+
 void KoStyleManager::add(KoSectionStyle *style)
 {
     if (d->sectionStyles.key(style, -1) != -1)
@@ -547,6 +608,11 @@ void KoStyleManager::add(KoSectionStyle *style)
     d->sectionStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
     Q_EMIT sectionStyleAdded(style);
+}
+
+KoSectionStyle *KoStyleManager::add(std::unique_ptr<KoSectionStyle> style)
+{
+    return addOwned(this, std::move(style), &KoStyleManager::add);
 }
 
 void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
@@ -560,6 +626,11 @@ void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
 
     d->tableTemplates.insert(d->s_stylesNumber, tableTemplate);
     ++d->s_stylesNumber;
+}
+
+KoTextTableTemplate *KoStyleManager::add(std::unique_ptr<KoTextTableTemplate> tableTemplate)
+{
+    return addOwned(this, std::move(tableTemplate), &KoStyleManager::add);
 }
 
 void KoStyleManager::slotAppliedParagraphStyle(const KoParagraphStyle *style)
