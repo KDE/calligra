@@ -538,7 +538,7 @@ Value func_days(valVector args, ValueCalc *calc, FuncExtra *)
             return calc->conv()->asDate(value).asDate(calc->settings());
         if (value.asString().contains(u',')) {
             const QString text = value.asString();
-            for (const QString &format : {"MMM d, yyyy"_L1, "MMM d,yyyy"_L1}) {
+            for (const QLatin1StringView &format : {"MMM d, yyyy"_L1, "MMM d,yyyy"_L1}) {
                 const QDate date = QDate::fromString(text, format);
                 if (date.isValid())
                     return date;
