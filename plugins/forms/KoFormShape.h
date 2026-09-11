@@ -35,6 +35,8 @@ public:
     const KoOdfForm::Control *formControl() const;
     KoDocument *document() const;
     void setControlProperties(const KoOdfForm::Control &properties);
+    QMap<QString, QString> formEventHandlers() const;
+    void setFormEventHandlers(const QMap<QString, QString> &handlers);
     void shapeAddedToDocument(KoShapeBasedDocumentBase *document) override;
     void shapeRemovedFromDocument(KoShapeBasedDocumentBase *document) override;
 

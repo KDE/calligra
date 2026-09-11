@@ -523,6 +523,12 @@ bool KoOdfForm::loadOdf(const KoXmlElement &e)
     m_datasource = e.attributeNS(KoXmlNS::form, u"datasource"_s);
     m_method = e.attributeNS(KoXmlNS::form, u"method"_s);
     m_xformsSubmission = e.attributeNS(u"http://www.w3.org/2002/xforms"_s, u"submission"_s);
+    m_eventHandlers.clear();
+    for (const auto &attribute : e.attributeFullNames()) {
+        if (attribute.first == KoXmlNS::form && attribute.second.startsWith("event-"_L1)) {
+            m_eventHandlers.insert(attribute.second.mid(6), e.attributeNS(attribute.first, attribute.second));
+        }
+    }
     m_texts.clear();
     m_textareas.clear();
     m_formattedTexts.clear();
@@ -649,7 +655,7 @@ bool KoOdfForm::isEmpty() const
         && m_textareas.isEmpty() && m_formattedTexts.isEmpty() && m_numbers.isEmpty() && m_dates.isEmpty() && m_times.isEmpty() && m_buttons.isEmpty()
         && m_checkboxes.isEmpty() && m_radios.isEmpty() && m_comboboxes.isEmpty() && m_listboxes.isEmpty() && m_passwords.isEmpty()
         && m_hiddenControls.isEmpty() && m_files.isEmpty() && m_fixedTexts.isEmpty() && m_valueRanges.isEmpty() && m_images.isEmpty() && m_imageFrames.isEmpty()
-        && m_frames.isEmpty() && m_grids.isEmpty() && m_genericControls.isEmpty() && m_models.isEmpty();
+        && m_frames.isEmpty() && m_grids.isEmpty() && m_genericControls.isEmpty() && m_models.isEmpty() && m_eventHandlers.isEmpty();
 }
 
 QString KoOdfForm::controlKind(const QString &id) const
@@ -975,6 +981,9 @@ void KoOdfForm::saveOdf(KoXmlWriter &w) const
         w.addAttribute("form:method", m_method);
     if (!m_xformsSubmission.isEmpty())
         w.addAttribute("xforms:submission", m_xformsSubmission);
+    for (auto it = m_eventHandlers.cbegin(); it != m_eventHandlers.cend(); ++it) {
+        w.addAttribute((u"form:event-"_s + it.key()).toUtf8().constData(), it.value());
+    }
     for (const Text &v : m_texts)
         v.saveOdf(w);
     for (const Textarea &v : m_textareas)
@@ -1040,6 +1049,30 @@ QString KoOdfForm::method() const
 QString KoOdfForm::xformsSubmission() const
 {
     return m_xformsSubmission;
+}
+
+QString KoOdfForm::eventHandler(const QString &event) const
+{
+    return m_eventHandlers.value(event);
+}
+
+QMap<QString, QString> KoOdfForm::eventHandlers() const
+{
+    return m_eventHandlers;
+}
+
+void KoOdfForm::setEventHandler(const QString &event, const QString &handler)
+{
+    if (handler.isEmpty()) {
+        m_eventHandlers.remove(event);
+    } else {
+        m_eventHandlers.insert(event, handler);
+    }
+}
+
+void KoOdfForm::setEventHandlers(const QMap<QString, QString> &handlers)
+{
+    m_eventHandlers = handlers;
 }
 
 QVector<KoOdfForm::Model> KoOdfForm::models() const
