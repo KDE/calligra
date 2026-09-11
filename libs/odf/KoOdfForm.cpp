@@ -352,8 +352,15 @@ void KoOdfForm::Button::setToggle(bool value)
 
 bool KoOdfForm::Checkbox::selected() const
 {
-    return formAttribute(u"current-selected"_s) == "true"_L1 || formAttribute(u"selected"_s) == "true"_L1 || formAttribute(u"current-state"_s) == "checked"_L1
-        || formAttribute(u"state"_s) == "checked"_L1;
+    const QString currentSelected = formAttribute(u"current-selected"_s);
+    if (!currentSelected.isEmpty()) {
+        return currentSelected == "true"_L1;
+    }
+    const QString currentState = formAttribute(u"current-state"_s);
+    if (!currentState.isEmpty()) {
+        return currentState == "checked"_L1;
+    }
+    return formAttribute(u"selected"_s) == "true"_L1 || formAttribute(u"state"_s) == "checked"_L1;
 }
 
 bool KoOdfForm::Checkbox::tristate() const

@@ -41,6 +41,8 @@
 #include <KMessageBox>
 #include <KSharedConfig>
 #include <MainDebug.h>
+#include <QCoreApplication>
+#include <QTimer>
 #include <kdesktopfile.h>
 #include <krecentdirs.h>
 
@@ -57,6 +59,7 @@
 #include <QWidget>
 
 #include <stdlib.h>
+#include <utility>
 
 #ifdef Q_OS_WIN
 #include <tchar.h>
@@ -295,6 +298,9 @@ bool KoApplication::start()
         KRecentDirs::add(":OpenDialog", QDir::currentPath());
         QString errorMsg;
         KoPart *part = entry.createKoPart(&errorMsg);
+        if (part) {
+            part->setParent(this);
+        }
         d->partList << part;
 
         if (!part) {
@@ -407,6 +413,9 @@ bool KoApplication::start()
                 // For now create an empty document
                 QString errorMsg;
                 KoPart *part = entry.createKoPart(&errorMsg);
+                if (part) {
+                    part->setParent(this);
+                }
                 d->partList << part;
                 if (part) {
                     url = QUrl::fromLocalFile(autosaveDir.absolutePath() + QDir::separator() + autoSaveFile);
@@ -436,8 +445,8 @@ bool KoApplication::start()
         const bool doNew = parser.isSet("new");
         const bool benchmarkLoading = parser.isSet("benchmark-loading") || parser.isSet("benchmark-loading-show-window") || !d->roundtripFileName.isEmpty();
         // only show the mainWindow when no command-line mode option is passed
-        const bool showmainWindow = parser.isSet("benchmark-loading-show-window") || (parser.isSet("export-pdf"))
-            || (!parser.isSet("benchmark-loading") && !parser.isSet("roundtrip-filename") && d->roundtripFileName.isEmpty());
+        const bool showmainWindow = parser.isSet("benchmark-loading-show-window")
+            || (!parser.isSet("benchmark-loading") && !parser.isSet("roundtrip-filename") && d->roundtripFileName.isEmpty() && !exportAsPdf);
         const QString profileFileName = parser.value("profile-filename");
 
         QTextStream profileoutput;
@@ -461,6 +470,9 @@ bool KoApplication::start()
             // For now create an empty document
             QString errorMsg;
             KoPart *part = entry.createKoPart(&errorMsg);
+            if (part) {
+                part->setParent(this);
+            }
             d->partList << part;
             if (part) {
                 KoDocument *doc = part->document();
@@ -586,6 +598,10 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
+    for (KoPart *part : std::as_const(d->partList)) {
+        delete part;
+    }
+    d->partList.clear();
     delete d;
 }
 
@@ -645,7 +661,7 @@ void KoApplication::slotFilePrint(KoMainWindow *mainWindow)
 void KoApplication::slotExportToPdf(KoMainWindow *mainWindow)
 {
     mainWindow->exportToPdf(d->pdfFileName);
-    // TODO: exit if all jobs over
+    QTimer::singleShot(0, qApp, &QCoreApplication::quit);
 }
 
 KoApplication *KoApplication::koApplication()

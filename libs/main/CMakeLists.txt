@@ -63,6 +63,7 @@ set(komain_LIB_SRCS
     KoFindStyle.cpp
 
     KoPart.cpp
+    KoPdfExportRegistry.cpp
 
     MainDebug.cpp
 )

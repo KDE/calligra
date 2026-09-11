@@ -33,8 +33,6 @@ KoBorderPrivate::~KoBorderPrivate() = default;
 
 KoBorder::BorderData::BorderData()
     : style(KoBorder::BorderNone)
-    , outerPen(QPen())
-    , innerPen(QPen())
     , spacing(0)
 {
     outerPen.setWidthF(0.0f);
@@ -78,9 +76,7 @@ KoBorder::KoBorder()
 {
 }
 
-KoBorder::KoBorder(const KoBorder &kb)
-
-    = default;
+KoBorder::KoBorder(const KoBorder &kb) = default;
 
 KoBorder::~KoBorder()
 {

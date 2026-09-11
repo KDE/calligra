@@ -16,3 +16,6 @@ leak:KoColorSpaceFactory::grabColorSpace
 leak:TextShape::TextShape
 # KChart keeps style objects in process-wide caches.
 leak:KChart::
+# Fontconfig retains a fallback-font pattern allocated while Qt shapes text.
+# The allocation is owned by the process-wide fontconfig cache, not Calligra.
+leak:FcFontRenderPrepare

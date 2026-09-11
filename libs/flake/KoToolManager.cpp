@@ -43,6 +43,7 @@
 #include <QKeyEvent>
 #include <QKeySequence>
 #include <QLabel>
+
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QStack>
@@ -51,6 +52,7 @@
 #include <QVBoxLayout>
 #include <QWheelEvent>
 #include <QWidget>
+#include <utility>
 
 Q_GLOBAL_STATIC(KoToolManager, s_instance)
 
@@ -250,6 +252,9 @@ KoToolManager::Private::Private(KoToolManager *qq)
 
 KoToolManager::Private::~Private()
 {
+    for (const QList<CanvasData *> &canvasDataList : std::as_const(canvasses)) {
+        qDeleteAll(canvasDataList);
+    }
     qDeleteAll(tools);
 }
 
