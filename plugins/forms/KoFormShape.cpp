@@ -162,6 +162,9 @@ bool KoFormShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &co
             m_document = document;
             m_controlKind = document->form().controlKindEnum(m_controlId);
             m_formControl = document->form().controlById(m_controlId);
+            if (m_formControl && m_formControl->label().isEmpty()) {
+                m_formControl->setLabel(document->form().labelForControl(m_controlId));
+            }
         }
     }
     if (m_formControl) {

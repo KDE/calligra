@@ -908,6 +908,27 @@ std::unique_ptr<KoOdfForm::Control> KoOdfForm::controlById(const QString &id) co
     return nullptr;
 }
 
+QString KoOdfForm::labelForControl(const QString &id) const
+{
+    for (const FixedText &label : m_fixedTexts) {
+        if (label.formAttribute(u"for"_s) == id) {
+            return label.label();
+        }
+    }
+    return {};
+}
+
+QVector<QString> KoOdfForm::radioGroup(const QString &name) const
+{
+    QVector<QString> ids;
+    for (const Radio &radio : m_radios) {
+        if (radio.name() == name) {
+            ids.append(radio.id());
+        }
+    }
+    return ids;
+}
+
 bool KoOdfForm::setControlProperties(const QString &id, const Control &properties)
 {
     if (id.isEmpty())
@@ -922,11 +943,21 @@ bool KoOdfForm::setControlProperties(const QString &id, const Control &propertie
         }
         return false;
     };
-    return updateControl(m_texts) || updateControl(m_textareas) || updateControl(m_formattedTexts) || updateControl(m_numbers) || updateControl(m_dates)
-        || updateControl(m_times) || updateControl(m_buttons) || updateControl(m_checkboxes) || updateControl(m_radios) || updateControl(m_comboboxes)
-        || updateControl(m_listboxes) || updateControl(m_passwords) || updateControl(m_hiddenControls) || updateControl(m_files) || updateControl(m_fixedTexts)
-        || updateControl(m_valueRanges) || updateControl(m_images) || updateControl(m_imageFrames) || updateControl(m_frames) || updateControl(m_grids)
-        || updateControl(m_genericControls);
+    const bool updated = updateControl(m_texts) || updateControl(m_textareas) || updateControl(m_formattedTexts) || updateControl(m_numbers)
+        || updateControl(m_dates) || updateControl(m_times) || updateControl(m_buttons) || updateControl(m_checkboxes) || updateControl(m_radios)
+        || updateControl(m_comboboxes) || updateControl(m_listboxes) || updateControl(m_passwords) || updateControl(m_hiddenControls) || updateControl(m_files)
+        || updateControl(m_fixedTexts) || updateControl(m_valueRanges) || updateControl(m_images) || updateControl(m_imageFrames) || updateControl(m_frames)
+        || updateControl(m_grids) || updateControl(m_genericControls);
+    if (updated) {
+        if (const auto *radio = dynamic_cast<const Radio *>(&properties); radio && radio->selected()) {
+            for (auto &other : m_radios) {
+                if (other.id() != id && other.name() == radio->name()) {
+                    other.setSelected(false);
+                }
+            }
+        }
+    }
+    return updated;
 }
 
 void KoOdfForm::saveOdf(KoXmlWriter &w) const
