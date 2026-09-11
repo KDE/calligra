@@ -98,24 +98,13 @@ StencilBoxDocker::StencilBoxDocker(QWidget *parent)
 
     // Load the stencils
     m_loader = new StencilBoxDockerLoader(this);
-    m_loader->moveToThread(&loaderThread);
-    connect(&loaderThread, &QThread::started, this, &StencilBoxDocker::threadStarted);
-    connect(this, &StencilBoxDocker::startLoading, m_loader, &StencilBoxDockerLoader::loadShapeCollections);
-    connect(&loaderThread, &QThread::finished, m_loader, &QObject::deleteLater);
     connect(m_loader, &StencilBoxDockerLoader::resultReady, this, &StencilBoxDocker::collectionsLoaded);
-    loaderThread.start();
+    m_loader->loadShapeCollections();
 }
 
 StencilBoxDocker::~StencilBoxDocker()
 {
-    loaderThread.quit();
-    loaderThread.wait();
     qDeleteAll(m_modelMap);
-}
-
-void StencilBoxDocker::threadStarted()
-{
-    Q_EMIT startLoading();
 }
 
 void StencilBoxDocker::collectionsLoaded()
@@ -126,8 +115,6 @@ void StencilBoxDocker::collectionsLoaded()
     m_treeWidget->regenerateFilteredMap();
     connect(this, &QDockWidget::dockLocationChanged, this, &StencilBoxDocker::locationChanged);
     connect(m_filterLineEdit, &QLineEdit::textEdited, this, &StencilBoxDocker::reapplyFilter);
-
-    loaderThread.quit();
 }
 
 void StencilBoxDocker::manageStencilsFolder()
