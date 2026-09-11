@@ -16,7 +16,7 @@ public:
         : context(nullptr)
     {
     }
-    ~KoDragOdfSaveHelperPrivate()
+    virtual ~KoDragOdfSaveHelperPrivate()
     {
         delete context;
     }
