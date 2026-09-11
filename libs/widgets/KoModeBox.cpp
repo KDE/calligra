@@ -48,6 +48,8 @@
 #include <QTabBar>
 #include <QTextLayout>
 
+using namespace Qt::StringLiterals;
+
 class KoModeBox::Private
 {
 public:
@@ -335,17 +337,26 @@ void KoModeBox::updateShownTools(const QList<QString> &codes)
             newIndex = d->addedToolActions.length();
         }
         if (toolAction->section().contains(applicationName)) {
-            addItem(toolAction);
+            bool visible = toolCodes.isEmpty() || toolCodes.startsWith("flake/"_L1);
+            for (const QString &shapeCode : codes) {
+                if (toolCodes.contains(shapeCode)) {
+                    visible = true;
+                    break;
+                }
+            }
+            if (visible) {
+                addItem(toolAction);
+            }
             continue;
         } else if (!toolAction->section().contains("dynamic") && !toolAction->section().contains("main")) {
             continue;
         }
-        if (toolCodes.startsWith(QLatin1String("flake/"))) {
+        if (toolCodes.startsWith("flake/"_L1)) {
             addItem(toolAction);
             continue;
         }
 
-        if (toolCodes.endsWith(QLatin1String("/always"))) {
+        if (toolCodes.endsWith("/always"_L1)) {
             addItem(toolAction);
             continue;
         } else if (toolCodes.isEmpty() && codes.count() != 0) {
