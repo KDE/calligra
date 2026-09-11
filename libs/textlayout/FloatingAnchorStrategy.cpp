@@ -22,7 +22,7 @@
 
 FloatingAnchorStrategy::FloatingAnchorStrategy(KoAnchorTextRange *anchorRange, KoTextLayoutRootArea *rootArea)
     : AnchorStrategy(anchorRange->anchor(), rootArea)
-    , m_obstruction(new KoTextLayoutObstruction(anchorRange->anchor()->shape(), QTransform()))
+    , m_obstruction(std::make_unique<KoTextLayoutObstruction>(anchorRange->anchor()->shape(), QTransform()))
     , m_anchorRange(anchorRange)
 {
 }
@@ -38,7 +38,7 @@ void FloatingAnchorStrategy::updateObstruction(qreal documentOffset)
     matrix.translate(0, documentOffset);
     m_obstruction->changeMatrix(matrix);
 
-    layout->registerAnchoredObstruction(m_obstruction);
+    layout->registerAnchoredObstruction(m_obstruction.get());
 }
 
 // should return true while we are still moving around
