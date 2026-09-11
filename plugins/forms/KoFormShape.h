@@ -11,12 +11,16 @@
 #include <QPointer>
 
 #include <QImage>
+#include <QList>
 #include <QString>
+
+class KoShape;
 
 class KoFormShape final : public KoShape
 {
 public:
     KoFormShape();
+    ~KoFormShape() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
@@ -29,6 +33,7 @@ public:
     void initializeControl(KoOdfForm::ControlKind kind, KoDocument *document);
     void setControlId(const QString &id);
     const KoOdfForm::Control *formControl() const;
+    KoDocument *document() const;
     void setControlProperties(const KoOdfForm::Control &properties);
     void shapeAddedToDocument(KoShapeBasedDocumentBase *document) override;
     void shapeRemovedFromDocument(KoShapeBasedDocumentBase *document) override;
@@ -40,3 +45,5 @@ private:
     QImage m_image;
     std::unique_ptr<KoOdfForm::Control> m_formControl;
 };
+
+QList<KoShape *> registeredFormShapes();

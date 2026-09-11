@@ -5,8 +5,12 @@
 
 #include "Plugin.h"
 
+#include "KoFormPdfExporter.h"
+#include "KoFormShape.h"
 #include "KoFormShapeFactory.h"
+#include "KoFormShapeRenderer.h"
 #include "KoFormTool.h"
+#include <KoPdfExportRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <KPluginFactory>
@@ -19,6 +23,17 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
 {
     KoShapeRegistry::instance()->add(new KoFormShapeFactory());
     KoToolRegistry::instance()->add(new KoFormToolFactory());
+    registerPdfFormExporter([](const QString &fileName, KoDocument *document, QString *errorMessage) {
+        const QList<KoShape *> shapes = registeredFormShapes();
+        QList<KoShape *> documentShapes;
+        for (KoShape *shape : shapes) {
+            auto *formShape = dynamic_cast<KoFormShape *>(shape);
+            if (formShape && formShape->document() == document) {
+                documentShapes.append(shape);
+            }
+        }
+        return exportFormFieldsToPdf(fileName, collectFormPdfFields(documentShapes), errorMessage);
+    });
 }
 
 #include "Plugin.moc"
