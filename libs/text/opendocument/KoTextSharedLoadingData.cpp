@@ -14,6 +14,10 @@
 #include <QHash>
 #include <QString>
 
+#include <memory>
+#include <utility>
+#include <vector>
+
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfWorkaround.h>
@@ -47,7 +51,6 @@ public:
     }
     ~Private()
     {
-        qDeleteAll(paragraphStylesToDelete);
         qDeleteAll(characterStylesToDelete);
         qDeleteAll(listStylesToDelete);
         qDeleteAll(tableStylesToDelete);
@@ -81,7 +84,7 @@ public:
     QHash<QString, KoSectionStyle *> sectionStylesDotXmlStyles;
     QHash<QString, KoTextTableTemplate *> tableTemplates;
 
-    QList<KoParagraphStyle *> paragraphStylesToDelete;
+    std::vector<std::unique_ptr<KoParagraphStyle>> paragraphStylesToDelete;
     QList<KoCharacterStyle *> characterStylesToDelete;
     QList<KoListStyle *> listStylesToDelete;
     QList<KoTableStyle *> tableStylesToDelete;
@@ -224,47 +227,56 @@ QList<QPair<QString, KoParagraphStyle *>> KoTextSharedLoadingData::loadParagraph
     QHash<KoParagraphStyle *, QString> nextStyles;
     QHash<KoParagraphStyle *, QString> parentStyles;
 
-    foreach (KoXmlElement *styleElem, styleElements) {
+    for (KoXmlElement *styleElem : std::as_const(styleElements)) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
         QString name = styleElem->attributeNS(KoXmlNS::style, "name", QString());
-        KoParagraphStyle *parastyle = new KoParagraphStyle();
-        parastyle->loadOdf(styleElem, context);
+        auto ownedStyle = std::make_unique<KoParagraphStyle>();
+        ownedStyle->loadOdf(styleElem, context);
         QString listStyleName = styleElem->attributeNS(KoXmlNS::style, "list-style-name", QString());
         KoListStyle *list = listStyle(listStyleName, styleTypes & StylesDotXml);
         if (list) {
-            KoListStyle *newListStyle = new KoListStyle(parastyle);
+            KoListStyle *newListStyle = new KoListStyle(ownedStyle.get());
             newListStyle->copyProperties(list);
-            parastyle->setListStyle(newListStyle);
+            ownedStyle->setListStyle(newListStyle);
         }
-        paragraphStyles.append(QPair<QString, KoParagraphStyle *>(name, parastyle));
-        d->namedParagraphStyles.insert(name, parastyle);
 
+        // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
+        KoParagraphStyle *parastyle = nullptr;
+        if (styleManager) {
+            if (KoParagraphStyle *existingStyle = styleManager->paragraphStyle(ownedStyle->name())) {
+                ownedStyle.reset();
+                parastyle = existingStyle;
+            } else {
+                parastyle = ownedStyle.get();
+                styleManager->add(std::move(ownedStyle));
+            }
+        } else {
+            parastyle = ownedStyle.get();
+            d->paragraphStylesToDelete.push_back(std::move(ownedStyle));
+        }
+
+        paragraphStyles.append(qMakePair(name, parastyle));
+        d->namedParagraphStyles.insert(name, parastyle);
         if (styleElem->hasAttributeNS(KoXmlNS::style, "next-style-name"))
             nextStyles.insert(parastyle, styleElem->attributeNS(KoXmlNS::style, "next-style-name"));
         if (styleElem->hasAttributeNS(KoXmlNS::style, "parent-style-name"))
             parentStyles.insert(parastyle, styleElem->attributeNS(KoXmlNS::style, "parent-style-name"));
-
-        // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
-        if (styleManager) {
-            styleManager->add(parastyle);
-        } else {
-            d->paragraphStylesToDelete.append(parastyle);
-        }
-
         parastyle->setDefaultStyle(d->defaultParagraphStyle);
     }
 
     // second pass; resolve all the 'next-style's and parent-style's.
     // TODO iterate via values
-    foreach (KoParagraphStyle *style, nextStyles.keys()) {
+    const auto nextStyleKeys = nextStyles.keys();
+    for (KoParagraphStyle *style : nextStyleKeys) {
         KoParagraphStyle *next = d->namedParagraphStyles.value(nextStyles.value(style));
         if (next && next->styleId() >= 0)
             style->setNextStyle(next->styleId());
     }
-    foreach (KoParagraphStyle *style, parentStyles.keys()) {
+    const auto parentStyleKeys = parentStyles.keys();
+    for (KoParagraphStyle *style : parentStyleKeys) {
         KoParagraphStyle *parent = d->namedParagraphStyles.value(parentStyles.value(style));
         if (parent)
             style->setParentStyle(parent);

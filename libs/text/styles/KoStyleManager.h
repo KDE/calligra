@@ -18,6 +18,8 @@
 #include <QObject>
 #include <QVector>
 
+#include <memory>
+
 class KoCharacterStyle;
 class KoParagraphStyle;
 class KoListStyle;
@@ -94,39 +96,48 @@ public:
      * Add a new style, automatically giving it a new styleId.
      */
     void add(KoCharacterStyle *style);
+    KoCharacterStyle *add(std::unique_ptr<KoCharacterStyle> style);
     /**
      * Add a new style, automatically giving it a new styleId.
      */
     void add(KoParagraphStyle *style);
+    KoParagraphStyle *add(std::unique_ptr<KoParagraphStyle> style);
     /**
      * Add a new list style, automatically giving it a new styleId.
      */
     void add(KoListStyle *style);
+    KoListStyle *add(std::unique_ptr<KoListStyle> style);
     /**
      * Add a new table style, automatically giving it a new styleId.
      */
     void add(KoTableStyle *style);
+    KoTableStyle *add(std::unique_ptr<KoTableStyle> style);
     /**
      * Add a new table column style, automatically giving it a new styleId.
      */
     void add(KoTableColumnStyle *style);
+    KoTableColumnStyle *add(std::unique_ptr<KoTableColumnStyle> style);
     /**
      * Add a new table row style, automatically giving it a new styleId.
      */
     void add(KoTableRowStyle *style);
+    KoTableRowStyle *add(std::unique_ptr<KoTableRowStyle> style);
     /**
      * Add a new table cell style, automatically giving it a new styleId.
      */
     void add(KoTableCellStyle *style);
+    KoTableCellStyle *add(std::unique_ptr<KoTableCellStyle> style);
     /**
      * Add a new section style, automatically giving it a new styleId.
      */
     void add(KoSectionStyle *style);
+    KoSectionStyle *add(std::unique_ptr<KoSectionStyle> style);
 
     /**
      * Add a table template, automatically giving it a new styleId.
      */
     void add(KoTextTableTemplate *tableTemplate);
+    KoTextTableTemplate *add(std::unique_ptr<KoTextTableTemplate> tableTemplate);
 
     /**
      * set the notes configuration of the document
