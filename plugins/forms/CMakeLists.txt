@@ -7,6 +7,7 @@ include_directories(${FLAKE_INCLUDES})
 
 set(forms_LIB_SRCS
     KoFormTool.cpp
+    KoFormEventsWidget.cpp
     KoFormShapeRenderer.cpp
     KoFormPdfExporter.cpp
     KoFormShape.cpp

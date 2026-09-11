@@ -19,6 +19,7 @@ class QSpinBox;
 class QFormLayout;
 class QWidget;
 class QListWidget;
+class KoFormEventsWidget;
 
 class KoFormTool : public KoToolBase
 {
@@ -37,6 +38,7 @@ public:
 
 protected:
     QWidget *createOptionWidget() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 private:
     void updateProperties();
@@ -54,6 +56,9 @@ private:
     QCheckBox *m_tabStop = nullptr;
     QSpinBox *m_tabIndex = nullptr;
     QFormLayout *m_specificForm = nullptr;
+    QFormLayout *m_eventForm = nullptr;
+    QPointer<QWidget> m_eventOptions;
+    KoFormEventsWidget *m_events = nullptr;
     int m_specificStartRow = 0;
     QHash<QString, QWidget *> m_specificProperties;
     QListWidget *m_entries = nullptr;

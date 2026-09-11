@@ -75,6 +75,8 @@ public:
         QString dataField() const;
         QString linkedCell() const;
         QString xformsBind() const;
+        QString eventHandler(const QString &event) const;
+        QMap<QString, QString> eventHandlers() const;
         bool disabled() const;
         bool printable() const;
         bool readOnly() const;
@@ -89,6 +91,7 @@ public:
         void setDataField(const QString &);
         void setLinkedCell(const QString &);
         void setXformsBind(const QString &);
+        void setEventHandler(const QString &event, const QString &handler);
         void setDisabled(bool);
         void setPrintable(bool);
         void setReadOnly(bool);
