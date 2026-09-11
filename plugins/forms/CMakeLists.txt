@@ -41,10 +41,15 @@ if(BUILD_TESTING)
     )
     target_include_directories(TestFormRendering PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+    ecm_add_test(tests/TestFormSerialization.cpp
+        TEST_NAME TestFormSerialization
+        NAME_PREFIX "plugins-forms-"
+        LINK_LIBRARIES koodf Qt6::Test)
+
     if(TARGET qpdf::libqpdf)
         ecm_add_test(tests/TestFormPdfExport.cpp KoFormPdfExporter.cpp
             TEST_NAME plugins-forms-PdfExport
-            LINK_LIBRARIES qpdf::libqpdf koodf KF6::Archive Qt6::Gui Qt6::Test)
+            LINK_LIBRARIES qpdf::libqpdf koodf KF6::Archive Qt6::Gui Qt6::Widgets Qt6::Test)
         set_source_files_properties(tests/TestFormPdfExport.cpp KoFormPdfExporter.cpp PROPERTIES COMPILE_OPTIONS "-fexceptions")
         target_compile_definitions(plugins-forms-PdfExport PRIVATE CALLIGRA_WITH_QPDF)
     endif()

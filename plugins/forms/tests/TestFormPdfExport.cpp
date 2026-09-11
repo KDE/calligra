@@ -93,6 +93,7 @@ private Q_SLOTS:
                                     points(attributes.value(u"svg:y"_s).toString()),
                                     points(attributes.value(u"svg:width"_s).toString()),
                                     points(attributes.value(u"svg:height"_s).toString()));
+                field.printable = true;
                 field.currentValue = kind == KoOdfForm::ControlKind::Checkbox || kind == KoOdfForm::ControlKind::Radio ? u"Yes"_s : u"From ODF"_s;
                 fields.append(field);
             }
@@ -101,7 +102,9 @@ private Q_SLOTS:
         QVERIFY(fields.size() > 2);
 
         {
-            QPdfWriter writer(pdfFile);
+            QFile output(pdfFile);
+            QVERIFY(output.open(QIODevice::WriteOnly));
+            QPdfWriter writer(&output);
             writer.setPageSize(QPageSize(QPageSize::Letter));
             QPainter painter(&writer);
             painter.drawText(QPointF(36, 24), u"Form export"_s);
@@ -129,6 +132,7 @@ private Q_SLOTS:
                 }
             }
             painter.end();
+            output.close();
         }
 
         QString error;
@@ -137,7 +141,7 @@ private Q_SLOTS:
         QPDF pdf;
         pdf.processFile(pdfFile.toLocal8Bit().constData());
         QPDFAcroFormDocumentHelper acroForm(pdf);
-        QVERIFY(static_cast<int>(acroForm.getFormFields().size()) >= 12);
+        QCOMPARE(static_cast<int>(acroForm.getFormFields().size()), fields.size());
     }
 };
 
