@@ -11,6 +11,8 @@
 #include <QToolButton>
 #include <QWidget>
 
+#include <memory>
+
 class QMenu;
 
 namespace Ui
@@ -23,8 +25,9 @@ class StatisticsPreferencesPopup : public QMenu
     Q_OBJECT
 public:
     explicit StatisticsPreferencesPopup(QWidget *parent = nullptr);
+    ~StatisticsPreferencesPopup() override;
     QSize sizeHint() const override;
-    Ui::StatisticsPreferencesPopup *w;
+    std::unique_ptr<Ui::StatisticsPreferencesPopup> w;
 
 Q_SIGNALS:
     void wordsDisplayChange(int);
