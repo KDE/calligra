@@ -38,7 +38,10 @@ KoOdfForm roundTrip(const KoOdfForm &form)
     }
     KoXmlWriter writer(&buffer);
     writer.startElement("root");
+    writer.addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
     writer.addAttribute("xmlns:form", "urn:oasis:names:tc:opendocument:xmlns:form:1.0");
+    writer.addAttribute("xmlns:script", "urn:oasis:names:tc:opendocument:xmlns:script:1.0");
+    writer.addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
     form.saveOdf(writer);
     writer.endElement();
 

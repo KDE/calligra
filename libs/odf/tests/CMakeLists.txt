@@ -23,6 +23,10 @@ koodf_add_unit_test(TestKoOdfLoadingContext TestKoOdfLoadingContext.cpp  LINK_LI
 
 ########### next target ###############
 
+koodf_add_unit_test(TestKoOdfScript TestKoOdfScript.cpp  LINK_LIBRARIES koodf Qt6::Test)
+
+########### next target ###############
+
 koodf_add_unit_test(TestXmlWriter TestXmlWriter.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### next target ###############

@@ -7,6 +7,8 @@
 
 #include "KoOdfWriteStore.h"
 
+#include "KoOdfScript.h"
+
 #include <QBuffer>
 
 #include <KLocalizedString>
@@ -47,6 +49,7 @@ struct Q_DECL_HIDDEN KoOdfWriteStore::Private {
     KoStore *store;
     KoStoreDevice *storeDevice;
     KoXmlWriter *contentWriter;
+    KoOdfScript::Scripts scripts;
 
     KoXmlWriter *bodyWriter;
     KoXmlWriter *manifestWriter;
@@ -130,6 +133,11 @@ KoXmlWriter *KoOdfWriteStore::contentWriter()
     return d->contentWriter;
 }
 
+void KoOdfWriteStore::setScripts(const KoOdfScript::Scripts &scripts)
+{
+    d->scripts = scripts;
+}
+
 KoXmlWriter *KoOdfWriteStore::bodyWriter()
 {
     if (!d->bodyWriter) {
@@ -157,6 +165,7 @@ bool KoOdfWriteStore::closeContentWriter()
     // copy over the contents from the tempfile to the real one
     d->contentTmpFile->close(); // does not really close but seeks to the beginning of the file
     if (d->contentWriter) {
+        KoOdfScript::saveScripts(*d->contentWriter, d->scripts);
         d->contentWriter->addCompleteElement(d->contentTmpFile);
     }
     d->contentTmpFile->close(); // seek again to the beginning

@@ -12,14 +12,11 @@
 
 #include <qpdf/QPDF.hh>
 #include <qpdf/QPDFAcroFormDocumentHelper.hh>
+#include <qpdf/QPDFWriter.hh>
 
 #include <QApplication>
 #include <QFile>
 #include <QHash>
-#include <QPainter>
-#include <QPdfWriter>
-#include <QStyle>
-#include <QStyleOptionButton>
 #include <QTemporaryDir>
 #include <QTest>
 #include <QXmlStreamReader>
@@ -101,39 +98,17 @@ private Q_SLOTS:
         QVERIFY2(!xml.hasError(), qPrintable(xml.errorString()));
         QVERIFY(fields.size() > 2);
 
-        {
-            QFile output(pdfFile);
-            QVERIFY(output.open(QIODevice::WriteOnly));
-            QPdfWriter writer(&output);
-            writer.setPageSize(QPageSize(QPageSize::Letter));
-            QPainter painter(&writer);
-            painter.drawText(QPointF(36, 24), u"Form export"_s);
-            const auto style = QApplication::style();
-            for (const auto &field : fields) {
-                const QRectF rect = field.rect.translated(field.pageOffset);
-                const QRect widgetRect = rect.toRect();
-                if (field.kind == KoOdfForm::ControlKind::Checkbox || field.kind == KoOdfForm::ControlKind::Radio
-                    || field.kind == KoOdfForm::ControlKind::Button) {
-                    QStyleOptionButton option;
-                    option.rect = widgetRect;
-                    option.text = field.label;
-                    option.state = QStyle::State_Enabled;
-                    if (field.kind == KoOdfForm::ControlKind::Checkbox) {
-                        option.state |= QStyle::State_On;
-                    }
-                    style->drawControl(field.kind == KoOdfForm::ControlKind::Checkbox    ? QStyle::CE_CheckBox
-                                           : field.kind == KoOdfForm::ControlKind::Radio ? QStyle::CE_RadioButton
-                                                                                         : QStyle::CE_PushButton,
-                                       &option,
-                                       &painter);
-                } else {
-                    painter.drawRect(widgetRect);
-                    painter.drawText(widgetRect.adjusted(4, 0, -4, 0), Qt::AlignVCenter | Qt::AlignLeft, field.currentValue);
-                }
-            }
-            painter.end();
-            output.close();
-        }
+        QPDF basePdf;
+        basePdf.emptyPDF();
+        auto page = QPDFObjectHandle::newDictionary();
+        page.replaceKey("/Type", QPDFObjectHandle::newName("/Page"));
+        page.replaceKey(
+            "/MediaBox",
+            QPDFObjectHandle::newArray(
+                {QPDFObjectHandle::newInteger(0), QPDFObjectHandle::newInteger(0), QPDFObjectHandle::newInteger(612), QPDFObjectHandle::newInteger(792)}));
+        basePdf.addPage(page, false);
+        QPDFWriter baseWriter(basePdf, pdfFile.toLocal8Bit().constData());
+        baseWriter.write();
 
         QString error;
         QVERIFY2(exportFormFieldsToPdf(pdfFile, fields, &error), qPrintable(error));

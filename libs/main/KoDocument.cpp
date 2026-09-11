@@ -20,6 +20,7 @@
 #include "KoFileDialog.h"
 #include "KoFilterManager.h"
 #include "KoOdfForm.h"
+#include "KoOdfScript.h"
 #include "KoPart.h"
 #include "KoView.h"
 
@@ -198,6 +199,7 @@ public:
     KoDocumentInfo *docInfo;
     KoDocumentRdfBase *docRdf;
     KoOdfForm form;
+    KoOdfScript::Scripts scripts;
 
     KoProgressUpdater *progressUpdater;
     KoProgressProxy *progressProxy;
@@ -495,6 +497,16 @@ KoOdfForm &KoDocument::form()
 void KoDocument::setForm(const KoOdfForm &form)
 {
     d->form = form;
+}
+
+KoOdfScript::Scripts KoDocument::scripts() const
+{
+    return d->scripts;
+}
+
+void KoDocument::setScripts(const KoOdfScript::Scripts &scripts)
+{
+    d->scripts = scripts;
 }
 
 bool KoDocument::exportDocument(const QUrl &_url)
@@ -847,6 +859,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     // Tell KoStore not to touch the file names
 
     KoOdfWriteStore odfStore(store);
+    odfStore.setScripts(d->scripts);
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     KoEmbeddedDocumentSaver embeddedSaver;
     SavingContext documentContext(odfStore, embeddedSaver);
@@ -1947,6 +1960,7 @@ bool KoDocument::loadOasisFromStore(KoStore *store)
     if (!odfStore.loadAndParse(d->lastErrorMessage)) {
         return false;
     }
+    d->scripts = KoOdfScript::loadScripts(odfStore.contentDoc().documentElement());
     return loadOdf(odfStore);
 }
 
@@ -1974,6 +1988,7 @@ bool KoDocument::addVersion(const QString &comment)
 
     debugMain << "Saving to OASIS format";
     KoOdfWriteStore odfStore(store.get());
+    odfStore.setScripts(d->scripts);
 
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     Q_UNUSED(manifestWriter); // XXX why?
