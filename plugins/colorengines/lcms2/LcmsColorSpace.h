@@ -168,7 +168,6 @@ protected:
     ~LcmsColorSpace() override
     {
         delete d->colorProfile;
-        delete d->defaultTransformations;
         delete d;
     }
 
