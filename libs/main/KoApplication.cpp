@@ -300,6 +300,9 @@ bool KoApplication::start()
         KoPart *part = entry.createKoPart(&errorMsg);
         if (part) {
             part->setParent(this);
+            connect(part, &QObject::destroyed, this, [this, part]() {
+                d->partList.removeAll(part);
+            });
         }
         d->partList << part;
 
@@ -415,6 +418,9 @@ bool KoApplication::start()
                 KoPart *part = entry.createKoPart(&errorMsg);
                 if (part) {
                     part->setParent(this);
+                    connect(part, &QObject::destroyed, this, [this, part]() {
+                        d->partList.removeAll(part);
+                    });
                 }
                 d->partList << part;
                 if (part) {
@@ -472,6 +478,9 @@ bool KoApplication::start()
             KoPart *part = entry.createKoPart(&errorMsg);
             if (part) {
                 part->setParent(this);
+                connect(part, &QObject::destroyed, this, [this, part]() {
+                    d->partList.removeAll(part);
+                });
             }
             d->partList << part;
             if (part) {
@@ -598,10 +607,11 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-    for (KoPart *part : std::as_const(d->partList)) {
+    const auto parts = d->partList;
+    d->partList.clear();
+    for (KoPart *part : parts) {
         delete part;
     }
-    d->partList.clear();
     delete d;
 }
 
