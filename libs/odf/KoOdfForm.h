@@ -101,6 +101,7 @@ public:
 
     protected:
         void saveChildren(KoXmlWriter &) const;
+        void saveEventListeners(KoXmlWriter &) const;
         void saveCommonAttributes(KoXmlWriter &) const;
         QString m_name, m_id, m_title, m_value, m_currentValue, m_dataField, m_linkedCell, m_xformsBind;
         bool m_disabled = false, m_printable = true, m_readOnly = false, m_inputRequired = false, m_tabStop = true;

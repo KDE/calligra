@@ -10,6 +10,7 @@
 #ifndef KODOCUMENT_H
 #define KODOCUMENT_H
 
+#include <QByteArray>
 #include <QDateTime>
 #include <QList>
 
@@ -17,6 +18,7 @@
 
 #include "komain_export.h"
 #include <KoDocumentBase.h>
+#include <KoOdfScript.h>
 #include <KoXmlReaderForward.h>
 #include <kundo2stack.h>
 
@@ -737,6 +739,9 @@ public:
     const KoOdfForm &form() const;
     KoOdfForm &form();
     void setForm(const KoOdfForm &form);
+
+    KoOdfScript::Scripts scripts() const;
+    void setScripts(const KoOdfScript::Scripts &scripts);
 
 public Q_SLOTS:
 

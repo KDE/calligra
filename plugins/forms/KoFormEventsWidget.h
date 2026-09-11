@@ -29,12 +29,14 @@ private Q_SLOTS:
     void commitEditor();
     void addEvent();
     void removeEvent();
+    void pickScript();
 
 private:
     void rebuildList();
     QListWidget *m_eventList = nullptr;
     QComboBox *m_eventSelector = nullptr;
     QLineEdit *m_handler = nullptr;
+    QPushButton *m_pick = nullptr;
     QPushButton *m_remove = nullptr;
     QPushButton *m_add = nullptr;
     QMap<QString, QString> m_events;
