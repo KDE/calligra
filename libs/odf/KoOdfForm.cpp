@@ -4,6 +4,7 @@
  */
 
 #include "KoOdfForm.h"
+#include "KoOdfScript.h"
 
 #include "KoXmlNS.h"
 #include "KoXmlReader.h"
@@ -91,6 +92,13 @@ bool KoOdfForm::Control::loadOdf(const KoXmlElement &e)
         if (!node.isElement())
             continue;
         const auto child = node.toElement();
+        if (child.localName() == "event-listeners"_L1) {
+            const auto events = KoOdfScript::loadEventListeners(e);
+            for (auto it = events.cbegin(); it != events.cend(); ++it) {
+                m_formAttributes.insert(u"event-"_s + it.key(), it.value());
+            }
+            continue;
+        }
         QDomDocument childDocument;
         KoXml::asQDomElement(childDocument, child);
         childDocument.documentElement().save(stream, -1);
@@ -133,8 +141,11 @@ void KoOdfForm::Control::saveCommonAttributes(KoXmlWriter &w) const
     w.addAttribute("form:tab-stop", m_tabStop);
     if (m_tabIndex)
         w.addAttribute("form:tab-index", m_tabIndex);
-    for (auto it = m_formAttributes.cbegin(); it != m_formAttributes.cend(); ++it)
-        w.addAttribute((u"form:"_s + it.key()).toUtf8().constData(), it.value());
+    for (auto it = m_formAttributes.cbegin(); it != m_formAttributes.cend(); ++it) {
+        if (!it.key().startsWith("event-"_L1)) {
+            w.addAttribute((u"form:"_s + it.key()).toUtf8().constData(), it.value());
+        }
+    }
 }
 #define C(N, T)                                                                                                                                                \
     bool KoOdfForm::N::loadOdf(const KoXmlElement &e)                                                                                                          \
@@ -145,6 +156,7 @@ void KoOdfForm::Control::saveCommonAttributes(KoXmlWriter &w) const
     {                                                                                                                                                          \
         w.startElement("form:" T);                                                                                                                             \
         saveCommonAttributes(w);                                                                                                                               \
+        saveEventListeners(w);                                                                                                                                 \
         saveChildren(w);                                                                                                                                       \
         w.endElement();                                                                                                                                        \
     }
@@ -556,7 +568,9 @@ bool KoOdfForm::loadOdf(const KoXmlElement &e)
             continue;
         const KoXmlElement c = n.toElement();
         const QString t = c.localName();
-        if (t == QLatin1String("model") && c.namespaceURI() == QLatin1String("http://www.w3.org/2002/xforms")) {
+        if (t == "event-listeners"_L1 || c.tagName() == "event-listeners") {
+            m_eventHandlers = KoOdfScript::loadEventListeners(e);
+        } else if (t == QLatin1String("model") && c.namespaceURI() == QLatin1String("http://www.w3.org/2002/xforms")) {
             Model v;
             if (v.loadOdf(c))
                 m_models.append(v);
@@ -981,9 +995,7 @@ void KoOdfForm::saveOdf(KoXmlWriter &w) const
         w.addAttribute("form:method", m_method);
     if (!m_xformsSubmission.isEmpty())
         w.addAttribute("xforms:submission", m_xformsSubmission);
-    for (auto it = m_eventHandlers.cbegin(); it != m_eventHandlers.cend(); ++it) {
-        w.addAttribute((u"form:event-"_s + it.key()).toUtf8().constData(), it.value());
-    }
+    KoOdfScript::saveEventListeners(w, m_eventHandlers);
     for (const Text &v : m_texts)
         v.saveOdf(w);
     for (const Textarea &v : m_textareas)
@@ -1098,6 +1110,17 @@ QString KoOdfForm::Control::formAttribute(const QString &name) const
 QString KoOdfForm::Control::eventHandler(const QString &event) const
 {
     return m_formAttributes.value(u"event-"_s + event);
+}
+
+void KoOdfForm::Control::saveEventListeners(KoXmlWriter &w) const
+{
+    KoOdfScript::EventHandlers events;
+    for (auto it = m_formAttributes.cbegin(); it != m_formAttributes.cend(); ++it) {
+        if (it.key().startsWith("event-"_L1)) {
+            events.insert(it.key().mid(6), it.value());
+        }
+    }
+    KoOdfScript::saveEventListeners(w, events);
 }
 
 QMap<QString, QString> KoOdfForm::Control::eventHandlers() const

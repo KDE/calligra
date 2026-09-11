@@ -31,6 +31,7 @@ set(koodf_LIB_SRCS
     KoBorder.cpp
     Ko3dScene.cpp
     KoOdfForm.cpp
+    KoOdfScript.cpp
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
@@ -107,6 +108,7 @@ install( FILES
     KoColumns.h
     KoUnit.h
     KoElementReference.h
+    KoOdfScript.h
     KoTableTemplate.h
     OdfDebug.h
 DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)

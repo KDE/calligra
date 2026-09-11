@@ -7,14 +7,18 @@
 #include <KLocalizedString>
 
 #include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QLineEdit>
 #include <QListWidget>
 #include <QPushButton>
+#include <QSet>
 #include <QVBoxLayout>
 #include <array>
+#include <utility>
 
 using namespace Qt::StringLiterals;
 
@@ -74,7 +78,13 @@ KoFormEventsWidget::KoFormEventsWidget(QWidget *parent)
     m_handler->setEnabled(true);
     m_handler->setPlaceholderText(i18nc("@info:placeholder", "Script URI or macro name"));
     form->addRow(i18nc("@label:form event", "Event:"), m_eventSelector);
-    form->addRow(i18nc("@label:form event", "Script or macro:"), m_handler);
+    auto *handlerLayout = new QHBoxLayout;
+    handlerLayout->setContentsMargins({});
+    handlerLayout->addWidget(m_handler);
+    m_pick = new QPushButton(i18nc("@button", "Select…"), this);
+    m_pick->setIcon(QIcon::fromTheme(u"document-open-symbolic"_s));
+    handlerLayout->addWidget(m_pick);
+    form->addRow(i18nc("@label:form event", "Script or macro:"), handlerLayout);
     layout->addLayout(form);
 
     auto *buttons = new QHBoxLayout;
@@ -91,6 +101,50 @@ KoFormEventsWidget::KoFormEventsWidget(QWidget *parent)
     connect(m_handler, &QLineEdit::editingFinished, this, &KoFormEventsWidget::commitEditor);
     connect(m_add, &QPushButton::clicked, this, &KoFormEventsWidget::addEvent);
     connect(m_remove, &QPushButton::clicked, this, &KoFormEventsWidget::removeEvent);
+    connect(m_pick, &QPushButton::clicked, this, &KoFormEventsWidget::pickScript);
+}
+
+void KoFormEventsWidget::pickScript()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle(i18nc("@title:form", "Select script or macro"));
+    auto *layout = new QVBoxLayout(&dialog);
+    auto *scripts = new QListWidget(&dialog);
+    const QString current = m_handler->text();
+    QSet<QString> knownScripts;
+    for (const auto &handler : std::as_const(m_events)) {
+        if (!handler.isEmpty()) {
+            knownScripts.insert(handler);
+        }
+    }
+    for (const auto &script : std::as_const(knownScripts)) {
+        scripts->addItem(script);
+    }
+    auto *entry = new QLineEdit(&dialog);
+    entry->setPlaceholderText(i18nc("@info:placeholder", "Script URI or macro name"));
+    entry->setText(current);
+    layout->addWidget(scripts);
+    layout->addWidget(entry);
+    auto *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+    auto *add = buttons->addButton(i18nc("@button", "Add"), QDialogButtonBox::ActionRole);
+    add->setIcon(QIcon::fromTheme(u"list-add-symbolic"_s));
+    layout->addWidget(buttons);
+    connect(add, &QPushButton::clicked, &dialog, [scripts, entry] {
+        const QString value = entry->text().trimmed();
+        const auto matches = scripts->findItems(value, Qt::MatchExactly);
+        if (!value.isEmpty() && matches.isEmpty()) {
+            scripts->addItem(value);
+        }
+        if (!value.isEmpty()) {
+            scripts->setCurrentRow(matches.isEmpty() ? scripts->count() - 1 : scripts->row(matches.first()));
+        }
+    });
+    connect(scripts, &QListWidget::itemDoubleClicked, &dialog, &QDialog::accept);
+    connect(scripts, &QListWidget::currentTextChanged, entry, &QLineEdit::setText);
+    if (dialog.exec() == QDialog::Accepted && !entry->text().trimmed().isEmpty()) {
+        m_handler->setText(entry->text().trimmed());
+        commitEditor();
+    }
 }
 
 QMap<QString, QString> KoFormEventsWidget::events() const

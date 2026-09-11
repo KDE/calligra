@@ -10,6 +10,7 @@
 class QIODevice;
 class KoXmlWriter;
 class KoStore;
+class KoOdfScript;
 
 /**
  * Helper class around KoStore for writing out ODF files.
@@ -31,6 +32,7 @@ class KoStore;
  *
  * @author: David Faure <faure@kde.org>
  */
+#include "KoOdfScript.h"
 #include "koodf_export.h"
 
 class KOODF_EXPORT KoOdfWriteStore
@@ -65,6 +67,8 @@ public:
      * Open contents.xml for writing and return the KoXmlWriter
      */
     KoXmlWriter *contentWriter();
+
+    void setScripts(const KoOdfScript::Scripts &scripts);
 
     /**
      * Open another KoXmlWriter for writing out the contents
