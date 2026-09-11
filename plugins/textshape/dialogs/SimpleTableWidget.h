@@ -23,6 +23,7 @@ class SimpleTableWidget : public QWidget
     Q_OBJECT
 public:
     explicit SimpleTableWidget(TextTool *tool, QWidget *parent = nullptr);
+    ~SimpleTableWidget() override;
 
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);

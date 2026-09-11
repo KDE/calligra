@@ -60,12 +60,12 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
-    SimpleRootAreaProvider *provider = new SimpleRootAreaProvider(m_textShapeData, this);
+    m_provider = std::make_unique<SimpleRootAreaProvider>(m_textShapeData, this);
 
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
     KoTextDocument(m_textShapeData->document()).setTextRangeManager(textRangeManager);
 
-    m_layout = new KoTextDocumentLayout(m_textShapeData->document(), provider);
+    m_layout = new KoTextDocumentLayout(m_textShapeData->document(), m_provider.get());
     m_textShapeData->document()->setDocumentLayout(m_layout);
 
     setCollisionDetection(true);

@@ -9,6 +9,8 @@
 
 #include "KoTextLayoutRootAreaProvider.h"
 
+#include <memory>
+
 class TextShape;
 class KoTextShapeData;
 
@@ -16,6 +18,7 @@ class SimpleRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
 public:
     SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape);
+    ~SimpleRootAreaProvider() override;
 
     /// reimplemented
     KoTextLayoutRootArea *
@@ -33,7 +36,7 @@ public:
 
     TextShape *m_textShape;
 
-    KoTextLayoutRootArea *m_area;
+    std::unique_ptr<KoTextLayoutRootArea> m_area;
     KoTextShapeData *m_textShapeData;
     bool m_fixAutogrow;
 };

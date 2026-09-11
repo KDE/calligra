@@ -18,6 +18,8 @@
 #include <QPainter>
 #include <QTextDocument>
 
+#include <memory>
+
 #define TextShape_SHAPEID "TextShapeID"
 
 class KoInlineTextObjectManager;
@@ -28,6 +30,7 @@ class KoTextDocument;
 class TextShape;
 class KoTextDocumentLayout;
 class KoParagraphStyle;
+class SimpleRootAreaProvider;
 
 /**
  * A text shape.
@@ -124,6 +127,7 @@ private:
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
     bool m_clip;
+    std::unique_ptr<SimpleRootAreaProvider> m_provider;
     KoTextDocumentLayout *m_layout;
 };
 

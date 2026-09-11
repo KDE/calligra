@@ -18,7 +18,7 @@ class StylesDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    StylesDelegate();
+    explicit StylesDelegate(QObject *parent = nullptr);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;

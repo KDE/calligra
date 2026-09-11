@@ -26,8 +26,8 @@
 
 #include <QDebug>
 
-StylesDelegate::StylesDelegate()
-    : QStyledItemDelegate()
+StylesDelegate::StylesDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
     , m_editButtonPressed(false)
     , m_deleteButtonPressed(false)
     , m_enableEditButton(true)
