@@ -25,9 +25,7 @@ public:
     explicit KoFormTool(KoCanvasBase *canvas);
     void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
-    void paint(QPainter &, const KoViewConverter &) override
-    {
-    }
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
     void mousePressEvent(KoPointerEvent *) override
     {
     }

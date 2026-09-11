@@ -18,6 +18,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QPainter>
+#include <QPen>
 #include <QPushButton>
 #include <QSignalBlocker>
 #include <QSpinBox>
@@ -66,6 +68,35 @@ KoFormTool::KoFormTool(KoCanvasBase *canvas)
 {
 }
 
+void KoFormTool::paint(QPainter &painter, const KoViewConverter &converter)
+{
+    if (!canvas()) {
+        return;
+    }
+    KoFormShape *shape = m_shape;
+    if (!shape) {
+        for (KoShape *candidate : canvas()->shapeManager()->selection()->selectedShapes()) {
+            shape = dynamic_cast<KoFormShape *>(candidate);
+            if (shape) {
+                break;
+            }
+        }
+    }
+    if (!shape) {
+        return;
+    }
+    painter.save();
+    painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
+    KoShape::applyConversion(painter, converter);
+    QPen pen(QColor(0, 173, 245, 127));
+    pen.setWidth(0);
+    pen.setJoinStyle(Qt::RoundJoin);
+    painter.setPen(pen);
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(QRectF(QPointF(0, 0), shape->size()));
+    painter.restore();
+}
+
 void KoFormTool::activate(ToolActivation, const QSet<KoShape *> &shapes)
 {
     if (canvas() && canvas()->shapeManager()) {
@@ -83,6 +114,9 @@ void KoFormTool::activate(ToolActivation, const QSet<KoShape *> &shapes)
     }
     useCursor(Qt::ArrowCursor);
     updateProperties();
+    if (m_shape) {
+        canvas()->updateCanvas(m_shape->boundingRect());
+    }
 }
 
 QWidget *KoFormTool::createOptionWidget()
@@ -466,8 +500,13 @@ void KoFormTool::mouseReleaseEvent(KoPointerEvent *event)
 
     auto *shape = dynamic_cast<KoFormShape *>(canvas()->shapeManager()->shapeAt(event->point));
     if (shape && shape != m_shape) {
+        const QRectF oldBounds = m_shape ? m_shape->boundingRect() : QRectF();
         m_shape = shape;
         updateProperties();
+        if (!oldBounds.isEmpty()) {
+            canvas()->updateCanvas(oldBounds);
+        }
+        canvas()->updateCanvas(m_shape->boundingRect());
     }
 }
 
@@ -484,8 +523,15 @@ void KoFormTool::shapeSelectionChanged()
     if (m_shape == shape) {
         return;
     }
+    const QRectF oldBounds = m_shape ? m_shape->boundingRect() : QRectF();
     m_shape = shape;
     updateProperties();
+    if (!oldBounds.isEmpty()) {
+        canvas()->updateCanvas(oldBounds);
+    }
+    if (m_shape) {
+        canvas()->updateCanvas(m_shape->boundingRect());
+    }
 }
 
 KoFormToolFactory::KoFormToolFactory()
