@@ -724,7 +724,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         d->right += d->neededWidth - d->width;
         d->maximumAllowedWidth = 0;
         setVirginPage(true);
-        KoTextLayoutArea::layout(new FrameIterator(d->startOfArea));
+        FrameIterator restartCursor(d->startOfArea);
+        KoTextLayoutArea::layout(&restartCursor);
     }
     return true; // we have layouted till the end of the frame
 }

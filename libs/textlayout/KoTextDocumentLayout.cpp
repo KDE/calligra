@@ -42,6 +42,8 @@
 #include <QTimer>
 #include <TextLayoutDebug.h>
 
+#include <utility>
+
 namespace
 {
 // Qt only recognizes object-replacement characters when the document layout has
@@ -180,6 +182,19 @@ KoTextDocumentLayout::~KoTextDocumentLayout()
     delete d->layoutPosition;
     qDeleteAll(d->freeObstructions);
     qDeleteAll(d->anchoredObstructions);
+    if (d->textRangeManager) {
+        const QList<KoTextRange *> ranges = d->textRangeManager->textRanges();
+        for (KoTextRange *range : ranges) {
+            if (auto *anchorRange = qobject_cast<KoAnchorTextRange *>(range)) {
+                if (anchorRange->document() == document()) {
+                    anchorRange->anchor()->setPlacementStrategy(nullptr);
+                }
+            }
+        }
+    }
+    for (KoShapeAnchor *anchor : std::as_const(d->textAnchors)) {
+        anchor->setPlacementStrategy(nullptr);
+    }
     qDeleteAll(d->textAnchors);
     delete d;
 }
