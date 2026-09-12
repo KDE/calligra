@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-09 17:52+0400\n"
+"PO-Revision-Date: 2026-09-11 10:59+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -14790,10 +14790,9 @@ msgid "Could not find sheet-style XML file '%1'."
 msgstr "تعذر العثور على ملف XML لأسلوب الورقة '%1'."
 
 #: ui/actions/AutoFormat.cpp:84
-#, fuzzy, kde-format
-#| msgid "Could not find sheet-style XML file '%1'."
+#, kde-format
 msgid "Could not open sheet-style XML file %1."
-msgstr "تعذر العثور على ملف XML لأسلوب الورقة '%1'."
+msgstr "تعذر فتح ملف XML لأسلوب الورقة %1."
 
 #: ui/actions/AutoFormat.cpp:94
 #, kde-format

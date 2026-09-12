@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-10 19:43+0300\n"
+"PO-Revision-Date: 2026-09-11 19:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11293,6 +11293,8 @@ msgid ""
 "The PERCENTRANK() function returns the rank, as a fraction of the data set, "
 "of a value in that data set. This is the inverse of PERCENTILE."
 msgstr ""
+"PERCENTRANK() işlevi, o veri kümesindeki bir değerin sırasını, veri "
+"kümesinin bir kesri olarak döndürür. Bu, PERCENTILE işlevinin tersidir."
 
 #: functions/statistical.xml:2042
 #, kde-format
@@ -11302,12 +11304,12 @@ msgstr "PERCENTRANK(veri; x; önem)"
 #: functions/statistical.xml:2056
 #, kde-format
 msgid "Probabilities, one for each value (must sum to 1)"
-msgstr ""
+msgstr "Olasılıklar, her değer için bir tane (toplamı 1 olmalı)"
 
 #: functions/statistical.xml:2060
 #, kde-format
 msgid "Lower limit (or the only value to test for, if Upper limit is omitted)"
-msgstr ""
+msgstr "Alt sınır (veya üst sınır yok sayılmışsa yalnızca sınanacak değer)"
 
 #: functions/statistical.xml:2068
 #, kde-format
@@ -11315,6 +11317,8 @@ msgid ""
 "The PROB() function returns the sum of the probabilities of the values that "
 "fall between (or equal) a lower and upper limit."
 msgstr ""
+"PROB() işlevi, bir alt ve üst sınır arasında yer alan (veya bunlara eşit "
+"olan) değerlerin olasılıklarının toplamını döndürür."
 
 #: functions/statistical.xml:2069
 #, kde-format

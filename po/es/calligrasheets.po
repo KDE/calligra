@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-05 18:14+0100\n"
+"PO-Revision-Date: 2026-09-12 01:19+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -15275,10 +15275,9 @@ msgid "Could not find sheet-style XML file '%1'."
 msgstr "No se ha encontrado el archivo XML de hoja de estilos «%1»."
 
 #: ui/actions/AutoFormat.cpp:84
-#, fuzzy, kde-format
-#| msgid "Could not find sheet-style XML file '%1'."
+#, kde-format
 msgid "Could not open sheet-style XML file %1."
-msgstr "No se ha encontrado el archivo XML de hoja de estilos «%1»."
+msgstr "No se ha podido abrir el archivo XML de hoja de estilos %1."
 
 #: ui/actions/AutoFormat.cpp:94
 #, kde-format
