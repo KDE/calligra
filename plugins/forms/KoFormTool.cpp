@@ -6,6 +6,12 @@
 #include "KoFormEventsWidget.h"
 #include "KoFormShape.h"
 
+#include <KoDocument.h>
+#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeController.h>
+
+#include <algorithm>
+
 #include <KLocalizedString>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -366,6 +372,10 @@ void KoFormTool::updateProperties()
     if (m_formEvents) {
         m_formEvents->setEvents(m_shape ? m_shape->formEventHandlers() : QMap<QString, QString>());
     }
+    if (auto *document = dynamic_cast<KoDocument *>(canvas()->shapeController()->documentBase())) {
+        m_events->setScripts(document->scripts());
+        m_formEvents->setScripts(document->scripts());
+    }
     for (auto it = m_specificProperties.cbegin(); it != m_specificProperties.cend(); ++it) {
         const QSignalBlocker blocker(it.value());
         if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
@@ -474,6 +484,20 @@ void KoFormTool::commitProperties()
     const auto beforeFormEvents = m_shape->formEventHandlers();
     const auto currentFormEvents = m_formEvents ? m_formEvents->events() : QMap<QString, QString>();
     const auto currentControlEvents = m_events ? m_events->events() : QMap<QString, QString>();
+    auto currentScripts = m_events ? m_events->scripts() : KoOdfScript::Scripts();
+    if (m_formEvents) {
+        for (const auto &script : m_formEvents->scripts()) {
+            const auto duplicate = std::find_if(currentScripts.cbegin(), currentScripts.cend(), [&script](const auto &existing) {
+                return existing.name == script.name;
+            });
+            if (duplicate == currentScripts.cend()) {
+                currentScripts.append(script);
+            }
+        }
+    }
+    if (auto *document = dynamic_cast<KoDocument *>(canvas()->shapeController()->documentBase())) {
+        document->setScripts(currentScripts);
+    }
     if (before->name() == m_name->text() && before->title() == m_title->text() && before->disabled() == !m_enabled->isChecked()
         && before->readOnly() == m_readOnly->isChecked() && before->printable() == m_printable->isChecked() && before->tabStop() == m_tabStop->isChecked()
         && before->tabIndex() == m_tabIndex->value() && beforeFormEvents == currentFormEvents && before->eventHandlers() == currentControlEvents) {
