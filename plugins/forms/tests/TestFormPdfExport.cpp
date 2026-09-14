@@ -107,14 +107,15 @@ private Q_SLOTS:
             QPDFObjectHandle::newArray(
                 {QPDFObjectHandle::newInteger(0), QPDFObjectHandle::newInteger(0), QPDFObjectHandle::newInteger(612), QPDFObjectHandle::newInteger(792)}));
         basePdf.addPage(page, false);
-        QPDFWriter baseWriter(basePdf, pdfFile.toLocal8Bit().constData());
+        const QByteArray pdfPath = pdfFile.toLocal8Bit();
+        QPDFWriter baseWriter(basePdf, pdfPath.constData());
         baseWriter.write();
 
         QString error;
         QVERIFY2(exportFormFieldsToPdf(pdfFile, fields, &error), qPrintable(error));
 
         QPDF pdf;
-        pdf.processFile(pdfFile.toLocal8Bit().constData());
+        pdf.processFile(pdfPath.constData());
         QPDFAcroFormDocumentHelper acroForm(pdf);
         QCOMPARE(static_cast<int>(acroForm.getFormFields().size()), fields.size());
     }
