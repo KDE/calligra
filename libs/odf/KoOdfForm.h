@@ -64,6 +64,9 @@ public:
         struct Entry {
             QString label;
             QString value;
+            QString width;
+            QString type;
+            QString binding;
             bool selected = false;
             QString element = QStringLiteral("option");
         };

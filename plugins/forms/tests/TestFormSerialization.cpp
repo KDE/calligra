@@ -102,6 +102,25 @@ private Q_SLOTS:
         QCOMPARE(restored.controlKind(second), u"radio"_s);
     }
 
+    void gridColumnsRoundTrip()
+    {
+        const KoOdfForm form = loadForm(u"grid"_s,
+                                        u"f:row-count='4'"_s,
+                                        u"<f:column f:label='Name' f:value='name' f:width='2' f:type='text' f:linked-cell='A1'/>"
+                                        "<f:column f:label='Amount' f:value='amount' f:width='1' f:type='number' f:linked-cell='B1'/>"_s);
+        const auto restored = roundTrip(form);
+        const auto control = restored.controlById(u"control1"_s);
+        QVERIFY(control);
+        QCOMPARE(control->formAttribute(u"row-count"_s), u"4"_s);
+        QCOMPARE(control->entries().size(), 2);
+        QCOMPARE(control->entries()[0].width, u"2"_s);
+        QCOMPARE(control->entries()[0].type, u"text"_s);
+        QCOMPARE(control->entries()[0].binding, u"A1"_s);
+        QCOMPARE(control->entries()[1].width, u"1"_s);
+        QCOMPARE(control->entries()[1].type, u"number"_s);
+        QCOMPARE(control->entries()[1].binding, u"B1"_s);
+    }
+
     void relationshipsRoundTrip()
     {
         KoOdfForm form = loadForm(u"radio"_s, u"f:name='choices' f:value='yes' f:for='label1'"_s);
