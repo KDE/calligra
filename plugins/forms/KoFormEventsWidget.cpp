@@ -14,6 +14,7 @@
 #include <QIcon>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSet>
 #include <QVBoxLayout>
@@ -112,6 +113,11 @@ void KoFormEventsWidget::pickScript()
     auto *scripts = new QListWidget(&dialog);
     const QString current = m_handler->text();
     QSet<QString> knownScripts;
+    for (const auto &script : std::as_const(m_scripts)) {
+        if (!script.name.isEmpty()) {
+            knownScripts.insert(script.name);
+        }
+    }
     for (const auto &handler : std::as_const(m_events)) {
         if (!handler.isEmpty()) {
             knownScripts.insert(handler);
@@ -126,18 +132,38 @@ void KoFormEventsWidget::pickScript()
     layout->addWidget(scripts);
     layout->addWidget(entry);
     auto *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
-    auto *add = buttons->addButton(i18nc("@button", "Add"), QDialogButtonBox::ActionRole);
-    add->setIcon(QIcon::fromTheme(u"list-add-symbolic"_s));
+    auto *newScript = buttons->addButton(i18nc("@button", "New script…"), QDialogButtonBox::ActionRole);
+    newScript->setIcon(QIcon::fromTheme(u"document-new-symbolic"_s));
     layout->addWidget(buttons);
-    connect(add, &QPushButton::clicked, &dialog, [scripts, entry] {
-        const QString value = entry->text().trimmed();
-        const auto matches = scripts->findItems(value, Qt::MatchExactly);
-        if (!value.isEmpty() && matches.isEmpty()) {
-            scripts->addItem(value);
+    connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    connect(newScript, &QPushButton::clicked, &dialog, [this, scripts, entry] {
+        QDialog scriptDialog(this);
+        scriptDialog.setWindowTitle(i18nc("@title:form", "Create script"));
+        auto *scriptForm = new QFormLayout(&scriptDialog);
+        auto *name = new QLineEdit(&scriptDialog);
+        auto *language = new QLineEdit(u"ooo:Basic"_s, &scriptDialog);
+        auto *content = new QPlainTextEdit(&scriptDialog);
+        scriptForm->addRow(i18nc("@label:form script", "Name:"), name);
+        scriptForm->addRow(i18nc("@label:form script", "Language:"), language);
+        scriptForm->addRow(i18nc("@label:form script", "Content:"), content);
+        auto *scriptButtons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &scriptDialog);
+        scriptForm->addRow(scriptButtons);
+        connect(scriptButtons, &QDialogButtonBox::accepted, &scriptDialog, &QDialog::accept);
+        connect(scriptButtons, &QDialogButtonBox::rejected, &scriptDialog, &QDialog::reject);
+        if (scriptDialog.exec() != QDialog::Accepted || name->text().trimmed().isEmpty()) {
+            return;
         }
-        if (!value.isEmpty()) {
-            scripts->setCurrentRow(matches.isEmpty() ? scripts->count() - 1 : scripts->row(matches.first()));
+        KoOdfScript::Script script;
+        script.name = name->text().trimmed();
+        script.language = language->text().trimmed();
+        script.content = content->toPlainText();
+        m_scripts.append(script);
+        if (scripts->findItems(script.name, Qt::MatchExactly).isEmpty()) {
+            scripts->addItem(script.name);
         }
+        scripts->setCurrentRow(scripts->count() - 1);
+        entry->setText(script.name);
     });
     connect(scripts, &QListWidget::itemDoubleClicked, &dialog, &QDialog::accept);
     connect(scripts, &QListWidget::currentTextChanged, entry, &QLineEdit::setText);
@@ -150,6 +176,16 @@ void KoFormEventsWidget::pickScript()
 QMap<QString, QString> KoFormEventsWidget::events() const
 {
     return m_events;
+}
+
+KoOdfScript::Scripts KoFormEventsWidget::scripts() const
+{
+    return m_scripts;
+}
+
+void KoFormEventsWidget::setScripts(const KoOdfScript::Scripts &scripts)
+{
+    m_scripts = scripts;
 }
 
 void KoFormEventsWidget::setEvents(const QMap<QString, QString> &events)
