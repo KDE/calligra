@@ -257,6 +257,8 @@ bool exportFormFieldsToPdf(const QString &fileName, const QList<FormPdfField> &f
             formFields.appendItem(formField);
         }
 
+        acroForm.replaceKey("/Fields", formFields);
+
         const QByteArray temporaryFileName = temporaryName.toLocal8Bit();
         QPDFWriter writer(pdf, temporaryFileName.constData());
         writer.write();

@@ -11,7 +11,6 @@
 #include <KoPageLayout.h>
 
 #include <qpdf/QPDF.hh>
-#include <qpdf/QPDFAcroFormDocumentHelper.hh>
 #include <qpdf/QPDFWriter.hh>
 
 #include <QApplication>
@@ -116,8 +115,11 @@ private Q_SLOTS:
 
         QPDF pdf;
         pdf.processFile(pdfPath.constData());
-        QPDFAcroFormDocumentHelper acroForm(pdf);
-        QCOMPARE(static_cast<int>(acroForm.getFormFields().size()), fields.size());
+        const auto acroForm = pdf.getRoot().getKey("/AcroForm");
+        QVERIFY(!acroForm.isNull());
+        const auto formFields = acroForm.getKey("/Fields");
+        QVERIFY(!formFields.isNull());
+        QCOMPARE(formFields.getArrayNItems(), fields.size());
     }
 };
 
