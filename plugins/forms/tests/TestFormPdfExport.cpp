@@ -39,6 +39,9 @@ private Q_SLOTS:
         QVERIFY(content->data().contains("form:"));
 
         const auto points = [](const QString &value) {
+            if (value.endsWith(u"pt"_s)) {
+                return value.left(value.size() - 2).toDouble();
+            }
             if (value.endsWith(u"in"_s)) {
                 return value.left(value.size() - 2).toDouble() * 72.0;
             }
@@ -105,6 +108,7 @@ private Q_SLOTS:
             "/MediaBox",
             QPDFObjectHandle::newArray(
                 {QPDFObjectHandle::newInteger(0), QPDFObjectHandle::newInteger(0), QPDFObjectHandle::newInteger(612), QPDFObjectHandle::newInteger(792)}));
+        page.replaceKey("/Resources", QPDFObjectHandle::newDictionary());
         basePdf.addPage(page, false);
         const QByteArray pdfPath = pdfFile.toLocal8Bit();
         QPDFWriter baseWriter(basePdf, pdfPath.constData());
