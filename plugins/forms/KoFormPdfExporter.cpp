@@ -115,11 +115,8 @@ bool exportFormFieldsToPdf(const QString &fileName, const QList<FormPdfField> &f
             acroForm = pdf.makeIndirectObject(QPDFObjectHandle::newDictionary());
             catalog.replaceKey("/AcroForm", acroForm);
         }
-        auto formFields = acroForm.getKey("/Fields");
-        if (formFields.isNull()) {
-            formFields = QPDFObjectHandle::newArray();
-            acroForm.replaceKey("/Fields", formFields);
-        }
+        // Build a fresh array so mutations are retained across qpdf versions.
+        auto formFields = QPDFObjectHandle::newArray();
         acroForm.replaceKey("/NeedAppearances", QPDFObjectHandle::newBool(false));
 
         for (const FormPdfField &field : fields) {
@@ -169,7 +166,8 @@ bool exportFormFieldsToPdf(const QString &fileName, const QList<FormPdfField> &f
                 formField.replaceKey("/TM", QPDFObjectHandle::newUnicodeString(field.dataField.toUtf8().toStdString()));
             }
             formField.replaceKey("/DA", QPDFObjectHandle::newString("/Helv 10 Tf 0 g"));
-            const int fieldFlags = (field.readOnly ? 1 : 0) | (field.required ? 2 : 0);
+            const bool fixedAppearance = field.kind == KoOdfForm::ControlKind::FixedText || field.kind == KoOdfForm::ControlKind::Frame;
+            const int fieldFlags = ((field.readOnly || fixedAppearance) ? 1 : 0) | (field.required ? 2 : 0);
             if (fieldFlags != 0) {
                 formField.replaceKey("/Ff", QPDFObjectHandle::newInteger(fieldFlags));
             }
@@ -228,6 +226,8 @@ bool exportFormFieldsToPdf(const QString &fileName, const QList<FormPdfField> &f
             case KoOdfForm::ControlKind::Number:
             case KoOdfForm::ControlKind::Date:
             case KoOdfForm::ControlKind::Time:
+            case KoOdfForm::ControlKind::FixedText:
+            case KoOdfForm::ControlKind::Frame:
             case KoOdfForm::ControlKind::GenericControl:
                 formField.replaceKey("/FT", QPDFObjectHandle::newName("/Tx"));
                 formField.replaceKey("/V", QPDFObjectHandle::newUnicodeString(field.currentValue.toUtf8().toStdString()));
@@ -251,13 +251,14 @@ bool exportFormFieldsToPdf(const QString &fileName, const QList<FormPdfField> &f
             auto annotations = pageObject.getKey("/Annots");
             if (annotations.isNull()) {
                 annotations = QPDFObjectHandle::newArray();
-                pageObject.replaceKey("/Annots", annotations);
             }
             annotations.appendItem(formField);
+            pageObject.replaceKey("/Annots", annotations);
             formFields.appendItem(formField);
         }
 
         acroForm.replaceKey("/Fields", formFields);
+        catalog.replaceKey("/AcroForm", acroForm);
 
         const QByteArray temporaryFileName = temporaryName.toLocal8Bit();
         QPDFWriter writer(pdf, temporaryFileName.constData());
