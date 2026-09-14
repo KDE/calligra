@@ -24,9 +24,9 @@ target_link_libraries(calligra_shape_forms
 )
 
 if(TARGET qpdf::libqpdf)
-    set_source_files_properties(KoFormPdfExporter.cpp PROPERTIES COMPILE_OPTIONS "-fexceptions")
+    set_source_files_properties(KoFormPdfExporter.cpp PROPERTIES COMPILE_OPTIONS "$<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-fexceptions>")
     target_link_libraries(calligra_shape_forms qpdf::libqpdf)
-    target_compile_definitions(calligra_shape_forms PRIVATE CALLIGRA_WITH_QPDF)
+    target_compile_definitions(calligra_shape_forms PRIVATE CALLIGRA_WITH_QPDF POINTERHOLDER_TRANSITION=4)
 else()
     message(STATUS "QPDF not found: interactive PDF form export will be unavailable")
 endif()
@@ -50,7 +50,7 @@ if(BUILD_TESTING)
         ecm_add_test(tests/TestFormPdfExport.cpp KoFormPdfExporter.cpp
             TEST_NAME plugins-forms-PdfExport
             LINK_LIBRARIES qpdf::libqpdf koodf KF6::Archive Qt6::Gui Qt6::Widgets Qt6::Test)
-        set_source_files_properties(tests/TestFormPdfExport.cpp KoFormPdfExporter.cpp PROPERTIES COMPILE_OPTIONS "-fexceptions")
-        target_compile_definitions(plugins-forms-PdfExport PRIVATE CALLIGRA_WITH_QPDF)
+        set_source_files_properties(tests/TestFormPdfExport.cpp KoFormPdfExporter.cpp PROPERTIES COMPILE_OPTIONS "$<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-fexceptions>")
+        target_compile_definitions(plugins-forms-PdfExport PRIVATE CALLIGRA_WITH_QPDF POINTERHOLDER_TRANSITION=4)
     endif()
 endif()
