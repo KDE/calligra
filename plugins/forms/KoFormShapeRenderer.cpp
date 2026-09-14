@@ -12,6 +12,7 @@
 #include <QPainter>
 #include <QStyle>
 #include <QStyleOption>
+#include <numeric>
 
 using namespace Qt::StringLiterals;
 
@@ -216,11 +217,30 @@ static void paintFormControlByName(QPainter &painter,
         const int headerHeight = base.fontMetrics.height() + 8;
         const int columnCount = qMax(1, int(columns.size()));
         const int rowCount = qMax(1, control->formAttribute(u"row-count"_s).toInt());
+        QVector<qreal> columnWeights(columnCount, 1.0);
+        qreal totalWeight = columnCount;
+        if (!columns.isEmpty()) {
+            totalWeight = 0;
+            for (int i = 0; i < columnCount; ++i) {
+                bool ok = false;
+                const qreal width = columns.at(i).width.toDouble(&ok);
+                if (ok && width > 0) {
+                    columnWeights[i] = width;
+                }
+                totalWeight += columnWeights[i];
+            }
+            if (totalWeight <= 0) {
+                totalWeight = columnCount;
+                columnWeights.fill(1.0);
+            }
+        }
         for (int i = 0; i < columnCount; ++i) {
             QStyleOptionHeader header;
             static_cast<QStyleOption &>(header) = base;
-            const int left = contents.left() + i * contents.width() / columnCount;
-            const int right = contents.left() + (i + 1) * contents.width() / columnCount;
+            const qreal start = std::accumulate(columnWeights.cbegin(), columnWeights.cbegin() + i, 0.0);
+            const qreal end = start + columnWeights.at(i);
+            const int left = contents.left() + qRound(contents.width() * start / totalWeight);
+            const int right = contents.left() + qRound(contents.width() * end / totalWeight);
             header.rect = QRect(left, contents.top(), right - left, headerHeight);
             header.text = i < columns.size() ? columns[i].label : QString();
             header.section = i;

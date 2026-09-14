@@ -109,6 +109,9 @@ bool KoOdfForm::Control::loadOdf(const KoXmlElement &e)
             entry.element = child.localName();
             entry.label = child.attributeNS(KoXmlNS::form, u"label"_s, child.text());
             entry.value = child.attributeNS(KoXmlNS::form, u"value"_s);
+            entry.width = child.attributeNS(KoXmlNS::form, u"width"_s);
+            entry.type = child.attributeNS(KoXmlNS::form, u"type"_s);
+            entry.binding = child.attributeNS(KoXmlNS::form, u"linked-cell"_s);
             entry.selected = child.attributeNS(KoXmlNS::form, u"current-selected"_s, child.attributeNS(KoXmlNS::form, u"selected"_s)) == "true"_L1;
             m_entries.append(entry);
         }
@@ -1165,6 +1168,15 @@ void KoOdfForm::Control::saveChildren(KoXmlWriter &writer) const
             }
             if (!entry.value.isEmpty()) {
                 writer.addAttribute("form:value", entry.value);
+            }
+            if (!entry.width.isEmpty()) {
+                writer.addAttribute("form:width", entry.width);
+            }
+            if (!entry.type.isEmpty()) {
+                writer.addAttribute("form:type", entry.type);
+            }
+            if (!entry.binding.isEmpty()) {
+                writer.addAttribute("form:linked-cell", entry.binding);
             }
             writer.addAttribute("form:selected", entry.selected ? "true" : "false");
             writer.endElement();
