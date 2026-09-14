@@ -29,6 +29,7 @@
 #include <QFont>
 #include <QFormLayout>
 #include <QHBoxLayout>
+#include <QInputDialog>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
@@ -311,8 +312,9 @@ void KoFormTool::rebuildSpecificProperties()
         m_specificProperties.insert(key, spin);
         connect(spin, &QSpinBox::editingFinished, this, &KoFormTool::commitProperties);
     };
-    const auto addEntries = [this](const QString &label) {
+    const auto addEntries = [this](const QString &label, bool checkable = false) {
         m_entries = new QListWidget(m_options);
+        m_entries->setProperty("checkable", checkable);
         m_entries->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
         m_entries->setMaximumHeight(120);
         m_specificForm->addRow(label, m_entries);
@@ -320,8 +322,14 @@ void KoFormTool::rebuildSpecificProperties()
         auto *buttonLayout = new QHBoxLayout(buttons);
         auto *add = new QPushButton(i18nc("@button", "Add"), buttons);
         auto *remove = new QPushButton(i18nc("@button", "Remove"), buttons);
+        auto *up = new QPushButton(QIcon::fromTheme(u"arrow-up-symbolic"_s), QString(), buttons);
+        auto *down = new QPushButton(QIcon::fromTheme(u"arrow-down-symbolic"_s), QString(), buttons);
+        up->setToolTip(i18nc("@info:tooltip", "Move the selected item up"));
+        down->setToolTip(i18nc("@info:tooltip", "Move the selected item down"));
         buttonLayout->addWidget(add);
         buttonLayout->addWidget(remove);
+        buttonLayout->addWidget(up);
+        buttonLayout->addWidget(down);
         m_specificForm->addRow(QString(), buttons);
         connect(add, &QPushButton::clicked, this, [this] {
             auto *item = new QListWidgetItem(i18nc("@item:form", "New item"), m_entries);
@@ -332,6 +340,24 @@ void KoFormTool::rebuildSpecificProperties()
         connect(remove, &QPushButton::clicked, this, [this] {
             delete m_entries->takeItem(m_entries->currentRow());
             commitProperties();
+        });
+        connect(up, &QPushButton::clicked, this, [this] {
+            const int row = m_entries->currentRow();
+            if (row > 0) {
+                auto *item = m_entries->takeItem(row);
+                m_entries->insertItem(row - 1, item);
+                m_entries->setCurrentRow(row - 1);
+                commitProperties();
+            }
+        });
+        connect(down, &QPushButton::clicked, this, [this] {
+            const int row = m_entries->currentRow();
+            if (row >= 0 && row + 1 < m_entries->count()) {
+                auto *item = m_entries->takeItem(row);
+                m_entries->insertItem(row + 1, item);
+                m_entries->setCurrentRow(row + 1);
+                commitProperties();
+            }
         });
         connect(m_entries, &QListWidget::itemChanged, this, [this] {
             commitProperties();
@@ -374,6 +400,12 @@ void KoFormTool::rebuildSpecificProperties()
                 commitProperties();
             }
         });
+    };
+    const auto addSelectedValue = [this] {
+        auto *box = new QComboBox(m_options);
+        m_specificForm->addRow(i18nc("@label:form property", "Selected value:"), box);
+        m_specificProperties.insert(u"selected-value"_s, box);
+        connect(box, qOverload<int>(&QComboBox::currentIndexChanged), this, &KoFormTool::commitProperties);
     };
     addText(u"data-field"_s, i18nc("@label:form relationship", "Data field:"));
     addText(u"linked-cell"_s, i18nc("@label:form relationship", "Linked cell:"));
@@ -431,12 +463,29 @@ void KoFormTool::rebuildSpecificProperties()
     case KoOdfForm::ControlKind::Combobox:
         addBoolean(u"autocomplete"_s, i18nc("@label:form property", "Auto-complete:"));
         addEntries(i18nc("@label:form property", "Items:"));
+        addSelectedValue();
         break;
     case KoOdfForm::ControlKind::Listbox:
         addBoolean(u"multiple"_s, i18nc("@label:form property", "Multiple selection:"));
         addBoolean(u"dropdown"_s, i18nc("@label:form property", "Drop-down:"));
         addText(u"list-source"_s, i18nc("@label:form property", "List source:"));
-        addEntries(i18nc("@label:form property", "Items:"));
+        if (auto *source = qobject_cast<QLineEdit *>(m_specificProperties.value(u"list-source"_s))) {
+            auto *action = source->addAction(QIcon::fromTheme(u"view-grid-symbolic"_s), QLineEdit::TrailingPosition);
+            connect(action, &QAction::triggered, this, [this, source] {
+                bool accepted = false;
+                const QString value = QInputDialog::getText(m_options,
+                                                            i18nc("@title:form", "Select list source"),
+                                                            i18nc("@label:form", "Cell range:"),
+                                                            QLineEdit::Normal,
+                                                            source->text(),
+                                                            &accepted);
+                if (accepted) {
+                    source->setText(value);
+                }
+            });
+        }
+        addEntries(i18nc("@label:form property", "Items:"), true);
+        addSelectedValue();
         break;
     case KoOdfForm::ControlKind::Grid:
         addEntries(i18nc("@label:form property", "Columns:"));
@@ -616,11 +665,22 @@ void KoFormTool::updateProperties()
         for (const auto &entry : control->entries()) {
             auto *item = new QListWidgetItem(entry.label, m_entries);
             item->setFlags(item->flags() | Qt::ItemIsEditable);
-            item->setCheckState(entry.selected ? Qt::Checked : Qt::Unchecked);
+            if (m_entries->property("checkable").toBool()) {
+                item->setCheckState(entry.selected ? Qt::Checked : Qt::Unchecked);
+            }
             item->setData(Qt::UserRole, entry.value);
             item->setData(GridWidthRole, entry.width);
             item->setData(GridTypeRole, entry.type);
             item->setData(GridBindingRole, entry.binding);
+        }
+        if (auto *selected = qobject_cast<QComboBox *>(m_specificProperties.value(u"selected-value"_s))) {
+            const QSignalBlocker blocker(selected);
+            selected->clear();
+            for (const auto &entry : control->entries()) {
+                selected->addItem(entry.label, entry.value);
+            }
+            const int index = selected->findData(control->currentValue());
+            selected->setCurrentIndex(index >= 0 ? index : -1);
         }
     }
     if (m_imagePreview && control) {
@@ -698,8 +758,9 @@ void KoFormTool::commitProperties()
         if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
             value = edit->text();
         } else if (auto *box = qobject_cast<QComboBox *>(it.value())) {
-            if (it.key() == "for"_L1 || it.key() == "format"_L1 || it.key() == "date-format"_L1 || it.key() == "time-format"_L1
-                || it.key() == "image-position"_L1 || it.key() == "image-align"_L1 || it.key() == "image-scale"_L1 || it.key() == "image-source"_L1) {
+            if (it.key() == "for"_L1 || it.key() == "selected-value"_L1 || it.key() == "format"_L1 || it.key() == "date-format"_L1
+                || it.key() == "time-format"_L1 || it.key() == "image-position"_L1 || it.key() == "image-align"_L1 || it.key() == "image-scale"_L1
+                || it.key() == "image-source"_L1) {
                 value = box->currentData().toString();
             } else {
                 value = box->currentData().toBool() ? u"true"_s : u"false"_s;
@@ -720,6 +781,8 @@ void KoFormTool::commitProperties()
         } else if (it.key() == "xforms-bind"_L1) {
             properties.setXformsBind(value);
         } else if (it.key() == "current-value"_L1) {
+            properties.setCurrentValue(value);
+        } else if (it.key() == "selected-value"_L1) {
             properties.setCurrentValue(value);
         } else if (it.key().startsWith("event-"_L1)) {
             properties.setEventHandler(it.key().mid(6), value);
@@ -777,7 +840,7 @@ void KoFormTool::commitProperties()
             KoOdfForm::Control::Entry entry;
             entry.label = item->text();
             entry.value = value;
-            entry.selected = item->checkState() == Qt::Checked;
+            entry.selected = m_entries->property("checkable").toBool() && item->checkState() == Qt::Checked;
             entry.element = i < oldEntries.size() ? oldEntries.at(i).element : QStringLiteral("option");
             entry.width = item->data(GridWidthRole).toString();
             entry.type = item->data(GridTypeRole).toString();
