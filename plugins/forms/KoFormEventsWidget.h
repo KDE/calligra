@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <KoOdfScript.h>
 #include <QMap>
 #include <QWidget>
 
@@ -20,6 +21,8 @@ public:
 
     QMap<QString, QString> events() const;
     void setEvents(const QMap<QString, QString> &events);
+    KoOdfScript::Scripts scripts() const;
+    void setScripts(const KoOdfScript::Scripts &scripts);
 
 Q_SIGNALS:
     void eventsChanged();
@@ -40,4 +43,5 @@ private:
     QPushButton *m_remove = nullptr;
     QPushButton *m_add = nullptr;
     QMap<QString, QString> m_events;
+    KoOdfScript::Scripts m_scripts;
 };
