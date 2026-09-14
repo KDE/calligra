@@ -6,6 +6,8 @@
 #include "KoFormEventsWidget.h"
 #include "KoFormShape.h"
 
+#include <KDateComboBox>
+#include <KTimeComboBox>
 #include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShapeController.h>
@@ -21,6 +23,9 @@
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QDialogButtonBox>
+#include <QDoubleValidator>
+#include <QFileDialog>
 #include <QFont>
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -29,6 +34,7 @@
 #include <QListWidget>
 #include <QPainter>
 #include <QPen>
+#include <QPixmap>
 #include <QPushButton>
 #include <QSignalBlocker>
 #include <QSpinBox>
@@ -41,6 +47,9 @@ using namespace std::chrono_literals;
 
 namespace
 {
+constexpr int GridWidthRole = Qt::UserRole + 1;
+constexpr int GridTypeRole = Qt::UserRole + 2;
+constexpr int GridBindingRole = Qt::UserRole + 3;
 class ChangeFormPropertiesCommand : public KUndo2Command
 {
 public:
@@ -212,6 +221,7 @@ void KoFormTool::rebuildSpecificProperties()
     }
     m_specificProperties.clear();
     m_entries = nullptr;
+    m_imagePreview = nullptr;
     if (!m_shape || !m_shape->formControl()) {
         while (m_eventForm && m_eventForm->rowCount() > 0) {
             m_eventForm->removeRow(m_eventForm->rowCount() - 1);
@@ -224,12 +234,50 @@ void KoFormTool::rebuildSpecificProperties()
         m_specificProperties.insert(key, edit);
         connect(edit, &QLineEdit::textChanged, &m_previewCompressor, &KoSignalCompressor::start);
     };
+    const auto addNumberText = [this, &addText](const QString &key, const QString &label) {
+        addText(key, label);
+        auto *edit = qobject_cast<QLineEdit *>(m_specificProperties.value(key));
+        edit->setValidator(new QDoubleValidator(edit));
+    };
+    const auto addFileText = [this, &addText](const QString &key, const QString &label) {
+        addText(key, label);
+        auto *edit = qobject_cast<QLineEdit *>(m_specificProperties.value(key));
+        auto *action = edit->addAction(QIcon::fromTheme(u"document-open-symbolic"_s), QLineEdit::TrailingPosition);
+        connect(action, &QAction::triggered, this, [this, edit] {
+            const QString file = QFileDialog::getOpenFileName(m_options, i18nc("@title:form", "Select file"));
+            if (!file.isEmpty()) {
+                edit->setText(file);
+            }
+        });
+    };
     const auto addBoolean = [this](const QString &key, const QString &label) {
         auto *box = new QCheckBox(m_options);
         box->setText(label);
         m_specificForm->addRow(QString(), box);
         m_specificProperties.insert(key, box);
         connect(box, &QCheckBox::toggled, this, &KoFormTool::commitProperties);
+    };
+    const auto addFormatSelector = [this](const QString &key, const QString &label, const QList<QPair<QString, QString>> &formats) {
+        auto *box = new QComboBox(m_options);
+        box->addItem(i18nc("@item:form format", "Custom"), QString());
+        for (const auto &format : formats) {
+            box->addItem(format.first, format.second);
+        }
+        m_specificForm->addRow(label, box);
+        m_specificProperties.insert(key, box);
+        connect(box, qOverload<int>(&QComboBox::currentIndexChanged), this, &KoFormTool::commitProperties);
+    };
+    const auto addDateEditor = [this](const QString &key, const QString &label) {
+        auto *edit = new KDateComboBox(m_options);
+        m_specificForm->addRow(label, edit);
+        m_specificProperties.insert(key, edit);
+        connect(edit, &KDateComboBox::dateChanged, this, &KoFormTool::commitProperties);
+    };
+    const auto addTimeEditor = [this](const QString &key, const QString &label) {
+        auto *edit = new KTimeComboBox(m_options);
+        m_specificForm->addRow(label, edit);
+        m_specificProperties.insert(key, edit);
+        connect(edit, &KTimeComboBox::timeChanged, this, &KoFormTool::commitProperties);
     };
     const auto addTargetSelector = [this](const QString &key, const QString &label) {
         auto *box = new QComboBox(m_options);
@@ -241,6 +289,15 @@ void KoFormTool::rebuildSpecificProperties()
             }
             const QString displayName = target->formControl() && !target->formControl()->name().isEmpty() ? target->formControl()->name() : target->controlId();
             box->addItem(displayName, target->controlId());
+        }
+        m_specificForm->addRow(label, box);
+        m_specificProperties.insert(key, box);
+        connect(box, qOverload<int>(&QComboBox::currentIndexChanged), this, &KoFormTool::commitProperties);
+    };
+    const auto addEnumSelector = [this](const QString &key, const QString &label, const QList<QPair<QString, QString>> &values) {
+        auto *box = new QComboBox(m_options);
+        for (const auto &value : values) {
+            box->addItem(value.first, value.second);
         }
         m_specificForm->addRow(label, box);
         m_specificProperties.insert(key, box);
@@ -279,6 +336,44 @@ void KoFormTool::rebuildSpecificProperties()
         connect(m_entries, &QListWidget::itemChanged, this, [this] {
             commitProperties();
         });
+        connect(m_entries, &QListWidget::itemDoubleClicked, this, [this](QListWidgetItem *item) {
+            QDialog dialog(m_options);
+            dialog.setWindowTitle(i18nc("@title:form", "Edit item"));
+            auto *form = new QFormLayout(&dialog);
+            auto *label = new QLineEdit(item->text(), &dialog);
+            auto *value = new QLineEdit(item->data(Qt::UserRole).toString(), &dialog);
+            form->addRow(i18nc("@label:form item", "Label:"), label);
+            form->addRow(i18nc("@label:form item", "Value:"), value);
+            QLineEdit *width = nullptr;
+            QComboBox *type = nullptr;
+            QLineEdit *binding = nullptr;
+            if (m_shape && m_shape->controlKind() == KoOdfForm::ControlKind::Grid) {
+                width = new QLineEdit(item->data(GridWidthRole).toString(), &dialog);
+                type = new QComboBox(&dialog);
+                type->addItems({i18nc("@item:form grid column type", "Text"),
+                                i18nc("@item:form grid column type", "Number"),
+                                i18nc("@item:form grid column type", "Date")});
+                type->setCurrentText(item->data(GridTypeRole).toString());
+                binding = new QLineEdit(item->data(GridBindingRole).toString(), &dialog);
+                form->addRow(i18nc("@label:form grid column", "Width:"), width);
+                form->addRow(i18nc("@label:form grid column", "Type:"), type);
+                form->addRow(i18nc("@label:form grid column", "Linked cell:"), binding);
+            }
+            auto *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+            form->addRow(buttons);
+            connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+            connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+            if (dialog.exec() == QDialog::Accepted) {
+                item->setText(label->text());
+                item->setData(Qt::UserRole, value->text());
+                if (width) {
+                    item->setData(GridWidthRole, width->text());
+                    item->setData(GridTypeRole, type->currentText());
+                    item->setData(GridBindingRole, binding->text());
+                }
+                commitProperties();
+            }
+        });
     };
     addText(u"data-field"_s, i18nc("@label:form relationship", "Data field:"));
     addText(u"linked-cell"_s, i18nc("@label:form relationship", "Linked cell:"));
@@ -291,22 +386,38 @@ void KoFormTool::rebuildSpecificProperties()
     case KoOdfForm::ControlKind::Textarea:
     case KoOdfForm::ControlKind::FormattedText:
     case KoOdfForm::ControlKind::Password:
-    case KoOdfForm::ControlKind::File:
         addText(u"max-length"_s, i18nc("@label:form property", "Max. length:"));
         addBoolean(u"multi-line"_s, i18nc("@label:form property", "Multi-line:"));
         break;
+    case KoOdfForm::ControlKind::File:
+        addFileText(u"current-value"_s, i18nc("@label:form property", "File:"));
+        break;
     case KoOdfForm::ControlKind::Number:
     case KoOdfForm::ControlKind::ValueRange:
-        addText(u"min-value"_s, i18nc("@label:form property", "Minimum:"));
-        addText(u"max-value"_s, i18nc("@label:form property", "Maximum:"));
-        addText(u"step-size"_s, i18nc("@label:form property", "Step:"));
-        addText(u"format"_s, i18nc("@label:form property", "Format:"));
+        addNumberText(u"min-value"_s, i18nc("@label:form property", "Minimum:"));
+        addNumberText(u"max-value"_s, i18nc("@label:form property", "Maximum:"));
+        addNumberText(u"step-size"_s, i18nc("@label:form property", "Step:"));
+        addFormatSelector(u"format"_s,
+                          i18nc("@label:form property", "Format:"),
+                          {{i18nc("@item:form number format", "Decimal"), u"0.00"_s},
+                           {i18nc("@item:form number format", "Percentage"), u"0%"_s},
+                           {i18nc("@item:form number format", "Currency"), u"$#,##0.00"_s}});
         break;
     case KoOdfForm::ControlKind::Date:
-        addText(u"date-format"_s, i18nc("@label:form property", "Date format:"));
+        addDateEditor(u"current-value"_s, i18nc("@label:form property", "Value:"));
+        addFormatSelector(u"date-format"_s,
+                          i18nc("@label:form property", "Date format:"),
+                          {{i18nc("@item:form date format", "Short date"), u"MM/DD/YY"_s},
+                           {i18nc("@item:form date format", "Long date"), u"MMMM D, YYYY"_s},
+                           {i18nc("@item:form date format", "ISO date"), u"YYYY-MM-DD"_s}});
         break;
     case KoOdfForm::ControlKind::Time:
-        addText(u"time-format"_s, i18nc("@label:form property", "Time format:"));
+        addTimeEditor(u"current-value"_s, i18nc("@label:form property", "Value:"));
+        addFormatSelector(u"time-format"_s,
+                          i18nc("@label:form property", "Time format:"),
+                          {{i18nc("@item:form time format", "Short time"), u"HH:MM"_s},
+                           {i18nc("@item:form time format", "Long time"), u"HH:MM:SS"_s},
+                           {i18nc("@item:form time format", "ISO time"), u"HH:MM:SSZ"_s}});
         break;
     case KoOdfForm::ControlKind::Button:
         addBoolean(u"default-button"_s, i18nc("@label:form property", "Default button:"));
@@ -333,9 +444,32 @@ void KoFormTool::rebuildSpecificProperties()
         break;
     case KoOdfForm::ControlKind::Image:
     case KoOdfForm::ControlKind::ImageFrame:
-        addText(u"image-data"_s, i18nc("@label:form property", "Image data:"));
-        addText(u"image-position"_s, i18nc("@label:form property", "Image position:"));
-        addText(u"image-align"_s, i18nc("@label:form property", "Image alignment:"));
+        addFileText(u"image-data"_s, i18nc("@label:form property", "Image data:"));
+        addEnumSelector(u"image-position"_s,
+                        i18nc("@label:form property", "Image position:"),
+                        {{i18nc("@item:form image position", "Normal"), u"normal"_s},
+                         {i18nc("@item:form image position", "Center"), u"center"_s},
+                         {i18nc("@item:form image position", "Tile"), u"tile"_s},
+                         {i18nc("@item:form image position", "Stretch"), u"stretch"_s}});
+        addEnumSelector(u"image-align"_s,
+                        i18nc("@label:form property", "Image alignment:"),
+                        {{i18nc("@item:form image alignment", "Left"), u"left"_s},
+                         {i18nc("@item:form image alignment", "Center"), u"center"_s},
+                         {i18nc("@item:form image alignment", "Right"), u"right"_s}});
+        addEnumSelector(u"image-scale"_s,
+                        i18nc("@label:form property", "Scaling:"),
+                        {{i18nc("@item:form image scaling", "None"), u"none"_s},
+                         {i18nc("@item:form image scaling", "Fit"), u"fit"_s},
+                         {i18nc("@item:form image scaling", "Fill"), u"fill"_s}});
+        addEnumSelector(u"image-source"_s,
+                        i18nc("@label:form property", "Image source:"),
+                        {{i18nc("@item:form image source", "Embedded"), u"embedded"_s}, {i18nc("@item:form image source", "Linked"), u"linked"_s}});
+        addBoolean(u"preserve-aspect"_s, i18nc("@label:form property", "Preserve aspect ratio"));
+        m_imagePreview = new QLabel(m_options);
+        m_imagePreview->setMinimumSize(96, 64);
+        m_imagePreview->setAlignment(Qt::AlignCenter);
+        m_imagePreview->setFrameShape(QFrame::StyledPanel);
+        m_specificForm->addRow(i18nc("@label:form property", "Preview:"), m_imagePreview);
         break;
     default:
         break;
@@ -403,15 +537,28 @@ void KoFormTool::updateProperties()
                 edit->setText(control->linkedCell());
             } else if (it.key() == "xforms-bind"_L1) {
                 edit->setText(control->xformsBind());
+            } else if (it.key() == "current-value"_L1) {
+                edit->setText(control->currentValue());
             } else if (it.key().startsWith("event-"_L1)) {
                 edit->setText(control->eventHandler(it.key().mid(6)));
             } else {
                 edit->setText(control->formAttribute(it.key()));
             }
+        } else if (auto *date = qobject_cast<KDateComboBox *>(it.value())) {
+            date->setDate(QDate::fromString(control ? control->currentValue() : QString(), Qt::ISODate));
+        } else if (auto *time = qobject_cast<KTimeComboBox *>(it.value())) {
+            time->setTime(QTime::fromString(control ? control->currentValue() : QString(), Qt::ISODate));
         } else if (auto *box = qobject_cast<QComboBox *>(it.value())) {
             if (it.key() == "for"_L1) {
                 const QString targetId = control ? control->formAttribute(it.key()) : QString();
                 box->setCurrentIndex(box->findData(targetId));
+                continue;
+            }
+            if (it.key() == "format"_L1 || it.key() == "date-format"_L1 || it.key() == "time-format"_L1 || it.key() == "image-position"_L1
+                || it.key() == "image-align"_L1 || it.key() == "image-scale"_L1 || it.key() == "image-source"_L1) {
+                const QString value = control ? control->formAttribute(it.key()) : QString();
+                const int index = box->findData(value);
+                box->setCurrentIndex(index >= 0 ? index : 0);
                 continue;
             }
             QString value;
@@ -471,7 +618,16 @@ void KoFormTool::updateProperties()
             item->setFlags(item->flags() | Qt::ItemIsEditable);
             item->setCheckState(entry.selected ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, entry.value);
+            item->setData(GridWidthRole, entry.width);
+            item->setData(GridTypeRole, entry.type);
+            item->setData(GridBindingRole, entry.binding);
         }
+    }
+    if (m_imagePreview && control) {
+        const QString imagePath = static_cast<const KoOdfForm::Image *>(control)->imageData();
+        const QPixmap pixmap(imagePath);
+        m_imagePreview->setPixmap(pixmap.isNull() ? QPixmap() : pixmap.scaled(m_imagePreview->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        m_imagePreview->setText(pixmap.isNull() ? i18nc("@info:form", "No image selected") : QString());
     }
 }
 
@@ -542,7 +698,16 @@ void KoFormTool::commitProperties()
         if (auto *edit = qobject_cast<QLineEdit *>(it.value())) {
             value = edit->text();
         } else if (auto *box = qobject_cast<QComboBox *>(it.value())) {
-            value = it.key() == "for"_L1 ? box->currentData().toString() : (box->currentData().toBool() ? u"true"_s : u"false"_s);
+            if (it.key() == "for"_L1 || it.key() == "format"_L1 || it.key() == "date-format"_L1 || it.key() == "time-format"_L1
+                || it.key() == "image-position"_L1 || it.key() == "image-align"_L1 || it.key() == "image-scale"_L1 || it.key() == "image-source"_L1) {
+                value = box->currentData().toString();
+            } else {
+                value = box->currentData().toBool() ? u"true"_s : u"false"_s;
+            }
+        } else if (auto *date = qobject_cast<KDateComboBox *>(it.value())) {
+            value = date->date().toString(Qt::ISODate);
+        } else if (auto *time = qobject_cast<KTimeComboBox *>(it.value())) {
+            value = time->time().toString(Qt::ISODate);
         } else if (auto *checkBox = qobject_cast<QCheckBox *>(it.value())) {
             value = checkBox->isChecked() ? u"true"_s : u"false"_s;
         } else if (auto *spin = qobject_cast<QSpinBox *>(it.value())) {
@@ -554,6 +719,8 @@ void KoFormTool::commitProperties()
             properties.setLinkedCell(value);
         } else if (it.key() == "xforms-bind"_L1) {
             properties.setXformsBind(value);
+        } else if (it.key() == "current-value"_L1) {
+            properties.setCurrentValue(value);
         } else if (it.key().startsWith("event-"_L1)) {
             properties.setEventHandler(it.key().mid(6), value);
         } else if (it.key() == "max-length"_L1) {
@@ -607,8 +774,15 @@ void KoFormTool::commitProperties()
         for (int i = 0; i < m_entries->count(); ++i) {
             auto *item = m_entries->item(i);
             const QString value = item->data(Qt::UserRole).toString();
-            entries.append(
-                {item->text(), value, item->checkState() == Qt::Checked, i < oldEntries.size() ? oldEntries.at(i).element : QStringLiteral("option")});
+            KoOdfForm::Control::Entry entry;
+            entry.label = item->text();
+            entry.value = value;
+            entry.selected = item->checkState() == Qt::Checked;
+            entry.element = i < oldEntries.size() ? oldEntries.at(i).element : QStringLiteral("option");
+            entry.width = item->data(GridWidthRole).toString();
+            entry.type = item->data(GridTypeRole).toString();
+            entry.binding = item->data(GridBindingRole).toString();
+            entries.append(entry);
         }
         properties.setEntries(entries);
     }
