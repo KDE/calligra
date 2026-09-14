@@ -12084,7 +12084,7 @@ all changes will be overwritten on the next script run
 <title
 >PV</title>
 <para
->La funció PV() retorna el valor present d'una inversió, és a dir, els diners que heu d'invertir per a tenir en un temps determinat, amb un interès determinat, alguns diners determinats. Per exemple, si necessiteu 1166,4 € pel vostre ordinador nou i voleu comprar-lo dins de dos anys i el banc us dona un 8% d'interès, heu de posar al banc PV(1166,4;0,08;2) o 1000 €.</para>
+>La funció PV() retorna el valor present d'una inversió, és a dir, els diners que heu d'invertir per a tenir en un temps determinat, amb un interès determinat, alguns diners determinats. Per exemple, si necessiteu 1166,4 € pel vostre ordinador nou i voleu comprar-lo d'aquí a dos anys i el banc us dona un 8% d'interès, heu de posar al banc PV(1166,4;0,08;2) o 1000 €.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -13537,7 +13537,7 @@ all changes will be overwritten on the next script run
 <title
 >INFO</title>
 <para
->La funció INFO() retorna informació quant a l'entorn d'operació actual. El paràmetre tipus especifica la informació que voleu retornar. És un dels següents: «directory» retorna el camí del directori actual, «numfile» retorna el nombre de documents actius, «release» retorna la versió del &sheets; com a text, «recalc» retorna el mode de recàlcul actual: «Automatic» o «Manual», «system» retorna el nom de l'entorn d'operació, «osversion» retorna el sistema operatiu actual.</para>
+>La funció INFO() retorna informació sobre l'entorn operatiu actual. El paràmetre tipus especifica la informació que voleu retornar. És un dels següents: «directory» retorna el camí del directori actual, «numfile» retorna el nombre de documents actius, «release» retorna la versió del &sheets; com a text, «recalc» retorna el mode de recàlcul actual: «Automatic» o «Manual», «system» retorna el nom de l'entorn d'operació, «osversion» retorna el sistema operatiu actual.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -19599,7 +19599,7 @@ all changes will be overwritten on the next script run
 <para
 >Calcula l'invers de la matriu.</para>
 <para
->La matriu multiplicada amb el seu invers resulta en la matriu identitat de la mateixa dimensió.</para>
+>La matriu multiplicada amb el seu invers dona com a resultat la matriu identitat de la mateixa dimensió.</para>
 <para
 >Les matrius inverses tenen un determinant diferent de zero.</para>
 <para

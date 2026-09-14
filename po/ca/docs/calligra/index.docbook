@@ -133,7 +133,7 @@
 <para
 >Malgrat que ofereix tants components, el &calligra; és molt lleuger, ràpid i té un consum de memòria bastant baix. Això també s'aconsegueix perquè el &calligra; està construït sobre el &kde;, el qual ja és un entorn de treball de desenvolupament d'aplicacions molt potent. </para>
 <para
->Un objectiu del &calligra; també és no sobrecarregar la interfície d'usuari amb característiques que difícilment es poden necessitar. Això ha resultat en una interfície d'usuari magra i lleugera que us permet fer la vostra feina de manera eficient. </para>
+>Un objectiu del &calligra; també és no sobrecarregar la interfície d'usuari amb característiques que difícilment es poden necessitar. Això dona com a resultat una interfície d'usuari funcional i lleugera que us permet fer la feina de manera eficient. </para>
 <para
 >Que sigui lleuger també vol dir que a vegades aquella funcionalitat específica que us cal no hi és. En aquest cas, sempre la podeu afegir ampliant el &calligra;. Aquestes característiques addicionals sempre es poden fer disponibles mitjançant connectors o scripts, mantenint lleuger el &calligra;. </para>
 </sect2>

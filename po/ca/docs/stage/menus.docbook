@@ -160,7 +160,7 @@ Be sure to comment it out again when you are done -->
 <para
 ><action
 >Obre una presentació existent.</action
-> Apareixerà un diàleg estàndard d'obrir fitxer del &kde;, permetent-vos d'escollir un fitxer per a obrir. </para>
+> Apareixerà un diàleg estàndard d'obrir fitxer del &kde;, cosa que permet escollir un fitxer per a obrir. </para>
 </listitem>
 </varlistentry>
 
@@ -1014,7 +1014,7 @@ visible; if disabled, they are not.</para>
 ><para
 >Si està habilitat, quan inseriu o moveu objectes a la diapositiva, la cantonada superior esquerra de l'objecte s'«ajustarà» o es mourà, al punt de la graella més proper.</para>
 <para
->Això redueix la vostra llibertat de posicionar lliurement els objectes de la diapositiva, però també ajuda a alinear els objectes de manera precisa. S'inhabilita fàcilment amb aquesta entrada del menú, permetent-vos el millor d'ambdós mons.</para>
+>Això redueix la vostra llibertat de posicionar lliurement els objectes de la diapositiva, però també ajuda a alinear els objectes de manera precisa. S'inhabilita fàcilment amb aquesta entrada del menú, cosa que permet el millor d'ambdós mons.</para>
 </listitem>
 </varlistentry>
 
