@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-05-29 17:06-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -427,7 +427,7 @@ msgstr ""
 #: flake/SnapGuideConfigWidget.ui:75
 #, kde-format
 msgid " px"
-msgstr " px"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:85
@@ -969,7 +969,7 @@ msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
 #: main/KoDocument.cpp:946
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "«%1» غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
+msgstr ""
 
 #: main/KoDocument.cpp:867
 #, kde-format
@@ -1215,8 +1215,6 @@ msgid ""
 "The document \"%1\" has been modified.\n"
 "Do you want to save your changes or discard them?"
 msgstr ""
-"پۈتۈك %1 ئۆزگەرتىلدى\n"
-"ئۆزگىرىشنى ساقلامسىز؟ تاشلىۋېتەمسىز؟"
 
 #: main/KoDocument.cpp:2561
 #, kde-format
@@ -1226,7 +1224,7 @@ msgstr "پۈتۈك ياپ"
 #: main/KoDocumentSectionDelegate.cpp:512
 #, kde-format
 msgid "%1 %"
-msgstr "%1 %"
+msgstr ""
 
 #: main/KoDocumentSectionToolTip.cpp:39
 #, kde-format
@@ -1754,10 +1752,9 @@ msgstr ""
 "خاتالىق ئۇچۇرى: %3"
 
 #: odf/KoOdfReadStore.cpp:156
-#, fuzzy, kde-format
-#| msgid "Could not find %1"
+#, kde-format
 msgid "Could not open %1"
-msgstr "%1 نى تاپالمىدى"
+msgstr "%1 نى ئاچالمىدى"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"
@@ -2256,7 +2253,7 @@ msgstr "سۈرەت قەۋىتى ئۆچۈر"
 #: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
-msgstr "ھەممە قاتلاملارنى ئۆچۈرگىلى بولمىدى. ئاز دېگەندە قاتلامدىن بىرى زۆرۈر."
+msgstr ""
 
 #: pageapp/KoPADocumentStructureDocker.cpp:343
 #, kde-format
@@ -3080,12 +3077,12 @@ msgstr ""
 #: pigment/KoBasicHistogramProducers.cpp:345
 #, kde-format
 msgid "G"
-msgstr "G"
+msgstr ""
 
 #: pigment/KoBasicHistogramProducers.cpp:346
 #, kde-format
 msgid "B"
-msgstr "B"
+msgstr ""
 
 #: pigment/KoBasicHistogramProducers.cpp:411
 #, kde-format
@@ -3105,12 +3102,12 @@ msgstr ""
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "RGB"
-msgstr "RGB"
+msgstr ""
 
 #: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "XYZ"
-msgstr "XYZ"
+msgstr ""
 
 #: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
@@ -3120,7 +3117,7 @@ msgstr ""
 #: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "CMYK"
-msgstr "CMYK"
+msgstr ""
 
 #: pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
@@ -3135,7 +3132,7 @@ msgstr ""
 #: pigment/KoColorModelStandardIds.cpp:18
 #, kde-format
 msgid "YCbCr"
-msgstr "YCbCr"
+msgstr ""
 
 #: pigment/KoColorModelStandardIds.cpp:20
 #, kde-format
@@ -3150,12 +3147,12 @@ msgstr "16 بىت"
 #: pigment/KoColorModelStandardIds.cpp:22
 #, kde-format
 msgid "16 Bits Float"
-msgstr "16 بىتلىق كەسىر سان"
+msgstr ""
 
 #: pigment/KoColorModelStandardIds.cpp:23
 #, kde-format
 msgid "32 Bits Float"
-msgstr "32 بىتلىق كەسىر سان"
+msgstr ""
 
 #: pigment/KoColorModelStandardIds.cpp:24
 #, kde-format
@@ -3190,7 +3187,7 @@ msgstr ""
 #: pigment/KoCompositeOp.cpp:51 pigment/KoCompositeOpRegistry.cpp:26
 #, kde-format
 msgid "HSV"
-msgstr "HSV"
+msgstr ""
 
 #: pigment/KoCompositeOp.cpp:55 pigment/KoCompositeOpRegistry.cpp:25
 #, kde-format
@@ -5064,19 +5061,19 @@ msgstr "كۆڭۈلدىكى"
 #: widgets/KoToolBox.cpp:313
 #, kde-format
 msgid "%1x%2"
-msgstr "%1x%2"
+msgstr ""
 
 #: widgets/KoToolBoxButton.cpp:53
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #: widgets/KoToolBoxButton.cpp:53
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
-msgstr "%1 (%2)"
+msgstr ""
 
 #: widgets/KoToolBoxDocker.cpp:25
 #, kde-format
@@ -5131,7 +5128,7 @@ msgstr ""
 #: widgets/KoZoomMode.cpp:11
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr ""
 
 #: widgets/KoZoomMode.cpp:12
 msgid "Fit Page Width"
@@ -5178,7 +5175,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #~ msgid "Left Edge:"
 #~ msgstr "سول گىرۋەك:"

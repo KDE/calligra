@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: words\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-05-29 17:11-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1080,7 +1080,7 @@ msgstr ""
 #: part/KWAboutData.h:28
 #, kde-format
 msgid "Carl Schwan"
-msgstr "Carl Schwan"
+msgstr ""
 
 #: part/KWAboutData.h:29
 #, kde-format
@@ -1220,7 +1220,7 @@ msgstr ""
 #: part/KWAboutData.h:50
 #, kde-format
 msgid "Thomas Zander"
-msgstr "Thomas Zander"
+msgstr ""
 
 #: part/KWAboutData.h:51
 #, kde-format
@@ -1240,12 +1240,12 @@ msgstr ""
 #: part/KWAboutData.h:53
 #, kde-format
 msgid "David Faure"
-msgstr "David Faure"
+msgstr ""
 
 #: part/KWAboutData.h:54
 #, kde-format
 msgid "Laurent Montel"
-msgstr "Laurent Montel"
+msgstr ""
 
 #: part/KWAboutData.h:55
 #, kde-format
@@ -1399,14 +1399,11 @@ msgstr "قورال"
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 msgstr ""
-"ئىناۋەتسىز OASIS OpenDocument پۈتۈك ھۆججىتى. office:body دېگەن tag يوق."
 
 #: part/KWOdfLoader.cpp:92
 #, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
 msgstr ""
-"ئىناۋەتسىز OASIS OpenDocument پۈتۈك ھۆججىتى. office:body نىڭ ئىچىدە "
-"ھېچقانداق tag يوق."
 
 #: part/KWOdfLoader.cpp:94
 #, kde-format

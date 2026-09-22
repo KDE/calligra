@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: kocolorspaces\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-29 17:11-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -211,7 +211,7 @@ msgstr ""
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:21
 #, kde-format
 msgid "Y"
-msgstr "Y"
+msgstr ""
 
 #: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:30
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:41
@@ -219,7 +219,7 @@ msgstr "Y"
 #: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:34
 #, kde-format
 msgid "Z"
-msgstr "Z"
+msgstr ""
 
 #: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.h:71
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.h:71

@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-05-29 17:10-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -167,7 +167,7 @@ msgstr "مىنۇت"
 #: core/ValueFormatter.cpp:562
 #, kde-format
 msgid "s"
-msgstr "s"
+msgstr ""
 
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
@@ -3479,7 +3479,7 @@ msgstr ""
 #: functions/financial.xml:107 functions/financial.xml:1214
 #, kde-format
 msgid "P"
-msgstr "P"
+msgstr ""
 
 #: functions/financial.xml:119
 #, kde-format
@@ -6820,6 +6820,17 @@ msgid ""
 "                    If any of the two parameters x or Significance is zero, "
 "the result is zero."
 msgstr ""
+"The FLOOR() function rounds x down (towards zero) to the nearest multiple of "
+"Significance which is smaller than the input.\n"
+"                The default value for Significance is 1, if x is positive. "
+"It is -1, if the value is negative,\n"
+"                which means rounding up to the nearest integer.\n"
+"                If mode is given and not equal to zero, the amount of x is "
+"rounded toward zero to a multiple\n"
+"                of significance and then the sign applied. Otherwise, it "
+"rounds toward negative infinity.\n"
+"                    If any of the two parameters x or Significance is zero, "
+"the result is zero."
 
 #: functions/math.xml:900
 #, kde-format
@@ -7768,10 +7779,9 @@ msgid "Return array"
 msgstr ""
 
 #: functions/reference.xml:259
-#, fuzzy, kde-format
-#| msgid "A1 style (optional)"
+#, kde-format
 msgid "If not found (optional)"
-msgstr "A1 ئۇسلۇبى (ئىختىيارى)"
+msgstr ""
 
 #: functions/reference.xml:261
 #, kde-format
@@ -7960,7 +7970,7 @@ msgstr ""
 #: functions/reference.xml:405
 #, kde-format
 msgid "Topic"
-msgstr ""
+msgstr "باش تېما"
 
 #: functions/reference.xml:409
 #, kde-format
@@ -7970,7 +7980,7 @@ msgstr "تۈرلەر"
 #: functions/reference.xml:413
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "ھالىتى"
 
 #: functions/reference.xml:417
 #, kde-format
@@ -7987,10 +7997,9 @@ msgid "DDE(server; topic; item; mode)"
 msgstr ""
 
 #: functions/reference.xml:426
-#, fuzzy, kde-format
-#| msgid "EUR"
+#, kde-format
 msgid "URL"
-msgstr "IRR"
+msgstr "تور ئادرېسى"
 
 #: functions/reference.xml:430
 #, kde-format
@@ -8593,6 +8602,15 @@ msgid ""
 "                   If the second parameter is empty, all values in the first "
 "parameter are counted."
 msgstr ""
+"The values in the second parameter determine the upper boundaries of the "
+"intervals.\n"
+"               The intervals include the upper boundaries.\n"
+"               The returned array is a column vector and has one more "
+"element than the second parameter;\n"
+"               the last element represents the number of all elements "
+"greater than the last value in second parameter.\n"
+"                   If the second parameter is empty, all values in the first "
+"parameter are counted."
 
 #: functions/statistical.xml:421
 #, kde-format
@@ -10124,10 +10142,9 @@ msgid "GAMMALN(2) returns 0"
 msgstr ""
 
 #: functions/statistical.xml:1841 functions/statistical.xml:1912
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Success probability"
-msgstr "ئېھتىماللىق"
+msgstr ""
 
 #: functions/statistical.xml:1845
 #, kde-format
@@ -10198,10 +10215,9 @@ msgid "CHISQINV(CHISQDIST(13.27; 5; TRUE); 5) returns 13.27"
 msgstr ""
 
 #: functions/statistical.xml:1916
-#, fuzzy, kde-format
-#| msgid "Criteria"
+#, kde-format
 msgid "Criterion value"
-msgstr "شەرت"
+msgstr ""
 
 #: functions/statistical.xml:1920
 #, kde-format
@@ -10216,11 +10232,9 @@ msgid "CRITBINOM(trials; SP; alpha)"
 msgstr ""
 
 #: functions/statistical.xml:1922
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "COMBINA(5;5) returns 126"
+#, kde-format
 msgid "CRITBINOM(20; 0.5; 0.55) returns 10"
-msgstr "AREAS(A1) نەتىجىسى 1"
+msgstr ""
 
 #: functions/statistical.xml:1931
 #, kde-format
@@ -10228,16 +10242,14 @@ msgid "The x-value for which a y-value is estimated"
 msgstr ""
 
 #: functions/statistical.xml:1935 functions/statistical.xml:1973
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Known y-values"
-msgstr "نۆل قىممەت"
+msgstr ""
 
 #: functions/statistical.xml:1939
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Known x-values"
-msgstr "نۆل قىممەت"
+msgstr ""
 
 #: functions/statistical.xml:1943
 #, kde-format
@@ -10252,16 +10264,14 @@ msgid "FORECAST(x; known_y's; known_x's)"
 msgstr ""
 
 #: functions/statistical.xml:1955
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Observed values"
-msgstr "نۆل قىممەت"
+msgstr ""
 
 #: functions/statistical.xml:1959
-#, fuzzy, kde-format
-#| msgid "Zero values"
+#, kde-format
 msgid "Expected values"
-msgstr "نۆل قىممەت"
+msgstr ""
 
 #: functions/statistical.xml:1963
 #, kde-format
@@ -10328,10 +10338,9 @@ msgid "LOGEST(known_y's; known_x's; const; stats)"
 msgstr ""
 
 #: functions/statistical.xml:2029
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "Data set"
-msgstr "ساندان"
+msgstr ""
 
 #: functions/statistical.xml:2033
 #, kde-format
@@ -11895,7 +11904,7 @@ msgstr ""
 #: part/AboutData.h:36
 #, kde-format
 msgid "Carl Schwan"
-msgstr "Carl Schwan"
+msgstr ""
 
 #: part/AboutData.h:37
 #, kde-format
@@ -11935,7 +11944,7 @@ msgstr ""
 #: part/AboutData.h:44
 #, kde-format
 msgid "Laurent Montel"
-msgstr "Laurent Montel"
+msgstr ""
 
 #: part/AboutData.h:45
 #, kde-format
@@ -11982,7 +11991,7 @@ msgstr ""
 #: part/AboutData.h:52
 #, kde-format
 msgid "David Faure"
-msgstr "David Faure"
+msgstr ""
 
 #: part/AboutData.h:53
 #, kde-format
@@ -12017,7 +12026,7 @@ msgstr ""
 #: part/AboutData.h:59
 #, kde-format
 msgid "Lukáš Tinkl"
-msgstr "Lukáš Tinkl"
+msgstr ""
 
 #: part/AboutData.h:60
 #, kde-format
@@ -12037,7 +12046,7 @@ msgstr ""
 #: part/AboutData.h:63
 #, kde-format
 msgid "Robert Knight"
-msgstr "Robert Knight"
+msgstr ""
 
 #: part/AboutData.h:64
 #, kde-format
@@ -12057,7 +12066,7 @@ msgstr ""
 #: part/AboutData.h:66
 #, kde-format
 msgid "Brad Hards"
-msgstr "Brad Hards"
+msgstr ""
 
 #: part/AboutData.h:66
 #, kde-format
@@ -12466,7 +12475,7 @@ msgstr ""
 #: part/dialogs/PageLayoutDialog.cpp:96
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr ""
 
 #: part/dialogs/PageLayoutDialog.cpp:104
 #, kde-format
@@ -13579,7 +13588,7 @@ msgstr ""
 #: part/View.cpp:1963
 #, kde-format
 msgid "%1x%2"
-msgstr "%1x%2"
+msgstr ""
 
 #: part/ViewAdaptor.cpp:125 ui/actions/Font.cpp:150
 msgctxt "(qtundo-format)"
@@ -13603,7 +13612,7 @@ msgstr "يان رامكا ئۆزگەرت"
 #: ui/actions/AdjustRowCol.cpp:31
 #, kde-format
 msgid "Insert Columns"
-msgstr "ئىستون قىستۇر"
+msgstr "رەت قىستۇر"
 
 #: ui/actions/AdjustRowCol.cpp:31
 #, kde-format
@@ -13613,7 +13622,7 @@ msgstr "قۇر قىستۇر"
 #: ui/actions/AdjustRowCol.cpp:31
 #, kde-format
 msgid "Remove Columns"
-msgstr "ئىستونلارنى چىقىرىۋېتىش"
+msgstr "رەتنى چىقىرىۋېتىش"
 
 #: ui/actions/AdjustRowCol.cpp:31
 #, kde-format
@@ -13626,10 +13635,9 @@ msgid "Inserts a new row into the spreadsheet"
 msgstr "ۋاراق قىستۇر"
 
 #: ui/actions/AdjustRowCol.cpp:50
-#, fuzzy, kde-format
-#| msgid "Removes the cells from the spreadsheet"
+#, kde-format
 msgid "Removes a row from the spreadsheet"
-msgstr "ۋاراقنى چىقىرىۋېتىش"
+msgstr ""
 
 #: ui/actions/AdjustRowCol.cpp:53
 #, kde-format
@@ -13637,10 +13645,9 @@ msgid "Inserts a new column into the spreadsheet"
 msgstr "ۋاراق قىستۇر"
 
 #: ui/actions/AdjustRowCol.cpp:55
-#, fuzzy, kde-format
-#| msgid "Removes the cells from the spreadsheet"
+#, kde-format
 msgid "Removes the selected columns from the spreadsheet"
-msgstr "ۋاراقنى چىقىرىۋېتىش"
+msgstr ""
 
 #: ui/actions/AdjustRowCol.cpp:93
 #, kde-format
@@ -13655,7 +13662,7 @@ msgstr "قۇر يوشۇر"
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:39
 #, kde-format
 msgid "Show Columns"
-msgstr "ئىستون كۆرسەت"
+msgstr "رەت كۆرسەت"
 
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:36
 #, kde-format
@@ -13668,10 +13675,9 @@ msgid "Show hidden rows in the selection"
 msgstr "ۋاراق كۆرسەت"
 
 #: ui/actions/AdjustRowCol.cpp:111
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Hide the selected rows"
-msgstr "كاتەكچە بىرلەشتۈر"
+msgstr ""
 
 #: ui/actions/AdjustRowCol.cpp:114
 #, kde-format
@@ -13679,10 +13685,9 @@ msgid "Show hidden columns in the selection"
 msgstr "ئىستون كۆرسەت"
 
 #: ui/actions/AdjustRowCol.cpp:116
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Hide the selected columns"
-msgstr "كاتەكچە بىرلەشتۈر"
+msgstr ""
 
 #: ui/actions/AdjustRowCol.cpp:182
 #, kde-format
@@ -13725,16 +13730,14 @@ msgid "Adjusts row/column size so that the contents will fit"
 msgstr "قۇر/ئىستون چوڭلۇقىنى تەڭشىسە مەزمۇن دەل پاتىدۇ"
 
 #: ui/actions/AdjustRowCol.cpp:270
-#, fuzzy, kde-format
-#| msgid "Adjusts row/column size so that the contents will fit"
+#, kde-format
 msgid "Adjusts row size so that the contents will fit"
-msgstr "قۇر/ئىستون چوڭلۇقىنى تەڭشىسە مەزمۇن دەل پاتىدۇ"
+msgstr ""
 
 #: ui/actions/AdjustRowCol.cpp:272
-#, fuzzy, kde-format
-#| msgid "Adjusts row/column size so that the contents will fit"
+#, kde-format
 msgid "Adjusts column size so that the contents will fit"
-msgstr "قۇر/ئىستون چوڭلۇقىنى تەڭشىسە مەزمۇن دەل پاتىدۇ"
+msgstr ""
 
 #: ui/actions/AdjustRowCol.cpp:292
 #, kde-format
@@ -13759,7 +13762,7 @@ msgstr "قۇر كۆرسەت"
 #: ui/actions/AdjustRowCol.cpp:327 ui/actions/AdjustRowCol.cpp:329
 #, kde-format
 msgid "Column: %1"
-msgstr "ئىستون: %1"
+msgstr "رەت: %1"
 
 #: ui/actions/AdjustRowCol.cpp:341
 #, kde-format
@@ -13792,10 +13795,9 @@ msgid "Align Left"
 msgstr "سولغا توغرىلا"
 
 #: ui/actions/Align.cpp:19
-#, fuzzy, kde-format
-#| msgid "Center the cell contents"
+#, kde-format
 msgid "Left justify the cell contents"
-msgstr "ئىزاھاتلارنى چىقىرىۋېتىش"
+msgstr ""
 
 #: ui/actions/Align.cpp:36 ui/actions/Align.cpp:68 ui/actions/Align.cpp:100
 msgctxt "(qtundo-format)"
@@ -13808,10 +13810,9 @@ msgid "Align Right"
 msgstr "ئوڭغا توغرىلا"
 
 #: ui/actions/Align.cpp:51
-#, fuzzy, kde-format
-#| msgid "Center the cell contents"
+#, kde-format
 msgid "Right justify the cell contents"
-msgstr "ئىزاھاتلارنى چىقىرىۋېتىش"
+msgstr ""
 
 #: ui/actions/Align.cpp:83
 #, kde-format
@@ -13847,12 +13848,9 @@ msgid "Top"
 msgstr "ئۈستى"
 
 #: ui/actions/Align.cpp:132 ui/actions/Align.cpp:168 ui/actions/Align.cpp:204
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Horizontal Alignment"
 msgctxt "(qtundo-format)"
 msgid "Change Vertical Alignment"
-msgstr "توغرا يۆنىلىشتە ئوتتۇرىغا توغرىلا"
+msgstr ""
 
 #: ui/actions/Align.cpp:149
 #, kde-format
@@ -13963,11 +13961,9 @@ msgid "Insert the 'sum' function"
 msgstr "قىستۇرۇش فۇنكسىيىسى"
 
 #: ui/actions/AutoSum.cpp:62
-#, fuzzy
-#| msgid "Autosum"
 msgctxt "(qtundo-format)"
 msgid "Auto Sum"
-msgstr "ئاپتوماتىك"
+msgstr ""
 
 #: ui/actions/Border.cpp:24
 #, kde-format
@@ -13975,10 +13971,9 @@ msgid "Border Left"
 msgstr "گىرۋەك"
 
 #: ui/actions/Border.cpp:24
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Set a left border to the selected area"
-msgstr "كاتەكچە بىرلەشتۈر"
+msgstr ""
 
 #: ui/actions/Border.cpp:56
 #, kde-format
@@ -13986,10 +13981,9 @@ msgid "Border Right"
 msgstr "گىرۋەك"
 
 #: ui/actions/Border.cpp:56
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Set a right border to the selected area"
-msgstr "كاتەكچە بىرلەشتۈر"
+msgstr ""
 
 #: ui/actions/Border.cpp:88
 #, kde-format
@@ -13997,10 +13991,9 @@ msgid "Border Top"
 msgstr "گىرۋەك"
 
 #: ui/actions/Border.cpp:88
-#, fuzzy, kde-format
-#| msgid "Merge the selected region"
+#, kde-format
 msgid "Set a top border to the selected area"
-msgstr "كاتەكچە بىرلەشتۈر"
+msgstr ""
 
 #: ui/actions/Border.cpp:117
 #, kde-format
@@ -14036,10 +14029,9 @@ msgid "No Borders"
 msgstr "گىرۋىكى يوق"
 
 #: ui/actions/Border.cpp:180
-#, fuzzy, kde-format
-#| msgid "Unmerge the selected region"
+#, kde-format
 msgid "Remove all borders in the selected area"
-msgstr "كاتەكچە بىرلەشتۈر"
+msgstr ""
 
 #: ui/actions/Border.cpp:213
 #, kde-format
@@ -14077,10 +14069,9 @@ msgid "Insert Cells..."
 msgstr "كاتەكچە قىستۇر …"
 
 #: ui/actions/Cells.cpp:20
-#, fuzzy, kde-format
-#| msgid "Inserts a new column into the spreadsheet"
+#, kde-format
 msgid "Insert a blank cell into the spreadsheet"
-msgstr "ۋاراق قىستۇر"
+msgstr ""
 
 #: ui/actions/Cells.cpp:71 ui/actions/Cells.cpp:85
 #, kde-format
@@ -14188,12 +14179,9 @@ msgid "Remove Conditional Formatting"
 msgstr "شەرت ئۇسلۇبى"
 
 #: ui/actions/Conditional.cpp:128
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove Conditional Formatting"
 msgctxt "(qtundo-format)"
 msgid "Add Conditional Formatting"
-msgstr "شەرت ئۇسلۇبى"
+msgstr ""
 
 #: ui/actions/Consolidate.cpp:22
 #, kde-format
@@ -14221,10 +14209,9 @@ msgid "Move the cell object to the clipboard"
 msgstr ""
 
 #: ui/actions/CSVActions.cpp:38
-#, fuzzy, kde-format
-#| msgid "From &Text File..."
+#, kde-format
 msgid "Insert From &Text File..."
-msgstr "تېكىست ھۆججەت"
+msgstr ""
 
 #: ui/actions/CSVActions.cpp:40
 #, kde-format
@@ -14249,12 +14236,10 @@ msgstr ""
 #: ui/actions/CSVActions.cpp:69
 #, kde-format
 msgid "Cannot open input file."
-msgstr "كىرگۈزگەن ھۆججەتنى ئاچالمىدى"
+msgstr "كىرگۈزگەن ھۆججەتنى ئاچالمىدى."
 
 #: ui/actions/CSVActions.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Inserting Text File"
+#, kde-format
 msgid "Inserting Text File"
 msgstr "تېكىست ھۆججەت"
 
@@ -14264,10 +14249,9 @@ msgid "Inserting Text File"
 msgstr "تېكىست ھۆججەت"
 
 #: ui/actions/CSVActions.cpp:121
-#, fuzzy, kde-format
-#| msgid "Inserting From Clipboard"
+#, kde-format
 msgid "Insert From &Clipboard..."
-msgstr "چاپلاش تاختىسىدىن قىستۇر"
+msgstr ""
 
 #: ui/actions/CSVActions.cpp:123
 #, kde-format
@@ -14352,11 +14336,9 @@ msgid "Angle:"
 msgstr "بۇلۇڭ:"
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Auto-Format"
+#, kde-format
 msgid "Automatic Format"
-msgstr "ئاپتوماتىك"
+msgstr ""
 
 #: ui/actions/dialogs/AutoFormatDialog.cpp:46
 #, kde-format
@@ -14369,10 +14351,9 @@ msgid "Select Character"
 msgstr "ھەرپ تاللا"
 
 #: ui/actions/dialogs/CharacterSelectDialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Unmerge the selected region"
+#, kde-format
 msgid "Insert the selected character in the text"
-msgstr "كاتەكچە بىرلەشتۈر"
+msgstr ""
 
 #: ui/actions/dialogs/CommentDialog.cpp:23
 #, kde-format
@@ -14506,7 +14487,7 @@ msgstr "ئۆلچەملىك ئېغىش"
 #: ui/actions/dialogs/ConsolidateDialog.cpp:72
 #, kde-format
 msgid "Variance"
-msgstr "كۋادراتلىق پەرق"
+msgstr "كىۋادراتلىق پەرق"
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:126
 #, kde-format
@@ -14519,28 +14500,20 @@ msgid "%1 is not a valid cell range."
 msgstr "%1 ئىناۋەتلىك كاتەكچە دائىرىسى ئەمەس."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid ""
-#| "The range\n"
-#| "%1\n"
-#| "is too small"
+#, kde-format
 msgid ""
 "The range\n"
 "%1\n"
 "is too small"
-msgstr "دائىرە بەك چوڭ."
+msgstr ""
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:150
-#, fuzzy, kde-format
-#| msgid ""
-#| "The range\n"
-#| "%1\n"
-#| "is too large"
+#, kde-format
 msgid ""
 "The range\n"
 "%1\n"
 "is too large"
-msgstr "دائىرە بەك چوڭ."
+msgstr ""
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:155
 #, kde-format
@@ -14548,16 +14521,12 @@ msgid "The source range intersects the destination range."
 msgstr ""
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "The range\n"
-#| "%1\n"
-#| " is malformed"
+#, kde-format
 msgid ""
 "The range\n"
 "%1\n"
 " is malformed"
-msgstr "دائىرە بەك چوڭ."
+msgstr ""
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:58
 #, kde-format
@@ -14567,12 +14536,12 @@ msgstr "سانداندىن سانلىق-مەلۇمات ئىمپورت قىلىش
 #: ui/actions/dialogs/DatabaseDialog.cpp:59
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "تامام"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:74
 #, kde-format
 msgid "Type:"
-msgstr "تىپى:"
+msgstr "تۈرى:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:82
 #, kde-format
@@ -14582,7 +14551,7 @@ msgstr "ساندان ئاتى: "
 #: ui/actions/dialogs/DatabaseDialog.cpp:90
 #, kde-format
 msgid "Host:"
-msgstr "كومپيۇتېر:"
+msgstr "مۇلازىمېتىر:"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:99
 #, kde-format
@@ -14628,7 +14597,7 @@ msgstr "جەدۋەل"
 #: ui/actions/dialogs/DatabaseDialog.cpp:198
 #, kde-format
 msgid "Columns"
-msgstr "ئىستونلار"
+msgstr "رەت"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:207
 #, kde-format
@@ -14659,7 +14628,7 @@ msgstr "تەڭسىز"
 #: ui/actions/dialogs/DatabaseDialog.cpp:256
 #, kde-format
 msgid "in"
-msgstr "دىيۇيم"
+msgstr "ئىچىدە"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:222
 #: ui/actions/dialogs/DatabaseDialog.cpp:241
@@ -14793,7 +14762,7 @@ msgstr ""
 #: ui/actions/dialogs/DatabaseDialog.cpp:630
 #, kde-format
 msgid "Connected. Retrieving table information..."
-msgstr ""
+msgstr "باغلاندى. Retrieving table information..."
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:634
 #, kde-format
@@ -14832,9 +14801,7 @@ msgstr ""
 #: ui/actions/dialogs/DatabaseDialog.cpp:839
 #: ui/actions/dialogs/DatabaseDialog.cpp:854
 #: ui/actions/dialogs/DatabaseDialog.cpp:869
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
 msgstr "ئالماشتۇر"
@@ -14857,7 +14824,7 @@ msgstr ""
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:91
 #, kde-format
 msgid "Case sensitive"
-msgstr "چوڭ-كىچىك يېزىلىشى پەرقلەندۈر"
+msgstr "چوڭ كىچىك ھەرپنى پەرقلەندۈر"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:94
 #, kde-format
@@ -14900,41 +14867,35 @@ msgid "&Use System's Locale Settings"
 msgstr "سىستېمىنىڭ يەرلەشتۈرۈش تەڭشىكىنى ئىشلەت(&U)"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:185
-#, fuzzy, kde-format
-#| msgid "Language: %1 (%2)"
+#, kde-format
 msgid "Language: %1 (%2)"
-msgstr "تىل: %1"
+msgstr ""
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:186
-#, fuzzy, kde-format
-#| msgid "Default number format: %1"
+#, kde-format
 msgid "Default number format: %1"
-msgstr "رەقەم پىچىمى"
+msgstr ""
 
 #. i18ncheckarg
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Long date format: %1"
+#, kde-format
 msgid "Long date format: %1"
-msgstr "ۋاقىت ئىپادىلىنىشى"
+msgstr ""
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:188
-#, fuzzy, kde-format
-#| msgid "Short date format: %1"
+#, kde-format
 msgid "Short date format: %1"
-msgstr "ۋاقىت ئىپادىلىنىشى"
+msgstr ""
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:189
-#, fuzzy, kde-format
-#| msgid "Time format: %1"
+#, kde-format
 msgid "Time format: %1"
-msgstr "ۋاقىت ئىپادىلىنىشى"
+msgstr ""
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:190
-#, fuzzy, kde-format
-#| msgid "Currency format: %1"
+#, kde-format
 msgid "Currency format: %1"
-msgstr "پۇل:"
+msgstr ""
 
 #: ui/actions/dialogs/FindDialog.cpp:23 ui/actions/dialogs/FindDialog.cpp:93
 #, kde-format
@@ -14982,10 +14943,9 @@ msgid "Fewer Options"
 msgstr "تېخىمۇ ئاز تاللانما"
 
 #: ui/actions/dialogs/FormulaDialog.cpp:52
-#, fuzzy, kde-format
-#| msgid "Function"
+#, kde-format
 msgid "Set Function"
-msgstr "فۇنكسىيە"
+msgstr ""
 
 #: ui/actions/dialogs/FormulaDialog.cpp:114
 #, kde-format
@@ -15125,7 +15085,7 @@ msgstr "ئېلخەت مەنزىل:"
 #: ui/actions/dialogs/LinkDialog.cpp:89
 #, kde-format
 msgid "Email address:"
-msgstr "ئېلخەت مەنزىل:"
+msgstr "ئېلخەت ئادرېسى:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:93
 #, kde-format
@@ -15173,11 +15133,9 @@ msgid "Custom Lists"
 msgstr "ئىختىيارىچە ئۇسلۇب"
 
 #: ui/actions/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Case"
+#, kde-format
 msgid "Save Changes"
-msgstr "چوڭ كىچىك يېزىلىش ئۆزگەرتىش"
+msgstr "ئۆزگەرتكەننى ساقلا"
 
 #: ui/actions/dialogs/ListDialog.cpp:54
 #, kde-format
@@ -15263,10 +15221,9 @@ msgid "&Remove"
 msgstr "چىقىرىۋەت(&R)"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Open/Save"
+#, kde-format
 msgid "Save"
-msgstr "ئاچ/ساقلا"
+msgstr "ساقلا"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:131
 #, kde-format
@@ -15296,7 +15253,7 @@ msgstr "كاتەكچە قىستۇر"
 #: ui/actions/dialogs/pivot.cpp:29
 #, kde-format
 msgid "Select Source"
-msgstr "ھەرپ تاللا"
+msgstr "مەنبە تاللا"
 
 #: ui/actions/dialogs/pivotmain.cpp:47
 #, kde-format
@@ -15306,7 +15263,7 @@ msgstr ""
 #: ui/actions/dialogs/pivotmain.cpp:51
 #, kde-format
 msgid "Add Filter"
-msgstr "سۈزگۈچ"
+msgstr "سۈزگۈچ قوش"
 
 #: ui/actions/dialogs/pivotoptions.cpp:28
 #, kde-format
@@ -15326,7 +15283,7 @@ msgstr "ئېگىزلىك:"
 #: ui/actions/dialogs/Resize2Dialog.cpp:78
 #, kde-format
 msgid "Resize Column"
-msgstr "ئىستوننىڭ چوڭلۇقىنى ئۆزگەرتىش"
+msgstr "رەتنىڭ چوڭلۇقىنى ئۆزگەرتىش"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:89
 #, kde-format
@@ -15339,9 +15296,7 @@ msgid "Series"
 msgstr "يۈرۈشلۈك"
 
 #: ui/actions/dialogs/SeriesDialog.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Series"
+#, kde-format
 msgid "Insert Series"
 msgstr "ئىستون قىستۇر"
 
@@ -15462,12 +15417,12 @@ msgstr "ئىستون ئۆچۈر"
 #: ui/actions/dialogs/SortDialog.cpp:76 ui/actions/dialogs/SortDialog.cpp:220
 #, kde-format
 msgid "Column %1"
-msgstr "ئىستون %1"
+msgstr "رەت %1"
 
 #: ui/actions/dialogs/SortDialog.cpp:99 ui/actions/dialogs/SortDialog.cpp:210
 #, kde-format
 msgid "Row %1"
-msgstr ""
+msgstr "%1-قۇر"
 
 #: ui/actions/dialogs/SortDialog.cpp:260
 #, kde-format
@@ -15497,7 +15452,7 @@ msgstr "ھەرپ تاللا"
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:20
 #, kde-format
 msgid "Paste"
-msgstr ""
+msgstr "چاپلا"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:32
 #, kde-format
@@ -15542,10 +15497,9 @@ msgstr "ئۆچۈر(&D)…"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:168
 #: ui/actions/dialogs/StyleManagerDialog.cpp:171
-#, fuzzy, kde-format
-#| msgid "style%1"
+#, kde-format
 msgid "style%1"
-msgstr "ئۇسلۇب"
+msgstr ""
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:40
 #, kde-format
@@ -15560,7 +15514,7 @@ msgstr "ھەممىنى چىقىرىۋەت"
 #: ui/actions/dialogs/SubtotalDialog.cpp:69
 #, kde-format
 msgid "Column '%1' "
-msgstr "ئىستون %1"
+msgstr "ئىستون %1 "
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:89
 #, kde-format
@@ -15625,7 +15579,7 @@ msgstr "بوشلۇققا ئىجازەت"
 #: ui/actions/dialogs/ValidityDialog.cpp:73
 #, kde-format
 msgid "Data:"
-msgstr "سانلىق-مەلۇمات:"
+msgstr "سانلىق مەلۇمات:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:89
 #: ui/actions/dialogs/ValidityDialog.cpp:119
@@ -15694,7 +15648,7 @@ msgstr "ئەڭ چوڭ:"
 #: ui/actions/dialogs/ValidityDialog.cpp:336
 #, kde-format
 msgid "Number:"
-msgstr "رەقەم:"
+msgstr "نومۇر:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:130
 #, kde-format
@@ -15702,10 +15656,9 @@ msgid "Entries:"
 msgstr "كىرگۈلەر:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "&Error Alert"
+#, kde-format
 msgid "Error Alert"
-msgstr "خاتالىق ئۇقتۇرۇشى(&E)"
+msgstr ""
 
 #: ui/actions/dialogs/ValidityDialog.cpp:140
 #, kde-format
@@ -15715,7 +15668,7 @@ msgstr "ئىناۋەتسىز قىممەت كىرگۈزگەندە خاتالىق 
 #: ui/actions/dialogs/ValidityDialog.cpp:145
 #, kde-format
 msgid "Action:"
-msgstr "ھەرىكەت:"
+msgstr "مەشغۇلات:"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:150
 #, kde-format
@@ -15754,24 +15707,21 @@ msgstr "كاتەكچە تاللىغاندا كىرگۈزۈش ياردىمى كۆ
 #: ui/actions/dialogs/ValidityDialog.cpp:466
 #: ui/actions/dialogs/ValidityDialog.cpp:472
 #: ui/actions/dialogs/ValidityDialog.cpp:477
-#, fuzzy, kde-format
-#| msgid "This is not a valid value."
+#, kde-format
 msgid "This is not a valid value."
-msgstr "%1 ئىناۋەتلىك كاتەكچە دائىرىسى ئەمەس."
+msgstr ""
 
 #: ui/actions/dialogs/ValidityDialog.cpp:483
 #: ui/actions/dialogs/ValidityDialog.cpp:488
-#, fuzzy, kde-format
-#| msgid "This is not a valid time."
+#, kde-format
 msgid "This is not a valid time."
-msgstr "%1 ئىناۋەتلىك كاتەكچە دائىرىسى ئەمەس."
+msgstr ""
 
 #: ui/actions/dialogs/ValidityDialog.cpp:494
 #: ui/actions/dialogs/ValidityDialog.cpp:499
-#, fuzzy, kde-format
-#| msgid "This is not a valid date."
+#, kde-format
 msgid "This is not a valid date."
-msgstr "%1 ئىناۋەتلىك كاتەكچە دائىرىسى ئەمەس."
+msgstr ""
 
 #: ui/actions/DocumentSettings.cpp:22
 #, kde-format
@@ -15809,22 +15759,19 @@ msgid "Fill &Up"
 msgstr ""
 
 #: ui/actions/Fill.cpp:66
-#, fuzzy, kde-format
-#| msgid "&Down"
+#, kde-format
 msgid "Fill &Down"
-msgstr "ئاستىغا(&D)"
+msgstr ""
 
 #: ui/actions/Fill.cpp:68
-#, fuzzy, kde-format
-#| msgid "&Left"
+#, kde-format
 msgid "Fill &Left"
-msgstr "سول(&L)"
+msgstr ""
 
 #: ui/actions/Fill.cpp:70
-#, fuzzy, kde-format
-#| msgid "&Right"
+#, kde-format
 msgid "Fill &Right"
-msgstr "ئوڭ(&R)"
+msgstr ""
 
 #: ui/actions/Fill.cpp:79
 msgctxt "(qtundo-format)"
@@ -15842,10 +15789,9 @@ msgid "Select Font..."
 msgstr "خەت نۇسخا تاللاش…"
 
 #: ui/actions/Font.cpp:30
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell font"
-msgstr "كاتەكچە رايونى"
+msgstr ""
 
 #: ui/actions/Font.cpp:59 ui/actions/Font.cpp:106 ui/actions/Style.cpp:93
 #: ui/actions/Style.cpp:129 ui/actions/Style.cpp:165 ui/actions/Style.cpp:194
@@ -15860,10 +15806,9 @@ msgid "Select Font Size"
 msgstr "خەت نۇسخا تاللاش…"
 
 #: ui/actions/Font.cpp:77
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell font size"
-msgstr "كاتەكچە رايونى"
+msgstr ""
 
 #: ui/actions/Font.cpp:86
 #, kde-format
@@ -15966,10 +15911,9 @@ msgid "Goto"
 msgstr "يۆتكەل"
 
 #: ui/actions/Goto.cpp:44
-#, fuzzy, kde-format
-#| msgid "This is not a valid time."
+#, kde-format
 msgid "That is not a valid cell."
-msgstr "%1 ئىناۋەتلىك كاتەكچە دائىرىسى ئەمەس."
+msgstr ""
 
 #: ui/actions/Indent.cpp:26
 #, kde-format
@@ -16129,10 +16073,9 @@ msgid "Area Name..."
 msgstr "دائىرە ئاتى…"
 
 #: ui/actions/NamedAreas.cpp:28
-#, fuzzy, kde-format
-#| msgid "Inserts a new row into the spreadsheet"
+#, kde-format
 msgid "Set a name for a region of the spreadsheet"
-msgstr "ۋاراق قىستۇر"
+msgstr ""
 
 #: ui/actions/NamedAreas.cpp:53
 #, kde-format
@@ -16152,10 +16095,9 @@ msgid "Replace Named Area"
 msgstr "ئالماشتۇرۇش"
 
 #: ui/actions/NamedAreas.cpp:81
-#, fuzzy, kde-format
-#| msgid "Edit Named Area"
+#, kde-format
 msgid "Edit or select named areas"
-msgstr "ۋاراقنى چىقىرىۋېتىش"
+msgstr ""
 
 #: ui/actions/NamedAreas.cpp:81
 #, kde-format
@@ -16193,10 +16135,9 @@ msgid "Column Break"
 msgstr "ئىستون ئايرىش بەلگىسى"
 
 #: ui/actions/Paste.cpp:34
-#, fuzzy, kde-format
-#| msgid "Remove the contents of the current cell"
+#, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
-msgstr "كاتەكچە مەزمۇنىنى كاتەكچىنىڭ ئاستىغا توغرىلايدۇ"
+msgstr ""
 
 #: ui/actions/Paste.cpp:94
 #, kde-format
@@ -16214,10 +16155,9 @@ msgid "Paste with Insertion"
 msgstr "كاتەكچە قىستۇر"
 
 #: ui/actions/Paste.cpp:155
-#, fuzzy, kde-format
-#| msgid "Inserts a new row into the spreadsheet"
+#, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "ۋاراق قىستۇر"
+msgstr ""
 
 #: ui/actions/Pivot.cpp:18
 #, kde-format
@@ -16225,10 +16165,9 @@ msgid "&Pivot Tables..."
 msgstr "تۈرگە ئايرىپ خۇلاسىلە"
 
 #: ui/actions/Pivot.cpp:18
-#, fuzzy, kde-format
-#| msgid "&Pivot Tables..."
+#, kde-format
 msgid "Create Pivot Tables"
-msgstr "تۈرگە ئايرىپ خۇلاسىلە"
+msgstr ""
 
 #: ui/actions/Pivot.cpp:29
 #, kde-format
@@ -16236,10 +16175,9 @@ msgid "You must select multiple cells."
 msgstr "بىر قانچە كاتەكچىنى تاللىشىڭىز كېرەك."
 
 #: ui/actions/SelectAll.cpp:20
-#, fuzzy, kde-format
-#| msgid "Removes the cells from the spreadsheet"
+#, kde-format
 msgid "Selects all cells in the current sheet"
-msgstr "ۋاراقنى چىقىرىۋېتىش"
+msgstr ""
 
 #: ui/actions/ShowTableView.cpp:23
 #, kde-format
@@ -16287,11 +16225,10 @@ msgid "Do you want to check the spelling in the next sheet?"
 msgstr ""
 
 #: ui/actions/SpellCheck.cpp:88
-#, fuzzy, kde-format
-#| msgid "Search entire sheet"
+#, kde-format
 msgctxt "@action:button"
 msgid "Check next sheet"
-msgstr "ئىزدەش يۆنىلىشى:"
+msgstr ""
 
 #: ui/actions/SpellCheck.cpp:237
 #, kde-format
@@ -16367,38 +16304,29 @@ msgid "Vertical Text"
 msgstr "تىك تېكىست"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Number Format"
+#, kde-format
 msgid "Number Format"
-msgstr "رەقەم فورماتى"
+msgstr ""
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a number"
-msgstr "كاتەكچە رايونى"
+msgstr ""
 
 #: ui/actions/Style.cpp:291
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Format Percent"
 msgctxt "(qtundo-format)"
 msgid "Format Number"
-msgstr "پىرسەنت"
+msgstr ""
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scientific Format"
+#, kde-format
 msgid "Scientific Format"
-msgstr "پەن-تېخنىكا"
+msgstr ""
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a scientific format"
-msgstr "كاتەكچە رايونى"
+msgstr ""
 
 #: ui/actions/Style.cpp:316 ui/dialogs/LayoutPage_Float.cpp:84
 #, kde-format
@@ -16406,11 +16334,9 @@ msgid "Scientific"
 msgstr "پەن-تېخنىكا"
 
 #: ui/actions/Style.cpp:324
-#, fuzzy
-#| msgid "Scientific"
 msgctxt "(qtundo-format)"
 msgid "Format Scientific"
-msgstr "پەن-تېخنىكا"
+msgstr ""
 
 #: ui/actions/Style.cpp:342
 #, kde-format
@@ -16418,10 +16344,9 @@ msgid "Percent Format"
 msgstr "پىرسەنت"
 
 #: ui/actions/Style.cpp:344
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to look like a percentage"
-msgstr "كاتەكچە رايونى"
+msgstr ""
 
 #: ui/actions/Style.cpp:353 ui/dialogs/LayoutPage_Float.cpp:70
 #, kde-format
@@ -16454,44 +16379,34 @@ msgid "Format Money"
 msgstr "پىچىمى"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Date Format"
+#, kde-format
 msgid "Date Format"
 msgstr "چېسلا پىچىمى"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a date"
-msgstr "كاتەكچە رايونى"
+msgstr ""
 
 #: ui/actions/Style.cpp:431
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format Date"
-msgstr "پىچىمى"
+msgstr ""
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Set the cell formatting to a time"
-msgstr "كاتەكچە رايونى"
+msgstr ""
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Time Format"
+#, kde-format
 msgid "Time Format"
-msgstr "ۋاقىت ئىپادىلىنىشى"
+msgstr ""
 
 #: ui/actions/Style.cpp:464
-#, fuzzy
-#| msgid "Format"
 msgctxt "(qtundo-format)"
 msgid "Format Time"
-msgstr "پىچىمى"
+msgstr ""
 
 #: ui/actions/Style.cpp:480
 #, kde-format
@@ -16534,17 +16449,14 @@ msgid "Decrease Precision"
 msgstr "توغرىلىقىنى تۆۋەنلىتىش"
 
 #: ui/actions/Style.cpp:603
-#, fuzzy, kde-format
-#| msgid "Set the cell formatting"
+#, kde-format
 msgid "Resets to the default format"
-msgstr "كاتەكچە رايونى"
+msgstr ""
 
 #: ui/actions/Style.cpp:613
-#, fuzzy
-#| msgid "Sheet Style"
 msgctxt "(qtundo-format)"
 msgid "Set Default Style"
-msgstr "ئۇسلۇبقا ۋارىسلىق قىلىش:"
+msgstr ""
 
 #: ui/actions/Style.cpp:622
 #, kde-format
@@ -16624,7 +16536,7 @@ msgstr "يۇقىرىسى"
 #: ui/actions/TextCase.cpp:34
 #, kde-format
 msgid "Lower"
-msgstr "تۆۋەنرەك"
+msgstr "تۆۋەنلەت"
 
 #: ui/actions/TextCase.cpp:37
 #, kde-format
@@ -16632,12 +16544,9 @@ msgid "First Letter Upper"
 msgstr "تۇنجى ئۆسۈم"
 
 #: ui/actions/TextCase.cpp:50
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "First letter uppercase"
 msgctxt "(qtundo-format)"
 msgid "Switch to uppercase"
-msgstr "تۇنجى ئۆسۈم"
+msgstr ""
 
 #: ui/actions/TextCase.cpp:53
 msgctxt "(qtundo-format)"
@@ -16682,7 +16591,7 @@ msgstr ""
 #: ui/actions/TextCase.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Change Case"
-msgstr "چوڭ كىچىك يېزىلىش ئۆزگەرتىش"
+msgstr "چوڭ كىچىك ھەرپ ئۆزگەرت"
 
 #: ui/actions/Validity.cpp:21
 #, kde-format
@@ -16695,10 +16604,9 @@ msgid "Validity..."
 msgstr "ئۈنۈملۈكلۈكى …"
 
 #: ui/actions/Validity.cpp:55
-#, fuzzy, kde-format
-#| msgid "Remove the contents of the current cell"
+#, kde-format
 msgid "Remove the validity tests on this cell"
-msgstr "كاتەكچە مەزمۇنىنى كاتەكچىنىڭ ئاستىغا توغرىلايدۇ"
+msgstr ""
 
 #: ui/actions/Validity.cpp:64
 #, kde-format
@@ -16963,12 +16871,12 @@ msgstr "كاتەكچىلەرنى چىقىرىۋېتىش"
 #: ui/commands/MergeCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Horizontally"
-msgstr ""
+msgstr "توغرا يۆنىلىشتە ئوتتۇرىغا توغرىلا"
 
 #: ui/commands/MergeCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Merge Cells Vertically"
-msgstr ""
+msgstr "كاتەكچە بىرلەشتۈر"
 
 #: ui/commands/MergeCommand.cpp:85
 msgctxt "(qtundo-format)"
@@ -16988,12 +16896,12 @@ msgstr ""
 #: ui/commands/NamedAreaCommand.cpp:21 ui/commands/NamedAreaCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Add Named Area"
-msgstr ""
+msgstr "ۋاراقنى چىقىرىۋېتىش"
 
 #: ui/commands/NamedAreaCommand.cpp:42
 msgctxt "(qtundo-format)"
 msgid "Remove Named Area"
-msgstr ""
+msgstr "ۋاراقنى چىقىرىۋېتىش"
 
 #: ui/commands/RowColumnManipulators.cpp:35
 msgctxt "(qtundo-format)"
@@ -17013,12 +16921,12 @@ msgstr ""
 #: ui/commands/RowColumnManipulators.cpp:279
 msgctxt "(qtundo-format)"
 msgid "Hide Columns"
-msgstr ""
+msgstr "ئىستون يوشۇر"
 
 #: ui/commands/RowColumnManipulators.cpp:281
 msgctxt "(qtundo-format)"
 msgid "Hide Rows"
-msgstr ""
+msgstr "قۇر يوشۇر"
 
 #: ui/commands/RowColumnManipulators.cpp:284
 msgctxt "(qtundo-format)"
@@ -17033,7 +16941,7 @@ msgstr "رەت كۆرسەت"
 #: ui/commands/RowColumnManipulators.cpp:288
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
-msgstr ""
+msgstr "قۇر كۆرسەت"
 
 #: ui/commands/RowColumnManipulators.cpp:531
 msgctxt "(qtundo-format)"
@@ -17375,6 +17283,15 @@ msgid ""
 "Sixteenths 1/16 then the cell will display \"1 6/16\" which is the nearest "
 "closest Sixteenth fraction."
 msgstr ""
+"The fraction format changes your number into a fraction. For example, 0.1 "
+"can be changed to 1/8, 2/16, 1/10, etc. You define the type of fraction by "
+"choosing it in the field on the right. If the exact fraction is not possible "
+"in the fraction mode you choose, the nearest closest match is chosen.\n"
+" For example: when we have 1.5 as number, we choose Fraction and Sixteenths "
+"1/16 the text displayed into cell is \"1 8/16\" which is an exact fraction. "
+"If you have 1.4 as number in your cell and you choose Fraction and "
+"Sixteenths 1/16 then the cell will display \"1 6/16\" which is the nearest "
+"closest Sixteenth fraction."
 
 #: ui/dialogs/LayoutPage_Float.cpp:101
 #, kde-format
@@ -17630,7 +17547,7 @@ msgstr "ئايلاندۇر"
 #: ui/dialogs/PositionWidget.ui:110
 #, kde-format
 msgid "°"
-msgstr "°"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, buttonGroup2)
 #: ui/dialogs/PositionWidget.ui:132

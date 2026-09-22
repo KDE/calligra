@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: CalendarTool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-29 17:10-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,8 +24,6 @@ msgid ""
 "End date is before start date! Please make sure that end date comes after "
 "start date."
 msgstr ""
-"ئاخىرلاشتۇرۇش چېسلاسى باشلاش چېسلاسىدىن ئىلگىرى! ئاخىرلاشتۇرۇش چېسلاسىنىڭ "
-"باشلاش چېسلاسىدىن كېيىن ئىكەنلىكىنى جەزملەڭ."
 
 #: CalendarTool.cpp:62 CalendarTool.cpp:69
 #, kde-format
@@ -38,8 +36,6 @@ msgid ""
 "Calendars should not be longer than 10 years. If you really need such long "
 "periods you need to split them up."
 msgstr ""
-"چېسلا 10 يىلدىن ئۇزۇن بولمايدۇ. ئەگەر سىز راستتىنلا شۇنداق ئۇزۇن چېسلا "
-"بۆلىكىگە ئېھتىياجلىق بولسىڭىز، چوقۇم شۇ چېسلا بۆلىكىنى پارچىلاڭ."
 
 #: CalendarTool.cpp:76
 #, kde-format
@@ -47,8 +43,6 @@ msgid ""
 "Start and end dates are equal! Only one day will be inserted, do you want to "
 "continue?"
 msgstr ""
-"باشلاش چېسلاسى بىلەن ئاخىرلاشتۇرۇش چېسلاسى تەڭ! بۇنداق بولغاندا پەقەت بىرلا "
-"كۈننى قىستۇرىدۇ. راستتىنلا داۋاملاشتۇرامسىز؟"
 
 #: CalendarTool.cpp:77 CalendarTool.cpp:87 CalendarTool.cpp:111
 #, kde-format
@@ -72,10 +66,6 @@ msgid ""
 "be required for the desired calendar will be selected so you can see what "
 "data would be overwritten."
 msgstr ""
-"يىلنامە قىستۇرماقچى بولغان رايون بوش ئەمەس، سىز داۋاملاشتۇرۇپ مەۋجۇت سانلىق "
-"مەلۇماتنى قاپلىۋېتەمسىز؟ ئەگەر ياق دەپ تاللىسىڭىز، يىلنامە قىستۇرماقچى "
-"بولغان رايون تاللىنىپ  قايسى سانلىق مەلۇماتلارنىڭ قاپلىنىپ كېتىدىغانلىقىنى "
-"كۆرەلەيسىز."
 
 #: CalendarTool.cpp:120
 msgctxt "(qtundo-format)"

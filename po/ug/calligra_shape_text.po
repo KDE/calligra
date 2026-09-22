@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-29 17:08-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1753,7 +1753,7 @@ msgstr "يەككە"
 #, kde-format
 msgctxt "Line spacing value"
 msgid "1.5 Lines"
-msgstr "1.5 قۇر"
+msgstr "1.5 سىزىقلار"
 
 #: dialogs/ParagraphIndentSpacing.cpp:30
 #, kde-format
@@ -1819,7 +1819,7 @@ msgstr ""
 #: dialogs/ParagraphIndentSpacing.ui:107
 #, no-c-format, kde-format
 msgid " %"
-msgstr " %"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, useFont)
 #: dialogs/ParagraphIndentSpacing.ui:129
@@ -2486,7 +2486,7 @@ msgstr ""
 #: ReviewTool.cpp:51 ReviewTool.cpp:52
 #, kde-format
 msgid "Remove Comment"
-msgstr ""
+msgstr "ئىزاھاتلارنى چىقىرىۋېتىش"
 
 #: ReviewTool.cpp:96
 #, kde-format
