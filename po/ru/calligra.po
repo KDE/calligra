@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-08-07 10:25+0300\n"
-"Last-Translator: Olesya Gerasimenko <goa@altlinux.org>\n"
+"PO-Revision-Date: 2026-09-24 08:25+0200\n"
+"Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -264,8 +264,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgstr ""
-"Cоздание объекта\n"
-"cоздание объекта"
+"Создание объекта\n"
+"создание объекта"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:44
 msgctxt "(qtundo-format) Delete one shape"
@@ -1626,12 +1626,12 @@ msgstr "Предупреждение"
 #: main/KoMainWindow.cpp:2019
 #, kde-format
 msgid "Show %1 Toolbar"
-msgstr "Показать панель инструментов %1 "
+msgstr "Показать панель инструментов %1"
 
 #: main/KoMainWindow.cpp:2021
 #, kde-format
 msgid "Hide %1 Toolbar"
-msgstr "Скрыть панель инструментов %1 "
+msgstr "Скрыть панель инструментов %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
 #: main/KoOpenPane.cpp:102 main/KoOpenPane.cpp:156 main/KoOpenPaneBase.ui:99
@@ -1747,7 +1747,7 @@ msgstr "&Добавить группу..."
 #: main/KoTemplateCreateDia.cpp:139 main/KoVersionDialog.cpp:60
 #, kde-format
 msgid "&Remove"
-msgstr "Удалить "
+msgstr "Удалить"
 
 #: main/KoTemplateCreateDia.cpp:145
 #, kde-format
@@ -1916,14 +1916,9 @@ msgstr ""
 "Сообщение об ошибке: %3"
 
 #: odf/KoOdfReadStore.cpp:156
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open\n"
-#| "%1"
+#, kde-format
 msgid "Could not open %1"
-msgstr ""
-"Не удалось открыть\n"
-"%1"
+msgstr "Не удалось открыть %1"
 
 #: odf/KoPageFormat.cpp:48
 msgctxt "Page size"
@@ -2969,7 +2964,7 @@ msgstr "Жёсткое смешивание"
 #: pigment/KoCompositeOpRegistry.cpp:70
 #, kde-format
 msgid "Geometric Mean"
-msgstr "Cреднее геометрическое"
+msgstr "Среднее геометрическое"
 
 #: pigment/compositeops/KoCompositeOps.h:114
 #: pigment/KoCompositeOpRegistry.cpp:68
@@ -4053,10 +4048,10 @@ msgstr "Выберите индекс, на который нужно сдела
 #, kde-format
 msgid "Found 1 match"
 msgid_plural "Found %1 matches"
-msgstr[0] "Найдено %1 cовпадение"
-msgstr[1] "Найдены %1 cовпадения"
-msgstr[2] "Найдено %1 cовпадений"
-msgstr[3] "Найдено %1 cовпадение"
+msgstr[0] "Найдено %1 совпадение"
+msgstr[1] "Найдены %1 совпадения"
+msgstr[2] "Найдено %1 совпадений"
+msgstr[3] "Найдено %1 совпадение"
 
 #: text/KoFindStrategy.cpp:55
 #, kde-format
@@ -4975,7 +4970,7 @@ msgstr "Цветовая палитра GIMP (*.gpl)"
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
 msgstr ""
 "Не удалось записать в файл палитры %1. Вероятно, он доступен только для "
-"чтения."
+"чтения. "
 
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
