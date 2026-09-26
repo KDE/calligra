@@ -1,8 +1,8 @@
 # translation of words.po to Italian
-# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2019, 2021, 2022, 2024 Vincenzo Reale <smart2128vr@gmail.com>
 # Giovanni Bacci <s206756@studenti.ing.unipi.it>, 2002.
 # Daniele Medri <madrid@linuxmeeting.net>, 2003.
 # Luciano Montanaro <mikelima@cirulla.net>, 2005, 2006, 2007, 2008, 2010.
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2019, 2021, 2022, 2024 Vincenzo Reale <smart2128vr@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: words\n"
