@@ -4,13 +4,13 @@
 # Translators:
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2013.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-02 18:52+0300\n"
+"PO-Revision-Date: 2026-09-26 20:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
 msgid "Annotation"
-msgstr "Bilgi Notu"
+msgstr "Ek Açıklama"
 
 #: AnnotationTextShapeFactory.cpp:33
 #, kde-format
 msgid "Annotation shape to show annotation content"
-msgstr "Bilgi notu içeriğinin gösterilme şekli"
+msgstr "Ek açıklama içeriğinin gösterilme şekli"
 
 #: AnnotationTextShapeFactory.cpp:41
 #, kde-format
 msgid "Annotation Shape"
-msgstr "Bilgi Notu Şekli"
+msgstr "Ek Açıklama Şekli"
 
 #: commands/AcceptChangeCommand.cpp:31
 msgctxt "(qtundo-format)"
@@ -940,7 +940,7 @@ msgstr "Not:"
 #: dialogs/CitationInsertionDialog.ui:403
 #, kde-format
 msgid "Annotation:"
-msgstr "Bilgi Notu:"
+msgstr "Ek açıklama:"
 
 #. i18n: ectx: property (text), widget (QLabel, urlLabel)
 #: dialogs/CitationInsertionDialog.ui:413

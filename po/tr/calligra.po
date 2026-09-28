@@ -7,13 +7,13 @@
 # Serdar Cevher <scevher@anet.com.tr>, 2001.
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-03 00:46+0000\n"
-"PO-Revision-Date: 2026-05-02 19:42+0300\n"
+"PO-Revision-Date: 2026-09-26 20:21+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1053,7 +1053,7 @@ msgstr "Dosya bulunamadı"
 #: main/KoDocument.cpp:1461
 #, kde-format
 msgid "Cannot create storage"
-msgstr "Depolama oluşturulamadı"
+msgstr "Depolama oluşturulamıyor"
 
 #: main/KoDocument.cpp:1465
 #, kde-format
@@ -1485,7 +1485,7 @@ msgstr "PDF Olarak Dışa Aktar"
 #: main/KoMainWindow.cpp:1414
 #, kde-format
 msgid "Cannot export to the specified file"
-msgstr "Belirtilen dosya dışa aktarılamadı"
+msgstr "Belirtilen dosyaya dışa aktarılamıyor"
 
 #: main/KoMainWindow.cpp:1613 pageapp/KoPADocumentStructureDocker.cpp:102
 #, kde-format
@@ -3584,9 +3584,9 @@ msgid ""
 "document will remain unreadable. Please try and save the document again to "
 "prevent losing your work."
 msgstr ""
-"Bildirim dosyası bozuk görünüyor. Belge değiştirilemeyeceğinden okunamaz "
-"kalacaktır. Lütfen çalışmanızın kaybolmaması için belgenizi kaydetmeyi "
-"yeniden deneyin."
+"Bildirim dosyası bozuk görünüyor. Belge değişiklik yapılamayacağından "
+"okunamaz kalacaktır. Lütfen çalışmanızın kaybolmaması için belgenizi "
+"kaydetmeyi yeniden deneyin."
 
 #: store/KoEncryptedStore.cpp:447
 #, kde-format
@@ -3595,7 +3595,7 @@ msgid ""
 "Please try and save the document again to prevent losing your work."
 msgstr ""
 "Bildirim dosyasına yazılamıyor. Belge okunamaz kalacak. Lütfen çalışmanızın "
-"kaybolmaması için belgenizi kaydetmeyi yeniden deneyin."
+"kaybolmaması için yeniden belgenizi kaydetmeyi deneyin."
 
 #: store/KoEncryptedStore.cpp:569
 #, kde-format
@@ -3845,7 +3845,7 @@ msgstr "Yer İmi Koy"
 #: text/KoTextEditor.cpp:489
 msgctxt "(qtundo-format)"
 msgid "Add Annotation"
-msgstr "Bilgi Notu Ekle"
+msgstr "Ek Açıklama Ekle"
 
 #: text/KoTextEditor.cpp:513
 msgctxt "(qtundo-format)"
@@ -4624,7 +4624,7 @@ msgstr "Gimp Renk Paleti (*.gpl)"
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "%1 palet dosyasına yazılamıyor. Salt-okunur olabilir. "
+msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir. "
 
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
@@ -5093,18 +5093,18 @@ msgid ""
 "clearing the filter box will restore all items.<br>Create and/or switch to a "
 "different tag if you want to save filtered resources into named sets.</qt>"
 msgstr ""
-"<qt>Buraya arama terimi girmek var olan etiket görününe kaynak ekleyecek "
-"veya çıkaracak.<para>Bir kaynağın kısmi, BÜYÜK/küçük harf duyarsız adını "
-"süzmek için:<br><icode>kısmiad</icode> veya <icode>!kısmiad</icode>.</"
-"para><para>Diğer etiket kümelerini içeride/dışarıda tutmak için:"
-"<br><icode>[Etiketadı]</icode> or <icode>![Etiketadı]</icode>.</"
-"para><para>Büyük/küçük harf duyarlı ve tam ad dışarıda/içeride tutmak için:"
-"<br><icode>\"TamEşleşme\"</icode> veya <icode>!\"TamEşleşme\"</icode>.</"
-"para>Süzgeç sonuçları <interface>Bütün Önayarlar</interface> görünümü için "
+"<qt>Buraya arama terimi girmek, var olan künye görününe kaynak ekleyecek "
+"veya çıkaracak.<para>Bir kaynağın kısmî, BÜYÜK/küçük harf duyarsız adını "
+"süzmek için:<br><icode>kısmiad</icode> veya <icode>!kısmiad</icode> yapın.</"
+"para><para>Diğer künye kümelerini içeride/dışarıda tutmak için:"
+"<br><icode>[KünyeAdı]</icode> veya <icode>![KünyeADı]</icode> kullanın.</"
+"para><para>BÜYÜK/küçük harf duyarlı ve tam ad dışarıda/içeride tutmak için:"
+"<br><icode>\"TamEşleşme\"</icode> veya <icode>!\"TamEşleşme\"</icode> yapın."
+"</para>Süzgeç sonuçları <interface>Bütün Önayarlar</interface> görünümü için "
 "kaydedilemez.<br>Bu görünümde <interface>Giriş</interface> düğmesine basmak "
 "veya süzgeç kutusunu temizlemek bütün ögeleri yeniden yükleyecektir."
-"<br>Süzülmüş kaynakları adlı kümeler şeklinde kaydetmek için yeni bir etiket "
-"oluşturun veya başka bir etikete geçin.</qt>"
+"<br>Süzülmüş kaynakları adlı kümeler şeklinde kaydetmek için yeni bir künye "
+"oluşturun veya başka bir künyeye geçin.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:52
 #, kde-format
