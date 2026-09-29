@@ -1,0 +1,554 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+          
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+   
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Андрей</firstname
+> <surname
+>Черепанов</surname
+> <affiliation
+><address
+><email
+>sibskull@mail.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+>  
+</authorgroup>
+</chapterinfo>
+<title
+>Обучение шаг за шагом</title>
+
+<para
+>В этой главе представлено простое обучение возможностям &stage;. Мы пройдём его шаг за шагом и покажем создание презентации и применение некоторых базовых эффектов. </para>
+
+<sect1 id="start-new">
+<title
+>Создание нового документа</title>
+
+<para
+>При запуске &stage; появляется стандартное диалоговое окно запуска &calligra;. </para>
+
+<screenshot>
+<screeninfo
+>Начальное окно <guilabel
+>&calligra;</guilabel
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut01.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Начальное окно &calligra;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Выберите <guilabel
+>Экран</guilabel
+> слева, затем щёлкните по шаблону с меткой <guilabel
+>Пустой</guilabel
+> (выделен синим на снимке экрана выше). Можно установить флажок <guilabel
+>Всегда использовать этот шаблон</guilabel
+>, чтобы сделать его шаблоном по умолчанию. </para>
+
+<para
+>Теперь нажмите кнопку <guibutton
+>Использовать этот шаблон</guibutton
+>. Появится окно редактирования слайда, где можно просмотреть и изменить слайды (а также объекты, содержащиеся в них) в документе. </para>
+
+<para
+>Сейчас имеется только один пустой слайд, поэтому выберите в докере <guilabel
+>Макеты слайдов</guilabel
+> верхний левый слайд с одним текстовым полем.</para>
+
+<para
+>Дважды щёлкните по текстовой врезке. Курсор примет вид вертикальной черты, показывая, что теперь можно напечатать текст. </para>
+
+<screenshot>
+<screeninfo
+>Курсор вставки текста</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut03.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Курсор вставки текста</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Вперёд! Напечатайте немного текста! </para>
+
+<screenshot>
+<screeninfo
+>Добавление текста</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut04.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Добавление текста</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Щёлкните на любом месте слайда кроме этой врезки когда закончите печатать. </para>
+
+</sect1>
+
+<sect1 id="insert-page">
+<title
+>Добавление нового слайда</title>
+
+<para
+>Теперь давайте добавим новый слайд в наш документ. Чтобы сделать это, выберите меню <guimenu
+>Слайд</guimenu
+> и выберите пункт меню <guimenuitem
+>Добавить слайд</guimenuitem
+>. </para>
+
+<para
+>Теперь можно решить, как будет выглядеть новый слайд. На этот раз выберите макет с одним столбцом (выделен синим цветом). </para>
+
+<screenshot>
+<screeninfo
+>Выбор шаблона для нового слайда</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut07.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Выбор шаблона для нового слайда</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>В окне редактора теперь появился новый макет слайда. Чтобы переключаться между страницами презентации, можно выбирать слайды в панели слева (на этом снимке экрана они выделены синим). </para>
+
+<para
+>Вставленный слайд состоит из двух текстовых врезок. Одна из них является заголовком, а другая — маркированным списком. </para>
+
+<screenshot>
+<screeninfo
+>Второй слайд</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut09.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Новый слайд</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Дважды щёлкните и введите заголовок. Затем дважды щёлкните по второй текстовой врезке с маркером. Наберите текст и завершите абзац нажатием клавиши <keycap
+>Enter</keycap
+> или <keycap
+>Return</keycap
+>. При вводе новых абзацев маркеры автоматически появляются перед ними. </para>
+
+<screenshot>
+<screeninfo
+>Добавление текста на второй слайд</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut10.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Добавление текста на второй слайд</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Вы можете снять выделение с текстовой врезки, щёлкнув на пустом месте слайда. </para>
+
+</sect1>
+
+<sect1 id="insert-pic">
+<title
+>Вставка рисунка.</title>
+
+<para
+>Теперь переключитесь на первый слайд. Используйте список слайдов с левой стороны экрана. </para>
+
+<para
+>В этом разделе мы немного оживим презентацию, добавив интересный логотип на титульную страницу. Чтобы сделать это, первым делом включите докер <guilabel
+>Добавить объект</guilabel
+> с помощью меню <menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Панели</guimenuitem
+></menuchoice
+>. </para>
+
+<para
+>Теперь выберите «Изображение» в докере <guilabel
+>Добавить объект</guilabel
+> и щёлкните <mousebutton
+>левой</mousebutton
+> кнопкой мыши в том месте, где требуется разместить логотип в исходном размере, или нарисуйте прямоугольник левой кнопкой мыши (нажмите <mousebutton
+>левую</mousebutton
+> кнопку мыши и не отпускайте кнопку), чтобы задать положение и размер логотипа. </para>
+
+<para
+>После этого появится диалог выбора файла. Для руководства по использованию этого диалога, равно как и других стандартных диалогов &kde;, обратитесь к документации по &kde;. Вы можете просматривать содержимое папок, щёлкая по значкам <guiicon
+>папок</guiicon
+> и используя <guiicon
+>кнопки навигации</guiicon
+> на панели инструментов. Щёлчок по <guiicon
+>стрелке вверх</guiicon
+> переводит на один уровень вверх в структуре папок. </para>
+
+<para
+>Выберите файл и нажмите кнопку <guibutton
+>ОК</guibutton
+>. </para>
+
+<para
+>Теперь изображение вставлено в слайд, а вокруг границы графического объекта видны маркеры выделения (маленькие квадраты). </para>
+
+<screenshot>
+<screeninfo
+>Добавленный рисунок</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut13.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Добавленный рисунок</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Поместите курсор мыши в любое место в середине логотипа и перетащите его в середину титульного слайда. Затем с помощью маркеров выделения задайте нужный размер. </para>
+
+<para
+>Вот и все. Теперь на титульном слайде у вас есть рисунок. </para>
+<!--FIXME Double click opens the file dialog to replace the image-->
+</sect1>
+
+<sect1 id="insert-object">
+<title
+>Вставка объекта &calligra;</title>
+<para
+>Вставим ещё один объект &calligra; под рисунком, например диаграмму.</para>
+
+<para
+>В слайд &stage; можно встроить любой объект, поддерживаемый &calligra;. Давайте выберем диаграмму в докере <guilabel
+>Добавить объект</guilabel
+>. </para>
+
+<para
+>Выберите <guilabel
+>Диаграмма</guilabel
+>, а затем обведите мышью на слайде &stage; область, в которую нужно поместить диаграмму. </para>
+
+<screenshot>
+<screeninfo
+>Выбор области для размещения диаграммы</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Выбор области для размещения диаграммы</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>После отпускания кнопки мыши на слайд добавляется шаблонная диаграмма. При работе с диаграммой в докере показываются её <guilabel
+>Параметры инструмента</guilabel
+>. </para>
+
+<screenshot>
+<screeninfo
+>Параметры инструмента &kchart;</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>&kchart; Параметры инструмента</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Чтобы переместить, изменить размер или даже удалить встроенную диаграмму, переключитесь на инструмент <guibutton
+>Основные операции с фигурами</guibutton
+> и щёлкните в любом месте области диаграммы. Теперь вокруг неё должна появиться зелёная рамка, а в каждом углу и посередине каждой стороны — маленький жёлтый квадрат. </para>
+<para
+>При наведении курсора на любой из квадратов он примет вид двунаправленной стрелки. Чтобы изменить размер диаграммы, перетащите один из этих квадратов, удерживая нажатой <mousebutton
+>левую</mousebutton
+> кнопку мыши. Чтобы удалить диаграмму, щёлкните <mousebutton
+>правой</mousebutton
+> кнопкой мыши по одному из квадратов и выберите <guimenuitem
+>Удалить</guimenuitem
+>.</para>
+<para
+>Чтобы переместить диаграмму, наведите на неё курсор. Курсор примет вид перекрестия; нажмите <mousebutton
+>левую</mousebutton
+> кнопку мыши и перетащите диаграмму в нужное место.</para>
+<para
+>Чтобы вернуть диаграмме обычный вид, просто щёлкните в любом месте за пределами области диаграммы.</para>
+<para
+>Чтобы изменить формат самой диаграммы, дважды щёлкните <mousebutton
+>левой</mousebutton
+> кнопкой мыши в области диаграммы. В докере должна появиться панель <guilabel
+>Параметры инструмента</guilabel
+> диаграммы. Затем эти инструменты позволяют изменить свойства диаграммы: тип диаграммы, метки, оси и данные.</para>
+
+<para
+>Чтобы вернуться к слайду &stage;, щёлкните <mousebutton
+>левой</mousebutton
+> кнопкой мыши в любом месте за пределами диаграммы.</para>
+
+<para
+>Один щелчок по диаграмме позволяет перетащить её, чтобы изменить расположение, а также перетащить границы, чтобы увеличить её, как и с любым другим объектом &stage;. Дважды щёлкните по диаграмме, чтобы войти в режим &kchart; и изменить любое свойство диаграммы.</para>
+
+</sect1>
+<!-- does not work in BETA6 here
+<sect1 id="addshadow">
+<title
+>Add a shadow to the title text</title>
+
+<para>
+Let's continue enhancing our title page by adding a shadow
+behind the title. <mousebutton
+>Right</mousebutton
+> click anywhere on the
+title text. This achieves two things: the text box containing the title
+is selected, and a menu pops up.
+</para>
+
+<para>
+Select the <guimenuitem
+>Shadow Objects...</guimenuitem
+> option in the popup menu.
+</para>
+
+<screenshot>
+<screeninfo
+>The context menu</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut15.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The context menu</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel
+>Shadow</guilabel
+> dialog pops up. The distance between the
+shadow and the text is currently 0 so the shadow cannot be seen (this
+part of the dialog box is highlighted in red.)
+</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Shadow</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut16.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The <guilabel
+>Shadow</guilabel>
+dialog</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Increase the distance value to 3. The effect of changing the distance
+can be seen in the preview window. Now click <guibutton
+>OK</guibutton
+>.
+</para>
+
+<screenshot>
+<screeninfo
+>Adding a shadow to the title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut17.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adding a shadow to the title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now the title has a shadow!
+</para>
+
+<screenshot>
+<screeninfo
+>The new shadowed title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut18.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The new shadowed title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+</sect1>
+-->
+<sect1 id="textcolor">
+<title
+>Изменим цвет заголовка</title>
+
+<para
+>Закончим создание слайда, изменив цвет заголовка с чёрного на синий. Для этого выделите текст заголовка, дважды щёлкнув по врезке заголовка. </para>
+<!-- Font from menu Format or contextmenu with a lot of options-->
+<para
+>Откройте выбор цвета, щёлкнув по значку <inlinemediaobject
+><imageobject
+> <imagedata fileref="22x22-actions-format-text-color.png" format="PNG"/></imageobject
+> </inlinemediaobject
+> в разделе «Параметры инструмента редактирования текста» (подсказка к этому значку — «Цвет текста…»).</para>
+
+<screenshot>
+<screeninfo
+>Палитра цветов</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut19.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Палитра цветов</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>Палитра цветов</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut20.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Палитра цветов</phrase
+></textobject>
+<caption
+><para
+>Изменим цвет на синий.</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<para
+>Изменение цвета выделенного текста на синий изменяет его вид. Точный цвет, который приобретает выделенный текст, зависит от системной цветовой схемы. </para>
+
+<note>
+<para
+>Цвет текста также можно выбрать на вкладке <guilabel
+>Оформление</guilabel
+> диалога <guilabel
+>Выбор шрифта</guilabel
+>. Чтобы открыть этот диалог, выберите <guimenuitem
+>Шрифт</guimenuitem
+> в меню <guimenu
+>Формат</guimenu
+> или в контекстном меню. </para>
+</note>
+
+<para
+>Теперь щёлкните в любом месте, чтобы снять выделение с текста. </para>
+
+
+<screenshot>
+<screeninfo
+>Окончательный заголовок</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut21.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Окончательный заголовок</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Теперь, когда есть два слайда, почему бы не устроить презентацию! Для запуска презентации нажмите кнопку <guiicon
+>Запустить</guiicon
+> на панели инструментов. Первый слайд должен появиться на экране. </para>
+
+<para
+>Для перехода с первого слайда на следующий, щёлкните мышью где-нибудь на экране или нажмите на клавишу <keycap
+>Page Down</keycap
+>. </para>
+
+<para
+>Чтобы выйти из показа слайдов, нажмите клавишу &Esc;. </para>
+
+</sect1>
+
+</chapter>

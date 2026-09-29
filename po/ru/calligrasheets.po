@@ -16309,7 +16309,7 @@ msgstr "Строка %1"
 #: ui/actions/dialogs/SortDialog.cpp:260
 #, kde-format
 msgid "&First column contains row headers"
-msgstr "&Первый столбец содержит заголовки столбца"
+msgstr "&Первый столбец содержит заголовки строк"
 
 #: ui/actions/dialogs/SortDialog.cpp:263
 #, kde-format
