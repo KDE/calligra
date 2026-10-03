@@ -8528,7 +8528,8 @@ msgid "Topic"
 msgstr ""
 
 #: functions/reference.xml:409
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Item"
 msgid "Item"
 msgstr "Tietue"
 
