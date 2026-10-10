@@ -1,0 +1,83 @@
+# Translation of calligralauncher into Russian.
+# This file is distributed under the same license as the calligra package.
+# Alexander Yavorsky <kekcuha@gmail.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligralauncher\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"PO-Revision-Date: 2026-10-09 19:38+0200\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: main.cpp:51
+#, kde-format
+msgctxt "@title"
+msgid "Calligra Launcher"
+msgstr "Calligra Launcher"
+
+#: main.cpp:53
+#, kde-format
+msgid "Calligra Launcher"
+msgstr "Calligra Launcher"
+
+#: main.cpp:55
+#, kde-format
+msgid "(c) 2024"
+msgstr "© 2024"
+
+#: main.cpp:56
+#, kde-format
+msgctxt "@info:credit"
+msgid "Carl Schwan"
+msgstr "Carl Schwan"
+
+#: main.cpp:56
+#, kde-format
+msgctxt "@info:credit"
+msgid "Maintainer"
+msgstr "Сопровождающий"
+
+#: main.cpp:57
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Александр Яворский"
+
+#: main.cpp:57
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kekcuha@gmail.com"
+
+#: Main.qml:48
+#, kde-format
+msgid "Calligra Words"
+msgstr "Calligra Words"
+
+#: Main.qml:53
+#, kde-format
+msgid "Calligra Stage"
+msgstr "Calligra Stage"
+
+#: Main.qml:58
+#, kde-format
+msgid "Calligra Sheets"
+msgstr "Calligra Sheets"
+
+#: Main.qml:63
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: Main.qml:68
+#, kde-format
+msgid "Quit"
+msgstr "Выход"
