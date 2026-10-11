@@ -335,7 +335,7 @@ msgstr "Значение"
 #: lcms2/IccColorSpaceEngine.cpp:86
 #, kde-format
 msgid "ICC Engine"
-msgstr "Движок ICC"
+msgstr "Механизм ICC"
 
 #: lcms2/LcmsEnginePlugin.cpp:116 lcms2/LcmsEnginePlugin.cpp:121
 #: lcms2/LcmsEnginePlugin.cpp:126

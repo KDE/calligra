@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-07-23 21:21+0200\n"
+"PO-Revision-Date: 2026-10-10 12:36+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
 "Language: nn\n"
@@ -15285,7 +15285,7 @@ msgstr "Stigande"
 #: ui/actions/dialogs/SortDialog.cpp:486
 #, kde-format
 msgid "Descending"
-msgstr "Synkande"
+msgstr "Fallande"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:296
 #, kde-format

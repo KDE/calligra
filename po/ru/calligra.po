@@ -2895,7 +2895,7 @@ msgstr "Неопределённая операция в цветовом про
 #: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:56
 #, kde-format
 msgid "Simple Color Conversion Engine"
-msgstr "Простой движок цветового преобразования"
+msgstr "Простой механизм цветового преобразования"
 
 #: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
 #: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:189
