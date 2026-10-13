@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-05-06 00:57+0300\n"
+"PO-Revision-Date: 2026-10-12 11:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -1734,12 +1734,12 @@ msgstr ""
 #: part/KWView.cpp:434
 #, kde-format
 msgid "Create Header"
-msgstr "Üstbilgi Oluştur"
+msgstr "Üst Bilgi Oluştur"
 
 #: part/KWView.cpp:440
 #, kde-format
 msgid "Create Footer"
-msgstr "Altbilgi Oluştur"
+msgstr "Alt Bilgi Oluştur"
 
 #: part/KWView.cpp:447
 #, kde-format
@@ -1769,7 +1769,7 @@ msgstr "Sayfa Düzeni"
 #: part/pagetool/KWPageTool.cpp:87
 #, kde-format
 msgid "Header & Footer"
-msgstr "Üstbilgi ve Altbilgi"
+msgstr "Üst Bilgi ve Alt Bilgi"
 
 #: part/pagetool/KWPageToolFactory.cpp:17
 #, kde-format
