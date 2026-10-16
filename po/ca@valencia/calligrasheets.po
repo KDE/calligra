@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-09-06 18:46+0200\n"
+"PO-Revision-Date: 2026-10-14 12:46+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -3829,7 +3829,7 @@ msgid ""
 msgstr ""
 "La funció COMPOUND() retorna el valor d'una inversió, donat el capital "
 "principal, la taxa d'interés nominal, la freqüència de combinació i el "
-"temps. Per exemple: 5000€ al 12% d'interés compost per trimestre per a 5 "
+"temps. Per exemple: 5000€ al 12 % d'interés compost per trimestre per a 5 "
 "anys serà COMPOUND(5000;0,12;4;5) o 9030,56€."
 
 #: functions/financial.xml:150
@@ -3851,7 +3851,7 @@ msgid ""
 msgstr ""
 "La funció CONTINUOUS() calcula el retorn de l'interés compost contínuament, "
 "donat el capital principal, la taxa nominal i el temps en anys. Per exemple: "
-"1000€ guanyant el 10% en un any serà CONTINUOUS(1000;0,1;1) o 1105,17€."
+"1000€ guanyant el 10 % en un any serà CONTINUOUS(1000;0,1;1) o 1105,17€."
 
 #: functions/financial.xml:172
 #, kde-format
@@ -4228,8 +4228,8 @@ msgid ""
 "provides an effective yield of EFFECT(.08;12) or 8.3%."
 msgstr ""
 "La funció EFFECT() calcula el tipus d'interés efectiu per a una taxa "
-"d'interés nominal (taxa anual o APR). Per exemple; el 8% d'interés compost "
-"dona, al mes, un tipus d'interés efectiu d'EFFECT(.08;12) o 8,3%."
+"d'interés nominal (taxa anual o APR). Per exemple; el 8 % d'interés compost "
+"dona, al mes, un tipus d'interés efectiu d'EFFECT(.08;12) o 8,3 %."
 
 #: functions/financial.xml:488
 #, kde-format
@@ -4338,8 +4338,8 @@ msgid ""
 "interest, after two years you will have FV(1000;0.08;2) or $1166.40."
 msgstr ""
 "La funció FV() retorna el valor futur d'una inversió, donat el tipus "
-"d'interés i el temps que passa. Si teniu 1000€ en un banc que vos dona un 8% "
-"d'interés, després de dos anys tindreu FV(1000;0,08;2) o 1166,40€."
+"d'interés i el temps que passa. Si teniu 1000€ en un banc que vos dona un "
+"8 % d'interés, després de dos anys tindreu FV(1000;0,08;2) o 1166,40€."
 
 #: functions/financial.xml:568
 #, kde-format
@@ -4369,7 +4369,7 @@ msgstr ""
 "La funció FV_ANNUITY() retorna el valor present d'una renda anual de fluix "
 "de pagaments donat el període del pagament, la taxa d'interés i el nombre de "
 "períodes. Per exemple: si rebeu 500€ per any durant 20 anys, i els invertiu "
-"al 8%, el total després de 20 anys, serà de FV_ANNUITY(500;0,08;20) o "
+"al 8 %, el total després de 20 anys, serà de FV_ANNUITY(500;0,08;20) o "
 "22,880,98€. Esta funció assumix que els pagaments es fan al final de cada "
 "període."
 
@@ -4598,8 +4598,8 @@ msgid ""
 "LEVEL_COUPON(1000;.13;2;4;.1) or $1096.95."
 msgstr ""
 "La funció LEVEL_COUPON() calcula el valor d'una fiança d'un cupó de nivell. "
-"Per exemple: si l'interés és del 10%, una fiança de 1000€ amb cupons "
-"semianuals amb una taxa del 13% que venç en 4 anys val "
+"Per exemple: si l'interés és del 10 %, una fiança de 1000€ amb cupons "
+"semianuals amb una taxa del 13 % que venç en 4 anys val "
 "LEVEL_COUPON(1000;0,13;2;4;0,1) o 1096,95€."
 
 #: functions/financial.xml:752
@@ -4659,7 +4659,7 @@ msgstr "MIRR(valors; inversió; reinversió)"
 #: functions/financial.xml:810
 #, no-c-format, kde-format
 msgid "MIRR({100;200;-50;300;-200}, 5%, 6%) equals 34.2823387842%"
-msgstr "MIRR({100;200;-50;300;-200}, 5%, 6%) fa 34,2823387842%"
+msgstr "MIRR({100;200;-50;300;-200}, 5 %, 6 %) fa 34,2823387842%"
 
 #: functions/financial.xml:819
 #, kde-format
@@ -4676,8 +4676,8 @@ msgid ""
 msgstr ""
 "La funció NOMINAL() calcula la taxa d'interés nominal (estat) per a una taxa "
 "d'interés efectiu (anual) compost a intervals donats. Per exemple: per a "
-"guanyar un 8% d'un compte compost mensualment, necessiteu un retorn de "
-"NOMINAL(.08;12) o 7,72%."
+"guanyar un 8 % d'un compte compost mensualment, necessiteu un retorn de "
+"NOMINAL(.08;12) o 7,72 %."
 
 #: functions/financial.xml:828
 #, kde-format
@@ -4754,7 +4754,7 @@ msgstr "NPV(Taxa; Valors)"
 #: functions/financial.xml:887
 #, no-c-format, kde-format
 msgid "NPV(100%;4;5;7) = 4.125"
-msgstr "NPV(100%;4;5;7) = 4,125"
+msgstr "NPV(100 %;4;5;7) = 4,125"
 
 # msgid "List"
 #: functions/financial.xml:908 functions/financial.xml:951
@@ -4791,7 +4791,7 @@ msgid ""
 "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2) "
 "returns 90.991042345"
 msgstr ""
-"ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2) "
+"ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3 %;5 %;100;2) "
 "retorna 90,991042345"
 
 #: functions/financial.xml:959 functions/financial.xml:1373
@@ -4824,7 +4824,7 @@ msgid ""
 "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100;2) "
 "returns 4.997775351"
 msgstr ""
-"ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100;2) "
+"ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3 %;91;100;2) "
 "retorna 4,997775351"
 
 #: functions/financial.xml:991
@@ -4934,7 +4934,7 @@ msgid ""
 "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%) returns "
 "103.819218241"
 msgstr ""
-"PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%) retorna "
+"PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6 %;5 %) retorna "
 "103,819218241"
 
 #: functions/financial.xml:1106 functions/financial.xml:1162
@@ -4955,7 +4955,7 @@ msgstr ""
 "que heu d'invertir per a tindre en un temps determinat, amb un interés "
 "determinat, alguns diners determinats. Per exemple, si necessiteu 1166,4 € "
 "per al vostre ordinador nou i voleu comprar-lo d'ací a dos anys i el banc "
-"vos dona un 8% d'interés, heu de posar al banc PV(1166,4;0,08;2) o 1000 €."
+"vos dona un 8 % d'interés, heu de posar al banc PV(1166,4;0,08;2) o 1000 €."
 
 #: functions/financial.xml:1119
 #, kde-format
@@ -4978,7 +4978,7 @@ msgid ""
 msgstr ""
 "La funció PV_ANNUITY() retorna el valor present d'una renda anual de fluix "
 "de pagaments. Per exemple: un bitllet de loteria «d'1 milió d'euros» quan "
-"paga 50.000 € per a 20 anys, amb una taxa d'interés del 5%, val realment "
+"paga 50.000 € per a 20 anys, amb una taxa d'interés del 5 %, val realment "
 "PV_ANNUITY(50000;0,05;20) o 623.111 €. Esta funció assumix que els pagaments "
 "es fan al final de cada període."
 
@@ -5262,9 +5262,9 @@ msgid ""
 "C1:C4 contains \"=DATE(2000;1;1)\", \"=DATE(2000;6;1)\", "
 "\"=DATE(2000;12;30)\", \"=DATE(2001;3;1)\" returns 2907.83187"
 msgstr ""
-"XNPV(5%;B1:B4;C1:C4) suposa que B1:B4 conté -20000, 4000, 12000, 8000 mentre "
-"que C1:C4 conté «=DATE(2000;1;1)», «=DATE(2000;6;1)», «=DATE(2000;12;30)», "
-"«=DATE(2001;3;1)» retorna 2907,83187"
+"XNPV(5 %;B1:B4;C1:C4) suposa que B1:B4 conté -20000, 4000, 12000, 8000 "
+"mentre que C1:C4 conté «=DATE(2000;1;1)», «=DATE(2000;6;1)», "
+"«=DATE(2000;12;30)», «=DATE(2001;3;1)» retorna 2907,83187"
 
 #: functions/financial.xml:1461
 #, kde-format
@@ -5307,8 +5307,8 @@ msgid ""
 "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); 6%;103.819218241) "
 "returns 0.050000000"
 msgstr ""
-"YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); 6%;103,819218241) "
-"retorna 0,050000000"
+"YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); "
+"6 %;103,819218241) retorna 0,050000000"
 
 #: functions/financial.xml:1520
 #, no-c-format, kde-format
@@ -5318,8 +5318,8 @@ msgid ""
 "matures in 20 years is worth ZERO_COUPON(1000;.1;20) or $148.64."
 msgstr ""
 "La funció ZERO_COUPON() calcula el valor d'una fiança d'un cupó zero "
-"(descompte pur). Per exemple: si la taxa d'interés és del 10%, una fiança de "
-"1000 € que venç en 20 anys val ZERO_COUPON(1000;0,1;20) o 148,64 €."
+"(descompte pur). Per exemple: si la taxa d'interés és del 10 %, una fiança "
+"de 1000 € que venç en 20 anys val ZERO_COUPON(1000;0,1;20) o 148,64 €."
 
 #: functions/financial.xml:1521
 #, kde-format
@@ -7989,8 +7989,8 @@ msgid ""
 "The matrix multiplied with its inverse results in the unity matrix of the "
 "same dimension."
 msgstr ""
-"La matriu multiplicada amb el seu invers resulta en la matriu identitat de "
-"la mateixa dimensió."
+"La matriu multiplicada amb el seu invers dona com a resultat la matriu "
+"identitat de la mateixa dimensió."
 
 #: functions/math.xml:1256
 #, kde-format
@@ -9988,8 +9988,8 @@ msgstr ""
 "La funció PERCENTILE() retorna el percentil x-èsim de la mostra de valors de "
 "dades a Data. Un percentil retorna el valor d'escala per a una sèrie de "
 "dades que va des del més xicotet (alpha=0) al més gran (alpha=1) d'una sèrie "
-"de dades. Per a alpha = 25%, el percentil vol dir el primer quartil; alpha = "
-"50% és la MITJANA. Les cel·les buides es consideraran com a zero, i les "
+"de dades. Per a alpha = 25 %, el percentil vol dir el primer quartil; alpha "
+"= 50 % és la MITJANA. Les cel·les buides es consideraran com a zero, i les "
 "cel·les amb text s'ignoraran."
 
 #: functions/statistical.xml:979
@@ -10558,8 +10558,8 @@ msgid ""
 "fraction of measurements which are to be excluded is set by the second "
 "parameter (cutOffFraction)."
 msgstr ""
-"La funció TRIMMEAN() calcula la mitjana d'un conjunt de dades amb els valors "
-"més xicotet i més gran omesos per a eliminar possibles atípics. La fracció "
+"La funció TRIMMEAN() calcula la mitjana d'un conjunt de dades amb el valor "
+"més xicotet i el més gran omés per a eliminar possibles atípics. La fracció "
 "total de mesures que s'han d'excloure està definit pel segon paràmetre "
 "(cutOffFraction)."
 
@@ -11169,8 +11169,8 @@ msgid ""
 "sequences of characters."
 msgstr ""
 "Podeu utilitzar comodins, l'interrogant «?» i l'asterisc «*». Un interrogant "
-"val per qualsevol caràcter, un asterisc val per qualsevol seqüència de "
-"caràcters."
+"val com a un caràcter qualsevol, un asterisc val com una seqüència de "
+"caràcters qualsevol."
 
 #: functions/text.xml:100
 #, kde-format
@@ -13273,7 +13273,7 @@ msgstr ""
 #: part/dialogs/PageLayoutDialog.cpp:96
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: part/dialogs/PageLayoutDialog.cpp:104
 #, kde-format
@@ -15390,7 +15390,7 @@ msgstr ""
 #: ui/actions/dialogs/ConsolidateDialog.cpp:155
 #, kde-format
 msgid "The source range intersects the destination range."
-msgstr "L'interval d'origen creua l'interval de destinació."
+msgstr "L'interval d'origen interseca l'interval de destinació."
 
 #: ui/actions/dialogs/ConsolidateDialog.cpp:199
 #, kde-format
@@ -16353,7 +16353,7 @@ msgstr "No distingisques majúscules de minúscules"
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:19
 #, kde-format
 msgid "Special Paste"
-msgstr "Apegades especial"
+msgstr "Apegades especials"
 
 #: ui/actions/dialogs/SpecialPasteDialog.cpp:20
 #, kde-format
@@ -17059,7 +17059,7 @@ msgstr "Apega el contingut del porta-retalls al cursor"
 #: ui/actions/Paste.cpp:94
 #, kde-format
 msgid "Special Paste..."
-msgstr "Apegades especial…"
+msgstr "Apegades especials…"
 
 #: ui/actions/Paste.cpp:96
 #, kde-format
@@ -18236,9 +18236,9 @@ msgid ""
 msgstr ""
 "Quan teniu un nombre en la cel·la actual i canvieu del format de cel·la de "
 "Genèric a Tant per cent, el nombre de la cel·la actual es multiplicarà per "
-"100%.\n"
+"100 %.\n"
 "Per exemple, si introduïu 12 i establiu el format de la cel·la a Tant per "
-"cent, el nombre serà 1,200%. Anant-hi arrere a format genèric, tornarà a "
+"cent, el nombre serà 1,200 %. Anant-hi arrere a format genèric, tornarà a "
 "12.\n"
 "També podeu utilitzar la icona de tant per cent en la barra d'eines de "
 "format."
