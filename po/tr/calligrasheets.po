@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-11 19:18+0300\n"
+"PO-Revision-Date: 2026-10-16 20:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -188,7 +188,7 @@ msgstr "Metin"
 #: engine/FunctionDescription.cpp:39
 #, kde-format
 msgid "Whole number (like 1, 132, 2344)"
-msgstr "Tamsayı (1, 23, 874 gibi)"
+msgstr "Tam sayı (1, 23, 874 gibi)"
 
 #: engine/FunctionDescription.cpp:41
 #, kde-format
@@ -218,7 +218,7 @@ msgstr "Diziler erimi"
 #: engine/FunctionDescription.cpp:54
 #, kde-format
 msgid "A range of whole numbers (like 1, 132, 2344)"
-msgstr "Tamsayı erimi (1, 132, 2344 gibi)"
+msgstr "Tam sayı erimi (1, 132, 2344 gibi)"
 
 #: engine/FunctionDescription.cpp:56
 #, kde-format
@@ -376,7 +376,7 @@ msgid ""
 "The BITAND() function performs a bit-wise AND operation for the two integer "
 "parameters."
 msgstr ""
-"BITAND() işlevi, iki tamsayı parametresi için bit bit AND işlemi "
+"BITAND() işlevi, iki tam sayı parametresi için bit bit AND işlemi "
 "gerçekleştirir."
 
 #: functions/bitops.xml:20
@@ -444,7 +444,7 @@ msgid ""
 "The BITOR() function performs a bit-wise OR operation for the two integer "
 "parameters. "
 msgstr ""
-"BITOR() işlevi, iki tamsayı parametresi arasında bit bit OR işlemi "
+"BITOR() işlevi, iki tam sayı parametresi arasında bit bit OR işlemi "
 "gerçekleştirir. "
 
 #: functions/bitops.xml:76
@@ -468,7 +468,7 @@ msgid ""
 "The BITXOR() function performs a bit-wise exclusive-OR operation for the two "
 "integer parameters. "
 msgstr ""
-"BITXOR() işlevi, iki tamsayı parametresi arasında bit bit özel OR işlemi "
+"BITXOR() işlevi, iki tam sayı parametresi arasında bit bit özel OR işlemi "
 "gerçekleştirir."
 
 #: functions/bitops.xml:96
@@ -529,7 +529,7 @@ msgstr "UPPER(BOOL2STRING(find(\"nan\"; \"ananas\"))), 3 döndürür"
 #: functions/conversion.xml:27
 #, kde-format
 msgid "Integer value to convert"
-msgstr "Dönüştürülecek tamsayı değeri"
+msgstr "Dönüştürülecek tam sayı değeri"
 
 #: functions/conversion.xml:31
 #, kde-format
@@ -539,8 +539,8 @@ msgid ""
 "boolean. It only accepts 0 or 1. If any other value is given, false is "
 "returned."
 msgstr ""
-"INT2BOOL() işlevi, verilen bir tamsayının Boole karşılığını döndürür. Bu "
-"yöntem, Boole kullanımın gerektiği yerlerde tamsayı değeri kullanmak "
+"INT2BOOL() işlevi, verilen bir tam sayının Boole karşılığını döndürür. Bu "
+"yöntem, Boole kullanımın gerektiği yerlerde tam sayı değeri kullanmak "
 "içindir. Yalnızca 0 ve 1 kabul edilen değerlerdir. Diğer değerlerin "
 "girilmesi durumunda yanlış döndürülür."
 
@@ -914,7 +914,7 @@ msgid ""
 "numbers can be converted. The optional Format argument specifies the level "
 "of conciseness, and defaults to 0."
 msgstr ""
-"ROMAN() işlevi, sayıyı Roma biçiminde döndürür. Yalnızca pozitif tamsayılar "
+"ROMAN() işlevi, sayıyı Roma biçiminde döndürür. Yalnızca pozitif tam sayılar "
 "dönüştürülebilir. İsteğe bağlı Biçim parametresi kısalık düzeyini belirtir "
 "ve öntanımlı değeri 0’dır."
 
@@ -6302,8 +6302,8 @@ msgid ""
 "The GCD() function returns the greatest common denominator for two or more "
 "integer values."
 msgstr ""
-"GCD() işlevi, iki veya daha fazla tamsayı değişkeni için ortak bölenlerin en "
-"büyük değerini döndürür."
+"GCD() işlevi, iki veya daha fazla tam sayı değişkeni için ortak bölenlerin "
+"en büyük değerini döndürür."
 
 #: functions/math.xml:105
 #, kde-format
@@ -6424,7 +6424,7 @@ msgstr "KUV(2; 3) eşittir 8"
 msgid ""
 "The EVEN() function returns the number rounded up to the nearest even "
 "integer."
-msgstr "ENT() işlevi, en yakın çift tamsayıya yuvarlatılmış sayıyı döndürür."
+msgstr "ENT() işlevi, en yakın çift tam sayıya yuvarlatılmış sayıyı döndürür."
 
 #: functions/math.xml:175
 #, kde-format
@@ -6599,7 +6599,7 @@ msgid ""
 "can count using a range: COUNT(A1:B5) or using a list of values like "
 "COUNT(12;5;12.5)."
 msgstr ""
-"Bu işlev, kendisine geçirilen tamsayı veya ondalık sayı argümanlarının "
+"Bu işlev, kendisine geçirilen tam sayı veya ondalık sayı argümanlarının "
 "sayısını döndürür. Bir erim kullanarak sayım yapabilirsiniz: COUNT(A1:B5) "
 "veya COUNT(12; 5; 12,5) gibi bir değer listesi kullanabilirsiniz."
 
@@ -7337,7 +7337,7 @@ msgid ""
 "the input, returning that value as a double."
 msgstr ""
 "CEIL() işlevi, x’i, geri dönüş değerini double verecek şekilde, girdiden "
-"daha büyük olan en yakın tamsayıya yukarı yuvarlar."
+"daha büyük olan en yakın tam sayıya yukarı yuvarlar."
 
 #: functions/math.xml:837
 #, kde-format
@@ -7375,7 +7375,7 @@ msgid ""
 msgstr ""
 "CEILING() işlevi, x’i girdiden büyük olan Ağırlığın en yakın çarpımına "
 "(sıfırdan uzağa) yukarı yuvarlar. Ağırlığın öntanımlı değeri 1 (veya değer "
-"negatif ise −1)’dir, bu da en yakın tamsayıya yukarı yuvarlandığı anlamına "
+"negatif ise −1)’dir, bu da en yakın tam sayıya yukarı yuvarlandığı anlamına "
 "gelir. Mod paremetresi sıfır değilse işlev pozitif sonsuza yuvarlamak yerine "
 "sıfırdan uzağa yuvarlar."
 
@@ -7430,7 +7430,7 @@ msgstr ""
 "The FLOOR() işlevi, x’i girdiden daha küçük olan Ağırlığın en yakın "
 "çarpımına aşağı (sıfıra doğru) yuvarlar.\n"
 "x pozitif ise Ağırlık 1’dir. Eğer değer negatif ise −1’dir,\n"
-"bu da en yakın tamsayıya yukarı doğru yuvarlandığı anlamına gelir.\n"
+"bu da en yakın tam sayıya yukarı doğru yuvarlandığı anlamına gelir.\n"
 "Eğer mod verilmişse ve sıfıra eşit değilse x’in miktarı ağırlığın\n"
 " bir katına sıfıra doğru yuvarlanır ve daha sonra işaret uygulanır. Aksi "
 "takdirde, negatif sonsuzluğa doğru yuvarlanır.\n"
@@ -7485,7 +7485,7 @@ msgstr "ABS(-12,5) eşittir 12,5"
 #: functions/math.xml:935
 #, kde-format
 msgid "The INT() function returns the integer part of the value."
-msgstr "INT() işlevi, değerin tamsayı kısmını döndürür."
+msgstr "INT() işlevi, değerin tam sayı kısmını döndürür."
 
 #: functions/math.xml:936
 #, kde-format
@@ -7729,8 +7729,8 @@ msgid ""
 msgstr ""
 "ROUND(değer;[basamaklar]) işlevi, yuvarlanmış değeri döndürür. Basamaklar, "
 "sayıyı kaç basamak yuvarlamak istediğinizi belirtir. Eğer basamaklar değeri "
-"sıfır ya da boş ise değer en yakın büyük tamsayıya yuvarlanır. Eğer "
-"basamaklar sıfırdan küçükse sayının ilgilitamsayı kısmı yuvarlanır."
+"sıfır ya da boş ise değer en yakın büyük tam sayıya yuvarlanır. Eğer "
+"basamaklar sıfırdan küçükse sayının ilgilitam sayı kısmı yuvarlanır."
 
 #: functions/math.xml:1119
 #, kde-format
@@ -7773,7 +7773,7 @@ msgstr ""
 "ROUNDUP(değer;[basamaklar]) işlevi, muklak değeri daha büyük olacak şekilde "
 "yuvarlanmış değeri döndürür. Basamaklar, sayıyı kaç basamak yuvarlamak "
 "istediğinizi belirtir. Eğer basamaklar sıfır ya da verilmemiş ise sayı en "
-"yakın tamsayıya yuvarlanır."
+"yakın tam sayıya yuvarlanır."
 
 #: functions/math.xml:1144
 #, kde-format
@@ -7811,7 +7811,7 @@ msgstr ""
 "ROUNDDOWN(değer;[basamaklar]) işlevi, mutlak değeri daha küçük olacak "
 "şekilde yuvarlanmış değer döndürür. Basamaklar, bu sayıyı yuvarlamak "
 "istediğiniz basamak sayısıdır. Basamaklar sıfır ya da boş ise sayı daha "
-"küçük en yakın tamsayıya yuvarlanır."
+"küçük en yakın tam sayıya yuvarlanır."
 
 #: functions/math.xml:1167
 #, kde-format
@@ -7882,7 +7882,7 @@ msgstr "Payda"
 #: functions/math.xml:1204
 #, kde-format
 msgid "Function QUOTIENT returns the integer portion of numerator/denumerator."
-msgstr "QUOTIENT fonskiyonu, pay/payda değerinin tamsayı kısmını döndürür."
+msgstr "QUOTIENT fonskiyonu, pay/payda değerinin tam sayı kısmını döndürür."
 
 #: functions/math.xml:1205
 #, kde-format
@@ -8657,8 +8657,8 @@ msgid ""
 "OFFSET(Reference reference; Integer rowOffset; Integer columnOffset; Integer "
 "newHeight; Integer newWidth)"
 msgstr ""
-"OFFSET(Başvuru başvurusu; Tamsayı satırOfseti; Tamsayı sütunOfseti; Tamsayı "
-"yeniYükseklik; Tamsayı yeniGenişlik)"
+"OFFSET(Başvuru başvurusu; Tam sayı satırOfseti; Tam sayı sütunOfseti; Tam "
+"sayı yeniYükseklik; Tam sayı yeniGenişlik)"
 
 #: functions/reference.xml:401
 #, kde-format
@@ -16730,7 +16730,7 @@ msgstr "İzin ver:"
 #: ui/actions/dialogs/ValidityDialog.cpp:61
 #, kde-format
 msgid "Integer"
-msgstr "Tamsayı"
+msgstr "Tam Sayı"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:65
 #, kde-format

@@ -5,13 +5,13 @@
 # Anıl Özbek <ozbekanil@gmail.com>, 2012.
 # obsoleteman <tulliana@gmail.com>, 2008.
 # Volkan Gezer <volkangezer@gmail.com>, 2013.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022-2023, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2023-05-01 12:41+0300\n"
+"PO-Revision-Date: 2026-10-16 20:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20
@@ -82,12 +82,12 @@ msgstr "CMYK (32 bit kayan noktalı değer/kanal)"
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.h:72
 #, kde-format
 msgid "CMYK (16-bit integer/channel)"
-msgstr "CMYK (16 bit tamsayı/kanal)"
+msgstr "CMYK (16 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/cmyk_u8/CmykU8ColorSpace.h:70
 #, kde-format
 msgid "CMYK (8-bit integer/channel)"
-msgstr "CMYK (8 bit tamsayı/kanal)"
+msgstr "CMYK (8 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/gray_f16/GrayF16ColorSpace.cpp:25
 #: lcms2/colorspaces/gray_f32/GrayF32ColorSpace.cpp:28
@@ -110,7 +110,7 @@ msgstr "Gri Tonlu/Alfa (32 bit kayan noktalı değer/kanal)"
 #: lcms2/colorspaces/gray_u16/GrayU16ColorSpace.h:68
 #, kde-format
 msgid "Grayscale (16-bit integer/channel)"
-msgstr "Gri Tonlu (16 bit tamsayı/kanal)"
+msgstr "Gri Tonlu (16 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/gray_u8/GrayU8ColorSpace.h:68
 #, kde-format
@@ -146,12 +146,12 @@ msgstr "L*a*b* (32 bit kayan noktalı değer/kanal)"
 #: lcms2/colorspaces/lab_u16/LabColorSpace.h:77
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel)"
-msgstr "L*a*b* (16 bit tamsayı/kanal)"
+msgstr "L*a*b* (16 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/lab_u8/LabU8ColorSpace.h:73
 #, kde-format
 msgid "L*a*b* (8-bit integer/channel)"
-msgstr "L*a*b* (8 bit tamsayı/kanal)"
+msgstr "L*a*b* (8 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/rgb_f16/RgbF16ColorSpace.cpp:23
 #: lcms2/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:26
@@ -190,12 +190,12 @@ msgstr "RGBA (32 bit kayan noktalı değer/kanal)"
 #: lcms2/colorspaces/rgb_u16/RgbU16ColorSpace.h:61
 #, kde-format
 msgid "RGB (16-bit integer/channel)"
-msgstr "RGB (16 bit tamsayı/kanal)"
+msgstr "RGB (16 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/rgb_u8/RgbU8ColorSpace.h:76
 #, kde-format
 msgid "RGB (8-bit integer/channel)"
-msgstr "CMYK (8 bit tamsayı/kanal)"
+msgstr "CMYK (8 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:21
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:25
@@ -228,17 +228,17 @@ msgstr "Z"
 #: lcms2/colorspaces/xyz_f32/XyzF32ColorSpace.h:71
 #, kde-format
 msgid "XYZ (32-bit float/channel)"
-msgstr "XYZ (16 bit tamsayı/kanal)"
+msgstr "XYZ (16 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/xyz_u16/XyzU16ColorSpace.h:63
 #, kde-format
 msgid "XYZ (16-bit integer/channel)"
-msgstr "XYZ (16 bit tamsayı/kanal)"
+msgstr "XYZ (16 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/xyz_u8/XyzU8ColorSpace.h:66
 #, kde-format
 msgid "XYZ (8-bit integer/channel)"
-msgstr "XYZ (8 bit tamsayı/kanal)"
+msgstr "XYZ (8 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:33
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:27
@@ -262,12 +262,12 @@ msgstr "YCBCR (32 bit kayan noktalı değer/kanal)"
 #: lcms2/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h:66
 #, kde-format
 msgid "YCBCR (16-bit integer/channel)"
-msgstr "YCBCR (16 bit tamsayı/kanal)"
+msgstr "YCBCR (16 bit tam sayı/kanal)"
 
 #: lcms2/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.h:66
 #, kde-format
 msgid "YCBCR (8-bit integer/channel)"
-msgstr "YCBCR (8 bit tamsayı/kanal)"
+msgstr "YCBCR (8 bit tam sayı/kanal)"
 
 #: lcms2/compositeops/RgbCompositeOpBumpmap.h:20
 #, kde-format
