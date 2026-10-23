@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-24 08:25+0200\n"
-"Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
+"PO-Revision-Date: 2026-10-22 05:43+0200\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -7914,7 +7914,7 @@ msgstr "ROUNDDOWN(-1.252) равняется -1"
 #: functions/math.xml:1181
 #, kde-format
 msgid "Nth term"
-msgstr "N-ый элемент"
+msgstr "N-й элемент"
 
 #: functions/math.xml:1185
 #, kde-format
@@ -7923,7 +7923,7 @@ msgid ""
 "8, 13, 21...), in which each number, after the first two, is the sum of the "
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
-"Функция FIB вычисляет N-ый элемент последовательности Фибоначчи (1, 1, 2, 3, "
+"Функция FIB вычисляет N-й элемент последовательности Фибоначчи (1, 1, 2, 3, "
 "5, 8, 13, 21...), в которой каждое число является суммой предыдущих двух. "
 "FIB(0) по определению равно 0."
 
