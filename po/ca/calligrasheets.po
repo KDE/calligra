@@ -6,15 +6,15 @@
 # SPDX-FileCopyrightText: 2000-2001 Sebastià Pla <sastia@retemail.es>
 # SPDX-FileCopyrightText: 2002-2006 Albert Astals Cid <aacid@kde.org>
 # SPDX-FileCopyrightText: 2006 Xavier Batlle i Pèlach <tevibp@wanadoo.es>
-# SPDX-FileCopyrightText: 2006, 2013-2014, 2016, 2020, 2022-2023 Antoni Bella Pérez <antonibella5@yahoo.com>
+# SPDX-FileCopyrightText: 2006, 2013-2014, 2016, 2020, 2022-2023, 2026 Antoni Bella Pérez <antonibella5@yahoo.com>
 # SPDX-FileCopyrightText: 2006-2008, 2010 Rafael Carreras <rcarreras@caliu.cat>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-06 02:56+0000\n"
-"PO-Revision-Date: 2026-10-14 12:46+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2026-10-29 22:25+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.12.3\n"
 "X-Poedit-Language: Catalan\n"
 
 #. i18n:
@@ -3828,8 +3828,8 @@ msgid ""
 msgstr ""
 "La funció COMPOUND() retorna el valor d'una inversió, donat el capital "
 "principal, la taxa d'interès nominal, la freqüència de combinació i el "
-"temps. Per exemple: 5000€ al 12% d'interès compost per trimestre per a 5 "
-"anys serà COMPOUND(5000;0,12;4;5) o 9030,56€."
+"temps. Per exemple: 5.000 € al 12% d'interès compost per trimestre per a 5 "
+"anys serà COMPOUND(5000;0,12;4;5) o 9.030,56 €."
 
 #: functions/financial.xml:150
 #, kde-format
@@ -3850,7 +3850,7 @@ msgid ""
 msgstr ""
 "La funció CONTINUOUS() calcula el retorn de l'interès compost contínuament, "
 "donat el capital principal, la taxa nominal i el temps en anys. Per exemple: "
-"1000€ guanyant el 10% en un any serà CONTINUOUS(1000;0,1;1) o 1105,17€."
+"1.000 € guanyant el 10% en un any serà CONTINUOUS(1000;0,1;1) o 1.105,17 €."
 
 #: functions/financial.xml:172
 #, kde-format
@@ -4038,7 +4038,7 @@ msgstr "DDB(75000;1;60;12;2) retorna 1721,81"
 #: functions/financial.xml:357 functions/financial.xml:1349
 #, kde-format
 msgid "Price per $100 face value"
-msgstr "Preu per al valor nominal de 100€"
+msgstr "Preu per al valor nominal de 100 €"
 
 #: functions/financial.xml:361 functions/financial.xml:616
 #: functions/financial.xml:920 functions/financial.xml:963
@@ -4337,8 +4337,8 @@ msgid ""
 "interest, after two years you will have FV(1000;0.08;2) or $1166.40."
 msgstr ""
 "La funció FV() retorna el valor futur d'una inversió, donat el tipus "
-"d'interès i el temps que passa. Si teniu 1000€ en un banc que us dona un 8% "
-"d'interès, després de dos anys tindreu FV(1000;0,08;2) o 1166,40€."
+"d'interès i el temps que passa. Si teniu 1.000 € en un banc que us dona un "
+"8% d'interès, després de dos anys tindreu FV(1000;0,08;2) o 1.166,40 €."
 
 #: functions/financial.xml:568
 #, kde-format
@@ -4367,9 +4367,9 @@ msgid ""
 msgstr ""
 "La funció FV_ANNUITY() retorna el valor present d'una renda anual de fluix "
 "de pagaments donat el període del pagament, la taxa d'interès i el nombre de "
-"períodes. Per exemple: si rebeu 500€ per any durant 20 anys, i els invertiu "
+"períodes. Per exemple: si rebeu 500 € per any durant 20 anys, i els invertiu "
 "al 8%, el total després de 20 anys, serà de FV_ANNUITY(500;0,08;20) o "
-"22,880,98€. Aquesta funció assumeix que els pagaments es fan al final de "
+"22.880,98 €. Aquesta funció assumeix que els pagaments es fan al final de "
 "cada període."
 
 #: functions/financial.xml:594
@@ -4597,9 +4597,9 @@ msgid ""
 "LEVEL_COUPON(1000;.13;2;4;.1) or $1096.95."
 msgstr ""
 "La funció LEVEL_COUPON() calcula el valor d'una fiança d'un cupó de nivell. "
-"Per exemple: si l'interès és del 10%, una fiança de 1000€ amb cupons "
+"Per exemple: si l'interès és del 10%, una fiança de 1.000 € amb cupons "
 "semianuals amb una taxa del 13% que venç en 4 anys val "
-"LEVEL_COUPON(1000;0,13;2;4;0,1) o 1096,95€."
+"LEVEL_COUPON(1000;0,13;2;4;0,1) o 1.096,95 €."
 
 #: functions/financial.xml:752
 #, kde-format
@@ -4952,9 +4952,9 @@ msgid ""
 msgstr ""
 "La funció PV() retorna el valor present d'una inversió, és a dir, els diners "
 "que heu d'invertir per a tenir en un temps determinat, amb un interès "
-"determinat, alguns diners determinats. Per exemple, si necessiteu 1166,4 € "
+"determinat, alguns diners determinats. Per exemple, si necessiteu 1.166,40 € "
 "per al vostre ordinador nou i voleu comprar-lo d'aquí a dos anys i el banc "
-"us dona un 8% d'interès, heu de posar al banc PV(1166,4;0,08;2) o 1000 €."
+"us dona un 8% d'interès, heu de posar al banc PV(1166,4;0,08;2) o 1.000 €."
 
 #: functions/financial.xml:1119
 #, kde-format
@@ -5318,7 +5318,7 @@ msgid ""
 msgstr ""
 "La funció ZERO_COUPON() calcula el valor d'una fiança d'un cupó zero "
 "(descompte pur). Per exemple: si la taxa d'interès és del 10%, una fiança de "
-"1000 € que venç en 20 anys val ZERO_COUPON(1000;0,1;20) o 148,64 €."
+"1.000 € que venç en 20 anys val ZERO_COUPON(1000;0,1;20) o 148,64 €."
 
 #: functions/financial.xml:1521
 #, kde-format
