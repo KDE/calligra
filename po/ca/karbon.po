@@ -664,6 +664,3 @@ msgstr "Traç:"
 #, kde-format
 msgid "Fill:"
 msgstr "Omple:"
-
-#~ msgid "D&elete"
-#~ msgstr "&Elimina"

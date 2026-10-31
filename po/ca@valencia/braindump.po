@@ -62,31 +62,31 @@ msgstr "Progrés"
 #: data/states/states/states.xml:8
 #, kde-format
 msgid "0 %"
-msgstr "0%"
+msgstr "0 %"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:9
 #, kde-format
 msgid "25 %"
-msgstr "25%"
+msgstr "25 %"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:10
 #, kde-format
 msgid "50 %"
-msgstr "50%"
+msgstr "50 %"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:11
 #, kde-format
 msgid "75 %"
-msgstr "75%"
+msgstr "75 %"
 
 #. i18n: tag state attribute name
 #: data/states/states/states.xml:12
 #, kde-format
 msgid "100 %"
-msgstr "100%"
+msgstr "100 %"
 
 #: plugins/quickstates/BraindumpQuickStatesPlugin.cpp:46
 #, kde-format
