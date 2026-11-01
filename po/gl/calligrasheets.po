@@ -14472,17 +14472,17 @@ msgstr "Agochar as filas"
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:39
 #, kde-format
 msgid "Show Columns"
-msgstr "Mostrar as columnas"
+msgstr "Amosar as columnas"
 
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:36
 #, kde-format
 msgid "Show Rows"
-msgstr "Mostrar as filas"
+msgstr "Amosar as filas"
 
 #: ui/actions/AdjustRowCol.cpp:109
 #, kde-format
 msgid "Show hidden rows in the selection"
-msgstr "Mostrar as filas agochadas na selección"
+msgstr "Amosar as filas agochadas na selección"
 
 #: ui/actions/AdjustRowCol.cpp:111
 #, fuzzy, kde-format
@@ -14493,7 +14493,7 @@ msgstr "Xunta a rexión escollida"
 #: ui/actions/AdjustRowCol.cpp:114
 #, kde-format
 msgid "Show hidden columns in the selection"
-msgstr "Mostra as columnas agochadas na selección"
+msgstr "Amosa as columnas agochadas na selección"
 
 #: ui/actions/AdjustRowCol.cpp:116
 #, fuzzy, kde-format
@@ -14556,22 +14556,22 @@ msgstr "Axusta o tamaño da filas/columna para que caiba o contido"
 #: ui/actions/AdjustRowCol.cpp:292
 #, kde-format
 msgid "Show Columns..."
-msgstr "Mostrar as columnas…"
+msgstr "Amosar as columnas…"
 
 #: ui/actions/AdjustRowCol.cpp:292
 #, kde-format
 msgid "Show Rows..."
-msgstr "Mostrar as filas…"
+msgstr "Amosar as filas…"
 
 #: ui/actions/AdjustRowCol.cpp:294
 #, kde-format
 msgid "Show hidden columns"
-msgstr "Mostrar as columnas agochadas"
+msgstr "Amosar as columnas agochadas"
 
 #: ui/actions/AdjustRowCol.cpp:294
 #, kde-format
 msgid "Show hidden rows"
-msgstr "Mostra as filas agochadas"
+msgstr "Amosa as filas agochadas"
 
 #: ui/actions/AdjustRowCol.cpp:327 ui/actions/AdjustRowCol.cpp:329
 #, kde-format
@@ -14722,7 +14722,7 @@ msgstr "Cambiar o ángulo"
 #: ui/actions/AutoFilter.cpp:21
 #, kde-format
 msgid "&Auto-Filter"
-msgstr "&Autofiltrar"
+msgstr "Filtrar &automaticamente"
 
 #: ui/actions/AutoFilter.cpp:21
 #, kde-format
@@ -14732,7 +14732,7 @@ msgstr "Engadir un filtro automático ao intervalo de celas"
 #: ui/actions/AutoFilter.cpp:52
 msgctxt "(qtundo-format)"
 msgid "Auto-Filter"
-msgstr "Filtro autom."
+msgstr "Filtrar automaticamente"
 
 #: ui/actions/AutoFormat.cpp:31
 #, fuzzy, kde-format
@@ -14748,7 +14748,7 @@ msgstr "Formato automático…"
 #: ui/actions/AutoFormat.cpp:78
 #, kde-format
 msgid "Could not find sheet-style XML file '%1'."
-msgstr "Non se puido atopar a folla de estilo do ficheiro XML «%1»."
+msgstr "Non foi posíbel atopar a folla de estilo do ficheiro XML «%1»."
 
 #: ui/actions/AutoFormat.cpp:91
 #, kde-format
@@ -14758,7 +14758,7 @@ msgstr "Erro de procesamento da folla de estilo do ficheiro XML %1."
 #: ui/actions/AutoFormat.cpp:133
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
-msgstr "Formato autom."
+msgstr "Formato automaticamente"
 
 #: ui/actions/AutoSum.cpp:22
 #, kde-format
@@ -15051,10 +15051,11 @@ msgstr "Ficheiros de datos CSV (*.csv)"
 #: ui/actions/CSVActions.cpp:69
 #, kde-format
 msgid "Cannot open input file."
-msgstr "Non se pode abrir o ficheiro de entrada."
+msgstr "Non é posíbel abrir o ficheiro de entrada."
 
 #: ui/actions/CSVActions.cpp:77
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inserting Text File"
 msgid "Inserting Text File"
 msgstr "Inserindo ficheiro de texto"
 
@@ -15398,7 +15399,7 @@ msgid ""
 "User name:\n"
 "(if necessary)"
 msgstr ""
-"Nome de usuario:\n"
+"Nome de usuaria:\n"
 "(de ser necesario)"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:119
@@ -15608,7 +15609,7 @@ msgstr "Esta base de datos non contén táboas"
 #: ui/actions/dialogs/DatabaseDialog.cpp:670
 #, kde-format
 msgid "Driver could not be loaded"
-msgstr "Non se puido cargar o controlador"
+msgstr "Non foi posíbel cargar o controlador"
 
 #: ui/actions/dialogs/DatabaseDialog.cpp:680
 #, kde-format
@@ -15669,7 +15670,7 @@ msgstr "Distinguir as maiúsculas"
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:94
 #, kde-format
 msgid "Precision as shown"
-msgstr "Precisión como se mostra"
+msgstr "Precisión como se amosa"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:97
 #, kde-format
@@ -15704,7 +15705,7 @@ msgstr "Ano nulo:"
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:157
 #, kde-format
 msgid "&Use System's Locale Settings"
-msgstr "&Empregar as configuracións locais do sistema"
+msgstr "&Usar as configuracións locais do sistema"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:185
 #, fuzzy, kde-format
@@ -15835,7 +15836,7 @@ msgstr "Inserir"
 #: ui/actions/dialogs/PasteInsertDialog.cpp:37
 #, kde-format
 msgid "Move towards right"
-msgstr "Mover cara a dereita"
+msgstr "Mover cara á dereita"
 
 #: ui/actions/dialogs/InsertDialog.cpp:42
 #: ui/actions/dialogs/PasteInsertDialog.cpp:38
@@ -15866,7 +15867,7 @@ msgstr "Retirar"
 #: ui/actions/dialogs/InsertDialog.cpp:48
 #, kde-format
 msgid "Move towards left"
-msgstr "Mover cara a esquerda"
+msgstr "Mover cara á esquerda"
 
 #: ui/actions/dialogs/InsertDialog.cpp:49
 #, kde-format
@@ -15907,7 +15908,7 @@ msgstr "Ligazón a enderezo de Internet"
 #: ui/actions/dialogs/LinkDialog.cpp:104 ui/actions/dialogs/LinkDialog.cpp:142
 #, kde-format
 msgid "Text to display:"
-msgstr "Texto a mostrar:"
+msgstr "Texto a amosar:"
 
 #: ui/actions/dialogs/LinkDialog.cpp:74
 #, kde-format
@@ -16270,12 +16271,12 @@ msgstr "Se a diferenza é negativa, o valor inicial debe ser maior que o final."
 #: ui/actions/dialogs/ShowColRowDialog.cpp:37
 #, kde-format
 msgid "Select hidden rows to show:"
-msgstr "Indica as filas agochadas a mostrar:"
+msgstr "Indica as filas agochadas a amosar:"
 
 #: ui/actions/dialogs/ShowColRowDialog.cpp:40
 #, kde-format
 msgid "Select hidden columns to show:"
-msgstr "Indica as columnas agochadas a mostrar:"
+msgstr "Indica as columnas agochadas a amosar:"
 
 #: ui/actions/dialogs/SortDialog.cpp:76 ui/actions/dialogs/SortDialog.cpp:220
 #, kde-format
@@ -16527,7 +16528,7 @@ msgstr "Alerta de &erro"
 #: ui/actions/dialogs/ValidityDialog.cpp:140
 #, kde-format
 msgid "Show error message when invalid values are entered"
-msgstr "Mostra unha mensaxe de erro cando se insire valores incorrectos"
+msgstr "Amosa unha mensaxe de erro cando se insire valores incorrectos"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:145
 #, kde-format
@@ -16565,7 +16566,7 @@ msgstr "Axuda de entrada"
 #: ui/actions/dialogs/ValidityDialog.cpp:174
 #, kde-format
 msgid "Show input help when cell is selected"
-msgstr "Mostra axuda de entrada cando escolle unha cela"
+msgstr "Amosa axuda de entrada cando escolle unha cela"
 
 #: ui/actions/dialogs/ValidityDialog.cpp:461
 #: ui/actions/dialogs/ValidityDialog.cpp:466
@@ -16595,7 +16596,7 @@ msgstr "Configuracións do documento…"
 #: ui/actions/DocumentSettings.cpp:24
 #, kde-format
 msgid "Show document settings dialog"
-msgstr "Mostrar o diálogo de configuración do documento"
+msgstr "Amosar o diálogo de configuración do documento"
 
 #: ui/actions/Editing.cpp:20
 #, kde-format
@@ -16899,7 +16900,7 @@ msgstr "Retirar a ligazón"
 #: ui/actions/Link.cpp:92
 msgctxt "(qtundo-format)"
 msgid "Set Link"
-msgstr "Configurar a ligazón"
+msgstr "Definir a ligazón"
 
 #: ui/actions/ListChoose.cpp:28
 #, kde-format
@@ -17003,7 +17004,7 @@ msgstr "Salto antes da columna"
 #: ui/actions/PageBreak.cpp:74
 #, kde-format
 msgid "Set a manual page break before the column"
-msgstr "Estabelecer un salto de páxina manual antes da columna"
+msgstr "Definir un salto de páxina manual antes da columna"
 
 #: ui/actions/PageBreak.cpp:83
 #, kde-format
@@ -17048,7 +17049,7 @@ msgstr "Crear táboas dinámicas"
 #: ui/actions/Pivot.cpp:29
 #, kde-format
 msgid "You must select multiple cells."
-msgstr "É necesario escoller varias celas."
+msgstr "Hai que escoller varias celas."
 
 #: ui/actions/SelectAll.cpp:20
 #, kde-format
@@ -17058,7 +17059,7 @@ msgstr "Recalcula o valor de cada cela na folla de cálculo actual"
 #: ui/actions/ShowTableView.cpp:23
 #, kde-format
 msgid "Show QTableView..."
-msgstr "Mostrar QTableView…"
+msgstr "Amosar QTableView…"
 
 #: ui/actions/Sort.cpp:25
 #, kde-format
@@ -17145,7 +17146,7 @@ msgstr "Subliñado"
 #: ui/actions/Style.cpp:184
 #, kde-format
 msgid "Strike Out"
-msgstr "Tachar"
+msgstr "Riscar"
 
 #: ui/actions/Style.cpp:213
 #, kde-format
@@ -17325,7 +17326,7 @@ msgstr "Aumentar a precisión"
 #: ui/actions/Style.cpp:532
 #, kde-format
 msgid "Increase the decimal precision shown onscreen"
-msgstr "Aumenta a precisión decimal mostrada na pantalla"
+msgstr "Aumenta a precisión decimal amosada na pantalla"
 
 #: ui/actions/Style.cpp:549
 #, kde-format
@@ -17335,7 +17336,7 @@ msgstr "Diminuír a precisión"
 #: ui/actions/Style.cpp:551
 #, kde-format
 msgid "Decrease the decimal precision shown onscreen"
-msgstr "Diminúe a precisión decimal mostrada na pantalla"
+msgstr "Diminúe a precisión decimal amosada na pantalla"
 
 #: ui/actions/Style.cpp:597
 msgctxt "(qtundo-format)"
