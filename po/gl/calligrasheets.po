@@ -17184,9 +17184,7 @@ msgid "Vertical Text"
 msgstr "Texto vertical"
 
 #: ui/actions/Style.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Number Format"
+#, kde-format
 msgid "Number Format"
 msgstr "Formato de número"
 
@@ -17204,9 +17202,7 @@ msgid "Format Number"
 msgstr "Primeiro número"
 
 #: ui/actions/Style.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scientific Format"
+#, kde-format
 msgid "Scientific Format"
 msgstr "Notación científica"
 
@@ -17269,9 +17265,7 @@ msgid "Format Money"
 msgstr "Formato de moeda"
 
 #: ui/actions/Style.cpp:414
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Date Format"
+#, kde-format
 msgid "Date Format"
 msgstr "Formato da data"
 
@@ -17295,9 +17289,7 @@ msgid "Set the cell formatting to a time"
 msgstr "Define o formato das celas"
 
 #: ui/actions/Style.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Time Format"
+#, kde-format
 msgid "Time Format"
 msgstr "Formato de hora"
 
