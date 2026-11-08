@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-13 05:30+0200\n"
+"PO-Revision-Date: 2026-11-08 03:03+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Poedit 3.10\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -9161,6 +9161,8 @@ msgid ""
 "The GAUSS() function returns the integral values for the standard normal "
 "cumulative distribution."
 msgstr ""
+"ფუნქცია GAUSS() აბრუნებს ინტეგრალის მნიშვნელობას სტანდარტული ნორმალური "
+"კუმულაციური განაწილებისთვის."
 
 #: functions/statistical.xml:488
 #, kde-format
@@ -10628,7 +10630,7 @@ msgstr "წარმატების ალბათობა"
 #: functions/statistical.xml:1845
 #, kde-format
 msgid "Number of successes (or the lower limit, if the upper limit is given)"
-msgstr ""
+msgstr "წარმატებების რაოდენობა (ან ქვედა ზღვარი, თუ მითითებულია ზედა ზღვარი)"
 
 #: functions/statistical.xml:1849
 #, kde-format
@@ -11127,6 +11129,8 @@ msgid ""
 "The PROPER() function converts the first letter of each word to uppercase "
 "and the rest of the letters to lowercase."
 msgstr ""
+"ფუნქციას PROPER() გადაჰყავს თითოეული სიტყვის პირველი ასო მთავრულში და "
+"დანარჩენი ასოები მხედრულში."
 
 #: functions/text.xml:175
 #, kde-format
@@ -11159,6 +11163,8 @@ msgid ""
 "The COMPARE() function returns 0 if the two strings are equal; -1 if the "
 "first one is lower in value than the second one; otherwise it returns 1."
 msgstr ""
+"ფუნქცია COMPARE() აბრუნებს 0-ს, თუ ორი სტრიქონი ტოლია. -1-ს, თუ პირველის "
+"მნიშვნელობა მეორეზე ნაკლებია. თუ არა, აბრუნებს 1-ს."
 
 #: functions/text.xml:197
 #, kde-format
@@ -11186,6 +11192,8 @@ msgid ""
 "The EXACT() function returns True if these two strings are equal. Otherwise, "
 "it returns False."
 msgstr ""
+"ფუნქცია EXACT() აბრუნებს ჭეშმარიტს, თუ ეს ორი სტრიქონი ტოლია. თუ არა, "
+"აბრუნებს ცრუს."
 
 #: functions/text.xml:218
 #, kde-format
@@ -11269,6 +11277,8 @@ msgid ""
 "The REPLACEB() function replaces part of a text string with a different text "
 "string using byte positions."
 msgstr ""
+"ფუნქცია REPLACEB() ანაცვლებს ტექსტური სტრიქონის ნაწილს სხვა ტექსტური "
+"სტრიქონით ბაიტის მდებარეობის გამოყენებით."
 
 #: functions/text.xml:277
 #, kde-format
