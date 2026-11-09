@@ -430,6 +430,19 @@
     <url>https://kde.org</url>
   </developer>
   <releases>
+    <release version="26.11.70" type="snapshot">
+      <description>
+        <ul>
+          <li>Improve compatibility with the OpenDocument 1.4 standard.</li>
+          <li>Restore password protection in Document Properties and support AES-256 encryption for OpenDocument files.</li>
+          <li>Fix font selection and preserve font families when loading styles and formatting text.</li>
+          <li>Update RTF document import to use QRtfReader.</li>
+          <li>Improve mathematical formula editing experience.</li>
+          <li>Improve undo handling for section names and list numbering.</li>
+          <li>Fix memory leaks when editing documents and working with shapes.</li>
+        </ul>
+      </description>
+    </release>
     <release version="26.08.3" date="2026-11-05"/>
     <release version="26.08.2" date="2026-10-08"/>
     <release version="26.08.1" date="2026-09-10"/>

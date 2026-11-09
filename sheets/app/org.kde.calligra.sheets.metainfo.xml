@@ -341,6 +341,17 @@
     <url>https://kde.org</url>
   </developer>
   <releases>
+    <release version="26.11.70" type="snapshot">
+      <description>
+        <ul>
+          <li>Improve OpenDocument 1.4 compatibility and add support for opening flat OpenDocument spreadsheets (FODS).</li>
+          <li>Expand spreadsheet function support, including LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC and YIELD, and improve compatibility with LibreOffice.</li>
+          <li>Fix formula evaluation, matrix import, array calculations and recalculation of dependent formulas. Improve calculation performance and prevent crashes, infinite loops and division by zero in financial functions.</li>
+          <li>Restore password protection in Document Properties and support AES-256 encryption for OpenDocument files.</li>
+          <li>Fix memory leaks when editing documents and working with shapes.</li>
+        </ul>
+      </description>
+    </release>
     <release version="26.08.3" date="2026-11-05"/>
     <release version="26.08.2" date="2026-10-08"/>
     <release version="26.08.1" date="2026-09-10"/>
