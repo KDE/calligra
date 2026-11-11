@@ -1575,7 +1575,7 @@ msgstr "Vis feltskygger"
 #: part/KWView.cpp:328
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr "Slå av/på skyggebakgrunn for felter"
+msgstr "Slå på/av skyggebakgrunn for felter"
 
 #: part/KWView.cpp:329
 #, kde-format
@@ -1583,7 +1583,7 @@ msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
-"Slå av/på visualisering av felter (variabler osv.) ved å tegne bakgrunnen "
+"Slå på/av visualisering av felter (variabler osv.) ved å tegne bakgrunnen "
 "deres i en kontrastfarge."
 
 #: part/KWView.cpp:331

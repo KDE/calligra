@@ -346,7 +346,7 @@ msgstr "Endre taktsignatur"
 #: commands/ToggleTiedNoteCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Toggle Note Tie"
-msgstr "Slå bindebue av/på"
+msgstr "Slå bindebue på/av"
 
 #: dialogs/KeySignatureDialog.cpp:15
 #, kde-format

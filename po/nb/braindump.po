@@ -223,12 +223,12 @@ msgstr "Verktøyvalg"
 #: src/import/ToolDocker.cpp:70
 #, kde-format
 msgid "Toggles showing a title bar"
-msgstr "Slår av/på visning av tittellinje"
+msgstr "Slår på/av visning av tittellinje"
 
 #: src/import/ToolDocker.cpp:78
 #, kde-format
 msgid "Toggles organising the options in tabs or not"
-msgstr "Slår av/på organisering av valgene i faner"
+msgstr "Slår på/av organisering av valgene i faner"
 
 #: src/layouts/ColumnLayout.cpp:126
 #, kde-format
