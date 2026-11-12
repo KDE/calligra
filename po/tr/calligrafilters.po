@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-10-16 20:11+0300\n"
+"PO-Revision-Date: 2026-11-10 21:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: karbon/image/ImageExport.cpp:88
 #, kde-format
@@ -451,7 +451,7 @@ msgstr "Her &tablo için ayrı dosya kullan"
 #: sheets/html/exportwidget.ui:83
 #, kde-format
 msgid "Style"
-msgstr "Biçem"
+msgstr "Stil"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
 #: sheets/html/exportwidget.ui:89
@@ -466,7 +466,7 @@ msgstr ""
 #: sheets/html/exportwidget.ui:92
 #, kde-format
 msgid "Use &default style"
-msgstr "Ö&ntanımlı biçemi kullan"
+msgstr "Ö&ntanımlı stili kullan"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:102
@@ -475,14 +475,14 @@ msgid ""
 "Select this option to specify a separate stylesheet for the HTML page. You "
 "can select or type on in the field below."
 msgstr ""
-"HTML sayfası için ayrı bir biçem sayfası belirtmek için bu seçeneği seçin. "
+"HTML sayfası için ayrı bir stil sayfası belirtmek için bu seçeneği seçin. "
 "Aşağıdaki alan üzerinde seçebilir veya yazabilirsiniz."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:105
 #, kde-format
 msgid "Use &external stylesheet:"
-msgstr "Dış &biçem sayfası kullan:"
+msgstr "Dış &stil sayfası kullan:"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
 #: sheets/html/exportwidget.ui:115
@@ -491,7 +491,7 @@ msgid ""
 "In this field you can enter an URL for your stylesheet. It is possible to "
 "point to a stylesheet on disk, or to somewhere on the Internet."
 msgstr ""
-"Bu alanda biçem sayfanız için bir URL girebilirsiniz. Disk üzerinde veya "
+"Bu alanda stil sayfanız için bir URL girebilirsiniz. Disk üzerinde veya "
 "internet üzerinde bir yer belirtebilirsiniz."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
@@ -552,7 +552,7 @@ msgstr "Belge"
 #: sheets/latex/export/latexexportwidget.ui:44
 #, kde-format
 msgid "Document style:"
-msgstr "Belge biçemi:"
+msgstr "Belge stili:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:51

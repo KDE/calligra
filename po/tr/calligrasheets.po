@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-10-16 20:11+0300\n"
+"PO-Revision-Date: 2026-11-10 21:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -104,7 +104,7 @@ msgstr "Veri Biçimi Uyuşmazlığı"
 #: core/ksp/SheetsKspDoc.cpp:105
 #, kde-format
 msgid "Styles cannot be loaded."
-msgstr "Biçemler yüklenemedi."
+msgstr "Stiller yüklenemedi."
 
 #: core/ksp/SheetsKspDoc.cpp:113
 #, kde-format
@@ -8048,7 +8048,7 @@ msgstr "Mutlak Değer (seçmeli)"
 #: functions/reference.xml:23 functions/reference.xml:160
 #, kde-format
 msgid "A1 style (optional)"
-msgstr "A1 biçemi (seçmeli)"
+msgstr "A1 stili (seçmeli)"
 
 #: functions/reference.xml:27 ui/MapModel.cpp:144
 #, kde-format
@@ -8081,8 +8081,8 @@ msgid ""
 "(default) the address is returned in A1 style if it is set to FALSE in R1C1 "
 "style."
 msgstr ""
-"A1 Biçemi, döndürülecek adresin biçemini belirtir. Eğer A1 TRUE (öntanımlı) "
-"olarak atanırsa adres A1 biçeminde, FALSE olarak atanırsa R1C1 biçeminde "
+"A1 Stili, döndürülecek adresin stilini belirtir. Eğer A1 TRUE (öntanımlı) "
+"olarak atanırsa adres A1 stilinde, FALSE olarak atanırsa R1C1 stilinde "
 "döndürülür."
 
 #: functions/reference.xml:34
@@ -8093,7 +8093,7 @@ msgstr "Sayfa adı, sayfanın adını belirten metindir."
 #: functions/reference.xml:35
 #, kde-format
 msgid "ADDRESS(row; col; absolute; style; sheet name)"
-msgstr "ADDRESS(satır; sütun; mutlak; biçem; sayfa adı)"
+msgstr "ADDRESS(satır; sütun; mutlak; stil; sayfa adı)"
 
 #: functions/reference.xml:36
 #, kde-format
@@ -8299,7 +8299,7 @@ msgstr "Belirtilen hücrenin içeriğini döndürür. İkinci parametre seçmeli
 #: functions/reference.xml:165
 #, kde-format
 msgid "INDIRECT(referenceText, a1 style)"
-msgstr "INDIRECT(başvuru_metni, a1 biçemi)"
+msgstr "INDIRECT(başvuru_metni, a1 stili)"
 
 #: functions/reference.xml:166
 #, kde-format
@@ -15071,17 +15071,17 @@ msgstr "Otomatik Biçimlendir…"
 #: ui/actions/AutoFormat.cpp:78
 #, kde-format
 msgid "Could not find sheet-style XML file '%1'."
-msgstr "Sayfa biçemi XML dosyası “%1” bulunamadı."
+msgstr "Sayfa stili XML dosyası “%1” bulunamadı."
 
 #: ui/actions/AutoFormat.cpp:84
 #, kde-format
 msgid "Could not open sheet-style XML file %1."
-msgstr "Sayfa biçemi XML dosyası “%1” açılamadı."
+msgstr "Sayfa stili XML dosyası “%1” açılamadı."
 
 #: ui/actions/AutoFormat.cpp:94
 #, kde-format
 msgid "Parsing error in sheet-style XML file %1."
-msgstr "Sayfa biçemi XML dosyası “%1” ayrıştırma hatası."
+msgstr "Sayfa stili XML dosyası “%1” ayrıştırma hatası."
 
 #: ui/actions/AutoFormat.cpp:136
 msgctxt "(qtundo-format)"
@@ -15289,27 +15289,27 @@ msgstr "Yorum Ekle"
 #: ui/actions/Conditional.cpp:26
 #, kde-format
 msgid "Conditional Styles..."
-msgstr "Koşullu Biçemler…"
+msgstr "Koşullu Stiller…"
 
 #: ui/actions/Conditional.cpp:26
 #, kde-format
 msgid "Set cell style based on certain conditions"
-msgstr "Hücre biçemini belirli durumlara göre değiştir"
+msgstr "Hücre stilini belirli durumlara göre değiştir"
 
 #: ui/actions/Conditional.cpp:88 ui/actions/dialogs/ConditionalDialog.cpp:227
 #, kde-format
 msgid "Conditional Styles"
-msgstr "Koşullu Biçemler"
+msgstr "Koşullu Stiller"
 
 #: ui/actions/Conditional.cpp:88
 #, kde-format
 msgid "Remove the conditional cell styles"
-msgstr "Koşullu hücre biçemlerini kaldır"
+msgstr "Koşullu hücre stillerini kaldır"
 
 #: ui/actions/Conditional.cpp:97
 #, kde-format
 msgid "Remove Conditional Styles"
-msgstr "Koşullu Biçemleri Kaldır"
+msgstr "Koşullu Stilleri Kaldır"
 
 #: ui/actions/Conditional.cpp:126
 msgctxt "(qtundo-format)"
@@ -15481,7 +15481,7 @@ msgstr "Otomatik Biçim"
 #: ui/actions/dialogs/AutoFormatDialog.cpp:46
 #, kde-format
 msgid "Select the sheet style to apply:"
-msgstr "Uygulanacak sayfa biçemini seç:"
+msgstr "Uygulanacak sayfa stilini seç:"
 
 #: ui/actions/dialogs/CharacterSelectDialog.cpp:35
 #, kde-format
@@ -15584,7 +15584,7 @@ msgstr "Hücre"
 #: ui/actions/dialogs/ConditionalDialog.cpp:154
 #, kde-format
 msgid "Cell style"
-msgstr "Hücre biçemi"
+msgstr "Hücre stili"
 
 #: ui/actions/dialogs/ConditionalDialog.cpp:172
 #: ui/actions/dialogs/ConditionalDialog.cpp:191
@@ -16628,23 +16628,23 @@ msgstr "Yapıştır"
 #: ui/actions/dialogs/StyleManagerDialog.cpp:32
 #, kde-format
 msgid "Style Manager"
-msgstr "Biçem Yöneticisi"
+msgstr "Stil Yöneticisi"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:43 ui/actions/Styles.cpp:122
 #: ui/dialogs/LayoutPage_General.cpp:42
 #, kde-format
 msgid "Style"
-msgstr "Biçem"
+msgstr "Stil"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:47
 #, kde-format
 msgid "All Styles"
-msgstr "Tüm Biçemler"
+msgstr "Tüm Stiller"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:48
 #, kde-format
 msgid "Custom Styles"
-msgstr "Özel Biçemler"
+msgstr "Özel Stiller"
 
 #: ui/actions/dialogs/StyleManagerDialog.cpp:49
 #, kde-format
@@ -16670,7 +16670,7 @@ msgstr "&Sil…"
 #: ui/actions/dialogs/StyleManagerDialog.cpp:171
 #, kde-format
 msgid "style%1"
-msgstr "biçem%1"
+msgstr "stil%1"
 
 #: ui/actions/dialogs/SubtotalDialog.cpp:40
 #, kde-format
@@ -17632,7 +17632,7 @@ msgstr "Öntanımlı biçime geri dön"
 #: ui/actions/Style.cpp:613
 msgctxt "(qtundo-format)"
 msgid "Set Default Style"
-msgstr "Öntanımlı Biçem Olarak Ayarla"
+msgstr "Öntanımlı Stil Olarak Ayarla"
 
 #: ui/actions/Style.cpp:622
 #, kde-format
@@ -17647,47 +17647,47 @@ msgstr "Arka plan rengini ayarla"
 #: ui/actions/Styles.cpp:31
 #, kde-format
 msgid "Create Style From Cell..."
-msgstr "Hücreden Biçem Oluştur…"
+msgstr "Hücreden Stil Oluştur…"
 
 #: ui/actions/Styles.cpp:31
 #, kde-format
 msgid "Create a new style based on the currently selected cell"
-msgstr "Seçili hücreyi temel alarak yeni bir biçem oluştur"
+msgstr "Seçili hücreyi temel alarak yeni bir stil oluştur"
 
 #: ui/actions/Styles.cpp:40
 #, kde-format
 msgid "Style From Cell"
-msgstr "Hücreden Biçem"
+msgstr "Hücreden Stil"
 
 #: ui/actions/Styles.cpp:53
 #, kde-format
 msgid "Create Style From Cell"
-msgstr "Hücreden Biçem Oluştur"
+msgstr "Hücreden Stil Oluştur"
 
 #: ui/actions/Styles.cpp:61
 #, kde-format
 msgid "The style name cannot be empty."
-msgstr "Biçem adı boş olamaz."
+msgstr "Stil adı boş olamaz."
 
 #: ui/actions/Styles.cpp:66 ui/dialogs/LayoutPage_General.cpp:86
 #, kde-format
 msgid "A style with this name already exists."
-msgstr "Bu adda bir biçem hâlihazırda var."
+msgstr "Bu adda bir stil hâlihazırda var."
 
 #: ui/actions/Styles.cpp:86
 #, kde-format
 msgid "Edit and organize cell styles"
-msgstr "Hücre biçemlerini düzenle ve organize et"
+msgstr "Hücre stillerini düzenle ve organize et"
 
 #: ui/actions/Styles.cpp:86
 #, kde-format
 msgid "Style Manager..."
-msgstr "Biçem Yöneticisi…"
+msgstr "Stil Yöneticisi…"
 
 #: ui/actions/Styles.cpp:122
 #, kde-format
 msgid "Apply a predefined style to the selected cells"
-msgstr "Seçili hücrelere önceden tanımlanmış bir biçem uygula"
+msgstr "Seçili hücrelere önceden tanımlanmış bir stil uygula"
 
 #: ui/actions/Subtotals.cpp:21
 #, kde-format
@@ -18206,12 +18206,12 @@ msgstr "Sayfa Özelliklerini Değiştir"
 #: ui/commands/StyleCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
-msgstr "Biçemi Sıfırla"
+msgstr "Stili Sıfırla"
 
 #: ui/commands/StyleCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Change Style"
-msgstr "Biçemi Değiştir"
+msgstr "Stili Değiştir"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -18224,10 +18224,10 @@ msgid ""
 "The default font is set for all cells in the Format -> Style Manager menu "
 "with the currently used style."
 msgstr ""
-"Burada geçerli hücre metni için yazıtipi biçemi, boyutu ve renginin yanı "
-"sıra altı çizili veya üzeri çizili ek özellikleri de seçebilirsiniz. "
-"Sayfanın altında seçtiğiniz metin biçiminin önizlemesini görebilirsiniz.\n"
-"Tüm hücreler için öntanımlı yazıtipi Biçim → Biçem Yöneticisi bağlantısından "
+"Burada geçerli hücre metni için yazıtipi stili, boyutu ve renginin yanı sıra "
+"altı çizili veya üzeri çizili ek özellikleri de seçebilirsiniz. Sayfanın "
+"altında seçtiğiniz metin biçiminin önizlemesini görebilirsiniz.\n"
+"Tüm hücreler için öntanımlı yazıtipi Biçim → Stil Yöneticisi bağlantısından "
 "atanır."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
@@ -18240,11 +18240,11 @@ msgid ""
 "settings for each cell. Changing to Roman for example will change all the "
 "selected cells style text to Roman."
 msgstr ""
-"Seçili hücreler için yazıtipi biçemini seçin. Başka biçemlerde birden fazla "
-"hücre seçtiğinizde görüntülenen biçem Değişken (Değişiklik Yok) olarak "
-"atanır ve onu öyle bırakmak her hücre için mevcut biçemi değişmeden bırakır. "
-"Örneğin Roman olarak değiştirirseniz seçili bütün hücrelerin yazıtipi biçemi "
-"Roman olarak değiştirilir."
+"Seçili hücreler için yazıtipi stilini seçin. Başka stillerde birden fazla "
+"hücre seçtiğinizde görüntülenen stil Değişken (Değişiklik Yok) olarak atanır "
+"ve onu öyle bırakmak her hücre için mevcut stili değişmeden bırakır. Örneğin "
+"Roman olarak değiştirirseniz seçili bütün hücrelerin yazıtipi stili Roman "
+"olarak değiştirilir."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
@@ -18312,7 +18312,7 @@ msgstr "Ağırlık:"
 #: ui/dialogs/FontWidget.ui:122
 #, kde-format
 msgid "Style:"
-msgstr "Biçem:"
+msgstr "Stil:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorButton, textColorButton)
 #: ui/dialogs/FontWidget.ui:129
@@ -18738,22 +18738,22 @@ msgstr "Ad:"
 #: ui/dialogs/LayoutPage_General.cpp:59
 #, kde-format
 msgid "Inherit style:"
-msgstr "Biçemden kullan:"
+msgstr "Stilden kullan:"
 
 #: ui/dialogs/LayoutPage_General.cpp:90
 #, kde-format
 msgid "The style name can not be empty."
-msgstr "Biçem adı boş olamaz."
+msgstr "Stil adı boş olamaz."
 
 #: ui/dialogs/LayoutPage_General.cpp:102
 #, kde-format
 msgid "A style cannot inherit from itself."
-msgstr "Bir biçem kendisinden kalıtım edinemez."
+msgstr "Bir stil kendisinden kalıtım edinemez."
 
 #: ui/dialogs/LayoutPage_General.cpp:106
 #, kde-format
 msgid "The style cannot inherit from '%1' because of recursive references."
-msgstr "Biçem, özyineli başvurular nedeniyle “%1” kalıtımını alamaz."
+msgstr "Stil, özyineli başvurular nedeniyle “%1” kalıtımını alamaz."
 
 #: ui/dialogs/LayoutPage_Pattern.cpp:125
 #, kde-format

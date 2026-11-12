@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-09-26 20:22+0300\n"
+"PO-Revision-Date: 2026-11-10 21:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -508,13 +508,13 @@ msgstr "Ad:"
 #: dialogs/CharacterGeneral.ui:52
 #, kde-format
 msgid "Next style:"
-msgstr "Sonraki biçem:"
+msgstr "Sonraki stil:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CharacterGeneral.ui:68
 #, kde-format
 msgid "Parent style:"
-msgstr "Üst biçem:"
+msgstr "Üst stil:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, inToc)
 #: dialogs/CharacterGeneral.ui:84
@@ -993,12 +993,12 @@ msgstr "Şu belgeden:"
 #: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Used Styles"
-msgstr "Kullanılan Biçemler"
+msgstr "Kullanılan Stiller"
 
 #: dialogs/DockerStylesComboModel.cpp:67
 #, kde-format
 msgid "Unused Styles"
-msgstr "Kullanılmayan Biçemler"
+msgstr "Kullanılmayan Stiller"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/FontDecorations.ui:17
@@ -2149,17 +2149,17 @@ msgstr "Kenarlık Yok"
 #: dialogs/StyleManager.cpp:38
 #, kde-format
 msgid "Create a new style inheriting the current style"
-msgstr "Geçerli biçemi kullanarak yeni bir biçem oluştur"
+msgstr "Geçerli stili kullanarak yeni bir stil oluştur"
 
 #: dialogs/StyleManager.cpp:344 dialogs/StyleManager.cpp:357
 #, kde-format
 msgid "New Style"
-msgstr "Yeni Biçem"
+msgstr "Yeni Stil"
 
 #: dialogs/StyleManager.cpp:442
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
-msgstr "“%1” adlı bir biçem hâlihazırda var. Lütfen başka bir ad seçin."
+msgstr "“%1” adlı bir stil hâlihazırda var. Lütfen başka bir ad seçin."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
 #: dialogs/StyleManager.ui:52 TextTool.cpp:2253
@@ -2182,7 +2182,7 @@ msgstr "&Yeni"
 #: dialogs/StyleManagerDialog.cpp:23
 #, kde-format
 msgid "Style Manager"
-msgstr "Biçem Yöneticisi"
+msgstr "Stil Yöneticisi"
 
 #: dialogs/StyleManagerDialog.cpp:53
 #, kde-format
@@ -2227,23 +2227,23 @@ msgstr ""
 "weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Metne adlandırılmış bir "
-"biçemi uygulamak ve biçemin özelliklerini değiştirerek tüm metni bu şekilde "
+"stili uygulamak ve stilin özelliklerini değiştirerek tüm metni bu şekilde "
 "biçimlendirmek olanaklıdır.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Bir biçem değişikliğini "
-"uygulamak o metne daha önce atanan adlandırılmış biçemi yeniden "
-"biçimlendirecek ve tüm metne uygulanacaktır. Metne biçem uygulamak için "
-"Biçemler alanını kullanın.</p></body></html>"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Bir stil değişikliğini "
+"uygulamak o metne daha önce atanan adlandırılmış stili yeniden "
+"biçimlendirecek ve tüm metne uygulanacaktır. Metne stil uygulamak için "
+"Stiller alanını kullanın.</p></body></html>"
 
 #: dialogs/StylesComboPreview.cpp:68
 #, kde-format
 msgid "Create a new style with the current properties"
-msgstr "Geçerli özellikler ile yeni bir biçem oluştur"
+msgstr "Geçerli özellikler ile yeni bir stil oluştur"
 
 #: dialogs/StylesComboPreview.cpp:175
 #, kde-format
 msgid "New style"
-msgstr "Yeni biçem"
+msgstr "Yeni stil"
 
 #: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:112
 #: dialogs/StylesModel.cpp:195
@@ -2316,7 +2316,7 @@ msgstr "Dış hat kullan"
 #: dialogs/TableOfContentsConfigure.cpp:65
 #, kde-format
 msgid "Use styles"
-msgstr "Kullanılacak biçemler"
+msgstr "Kullanılacak stiller"
 
 #: dialogs/TableOfContentsConfigure.cpp:66 ReferencesTool.cpp:170
 #, kde-format
@@ -2381,17 +2381,17 @@ msgstr "Düzey"
 #: dialogs/TableOfContentsEntryModel.cpp:141
 #, kde-format
 msgid "Style"
-msgstr "Biçem"
+msgstr "Stil"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
-msgstr "İçindekiler Tablosu — Biçemleri Yapılandır"
+msgstr "İçindekiler Tablosu — Stilleri Yapılandır"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
 msgid "Styles available"
-msgstr "Kullanılabilir biçemler"
+msgstr "Kullanılabilir stiller"
 
 #. i18n: ectx: property (text), widget (QLabel, stylesAvailableLabel)
 #: dialogs/TableOfContentsStyleConfigure.ui:20
@@ -2896,7 +2896,7 @@ msgstr "Hücreleri Ayır"
 #: TextTool.cpp:451
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
-msgstr "Bir kenarlık biçemi seç ve bir tabloyu bu biçemle boya"
+msgstr "Bir kenarlık stili seç ve bir tabloyu bu stille boya"
 
 #: TextTool.cpp:455
 #, kde-format
@@ -2926,12 +2926,12 @@ msgstr ""
 #: TextTool.cpp:464
 #, kde-format
 msgid "Style Manager..."
-msgstr "Biçem Yöneticisi…"
+msgstr "Stil Yöneticisi…"
 
 #: TextTool.cpp:466
 #, kde-format
 msgid "Change attributes of styles"
-msgstr "Biçemin özniteliklerini değiştir"
+msgstr "Stilin özniteliklerini değiştir"
 
 #: TextTool.cpp:467
 #, kde-format

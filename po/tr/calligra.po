@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-10-16 20:02+0300\n"
+"PO-Revision-Date: 2026-11-10 21:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3418,7 +3418,7 @@ msgstr "Yürüt"
 #: rdf/KoDocumentRdfEditWidget.ui:211
 #, kde-format
 msgid "Stylesheets"
-msgstr "Biçem Sayfaları"
+msgstr "Stil Sayfaları"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: rdf/KoDocumentRdfEditWidget.ui:217
@@ -3429,14 +3429,14 @@ msgid ""
 "the stylesheet for all existing semantic objects to the new default "
 "stylesheet as well."
 msgstr ""
-"Belgedeki anlamsal nesneler için öntanımlı biçemi ayarla. Yeni RDF nesneleri "
-"otomatik olarak bu biçemi kullanacak. Düğmeler de bütün var olan anlamsal "
-"nesneler için biçemi, yeni öntanımlı biçeme ayarlamanıza izin verir."
+"Belgedeki anlamsal nesneler için öntanımlı stili ayarla. Yeni RDF nesneleri "
+"otomatik olarak bu stili kullanacak. Düğmeler de bütün var olan anlamsal "
+"nesneler için stili, yeni öntanımlı stile ayarlamanıza izin verir."
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
 #, kde-format
 msgid "Apply Stylesheet"
-msgstr "Biçem Dosyasını Uygula"
+msgstr "Stil Dosyasını Uygula"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
 #: rdf/KoSemanticStylesheetsEditor.cpp:101
@@ -3469,7 +3469,7 @@ msgstr "%1 Düzenle"
 #: rdf/KoSemanticStylesheetsEditor.ui:17
 #, kde-format
 msgid "Stylesheet Definition"
-msgstr "Biçem Sayfası Tanımlaması"
+msgstr "Stil Sayfası Tanımlaması"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: rdf/KoSemanticStylesheetsEditor.ui:29
@@ -3649,7 +3649,7 @@ msgstr "Listeyi Değiştir"
 #: text/commands/ChangeStylesMacroCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Change Styles"
-msgstr "Biçemleri Değiştir"
+msgstr "Stilleri Değiştir"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:263
 #, kde-format
@@ -4837,7 +4837,7 @@ msgstr "Birim:"
 #: widgets/KoPageLayoutWidget.ui:45
 #, kde-format
 msgid "Follow style:"
-msgstr "Sonraki biçem:"
+msgstr "Sonraki stil:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/KoPageLayoutWidget.ui:61

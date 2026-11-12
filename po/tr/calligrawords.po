@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-10-12 11:59+0300\n"
+"PO-Revision-Date: 2026-11-10 21:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -58,7 +58,7 @@ msgstr "Anlamsallar"
 #: part/calligrawords.rc:74
 #, kde-format
 msgid "S&tyles"
-msgstr "&Biçemler"
+msgstr "&Stiller"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrawords.rc:78
@@ -105,12 +105,12 @@ msgstr "&Araçlar"
 #: part/commands/KWChangePageStyleCommand.cpp:11
 msgctxt "(qtundo-format)"
 msgid "Set Page Style"
-msgstr "Sayfa Biçemini Ayarla"
+msgstr "Sayfa Stilini Ayarla"
 
 #: part/commands/KWNewPageStyleCommand.cpp:12
 msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
-msgstr "Sayfa Biçemi Ekle"
+msgstr "Sayfa Stili Ekle"
 
 #: part/commands/KWPageStylePropertiesCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -539,7 +539,7 @@ msgstr "Sütunlar"
 #: part/dialogs/KWPageSettingsDialog.cpp:44
 #, kde-format
 msgid "Style"
-msgstr "Biçem"
+msgstr "Stil"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:60
 #, kde-format
@@ -554,17 +554,17 @@ msgstr "Sil"
 #: part/dialogs/KWPageSettingsDialog.cpp:154
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
-msgstr "Sayfa Biçemini Değiştir"
+msgstr "Sayfa Stilini Değiştir"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:235
 #, kde-format
 msgid "Clone Page Style"
-msgstr "Sayfa Biçemini Klonla"
+msgstr "Sayfa Stilini Klonla"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:236
 #, kde-format
 msgid "Add a new page style with the name:"
-msgstr "Şu adda yeni bir sayfa biçemi ekle:"
+msgstr "Şu adda yeni bir sayfa stili ekle:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: part/dialogs/KWRunAroundProperties.ui:19
@@ -1207,7 +1207,7 @@ msgstr "Mojtaba Shahi"
 #: part/KWAboutData.h:46
 #, kde-format
 msgid "Style Manager"
-msgstr "Biçem Yöneticisi"
+msgstr "Stil Yöneticisi"
 
 #: part/KWAboutData.h:47
 #, kde-format
@@ -1478,12 +1478,12 @@ msgstr "Satır Numarası"
 #: part/KWStatusBar.cpp:157
 #, kde-format
 msgid "Change the page style"
-msgstr "Sayfa biçemini değiştir"
+msgstr "Sayfa stilini değiştir"
 
 #: part/KWStatusBar.cpp:165
 #, kde-format
 msgid "Page Style"
-msgstr "Sayfa Biçemi"
+msgstr "Sayfa Stili"
 
 #: part/KWStatusBar.cpp:179
 #, kde-format
@@ -1690,12 +1690,12 @@ msgstr "Görünümü, tam ekran kipine ayarlar"
 #: part/KWView.cpp:400
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr "Anlamsal Biçem Sayfaları…"
+msgstr "Anlamsal Stil Sayfaları…"
 
 #: part/KWView.cpp:402
 #, kde-format
 msgid "Modify and add semantic stylesheets"
-msgstr "Anlamsal biçem sayfaları ekleyin ve değiştirin"
+msgstr "Anlamsal stil sayfaları ekleyin ve değiştirin"
 
 #: part/KWView.cpp:403
 #, kde-format
@@ -1703,7 +1703,7 @@ msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
-"Biçem sayfaları, RDF içinde saklanan bilgiyi görünümünü biçimlendirmek için "
+"Stil sayfaları, RDF içinde saklanan bilgiyi görünümünü biçimlendirmek için "
 "kullanılır."
 
 #: part/KWView.cpp:418

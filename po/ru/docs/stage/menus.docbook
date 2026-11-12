@@ -1102,9 +1102,9 @@ and choose a <guilabel
 >, при котором весь слайд масштабируется так, чтобы помещаться в открытом окне, и <guimenuitem
 >По ширине страницы</guimenuitem
 >, при котором слайд масштабируется по всей ширине окна, хотя при этом, возможно, придётся прокручивать его по вертикали. Имеются и другие варианты масштаба — от <guimenuitem
->33%</guimenuitem
+>33 %</guimenuitem
 > до <guimenuitem
->500%</guimenuitem
+>500 %</guimenuitem
 >.</para>
 </listitem>
 </varlistentry>
