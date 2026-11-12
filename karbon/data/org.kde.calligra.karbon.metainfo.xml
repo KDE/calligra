@@ -679,10 +679,60 @@
       <description>
         <ul>
           <li>Improve compatibility with the OpenDocument 1.4 standard.</li>
+          <li xml:lang="ar">تحسين التوافق مع معيار OpenDocument 1.4.</li>
+          <li xml:lang="ca">Millora la compatibilitat amb l'estàndard OpenDocument 1.4.</li>
+          <li xml:lang="cs">Vylepšená kompatibilita se standardem OpenDocument 1.4.</li>
+          <li xml:lang="ka">გაუმჯობესდა სტანდარტთან OpenDocument 1.4.</li>
+          <li xml:lang="nl">Verbeter de compatibiliteit met de OpenDocument 1.4-standaard.</li>
+          <li xml:lang="pt-BR">Melhoria da compatibilidade com o padrão OpenDocument 1.4.</li>
+          <li xml:lang="ru">Улучшена совместимость со стандартом OpenDocument 1.4.</li>
+          <li xml:lang="sl">Izboljša združljivost s standardom OpenDocument 1.4.</li>
+          <li xml:lang="tr">OpenDocument 1.4 standardıyla uyumluluk iyileştirildi.</li>
+          <li xml:lang="uk">Удосконалено сумісність зі стандартом OpenDocument 1.4.</li>
           <li>Restore password protection in Document Properties and support AES-256 encryption for OpenDocument files.</li>
+          <li xml:lang="ar">استعادة حماية كلمة السر في خصائص المستند، ودعم تعمية AES-256 لملفات OpenDocument.</li>
+          <li xml:lang="ca">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptatge AES-256 als fitxers OpenDocument.</li>
+          <li xml:lang="cs">Obnovení ochrany heslem v okně Vlastnosti dokumentu a podpora šifrování AES-256 pro soubory OpenDocument.</li>
+          <li xml:lang="ka">პაროლით დაცვის აღდგენა დოკუმენტის თვისებების ფანჯარაში და AES-256 დაშიფვრის მხარდაჭერა OpenDocument-ის ფაილებისთვის.</li>
+          <li xml:lang="nl">Herstel wachtwoordbeveiliging in documenteigenschappen en voeg ondersteuning toe voor AES-256-versleuteling voor OpenDocument-bestanden.</li>
+          <li xml:lang="pt-BR">Restauração da proteção por senha nas Propriedades do Documento e suporte à criptografia AES-256 para arquivos OpenDocument.</li>
+          <li xml:lang="ru">В свойства документа возвращена защита паролем, добавлена поддержка шифрования AES-256 для файлов OpenDocument.</li>
+          <li xml:lang="sl">Obnovi zaščito z geslom v lastnostih dokumenta in zagotovi podporo za šifriranje AES-256 za datoteke OpenDocument.</li>
+          <li xml:lang="tr">OpenDocument dosyaları için AES-256 şifrelemesi desteği ve belge özelliklerinde parola koruması özellikleri geri getirildi.</li>
+          <li xml:lang="uk">Відновлено захист паролем у властивостях документа і додано підтримку шифрування AES-256 для файлів OpenDocument.</li>
           <li>Fix font selection and preserve font families when loading styles and formatting text.</li>
+          <li xml:lang="ar">إصلاح اختيار الخطوط والحفاظ على عائلات الخطوط عند تحميل الأنماط وتنسيق النص.</li>
+          <li xml:lang="ca">Corregeix la selecció de les lletres i conserva les famílies de lletres quan es carreguen els estils i el format de text.</li>
+          <li xml:lang="cs">Opraven výběr písma a zachování rodin písem při načítání stylů a formátování textu.</li>
+          <li xml:lang="ka">გასწორდა ფონის არჩევანი და ფონის ოჯახების შენარჩუნება სტილების ჩატვირთვისას და ტექსტის დაფორმატებისას.</li>
+          <li xml:lang="nl">Corrigeer de lettertypeselectie en behoud lettertypefamilies bij het laden van stijlen en het opmaken van tekst.</li>
+          <li xml:lang="pt-BR">Correção da seleção de fontes e preservação das famílias de fontes ao carregar estilos e formatar texto.</li>
+          <li xml:lang="ru">Исправлен выбор шрифта; при загрузке стилей и форматировании текста гарнитуры шрифтов больше не теряются.</li>
+          <li xml:lang="sl">Popravi izbiro pisave in ohrani družine pisav pri nalaganju slogov ter oblikovanju besedila.</li>
+          <li xml:lang="tr">Stilleri ve metin biçimlendirmesini yüklerken yazıtipi seçimi ve yazıtipi aileleri artık korunuyor.</li>
+          <li xml:lang="uk">Виправлено вибір шрифтів і збереження гарнітури шрифтів під час завантаження стилів та форматування тексту.</li>
           <li>Improve undo and redo when moving path points and control points.</li>
+          <li xml:lang="ar">تحسين وظيفتي التراجع والإعادة عند تحريك نقاط المسار ونقاط التحكم.</li>
+          <li xml:lang="ca">Millora el desfer i refer en moure els punts de camí i els punts de control.</li>
+          <li xml:lang="cs">Vylepšené funkce Zpět a Znovu při přesouvání bodů cesty a kontrolních bodů.</li>
+          <li xml:lang="ka">გაუმჯობესდა ბოლო ბრძანებების გაუქმება და გამეორება ბილიკისა და საკონტროლო წერტილების გადატანისას.</li>
+          <li xml:lang="nl">Verbeter het ongedaan maken en opnieuw uitvoeren bij het verplaatsen van padpunten en controlepunten.</li>
+          <li xml:lang="pt-BR">Melhoria das funções de desfazer e refazer ao mover pontos de caminho e pontos de controle.</li>
+          <li xml:lang="ru">Улучшены отмена и повтор действий при перемещении точек контура и управляющих точек.</li>
+          <li xml:lang="sl">Izboljša razveljavljanje in uveljavljanje dejanj pri premikanju točk poti in kontrolnih točk.</li>
+          <li xml:lang="tr">Yol ve denetim noktalarını hareket ettirme ile ilgili geri alma/yineleme işlemleri iyileştirildi.</li>
+          <li xml:lang="uk">Удосконалено скасування та повторення дій під час пересування точок контуру і контрольних точок.</li>
           <li>Fix memory leaks when editing documents and working with shapes.</li>
+          <li xml:lang="ar">إصلاح تسريبات الذاكرة عند تحرير المستندات والتعامل مع الأشكال.</li>
+          <li xml:lang="ca">Corregeix fuites de memòria en editar documents i treballar amb formes.</li>
+          <li xml:lang="cs">Opraveny úniky paměti při úpravách dokumentů a práci s tvary.</li>
+          <li xml:lang="ka">გასწორდა მეხსიერების გაჟონვები დოკუმენტების ჩასწორებისას და მოხაზულობებთან მუშაობისას.</li>
+          <li xml:lang="nl">Los geheugenlekken op die optreden bij het bewerken van documenten en het werken met vormen.</li>
+          <li xml:lang="pt-BR">Correção de vazamentos de memória ao editar documentos e trabalhar com formas.</li>
+          <li xml:lang="ru">Исправлены утечки памяти при редактировании документов и работе с фигурами.</li>
+          <li xml:lang="sl">Odpravi uhajanje pomnilnika pri urejanju dokumentov in delu z liki.</li>
+          <li xml:lang="tr">Belge düzenlerken ve şekillerle çalışırken oluşan bellek sızıntıları giderildi.</li>
+          <li xml:lang="uk">Виправлено витоки пам’яті під час редагування документів і роботи з формами.</li>
         </ul>
       </description>
     </release>

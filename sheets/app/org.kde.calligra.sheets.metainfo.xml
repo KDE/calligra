@@ -345,10 +345,60 @@
       <description>
         <ul>
           <li>Improve OpenDocument 1.4 compatibility and add support for opening flat OpenDocument spreadsheets (FODS).</li>
+          <li xml:lang="ar">تحسين التوافق مع معيار OpenDocument 1.4، وإضافة دعم لفتح ملفات جداول بيانات OpenDocument ذات التنسيق المسطح (FODS).</li>
+          <li xml:lang="ca">Millora la compatibilitat amb OpenDocument 1.4 i afegeix suport per obrir fulls de càlcul OpenDocument plans (FODS).</li>
+          <li xml:lang="cs">Vylepšená kompatibilita s formátem OpenDocument 1.4 a přidána podpora pro otevírání tabulkových souborů ve formátu OpenDocument (FODS).</li>
+          <li xml:lang="ka">გაუმჯობესდა OpenDocument 1.4-თან თავსებადობა და დაემატა ბრტყელი OpenDocument-ის ელცხრილების (FODS) მხარდაჭერა.</li>
+          <li xml:lang="nl">Verbeter de compatibiliteit met OpenDocument 1.4 en voeg ondersteuning toe voor het openen van 'platte' OpenDocument-rekenbladen (FODS).</li>
+          <li xml:lang="pt-BR">Melhoria da compatibilidade com o OpenDocument 1.4 e adição do suporte para a abertura de planilhas OpenDocument em formato plano (FODS).</li>
+          <li xml:lang="ru">Улучшена совместимость с OpenDocument 1.4, добавлена поддержка открытия электронных таблиц OpenDocument в одном XML-файле (FODS).</li>
+          <li xml:lang="sl">Izboljša združljivost s standardom OpenDocument 1.4 in doda podporo za odpiranje ravnih datotek OpenDocument v obliki (FODS).</li>
+          <li xml:lang="tr">OpenDocument 1.4 standardıyla uyumluluk iyileştirildi.</li>
+          <li xml:lang="uk">Удосконалено сумісність із OpenDocument 1.4 і додано підтримку відкривання електронних таблиць OpenDocument у простому форматі (FODS).</li>
           <li>Expand spreadsheet function support, including LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC and YIELD, and improve compatibility with LibreOffice.</li>
+          <li xml:lang="ar">توسيع نطاق دعم دوال جداول البيانات، بما في ذلك LINEST وLOGEST وFORECAST وCHISQDIST وCHISQINV وPRICE وPRICEDISC وYIELD، وتحسين التوافق مع LibreOffice.</li>
+          <li xml:lang="ca">Amplia el suport de funcions de full de càlcul, incloent-hi LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC i YIELD, i millora la compatibilitat amb el LibreOffice.</li>
+          <li xml:lang="cs">Rozšíření podpory funkcí tabulkového procesoru, včetně funkcí LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC a YIELD, a zlepšení kompatibility s LibreOffice.</li>
+          <li xml:lang="ka">გაფართოვდა ელცხრილის ფუნქციების მხარდაჭერა LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC და YIELD-ის ჩათვლით და გაუმჯობესდა LibreOffice-სთან თავსებადობა.</li>
+          <li xml:lang="nl">Breid de ondersteuning voor rekenbladfuncties uit – waaronder LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC en YIELD – en verbeter de compatibiliteit met LibreOffice.</li>
+          <li xml:lang="pt-BR">Ampliação do suporte a funções de planilha, incluindo LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC e YIELD, e melhoria da compatibilidade com o LibreOffice.</li>
+          <li xml:lang="ru">Расширена поддержка функций электронных таблиц, в том числе LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC и YIELD, улучшена совместимость с LibreOffice.</li>
+          <li xml:lang="sl">Razširi podporo za funkcije v preglednicah, vključno z LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC in YIELD, ter izboljša združljivost s programom LibreOffice.</li>
+          <li xml:lang="tr">LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC ve YIELD içerilmek üzere hesap tablosu işlev desteği ve LibreOffice ile uyumluluk iyileştirildi.</li>
+          <li xml:lang="uk">Розширено підтримку функцій електронних таблиць, зокрема LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC та YIELD, а також удосконалено сумісність із LibreOffice.</li>
           <li>Fix formula evaluation, matrix import, array calculations and recalculation of dependent formulas. Improve calculation performance and prevent crashes, infinite loops and division by zero in financial functions.</li>
+          <li xml:lang="ar">إصلاح عمليات تقييم الصيغ، واستيراد المصفوفات، وحسابات النطاقات (arrays)، وإعادة احتساب الصيغ المعتمدة على غيرها. تحسين أداء العمليات الحسابية، ومنع حدوث أعطال أو حلقات تكرارية لا نهائية أو حالات القسمة على صفر في الدوال المالية.</li>
+          <li xml:lang="ca">Corregeix l'avaluació de fórmules, la importació de matrius, els càlculs de matrius i el càlcul de fórmules dependents. Millora el rendiment dels càlculs i evita fallades, bucles infinits i divisió per zero en funcions financeres.</li>
+          <li xml:lang="cs">Opraveno vyhodnocování vzorců, import matic, výpočty s poli a přepočítávání závislých vzorců. Zlepšen výkon výpočtů a zabráněno pádům aplikace, nekonečným smyčkám a dělení nulou ve finančních funkcích.</li>
+          <li xml:lang="ka">გასწორდა ფორმულის გამოთვლა, მატრიცის შემოტანა, მასივის გამოთვლა და დამოკიდებული ფორმულების თავიდან გამოთვლა. გაუმჯობესდა გამოთვლის წარმადობა და პროგრამის ავარიული დასრულების თავიდან არიდება, უსასრულო ციკლები და ნულზე გაყოფა ფინანსურ ფუნქციებში.</li>
+          <li xml:lang="nl">Corrigeer de evaluatie van formules, het importeren van matrices, berekeningen met arrays en de herberekening van afhankelijke formules. Verbeter de rekenprestaties en voorkom crashes, oneindige lussen en delingen door nul in financiële functies.</li>
+          <li xml:lang="pt-BR">Correção da avaliação de fórmulas, a importação de matrizes, os cálculos com arrays e o recálculo de fórmulas dependentes. Melhoria do desempenho dos cálculos e evitar travamentos, loops infinitos e divisões por zero em funções financeiras.</li>
+          <li xml:lang="ru">Исправлены вычисление формул, импорт матриц, расчёты с массивами и пересчёт зависимых формул. Ускорены вычисления, устранены аварийные завершения, бесконечные циклы и деление на ноль в финансовых функциях.</li>
+          <li xml:lang="sl">Popravi vrednotenje formul, uvoz matrik, izračune polj in ponovni izračun odvisnih formul. Izboljša učinkovitost izračuna in preprečuje sesutja, neskončne zanke in deljenje z ničlo v finančnih funkcijah.</li>
+          <li xml:lang="tr">Formül değerlendirmesi, matris içe aktarma, diziliş hesaplamaları ve bağımlı formüllerin yeniden hesaplanmasındaki sorunlar düzeltildi. Finansal fonksiyonlarda hesaplama performansını iyileştirildi ve çökmeler, sonsuz döngüler ve sıfıra bölme önleniyor.</li>
+          <li xml:lang="uk">Виправлено обчислення формул, імпортування матриць, операції з масивами та перерахунок залежних формул. Підвищено продуктивність обчислень, а також усунено причини аварій, виникнення нескінченних циклів і ділення на нуль у фінансових функціях.</li>
           <li>Restore password protection in Document Properties and support AES-256 encryption for OpenDocument files.</li>
+          <li xml:lang="ar">استعادة حماية كلمة السر في خصائص المستند، ودعم تعمية AES-256 لملفات OpenDocument.</li>
+          <li xml:lang="ca">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptatge AES-256 als fitxers OpenDocument.</li>
+          <li xml:lang="cs">Obnovení ochrany heslem v okně Vlastnosti dokumentu a podpora šifrování AES-256 pro soubory OpenDocument.</li>
+          <li xml:lang="ka">პაროლით დაცვის აღდგენა დოკუმენტის თვისებების ფანჯარაში და AES-256 დაშიფვრის მხარდაჭერა OpenDocument-ის ფაილებისთვის.</li>
+          <li xml:lang="nl">Herstel wachtwoordbeveiliging in documenteigenschappen en voeg ondersteuning toe voor AES-256-versleuteling voor OpenDocument-bestanden.</li>
+          <li xml:lang="pt-BR">Restauração da proteção por senha nas Propriedades do Documento e suporte à criptografia AES-256 para arquivos OpenDocument.</li>
+          <li xml:lang="ru">В свойства документа возвращена защита паролем, добавлена поддержка шифрования AES-256 для файлов OpenDocument.</li>
+          <li xml:lang="sl">Obnovi zaščito z geslom v lastnostih dokumenta in zagotovi podporo za šifriranje AES-256 za datoteke OpenDocument.</li>
+          <li xml:lang="tr">OpenDocument dosyaları için AES-256 şifrelemesi desteği ve belge özelliklerinde parola koruması özellikleri geri getirildi.</li>
+          <li xml:lang="uk">Відновлено захист паролем у властивостях документа і додано підтримку шифрування AES-256 для файлів OpenDocument.</li>
           <li>Fix memory leaks when editing documents and working with shapes.</li>
+          <li xml:lang="ar">إصلاح تسريبات الذاكرة عند تحرير المستندات والتعامل مع الأشكال.</li>
+          <li xml:lang="ca">Corregeix fuites de memòria en editar documents i treballar amb formes.</li>
+          <li xml:lang="cs">Opraveny úniky paměti při úpravách dokumentů a práci s tvary.</li>
+          <li xml:lang="ka">გასწორდა მეხსიერების გაჟონვა დოკუმენტების ჩასწორებისას და მოხაზულობებთან მუშაობისას.</li>
+          <li xml:lang="nl">Los geheugenlekken op die optreden bij het bewerken van documenten en het werken met vormen.</li>
+          <li xml:lang="pt-BR">Correção de vazamentos de memória ao editar documentos e trabalhar com formas.</li>
+          <li xml:lang="ru">Исправлены утечки памяти при редактировании документов и работе с фигурами.</li>
+          <li xml:lang="sl">Odpravi uhajanje pomnilnika pri urejanju dokumentov in delu z liki.</li>
+          <li xml:lang="tr">Belge düzenlerken ve şekillerle çalışırken oluşan bellek sızıntıları giderildi.</li>
+          <li xml:lang="uk">Виправлено витоки пам’яті під час редагування документів і роботи з формами.</li>
         </ul>
       </description>
     </release>

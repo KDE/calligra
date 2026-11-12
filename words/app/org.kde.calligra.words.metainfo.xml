@@ -434,12 +434,82 @@
       <description>
         <ul>
           <li>Improve compatibility with the OpenDocument 1.4 standard.</li>
+          <li xml:lang="ar">تحسين التوافق مع معيار OpenDocument 1.4.</li>
+          <li xml:lang="ca">Millora la compatibilitat amb l'estàndard OpenDocument 1.4.</li>
+          <li xml:lang="cs">Vylepšená kompatibilita se standardem OpenDocument 1.4.</li>
+          <li xml:lang="ka">გაუმჯობესდა სტანდარტთან OpenDocument 1.4.</li>
+          <li xml:lang="nl">Verbeter de compatibiliteit met de OpenDocument 1.4-standaard.</li>
+          <li xml:lang="pt-BR">Melhoria da compatibilidade com o padrão OpenDocument 1.4.</li>
+          <li xml:lang="ru">Улучшена совместимость со стандартом OpenDocument 1.4.</li>
+          <li xml:lang="sl">Izboljša združljivost s standardom OpenDocument 1.4.</li>
+          <li xml:lang="tr">OpenDocument 1.4 standardıyla uyumluluk iyileştirildi.</li>
+          <li xml:lang="uk">Удосконалено сумісність зі стандартом OpenDocument 1.4.</li>
           <li>Restore password protection in Document Properties and support AES-256 encryption for OpenDocument files.</li>
+          <li xml:lang="ar">استعادة حماية كلمة السر في خصائص المستند، ودعم تعمية AES-256 لملفات OpenDocument.</li>
+          <li xml:lang="ca">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptatge AES-256 als fitxers OpenDocument.</li>
+          <li xml:lang="cs">Obnovení ochrany heslem v okně Vlastnosti dokumentu a podpora šifrování AES-256 pro soubory OpenDocument.</li>
+          <li xml:lang="ka">პაროლით დაცვის აღდგენა დოკუმენტის თვისებების ფანჯარაში და AES-256 დაშიფვრის მხარდაჭერა OpenDocument-ის ფაილებისთვის.</li>
+          <li xml:lang="nl">Herstel wachtwoordbeveiliging in documenteigenschappen en voeg ondersteuning toe voor AES-256-versleuteling voor OpenDocument-bestanden.</li>
+          <li xml:lang="pt-BR">Restauração da proteção por senha nas Propriedades do Documento e suporte à criptografia AES-256 para arquivos OpenDocument.</li>
+          <li xml:lang="ru">В свойства документа возвращена защита паролем, добавлена поддержка шифрования AES-256 для файлов OpenDocument.</li>
+          <li xml:lang="sl">Obnovi zaščito z geslom v lastnostih dokumenta in zagotovi podporo za šifriranje AES-256 za datoteke OpenDocument.</li>
+          <li xml:lang="tr">OpenDocument dosyaları için AES-256 şifrelemesi desteği ve belge özelliklerinde parola koruması özellikleri geri getirildi.</li>
+          <li xml:lang="uk">Відновлено захист паролем у властивостях документа і додано підтримку шифрування AES-256 для файлів OpenDocument.</li>
           <li>Fix font selection and preserve font families when loading styles and formatting text.</li>
+          <li xml:lang="ar">إصلاح اختيار الخطوط والحفاظ على عائلات الخطوط عند تحميل الأنماط وتنسيق النص.</li>
+          <li xml:lang="ca">Corregeix la selecció de les lletres i conserva les famílies de lletres quan es carreguen els estils i el format de text.</li>
+          <li xml:lang="cs">Opraven výběr písma a zachování rodin písem při načítání stylů a formátování textu.</li>
+          <li xml:lang="ka">გასწორდა ფონის არჩევანი და ფონის ოჯახების შენარჩუნება სტილების ჩატვირთვისას და ტექსტის დაფორმატებისას.</li>
+          <li xml:lang="nl">Corrigeer de lettertypeselectie en behoud lettertypefamilies bij het laden van stijlen en het opmaken van tekst.</li>
+          <li xml:lang="pt-BR">Correção da seleção de fontes e preservação das famílias de fontes ao carregar estilos e formatar texto.</li>
+          <li xml:lang="ru">Исправлен выбор шрифта; при загрузке стилей и форматировании текста гарнитуры шрифтов больше не теряются.</li>
+          <li xml:lang="sl">Popravi izbiro pisave in ohrani družine pisav pri nalaganju slogov ter oblikovanju besedila.</li>
+          <li xml:lang="tr">Stilleri ve metin biçimlendirmesini yüklerken yazıtipi seçimi ve yazıtipi aileleri artık korunuyor.</li>
+          <li xml:lang="uk">Виправлено вибір шрифтів і збереження гарнітури шрифтів під час завантаження стилів та форматування тексту.</li>
           <li>Update RTF document import to use QRtfReader.</li>
+          <li xml:lang="ar">تحديث عملية استيراد مستندات RTF لاستخدام QRtfReader.</li>
+          <li xml:lang="ca">Actualitza la importació de documents RTF per utilitzar QRtfReader.</li>
+          <li xml:lang="cs">Aktualizovaný import dokumentů RTF tak, aby využíval knihovnu QRtfReader.</li>
+          <li xml:lang="ka">განახლდა RTF დოკუმენტის შემოტანა. ახლა ის QRtfReader-ს იყენებს.</li>
+          <li xml:lang="nl">Werk het importeren van RTF-documenten bij zodat gebruik wordt gemaakt van QRtfReader.</li>
+          <li xml:lang="pt-BR">Atualização da importação de documentos RTF para utilizar o QRtfReader.</li>
+          <li xml:lang="ru">Импорт документов RTF переведён на QRtfReader.</li>
+          <li xml:lang="sl">Posodobite uvoz dokumentov RTF, tako da uporablja QRtfReader.</li>
+          <li xml:lang="tr">RTF belgesi içe aktarma, artık QRtfReader kullanıyor.</li>
+          <li xml:lang="uk">Оновлено засіб імпортування документів RTF з метою використання QRtfReader.</li>
           <li>Improve mathematical formula editing experience.</li>
+          <li xml:lang="ar">تحسين تجربة تحرير الصيغ الرياضية.</li>
+          <li xml:lang="ca">Millorar l'experiència d'edició de fórmules matemàtiques.</li>
+          <li xml:lang="cs">Vylepšené možnosti úpravy matematických vzorců.</li>
+          <li xml:lang="ka">გაუმჯობესდა მათემატიკური ფუნქციის ჩასწორების გარემო.</li>
+          <li xml:lang="nl">Verbeter de ervaring bij het bewerken van wiskundige formules.</li>
+          <li xml:lang="pt-BR">Melhoria da experiência de edição de fórmulas matemáticas.</li>
+          <li xml:lang="ru">Улучшено редактирование математических формул.</li>
+          <li xml:lang="sl">Izboljša izkušnjo urejanja matematičnih formul.</li>
+          <li xml:lang="tr">Matematiksel formül düzenleme deneyimi iyileştirildi.</li>
+          <li xml:lang="uk">Удосконалено середовище редагування математичних формул.</li>
           <li>Improve undo handling for section names and list numbering.</li>
+          <li xml:lang="ar">تحسين معالجة التراجع فيما يخص أسماء الأقسام وترقيم القوائم.</li>
+          <li xml:lang="ca">Millora la gestió de desfer dels noms de seccions i la numeració de llistes.</li>
+          <li xml:lang="cs">Vylepšené zpracování zpětných kroků u názvů sekcí a číslování seznamů.</li>
+          <li xml:lang="ka">გაუმჯობესდა ბოლო ქმედების გაუქმება სექციის სახელებისთვის და სიის დანომვრისთვის.</li>
+          <li xml:lang="nl">Verbeter de afhandeling van ongedaan maken voor sectienamen en lijstnummering.</li>
+          <li xml:lang="pt-BR">Melhoria do tratamento de desfazer para nomes de seções e numeração de listas.</li>
+          <li xml:lang="ru">Улучшена отмена действий для названий разделов и нумерации списков.</li>
+          <li xml:lang="sl">Izboljša delovanje razveljavitve za imena razdelkov in oštevilčevanje seznamov.</li>
+          <li xml:lang="tr">Bölüm adları ve liste numaralandırması için geri alma iyileştirildi.</li>
+          <li xml:lang="uk">Удосконалено обробку скасування дій для назв розділів і нумерації списків.</li>
           <li>Fix memory leaks when editing documents and working with shapes.</li>
+          <li xml:lang="ar">إصلاح تسريبات الذاكرة عند تحرير المستندات والتعامل مع الأشكال.</li>
+          <li xml:lang="ca">Corregeix fuites de memòria en editar documents i treballar amb formes.</li>
+          <li xml:lang="cs">Opraveny úniky paměti při úpravách dokumentů a práci s tvary.</li>
+          <li xml:lang="ka">გასწორდა მეხსიერების გაჟონვა დოკუმენტების ჩასწორებისას და მოხაზულობებთან მუშაობისას.</li>
+          <li xml:lang="nl">Los geheugenlekken op die optreden bij het bewerken van documenten en het werken met vormen.</li>
+          <li xml:lang="pt-BR">Correção de vazamentos de memória ao editar documentos e trabalhar com formas.</li>
+          <li xml:lang="ru">Исправлены утечки памяти при редактировании документов и работе с фигурами.</li>
+          <li xml:lang="sl">Odpravi uhajanje pomnilnika pri urejanju dokumentov in delu z liki.</li>
+          <li xml:lang="tr">Belge düzenlerken ve şekillerle çalışırken oluşan bellek sızıntıları giderildi.</li>
+          <li xml:lang="uk">Виправлено витоки пам’яті під час редагування документів і роботи з формами.</li>
         </ul>
       </description>
     </release>
@@ -541,7 +611,7 @@
         <p xml:lang="sk">Word teraz obsahuje nový dizajn bočného panela a hlavné zobrazenie používa tieň na definovanie okrajov dokumentu. Dialógy Správca štýlov a Rozloženie strany boli výrazne prepracované.</p>
         <p xml:lang="sl">Word zdaj uporablja novo zasnovo stranske vrstice, glavni pogled pa uporablja senco za določanje robov dokumenta. Pogovorno okno Upravitelj slogov in Postavitev strani sta bila prav tako posodobljena z novo zasnovo.</p>
         <p xml:lang="sv">Word har nu den nya sidoradsdesignen, och huvudvyn använder en skugga för att definiera dokumentkanterna. Dialogrutan Stilhanteraren och Sidlayout har också uppdaterats med en ny design.</p>
-        <p xml:lang="tr">Sözcükler artık yeni bir kenar çubuğu tasarımı kullanıyor ve ana görünüm belge kenarlıklarını göstermek için gölge yapıyor. Biçem Yöneticisi ve Sayfa Yerleşimi iletişim kutuları da yeni bir tasarıma geçtiler.</p>
+        <p xml:lang="tr">Sözcükler artık yeni bir kenar çubuğu tasarımı kullanıyor ve ana görünüm belge kenarlıklarını göstermek için gölge yapıyor. Stil Yöneticisi ve Sayfa Yerleşimi iletişim kutuları da yeni bir tasarıma geçtiler.</p>
         <p xml:lang="uk">У Word оновлено дизайн бічної панелі, а на головній панелі перегляду використано тінь для визначення меж документа. Диспетчер стилів і діалогове вікно «Компонування сторінки» також отримали новий дизайн.</p>
         <p xml:lang="zh-CN">单词现在具有新的侧边栏设计，主视图使用阴影来定义文件边界。样式管理器和页面布局对话框也更新了，设计改了。</p>
         <p xml:lang="zh-TW">Word 現在使用新的側邊欄設計，並讓主檢視用陰影來顯示文件邊框。樣式管理者與頁面佈局對話框也更新成新的設計。</p>
