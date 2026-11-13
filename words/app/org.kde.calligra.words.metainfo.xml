@@ -436,6 +436,7 @@
           <li>Improve compatibility with the OpenDocument 1.4 standard.</li>
           <li xml:lang="ar">تحسين التوافق مع معيار OpenDocument 1.4.</li>
           <li xml:lang="ca">Millora la compatibilitat amb l'estàndard OpenDocument 1.4.</li>
+          <li xml:lang="ca-valencia">Millora la compatibilitat amb l'estàndard OpenDocument 1.4.</li>
           <li xml:lang="cs">Vylepšená kompatibilita se standardem OpenDocument 1.4.</li>
           <li xml:lang="ka">გაუმჯობესდა სტანდარტთან OpenDocument 1.4.</li>
           <li xml:lang="nl">Verbeter de compatibiliteit met de OpenDocument 1.4-standaard.</li>
@@ -447,6 +448,7 @@
           <li>Restore password protection in Document Properties and support AES-256 encryption for OpenDocument files.</li>
           <li xml:lang="ar">استعادة حماية كلمة السر في خصائص المستند، ودعم تعمية AES-256 لملفات OpenDocument.</li>
           <li xml:lang="ca">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptatge AES-256 als fitxers OpenDocument.</li>
+          <li xml:lang="ca-valencia">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptació AES-256 als fitxers OpenDocument.</li>
           <li xml:lang="cs">Obnovení ochrany heslem v okně Vlastnosti dokumentu a podpora šifrování AES-256 pro soubory OpenDocument.</li>
           <li xml:lang="ka">პაროლით დაცვის აღდგენა დოკუმენტის თვისებების ფანჯარაში და AES-256 დაშიფვრის მხარდაჭერა OpenDocument-ის ფაილებისთვის.</li>
           <li xml:lang="nl">Herstel wachtwoordbeveiliging in documenteigenschappen en voeg ondersteuning toe voor AES-256-versleuteling voor OpenDocument-bestanden.</li>
@@ -458,6 +460,7 @@
           <li>Fix font selection and preserve font families when loading styles and formatting text.</li>
           <li xml:lang="ar">إصلاح اختيار الخطوط والحفاظ على عائلات الخطوط عند تحميل الأنماط وتنسيق النص.</li>
           <li xml:lang="ca">Corregeix la selecció de les lletres i conserva les famílies de lletres quan es carreguen els estils i el format de text.</li>
+          <li xml:lang="ca-valencia">Corregix la selecció de les lletres i conserva les famílies de lletres quan es carreguen els estils i el format de text.</li>
           <li xml:lang="cs">Opraven výběr písma a zachování rodin písem při načítání stylů a formátování textu.</li>
           <li xml:lang="ka">გასწორდა ფონის არჩევანი და ფონის ოჯახების შენარჩუნება სტილების ჩატვირთვისას და ტექსტის დაფორმატებისას.</li>
           <li xml:lang="nl">Corrigeer de lettertypeselectie en behoud lettertypefamilies bij het laden van stijlen en het opmaken van tekst.</li>
@@ -469,6 +472,7 @@
           <li>Update RTF document import to use QRtfReader.</li>
           <li xml:lang="ar">تحديث عملية استيراد مستندات RTF لاستخدام QRtfReader.</li>
           <li xml:lang="ca">Actualitza la importació de documents RTF per utilitzar QRtfReader.</li>
+          <li xml:lang="ca-valencia">Actualitza la importació de documents RTF per a utilitzar QRtfReader.</li>
           <li xml:lang="cs">Aktualizovaný import dokumentů RTF tak, aby využíval knihovnu QRtfReader.</li>
           <li xml:lang="ka">განახლდა RTF დოკუმენტის შემოტანა. ახლა ის QRtfReader-ს იყენებს.</li>
           <li xml:lang="nl">Werk het importeren van RTF-documenten bij zodat gebruik wordt gemaakt van QRtfReader.</li>
@@ -480,6 +484,7 @@
           <li>Improve mathematical formula editing experience.</li>
           <li xml:lang="ar">تحسين تجربة تحرير الصيغ الرياضية.</li>
           <li xml:lang="ca">Millorar l'experiència d'edició de fórmules matemàtiques.</li>
+          <li xml:lang="ca-valencia">Millorar l'experiència d'edició de fórmules matemàtiques.</li>
           <li xml:lang="cs">Vylepšené možnosti úpravy matematických vzorců.</li>
           <li xml:lang="ka">გაუმჯობესდა მათემატიკური ფუნქციის ჩასწორების გარემო.</li>
           <li xml:lang="nl">Verbeter de ervaring bij het bewerken van wiskundige formules.</li>
@@ -491,6 +496,7 @@
           <li>Improve undo handling for section names and list numbering.</li>
           <li xml:lang="ar">تحسين معالجة التراجع فيما يخص أسماء الأقسام وترقيم القوائم.</li>
           <li xml:lang="ca">Millora la gestió de desfer dels noms de seccions i la numeració de llistes.</li>
+          <li xml:lang="ca-valencia">Millora la gestió de desfer dels noms de seccions i la numeració de llistes.</li>
           <li xml:lang="cs">Vylepšené zpracování zpětných kroků u názvů sekcí a číslování seznamů.</li>
           <li xml:lang="ka">გაუმჯობესდა ბოლო ქმედების გაუქმება სექციის სახელებისთვის და სიის დანომვრისთვის.</li>
           <li xml:lang="nl">Verbeter de afhandeling van ongedaan maken voor sectienamen en lijstnummering.</li>
@@ -502,6 +508,7 @@
           <li>Fix memory leaks when editing documents and working with shapes.</li>
           <li xml:lang="ar">إصلاح تسريبات الذاكرة عند تحرير المستندات والتعامل مع الأشكال.</li>
           <li xml:lang="ca">Corregeix fuites de memòria en editar documents i treballar amb formes.</li>
+          <li xml:lang="ca-valencia">Corregix fuites de memòria en editar documents i treballar amb formes.</li>
           <li xml:lang="cs">Opraveny úniky paměti při úpravách dokumentů a práci s tvary.</li>
           <li xml:lang="ka">გასწორდა მეხსიერების გაჟონვა დოკუმენტების ჩასწორებისას და მოხაზულობებთან მუშაობისას.</li>
           <li xml:lang="nl">Los geheugenlekken op die optreden bij het bewerken van documenten en het werken met vormen.</li>
