@@ -1,0 +1,1148 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Raphael</firstname
+> <surname
+>Langerhorst</surname
+> <affiliation
+> <address
+><email
+>raphael.langerhorst@kdemail.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>تنسيق جدول البيانات</title>
+
+<sect1 id="formatcells">
+<!--<title
+>Fonts, Text, Borders and Colors</title
+>-->
+<title
+>تنسيق الخلية</title>
+<para
+>لتغيير تنسيق ومظهر الخلية/الخلايا أو الصف/الصفوف أو العمود/الأعمدة المحددة، استخدم خيار <guimenuitem
+>تنسيق الخلية...</guimenuitem
+> من قائمة <guimenu
+>تنسيق</guimenu
+> أو من القائمة المنبثقة لزر الفأرة <mousebutton
+>الأيمن</mousebutton
+>.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>قائمة سياق زر الفأرة الأيمن.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>سيؤدي هذا إلى فتح مربع حوار <guilabel
+>تنسيق الخلية</guilabel
+> الذي يحتوي على عدة صفحات مبوبة:</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title
+>تنسيقات البيانات وتمثيلها</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>صفحة <guilabel
+>تنسيق البيانات</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>تتيح لك صفحة <guilabel
+>تنسيق البيانات</guilabel
+> من مربع حوار <guilabel
+>تنسيق الخلية</guilabel
+> التحكم في كيفية عرض قيم الخلايا.</para>
+<para
+>يتيح لك الجزء العلوي من هذه الصفحة تحديد التنسيق الذي سيُستخدم عند عرض القيم الرقمية أو التواريخ أو الأوقات. تسمح لك لوحة <guilabel
+>معاينة</guilabel
+> برؤية تأثير التنسيق الجديد. </para>
+<para
+>يمكنك ضبط نفس تنسيق البيانات لصف أو عمود بتحديد الصف أو العمود واستدعاء مربع حوار <guilabel
+>تنسيق الخلية</guilabel
+> باستخدام &RMB;.</para>
+<note
+><para
+>يمكنك زيادة الدقة العشرية لأي رقم في تنسيقات <guilabel
+>عام</guilabel
+> أو <guilabel
+>رقم</guilabel
+> أو <guilabel
+>نسبة مئوية</guilabel
+> أو <guilabel
+>عملة</guilabel
+> أو <guilabel
+>علمي</guilabel
+> باستخدام أيقونة <guiicon
+>زيادة الدقة</guiicon
+> في شريط أدوات <guilabel
+>تنسيق</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+<para
+>يمكنك تقليل الدقة العشرية لأي رقم في تنسيقات <guilabel
+>عام</guilabel
+> أو <guilabel
+>رقم</guilabel
+> أو <guilabel
+>نسبة مئوية</guilabel
+> أو <guilabel
+>عملة</guilabel
+> أو <guilabel
+>علمي</guilabel
+> باستخدام أيقونة <guiicon
+>تقليل الدقة</guiicon
+> في شريط أدوات <guilabel
+>تنسيق</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</note>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>عامّ</guilabel
+></term>
+<listitem
+><para
+>هذا هو التنسيق المبدئي، وشيت يكتشف آليًا نوع البيانات الفعلي بناءً على بيانات الخلية الحالية. مبدئيًا، يقوم شيت بمحاذاة الأرقام والتواريخ والأوقات إلى اليمين داخل الخلية وأي شيء آخر إلى اليسار.</para>
+<para
+>إذا كان التنسيق <guilabel
+>عام</guilabel
+> لا يناسبك، يمكنك التغيير إلى تنسيق محدد من بين الخيارات أدناه.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>عدد</guilabel
+></term>
+<listitem
+><para
+>يستخدم تدوين الأرقام التدوين الذي تختاره عالميًا في &systemsettings; ضمن <menuchoice
+><guimenu
+>الإعدادات المحلية</guimenu
+><guisubmenu
+>البلد/المنطقة واللغة</guisubmenu
+><guimenuitem
+>الأرقام</guimenuitem
+></menuchoice
+>. الأرقام مُحاذاة إلى اليمين مبدئيًا.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>نسبة مئوية</guilabel
+></term>
+<listitem
+><para
+>عندما يكون لديك رقم في الخلية الحالية وتقوم بتبديل تنسيق الخلية من <guilabel
+>عام</guilabel
+> إلى <guilabel
+>نسبة مئوية</guilabel
+>، سيُضرب رقم الخلية الحالي في 100.</para>
+<para
+>على سبيل المثال، إذا أدخلت 2 وضبطت تنسيق الخلية على <guilabel
+>نسبة مئوية</guilabel
+>، سيصبح الرقم 200%. العودة إلى تنسيق الخلية <guilabel
+>عام</guilabel
+> ستعيده إلى 2.</para>
+<para
+>يمكنك أيضًا استخدام أيقونة <guiicon
+>نسبة مئوية</guiicon
+> في شريط أدوات <guilabel
+>تنسيق</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>مال</guilabel
+></term>
+<listitem
+><para
+>يقوم تنسيق <guilabel
+>عملة</guilabel
+> بتحويل رقمك إلى تدوين عملة باستخدام الإعدادات المحددة عالميًا في &systemsettings; ضمن <menuchoice
+><guimenu
+>الإعدادات المحلية</guimenu
+><guisubmenu
+>البلد/المنطقة واللغة</guisubmenu
+><guimenuitem
+>العملة</guimenuitem
+></menuchoice
+>. سيُعرض رمز العملة وستكون الدقة هي تلك المحددة في &systemsettings;.</para>
+<para
+>يمكنك أيضًا استخدام أيقونة <guiicon
+>تنسيق العملة</guiicon
+> في شريط أدوات <guilabel
+>تنسيق</guilabel
+> لضبط تنسيق الخلية ليشبه عملتك الحالية: <inlinemediaobject
+><imageobject>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>علمي</guilabel
+></term>
+<listitem
+><para
+>يقوم تنسيق <guilabel
+>علمي</guilabel
+> بتغيير رقمك باستخدام التدوين العلمي. على سبيل المثال، سيُغير 0.0012 إلى 1.2E-03. العودة باستخدام تنسيق الخلية <guilabel
+>عام</guilabel
+> ستعرض 0.0012 مرة أخرى. تنسيق بيانات الخلية <guilabel
+>عام</guilabel
+> لا يحتفظ بالتدوين العلمي، لذا إذا أردت هذا التدوين، عليك تحديده باستخدام عنصر القائمة هذا.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>كسر</guilabel
+></term>
+<listitem
+><para
+>يقوم تنسيق <guilabel
+>كسر</guilabel
+> بتغيير رقمك إلى كسر. على سبيل المثال، يمكن تغيير 0.1 إلى 1/8 أو 2/16 أو 1/10، &etc;. تحدد نوع الكسر باختياره في الحقل على اليمين. إذا لم يكن الكسر الدقيق ممكنًا في وضع الكسر الذي تختاره، يُختار أقرب تطابق. على سبيل المثال: عندما يكون لدينا 1.5 كرقم، نختار <guilabel
+>كسر</guilabel
+> و<guilabel
+>أسداس عشر 1/16</guilabel
+>، النص المعروض في الخلية هو "1 8/16" وهو كسر دقيق. إذا كان لديك 1.4 كرقم في خليتك واخترت <guilabel
+>كسر</guilabel
+> و<guilabel
+>أسداس عشر 1/16</guilabel
+>، فستعرض الخلية "1 6/16" وهو أقرب كسر سدس عشري.</para>
+</listitem
+><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>تاريخ</guilabel
+></term>
+<listitem
+><para
+>لإدخال تاريخ، يجب إدخاله بأحد التنسيقات المحددة في &systemsettings; ضمن <menuchoice
+><guimenu
+>الإعدادات المحلية</guimenu
+> <guisubmenu
+>البلد/المنطقة واللغة</guisubmenu
+><guimenuitem
+>التاريخ والوقت</guimenuitem
+></menuchoice
+>. هناك تنسيقان محددان هنا: تنسيق التاريخ وتنسيق التاريخ القصير.</para>
+<para
+>سيُحول رقم طبيعي عشوائي NN إلى التاريخ من 30 ديسمبر 1899 (وهو 0) مع إضافة عدد الأيام NN. على سبيل المثال، إذا كان لديك خلية تحتوي على 100 واخترت تنسيق <guilabel
+>تاريخ</guilabel
+>، سيُعرض "1900-04-09" في الخلية وهو 100 يوم بعد 30 ديسمبر 1899. هذا التاريخ البدائي متقدم بيومين لأنه كان خطأ في Lotus 123 ثم بقي على هذا النحو في Excel للحفاظ على التوافق. قليل من الناس سيحتاجون إلى الحساب من 1 يناير 1900 على أي حال، وإضافة 9 أيام إلى 1 نوفمبر 2000 على سبيل المثال سيعطيك 10 نوفمبر 2000، لذا جميع الحسابات العادية على التواريخ صحيحة.</para>
+<note
+><para
+>عندما تكون الخلية بتنسيق <guilabel
+>تاريخ</guilabel
+>، يمكنك سحب هذه الخلية لأسفل كما تفعل مع الأرقام وستحصل الخلايا التالية أيضًا على تواريخ، كل تاريخ يزداد بيوم واحد.</para
+></note
+><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>وقت</guilabel
+></term>
+<listitem
+><para
+>يقوم هذا بتنسيق محتوى خليتك كوقت. لإدخال وقت، يجب إدخاله بتنسيق <guilabel
+>تنسيق الوقت</guilabel
+> المحدد في &systemsettings; ضمن <menuchoice
+><guimenu
+>الإعدادات المحلية</guimenu
+> <guisubmenu
+>البلد/المنطقة واللغة</guisubmenu
+><guimenuitem
+>التاريخ والوقت</guimenuitem
+></menuchoice
+>. في مربع حوار <guilabel
+>تنسيق الخلية</guilabel
+> يمكنك ضبط كيفية عرض الوقت باختيار أحد خيارات تنسيق الوقت المتاحة. التنسيق المبدئي هو تنسيق النظام المحدد في &systemsettings;. عندما لا يكون الرقم في الخلية منطقيًا كوقت، سيعرض شيت 00:00 بالتنسيق العام لديك في &systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>تاريخ ووقت</guilabel
+></term>
+<listitem
+><para
+>يقوم هذا بتنسيق محتوى خليتك كتاريخ ووقت. لإدخال تاريخ ووقت، يجب إدخالهما بتنسيق <guilabel
+>تنسيق الوقت</guilabel
+> المحدد في &systemsettings; ضمن <menuchoice
+><guimenu
+>الإعدادات المحلية</guimenu
+> <guisubmenu
+>البلد/المنطقة واللغة</guisubmenu
+><guimenuitem
+>التاريخ والوقت</guimenuitem
+></menuchoice
+>. في مربع حوار <guilabel
+>تنسيق الخلية</guilabel
+> يمكنك ضبط كيفية عرض التاريخ والوقت باختيار أحد خيارات تنسيق التاريخ والوقت المتاحة. التنسيق المبدئي هو تنسيق النظام المحدد في &systemsettings;. عندما لا يكون الرقم في الخلية منطقيًا كتاريخ ووقت، سيعرض شيت 00:00 بالتنسيق العام لديك في &systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>نص</guilabel
+></term>
+<listitem
+><para
+>هذا ينسق محتوي الخلية كنص. قد يكون هذا مفيدا إذا أردت لرقم أن يعامل على أنه نص بدلا من كونه رقما على سبيل المثال لرقم شفرة ZIP. عند ضبط رنسّق نص سيضبط محاذاته لليسار. عند تنسيق الأرقام كنص، لا يمكن استخدامها في الحسابات أو الصيغ الحسابية. ذلك يغير أيضا طريقة ضبط محاذاة الخلية.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>مخصّص</guilabel
+></term>
+<listitem
+><para
+>لا يعمل بعد. سيُفعّل في الإصدار التالي.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>يتيح لك الجزء السفلي من صفحة <guilabel
+>تنسيق البيانات</guilabel
+> إضافة <guilabel
+>بادئة:</guilabel
+> مثل رمز $ في بداية كل عنصر أو <guilabel
+>لاحقة:</guilabel
+> مثل $HK في النهاية. يمكنك أيضًا التحكم في عدد الأرقام المعروضة بعد الفاصلة العشرية للقيم الرقمية، وما إذا كانت القيم الموجبة تُعرض بعلامة + بادئة، وما إذا كانت القيم السالبة تُعرض باللون الأحمر. </para>
+</sect2
+> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title
+>إعدادات الخطوط والنص</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>صفحة الخط.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>تتيح لك صفحة <guilabel
+>الخط</guilabel
+> اختيار عائلة الخط، <guilabel
+>النمط:</guilabel
+>، <guilabel
+>الحجم:</guilabel
+>، <guilabel
+>الوزن:</guilabel
+> و<guilabel
+>اللون:</guilabel
+> للخلية الحالية، بما في ذلك بعض الخيارات الإضافية مثل النص المسطر أو المشطوب. يعطي الجزء السفلي من الصفحة <guilabel
+>معاينة</guilabel
+> لتنسيق النص المحدد.</para>
+<para
+>يُضبط الخط المبدئي لجميع الخلايا في قائمة <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>مدير الأنماط</guimenuitem
+></menuchoice
+> باستخدام النمط المستخدم حاليًا.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term
+><guilabel
+>Family List box</guilabel
+></term>
+<listitem
+><para
+>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term
+><guilabel
+>النمط:</guilabel
+></term>
+<listitem
+><para
+>اختر نمط خطك للخلايا المحددة حاليًا. عند تحديد عدة خلايا بأنماط مختلفة، يُضبط النمط المعروض على <guilabel
+>متفاوت (لا تغيير)</guilabel
+> وتركه على هذا النحو سيُبقي جميع إعدادات النمط الحالية لكل خلية. التغيير إلى <guilabel
+>روماني</guilabel
+> مثلًا سيغير نص نمط جميع الخلايا المحددة إلى <guilabel
+>روماني</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>الحجم:</guilabel
+></term>
+<listitem
+><para
+>اختر حجم خطك للخلايا المحددة حاليًا. عند تحديد عدة خلايا بأحجام مختلفة، يُضبط الحجم المعروض على <guilabel
+> </guilabel
+> (لا يُكتب رقم) وتركه على هذا النحو سيُبقي جميع إعدادات الحجم الحالية لكل خلية. التغيير إلى <guilabel
+>14</guilabel
+> مثلًا سيغير حجم خط جميع الخلايا المحددة إلى <guilabel
+>14</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>الوزن:</guilabel
+></term>
+<listitem
+><para
+>اختر وزن خطك للخلايا المحددة حاليًا. عند تحديد عدة خلايا بأوزان خطوط مختلفة، يُضبط الوزن المعروض على <guilabel
+>متفاوت (لا تغيير)</guilabel
+> وتركه على هذا النحو سيُبقي جميع إعدادات الوزن الحالية لكل خلية. التغيير إلى <guilabel
+>عريض</guilabel
+> مثلًا سيغير وزن خط جميع الخلايا المحددة إلى <guilabel
+>عريض</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>اللون:</guilabel
+></term>
+<listitem
+><para
+>اختر لون نص الخلايا المحددة حاليًا. النقر على شريط اللون سيفتح حوار كيدي القياسي <guilabel
+>اختيار لون</guilabel
+> حيث ستتمكن من اختيار اللون الجديد. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>تسطير</guilabel
+></term>
+<listitem
+><para
+>يُسطر نص الخلايا المحددة حاليًا إذا كان محددًا. هذا غير محدد مبدئيًا.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>شطب</guilabel
+></term>
+<listitem
+><para
+>سيشطب نص الخلايا المحددة حاليًا إذا كان هذا محددًا. هذا غير محدد مبدئيًا.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title
+>موضع النص وتدويره</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>صفحة الموضع.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>من صفحة <guilabel
+>الموضع</guilabel
+> يمكنك التحكم في موضع النص داخل الخلية عن طريق إجراء اختيارات مناسبة في منطقتي <guilabel
+>أفقي</guilabel
+> و<guilabel
+>عمودي</guilabel
+> أو عن طريق ضبط قيمة <guilabel
+>المسافة البادئة</guilabel
+>. يمكنك أيضًا اختيار ظهور النص عموديًا بدلًا من أفقيًا، أو حتى بزاوية.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>أفقي</guilabel
+></term>
+<listitem
+><para
+>اضبط موضع المحتوى أفقيًا في الخلية. <guilabel
+>قياسي</guilabel
+> هو المبدئي ويُضبط من تنسيق البيانات الذي تختاره. <guilabel
+>يسار</guilabel
+> يعني عرض المحتوى على يسار الخلية. <guilabel
+>وسط</guilabel
+> يعني أن المحتوى سيكون في المنتصف أفقيًا في الخلية. <guilabel
+>يمين</guilabel
+> يعني عرض محتوى الخلية على يمين الخلية.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>عمودي</guilabel
+></term>
+<listitem
+><para
+>اضبط موضع المحتوى عموديًا في الخلية. <guilabel
+>أعلى</guilabel
+> يعني عرض المحتوى في أعلى الخلية. <guilabel
+>منتصف</guilabel
+> يعني أن المحتوى سيكون في المنتصف عموديًا في الخلية. <guilabel
+>أسفل</guilabel
+> يعني عرض محتوى الخلية في أسفل الخلية.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>خيار النص</guilabel
+></term>
+<listitem
+><para
+>هذا متاح فقط عندما يكون التدوير 0°. <guilabel
+>التفاف النص</guilabel
+> يلف النص ليتناسب مع حجم الخلية السابق. إذا لم يكن هذا محددًا، سيبقى النص في سطر واحد.</para>
+<para
+><guilabel
+>نص عمودي</guilabel
+> يضع نصك عموديًا.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>١التّدوير</guilabel
+></term>
+<listitem
+><para
+>النص لديك سيظهر متجها بالزاوية التي تعينها هنا. القيم الموجبة ستحركه بعكس اتجاه عقارب الساعة والقيم السالبة ستحركه في اتجاه عقارب الساعة.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>ادمج الخلايا</guilabel
+></term>
+<listitem
+><para
+>عند التحديد، يكون لهذا نفس تأثير <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>دمج الخلايا</guimenuitem
+></menuchoice
+>. يجب أن يكون لديك خليتان متتاليتان على الأقل محددتان. ثم تُدمج تلك الخلايا المتتالية في خلية أكبر.</para>
+<para
+>عند تحديد خلية مدمجة وعند إلغاء تحديد هذا، تعود جميع الخلايا إلى حجمها الأصلي كما قبل الدمج. له نفس تأثير <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>فصل الخلايا</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>إزاحة</guilabel
+></term>
+<listitem
+><para
+>اضبط مقدار المسافة البادئة التي ستُستخدم في الخلية عند اختيار إجراءات <guilabel
+>زيادة المسافة البادئة</guilabel
+>/<guilabel
+>تقليل المسافة البادئة</guilabel
+> من شريط الأدوات. هذه الإجراءات غير مفعلة مبدئيًا في شريط الأدوات.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>حجم الخلية</guilabel
+></term>
+<listitem
+><para
+>تضبط هنا حجم الخلية، إما عرض وارتفاع مخصصين أو اختيار العرض والارتفاع المبدئيين.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title
+>حد الخلية</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>صفحة الحد.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>تتيح لك صفحة <guilabel
+>الحد</guilabel
+> ضبط مظهر حدود الخلايا. إذا حددت أكثر من خلية واحدة، يمكنك تطبيق أنماط مختلفة على الحدود بين الخلايا وتلك المحيطة بالمنطقة المحددة. </para>
+<para
+>اختر أولًا النمط واللون من قسم <guilabel
+>النمط</guilabel
+> في صفحة <guilabel
+>الحد</guilabel
+> ثم طبقه على أجزاء مختلفة من الحد بالنقر على الزر المناسب في قسم <guilabel
+>الحد</guilabel
+>، أو على أحد أزرار <guilabel
+>الاختيار المسبق</guilabel
+>. الزر الأيسر في قسم <guilabel
+>الاختيار المسبق</guilabel
+> سيمسح أي حد(ود) مطبق سابقًا. لاحظ أنه يمكنك أيضًا إضافة خط شطب قطري للخلية(الخلايا).</para>
+</sect2>
+<sect2 id="formatbackground">
+<title
+>خلفية الخلية</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>صفحة الخلفية.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>يمكن اختيار نمط خلفية الخلية ولونها من صفحة <guilabel
+>الخلفية</guilabel
+>.</para>
+<para
+>ببساطة اختر <guilabel
+>نمطًا</guilabel
+> مرغوبًا، ثم حدد <guilabel
+>لون</guilabel
+> النمط و<guilabel
+>لون الخلفية</guilabel
+>.</para>
+<para
+>في أسفل هذه الصفحة يمكنك رؤية <guilabel
+>معاينة</guilabel
+> لخلفية الخلية المهيأة.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title
+>حماية الخلية</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>صفحة حماية الخلية.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>يمكنك تغيير طريقة حماية محتوى الخلية في صفحة <guilabel
+>حماية الخلية</guilabel
+>.</para>
+<para
+>جميع الخلايا محمية افتراضيًا (أي لا يمكن تغيير محتوى الخلية)، ولتفعيل حماية الخلية تحتاج أيضًا إلى حماية الورقة باستخدام القائمة <menuchoice
+><guimenu
+>أدوات</guimenu
+><guimenuitem
+>حماية الورقة...</guimenuitem
+></menuchoice
+> وتقديم كلمة مرور. يمكنك أيضًا إخفاء صيغة الخلية لحماية طريقة حساب الصيغة. وهذا يتطلب أيضًا تفعيل حماية الورقة ليعمل. يمكنك إخفاء محتوى الخلية باستخدام <guilabel
+>إخفاء الكل</guilabel
+> وهذا أيضًا يتطلب حماية الورقة. يمكنك معرفة المزيد عن كل هذه الإعدادات في <link linkend="protection"
+>فصل شيت المتقدم، قسم الحماية</link
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>أخفِ الكل</guilabel
+></term>
+<listitem
+><para
+>يخفي هذا محتوى الخلية ويعمل فقط عندما تكون الورقة محمية، مما يعني أن تغيير سمة <guilabel
+>إخفاء الكل</guilabel
+> لخلية ليس له تأثير ما لم تكن الورقة محمية. سواء كانت الخلية نفسها محمية أم لا لا يهم.</para>
+<para
+>عند تحديد <guilabel
+>إخفاء الكل</guilabel
+>، يتم تعطيل <guilabel
+>محمية</guilabel
+> و<guilabel
+>إخفاء الصيغة</guilabel
+> لأنه عندما تكون الورقة محمية، يخفي <guilabel
+>إخفاء الكل</guilabel
+> محتوى الخلية والصيغة وبالتالي يُقنّع ويحمي محتوى الخلية.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>محمي</guilabel
+></term>
+<listitem
+><para
+>إذا حُدد، فسيُحمى محتوى الخلية. هذا هو السلوك المبدئي. تحتاج إلى حماية الورقة بأكملها باستخدام القائمة <menuchoice
+><guimenu
+>أدوات</guimenu
+><guimenuitem
+>حماية الورقة...</guimenuitem
+></menuchoice
+> لكي تعمل حماية الخلية الفردية هذه. عندما تكون الخلية محمية، لا يمكن تغيير محتواها.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>أخف الصيغة</guilabel
+></term>
+<listitem
+><para
+>عند تحديد هذا، تظل الخلية مرئية. ومع ذلك، لا يظهر محتواها في شريط <guilabel
+>الصيغة</guilabel
+>. إخفاء الصيغة يعمل فقط مع الخلايا التي تحتوي على صيغ حتى لا يتمكن المستخدم من عرض الصيغة. ويجب حماية الورقة لكي يعمل هذا.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>لا تطبع النص</guilabel
+></term>
+<listitem
+><para
+>إذا حددت <guilabel
+>عدم طباعة النص</guilabel
+> فلن تتم طباعة النص في الخلية. هذا غير محدد مبدئيًا مما يعني أن نص الخلية سيُطبع دائمًا مبدئيًا.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title
+>سمات الخلية الشرطية</title>
+<para
+>يمكنك جعل مظهر الخلية يتغير وفقًا للقيمة التي تحتويها، وهو مفيد ربما إذا كنت تستخدم شيت لتتبع نفقات منزلك وتريد تمييز أي بند أكبر من، على سبيل المثال، ألف دولار.</para>
+<para
+>لفعل ذلك، حدد الخلية (الخلايا) ثم اختر <guimenuitem
+>أنماط شرطية...</guimenuitem
+> من قائمة <guimenu
+>تنسيق</guimenu
+>. سيظهر مربع حوار <guilabel
+>الأنماط الشرطية</guilabel
+> حيث يمكنك جعل نوع الخط ولون الخلية يتغيران عندما تفي القيمة بشرط واحد أو أكثر. لاحظ أن الشرطين الثاني والثالث ينطبقان فقط إذا لم يتم استيفاء الشرط (الشرط) السابق.</para>
+<para
+>استخدم <menuchoice
+><guisubmenu
+>مسح</guisubmenu
+><guimenuitem
+>أنماط شرطية</guimenuitem
+></menuchoice
+> من قائمة <guimenu
+>تحرير</guimenu
+> لمسح أي سمات شرطية من الخلايا المحددة.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title
+>تغيير أحجام الخلايا</title>
+<para
+>تتيح لك صفحة <guilabel
+>الموضع</guilabel
+> في مربع حوار <guilabel
+>تنسيق الخلية</guilabel
+> تغيير حجم الخلية (الخلايا) المحددة. لاحظ أن تغيير ارتفاع خلية واحدة سيغير الارتفاع لجميع الخلايا في ذلك الصف، وبالمثل سيؤثر تغيير العرض على العمود بأكمله.</para>
+<para
+>يمكنك أيضًا تحديد الصف (الصفوف) أو العمود (الأعمدة) المراد تغييرها ثم تحديد <guimenuitem
+>تغيير حجم الصف...</guimenuitem
+> أو <guimenuitem
+>تغيير حجم العمود...</guimenuitem
+> من قائمة النقر بزر الفأرة <mousebutton
+>الأيمن</mousebutton
+> المنبثقة أو من قائمة <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guisubmenu
+>صف</guisubmenu
+> </menuchoice
+> أو <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guisubmenu
+>عمود</guisubmenu
+></menuchoice
+>.</para>
+<para
+>إذا حركت مؤشر الفأرة بحيث يكون طرفه فوق الخط الفاصل بين رقمي صفين على يسار نافذة شيت، سيتغير المؤشر ليظهر خطين متوازيين لكل منهما سهم قصير يخرج منه. عندما يكون المؤشر في هذه الحالة، يمكنك الضغط باستمرار على زر الفأرة <mousebutton
+>الأيسر</mousebutton
+> وسحب الحد بين الصفين، مما يغير ارتفاع الصف العلوي. يمكن استخدام تقنية مماثلة لتغيير عرض عمود.</para>
+
+<para
+>لتعيين ارتفاع الصف أو عرض العمود إلى الحد الأدنى اللازم لعرض المحتويات، حدد الصف أو العمود بأكمله، وانقر بزر الفأرة &RMB; على تسمية الصف أو العمود. في القائمة التي تظهر، حدد <guimenuitem
+>ضبط الصف</guimenuitem
+> أو <guimenuitem
+>ضبط العمود</guimenuitem
+>. سيتم تغيير حجم الصف أو العمود إلى الحد الأدنى الضروري. يمكنك أيضًا تحديد خلية واحدة أو نطاق من الخلايا، والنقر على <guimenuitem
+>ضبط الصف والعمود</guimenuitem
+> إما من القائمة المنبثقة بزر الفأرة &RMB; أو من قائمة <guimenu
+>تنسيق</guimenu
+>.</para>
+
+<para
+>يمكنك جعل عدد من الصفوف أو الأعمدة المتجاورة بنفس الحجم عن طريق تحديدها ثم اختيار <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guisubmenu
+>صف</guisubmenu
+><guimenuitem
+>تسوية الصف</guimenuitem
+></menuchoice
+> أو <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guisubmenu
+>عمود</guisubmenu
+> <guimenuitem
+>تسوية العمود</guimenuitem
+></menuchoice
+>.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title
+>دمج الخلايا</title>
+<para
+>غالبًا ما يكون من المناسب وجود خلية واحدة تمتد عبر عمودين أو أكثر أو لأسفل أكثر من صف واحد. يمكن القيام بذلك عن طريق دمج خليتين أو أكثر في خلية واحدة. حدد الخلايا المراد دمجها ثم اختر <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>دمج الخلايا</guimenuitem
+></menuchoice
+>.</para>
+<para
+>لعكس هذه العملية، حدد الخلية المدمجة ثم اختر <guimenuitem
+>فصل الخلايا</guimenuitem
+> من قائمة <guimenu
+>تنسيق</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title
+>إخفاء الصفوف والأعمدة</title>
+<para
+>يمكن غالبًا جعل جدول البيانات النهائي يبدو أكثر جاذبية عن طريق إخفاء الخلايا التي تحتوي على حسابات وسيطة بحيث تظهر فقط مناطق إدخال البيانات المهمة والنتائج.</para>
+<para
+>في شيت يمكنك إخفاء الصفوف أو الأعمدة المحددة باستخدام خيارات <guimenuitem
+>إخفاء الصفوف</guimenuitem
+> و<guimenuitem
+>إخفاء الأعمدة</guimenuitem
+> من قوائم <menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>صف</guisubmenu
+></menuchoice
+> أو <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guisubmenu
+>عمود</guisubmenu
+></menuchoice
+> أو قائمة زر الفأرة <mousebutton
+>الأيمن</mousebutton
+>. لا يتم عرض الصفوف والأعمدة المخفية على الشاشة أو تضمينها في الطباعة.</para>
+<para
+>إخفاء الخلايا بهذه الطريقة يجعلها أيضًا أقل عرضة للتغيير العرضي.</para>
+<para
+>لإظهار صف أو عمود، حدد <menuchoice
+><guisubmenu
+>صف</guisubmenu
+><guimenuitem
+>إظهار الصفوف...</guimenuitem
+></menuchoice
+> أو <menuchoice
+><guisubmenu
+>عمود</guisubmenu
+><guimenuitem
+>إظهار الأعمدة...</guimenuitem
+> </menuchoice
+> من قائمة <guimenu
+>تنسيق</guimenu
+>. في مربع الحوار الذي يظهر، يمكنك تحديد أي عدد من الصفوف لإظهارها.</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title
+>خصائص الورقة</title>
+<para
+>يمكنك الوصول إلى خصائص الورقة الحالية إما بالنقر بزر الفأرة الأيمن على علامة تبويب الورقة واختيار <guilabel
+>خصائص الورقة</guilabel
+> أو باستخدام القائمة <menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>ورقة</guisubmenu
+><guimenuitem
+>خصائص الورقة</guimenuitem
+></menuchoice
+>. يرجى ملاحظة أنه يمكنك فقط الوصول إلى <guilabel
+>خصائص الورقة</guilabel
+> عندما لا يكون المستند أو الورقة محمية.</para>
+<para
+>يمكنك تعيين خصائص مختلفة ستكون سارية في الورقة الحالية. النقر على <guibutton
+>موافق</guibutton
+> سيؤكد تغييراتك و<guibutton
+>مبدئي</guibutton
+> سيعيد الإعدادات المبدئية.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>مربع حوار خصائص الورقة.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>اتجاه التخطيط:</guilabel
+></term>
+<listitem
+><para
+>يتيح لك اختيار اتجاه الورقة. المبدئي هو أن العمود الأول من الورقة على اليسار. إذا اخترت <guilabel
+>من اليمين إلى اليسار</guilabel
+>، فسيكون العمود الأول على اليمين وتُضاف الأعمدة الأخرى من اليمين إلى اليسار.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>أخف الصفر</guilabel
+></term>
+<listitem
+><para
+>عند تعيين هذا الصندوق فإن أي خلية تحتوي القيمة صفر ستبدو فارغة.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>إعادة الحساب الآليّة</guilabel
+></term>
+<listitem
+><para
+>هذا التعيين يتحكم في كون الصيغ سيعاد حسابها آليّا حين تتغير قيمة أي خلية تمثلها أم لا.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>اعرض الأعمدة كأرقام</guilabel
+></term>
+<listitem
+><para
+>عند تعيين هذا الصندوق فإن رؤوس الأعمدة ستعرض كأرقام بدلا من الحروف. الحروف هي المبدئية.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>استخدم نمط LC</guilabel
+></term>
+<listitem
+><para
+>عند تعيين هذا الصندوق فإن مرجع الخلية المعروض عند النهاية اليسرى من شريط الصيغة سيعرض في نمط LC (مثال L2C3) بدلًا من شكلها العادي B3. هذا لا يبدو ذو فائدة حقيقية مباشرة.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>حول الحرف الأول إلى حرف علوي</guilabel
+></term>
+<listitem
+><para
+>عيِّن هذا الصندوق وسيحول الحرف الأول لأي نص تقوم بكتابته  آليّا إلى حرف علوي.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>اعرض الشّبكة</guilabel
+></term>
+<listitem
+><para
+>إذا حُدد، فستُعرض الشبكة (حدود الخلايا). هذا هو المبدئي. إذا قمت بإلغاء تحديده، فستُخفى الشبكة.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>أظهر حدود الصفحة</guilabel
+></term>
+<listitem
+><para
+>إذا عينت هذا الخيار، فإن حدود الصفحة سترسم في الورقة الحالية. مبدئيا حدود الصفحة لا تظهر. ذلك مفيد لرؤية حدود الصفحة إذا كنت تريد طباعة ورقتك.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>أظهر الصيغة</guilabel
+></term>
+<listitem
+><para
+>إذا حُدد هذا المربع، سيعرض شيت الصيغ الفعلية في الخلايا بدلًا من النتائج.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>اعرض مميز الصيغة</guilabel
+></term>
+<listitem
+><para
+>إذا حُدد هذا المربع، سيعرض شيت مثلثًا أزرق صغيرًا في الزاوية السفلية اليسرى من الخلايا التي تحتوي على صيغ. هذا مفيد إذا أردت حماية الخلايا التي تحتوي على صيغ.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>اعرض مميز التعليقات</guilabel
+></term>
+<listitem
+><para
+>عند تعيين هذا الصندوق فإن الخلايا المحتوية على تعليقات ستميز بمثلث أحمر صغير في الركن الأيمن الأعلى.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

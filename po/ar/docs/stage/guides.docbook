@@ -1,0 +1,254 @@
+<chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Brad</firstname
+> <surname
+>Hards</surname
+> <affiliation
+> <address
+><email
+>bradh@frogmouth.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Danny</firstname
+> <surname
+>Allen</surname
+> <affiliation
+> <address
+><email
+>danny@dannyallen.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>أدلة مفصلة</title>
+
+<para
+>يصف هذا الفصل كيفية أداء بعض المهام الشائعة في &stage;.</para>
+
+<sect1 id="html-wizard">
+<title
+>إنشاء عرض شرائح &HTML;</title>
+
+<para
+>حوّل عرضًا تقديميًا موجودًا إلى صفحات &HTML; قياسية مع أدوات مساعدة للتنقل.</para>
+
+<para
+>أولًا، إما أنشئ عرضًا تقديميًا جديدًا، أو افتح عرضًا موجودًا. ثم انقر على <menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>تصدير كـ HTML...</guimenuitem
+></menuchoice
+></para>
+<para
+>ستظهر لك نافذة حوار تطلب بعض التفاصيل:</para>
+
+<screenshot>
+<screeninfo
+>املأ التفاصيل لعرض الشرائح &HTML; الخاص بك</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>املأ التفاصيل لعرض الشرائح &HTML; الخاص بك</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>املأ حقلي <guilabel
+>العنوان</guilabel
+> و<guilabel
+>المؤلف</guilabel
+>. حدد الشرائح التي يجب تصديرها. إذا أردت تغيير اسم مستخدم في صفحة &HTML; لكل شريحة، انقر نقرًا مزدوجًا على الاسم وحرره في المكان.</para>
+
+<para
+>في منطقة <guilabel
+>معاينة المخرجات</guilabel
+>، تُعرض الشرائح المصغرة ويمكنك التحقق من ترتيب الشرائح الصحيح وتصفح العرض التقديمي باستخدام زري <guiicon
+>&lt;</guiicon
+> و<guiicon
+>&gt;</guiicon
+>. </para>
+
+<para
+>يمكنك الآن تحديد ورقة أنماط مع إعداد خيارات &HTML;.</para>
+
+<para
+>لإنتاج عرض &HTML; الخاص بك فعليًا، اضغط على زر <guibutton
+>تصدير</guibutton
+> وحدد مجلدًا.</para>
+
+<para
+>ما لدينا الآن هو المجلدان المنشآن حديثًا <filename
+>html/</filename
+> و<filename
+>pics/</filename
+>، اللذان أُنشئا حيث حددنا المسار سابقًا:</para>
+
+<screenshot>
+<screeninfo
+>مجلدا عرض الشرائح &HTML; المنشآن حديثًا</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow9.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>مجلدا عرض الشرائح &HTML; المنشآن حديثًا</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>يوجد أيضًا ملف <filename
+>index.html</filename
+> لتشغيل عرض الشرائح الويب الخاص بك.</para>
+
+<para
+>يمكنك رؤية كيفية عمله باستخدام مدير الملفات أو متصفح الويب لفتح ملف <filename
+>index.html</filename
+>. انقر حيث يُطلب منك، وستُعرض الشريحة الأولى من عرضك التقديمي. سيتصرف الآن كعرض شرائح &stage;.</para>
+
+<para
+>كل نقرة على أيقونات الأسهم تنقلك إلى الشريحة التالية أو السابقة. للعودة إلى بداية عرض الشرائح، انقر على أيقونة الشريحة.</para>
+
+<tip
+><para
+>لمشاركة عرضك التقديمي مع العالم، انقل الملفات المنشأة حديثًا إلى موقع يمكن الوصول إليه عبر الشبكة (أي مساحة ويب)، مع الحفاظ على هيكل المجلد سليمًا.</para
+></tip>
+</sect1>
+
+<sect1 id="creating-templates">
+<title
+>إنشاء قوالب &stage;</title>
+
+<para
+>من السهل جدًا إنشاء قالب جديد لـ &stage;.</para>
+
+<para
+>إذا أنشأت عرضًا تقديميًا بأسلوب ترغب في استخدامه مرة أخرى، يمكنك حفظه كقالب.</para>
+
+<para
+>سيوضح هذا البرنامج التعليمي كيف يمكننا إنشاء قالب جديد وحفظه.</para>
+
+<para
+>افتح &stage; وأنشئ مستندًا جديدًا.</para>
+
+<para
+>لإضافة لمسة جمالية إلى الشريحة الفارغة، يمكننا تغيير خلفية الشريحة - افعل ذلك بتحديد أداة <guilabel
+>خلفية المستند</guilabel
+> في حاوية الأدوات.</para>
+
+<para
+>نريد أن تكون الخلفية جذابة، لذا قد تختار استخدام صورة كخلفية بالنقر على زر <guibutton
+>تعيين صورة</guibutton
+>: لا تتردد في التجربة، ولكن حافظ على جمالها!</para>
+
+<screenshot>
+<screeninfo
+>اختيار خلفية شريحة</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template03.png"/>
+</imageobject>
+<textobject
+><phrase
+>اختيار خلفية شريحة</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>يجب أن تحتوي الصفحة الآن على الخلفية التي ترغب بها. أنشئ مربع نص، واكتب عنوانًا لشريحتك:</para>
+
+<screenshot>
+<screeninfo
+>إضافة عنوان إلى القالب الجديد</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template04.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>إضافة عنوان إلى القالب الجديد</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>عندما تكون راضيًا عن قالبك، اذهب إلى <menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>حفظ باسم</guimenuitem
+></menuchoice
+> واختر نوع الملف <guilabel
+>قالب عرض مستند أوبن دوكيومنت</guilabel
+> في حوار الملف.</para>
+
+</sect1>
+
+</chapter>

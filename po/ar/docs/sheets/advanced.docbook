@@ -1,0 +1,1397 @@
+<chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>الجداول المتقدمة</title>
+<sect1 id="series">
+<title
+>السلسلة</title>
+<para
+>عند إنشاء جدول بيانات، غالبًا ما تحتاج إلى تضمين سلسلة من القيم، مثل 10، 11، 12...، في صف أو عمود. هناك عدة طرق يمكنك من خلالها فعل ذلك في الجداول.</para>
+<para
+>بالنسبة لسلسلة قصيرة بسيطة مثل 5، 6، 7، 8... فإن طريقة <quote
+>السحب والنسخ</quote
+> هي الأبسط. أدخل القيمة البداية في الخلية البداية والقيمة التالية من السلسلة في خلية مجاورة. ثم حدد كلتا الخليتين وحرّك مؤشر الفأرة ليكون فوق المربع الصغير في الزاوية اليمنى السفلى؛ سيتغير المؤشر إلى سهم مزدوج الرأس قطري. ثم اضغط مع الاستمرار على زر الفأرة <mousebutton
+>الأيسر</mousebutton
+> أثناء سحب الخلايا لأسفل أو عبر حسب الحاجة.</para>
+<para
+>يُحسب حجم الخطوة على أنه الفرق بين قيمتي البداية اللتين أدخلتهما. على سبيل المثال، إذا أدخلت <userinput
+>4</userinput
+> في الخلية A1 و<userinput
+>3.5</userinput
+> في A2، ثم حددت كلتا الخليتين وسحبتهما ونسختهما لأسفل، سيكون حجم الخطوة هو القيمة في A2 ناقص القيمة في A1، أي -0.5 في هذه الحالة، لذا ستحصل على السلسلة 4، 3.5، 3، 2.5، 2...</para>
+
+<para
+>ستتعامل طريقة <quote
+>السحب والنسخ</quote
+> حتى مع السلاسل حيث قيمة الخطوة ليست قيمة ثابتة بل هي سلسلة بذاتها. لذا إذا بدأت بـ 1، 3، 4، 6، سيمدد السحب والنسخ السلسلة إلى 1، 3، 4، 6، 7، 9، 10، 12...، حيث قيمة الخطوة في هذا المثال هي السلسلة 2، 1، 2، 1...</para>
+
+ <!--FIXME does not work here -->
+<para
+>تتعرف الجداول أيضًا على بعض <quote
+>السلاسل</quote
+> الخاصة مثل أيام الأسبوع. جرب إدخال <userinput
+>الجمعة</userinput
+> في خلية (لاحظ كتابة الحرف الأول كبيرًا) ثم اسحبها وانسخها لأسفل. لرؤية السلاسل الخاصة المتاحة، وربما إنشاء سلسلة خاصة بك، اختر <menuchoice
+><guimenu
+>أدوات</guimenu
+> <guimenuitem
+>قوائم مخصصة...</guimenuitem
+></menuchoice
+></para>
+
+<para
+>إذا حددت خلية واخترت <guimenuitem
+>سلسلة...</guimenuitem
+> من قائمة <guimenu
+>إدراج</guimenu
+>، سترى مربع حوار <guilabel
+>سلسلة</guilabel
+>. هذا مفيد لإنشاء سلاسل طويلة جدًا بحيث لا يمكن بناؤها بسهولة باستخدام طريقة السحب والنسخ، أو لإنشاء سلاسل هندسية مثل 1، 1.5، 2.25، 3.375... حيث تُستخدم قيمة الخطوة، 1.5 في هذه الحالة، كمضاعف.</para>
+<para
+>إذا كان نوع السلسلة التي تريدها معقدًا جدًا لأي من الطرق السابقة، فكر في استخدام صيغة وسحبها ونسخها. على سبيل المثال، لإنشاء سلسلة بالقيم 2، 4، 16، 256... أدخل <userinput
+>2</userinput
+> في A1، و<userinput
+>=A1*A1</userinput
+> في A2، واسحب وانسخ الخلية A2 لأسفل.</para>
+</sect1>
+
+<sect1 id="formulas">
+<title
+>الصيغ</title>
+<sect2 id="builtin">
+<title
+>الوظائف المضمّنة</title>
+<para
+>تحتوي الجداول على مجموعة ضخمة من <link linkend="functions"
+>الدوال</link
+> الرياضية وغيرها المضمنة التي يمكن استخدامها في خلية صيغة. يمكن رؤيتها والوصول إليها بتحديد خلية ثم اختيار <guimenuitem
+>دالة...</guimenuitem
+> من قائمة <guimenu
+>إدراج</guimenu
+>. يعرض هذا مربع حوار <guilabel
+>دالة</guilabel
+>.</para>
+<para
+>اختر الدالة التي تريد استخدامها من مربع القائمة على يسار مربع الحوار. ستعرض علامة التبويب <guilabel
+>مساعدة</guilabel
+> وصفًا ونوع الإرجاع والصيغة والمعلمات والأمثلة لهذه الدالة. بالإضافة إلى ذلك، توفر هذه الصفحة غالبًا روابط لدوال ذات صلة. ثم اضغط على الزر الذي يحوي رمز سهم السهم لأسفل للصقها في مربع تحرير النص في أسفل الحوار.</para>
+<para
+>ستُعرض بعد ذلك علامة التبويب <guilabel
+>معلمات</guilabel
+> لتتيح لك إدخال المعلمة (المعلمات) للدالة التي اخترتها للتو. إذا أردت إدخال قيمة فعلية لمعلمة، اكتبها ببساطة في مربع النص المناسب في صفحة <guilabel
+>معلمات</guilabel
+>. لإدخال مرجع خلية بدلًا من قيمة، انقر <mousebutton
+>يسارًا</mousebutton
+> على مربع النص المناسب في صفحة <guilabel
+>معلمات</guilabel
+>؛ ثم انقر <mousebutton
+>يسارًا</mousebutton
+> على الخلية الهدف في جدول البيانات.</para>
+<para
+>بدلًا من استخدام صفحة <guilabel
+>معلمات</guilabel
+>، يمكن إدخال مراجع خلايا مثل <userinput
+>B6</userinput
+> بكتابتها مباشرة في مربع التحرير في أسفل حوار <guilabel
+>دالة</guilabel
+>. إذا كانت الدالة تحتوي على أكثر من معلمة، افصل بينها بفاصلة منقوطة (<keysym
+>;</keysym
+>).</para>
+<para
+>سيؤدي الضغط على زر <guibutton
+>موافق</guibutton
+> إلى إدراج الدالة في الخلية الحالية وإغلاق حوار <guilabel
+>دالة</guilabel
+>.</para>
+<para
+>يمكنك بالطبع الاستغناء عن حوار <guilabel
+>دالة</guilabel
+> وكتابة التعبير الكامل ببساطة في مربع إدخال النص الرئيسي في خيارات أداة <guilabel
+>محرر الخلايا</guilabel
+>. أسماء الدوال ليست حساسة لحالة الأحرف. لا تنسَ أن جميع التعبيرات يجب أن تبدأ برمز <keysym
+>=</keysym
+>.</para>
+</sect2>
+
+<sect2 id="logical">
+<title
+>المقارنات المنطقية</title>
+<para
+>تأخذ الدوال المنطقية مثل IF() وAND() وOR() معلمات لها القيم المنطقية (البوليانية) صواب أو خطأ. يمكن إنتاج هذا النوع من القيم بواسطة دوال منطقية أخرى مثل ISEVEN() أو بمقارنة القيم في خلايا جدول البيانات باستخدام تعابير المقارنة الواردة في الجدول التالي.</para>
+
+<informaltable
+><tgroup cols="3">
+<thead>
+<row>
+<entry
+>عبارة </entry>
+<entry
+>الوصف </entry>
+<entry
+>مثال </entry
+></row>
+</thead>
+<tbody>
+
+<row
+><entry
+><keysym
+>=</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>يساوي</entry>
+<entry
+><userinput
+>A2==B3</userinput
+> صواب إذا كانت القيمة في A2 مساوية للقيمة في B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>!</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>لا يساوي</entry>
+<entry
+><userinput
+>A2!=B3</userinput
+> صواب إذا كانت القيمة في A2 غير مساوية للقيمة في B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>لا يساوي</entry>
+<entry
+>نفس <userinput
+>A2!=B3</userinput
+></entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+></entry>
+<entry
+>اقل من</entry>
+<entry
+><userinput
+>A2&lt;B3</userinput
+> صواب إذا كانت القيمة في A2 أقل من القيمة في B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>أقل من أو يساوي</entry>
+<entry
+><userinput
+>A2&lt;=B3</userinput
+> صواب إذا كانت القيمة في A2 أقل من أو تساوي القيمة في B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>أكبر من</entry>
+<entry
+><userinput
+>A2&gt;B3</userinput
+> صواب إذا كانت القيمة في A2 أكبر من القيمة في B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>أكبر من أو يساوي</entry>
+<entry
+><userinput
+>A2&gt;=B3</userinput
+> صحيح إذا كانت القيمة A2 أكبر من أو تساوي القيمة في B3</entry>
+</row>
+
+</tbody
+></tgroup
+></informaltable>
+
+<para
+>وبالتالي إذا أدخلت <userinput
+>=IF(B3&gt;B1;"BIGGER";"")</userinput
+> في خلية، فستعرض BIGGER إذا كانت القيمة في B3 أكبر من تلك في B1، وإلا فلن تظهر الخلية شيئًا.</para>
+</sect2>
+
+<sect2 id="absolute">
+<title
+>مراجع الخلايا المطلقة</title>
+<para
+>إذا احتوت صيغة على مرجع خلية، فسيُغيّر هذا المرجع عادةً عند نسخ الخلية إلى جزء آخر من ورقة العمل. لمنع هذا السلوك، ضع رمز <keysym
+>$</keysym
+> قبل حرف العمود أو رقم الصف أو كليهما. </para>
+
+<itemizedlist>
+<listitem
+><para
+>إذا احتوت A1 على الصيغة <userinput
+>=D5</userinput
+>، فعند نسخ الخلية إلى B2 ستصبح <userinput
+>=E6</userinput
+> (السلوك الطبيعي). </para
+></listitem>
+<listitem
+><para
+>إذا احتوت A1 على الصيغة <userinput
+>=$D5</userinput
+>، فعند نسخ الخلية إلى B2 ستصبح <userinput
+>=D6</userinput
+> (حرف العمود لم يتغير). </para
+></listitem>
+<listitem
+><para
+>إذا احتوت A1 على الصيغة <userinput
+>=D$5</userinput
+>، فعند نسخ الخلية إلى B2 ستصبح <userinput
+>=E5</userinput
+> (رقم الصف لم يتغير). </para
+></listitem>
+<listitem
+><para
+>إذا احتوت A1 على الصيغة <userinput
+>=$D$5</userinput
+>، فعند نسخ الخلية إلى B2 ستبقى <userinput
+>=D5</userinput
+> (لم يتغير حرف العمود ولا رقم الصف). </para
+></listitem>
+
+</itemizedlist>
+<para
+>عند إدخال أو تحرير مرجع خلية في صيغة، يمكن استخدام مفتاح الاختصار <keysym
+>F4</keysym
+> للتنقل بين هذه الاحتمالات الأربعة.</para>
+<para
+>يمكن استخدام <link linkend="namedareas"
+>الخلايا المسماة</link
+> بطريقة مماثلة لتضمين مرجع خلية ثابت في صيغة. </para>
+</sect2>
+</sect1>
+
+<sect1 id="sumspecialpaste">
+<title
+>الحساب باستخدام اللصق الخاص</title>
+<para
+>قد ترغب أحيانًا في إضافة قيمة واحدة إلى عدد من الخلايا، أو طرح قيمة منها، أو ضربها أو قسمتها جميعًا بقيمة واحدة. يتيح لك خيار <guimenuitem
+>لصق خاص...</guimenuitem
+> القيام بذلك بسرعة وسهولة.</para>
+<para
+>أولًا، أدخل القيمة المعدلة في أي خلية فارغة في جدول البيانات و<guimenuitem
+>انسخ</guimenuitem
+>ها. ثم حدد منطقة الخلايا التي تريد تغييرها، واختر <guimenuitem
+>لصق خاص...</guimenuitem
+> من قائمة <guimenu
+>تحرير</guimenu
+> أو القائمة السياقية، واختر <guilabel
+>جمع</guilabel
+> أو <guilabel
+>طرح</guilabel
+> أو <guilabel
+>ضرب</guilabel
+> أو <guilabel
+>قسمة</guilabel
+> من قسم <guilabel
+>عملية</guilabel
+> في مربع الحوار.</para>
+<para
+>يمكنك أيضًا تطبيق قيم معدلة مختلفة على صفوف أو أعمدة مختلفة من المنطقة المستهدفة عن طريق نسخ منطقة تحتوي على القيم المعدلة المطلوبة قبل تحديد المنطقة المستهدفة وتنفيذ <guimenuitem
+>لصق خاص...</guimenuitem
+> على سبيل المثال، إذا أدخلت <userinput
+>5</userinput
+> في الخلية A1 و<userinput
+>10</userinput
+> في B1، وحددت الخليتين وقمت بـ<guimenuitem
+>نسخ</guimenuitem
+> ثم <guimenuitem
+>لصق خاص...</guimenuitem
+> <guilabel
+>جمع</guilabel
+> في الخلايا A10 إلى D15، فسيُضاف 5 إلى A10:A15 وC10:C15، و10 إلى B10:B15 وD10:D15.</para>
+<para
+>لاحظ أن القيمة المعدلة يمكن أن تكون صيغة بالإضافة إلى قيمة رقمية بسيطة. إذا كانت صيغة، فسيضبط &sheets; مراجع الخلايا كما في عملية <guimenuitem
+>لصق</guimenuitem
+> عادية.</para>
+</sect1>
+
+<sect1 id="arrayformulas">
+<title
+>صيغ المصفوفات</title>
+<para
+>يتيح لك &sheets; استخدام صيغ تكون نتيجتها مصفوفة أو نطاقًا من القيم. عادةً، تُعرض القيمة الأولى فقط في خلية. إذا أردت عرض المصفوفة بأكملها، استخدم <keycombo
+>&Ctrl;&Alt;&Enter;</keycombo
+> عند تحرير صيغة، وسيُحوّلها إلى صيغة مصفوفة، تشغل الخلايا المجاورة حسب الحاجة.</para>
+<para
+>الخلايا التي هي جزء من صيغة مصفوفة مقفلة للتحرير.</para>
+</sect1>
+
+<sect1 id="goalseek">
+<title
+>استهداف القيمة</title>
+<para
+>يمكن استخدام &sheets; لحل التعابير الجبرية مثل <emphasis
+> x + x^2 = 4</emphasis
+> أو <emphasis
+>ما قيمة x التي تجعل x + x تربيع يساوي 4؟</emphasis
+></para>
+<para
+>في هذا المثال، يمكنك إدخال <userinput
+>=A2+A2*A2</userinput
+> في A1 ثم إما تجربة قيم مختلفة في A2 حتى يصبح الناتج في A1 قريبًا بقدر ما تريد من <emphasis
+>4</emphasis
+>، أو، ويفضل، استخدام ميزة <guimenuitem
+>استهداف القيمة...</guimenuitem
+> في &sheets; التي تضبط تلقائيًا القيمة في خلية واحدة لمحاولة جعل القيمة في خلية أخرى قريبة بقدر الإمكان من قيمة مستهدفة.</para>
+<para
+>يُستدعى ذلك باختيار <guimenuitem
+>استهداف القيمة...</guimenuitem
+> من قائمة <guimenu
+>بيانات</guimenu
+>. يظهر مربع حوار يجب فيه إدخال مرجع خلية القيمة المستهدفة (<userinput
+>A1</userinput
+> في هذه الحالة) في مربع <guilabel
+>تعيين الخلية:</guilabel
+>، والقيمة المستهدفة نفسها (<userinput
+>4</userinput
+>) في مربع <guilabel
+>إلى القيمة:</guilabel
+>، ومرجع الخلية التي سيُغيّر (<userinput
+>A2</userinput
+>) في مربع <guilabel
+>بتغيير الخلية:</guilabel
+>. لاحظ أنك تحتاج إلى إدخال قيمة أولية في الخلية التي سيُغيّر قبل بدء <guimenuitem
+>استهداف القيمة</guimenuitem
+>.</para>
+<para
+>الضغط على زر <guibutton
+>موافق</guibutton
+> سيبدأ الحساب. عند الانتهاء، وإذا وُجد حل، اضغط على زر <guibutton
+>موافق</guibutton
+> لقبول النتيجة أو <guibutton
+>إلغاء</guibutton
+> للاحتفاظ بالقيمة الأصلية. </para>
+</sect1>
+
+ <sect1 id="pivottable">
+   <title
+>جداول محورية</title>
+   <para
+>يمكن استخدام &sheets; لبناء <ulink url="http://en.wikipedia.org/wiki/Pivot_table"
+>جداول محورية</ulink
+> باستخدام بيانات الجدول الحالي. </para>
+   <para
+>يمكن استدعاء هذه الميزة باختيار <guimenuitem
+>محوري...</guimenuitem
+> من قائمة <guimenu
+>بيانات</guimenu
+>. فيما يلي مثال على إنشاء جدول محوري. </para>
+   <para
+>لنفترض أن لدينا البيانات التالية. </para>
+   <para>
+     <mediaobject>
+       <imageobject>
+	 <imagedata fileref="pivot1.png" format="PNG"/>
+       </imageobject>
+       <textobject>
+	 <phrase
+>الجدول الأولي</phrase>
+       </textobject>
+     </mediaobject>
+   </para>
+   <para
+>نريد إنشاء جدول محوري حسب اختيارنا ومتطلباتنا. لذا نختار <menuchoice
+> <guimenu
+>بيانات</guimenu
+> <guimenuitem
+>محوري...</guimenuitem
+> </menuchoice
+>. </para>
+     <para
+>مربع الحوار الذي سيظهر يتيح للمستخدم اختيار مصدر البيانات. يمكن أخذ البيانات من ورقة العمل الحالية أو من مصدر خارجي مثل قاعدة بيانات أو ملف <abbrev
+>ODS</abbrev
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot2.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>اختيار مصدر البيانات</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>هذا هو مربع الحوار الذي يسمح للمستخدم بتخصيص الجدول المحوري. تُحوَّل لصائق الأعمدة في البيانات المصدر إلى لصائق تعمل كحقول عمل. يمكن سحب اللصائق وإفلاتها في إحدى المناطق الثلاث (<guilabel
+>صفوف</guilabel
+> أو <guilabel
+>أعمدة</guilabel
+> أو <guilabel
+>قيم</guilabel
+>) لتوليد الجدول المحوري. يمكنك إعادة تعيين خياراتك باستخدام زر <guibutton
+>إعادة تعيين السحب والإفلات</guibutton
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot3.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>مربع حوار تخصيص الجدول المحوري</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>في مثالنا، يُسحب <replaceable
+>الاسم</replaceable
+> إلى <guilabel
+>صفوف</guilabel
+>، و<replaceable
+>الفئة</replaceable
+> إلى <guilabel
+>أعمدة</guilabel
+>، و<replaceable
+>الدرجة</replaceable
+> إلى <guilabel
+>قيم</guilabel
+>. يمكن اختيار دوال معرفة من قبل المستخدم مثل المجموع والمتوسط والحد الأقصى والحد الأدنى والعد وغيرها من قائمة <guilabel
+>اختيار خيار</guilabel
+>. </para>
+     <para
+>يمكن استخدام زر <guibutton
+>إضافة مرشح</guibutton
+> لفتح مربع حوار الترشيح لترشيح البيانات المطلوبة. باستخدام هذا المربع يمكنك تعريف مرشحات متعددة بناءً على لصيقة العمود والعلاقة بينها (<guimenuitem
+>و</guimenuitem
+> أو <guimenuitem
+>أو</guimenuitem
+>). يتيح هذا حرية قصوى لتخصيص المخرجات. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot4.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>مربع حوار ترشيح الجدول المحوري</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+><guilabel
+>إجمالي الصفوف</guilabel
+> و<guilabel
+>إجمالي الأعمدة</guilabel
+>: يتيح تحديدهما الجمع التلقائي للصفوف والأعمدة المقابلة في الجدول المحوري. </para>
+   </sect1>
+
+<sect1 id="worksheets">
+<title
+>استخدام أكثر من ورقة عمل واحدة</title>
+<para
+>عند بدء مستند جديد وفارغ مع &sheets;، سينشئ عددًا من أوراق العمل الفارغة. يُحدد عدد الأوراق التي ينشئها القالب المحدد.</para>
+<para
+><menuchoice
+><guimenu
+>إدراج</guimenu
+><guimenuitem
+>ورقة</guimenuitem
+> </menuchoice
+> سيضيف ورقة أخرى إلى المستند.</para>
+<para
+>يمكنك أيضًا التبديل بين أوراق العمل باستخدام <keycombo action="simul"
+>&Ctrl;<keysym
+>PgDown</keysym
+></keycombo
+> للانتقال إلى الورقة التالية، و<keycombo action="simul"
+>&Ctrl;<keysym
+>PgUp</keysym
+></keycombo
+> للانتقال إلى الورقة السابقة.</para>
+<para
+>تُعطى أوراق العمل الأسماء المبدئية <emphasis
+>ورقة1</emphasis
+> و<emphasis
+>ورقة2</emphasis
+>... يمكنك إعطاء الورقة اسمًا مختلفًا بالنقر <mousebutton
+>الأيمن</mousebutton
+> على اللسان واختيار <guimenuitem
+>إعادة تسمية الورقة...</guimenuitem
+></para>
+<para
+>لإزالة ورقة من المستند، استخدم خيار <guimenuitem
+>إزالة الورقة</guimenuitem
+> في قائمة السياق التي تظهر عند النقر <mousebutton
+>الأيمن</mousebutton
+> على لسان الورقة التي تريد إزالتها.</para>
+<para
+>تسمح لك الإدخالات الأخرى في القائمة الفرعية <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guisubmenu
+>ورقة</guisubmenu
+></menuchoice
+> بإظهار أو إخفاء ورقة بنفس طريقة إخفاء الصفوف والأعمدة.</para>
+<para
+>إذا أردت أن تشير صيغة في ورقة إلى خلية في ورقة أخرى، يجب أن يبدأ مرجع الخلية باسم الورقة متبوعًا بعلامة تعجب (<keysym
+>!</keysym
+>). على سبيل المثال، إذا أدخلت <userinput
+>=ورقة2!A2</userinput
+> في خلية في الورقة 1، ستأخذ تلك الخلية القيمة من A2 من الورقة 2. لاحظ أن أسماء الأوراق حساسة لحالة الأحرف.</para>
+
+
+<sect2 id="consolidate">
+<title
+>دمج البيانات</title>
+<para
+>ربما أنشأت مستندًا يحتوي على عدة أوراق عمل تحتوي على بيانات متشابهة ولكن، على سبيل المثال، لأشهر مختلفة من السنة، وتريد ورقة ملخص تحتوي على القيم المدمجة (مثل المجموع أو المتوسط) لعناصر البيانات المقابلة في الأوراق الأخرى.</para>
+<para
+>يمكن تسهيل هذه المهمة قليلًا باستخدام عنصر <guimenuitem
+>دمج...</guimenuitem
+> من قائمة <guimenu
+>بيانات</guimenu
+>.</para>
+<para
+>يؤدي اختيار هذا الخيار إلى ظهور مربع حوار <guilabel
+>دمج</guilabel
+>.</para>
+<para
+>لكل ورقة مصدر، أدخل مرجعًا إلى منطقة البيانات المطلوبة في مربع <guilabel
+>مرجع:</guilabel
+>. اضغط <guibutton
+>إضافة</guibutton
+> لنقله إلى مربع <guilabel
+>المراجع المدخلة:</guilabel
+>. يجب أن يتضمن المرجع اسم الورقة التي تحتوي على البيانات المصدر، مثل <userinput
+>يناير!A1:A10</userinput
+>، ويمكن إدخاله آليًا بتحديد المنطقة في الورقة المناسبة.</para>
+<para
+>بعد إدخال المراجع لجميع أوراق البيانات المصدر، حدد الخلية في الورقة الهدف حيث تريد ظهور الزاوية العليا اليسرى من النتائج المدمجة. ثم اختر الدالة المناسبة من مربع التحرير والسرد <guilabel
+>دالة:</guilabel
+> واضغط زر <guibutton
+>موافق</guibutton
+>.</para>
+<para
+>إذا نقرت على <guibutton
+>تفاصيل 
+>
+></guibutton
+> في مربع الحوار وحددت مربع <guilabel
+>نسخ البيانات</guilabel
+>، فستوضع القيم الناتجة عن الدمج في الخلايا الهدف بدلًا من الصيغ لحسابها. </para>
+</sect2>
+</sect1>
+<sect1 id="insertchart">
+<title
+>إدراج رسم بياني</title>
+<para
+>يمكنك إدراج رسم بياني في ورقة لإعطاء عرض رسومي لبياناتك.</para>
+<para
+>فعّل أولًا حاوية <guilabel
+>إضافة شكل</guilabel
+> باستخدام عنصر القائمة <menuchoice
+> <guimenu
+>إعدادات</guimenu
+><guimenuitem
+>حاويات</guimenuitem
+> </menuchoice
+>.</para>
+<para
+>ثم حدد منطقة الخلايا التي تحتوي على البيانات واختر <guilabel
+>رسم بياني</guilabel
+> في <guilabel
+>إضافة شكل</guilabel
+>. اسحب المؤشر عبر الورقة أثناء الضغط على زر الفأرة <mousebutton
+>الأيسر</mousebutton
+> لتحديد المنطقة التي تريد ظهور الرسم البياني فيها، ليست هناك حاجة للدقة المفرطة في هذه المرحلة حيث يمكن تغيير حجم الرسم البياني بسهولة في أي وقت. عند تحرير زر الفأرة، سيظهر مربع حوار <guilabel
+>خيارات الرسم البياني</guilabel
+>.</para>
+<para
+>مربع حوار خيارات الرسم البياني</para>
+<para
+>تم ملء منطقة البيانات مسبقًا بنطاق الخلايا المحدد. حدد الصف الأول والعمود الأول كلصائق، وحدد <guilabel
+>مجموعة البيانات في صفوف</guilabel
+> واضغط زر <guibutton
+>موافق</guibutton
+>. سيختفي مربع الحوار وسترى الرسم البياني مضمنًا في ورقة العمل.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chart1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>الآن حدد <guibutton
+>أداة تحرير الرسم البياني</guibutton
+> من حاوية <guilabel
+>أدوات</guilabel
+> وحرر خصائص الرسم البياني مثل نوع الرسم البياني واللصائق والمحاور في <guilabel
+>تحرير الرسم البياني</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>لقطة شاشة لرسم بياني مضمن </para>
+<para
+>لنقل الرسم البياني المضمن أو تغيير حجمه أو حتى حذفه، انتقل إلى أداة <guibutton
+>التلاعب الأساسي بالشكل</guibutton
+> وانقر في أي مكان داخل منطقة الرسم البياني. يجب أن يظهر الآن بحدود خضراء ومربع أصفر صغير في كل زاوية وفي منتصف كل حافة.</para>
+<para
+>لتحريك المخطط، حرّك المؤشر داخل المخطط. يجب أن يتغير المؤشر إلى علامة تقاطع، اضغط زر الفأرة <mousebutton
+>الأيسر</mousebutton
+> وستتمكن من سحب المخطط إلى حيث تريده.</para>
+<para
+>لاستعادة المخطط إلى مظهره الطبيعي، ببساطة انقر في أي مكان خارج منطقة المخطط.</para>
+<para
+>لتغيير تنسيق المخطط نفسه، انقر نقرًا مزدوجًا بزر الفأرة <mousebutton
+>الأيسر</mousebutton
+> داخل منطقة المخطط. يجب أن يظهر <guilabel
+>تحرير المخطط</guilabel
+> في الحاوية. يمكنك بعد ذلك استخدام هذه الأدوات لتغيير المخطط.</para>
+</sect1>
+
+<sect1 id="insertdata">
+<title
+>إدراج البيانات الخارجية</title>
+<para
+>يمكنك إدراج بيانات من ملف نصي أو من الحافظة في ورقة عمل بتحديد الخلية التي تريد ظهور العنصر العلوي الأيسر من البيانات المُدرجة فيها أولًا، ثم اختيار <guimenuitem
+>من ملف نصي...</guimenuitem
+> أو <guimenuitem
+>من الحافظة...</guimenuitem
+> من القائمة الفرعية <menuchoice
+><guimenu
+>إدراج</guimenu
+><guisubmenu
+>بيانات خارجية</guisubmenu
+> </menuchoice
+>.</para>
+<para
+>في كلتا الحالتين، ستفترض &sheets; أن البيانات بصيغة <acronym
+>CSV</acronym
+> وستفتح مربع حوار يتيح لك التحكم في كيفية استخراج البيانات من الملف أو الحافظة ووضعها في خلايا ورقة العمل.</para>
+<para
+>إذا كان الدعم مضمنًا في نظامك، يمكن لـ &sheets; أيضًا إدراج بيانات من قاعدة بيانات <acronym
+>SQL</acronym
+> في ورقة عمل. يتم ذلك باستخدام الخيار <menuchoice
+><guimenu
+>إدراج</guimenu
+><guisubmenu
+>بيانات خارجية</guisubmenu
+><guimenuitem
+>من قاعدة بيانات...</guimenuitem
+> </menuchoice
+>.</para>
+</sect1>
+
+<sect1 id="hyper">
+<title
+>ربط الخلايا</title>
+<para
+>يمكن ربط خلية جدول بيانات بإجراء بحيث يؤدي النقر بزر الفأرة <mousebutton
+>الأيسر</mousebutton
+> على الخلية، على سبيل المثال، إلى فتح متصفحك. لجعل الخلية تتصرف بهذه الطريقة، حددها واختر <menuchoice
+><guimenu
+>إدراج</guimenu
+><guimenuitem
+>رابط...</guimenuitem
+> </menuchoice
+>. سيفتح هذا مربع حوار <guilabel
+>إدراج رابط</guilabel
+>، الذي يتيح لك الاختيار بين أربعة أنواع من الروابط:</para>
+
+<itemizedlist>
+<listitem
+><para
+>خلية رابط <guilabel
+>إنترنت</guilabel
+> ستحاول فتح متصفحك الافتراضي على &URL; المُدخل في مربع النص <guilabel
+>عنوان الإنترنت:</guilabel
+> في مربع حوار <guilabel
+>إدراج رابط</guilabel
+> عند النقر عليها. يمكن أن يكون هذا، على سبيل المثال، <userinput
+>http://www.calligra.org</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>النقر على خلية تحتوي على رابط <guilabel
+>بريد</guilabel
+> سيفتح محرر بريدك الإلكتروني باستخدام العنوان المُدخل في مربع النص <guilabel
+>البريد الإلكتروني:</guilabel
+> كعنوان "إلى:". على سبيل المثال <userinput
+>anon@example.com</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>خلية رابط <guilabel
+>ملف</guilabel
+> تحتوي على مسار ملف أو مجلد، كما هو مُدخل في مربع النص <guilabel
+>موقع الملف:</guilabel
+>، وستحاول فتح ذلك الملف أو المجلد بتطبيق مناسب عند النقر عليها. </para
+></listitem>
+
+<listitem
+><para
+>نوع رابط الخلية <guilabel
+>خلية</guilabel
+> يحتوي على مرجع خلية &sheets;، مُدخل في مربع النص <guilabel
+>خلية أو منطقة مسماة</guilabel
+>. النقر بزر الفأرة <mousebutton
+>الأيسر</mousebutton
+> على هذا النوع من خلايا الرابط يتسبب في انتقال تركيز &sheets; إلى الخلية الهدف. </para
+></listitem>
+</itemizedlist>
+
+<para
+>جميع أنواع خلايا الروابط الأربعة تحتاج إلى إدخال نص مناسب في حقل <guilabel
+>النص المراد عرضه</guilabel
+> في مربع حوار <guilabel
+>إدراج رابط</guilabel
+>. هذا هو النص الذي يظهر في الخلية.</para>
+</sect1>
+
+<sect1 id="validcheck">
+<title
+>التحقق من الصحة</title>
+<para
+>يمكن لـ &sheets; التحقق آليًا من صحة البيانات المُدخلة مقابل عدد من المعايير، وإظهار مربع رسالة إذا كانت البيانات غير صالحة.</para>
+<para
+>لتفعيل هذه الميزة، حدد الخلية (الخلايا) المراد مراقبتها واختر <menuchoice
+><guimenu
+>بيانات</guimenu
+><guimenuitem
+>صحة...</guimenuitem
+> </menuchoice
+>. سيفتح هذا مربع حوار <guilabel
+>الصحة</guilabel
+> الخاص بـ &sheets; والذي يحتوي على ثلاث صفحات مبوبة.</para>
+<para
+>في صفحة <guilabel
+>المعايير</guilabel
+>، اختر نوع البيانات التي ستُعتبر صالحة من قائمة <guilabel
+>السماح بـ:</guilabel
+> المنسدلة، ثم حدد النطاق الصالح للقيم باختيار أحد الخيارات في قائمة <guilabel
+>البيانات:</guilabel
+> المنسدلة وإدخال القيمة (القيم) المناسبة في مربع (مربعات) التحرير.</para>
+<para
+>عند الانتهاء من ذلك، انتقل إلى علامة التبويب <guilabel
+>تنبيه الخطأ</guilabel
+>. هنا يمكنك اختيار نوع مربع الرسالة (<guimenuitem
+>إيقاف</guimenuitem
+> أو <guimenuitem
+>تحذير</guimenuitem
+> أو <guimenuitem
+>معلومات</guimenuitem
+>) الذي سيظهر عند إدخال قيمة غير صالحة، وتحديد عنوان مربع الرسالة ونص الرسالة.</para>
+<!--FIXME missing Input Help tab-->
+<para
+>لاحظ أن هذه الميزة تتحقق فقط من البيانات التي تدخلها في الخلية، لطريقة التحقق من نتائج خلايا الصيغ، راجع قسم <link linkend="formatdata"
+>سمات الخلايا الشرطية</link
+> من هذا الدليل.</para>
+</sect1>
+
+<sect1 id="protection">
+<title
+>الحماية</title>
+
+<sect2 id="doc-protection">
+<title
+>حماية المستند</title>
+<para
+>حماية المستند تعني أنه بدون كلمة السر لا يمكن للمستخدم إضافة أو حذف أوراق. حماية المستند لا تحمي الخلايا.</para>
+<para
+>اختر <menuchoice
+><guimenu
+>أدوات</guimenu
+><guimenuitem
+>حماية المستند...</guimenuitem
+></menuchoice
+> يظهر مربع حوار يطلب منك كلمة مرور. يُشير مقياس قوة <guilabel
+>كلمة السر:</guilabel
+> إلى ما إذا كانت كلمة السر آمنة بما يكفي. كلما زاد طول المؤشر، زادت أمان كلمة السر.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>مربع حوار حماية المستند</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>ستكون كلمة السر هذه مطلوبة بعد ذلك لإلغاء حماية المستند.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>مربع حوار إلغاء حماية المستند</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>عندما يكون المستند محميًا، لا يجوز لك:</para>
+<itemizedlist>
+<listitem
+><para
+>إعادة تسمية ورقة </para
+></listitem>
+<listitem
+><para
+>إدراج ورقة </para
+></listitem>
+<listitem
+><para
+>إزالة ورقة </para
+></listitem>
+<listitem
+><para
+>إخفاء ورقة </para
+></listitem>
+<listitem
+><para
+>أظهر ورقة </para
+></listitem>
+<listitem
+><para
+>اطلع على خصائص الورقة </para
+></listitem>
+<listitem
+><para
+>ادمج الخلايا أو فك ارتباطها </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="sheet-protection">
+<title
+>حماية الورقة</title>
+<para
+>حماية ورقة تعني حماية محتويات جميع الخلايا والكائنات المحمية في الورقة. يمكن إلغاء حماية خلية فردية أو مجموعة مختارة من الخلايا داخل ورقة محمية، انظر <link linkend="cell-protection"
+>القسم التالي</link
+>.</para>
+<para
+>لحماية ورقة، اختر <menuchoice
+><guimenu
+>أدوات</guimenu
+><guimenuitem
+>حماية الورقة...</guimenuitem
+></menuchoice
+>. يظهر حوار يطلب منك كلمة مرور. يشير مقياس قوة <guilabel
+>كلمة السر</guilabel
+> إلى ما إذا كانت كلمة مرورك آمنة بما يكفي. كلما زاد طول المؤشر، زاد أمان كلمة مرورك.</para>
+<para
+>ستُطلب كلمة السر تلك بعد ذلك لإلغاء حماية الورقة.</para>
+<para
+>عندما تكون الورقة محمية، قد لا تتمكن من:</para>
+<itemizedlist>
+<listitem
+><para
+>إدراج أي كائن أو مخطط </para
+></listitem>
+<listitem
+><para
+>تنسيق أي خلية </para
+></listitem>
+<listitem
+><para
+>إدراج صف أو عمود </para
+></listitem>
+<listitem
+><para
+>تحرير وتغيير محتوى الخلية </para
+></listitem>
+<listitem
+><para
+>تغيير أي محتوى في الورقة </para
+></listitem>
+</itemizedlist>
+
+<note
+><para
+>حماية الورقة مفيدة بشكل خاص لمنع المسح العرضي للصيغ.</para
+></note>
+</sect2>
+
+<sect2 id="cell-protection">
+<title
+>حماية الخلية أو الخلايا المختارة</title>
+<warning
+><para
+>حماية الخلية نشطة لجميع الخلايا افتراضيًا وتصبح فعالة عند تمكين حماية الورقة. لذا إذا أبقيت الإعداد المبدئي وقمت بحماية الورقة، فستُحمى جميع الخلايا.</para
+></warning>
+<para
+>إذا أردت حماية خلايا معينة فقط، يجب إيقاف تشغيل هذه الحماية المبدئية لجميع الخلايا الأخرى. على سبيل المثال، قد ترغب في أن تقبل معظم الخلايا إدخال المستخدم لذا ستلغي تحديد <guilabel
+>محمي</guilabel
+> لتلك الخلايا وتختار الاحتفاظ بالخلايا المحمية التي يجب أن تبقى دون تغيير (مثل العناوين). لذا تحتاج إلى 3 خطوات لحماية بعض الخلايا فقط: ألغِ حماية جميع الخلايا، واختر الخلايا المراد حمايتها واحمها، ثم احم الورقة بأكملها.</para>
+<para
+>لإلغاء حماية جميع الخلايا:</para>
+<itemizedlist>
+<listitem
+><para
+>حدد جدول البيانات بأكمله باستخدام الفأرة. </para
+></listitem>
+<listitem
+><para
+>في شريط القوائم، اختر <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>تنسيق الخلية...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>في الحوار الذي يظهر، انتقل إلى لسان <guilabel
+>حماية الخلية</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>حدد <guilabel
+>إخفاء الكل</guilabel
+> وألغِ تحديد <guilabel
+>محمي</guilabel
+> لإزالة الحماية عن جميع الخلايا. أصبحت الخلايا الآن جميعها غير محمية. </para
+></listitem>
+</itemizedlist>
+<para
+>لحماية نطاق من الخلايا المختارة أو مجموعة من الخلايا غير المتجاورة:</para>
+<itemizedlist>
+<listitem
+><para
+>أبرز نطاق الخلايا المراد حمايتها أو استخدم مفتاح <keycombo action="simul"
+>&Ctrl;</keycombo
+> لتحديد خلايا غير متجاورة. </para
+></listitem>
+<listitem
+><para
+>عند تحديد جميع الخلايا المطلوبة، انتقل إلى قائمة <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>تنسيق الخلية...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>في الحوار الذي يظهر، انتقل إلى لسان <guilabel
+>حماية الخلية</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>انقر على المربع بجانب <guilabel
+>محمي</guilabel
+> ثم انقر على <guibutton
+>موافق</guibutton
+>. </para
+></listitem>
+</itemizedlist>
+<para
+>بمجرد وضع علامة على الخلايا للحماية، يجب تمكين خيار الحماية على مستوى الورقة، وهذا يعني أنه يجب عليك حماية الورقة بأكملها حتى تُحمى الخلية فعليًا:</para>
+<itemizedlist>
+<listitem
+><para
+>اختر <menuchoice
+><guimenu
+>أدوات</guimenu
+><guimenuitem
+>حماية الورقة...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>في الحوار الذي يظهر، قدم كلمة مرور آمنة، ثم أكدها بكتابتها مرة أخرى. انقر على <guibutton
+>موافق</guibutton
+>. </para
+></listitem>
+<listitem
+><para
+>لا يمكن تحرير الخلايا المحمية في ورقة محمية دون إلغاء حماية الورقة بأكملها، ويُعطل أي تغييرات في الورقة. على سبيل المثال، لا يمكن لأحد إدراج صفوف أو أعمدة، أو تغيير عرض العمود، أو إنشاء مخططات مضمنة. </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="hide-formula">
+<title
+>إخفاء صيغة الخلية</title>
+<para
+>قد ترغب في إخفاء صيغك حتى لا يتمكن الآخرون من رؤيتها. افتراضيًا، كل خلية محمية وغير مخفية. ولكن من المهم أن تتذكر أن هذه السمات ليس لها تأثير ما لم تكن الورقة نفسها محمية.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>خلية افتراضية تحتوي على صيغة</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>لإخفاء صيغ الخلايا، حدد الخلية المناسبة أو نطاق الخلايا أو الخلايا غير المتجاورة باستخدام <keycombo action="simul"
+>&Ctrl;</keycombo
+> ثم اختر القائمة <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>تنسيق الخلية...</guimenuitem
+></menuchoice
+>. في مربع حوار تنسيق الخلية، انقر فوق علامة التبويب <guilabel
+>حماية الخلية</guilabel
+> وحدد <guilabel
+>إخفاء الصيغة</guilabel
+>. بعد حماية الورقة، ستكون نتائج الصيغ مرئية، لكن الصيغ نفسها لن تكون كذلك. </para>
+<para
+>عليك الآن حماية الورقة: اختر <menuchoice
+><guimenu
+>أدوات</guimenu
+><guimenuitem
+>حماية الورقة...</guimenuitem
+></menuchoice
+> لعرض مربع حوار <guilabel
+>حماية الورقة</guilabel
+>. أدخل كلمة مرور آمنة مرتين لمنع الآخرين من إلغاء حماية الورقة. </para>
+<para
+>عند تمكين <guilabel
+>إخفاء الصيغة</guilabel
+> وتعطيل <guilabel
+>محمية</guilabel
+>، تُخفى الصيغة بعد حماية الورقة ولكن يمكن تغيير محتوى الخلية.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject
+>    
+<textobject>
+<phrase
+><guilabel
+>إخفاء الصيغة</guilabel
+> ممكّن ولكن الخلية غير محمية والورقة محمية</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>عند تمكين <guilabel
+>إخفاء الصيغة</guilabel
+> و<guilabel
+>محمية</guilabel
+>، تُخفى الصيغة بعد حماية الورقة ولا يمكن تغيير محتوى الخلية.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>إخفاء الصيغة</guilabel
+> و<guilabel
+>محمية</guilabel
+> ممكّنان في <guilabel
+>حماية الخلية</guilabel
+> والورقة محمية</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>ضع في اعتبارك أنه من السهل جدًا كسر كلمة مرور ورقة محمية، لذا إذا كنت تبحث عن أمان حقيقي، فهذا ليس الحل الأفضل.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title
+>إخفاء الكل في الخلية</title>
+<para
+>يمكنك إخفاء كل من الصيغة ومحتوى الخلية باختيار <guilabel
+>إخفاء الكل</guilabel
+> في علامة التبويب حماية الخلية في القائمة <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>تنسيق الخلية...</guimenuitem
+></menuchoice
+>. في لقطة الشاشة أدناه، الخلية نفسها غير محمية (<guilabel
+>محمية</guilabel
+> غير محددة) وبالتالي يمكن تغيير محتوى الخلية.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>إخفاء الكل</guilabel
+> ممكّن فقط (بدون حماية خلية) والورقة محمية</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>هنا الخلية نفسها محمية لذا لا يمكن الكتابة فوقها.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>إخفاء الكل</guilabel
+> و<guilabel
+>محمية</guilabel
+> ممكّنان في حماية الخلية والورقة محمية</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
+</sect1>
+
+
+<sect1 id="other">
+<title
+>ميزات أخرى</title>
+<!-- no split view in 2.4
+<sect2 id="splitview">
+<title
+>Splitting the View</title>
+<para
+>If your spreadsheet is so large that you cannot see all of it at once, 
+splitting &sheets;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Split View</guimenuitem
+></menuchoice
+> which will split the current view into 
+two parts. <menuchoice
+><guimenu
+>View</guimenu
+><guisubmenu
+>Splitter Orientation
+</guisubmenu
+></menuchoice
+> lets you choose between 
+<guimenuitem
+>Horizontal</guimenuitem
+> and <guimenuitem
+>Vertical</guimenuitem
+> 
+splitting.</para>
+<para
+>This technique is particularly useful when you want to select an area 
+of the spreadsheet that is larger than can be shown in one view, perhaps to
+paste a copied cell into it. 
+Use the scrollbars to position the two views to show the top left and 
+bottom right cells of the wanted area, select the top left cell in one 
+view then hold the &Shift; key pressed while you select the 
+bottom right cell with the <mousebutton
+>left</mousebutton
+> mouse button.</para>
+<para
+>If there is more than one sheet in your document, you can show a 
+different sheet in each of the split views.</para>
+<para
+>The relative sizes of the views can be changed by dragging the thick bar 
+separating the views.</para>
+<para
+>To remove a view select <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Remove View</guimenuitem
+></menuchoice
+></para>
+</sect2>
+-->
+
+<sect2 id="namedareas">
+<title
+>الخلايا والمناطق المسماة</title>
+<para
+>يمكنك إعطاء اسم مثل <userinput
+>foo</userinput
+> لخلية أو لأي منطقة في ورقة عن طريق تحديد الخلية أو المنطقة ثم اختيار <guimenuitem
+>اسم المنطقة...</guimenuitem
+> من قائمة زر الفأرة <mousebutton
+>الأيمن</mousebutton
+>. سيؤدي هذا إلى إظهار مربع حوار <guilabel
+>اسم المنطقة</guilabel
+> حيث يمكنك إدخال أي اسم تريده.</para>
+<para
+>يمكنك أيضًا تسمية خلية أو منطقة بتحديدها ثم كتابة الاسم في مربع النص الصغير في الطرف الأيسر من شريط أدوات الصيغة، مع استبدال مرجع الخلية الذي يظهر عادةً هنا.</para>
+<para
+>إذا أدخلت اسمًا مستخدمًا بالفعل في مربع النص هذا، فسيتغير تحديد &sheets; لإظهار الخلية (الخلايا) المسماة.</para>
+<para
+>سيمنحك خيار <menuchoice
+><guimenu
+>بيانات</guimenu
+><guimenuitem
+>المناطق المسماة...</guimenuitem
+> </menuchoice
+> قائمة بالأسماء الموجودة ويسمح لك بتغيير تركيز &sheets; إلى أي منها أو يسمح لك بإزالة اسم. </para>
+<para
+>الخلايا المسماة مفيدة بشكل خاص في الصيغ كبديل لـ <link linkend="absolute"
+>مراجع الخلايا المطلقة</link
+> حيث يمكن استخدام الأسماء بدلًا من مراجع الخلايا العادية ولا تتغير عند نسخ الخلية التي تحتوي على الصيغة. عند استخدام اسم بهذه الطريقة، يجب وضعه بين علامتي اقتباس مفردة.</para>
+<para
+>على سبيل المثال، إذا تم إعطاء الخلية A1 الاسم <userinput
+>fred</userinput
+>، فيمكنك إدخال صيغة مثل <userinput
+>='fred' + 2</userinput
+> في خلية أخرى والتي ستعطي دائمًا نتيجة إضافة 2 إلى القيمة في A1 بغض النظر عن مكان نسخ خلية الصيغة.</para>
+<para
+>لاحظ أن أسماء الخلايا والمناطق تُعامل على أنها بأحرف صغيرة.</para>
+</sect2>
+
+<sect2 id="cellcomments">
+<title
+>التعليقات على الخلية</title>
+<para
+>يمكن أن تحتوي الخلية على تعليق نصي يمكن عرضه عند العمل على جدول البيانات ولكن لا تتم طباعته ولا يُرى عادةً.</para>
+<para
+>لإضافة تعليق، حدد الخلية واختر <guimenuitem
+>تعليق...</guimenuitem
+> من قائمة زر الفأرة <mousebutton
+>الأيمن</mousebutton
+> أو من القائمة <guimenu
+>إدراج</guimenu
+> واكتب تعليقك في مربع حوار <guilabel
+>تعليق الخلية</guilabel
+> الناتج.</para>
+<para
+>لعرض التعليق، مرر مؤشر الفأرة فوق الخلية. سيظهر التعليق كما لو كان تلميح أداة. </para>
+<para
+>إذا حددت مربع <guilabel
+>إظهار مؤشر التعليق</guilabel
+> في مربع حوار <guilabel
+>خصائص الورقة</guilabel
+>، فسيتم تمييز الخلايا التي تحتوي على تعليقات بمثلث أحمر صغير في الزاوية اليمنى العليا.</para>
+<para
+>لفتح مربع الحوار هذا، انقر بزر الفأرة <mousebutton
+>الأيمن</mousebutton
+> على علامة تبويب الورقة في أسفل النافذة الرئيسية واختر <guimenuitem
+>خصائص الورقة</guimenuitem
+> من القائمة المنبثقة. أو اختره من القائمة <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guisubmenu
+>ورقة</guisubmenu
+></menuchoice
+>.</para>
+
+<para
+>لإزالة تعليق من خلية، اختر <guimenuitem
+>إزالة التعليق</guimenuitem
+> من قائمة زر الفأرة <mousebutton
+>الأيمن</mousebutton
+> أو اختر <menuchoice
+><guimenu
+>تحرير</guimenu
+><guisubmenu
+>مسح</guisubmenu
+> <guimenuitem
+>تعليق</guimenuitem
+></menuchoice
+>.</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
