@@ -1,0 +1,152 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>ضبط اختصارات وأشرطة أداء شيت</title>
+
+<sect1 id="configshort">
+<title
+>الاختصارات</title>
+<para
+>لتغيير ترتيبات مفاتيح الاختصار المستخدمة من قبل شيت اختر <menuchoice
+><guimenu
+>الإعدادات</guimenu
+><guimenuitem
+>ضبط الاختصارات... </guimenuitem
+></menuchoice
+>. سيُطلق هذا صندوق حوار كما هو موضح أدناه. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>لقطة شاشة ضبط الاختصار 1</phrase>
+</textobject>
+</mediaobject>
+<para
+>ابحث في مربع القائمة للعثور على الإجراء الذي تريد إضافة مفاتيح الاختصار له أو تغييرها واختره بالنقر <mousebutton
+>الأيسر</mousebutton
+> على الاسم. بإدخال اسم الإجراء في شريط البحث في الأعلى يمكنك العثور بسرعة على الإجراء المطلوب. ستتمكن بعد ذلك من تغيير الاختصار باختيار زر الاختيار <guilabel
+>بلا</guilabel
+> أو <guilabel
+>مبدئي</guilabel
+> أو <guilabel
+>مخصص</guilabel
+>.</para>
+<para
+>يمكنك الآن ببساطة ضغط مجموعة المفاتيح التي تريدها لتعمل كاختصار، على سبيل المثال <keycombo action="simul"
+> &Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>أشرطة الأدوات</title>
+<para
+>شيت لديه ستة أشرطة أداء: <guilabel
+>ملف</guilabel
+> و<guilabel
+>تحرير</guilabel
+> و<guilabel
+>تنقل</guilabel
+> و<guilabel
+>تنسيق</guilabel
+> و<guilabel
+>خط</guilabel
+> و<guilabel
+>لون/حدود</guilabel
+>. قد يُظهر كل منها أو لا يُظهر حسب الخيارات المتخذة في قائمة <guimenu
+>الإعدادات</guimenu
+>.</para>
+<para
+>إذا كانت أشرطة الأداء غير مقفلة، يمكنك اختيار ما إذا كان شريط الأداء يظهر في <guimenuitem
+>الأعلى</guimenuitem
+> أو <guimenuitem
+>اليسار</guimenuitem
+> أو <guimenuitem
+>اليمين</guimenuitem
+> أو <guimenuitem
+>الأسفل</guimenuitem
+> من نافذة شيت بالنقر <mousebutton
+>الأيمن</mousebutton
+> على شريط الأداء، مما يُظهر <guilabel
+>قائمة شريط الأداء</guilabel
+>، واختيار من القائمة الفرعية <guisubmenu
+>الاتجاه</guisubmenu
+>. تحتوي <guilabel
+>قائمة شريط الأداء</guilabel
+> هذه أيضًا على قوائم فرعية لاختيار ما إذا كان شريط الأداء يعرض أيقونات أو نصًا أو كليهما، وحجم الأيقونات.</para>
+
+<para
+>طريقة أخرى لتحريك شريط الأداء هي بوضع مؤشر الفأرة فوق الشريطين العموديين في الطرف الأيسر من كل شريط أداء وإبقاء زر الفأرة <mousebutton
+>الأيسر</mousebutton
+> مضغوطًا أثناء سحب شريط الأداء إلى الموضع المطلوب. عندما تسحب شريط الأداء بهذه الطريقة يمكنك تحرير زر الفأرة عندما يكون على مسافة من أي من جوانب نافذة شيت، وستحصل بعد ذلك على شريط أداء عائم، غير مقفل إلى أي جزء معين من نافذة شيت ويمكن في الواقع نقله خارج النافذة. لإعادة شريط أداء عائم إلى أحد المواضع التقليدية، انقر <mousebutton
+>الأيمن</mousebutton
+> على شريط عنوانه لإظهار <guilabel
+>قائمة شريط الأداء</guilabel
+> ثم اختر أحد الخيارات في القائمة الفرعية <guisubmenu
+>الاتجاه</guisubmenu
+>.</para>
+
+<para
+>اختيار <guimenuitem
+>ضبط أشرطة الأداء...</guimenuitem
+> من قائمة <guimenu
+>الإعدادات</guimenu
+> سيُظهر صندوق حوار يتيح لك إضافة أزرار إلى أشرطة أداء شيت أو إزالتها منها.</para>
+<para
+>لاستخدام صندوق الحوار <guilabel
+>ضبط أشرطة الأداء</guilabel
+> هذا، اختر أولًا شريط أداء من مربع التحرير والسرد <guilabel
+>شريط الأداء:</guilabel
+>. ستعرض نافذة <guilabel
+>الإجراءات الحالية:</guilabel
+> اليمنى الأزرار الموجودة حاليًا على شريط الأداء. يمكنك إزالة زر باختياره في هذه النافذة ثم الضغط على زر السهم الأيسر، أو تحريكه بالضغط على زري السهمين لأعلى ولأسفل. لإضافة زر جديد إلى شريط الأداء، اختره في قائمة <guilabel
+>الإجراءات المتاحة:</guilabel
+> ثم اضغط على زر السهم الأيمن.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

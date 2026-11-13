@@ -1,0 +1,548 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+          
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+   
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>دليل تدريجي خطوة بخطوة</title>
+
+<para
+>في هذا الفصل، نقدم &stage; باستخدام دليل تدريجي بسيط. سنستعرض الخطوات الأساسية المتضمنة في إنشاء عرض تقديمي وإضافة بعض التأثيرات الأساسية. </para>
+
+<sect1 id="start-new">
+<title
+>ابدأ مستندًا جديدًا</title>
+
+<para
+>عند بدء &stage;، يظهر حوار بدء كاليغرا المعتاد. </para>
+
+<screenshot>
+<screeninfo
+>حوار بدء <guilabel
+>كاليغرا</guilabel
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut01.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>حوار بدء كاليغرا</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>اختر <guilabel
+>شاشة</guilabel
+> على اليسار، ثم اختر القالب المسمى <guilabel
+>فارغ</guilabel
+> (المظلل بالأزرق في لقطة الشاشة أعلاه) بالنقر عليه. يمكنك تفعيل <guilabel
+>استخدم هذا القالب دائمًا</guilabel
+> لتعيينه كقالب مبدئي. </para>
+
+<para
+>الآن انقر <guibutton
+>استخدم هذا القالب</guibutton
+>. يظهر محرر الشرائح، حيث يمكنك عرض وتحرير الشرائح (والكائنات الموجودة فيها) في مستندك. </para>
+
+<para
+>حاليًا، لدينا شريحة فارغة واحدة فقط، لذا اختر الشريحة العلوية اليسرى التي تحتوي على مربع نص واحد من حاوية <guilabel
+>تخطيطات الشرائح</guilabel
+>.</para>
+
+<para
+>انقر مرتين على مربع النص. يتغير المؤشر إلى شريط عمودي للإشارة إلى أنه يمكنك الآن كتابة نص. </para>
+
+<screenshot>
+<screeninfo
+>مؤشر إدراج النص</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut03.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>مؤشر إدراج النص</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>تفضل، اكتب بعض النص! </para>
+
+<screenshot>
+<screeninfo
+>إضافة نص</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut04.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>إضافة نص</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>انقر بعيدًا عن النص لإلغاء تحديد مربع النص عند الانتهاء من الكتابة. </para>
+
+</sect1>
+
+<sect1 id="insert-page">
+<title
+>أضف صفحة جديدة</title>
+
+<para
+>لنضف الآن شريحة جديدة إلى مستندنا. للقيام بذلك، انقر على قائمة <guimenu
+>شريحة</guimenu
+>، ثم انقر على <guimenuitem
+>أدرج شريحة</guimenuitem
+>. </para>
+
+<para
+>الآن يمكننا تحديد شكل الشريحة الجديدة. هذه المرة، اختر تخطيط عمود واحد (مظلل بالأزرق). </para>
+
+<screenshot>
+<screeninfo
+>اختيار تخطيط للصفحة الجديدة</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut07.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>اختيار تخطيط للصفحة الجديدة</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>يظهر تخطيط الشريحة الجديدة الآن في نافذة التحرير. لتغيير الصفحات في عرضك التقديمي، يمكنك اختيار الشرائح في اللوحة اليسرى (المظللة بالأزرق في لقطة الشاشة هذه). </para>
+
+<para
+>تحتوي الشريحة المدرجة حديثًا على مربعي نص. واحد للعنوان، وآخر لاحتواء قائمة منقوطة من العناصر. </para>
+
+<screenshot>
+<screeninfo
+>الشريحة الجديدة</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut09.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>الشريحة الجديدة</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>انقر مرتين واكتب عنوانًا. ثم انقر مرتين على مربع النص الثاني الذي يحتوي على النقطة. اكتب بعض النص وأنهِ الفقرة بالضغط على مفتاح <keycap
+>إدخال</keycap
+> أو <keycap
+>رجوع</keycap
+>. أثناء كتابة فقرات جديدة، تظهر النقاط تلقائيًا أمامها. </para>
+
+<screenshot>
+<screeninfo
+>إضافة نص إلى الشريحة الثانية</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut10.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>إضافة نص إلى الشريحة الثانية</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>يمكنك إلغاء تحديد مربع النص بالنقر بعيدًا عنه. </para>
+
+</sect1>
+
+<sect1 id="insert-pic">
+<title
+>أدرج صورة</title>
+
+<para
+>لنعد الآن إلى الشريحة الأولى. استخدم قائمة الشرائح على يسار شاشتك. </para>
+
+<para
+>في هذا القسم، سنضفي بعض الحيوية على عرضنا التقديمي بإضافة شعار جميل إلى صفحة العنوان. للقيام بذلك، الخطوة الأولى هي تفعيل حاوية <guilabel
+>إضافة شكل</guilabel
+> باستخدام <menuchoice
+><guimenu
+>الإعدادات</guimenu
+> <guimenuitem
+>الحاويات</guimenuitem
+></menuchoice
+> من القائمة. </para>
+
+<para
+>الآن اختر صورة في حاوية <guilabel
+>إضافة شكل</guilabel
+> وانقر بزر الفأرة الأيسر (&LMB;) حيث تريد وضع الشعار بحجمه الأصلي أو ارسم مستطيلًا بزر الفأرة الأيسر (انقر بزر الفأرة الأيسر (&LMB;) واستمر في الضغط على الزر) لتحديد موضع الشعار وحجمه. </para>
+
+<para
+>يظهر مربع حوار اختيار ملف. لمعرفة المزيد عن مربع الحوار هذا أو مربعات حوار &kde; القياسية الأخرى بالتفصيل، يُرجى الرجوع إلى وثائق &kde;. يمكنك التصفح بالنقر على أيقونات <guiicon
+>مجلد</guiicon
+> أو باستخدام أزرار نمط <guiicon
+>المتصفح</guiicon
+> في شريط الأدوات. النقر على <guiicon
+>السهم لأعلى</guiicon
+> يأخذك إلى مستوى مجلد أعلى. </para>
+
+<para
+>اختر ملفًا وانقر <guibutton
+>موافق</guibutton
+>. </para>
+
+<para
+>الآن أُدرجت الصورة في الشريحة وتظهر مقابض التحديد (مربعات صغيرة) حول حدود الرسم. </para>
+
+<screenshot>
+<screeninfo
+>الصورة المضافة حديثًا</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut13.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>الصورة المضافة حديثًا</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>ضع مؤشر الفأرة في أي مكان في منتصف الشعار، واسحبه إلى منتصف صفحة العنوان. ثم استخدم مقابض التحديد لتغيير حجمه بشكل صحيح. </para>
+
+<para
+>هذا كل شيء. الآن لديك صورة على صفحة العنوان! </para>
+<!--FIXME Double click opens the file dialog to replace the image-->
+</sect1>
+
+<sect1 id="insert-object">
+<title
+>أدرج كائن كاليغرا</title>
+<para
+>لندرج كائن كاليغرا آخر تحت الصورة، مثلًا رسمًا بيانيًا.</para>
+
+<para
+>يمكن تضمين كل كائن مدعوم من كاليغرا في شريحة &stage;. دعنا نختار رسمًا بيانيًا من حاوية <guilabel
+>إضافة شكل</guilabel
+>. </para>
+
+<para
+>اختر <guilabel
+>رسم بياني</guilabel
+> ثم حدد بالفأرة المنطقة التي تريد وضع الرسم البياني فيها على شريحة &stage;. </para>
+
+<screenshot>
+<screeninfo
+>حدد المنطقة لوضع الرسم البياني</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>حدد المنطقة لوضع الرسم البياني</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>بمجرد تحرير زر الفأرة، يُضاف رسم بياني نموذجي إلى الشريحة. عندما تعمل في الرسم البياني، تظهر <guilabel
+>خيارات الأدوات</guilabel
+> الخاصة به في الحاوية. </para>
+
+<screenshot>
+<screeninfo
+>خيارات أدوات &kchart;</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>خيارات أدوات &kchart;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>لتحريك الرسم البياني المضمن أو تغيير حجمه أو حتى حذفه، انتقل إلى أداة <guibutton
+>التلاعب الأساسي بالأشكال</guibutton
+> وانقر في أي مكان داخل منطقة الرسم البياني. يجب أن يظهر الآن بحدود خضراء ومربع أصفر صغير في كل زاوية وفي منتصف كل حافة. </para>
+<para
+>إذا حركت المؤشر فوق أي من المربعات، يجب أن يتغير إلى سهم مزدوج الرأس. يمكنك تغيير حجم الرسم البياني بسحب أحد هذه المربعات مع الضغط على زر الفأرة <mousebutton
+>الأيسر</mousebutton
+>. لحذف الرسم البياني، انقر بزر الفأرة <mousebutton
+>الأيمن</mousebutton
+> على أحد المربعات واختر <guimenuitem
+>حذف</guimenuitem
+>.</para>
+<para
+>لتحريك الرسم البياني، حرك المؤشر داخل الرسم البياني. يجب أن يتغير المؤشر بعد ذلك إلى علامة تقاطع، اضغط على زر الفأرة <mousebutton
+>الأيسر</mousebutton
+> وستتمكن من سحب الرسم البياني إلى حيث تريد.</para>
+<para
+>لاستعادة المظهر الطبيعي للرسم البياني، انقر ببساطة في أي مكان خارج منطقة الرسم البياني.</para>
+<para
+>لتغيير تنسيق الرسم البياني نفسه، انقر بزر الفأرة <mousebutton
+>الأيسر</mousebutton
+> مرتين داخل منطقة الرسم البياني. يجب أن تظهر <guilabel
+>خيارات الأدوات</guilabel
+> للرسم البياني في الحاوية. يمكنك بعد ذلك استخدام هذه الأدوات لتحرير خصائص الرسم البياني مثل نوع الرسم واللصائق والمحاور والبيانات.</para>
+
+<para
+>انقر في أي مكان بزر الفأرة الأيسر (&LMB;) خارج الرسم البياني للعودة إلى شريحة &stage;.</para>
+
+<para
+>نقرة واحدة على الرسم البياني ستسمح لك بسحبه لتغيير موقعه وأيضًا سحب الحدود لتكبيره كما هو الحال مع أي كائن &stage; آخر. انقر نقرًا مزدوجًا على الرسم البياني للدخول إلى وضع &kchart; وتعديل أي من خصائص الرسم البياني.</para>
+
+</sect1>
+<!-- does not work in BETA6 here
+<sect1 id="addshadow">
+<title
+>Add a shadow to the title text</title>
+
+<para>
+Let's continue enhancing our title page by adding a shadow
+behind the title. <mousebutton
+>Right</mousebutton
+> click anywhere on the
+title text. This achieves two things: the text box containing the title
+is selected, and a menu pops up.
+</para>
+
+<para>
+Select the <guimenuitem
+>Shadow Objects...</guimenuitem
+> option in the popup menu.
+</para>
+
+<screenshot>
+<screeninfo
+>The context menu</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut15.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The context menu</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel
+>Shadow</guilabel
+> dialog pops up. The distance between the
+shadow and the text is currently 0 so the shadow cannot be seen (this
+part of the dialog box is highlighted in red.)
+</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Shadow</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut16.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The <guilabel
+>Shadow</guilabel>
+dialog</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Increase the distance value to 3. The effect of changing the distance
+can be seen in the preview window. Now click <guibutton
+>OK</guibutton
+>.
+</para>
+
+<screenshot>
+<screeninfo
+>Adding a shadow to the title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut17.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adding a shadow to the title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now the title has a shadow!
+</para>
+
+<screenshot>
+<screeninfo
+>The new shadowed title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut18.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The new shadowed title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+</sect1>
+-->
+<sect1 id="textcolor">
+<title
+>تغيير لون نص العنوان</title>
+
+<para
+>لننهِ بتغيير لون نص العنوان من الأسود إلى الأزرق. للقيام بذلك، حدد نص العنوان بالنقر المزدوج على مربع النص وحدد النص. </para>
+<!-- Font from menu Format or contextmenu with a lot of options-->
+<para
+>افتح منتقي الألوان بالنقر على أيقونة <inlinemediaobject
+><imageobject
+> <imagedata fileref="22x22-actions-format-text-color.png" format="PNG"/></imageobject
+> </inlinemediaobject
+> في خيارات أدوات تحرير النص (تحتوي هذه الأيقونة على تلميح أداة لون النص...).</para>
+
+<screenshot>
+<screeninfo
+>منتقي الألوان</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut19.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>مُنتقِي الألوان</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>منتقي الألوان</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut20.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>مُنتقِي الألوان</phrase
+></textobject>
+<caption
+><para
+>غيّر اللون إلى الأزرق.</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<para
+>تغيير لون النص المحدد إلى الأزرق يُغيّر مظهره. يعتمد اللون الدقيق الذي يتحول إليه النص المظلل على نظام ألوان حاسوبك. </para>
+
+<note>
+<para
+>اختيار لون النص متاح أيضًا في لسان <guilabel
+>الزخارف</guilabel
+> من حوار <guilabel
+>اختيار الخط</guilabel
+>. افتح هذا الحوار عبر <guimenuitem
+>الخط</guimenuitem
+> في قائمة <guimenu
+>تنسيق</guimenu
+> أو القائمة السياقية. </para>
+</note>
+
+<para
+>انقر الآن بعيدًا عن النص لإلغاء تحديده. </para>
+
+
+<screenshot>
+<screeninfo
+>العنوان النهائي</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut21.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>العنوان النهائي</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>الآن بعد وجود شريحتين، لمَ لا تجرّب عرض الشرائح! لبدء عرض الشرائح، اضغط على زر <guiicon
+>بدء العرض</guiicon
+> في شريط الأدوات. يجب أن تظهر الشريحة الأولى على شاشتك. </para>
+
+<para
+>للتقدّم من الشريحة الأولى إلى التالية، انقر في أي مكان على الشاشة، أو استخدم مفتاح <keycap
+>الصفحة التالية</keycap
+>. </para>
+
+<para
+>للخروج من عرض الشرائح، اضغط على مفتاح &Esc;. </para>
+
+</sect1>
+
+</chapter>

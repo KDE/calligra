@@ -1,0 +1,345 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % Arabic "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>كاليغرا</title>
+<subtitle
+>مقدمة عامة</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>2012-01-03</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>كاليغرا هي مجموعة رسوميات ومكتبية من كيدي. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>كيدي</keyword>
+<keyword
+>كاليغرا</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>مقدمة</title>
+<sect1>
+<title
+>مكونات كاليغرا</title>
+
+<important
+> <para
+>يرجى التحقق من <ulink url="http://docs.kde.org/development/en/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+> للحصول على إصدارات محدثة من هذا المستند.</para
+></important>
+
+<para
+>كاليغرا هي مجموعة رسوميات ومكتبية من كيدي. تتكون كاليغرا من المكونات التالية: </para>
+
+<itemizedlist>
+<listitem
+><para
+>ووردز (معالج نصوص قائم على الإطارات)</para
+></listitem>
+<listitem
+><para
+>شيتس (تطبيق جداول بيانات)</para
+></listitem
+> 
+<listitem
+><para
+>ستيج (عروض شرائح وشاشة)</para
+></listitem>
+<listitem
+><para
+>فلو (تطبيق مخططات انسيابية)</para
+></listitem>
+<listitem
+><para
+>كاربون (تطبيق رسم متجهي)</para
+></listitem>
+<listitem
+><para
+>المُخطط (تطبيق إدارة مشاريع)</para
+></listitem>
+</itemizedlist>
+
+<para
+>لأن هذه المكونات تستخدم تقنية فليك، صُممت مكونات كاليغرا للعمل معًا بشكل جيد جدًا. يمكن تضمين العديد من مكونات كاليغرا في مستند كاليغرا آخر. على سبيل المثال، يمكنك إدراج جدول بيانات أنشأته في شيت مباشرة في مستند ورد. بهذه الطريقة، يمكن إنشاء مستندات مركبة ومعقدة باستخدام كاليغرا. </para>
+
+<para
+>تسهل آلية الملحقات توسيع وظائف كاليغرا. ستجد العديد من الملحقات في بعض المكونات ويمكنك تعلم كيفية كتابة ملحقات بنفسك. </para>
+
+<para
+>يغطي هذا الدليل فقط الميزات العامة لـ كاليغرا، وهي تلك المشتركة بين معظم أو كل مكونات المجموعة. للحصول على معلومات مفصلة حول المكونات المختلفة، اطلع على الدليل الخاص بكل منها. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>نظرة عامة على ميزات كاليغرا</title>
+<sect2 id="featureintegration">
+<title
+>التكامل</title>
+<para
+>يوفر كاليغرا إطارًا تبني عليه جميع المكونات. من خلال هذا الإطار، يُحقق تكامل عالٍ. من الممكن تطوير مكون خاص بك يتكامل أيضًا. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>خفيف الوزن</title>
+<para
+>على الرغم من تقديم العديد من المكونات، فإن كاليغرا خفيف وسريع وله بصمة ذاكرة منخفضة إلى حد ما. يُحقق هذا أيضًا لأن كاليغرا يبني على كيدي، وهو إطار تطوير تطبيقات قوي. </para>
+<para
+>هدف كاليغرا أيضًا هو عدم إثقال واجهة المستخدم بميزات نادرًا ما تُحتاج. ينتج عن هذا واجهة مستخدم بسيطة وفعالة تتيح لك أداء عملك بكفاءة. </para>
+<para
+>قد يعني كونها خفيفة في بعض الأحيان أن الوظيفة الخاصة جدًا التي تحتاجها غير موجودة. في هذه الحالة، يمكنك دائمًا إضافة الوظيفة بنفسك عن طريق توسيع كاليغرا. يمكن دائمًا توفير الميزات الإضافية من خلال ملحقات أو نصوص إضافية، مما يحافظ على خفة كاليغرا نفسه. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>الاكتمال</title>
+<para
+>يقدم كاليغرا مجموعة واسعة من المكونات، تغطي معظم احتياجات المكتب المنزلي والتجاري. يمكن دائمًا تنفيذ الميزات الإضافية من خلال النصوص أو الملحقات أو حتى مكونات كاملة مبنية على إطار كاليغرا. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>تنسيق OASIS OpenDocument</title>
+<para
+>من الأهمية الكبرى لأي مجموعة مكتبية الالتزام بالمعايير المعمول بها. خاصة على مستوى تنسيق الملفات للسماح بتبادل المستندات بسلاسة مع المجموعات المكتبية الأخرى. يتجنب هذا أيضًا احتكار البائع، وهو أمر مهم بشكل خاص للشركات وكذلك للأفراد. </para>
+<para
+>لهذا السبب، تبنى كاليغرا تنسيق OASIS OpenDocument كتنسيق ملف أصلي. </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>ميزات كيدي</title>
+<para
+>بما أن كاليغرا يبني على كيدي، فإن جميع الميزات التي تتوقعها من تطبيق كيدي متاحة أيضًا في كاليغرا. يشمل هذا &DBus;، كي بارتس، فليك، التكامل مع سطح المكتب، قابلية الضبط، وهكذا. كل هذا يجعل مظهر وشعور كاليغرا مألوفًا جدًا ويدمج كاليغرا حقًا في بيئة سطح المكتب، مما يسمح بسير عمل سلس. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>ضبط كاليغرا ونظامك</title>
+
+<para
+>بينما يجب أن يعمل كاليغرا بشكل جيد جدًا خارج الصندوق، قد يكون هناك بعض الأشياء لتحسينها للحصول على أفضل ما في كاليغرا. يوضح لك هذا الفصل ما قد ترغب في فعله لتحقيق أفضل النتائج مع مجموعتك المكتبية الجديدة وجعلها تناسب احتياجاتك. كاليغرا قابل للضبط بدرجة كبيرة، حتى وصولًا إلى تخطيط شريط الأدوات والقائمة التفصيلي. </para>
+
+<sect1 id="custom-gui">
+<title
+>تخصيص واجهة المستخدم الرسومية لكيدي</title>
+
+<para
+>على الرغم من أن كاليغرا يأتي بواجهة مستخدم رسومية تناسب احتياجات معظم المستخدمين، إلا أن هناك أسبابًا وجيهة قد تدفعك لتغيير مظهر البرامج. </para>
+
+<para
+>والدتي، على سبيل المثال، تخاف قليلًا من الأزرار وإدخالات القوائم التي لا تفهمها. لتكييف كاليغرا مع احتياجاتها، قلّصت واجهة المستخدم الرسومية إلى الحد الأدنى من الوظائف. وبما أنها تحتاج فقط إلى كتابة الرسائل واستخدام قوالب معينة، فلا حاجة لوظائف أكثر من الحفظ والتحميل والطباعة وما إلى ذلك. </para>
+
+<para
+>بفضل مفهوم <quote
+>الإجراء</quote
+> في كيوت وكيدي، يمكنك تخصيص أشرطة القوائم وأشرطة الأدوات في كاليغرا بحرية. لسوء الحظ، لا توجد حاليًا حوارات سهلة الاستخدام للقيام بذلك. يخزن كاليغرا إعدادات واجهة المستخدم الرسومية في ملفات إكس إم إل وسيتعين عليك تحريرها. نأمل أن يتغير هذا الوضع في المستقبل؛ حاليًا، ستحتاج إلى بعض المعرفة الأساسية بكيفية عمل مستند إكس إم إل (أو إتش تي إم إل، وهي مجموعة فرعية من إكس إم إل). </para>
+
+<para
+>عادةً، يحتوي كل تطبيق من تطبيقات كاليغرا على ملفين على الأقل من ملفات إكس إم إل هذه: أحدهما يصف واجهة المستخدم الرسومية للصدفة (أساسًا، ما تراه إذا لم يكن هناك مستند مفتوح) والآخر يصف واجهة المستخدم الرسومية للجزء المعني (ما تراه عادةً). على سبيل المثال، بالنسبة لوردز، يُسمى هذان الملفان <filename
+>calligra_shell.rc</filename
+> و <filename
+>words.rc</filename
+>. </para>
+
+<para
+>إليك مثال بسيط على ملف rc كهذا. </para>
+
+<example>
+<title
+>مثال على ملف rc بسيط</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>كيفية الحصول على مزيد من المعلومات</title>
+
+<sect1 id="other-manuals">
+<title
+>أدلة كاليغرا الأخرى</title>
+
+<para
+>للحصول على معلومات مفصلة حول تطبيقات كاليغرا المختلفة، يُرجى الرجوع إلى أدلتها الخاصة. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>الروابط</title>
+
+<para
+>يجب أن تكون الروابط التالية مفيدة إذا كنت تبحث عن مزيد من المعلومات حول كيدي أو كاليغرا. </para>
+
+<itemizedlist>
+<listitem>
+<para
+><ulink url="http://calligra.org"
+>الصفحة الرئيسية لكاليغرا</ulink
+>. يمكنك هنا العثور على معلومات حول كيفية الحصول على كاليغرا وتثبيته، وأخبار حول تطوير كاليغرا، ولقطات شاشة وما إلى ذلك. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>الصفحة الرئيسية لكيدي</ulink
+>. كيدي هي بيئة سطح المكتب الأكثر تقدمًا والمجانية تمامًا لأنظمة التشغيل الشبيهة بيونكس. يستخدم كاليغرا مكتبات كيدي. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://qt-project.org/"
+>صفحة كيوت</ulink
+>. مبتكرو مجموعة أدوات سي++ كيوت. يستخدم كيدي وكاليغرا كيوت. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>برمجة كاليغرا</title>
+
+<sect1 id="programmingintro">
+<title
+>مقدمة</title>
+<para
+>إذا كنت ترغب في القيام بتطوير كاليغرا، فقد تكون الموارد التالية ذات أهمية: </para>
+
+<itemizedlist>
+<listitem
+><para
+>على <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+> ستجد العديد من المستندات حول البرمجة باستخدام كيوت وكيدي. يمكنك العثور على النسخة الإلكترونية من توثيق مكتبة كيدي الكامل على <ulink url="http://api.kde.org/"
+>مرجع واجهة برمجة تطبيقات كيدي</ulink
+> </para
+></listitem
+> 
+<listitem
+><para
+>الخطوة الأولى للمساهمة بالكود هي اتباع <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>هذه التعليمات</ulink
+> للحصول على الكود المصدري وبنائه. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>حقوق النشر والترخيص</title>
+
+<para
+>كاليغرا هو نتيجة جهد مشترك للعديد من المطورين. كل ملف مصدري من كاليغرا محمي بحقوق النشر من قبل الأشخاص الذين كتبوا هذا الملف المعين ويمكن العثور على أسمائهم في بداية كل ملف مصدري مع الترخيص المطبق على ذلك الملف. </para>
+
+<para
+>هذا الدليل محمي بحقوق النشر من قبل يوست شينك. يمكن توزيعه بحرية، طالما تم تضمين إشعار حقوق النشر هذا. يمكنك تغييره طالما أرسلت لي التغييرات أو قمت بإيداعها في جيت كيدي. لن أكون مسؤولًا عن أي شيء ينتج عن استخدام هذا الدليل. </para>
+
+<para
+>أدلة كاليغرا الأخرى محمية بحقوق النشر من قبل مؤلفيها المعنيين. </para>
+
+<para
+>الترجمة: زايد السعيدي <email
+>zayed.alsaidi@gmail.com</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+

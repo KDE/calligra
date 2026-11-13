@@ -1,0 +1,331 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>ضبط سيج</title>
+
+<sect1 id="configure-dialog">
+<title
+>حوار الضبط - المرحلة</title>
+
+<sect2 id="configure-misc">
+<title
+>متنوّع</title>
+
+<screenshot>
+<screeninfo
+>متنوّع</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>متنوّع</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>الوحدات</guilabel
+></term>
+<listitem
+><para
+>اختر الوحدة المبدئية التي ستُستخدم في شرائحك.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>نصف قطر المقبض</guilabel
+></term>
+<listitem
+><para
+>إذا حددت شكلًا بالأداة المبدئية (السهم) فسترى المستطيلات الصفراء والحمراء. تُسمى هذه المقابض (تُستخدم لتغيير الحجم، التدوير، ...). نصف قطر المقبض يُغير حجم المقابض. إذا جعلتها أكبر فسيكون من الأسهل النقر عليها.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>حساسية الإمساك</guilabel
+></term>
+<listitem
+><para
+>يُحدد هذا الخيار مدى الدقة المطلوبة للنقر على مقبض لتحديده.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>إزاحة اللصق</guilabel
+></term>
+<listitem
+><para
+>هذا نشط فقط إذا كان <guilabel
+>لصق عند المؤشر</guilabel
+> معطلًا. إذا نسخت شكلًا بالاختصار <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> ولصقته بـ <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>، وفعلت ذلك في مكان يوجد به شكل بالفعل، يُستخدم هذا الإزاحة للصق الشكل الجديد في الأسفل/اليمين.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>ألصِق عند المؤشر</guilabel
+></term>
+<listitem
+><para
+>يُعطل إزاحة اللصق ويُدرج شكلًا ملصوقًا في موضع مؤشر الفأرة.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>الشبكة</title>
+
+<screenshot>
+<screeninfo
+>الشبكة</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>الشبكة</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>الشبكة</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>اعرض الشّبكة</guilabel
+></term>
+<listitem
+><para
+>إذا فُعّل، سيعرض سيج شبكة من النقاط تمثل تقاطعات خطوط أفقية وعمودية وهمية. يمكنك استخدام هذه النقاط لتحديد موضع الكائنات بدقة على الشريحة.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>حاذِ إلى الشبكة</guilabel
+></term>
+<listitem
+><para
+>إذا فُعّل هذا، عند إسقاط أو تحريك الكائنات على الشريحة، ستلتصق الزاوية العلوية اليسرى من الكائن أو تتحرك إلى أقرب نقطة شبكة.</para>
+<para
+>يُقلل هذا من حريتك في وضع الكائنات بحرية على الشريحة، ولكنه يساعد أيضًا في محاذاة الكائنات بدقة. يمكن تعطيله أو تفعيله بسهولة بهذا الخيار، مما يمنحك أفضل ما في العالمين.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>لون الشبكة:</guilabel
+></term>
+<listitem
+><para
+>يمكنك تغيير لون الشبكة هنا، وهو أسود مبدئيًا.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>التباعد</guilabel
+></title>
+<para
+>يمكنك اختيار الحفاظ على نفس النسبة للإعدادين أدناه باستخدام أيقونة <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> أو فصل الإعدادين باستخدام أيقونة <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>أفقي:</guilabel
+></term>
+<listitem
+><para
+>اضبط المسافة بالسنتيمتر بين نقطتين على خط أفقي في الشبكة. المبدئي هو 0.5 سنتيمتر.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>عمودي:</guilabel
+></term>
+<listitem
+><para
+>اضبط المسافة بالسنتيمتر بين نقطتين على خط عمودي في الشبكة. المبدئي هو 0.5 سنتيمتر.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>مستند</title>
+
+<screenshot>
+<screeninfo
+>مستند</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>مستند</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>خصائص المستند</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>فترة الحفظ الآليّ:</guilabel
+></term>
+<listitem
+><para
+>يمكنك استخدام هذا لضبط عدد مرات حفظ سيج لملف مؤقت. إذا ضبطت هذه القيمة على <guilabel
+>لا حفظ آلي</guilabel
+>، فلن يحفظ سيج آليًا. يمكنك ضبط الحفظ الآلي من دقيقة واحدة إلى 60 دقيقة.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>أنشئ ملف احتياطي:</guilabel
+></term>
+<listitem
+><para
+>إذا فُعّل، سينشئ هذا ملفًا <filename
+>.&lt;name&gt;.odp.autosave.odp</filename
+> في المجلد الذي يوجد به ملفك. يمكن استخدام ملف النسخ الاحتياطي هذا في حال حدوث مشكلة. يُحدّث ملف النسخ الاحتياطي في كل مرة تحفظ فيها مستندك أو في كل مرة يحدث فيها حفظ آلي.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>المؤلف</title>
+
+<screenshot>
+<screeninfo
+>المؤلف</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>مستند</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>اختر تشكيلة مؤلف لمستندك. </para>
+<para
+>يمكنك إضافة تشكيلة جديدة أو حذف التشكيلة الحالية باستخدام الأزرار إلى يمين القائمة المنسدلة للتشكيلات. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

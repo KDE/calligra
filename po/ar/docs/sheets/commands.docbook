@@ -1,0 +1,2734 @@
+<chapter id="commands">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>مرجع الأوامر</title>
+
+<sect1 id="filemenu">
+<title
+>مرجع الأوامر</title>
+<para>
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>جديد</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أنشئ مستندًا جديدًا.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>افتح...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>افتح مستندًا موجودًا.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guisubmenu
+>افتح الأخير</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>افتح مستندًا موجودًا</action
+> باختياره من قائمة منسدلة للملفات المستخدمة مؤخرًا.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>احفظ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>احفظ المستند.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>احفظ باسم...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>احفظ المستند الحالي وغيّره إلى اسم أو تنسيق جديد. إذا أردت الاحتفاظ باسم المستند وتنسيقه، استخدم <guimenuitem
+>تصدير...</guimenuitem
+></action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>أعد التحميل</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يعيد تحميل المستند.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Versions</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME define different versions of the document + open them in new windows</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>استيراد...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>استيراد مستندات أخرى.</action>
+</para>
+<para
+>غالبًا ما تُحفظ جداول البيانات في ملفات نصية حيث تُفصل القيم في السطر بفاصلة أو مسافة أو علامة تبويب أو حرف آخر، مثل <emphasis
+>123, 456, 789, abcd, efgh</emphasis
+>. تُسمى هذه الملفات عادةً ملفات <quote
+><acronym
+>CSV</acronym
+></quote
+> (قيم مفصولة بفاصلة)، حتى لو لم يكن الحرف الفاصل فاصلة.</para>
+<para
+>إذا طلبت من شيت فتح ملف نصي، يفترض أن الملف بتنسيق <acronym
+>CSV</acronym
+> ويعرض مربع حوار يسمح لك بتحديد المحدد (الحرف الفاصل) المستخدم في الملف، ويظهر كيفية وضع عناصر البيانات في خلايا جدول بيانات مختلفة.</para>
+<para
+>تتيح لك الخيارات الأخرى في مربع الحوار هذا تعريف <guilabel
+>تنسيق</guilabel
+> خلايا جدول البيانات، وما إذا كان يجب إزالة أحرف اقتباس النص، وما إذا كان يجب تجاهل السطر (الأسطر) الأولى من الملف.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>صَدِّر...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>احفظ مستندًا بأي تنسيق مدعوم.</action
+> لا يصبح المستند هو الملف المُصدَّر. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>بريد...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أرسل الملف كمرفق بريد إلكتروني.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>أنشئ قالبًا من المستند...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>أنشئ <link linkend="templates"
+>قالب</link
+> شيت استنادًا إلى هذا المستند. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>اطبع...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اطبع المستند.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>معاينة الطباعة...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اعرض المستند كما سيُطبع.</action
+></para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Export as PDF...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action
+></para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>معلومات المستند</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اعرض أو أدخل معلومات عن المستند والمؤلف.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>أغلق</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أغلق المستند الحالي مع إبقاء شيت قيد التشغيل. </action
+></para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>أنهِ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اخرج</action
+> من شيت.</para
+></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title
+>قائمة حرر</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>حرر</guimenu
+> <guimenuitem
+>تراجع</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>تراجع عن آخر إجراء.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>حرر</guimenu
+> <guimenuitem
+>أعد</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أعد تنفيذ آخر إجراء تم التراجع عنه.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>حرر</guimenu
+> <guimenuitem
+>قص</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ضع العنصر (العناصر) المحددة في الحافظة وأزلها من الموقع الأصلي.</action
+> إذا قمت بعد ذلك بـ <guimenuitem
+>لصق</guimenuitem
+>، فسيُدرج العنصر (العناصر) في الموقع الجديد. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>حرر</guimenu
+> <guimenuitem
+>انسخ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>انسخ العنصر(العناصر) المحدد(ة) إلى الحافظة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>حرر</guimenu
+> <guimenuitem
+>ألصق</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>الصق العنصر (العناصر) من الحافظة في الخلية (الخلايا) المحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تحرير</guimenu
+> <guimenuitem
+>لصق خاص...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أشكال خاصة من اللصق.</action
+> راجع القسمين <link linkend="specialpaste"
+>أوضاع اللصق الأخرى</link
+> و<link linkend="sumspecialpaste"
+>الحساب باستخدام اللصق الخاص</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تحرير</guimenu
+> <guimenuitem
+>لصق مع إدراج</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>انقل محتوى منطقة اللصق إما إلى اليمين أو إلى الأسفل والصق العنصر (العناصر) من الحافظة في الخلية (الخلايا) المحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تحرير</guimenu
+> <guisubmenu
+>تعبئة</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>املأ المساحة المحددة بالقيم من مجموعة العناصر الأولى.</action
+> جميع الاتجاهات الأربعة مدعومة. لاحظ أن مصطلح "مجموعة العناصر" يصف المجموعة الأولى من القيم التي تظهر في اتجاه التعبئة. إذا كان اتجاه التعبئة إلى اليسار، فإن مجموعة العناصر الأولى هي العمود الأخير من التحديد. </para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>A</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Select All</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>حرر</guimenu
+> <guimenuitem
+>ابحث...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ابحث عن خلية تحتوي على نص معين.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keysym
+>F3</keysym
+></shortcut
+> <guimenu
+>حرر</guimenu
+><guimenuitem
+>ابحث عن التالي</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اعثر على الخلية التالية التي تحتوي على النص المحدد.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Shift;<keycap
+>F3</keycap
+></keycombo
+></shortcut
+> <guimenu
+>حرر</guimenu
+><guimenuitem
+>ابحث عن السابق</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اعثر على الخلية السابقة التي تحتوي على النص المحدد.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>حرر</guimenu
+> <guimenuitem
+>استبدل...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ابحث واستبدل النص المحدد في الخلية (الخلايا).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>حرر</guimenu
+><guisubmenu
+>امسح</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>امسح <guimenuitem
+>الكل</guimenuitem
+> أو <guimenuitem
+>المحتويات</guimenuitem
+> أو <guimenuitem
+>التعليق</guimenuitem
+> أو <guimenuitem
+>الأنماط الشرطية</guimenuitem
+> أو <guimenuitem
+>الرابط</guimenuitem
+> أو <guimenuitem
+>الصحة</guimenuitem
+> من الخلية (الخلايا) المحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+> حرر</guimenu
+> <guimenuitem
+>احذف</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>احذف <guimenuitem
+>الخلايا</guimenuitem
+> أو <guimenuitem
+>الأعمدة</guimenuitem
+> أو <guimenuitem
+>الصفوف</guimenuitem
+> أو <guimenuitem
+>الورقة</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Conditional Cell Attributes...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add or modify conditional cell attributes.</action>
+</para
+></listitem>
+</varlistentry>
+
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycap
+>F2</keycap
+> </shortcut
+> <guimenu
+>تحرير</guimenu
+> <guimenuitem
+>تعديل الخلية</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>لتعديل الخلية المحددة في موضعها.</action>
+</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title
+>قائمة عرض</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>عرض</guimenu
+> <guimenuitem
+>عرض جديد</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>افتح مثيلًا جديدًا من شيت مع المستند نفسه.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Close all open instances of &sheets;</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Split current view into two parts.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Remove current view.</action
+> (Where the window 
+contains two or more views)
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change view split to <guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Goto Cell...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change &sheets;'s focus to show defined cell.</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>عرض</guimenu
+> <guimenuitem
+>حدود الصفحة</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>بدّل وضع علامات حدود الصفحات المطبوعة في الورقة بخطوط حمراء. </action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show/Hide Comment Indicator</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toggle marking of cell comments.</action>
+If a cell contains a comment and this option is selected, a small red triangle
+is shown in the upper right corner of the cell.
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing Zoom In Zoom Out-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>عرض</guimenu
+><guisubmenu
+>كبر</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>زد أو أنقص التكبير المستخدم لعرض جدول البيانات. النطاق من 33% إلى 500%. </action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME Full Screen Mode-->
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="gomenu">
+<title
+>قائمة اذهب</title>
+<para
+>في هذه القائمة تجد إجراءات للتنقل بين أوراق جدول البيانات المفتوح حاليًا وإجراء <guimenuitem
+>اذهب إلى الخلية</guimenuitem
+> للقفز إلى خلية واحدة أو لتحديد نطاق من الخلايا.</para>
+</sect1>
+
+<sect1 id="insertmenu">
+<title
+>قائمة الإدراج</title>
+<para>
+<variablelist>
+
+<!-- OBSOLETE <varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Sheet</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add another worksheet.</action>
+</para
+></listitem>
+</varlistentry
+>-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إدراج</guimenu
+> <guisubmenu
+>تعليق</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>أضف أو عدّل تعليقًا. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إدراج</guimenu
+> <guimenuitem
+>دالة...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أدرج دالة رياضية.</action
+> انظر القسم <link linkend="formulas"
+>الصيغ</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إدراج</guimenu
+> <guimenuitem
+>سلسلة...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أدرج سلسلة.</action
+> انظر القسم <link linkend="series"
+>السلسلة</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إدراج</guimenu
+> <guimenuitem
+>رابط...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أدرج رابطًا في الخلية المحددة.</action
+> انظر القسم <link linkend="hyper"
+>ربط الخلايا</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إدراج</guimenu
+> <guimenuitem
+>حرف خاص...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أدرج حرفًا خاصًا في الخلية المحددة.</action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME missing Cells Columns Rows Sheet-->
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Embed another &koffice; document into the sheet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a chart.</action
+> See the section 
+<link linkend="insertchart"
+>Inserting a Chart</link
+> for more details.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the standard &kde; file dialog</action>
+to insert a picture.
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إدراج</guimenu
+> <guisubmenu
+>بيانات خارجية</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أدرج بيانات <guilabel
+>من قاعدة بيانات...</guilabel
+> أو <guilabel
+>من ملف نصي...</guilabel
+> أو <guilabel
+>من الحافظة...</guilabel
+>.</action
+> انظر القسم <link linkend="insertdata"
+>إدراج بيانات خارجية</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="formatmenu">
+<title
+>قائمة التنسيق</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Alt;&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>تنسيق</guimenu
+> <guimenuitem
+>تنسيق الخلية...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>نسّق الخلية (الخلايا) المحددة.</action
+> انظر القسم <link linkend="formatspread"
+>تنسيق جدول البيانات</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guimenuitem
+>مدير الأنماط</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أنشئ أو عدّل أو احذف أنماط تنسيق الخلية.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>نمط</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>تطبيق نمط على الخلية/الخلايا المحددة.</action
+> لإدارة الأنماط استخدم <menuchoice
+> <guimenu
+>تنسيق</guimenu
+><guimenuitem
+>مدير الأنماط...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guimenuitem
+>إنشاء نمط من خلية...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>إنشاء نمط جديد من تنسيق الخلية المحددة.</action
+> لإدارة الأنماط استخدم <menuchoice
+> <guimenu
+>تنسيق</guimenu
+><guimenuitem
+>مدير الأنماط...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Conditional Styles-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guimenuitem
+>تنسيق آلي...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>تنسيق الخلايا المحددة آليًا: حوار يتيح لك الاختيار بين تنسيقين مقترحين.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guimenuitem
+>دمج الخلايا</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>دمج الخلايا المحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guimenuitem
+>فصل الخلايا</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>فصل (تقسيم) الخلايا المدمجة سابقًا. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guimenuitem
+>ضبط الصف والعمود</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>تعيين أحجام الصفوف والأعمدة لعرض الخلية/الخلايا المحددة بشكل صحيح.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>صف</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>تغيير الحجم، أو التسوية، أو الإخفاء، أو إظهار الصف/الصفوف.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>عمود</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>تغيير الحجم، أو التسوية، أو الإخفاء، أو إظهار العمود/الأعمدة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>ورقة</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>إخفاء، أو إظهار ورقة العمل، أو ضبط خصائص الورقة المتقدمة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guimenuitem
+>تخطيط الصفحة...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>تنسيق تخطيط الصفحة المطبوعة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>نطاق الطباعة</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>تعريف أو إعادة تعيين نطاق الطباعة.</action>
+</para
+></listitem>
+</varlistentry>
+
+ <!--FIXME missing Manual Page Breaks, Anchors, Document Settings-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="datamenu">
+<title
+>قائمة البيانات</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>بيانات</guimenu
+> <guimenuitem
+>فرز...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>فرز البيانات في الخلايا المحددة.</action
+> انظر القسم <link linkend="sort"
+>فرز البيانات</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Filter-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>بيانات</guimenu
+> <guimenuitem
+>نص إلى أعمدة...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>يحاول هذا الخيار تفسير النص في الخلية/الخلايا المحددة كبيانات <acronym
+>CSV</acronym
+>، واضعًا كل عنصر في خلية مختلفة في الصف. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>G</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>بيانات</guimenu
+> <guimenuitem
+>مناطق مسماة...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>فتح</action
+> حوار <guilabel
+>المناطق المسماة</guilabel
+> لتحديد، وإضافة، وتحرير، وإزالة المناطق المسماة. انظر القسم <link linkend="namedareas"
+>الخلايا والمناطق المسماة</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>بيانات</guimenu
+> <guimenuitem
+>دمج...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>وحّد البيانات.</action
+> انظر القسم <link linkend="consolidate"
+>توحيد البيانات</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>بيانات</guimenu
+> <guimenuitem
+>مجموعات فرعية...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أنشئ أنواعًا مختلفة من المجاميع الفرعية لقاعدة بيانات.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>بيانات</guimenu
+> <guimenuitem
+>صلاحية...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اضبط أو عدّل معايير التحقق من الأخطاء ورسالة تنبيه الخطأ للخلية (الخلايا) المحددة.</action
+> انظر <link linkend="validcheck"
+>التحقق من الصلاحية</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>بيانات</guimenu
+> <guimenuitem
+>بحث عن هدف...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>افتح حوار البحث عن هدف</action
+>. انظر <link linkend="goalseek"
+>البحث عن هدف</link
+> للتفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>بيانات</guimenu
+> <guimenuitem
+>جدول محوري...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>افتح حوار ضبط الجدول المحوري</action
+>. انظر <link linkend="pivottable"
+>الجدول المحوري</link
+> للتفاصيل. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title
+>قائمة أدوات</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>أدوات</guimenu
+><guimenuitem
+>الإملاء...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>دقّق إملاء الكلمات في ورقة العمل.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>أدوات</guimenu
+> <guimenuitem
+>قوائم مخصصة...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اعرض أو عدّل السلاسل الخاصة من الكلمات التي يتعرف عليها شيت. يمكن استخدام هذه القوائم لإدراج <link linkend="series"
+>سلاسل</link
+> خاصة في ورقة العمل.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>أدوات</guimenu
+> <guimenuitem
+>احمِ الورقة...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>احمِ الورقة بكلمة مرور. يظهر حوار يطالبك بإدخال كلمة مرور. إلغاء تحديد هذا الخيار سيطلب منك كلمة المرور لإلغاء حماية الورقة. حماية ورقة تعني حماية جميع الخلايا في الورقة. في ورقة محمية، لا يمكن إعادة تنسيق الخلايا أو الكتابة فوقها.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>أدوات</guimenu
+> <guimenuitem
+>احمِ المستند...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>احمِ المستند بأكمله بكلمة مرور. يظهر حوار يطالبك بإدخال كلمة مرور. إلغاء تحديد هذا الخيار سيطلب منك كلمة المرور لإلغاء حماية المستند. في مستند محمي، لا يمكنك إعادة تسمية ورقة أو إزالتها. حماية المستند لا تعني أن كل ورقة فردية محمية.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>أدوات</guimenu
+> <guimenuitem
+>أعد حساب الورقة</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أعد حساب الصيغ في الورقة الحالية.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F9</keysym
+> </shortcut
+> <guimenu
+>أدوات</guimenu
+> <guimenuitem
+>أعد حساب المستند</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أعد حساب جميع الأوراق.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Tools</guimenu>
+<guimenuitem
+>Insert Calendar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
+</action>
+</para
+></listitem>
+</varlistentry>
+-->
+  
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>أدوات</guimenu
+> <guimenuitem
+>نفّذ ملف سكريبت...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>نفّذ السكريبت الخارجي المختار في شيت. يدعم شيت البرمجة النصية بلغة JavaScript وPython وRuby. يمكن العثور على أمثلة افتراضية للسكريبتات في القائمة الفرعية <menuchoice
+><guimenu
+>أدوات</guimenu
+><guisubmenu
+>سكريبتات</guisubmenu
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>أدوات</guimenu
+> <guisubmenu
+>السكربتات</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>هنا يمكنك تنفيذ السكريبت لتصدير أو استيراد البيانات بتنسيقات مختلفة، وحفظ سجل شيت في ملف، واستخدام <ulink url="https://live.gnome.org/Orca"
+>نطق Orca</ulink
+> لإمكانية الوصول، وتنقيح سكريبتات Python وRuby، أو إضافة دوال لعرض قيم الأسهم أو حالة الطقس. يمكنك حتى استخدام بعض <ulink url="http://www.r-project.org/"
+>دوال R</ulink
+> (يجب تثبيت <ulink url="http://rpy.sourceforge.net/rpy.html"
+>وحدة RPy</ulink
+>).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>أدوات</guimenu
+> <guimenuitem
+>مدير السكريبتات...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يفتح</action
+> حوار <guilabel
+>مدير السكريبتات</guilabel
+> لتنفيذ السكريبتات وتحميلها وإلغاء تحميلها وتثبيتها وإلغاء تثبيتها والحصول على المزيد منها. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>أدوات</guimenu
+> <guimenuitem
+>محسّن الدوال...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يفتح</action
+> حوار <guilabel
+>محسّن الدوال</guilabel
+> حيث يمكنك اختيار خلية دالة موضوعية، وهدف تحسين (<guilabel
+>تعظيم</guilabel
+>، <guilabel
+>تصغير</guilabel
+> أو إدخال <guilabel
+>القيمة</guilabel
+>) ومجموعة من خلايا معاملات القرار. </para
+></listitem>
+</varlistentry>
+  </variablelist
+></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>قائمة الإعدادات</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إعدادات</guimenu
+> <guisubmenu
+>أشرطة الأدوات المعروضة</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أظهر أو أخفِ أشرطة الأدوات: <guilabel
+>ملف</guilabel
+>، <guilabel
+>تحرير</guilabel
+>، <guilabel
+>تنقل</guilabel
+>، <guilabel
+>خط</guilabel
+>، <guilabel
+>تنسيق</guilabel
+> و<guilabel
+>لون/حدود</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Settings</guimenu>
+<guimenuitem
+>Dockers</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+>FIXME
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing:
+Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
+ -->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إعدادات</guimenu
+> <guimenuitem
+>شريط الحالة</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أظهر أو أخفِ شريط الحالة.</action
+> يظهر شريط الحالة معلومات إضافية للعناصر المحددة وحسابات فورية للخلايا المحددة. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>الإعدادات</guimenu
+> <guimenuitem
+>شريط اللسانيات</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>إظهار أو إخفاء شريط اللسانيات.</action
+> يمكن الوصول إلى كل أوراق المستند الحالي من خلال شريط اللسانيات. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إعدادات</guimenu
+> <guimenuitem
+>اضبط الاختصارات...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اضبط اختصارات لوحة المفاتيح المستخدمة بواسطة شيت.</action
+> انظر القسم الخاص بـ <link linkend="configshort"
+>ضبط الاختصارات</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إعدادات</guimenu
+> <guimenuitem
+>اضبط أشرطة الأدوات...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اضبط أشرطة الأدوات.</action
+> يحتوي القسم الخاص بـ <link linkend="configtoolbars"
+>ضبط أشرطة الأدوات</link
+> على مزيد من المعلومات. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>الإعدادات</guimenu
+> <guimenuitem
+>السمات</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اختر سمة الألوان لنافذة شيت.</action
+> يمكنك اختيار أحد أنظمة الألوان المحددة مسبقًا أو تحديد <guimenuitem
+>الضبط...</guimenuitem
+> لفتح <ulink url="help:/kcontrol/colors"
+>وحدة اختيار الألوان في &systemsettings;</ulink
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>الإعدادات</guimenu
+> <guimenuitem
+>تشكيلة المؤلف النشطة</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اضبط تشكيلة المؤلف للمستند الحالي.</action
+> يمكنك اختيار إحدى التشكيلات المحددة باستخدام <link linkend="configauthor"
+>نافذة ضبط شيت</link
+>، أو <guimenuitem
+>تشكيلة المؤلف المبدئية</guimenuitem
+> كما هو محدد بواسطة بيانات &systemsettings;، أو تشكيلة <guimenuitem
+>مجهول</guimenuitem
+> الفارغة التي تضمن خصوصيتك. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>إعدادات</guimenu
+><guimenuitem
+>اضبط الإشعارات...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>اضبط نظام الإشعارات في شيت.</action
+> لا توجد إجراءات يمكن إعلامك بها في الإصدار الحالي من شيت. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>الإعدادات</guimenu
+> <guimenuitem
+>اضبط شيت...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ضبط عام لـ شيت.</action
+> انظر القسم الخاص بـ <link linkend="configdialog"
+>ضبط شيت</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>قائمة مساعدة</title
+>&help.menu.documentation; </sect1>
+
+<sect1 id="rmbmenu">
+<title
+>قائمة زر الفأرة الأيمن</title>
+<para
+>يصف هذا القسم العناصر في القائمة المنبثقة التي تُحصل عليها بالنقر <mousebutton
+>الأيمن</mousebutton
+> على خلية أو خلايا محددة، أو صف (صفوف) أو عمود (أعمدة). </para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>تنسيق الخلية...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>نسّق الخلية (الخلايا) المحددة.</action
+> انظر القسم <link linkend="formatspread"
+>تنسيق جدول البيانات</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+></shortcut
+><guimenuitem
+>قص</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ضع العنصر (العناصر) المحدد في الحافظة.</action
+> إذا قمت بعد ذلك بـ <guilabel
+>لصق</guilabel
+>، فسيتم نقل العنصر (العناصر) من الموقع الأصلي إلى الموقع الجديد. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+></shortcut
+><guimenuitem
+>نسخ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>انسخ العنصر (العناصر) المحدد في الحافظة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+></shortcut
+><guimenuitem
+>لصق</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>الصق العنصر (العناصر) من الحافظة إلى الخلايا المحددة. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>لصق خاص...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>أشكال خاصة من اللصق.</action
+> راجع القسمين <link linkend="specialpaste"
+>أوضاع اللصق الأخرى</link
+> و<link linkend="sumspecialpaste"
+>الحساب باستخدام اللصق الخاص</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>لصق مع إدراج</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>الصق من الحافظة إلى الخلية (الخلايا) المحددة، مع تحريك الخلية (الخلايا) السابقة لإفساح المجال.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>الكلّ</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>احذف محتويات الخلية (الخلايا) المحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>اضبط الصف والعمود</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>غيّر حجم الصف والعمود لعرض الخلية (الخلايا) المحددة بالكامل.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>المبدئيّ</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>اضبط التنسيقات المبدئية للخلية (الخلايا) المحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>اسم المنطقة...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>سمِّ المنطقة المحددة.</action
+> انظر القسم <link linkend="namedareas"
+>المناطق المسماة</link
+> لمزيد من التفاصيل. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>غير حجم الصف...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>غيّر ارتفاع الصف المحدد.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>اضبط الصف</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>غيّر ارتفاع الصف المحدد لعرض الخلية (الخلايا) بالكامل.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>غير حجم العمود...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>غيِّر عرض العمود المُحدد.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>اضبط العمود</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>غيِّر عرض العمود المُحدد لعرض الخلية/الخلايا بالكامل.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>إدراج خلايا...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>أدرج خلية/خلايا جديدة في الموقع المُحدد، مع نقل الخلايا الموجودة لإفساح المجال.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>احذف الخلايا...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>أزل الخلية/الخلايا المُحددة، مع نقل الخلايا الأخرى لشغل المساحة التي تركتها الخلايا المُزالة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>أدرج صفوف</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>أدرج صفًا/صفوفًا جديدة فوق الصف/الصفوف المُحددة. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>احذف الصفوف</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>احذف الصف/الصفوف المُحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>أخف الصفوف</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>يُخفي الصف/الصفوف المُحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>أظهر الصفوف</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>يُظهر الصف/الصفوف المُحددة. لإظهار الصفوف المخفية، يجب تحديد نطاق من الصفوف يشمل الصفوف المخفية.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>أدرج أعمدة</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>أدرج عمودًا/أعمدة جديدة على يسار العمود/الأعمدة المُحددة. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>احذف الأعمدة</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>احذف العمود (الأعمدة) المختار.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>أخف الأعمدة</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>يُخفي العمود/الأعمدة المُحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>أظهر الأعمدة</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>يُظهر العمود/الأعمدة المُحددة. لإظهار الأعمدة المخفية، يجب تحديد نطاق من الأعمدة يشمل الأعمدة المخفية.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>تعليق...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>أضف أو عدّل تعليقًا على الخلية المُحددة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>قائمة التحديد...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>يتيح لك تحديد ولصق نص من أي خلية في التحديد الحالي للخلايا إلى الخلية المُحددة.</action>
+</para
+></listitem>
+</varlistentry>
+<!-- not in 2.4.0
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Show Related Words</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the <guilabel
+>Related Words</guilabel
+> dialog box.</action
+> 
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="othershort">
+<title
+>اختصارات أخرى</title>
+<para
+>يصف هذا القسم مفاتيح الاختصار في شيت المُستخدمة للعمليات التي لا تظهر في أي من القوائم.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo>
+</term>
+<listitem
+><para
+>بدّل عرض الإرساءات.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>مفاتيح الأسهم</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>إذا كانت الخلية المُحددة مشغولة، فانقل مؤشر الخلية إلى بداية أو نهاية الكتلة المشغولة في الصف أو العمود الحالي. إذا كانت الخلية المُحددة غير مشغولة، فانقل مؤشر الخلية إلى بداية أو نهاية كتلة الخلايا غير المشغولة في الصف أو العمود الحالي. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keysym
+>مفاتيح الأسهم</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>إذا كانت الخلية المُحددة مشغولة، فحدد جميع الخلايا المشغولة حتى بداية أو نهاية تلك الكتلة من الخلايا المشغولة في الصف أو العمود الحالي. إذا كانت الخلية المُحددة غير مشغولة، فحدد جميع الخلايا غير المشغولة حتى بداية أو نهاية تلك الكتلة من الخلايا غير المشغولة في الصف أو العمود الحالي. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>صفحة لأسفل</keysym>
+</term>
+<listitem
+><para
+><action
+>انقل مؤشر الخلية 10 خلايا لأسفل.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>صفحة لأعلى</keysym>
+</term>
+<listitem
+><para
+><action
+>انقل مؤشر الخلية 10 خلايا لأعلى.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Page Down</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>انقل للورقة التالية.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Page Up</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>انقل للورقة السابقة.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycap
+>F4</keycap>
+</term>
+<listitem
+><para
+><action
+>غيِّر مرجع الخلية</action
+> بين النوع العادي والنوع <link linkend="absolute"
+>المرجع المُطلق</link
+>. </para
+></listitem>
+</varlistentry>
+<!-- does not work in 2.4.0
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>&amp;</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Add a border to the selected cell(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>$</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in Money
+format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>%</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Percentage format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>^</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Scientific format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>#</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Date format</action
+>. The value is taken as the number of days since 
+1 January 1900.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>@</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+Time format</action
+>. The value is taken as the number of seconds since
+midnight.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>!</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+normal Number format</action
+>.
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

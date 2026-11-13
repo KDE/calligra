@@ -1,0 +1,931 @@
+<chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>أساسيات &sheets;</title>
+
+<note
+><para
+>مثل بقية &kde;، &sheets; قابل للضبط بدرجة عالية، مما قد يسبب مشاكل للقراء الذين يحاولون مقارنة النص في مستند كهذا بما يرونه على إصدار &sheets; الجاري على سطح مكتبهم. لتقليل بعض احتمالات الارتباك، يُقترح أنه عند بدء استخدام &sheets; لأول مرة تضبط الخيارات المبدئية في جميع صفحات حوار ضبط &sheets; (الذي يُحصل عليه باختيار <menuchoice
+><guimenu
+>إعدادات</guimenu
+><guimenuitem
+>اضبط الجداول...</guimenuitem
+></menuchoice
+>). </para
+></note>
+
+<sect1 id="starting">
+<title
+>الجداول الممتدة للمبتدئين</title>
+
+<para
+>يحاول هذا القسم شرح ما يفعله برنامج جداول ممتدة مثل &sheets; فعليًا بالأمثلة، ولماذا هو أداة مفيدة جدًا في أي موقف تتعامل فيه مع الأرقام. إذا كنت قد استخدمت بالفعل برنامج جداول ممتدة، فقد ترغب في الانتقال إلى القسم التالي.</para>
+
+<para
+>أول شيء تفعله هو تشغيل &sheets;. يمكنك فعل ذلك بالنقر <mousebutton
+>الأيسر</mousebutton
+> على أيقونة &sheets; إذا كانت موجودة على سطح المكتب أو اللوحة، أو يمكنك اختيار <menuchoice
+><guimenu
+>مكتب</guimenu
+><guimenuitem
+>&sheets;</guimenuitem
+> </menuchoice
+> من مشغل التطبيقات.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>&sheets; عند التشغيل الأول</phrase>
+</textobject>
+</mediaobject
+>عندما يبدأ، سيُعطى لك خيار فتح مستند حديث، أو إنشاء مستند جديد من قالب (مع فئات القوالب) أو فتح مستند موجود. اختر الفئة <guilabel
+>عام</guilabel
+> على اليسار واختر القالب <guilabel
+>ورقة عمل فارغة</guilabel
+>. ثم انقر الزر <guibutton
+>استخدم هذا القالب</guibutton
+>.</para>
+
+<para
+>بالنظر إلى &sheets; بمجرد تشغيله، سترى ورقة من خلايا مستطيلة فارغة مرتبة في صفوف مرقمة وأعمدة بحروف. هذا هو المكان الذي تُدخل فيه البيانات أو الصيغ أو النص أو المخططات. <mediaobject>
+<imageobject>
+<imagedata fileref="starting1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>لقطة شاشة بدء1</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>الآن، أدخل النص والقيم المعروضة في أول 5 صفوف من لقطة الشاشة أعلاه في نفس الخلايا من جدولك الممتد. تجاهل ما في الصف 7 في الوقت الحالي. لإدخال أي شيء في خلية، حدد الخلية أولًا بالنقر <mousebutton
+>الأيسر</mousebutton
+> داخلها، ثم اكتب ما تريد، ثم اضغط &Enter; أو استخدم مفاتيح الأسهم لنقل نقطة التحديد إلى خلية أخرى. </para>
+<para
+>ما أدخلناه حتى الآن يمكن أن يكون ميزانية بسيطة للشهرين القادمين، تسرد كم نعتقد أننا سننفق على الطعام والمأوى والملبس وأي نفقات أخرى. الآن حدد الخلية B7 (العمود B، الصف 7)، واكتب <userinput
+>=B2+B3+B4+B5</userinput
+> واضغط &Enter;. لأنها تبدأ برمز <keycap
+>=</keycap
+>، يرى &sheets; هذا كصيغة، شيء يجب عليه حسابه، في هذه الحالة بجمع القيم في الخلايا الأربع B2 إلى B5، وما يُعرض في الخلية B7 هو نتيجة ذلك الحساب.</para>
+<para
+>يمكنك إدخال صيغة مماثلة في الخلية C7، إلا أنها في هذه الحالة ستكون <userinput
+>=C2+C3+C4+C5</userinput
+>، ولكن هناك طريقة أسهل وهي نسخ الخلية B7 ولصقها في C7. سيضبط &sheets; مراجع الخلايا آليًا من B.. إلى C.. عند إتمام اللصق.</para>
+<para
+>في هذه المرحلة قد تعتقد أن &sheets; لا يفعل أكثر مما يمكنك فعله بقلم رصاص وورقة وآلة حاسبة، وقد تكون على صواب، لكن تذكر أن هذا مثال صغير جدًا لجدول ممتد، يقوم بحسابات بسيطة على بضعة أرقام فقط. لأي كمية معقولة من القيم أو البيانات، استخدام جدول ممتد لإجراء الحسابات أسرع وأكثر دقة بكثير من فعلها يدويًا.</para>
+<para
+>أيضًا، يتيح لك الجدول الممتد لعب لعبة <quote
+>ماذا لو؟</quote
+>. لأن كل صيغة تُعاد حسابها آليًا كلما تغيرت أي من القيم التي تشير إليها، يمكنك رؤية ما يحدث بسرعة إذا غيرت أيًا منها. باستخدام مثالنا، يمكنك رؤية تأثير تقليل المبلغ المنفق على الطعام في ديسمبر بمجرد إدخال قيمة جديدة في الخلية C2. إذا كان لديك جدول ممتد يصوّر تأثير الاحتباس الحراري بدقة، فقد ترى تأثير تخفيض بنسبة 50 بالمئة في كمية الميثان المنبعثة في الغلاف الجوي.</para>
+</sect1>
+
+<sect1 id="selecting">
+<title
+>تحديد الخلايا</title>
+<para
+>يمكنك تحديد خلية واحدة أو منطقة مستطيلة من الخلايا في الجدول الممتد. تُعرض الخلية (الخلايا) المحددة بحد أسود سميك. </para>
+<itemizedlist>
+<title
+>يمكنك تحديد خلية واحدة بإحدى الطرق التالية</title>
+<listitem
+><para
+>النقر <mousebutton
+>الأيسر</mousebutton
+> عليها</para
+></listitem>
+<listitem
+><para
+>إدخال مرجع الخلية (مثل <userinput
+>B5</userinput
+>) في مربع مرجع الخلية في الطرف الأيسر من خيارات أداة <guilabel
+>محرر الخلايا</guilabel
+> والضغط على &Enter;</para
+></listitem>
+<listitem
+><para
+>استخدام خيار القائمة <menuchoice
+><guimenu
+>اذهب</guimenu
+><guimenuitem
+>اذهب إلى خلية...</guimenuitem
+></menuchoice
+></para
+></listitem>
+</itemizedlist>
+
+<para
+>يمكنك أيضًا التنقل باستخدام مفاتيح <keysym
+>الأسهم</keysym
+>. سيؤدي الضغط على مفتاح &Enter; إلى نقل التحديد الحالي موضعًا واحدًا لأعلى أو لأسفل أو لليسار أو لليمين اعتمادًا على الإعداد في صفحة <guilabel
+>الواجهة</guilabel
+> من <link linkend="configinterface"
+>مربع حوار الضبط</link
+> لـ &sheets;.</para
+> <para
+>إذا ضغطت مع الاستمرار على مفتاح <keycombo action="simul"
+>&Shift;</keycombo
+> أثناء استخدام مفاتيح <keysym
+>الأسهم</keysym
+>، سينتقل التحديد إلى بداية أو نهاية كتلة الخلايا المشغولة.</para>
+<para
+>لتحديد منطقة من الخلايا المتجاورة، اسحب مؤشر الفأرة عبر المنطقة المطلوبة مع الضغط باستمرار على الزر <mousebutton
+>الأيسر</mousebutton
+>، أو أدخل مراجع الخلية العلوية اليسرى والسفلية اليمنى مفصولة بنقطتين رأسيتين في مربع مرجع الخلية في <guilabel
+>محرر الخلايا</guilabel
+> (مثل <userinput
+>B7:C14</userinput
+>) واضغط &Enter;، أو أدخل مراجع الخلايا هذه بتنسيق مماثل في مربع الحوار الذي يظهر من <menuchoice
+><guimenu
+>اذهب</guimenu
+><guimenuitem
+>اذهب إلى خلية...</guimenuitem
+></menuchoice
+>.</para>
+<para
+>يمكنك أيضًا تحديد منطقة من الخلايا بتحديد الخلية في إحدى زوايا المنطقة المطلوبة ثم الضغط مع الاستمرار على مفتاح <keycombo action="simul"
+>&Shift; </keycombo
+> أثناء استخدام زر الفأرة <mousebutton
+>الأيسر</mousebutton
+> لتحديد الخلية في الزاوية المقابلة.</para>
+
+<para
+>لتحديد خلايا غير متجاورة، انقر على الخلية الأولى التي تريد تحديدها ثم اضغط مع الاستمرار على مفتاح <keycombo action="simul"
+>&Ctrl;</keycombo
+> وحدد الخلايا الأخرى.</para>
+
+<para
+>لتحديد صف أو عمود كامل من الخلايا، انقر <mousebutton
+>الأيسر</mousebutton
+> على رقم الصف على يسار ورقة العمل أو على حرف العمود في الأعلى. لتحديد صفوف أو أعمدة متجاورة، اسحب مؤشر الفأرة فوق أرقام الصفوف أو أحرف الأعمدة المناسبة مع الضغط باستمرار على الزر <mousebutton
+>الأيسر</mousebutton
+>.</para>
+<para
+>لتحديد صفوف أو أعمدة غير متجاورة من الخلايا، انقر على رقم الصف الأول أو حرف العمود الأول ثم اضغط مع الاستمرار على مفتاح <keycombo action="simul"
+>&Ctrl;</keycombo
+> وحدد الصفوف أو الأعمدة الأخرى من الخلايا.</para>
+
+</sect1>
+
+<sect1 id="entering">
+<title
+>إدخال البيانات</title>
+<para
+>إدخال البيانات في خلية يمكن أن يكون بسيطًا مثل تحديد الخلية، وكتابة بياناتك، ثم الضغط على &Enter; أو نقل التحديد إلى خلية أخرى بأحد مفاتيح <keysym
+>الأسهم</keysym
+>. اعتمادًا على كيفية إدخال البيانات، سيفسرها &sheets; كرقم أو تاريخ أو وقت أو نص:</para>
+<itemizedlist>
+<listitem
+><para
+>تُدخل الأرقام بالطريقة الواضحة؛ <userinput
+>123</userinput
+>، <userinput
+> -123</userinput
+>، <userinput
+>456.7</userinput
+> أو بالترميز العلمي <userinput
+>-1.2E-5</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>يجب إدخال التواريخ بتنسيق النظام الخاص بك، كما هو مُحدد في إعدادات النظام، ضمن لسان <menuchoice
+><guimenu
+>محلية</guimenu
+><guisubmenu
+>البلد/المنطقة - اللغة</guisubmenu
+><guimenuitem
+>التاريخ والوقت</guimenuitem
+></menuchoice
+>. على سبيل المثال، إذا كنت تستخدم تنسيق DD/MM/YYYY، فيجب عليك إدخال <userinput
+>30/03/2012</userinput
+> لتاريخ 30 مارس 2012. يمكن حذف الأصفار البادئة من حقلي اليوم والشهر، ويكفي إدخال آخر رقم أو رقمين من السنة إذا كان التاريخ في القرن الحالي، على سبيل المثال <userinput
+>9/1/9</userinput
+> لتاريخ 9 يناير 2009. </para
+></listitem>
+<listitem
+><para
+>يجب إدخال الأوقات أيضًا باستخدام تنسيق <quote
+>النظام</quote
+>. على سبيل المثال، إذا كنت تستخدم ساعة ذات 12 ساعة، فأدخل الأوقات بصيغة HH:MIN am|pm أو HH:MIN:SS am|pm مثل <userinput
+>9:42 صباحًا</userinput
+> أو <userinput
+>10:30:52 مساءً</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>يعرّف &sheets; أي بيانات مدخلة على أنها <quote
+>نص</quote
+> إذا لم يتمكن من التعرف على البيانات كرقم أو تاريخ أو وقت. </para
+></listitem>
+</itemizedlist>
+<note
+><para
+>افتراضيًا، يقوم &sheets; بمحاذاة الأرقام والتواريخ والأوقات إلى اليمين داخل الخلية وأي شيء آخر إلى اليسار. يمكن أن يكون هذا دليلًا مفيدًا لمعرفة ما إذا كنت قد أدخلت تاريخًا أو وقتًا بالتنسيق الصحيح. لكن تذكر أنه يمكن تغيير كيفية عرض العناصر عن طريق تغيير <link linkend="formatdata"
+>تنسيق الخلية</link
+>.</para
+></note>
+
+<para
+>يوفر مربع إدخال النص الرئيسي في خيارات أداة <guilabel
+>محرر الخلايا</guilabel
+> طريقة سهلة لتحرير محتويات خلية محددة. اضغط &Enter; أو انقر <mousebutton
+>يسار</mousebutton
+> على علامة الاختيار الخضراء عندما تكون راضيًا عما أدخلته، أو انقر على الصليب الأحمر لإلغاء تعديلاتك.</para>
+
+<sect2 id="genericformat">
+<title
+>تنسيق الخلية العام</title>
+<para
+>يستخدم &sheets; تنسيق الخلية <quote
+>العام</quote
+> كإعداد مبدئي. طالما تم استخدام هذا التنسيق، يكتشف &sheets; نوع البيانات الفعلي تلقائيًا اعتمادًا على بيانات الخلية الحالية. على سبيل المثال، إذا أدخلت نصًا في خلية ثم أدخلت رقمًا في نفس الخلية لاحقًا، يفسر &sheets; البيانات الجديدة تلقائيًا كرقم. إذا كنت تريد تحديد نوع البيانات بنفسك، يمكنك ضبطه صراحةً في <link linkend="formatdata"
+>تنسيق الخلية</link
+>. يمكنك تغيير التنسيق مرة أخرى إلى <quote
+>العام</quote
+> في أي وقت. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="copypaste">
+<title
+>انسخ، وقص والصق</title>
+
+<para
+>للوهلة الأولى، تبدو وظائف <guimenuitem
+>قص</guimenuitem
+> و<guimenuitem
+>نسخ</guimenuitem
+> و<guimenuitem
+>لصق</guimenuitem
+> في &sheets; مشابهة لهذه الوظائف في تطبيقات &kde; الأخرى. بعد تحديد خلية أو خلايا، يمكنك اختيار <guimenuitem
+>نسخ</guimenuitem
+> أو <guimenuitem
+>قص</guimenuitem
+> من قائمة <guimenu
+>تحرير</guimenu
+> أو من القائمة المنسدلة التي تظهر بالضغط باستمرار على زر الفأرة <mousebutton
+>الأيمن</mousebutton
+> على خلية محددة. يمكنك أيضًا استخدام الاختصارات <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> أو <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+>، ثم انقل التحديد إلى الخلية الهدف واختر <guimenuitem
+>لصق</guimenuitem
+> أو اضغط <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+>. ومع ذلك، هناك بعض الدقائق المرتبطة بهذه الوظائف في &sheets; وسيتم مناقشتها أدناه.</para>
+
+<para
+>إذا كانت الخلية تحتوي على صيغة، فسيتم نسخ الصيغة نفسها بدلًا من النتيجة المعروضة، وإذا كانت الصيغة تحتوي على مرجع لخلية أخرى، فسيتم تغيير هذا المرجع بواسطة عملية <guimenuitem
+>قص</guimenuitem
+> أو <guimenuitem
+>نسخ</guimenuitem
+> و<guimenuitem
+>لصق</guimenuitem
+> للإشارة إلى الخلية التي تكون في نفس الموضع النسبي كما في الخلية الأصلية. على سبيل المثال، إذا كانت الخلية A2 تحتوي على الصيغة <userinput
+>=B3</userinput
+> وتم نسخها إلى C4، فستحتوي الخلية C4 على <userinput
+>=D5</userinput
+>.</para>
+<para
+>قد تبدو هذه طريقة غريبة نوعًا ما لعمل نسخة، لكنها في 99 بالمائة من الوقت هي بالضبط ما هو مطلوب (إذا لم تكن كذلك، فراجع القسم حول <link linkend="absolute"
+>مراجع الخلايا المطلقة</link
+>). على سبيل المثال، في قائمة التسوق البسيطة الموضحة أدناه، يجب أن تحتوي الخلية D2 على <userinput
+>=B2 * C2</userinput
+>، وD3 يجب أن تكون <userinput
+>=B3 * C3</userinput
+>، وD4 يجب أن تكون <userinput
+>=B4 * C4</userinput
+> وهكذا. بدلًا من الاضطرار إلى إدخال صيغة مختلفة في كل خلية، يمكنك فقط إدخال الصيغة الأولى في D2 ثم نسخها إلى الخلايا أدناه، تاركًا &sheets; يضبط مراجع الخلايا لتناسب.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="copy1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>لقطة شاشة copy1</phrase>
+</textobject>
+</mediaobject>
+
+<sect2 id="copypasteareas">
+<title
+>نسخ ولصق مناطق الخلايا</title>
+<para
+>في المثال أعلاه، يمكن نسخ D2 إلى جميع الخلايا الثلاث D3 إلى D5 مرة واحدة بمجرد نسخ D2 ثم تحديد منطقة الخلايا الكاملة D3:D5 قبل القيام باللصق.</para>
+<para
+>يمكن قص أو نسخ منطقة مستطيلة من الخلايا في عملية واحدة عن طريق تحديد المنطقة قبل القص أو النسخ. ثم حدد خلية الزاوية العلوية اليسرى من المنطقة التي تريد اللصق فيها قبل القيام باللصق.</para>
+<para
+>إذا قمت بقص أو نسخ منطقة مستطيلة من الخلايا، مثل B2:C3، ولصقتها في منطقة أكبر مثل A10:D13، فسيتم تكرار النمط الأصلي للخلايا لملء المنطقة الهدف.</para>
+<para
+>يوفر &sheets; أيضًا طريقة <quote
+>سحب ونسخ</quote
+> لنسخ الخلايا إلى أسفل في خلايا أخرى أسفل الخلية (الخلايا) الأصلية أو إلى يمينها مباشرة. لاستخدام هذه الطريقة، حدد الخلية (الخلايا) المراد نسخها ثم ضع مؤشر الفأرة فوق المربع الأسود الصغير في الزاوية اليمنى السفلية من الخلية (الخلايا) المحددة حتى يتغير المؤشر إلى سهم مزدوج الرأس. ثم اضغط باستمرار على زر الفأرة <mousebutton
+>الأيسر</mousebutton
+> أثناء سحب الخلية (الخلايا) المحددة بقدر ما تريد. لاحظ أن مراجع الخلايا في الصيغ تزداد وفقًا لتغير الموضع النسبي. لا يتم تغيير المراجع المطلقة.</para>
+</sect2>
+
+<sect2 id="specialpaste">
+<title
+>أوضاع اللصق الأخرى</title>
+<para
+>قد تحتوي الخلية على نص أو قيمة أو صيغة، وقد تحتوي أيضًا على <link linkend="formatspread"
+>معلومات تنسيق</link
+> خاصة بالخط أو الحدود أو الخلفية. يحتوي &sheets; على إصدارات خاصة من اللصق تتيح لك التعامل مع هذه العناصر بطرق مختلفة.</para>
+
+<para
+><menuchoice
+><guimenu
+>تحرير</guimenu
+><guimenuitem
+>لصق خاص...</guimenuitem
+></menuchoice
+> يعرض مربع حوار <guilabel
+>لصق خاص</guilabel
+>. من خلال تحديد العنصر المناسب من الجزء الأيسر من مربع الحوار هذا، يمكنك اختيار لصق <guilabel
+>كل شيء</guilabel
+>، أو فقط <guilabel
+>النص</guilabel
+>، أو <guilabel
+>تنسيق</guilabel
+> الخلية، أو أي <guilabel
+>تعليق</guilabel
+> في الخلية (الخلايا) أو <guilabel
+>كل شيء بدون حدود</guilabel
+>. تسمح لك العناصر في الجزء الأيمن من مربع الحوار هذا بإجراء <link linkend="sumspecialpaste"
+>عمليات حسابية بسيطة على منطقة من الخلايا</link
+>. </para>
+
+<para
+><guimenuitem
+>لصق مع إدراج...</guimenuitem
+> يقوم بإدراج الخلية (الخلايا) المنسوخة في الورقة عن طريق نقل الخلايا التي كان من الممكن استبدالها بعدد مناسب من الصفوف أو الأعمدة إلى أسفل أو إلى اليمين. يمكن استخدامه أيضًا لإدراج صف (صفوف) أو عمود (أعمدة) كاملة منسوخة في ورقة العمل.</para>
+</sect2>
+
+</sect1>
+<!-- ME insdel -->
+<sect1 id="insdel">
+<title
+>إدراج وحذف</title>
+<para
+>استخدم مفتاح <keysym
+>Del</keysym
+> أو <menuchoice
+><guimenu
+>تحرير</guimenu
+> <guisubmenu
+>مسح</guisubmenu
+><guimenuitem
+>محتويات</guimenuitem
+></menuchoice
+> لإزالة النص أو القيمة أو الصيغة من الخلية (الخلايا) أو الصف (الصفوف) أو العمود (الأعمدة) المحددة دون التأثير على أي شيء آخر.</para>
+
+<para
+>لحذف كل شيء في الخلية (الخلايا) أو الصف (الصفوف) أو العمود (الأعمدة) المحددة، بما في ذلك التعليقات والتنسيق الخاص، اختر خيار <guimenuitem
+>الكل</guimenuitem
+> من قائمة <menuchoice
+><guimenu
+>تحرير</guimenu
+><guisubmenu
+>مسح</guisubmenu
+></menuchoice
+> أو من القائمة المنبثقة التي تظهر عند النقر <mousebutton
+>الأيمن</mousebutton
+> على تحديد. </para>
+<para
+>لإزالة الصف (الصفوف) أو العمود (الأعمدة) المحددة بالكامل، استخدم خيارات <guimenuitem
+>حذف صفوف</guimenuitem
+> أو <guimenuitem
+>حذف أعمدة</guimenuitem
+> من قائمة الفأرة المنبثقة بزر <mousebutton
+>الأيمن</mousebutton
+>.</para>
+<para
+>إذا قمت بتحديد خلية أو خلايا واخترت <guimenuitem
+>إزالة خلايا...</guimenuitem
+> من قائمة الفأرة المنبثقة بزر <mousebutton
+>الأيمن</mousebutton
+>، يمكنك بعد ذلك اختيار ما إذا كانت الخلايا الأخرى في ورقة العمل سيتم نقلها لأعلى أو لليسار لملء المساحة التي تركتها الخلية (الخلايا) التي اخترت إزالتها.</para>
+<para
+>إذا كنت تريد إدراج صف (صفوف) أو عمود (أعمدة) جديدة فارغة في الورقة، فحدد الصف (الصفوف) أو العمود (الأعمدة) حيث ترغب في وضع الصف (الصفوف) أو العمود (الأعمدة) الجديدة واختر خيار <guimenuitem
+>إدراج صفوف</guimenuitem
+> أو <guimenuitem
+>إدراج أعمدة</guimenuitem
+> من قائمة الفأرة المنبثقة بزر <mousebutton
+>الأيمن</mousebutton
+>.</para>
+<para
+>يمكنك إدراج خلايا جديدة في ورقة العمل عن طريق تحديد المنطقة التي تريد ظهورها فيها ثم اختيار خيار <guimenuitem
+>إدراج خلايا...</guimenuitem
+> من قائمة الفأرة المنبثقة بزر <mousebutton
+>الأيمن</mousebutton
+>. سيُطلب منك بعد ذلك ما إذا كان يجب نقل الخلية (الخلايا) الموجودة في المنطقة المحددة لأسفل أو لليمين لإفساح المجال للخلايا الجديدة.</para>
+
+</sect1>
+
+<sect1 id="simplesums">
+<title
+>المجموعات البسيطة</title>
+<para
+>إذا كان الحرف الأول في الخلية هو علامة يساوي (<keycap
+>=</keycap
+>)، فسيعتبر &sheets; محتويات الخلية صيغة يجب حسابها. سيتم عرض نتيجة الحساب في الخلية بدلًا من الصيغة نفسها. على سبيل المثال، أدخل <userinput
+>=2+3</userinput
+> في خلية ويجب أن تعرض <emphasis
+>5</emphasis
+>.</para>
+<para
+>بشكل أكثر فائدة، يمكن أن تحتوي الصيغة على مراجع لخلايا أخرى، بحيث <userinput
+>=B4+A3</userinput
+> ستحسب مجموع القيم في الخليتين B4 وA3، وسيتم تحديث هذا الحساب كلما تم تغيير الخليتين B4 أو A3.</para>
+<para
+>بالإضافة إلى الجمع، يمكن للصيغة استخدام الرمز <keycap
+>-</keycap
+> للطرح، و<keycap
+>*</keycap
+> للضرب، و<keycap
+>/</keycap
+> لإجراء القسمة. يمكن أيضًا استخدام رمزي القوسين <keycap
+>(</keycap
+> و<keycap
+>)</keycap
+> كما في الجبر العادي، لذا يمكنك إدخال صيغ أكثر تعقيدًا مثل <userinput
+>=((B10 + C3) *5 - F11) / 2</userinput
+>.</para>
+
+<para
+>ستُوسم الخلايا المحتوية على صيغة بمثلث أزرق صغير في الزاوية السفلى اليسرى إذا كان مربع الاختيار <guilabel
+>إظهار مؤشر الصيغة</guilabel
+> في حوار <menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>ورقة</guisubmenu
+><guisubmenu
+>خصائص الورقة</guisubmenu
+> </menuchoice
+> مُحدَّدًا.</para>
+<para
+>تتضمن &sheets; أيضًا عددًا كبيرًا من الدوال المضمنة لتطبيقات مثل الحسابات الإحصائية والمثلثية والمالية. سيُفحص استخدامها بتعمق أكبر في <link linkend="formulas"
+>قسم لاحق</link
+> من هذا الدليل، ولكن إذا كنت مهتمًا في هذه المرحلة، فاختر <guimenuitem
+>دالة...</guimenuitem
+> من قائمة <guimenu
+>إدراج</guimenu
+> وألقِ نظرة على مربع حوار <guilabel
+>دالة</guilabel
+> الذي سيُعرض.</para>
+<para
+>في الوقت الحالي، مع ذلك، قد تكون الدالة <userinput
+>SUM</userinput
+> ذات أهمية لأنها تحسب مجموع كل القيم في نطاق خلايا محدد. على سبيل المثال، <userinput
+>=SUM(B4:C10)</userinput
+> يحسب مجموع كل القيم في نطاق الخلايا B4 إلى C10.</para>
+<para
+>إذا عرضت &sheets; <keycap
+>#VALUE!</keycap
+> عند إدخال صيغتك، فهذا يعني عادةً أنها لا تستطيع فهم ما أدخلته، ولكن إذا انتهى صف الرموز بسهم أحمر صغير، فهذا يعني فقط أن الخلية ليست عريضة بما يكفي لعرض النتيجة الكاملة، وفي هذه الحالة يجب إما جعل الخلية (الخلايا) أوسع أو تغيير <link linkend="formatdata"
+>تنسيقها</link
+> بحيث تتناسب النتيجة بشكل صحيح.</para>
+
+<sect2 id="recalc">
+<title
+>إعادة الحساب</title>
+<para
+>إذا كان مربع <guilabel
+>إعادة الحساب آلي</guilabel
+> في مربع حوار <menuchoice
+><guimenu
+>تنسيق</guimenu
+> <guisubmenu
+>ورقة</guisubmenu
+><guisubmenu
+>خصائص الورقة</guisubmenu
+> </menuchoice
+> مُحدَّدًا، فستُعيد &sheets; حساب قيم الخلايا كلما تغير أي شيء يؤثر عليها في الورقة.</para>
+<para
+>عندما لا يكون <guilabel
+>إعادة الحساب آلي</guilabel
+> مُحدَّدًا للورقة الحالية، يمكنك توجيه &sheets; لإجراء إعادة حساب في أي وقت باستخدام الخيار <guimenuitem
+>إعادة حساب الورقة</guimenuitem
+> أو <guimenuitem
+>إعادة حساب المستند</guimenuitem
+> في قائمة <guimenu
+>أدوات</guimenu
+> أو اختصاراتها <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+> </keycombo
+> أو <keysym
+>F9</keysym
+>.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sort">
+<title
+>فرز البيانات</title>
+<para
+>في المثال البسيط الموضح أدناه، تتكون البيانات من أسماء وبلدان عدد من الجبال مع ارتفاعها عن سطح البحر. يمكن لـ &sheets; فرز بيانات مثل هذه بطرق مختلفة.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>لقطة شاشة للبيانات المفروزة</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>قد نرغب في فرز البيانات بحيث تكون الأسماء بترتيب أبجدي. لفعل ذلك، حدد المنطقة المحتوية على البيانات (A2:C7 في هذه الحالة) واختر <guimenuitem
+>فرز...</guimenuitem
+> من قائمة <guimenu
+>بيانات</guimenu
+>. يفتح هذا مربع حوار <guilabel
+>فرز</guilabel
+>.</para
+> 
+<para
+>يُجرى الفرز أبجديًا رقميًا، والمبدئي حساس لحالة الأحرف، حيث تأتي الأرقام قبل الأحرف الكبيرة التي تأتي قبل الأحرف الصغيرة، بحيث تُفرز الخلايا المحتوية على الإدخالات <userinput
+>Cat</userinput
+> و<userinput
+>bar</userinput
+> و<userinput
+>77</userinput
+> و<userinput
+>Bat</userinput
+> بالترتيب التالي: <emphasis
+>77 Bat Cat bar</emphasis
+>.</para>
+<!-- Obsolete, AFAICT (Phil)
+<para
+>The <guimenuitem
+>Sort Increasing</guimenuitem
+> and <guimenuitem
+>Sort 
+Decreasing</guimenuitem
+> options from the <guimenu
+>Data</guimenu
+> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice
+><guimenu
+>Data
+</guimenu
+><guimenuitem
+>Sort...</guimenuitem
+></menuchoice
+> to bring up the 
+<guilabel
+>Sort</guilabel
+> dialog box.</para>
+-->
+<para
+>في منطقة <guilabel
+>اتجاه</guilabel
+> من مربع الحوار هذا، اختر الفرز في صفوف أو أعمدة. إذا حددت مربع <guilabel
+>الصف الأول يحتوي على ترويسات الأعمدة</guilabel
+> أو <guilabel
+>العمود الأول يحتوي على ترويسات الصفوف</guilabel
+>، فلن تُدرج البيانات في الصف أو العمود الأول في عملية الفرز.</para>
+<para
+>تُفرز الصفوف أو الأعمدة بالترتيب المحدد، الذي يمكن تغييره باستخدام الزرين <guibutton
+>نقل لأعلى</guibutton
+> و<guibutton
+>نقل لأسفل</guibutton
+>. باستخدام المثال في لقطة الشاشة أعلاه، اختيار العمود B كمفتاح أول والعمود C كمفتاح ثانٍ سيفرز البيانات حسب البلد، ولكل بلد، حسب الارتفاع.</para>
+<para
+>ألغِ تحديد الخيار <guilabel
+>حساس لحالة الأحرف</guilabel
+> للحصول على فرز لا يعتمد على الأحرف الكبيرة، وبدّل ترتيب الفرز بين <guilabel
+>تصاعدي</guilabel
+> و<guilabel
+>تنازلي</guilabel
+> بالنقر على الخلايا في العمود <guilabel
+>ترتيب الفرز</guilabel
+>. </para>
+
+<para
+>يتيح لك امتداد <guilabel
+>تفاصيل 
+>
+></guilabel
+> من الحوار الفرز باستخدام ترتيب العناصر في قائمة مخصصة مثل يناير، فبراير... بدلًا من الترتيب الأبجدي الرقمي. يُنقل تنسيق الخلية مع محتوى الخلية، إذا حددت <guilabel
+>نسخ تنسيق الخلية (حدود، ألوان، نمط نص)</guilabel
+>. </para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title
+>حاسبة الملخص في شريط الحالة</title>
+<para
+>يُظهر الطرف الأيسر من شريط الحالة مبدئيًا ملخصًا للقيم في الخلية (الخلايا) المحددة. وفقًا لإعداد مربع التحرير والسرد <guilabel
+>الدالة المعروضة في شريط الحالة</guilabel
+> في صفحة <guilabel
+>واجهة</guilabel
+> من حوار تهيئة &sheets;، يمكن أن يكون الملخص:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>لا شيء</guilabel
+></term>
+<listitem
+><para
+>لا يُجرى أي حساب ملخص. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>المتوسط</guilabel
+></term>
+<listitem
+><para
+>القيمة المعروضة هي متوسط القيم في الخلايا المحددة. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>العدد</guilabel
+></term>
+<listitem
+><para
+>القيمة المعروضة هي عدد الخلايا المحتوية على قيم رقمية. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>عدد القيم</guilabel
+></term>
+<listitem
+><para
+>القيمة المعروضة هي عدد الخلايا غير الفارغة. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>الأقصى</guilabel
+></term>
+<listitem
+><para
+>القيمة المعروضة هي أقصى القيم في الخلايا المحددة. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>الأدنى</guilabel
+></term>
+<listitem
+><para
+>القيمة المعروضة هي أدنى القيم في الخلايا المحددة. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>المجموع</guilabel
+></term>
+<listitem
+><para
+>القيمة المعروضة هي مجموع القيم في الخلايا المحددة. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+<para
+>يمكن أيضًا تغيير طريقة الحساب بالنقر <mousebutton
+>الأيمن</mousebutton
+> على منطقة نتيجة حساب الملخص في شريط الحالة واختيار عنصر من القائمة المنبثقة.</para>
+
+</sect1>
+
+<sect1 id="saving">
+<title
+>حفظ عملك</title>
+<para
+>تحفظ &sheets; المستند الكامل، الذي قد يتضمن أكثر من ورقة عمل واحدة، كملف مستند واحد.</para>
+<para
+>إذا أنشأت مستندًا جديدًا، أو أردت حفظ مستند موجود باسم مختلف، فاستخدم <menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>حفظ باسم...</guimenuitem
+></menuchoice
+>. سيُظهر هذا مربع حوار &kde; الشائع <guilabel
+>حفظ المستند باسم</guilabel
+>. اختر المجلد حيث تريد حفظ المستند وأدخل اسم ملف مناسبًا في مربع النص <guilabel
+>الاسم</guilabel
+>. تُحفظ مستندات &sheets; عادةً آليًا بامتداد <filename
+>.ods</filename
+>، لا تحتاج إلى إضافة هذا إلى اسم الملف ولكن تأكد من أن اختيار <guilabel
+>مرشح</guilabel
+> مضبوط على <guilabel
+>جدول بيانات OpenDocument</guilabel
+>.</para>
+<para
+>لحفظ مستندك دون تغيير اسمه، استخدم فقط <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>حفظ</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>يمكنك أيضًا حفظ مستند &sheets; بتنسيق أجنبي باختيار التنسيق من مربع التحرير والسرد <guilabel
+>مرشح:</guilabel
+>.</para>
+<para
+>عند حفظ نسخة معدلة من مستند موجود، سيحتفظ &sheets; بالنسخة السابقة كملف نسخ احتياطي، مضيفًا <literal
+>~</literal
+> إلى نهاية اسم الملف.</para>
+<para
+>يمكن لـ &sheets; توفير بعض الحماية ضد فقدان عملك بسبب تعطل الحاسوب أو إغلاق &sheets; دون حفظ المستند الحالي. يفعل ذلك بحفظ أحدث إصدار من المستند الذي تعمل عليه آليًا كل بضع دقائق باستخدام اسم ملف معدل. تُحذف النسخة المحفوظة آليًا عادةً عند حفظ المستند لاحقًا، بحيث توجد فقط إذا كانت أحدث من النسخة المحفوظة يدويًا. عند فتح مستند، يتحقق &sheets; من وجود نسخة محفوظة آليًا، وإذا وجدها، سيعرض فتحها بدلًا من ذلك.</para>
+<para
+>تُحفظ المستندات المحفوظة آليًا باسم ملف من الشكل <filename
+>.yourfilename.autosave</filename
+> (لاحظ النقطة البادئة)، بحيث يُحفظ <filename
+>spread1.ods</filename
+> آليًا كـ <filename
+>.spread1.ods.autosave</filename
+>. ميزة الحفظ الآلي قابلة للضبط من قبل المستخدم في <link linkend="configopensave"
+>حوار الإعدادات</link
+>.</para>
+
+<sect2 id="templates">
+<title
+>القوالب</title>
+<para
+>إذا كنت ستُنشئ الكثير من المستندات المتشابهة، يمكنك توفير الوقت والجهد بإنشاء قالب أولًا ثم استخدامه كأساس للمستندات الفردية.</para>
+<para
+>لفعل ذلك، أنشئ أولًا مستندًا يحتوي على العناصر المشتركة، ثم احفظه كقالب باختيار <menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>أنشئ قالبًا من المستند</guimenuitem
+></menuchoice
+>. يفتح هذا حوار <guilabel
+>إنشاء قالب</guilabel
+>. أدخل اسمًا للقالب الجديد في مربع النص <guilabel
+>الاسم:</guilabel
+> واضغط <guibutton
+>موافق</guibutton
+>. في المرة التالية التي تبدأ فيها مستندًا جديدًا باختيار <menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>جديد</guimenuitem
+></menuchoice
+> أو عند بدء &sheets; لاحقًا، ستمنحك نافذة حوار البدء خيار إنشاء المستند الجديد من القالب.</para>
+<para
+>يسمح لك حوار <guilabel
+>إنشاء قالب</guilabel
+> أيضًا باختيار صورة مختلفة لعرضها فوق اسم القالب في نافذة حوار البدء، ويسمح بحفظ القوالب تحت أسماء مجموعات مختلفة، ستظهر كصفحات مختلفة في الحوار.</para>
+<para
+>تُخزَّن القوالب كملفات <literal role="extension"
+>.kst</literal
+> تحت <filename
+>~/.kde/share/apps/tables/templates/</filename
+>. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="printing">
+<title
+>طباعة جدول بيانات</title>
+<para
+>تتم طباعة جدول البيانات أساسًا باختيار <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>طباعة...</guimenuitem
+></menuchoice
+> مما يظهر حوار &kde; الشائع <guilabel
+>طباعة</guilabel
+> حيث يمكنك اختيار، من بين خيارات أخرى، الطابعة المراد استخدامها، عدد النسخ، وما إذا كانت كل الصفحات أو الصفحات المحددة فقط ستُطبع.</para>
+<para
+>بشكل مبدئي، سيطبع &sheets; كل العناصر في ورقة العمل الحالية، لكن يمكنك تقييد ذلك بتحديد المنطقة التي تريد طباعتها أولًا ثم اختيار <guimenuitem
+>حدد نطاق الطباعة</guimenuitem
+> من القائمة الفرعية <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guisubmenu
+>نطاق الطباعة</guisubmenu
+> </menuchoice
+>.</para>
+<para
+>سيطبع &sheets; عدد الصفحات اللازمة لتضمين كل العناصر في ورقة العمل الحالية. يمكنك رؤية كيفية تقسيم ورقة العمل إلى صفحات منفصلة للطباعة بسرعة بتحديد مربع <menuchoice
+> <guimenu
+>عرض</guimenu
+> <guimenuitem
+>حدود الصفحات</guimenuitem
+></menuchoice
+>. ستُحدد حدود كل صفحة مطبوعة بخطوط ملونة في ورقة العمل.</para>
+
+<para
+>لعرض أكثر تفصيلًا لما سيُرسل إلى الطابعة، بما في ذلك أي شيء طلبت تضمينه في ترويسات وتذييلات الصفحات (انظر أدناه)، اختر <menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>معاينة الطباعة...</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>لتحسين مظهر المخرجات المطبوعة، يمكنك تغيير الخطوط والألوان والحدود وأحجام الخلايا في ورقة العمل، انظر قسم <link linkend="formatspread"
+>تنسيق جدول البيانات</link
+> لمزيد من التفاصيل حول كيفية فعل ذلك.</para>
+
+<para
+>يمكنك أيضًا استخدام حوار <guilabel
+>تخطيط الصفحة</guilabel
+>، الذي يُستدعى باختيار <menuchoice
+><guimenu
+>تنسيق</guimenu
+><guimenuitem
+>تخطيط الصفحة...</guimenuitem
+></menuchoice
+>، لتغيير اتجاه الصفحات المطبوعة، حجم الورق (يجب أن يكون مناسبًا للطابعة) وحجم حدود الصفحة.</para>
+<para
+>يوفر <guilabel
+>الورقة</guilabel
+> المزيد من الخيارات. يتيح لك قسم <guilabel
+>إعدادات الطباعة</guilabel
+> اختيار طباعة الشبكة ومؤشرات التعليقات ومؤشرات الصيغ والكائنات والرسوم البيانية أم لا. يسمح لك قسم <guilabel
+>التكرارات في كل صفحة</guilabel
+> بتكرار عمود (أو أعمدة) أو صف (أو صفوف) محدد في كل صفحة مطبوعة. في قسم <guilabel
+>التحجيم</guilabel
+> يمكنك ضبط عامل تحجيم أو حدود الصفحات للطباعة.</para>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
