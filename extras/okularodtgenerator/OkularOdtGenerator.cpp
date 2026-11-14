@@ -9,7 +9,6 @@
 #include "OkularOdtGenerator.h"
 
 #include <QDebug>
-#include <QDomNode>
 #include <QImage>
 #include <QMimeDatabase>
 #include <QMimeType>
@@ -128,10 +127,9 @@ bool OkularOdtGenerator::loadDocument(const QString &fileName, QVector<Okular::P
     m_documentInfo.set(Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator"));
 
     // ToC
-    QDomNode parentNode = m_documentSynopsis;
+    Okular::DocumentSynopsis parentNode = m_documentSynopsis;
 
-    QStack<QPair<int, QDomNode>> parentNodeStack;
-    parentNodeStack.push(qMakePair(0, parentNode));
+    QStack<QPair<int, Okular::DocumentSynopsis::ElementBuilder>> parentNodeStack;
 
     QTextDocument *textDocument = m_doc->mainFrameSet()->document();
     KoTextDocumentLayout *textDocumentLayout = static_cast<KoTextDocumentLayout *>(textDocument->documentLayout());
@@ -148,10 +146,12 @@ bool OkularOdtGenerator::loadDocument(const QString &fileName, QVector<Okular::P
             continue;
         }
 
+        std::optional<Okular::DocumentSynopsis::ElementBuilder> parentNode;
+
         Okular::DocumentViewport viewport = calculateViewport(block, textDocumentLayout);
 
-        QDomElement item = m_documentSynopsis.createElement(block.text());
-        item.setAttribute("Viewport", viewport.toString());
+        auto item = Okular::DocumentSynopsis::ElementBuilder(block.text());
+        item.setViewPort(viewport);
 
         // we need a parent, which has to be at a higher heading level than this heading level
         // so we just work through the stack
@@ -166,8 +166,12 @@ bool OkularOdtGenerator::loadDocument(const QString &fileName, QVector<Okular::P
                 parentNodeStack.pop();
             }
         }
-        parentNode.appendChild(item);
-        parentNodeStack.push(qMakePair(blockLevel, QDomNode(item)));
+        if (parentNode) {
+            parentNode->addChild(Okular::DocumentSynopsis::Element {item});
+        } else {
+            m_documentSynopsis.addChild(Okular::DocumentSynopsis::Element {item});
+        }
+        parentNodeStack.push(qMakePair(blockLevel, item));
     }
 
     return true;
@@ -283,5 +287,5 @@ Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo(const QSet<Okular:
 
 const Okular::DocumentSynopsis *OkularOdtGenerator::generateDocumentSynopsis()
 {
-    return m_documentSynopsis.hasChildNodes() ? &m_documentSynopsis : nullptr;
+    return m_documentSynopsis.children().isEmpty() ? nullptr : &m_documentSynopsis;
 }
