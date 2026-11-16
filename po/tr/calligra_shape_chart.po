@@ -6,21 +6,21 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Server Acim <sacim@kde.org.tr>, 2008.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2025-09-04 14:58+0300\n"
-"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
+"PO-Revision-Date: 2026-11-15 19:57+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -82,7 +82,7 @@ msgstr "Etiketleri Göster"
 #: AxesConfigWidget.ui:72
 #, kde-format
 msgid "Font"
-msgstr "Yazıtipi"
+msgstr "Yazı Tipi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
@@ -663,7 +663,7 @@ msgstr "Elle Alt Adımlama Genişliğini Ayarla"
 #: commands/AxisCommand.cpp:228
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr "Eksen Etiketi Yazıtipini Ayarla"
+msgstr "Eksen Etiketi Yazı Tipini Ayarla"
 
 #: commands/AxisCommand.cpp:234
 msgctxt "(qtundo-format)"
@@ -863,12 +863,12 @@ msgstr "Lejant Başlığını Ayarla"
 #: commands/LegendCommand.cpp:81
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr "Lejant Yazıtipini Ayarla"
+msgstr "Lejant Yazı Tipini Ayarla"
 
 #: commands/LegendCommand.cpp:88
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr "Lejant Yazıtipi Puntosunu Ayarla"
+msgstr "Lejant Yazı Tipi Puntosunu Ayarla"
 
 #: commands/LegendCommand.cpp:95
 msgctxt "(qtundo-format)"
@@ -1366,7 +1366,7 @@ msgstr "Sü&tunlardaki veri kümeleri"
 #: dialogs/FontEditorDialog.cpp:18
 #, kde-format
 msgid "Select Font"
-msgstr "Yazıtipi Seç"
+msgstr "Yazı Tipi Seç"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
 #: dialogs/FormatErrorBarDialog.ui:29
@@ -1698,7 +1698,7 @@ msgstr "Yönelim"
 #: LegendConfigWidget.ui:147
 #, kde-format
 msgid "Fonts..."
-msgstr "Yazıtipleri…"
+msgstr "Yazı Tipleri…"
 
 #: PieConfigWidget.cpp:98
 #, kde-format

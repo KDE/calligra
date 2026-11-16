@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-11-10 21:38+0300\n"
+"PO-Revision-Date: 2026-11-15 19:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -459,7 +459,7 @@ msgstr "Stil"
 msgid ""
 "Select this option to use the default fonts and colors for the HTML page."
 msgstr ""
-"HTML sayfası için öntanımlı yazıtipi ve renkleri kullanmak için bu seçeneği "
+"HTML sayfası için öntanımlı yazı tipi ve renkleri kullanmak için bu seçeneği "
 "seçin."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
@@ -647,7 +647,7 @@ msgstr "Taslak"
 #: sheets/latex/export/latexexportwidget.ui:154
 #, kde-format
 msgid "Default font size:"
-msgstr "Öntanımlı yazıtipi puntosu:"
+msgstr "Öntanımlı yazı tipi puntosu:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
 #: sheets/latex/export/latexexportwidget.ui:186
@@ -796,7 +796,7 @@ msgstr "Paylaşılan dizilerin bildirilen sayısı çok küçük (%1)"
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:564
 #, kde-format
 msgid "Declared number of font styles too small (%1)"
-msgstr "Yazıtipi biçimlerinin bildirilen sayısı çok küçük (%1)"
+msgstr "Yazı tipi biçimlerinin bildirilen sayısı çok küçük (%1)"
 
 #: sheets/xlsx/XlsxXmlStylesReader.cpp:920
 #, kde-format

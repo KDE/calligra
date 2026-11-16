@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-11-10 21:38+0300\n"
+"PO-Revision-Date: 2026-11-15 19:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -13311,7 +13311,7 @@ msgstr "Etkinleştir"
 #: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:139
 #, kde-format
 msgid "Font"
-msgstr "Yazıtipi"
+msgstr "Yazı Tipi"
 
 #. i18n: ectx: ToolBar (colorAndBorderToolBar)
 #: part/calligrasheets.rc:246
@@ -16957,34 +16957,34 @@ msgstr "Değiştir"
 #: ui/actions/Font.cpp:30
 #, kde-format
 msgid "Select Font..."
-msgstr "Yazıtipi Seç…"
+msgstr "Yazı Tipi Seç…"
 
 #: ui/actions/Font.cpp:30
 #, kde-format
 msgid "Set the cell font"
-msgstr "Hücre yazıtipini ayarla"
+msgstr "Hücre yazı tipini ayarla"
 
 #: ui/actions/Font.cpp:59 ui/actions/Font.cpp:106 ui/actions/Style.cpp:93
 #: ui/actions/Style.cpp:129 ui/actions/Style.cpp:165 ui/actions/Style.cpp:194
 #: ui/actions/Style.cpp:495 ui/actions/Style.cpp:519
 msgctxt "(qtundo-format)"
 msgid "Change Font"
-msgstr "Yazıtipini Değiştir"
+msgstr "Yazı Tipini Değiştir"
 
 #: ui/actions/Font.cpp:77
 #, kde-format
 msgid "Select Font Size"
-msgstr "Yazıtipi Puntosu Seç"
+msgstr "Yazı Tipi Puntosu Seç"
 
 #: ui/actions/Font.cpp:77
 #, kde-format
 msgid "Set the cell font size"
-msgstr "Hücre yazıtipi puntosunu ayarla"
+msgstr "Hücre yazı tipi puntosunu ayarla"
 
 #: ui/actions/Font.cpp:86
 #, kde-format
 msgid "Font Size"
-msgstr "Yazıtipi Puntosu"
+msgstr "Yazı Tipi Puntosu"
 
 #: ui/actions/Font.cpp:125
 #, kde-format
@@ -17587,12 +17587,12 @@ msgstr "Zaman Olarak Biçimlendir"
 #: ui/actions/Style.cpp:480
 #, kde-format
 msgid "Increase Font Size"
-msgstr "Yazıtipi Puntosunu Artır"
+msgstr "Yazı Tipi Puntosunu Artır"
 
 #: ui/actions/Style.cpp:504
 #, kde-format
 msgid "Decrease Font Size"
-msgstr "Yazıtipi Puntosunu Azalt"
+msgstr "Yazı Tipi Puntosunu Azalt"
 
 #: ui/actions/Style.cpp:530
 #, kde-format
@@ -18224,10 +18224,10 @@ msgid ""
 "The default font is set for all cells in the Format -> Style Manager menu "
 "with the currently used style."
 msgstr ""
-"Burada geçerli hücre metni için yazıtipi stili, boyutu ve renginin yanı sıra "
-"altı çizili veya üzeri çizili ek özellikleri de seçebilirsiniz. Sayfanın "
-"altında seçtiğiniz metin biçiminin önizlemesini görebilirsiniz.\n"
-"Tüm hücreler için öntanımlı yazıtipi Biçim → Stil Yöneticisi bağlantısından "
+"Burada geçerli hücre metni için yazı tipi stili, boyutu ve renginin yanı "
+"sıra altı çizili veya üzeri çizili ek özellikleri de seçebilirsiniz. "
+"Sayfanın altında seçtiğiniz metin biçiminin önizlemesini görebilirsiniz.\n"
+"Tüm hücreler için öntanımlı yazı tipi Biçim → Stil Yöneticisi bağlantısından "
 "atanır."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
@@ -18240,10 +18240,10 @@ msgid ""
 "settings for each cell. Changing to Roman for example will change all the "
 "selected cells style text to Roman."
 msgstr ""
-"Seçili hücreler için yazıtipi stilini seçin. Başka stillerde birden fazla "
+"Seçili hücreler için yazı tipi stilini seçin. Başka stillerde birden fazla "
 "hücre seçtiğinizde görüntülenen stil Değişken (Değişiklik Yok) olarak atanır "
 "ve onu öyle bırakmak her hücre için mevcut stili değişmeden bırakır. Örneğin "
-"Roman olarak değiştirirseniz seçili bütün hücrelerin yazıtipi stili Roman "
+"Roman olarak değiştirirseniz seçili bütün hücrelerin yazı tipi stili Roman "
 "olarak değiştirilir."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
@@ -18271,11 +18271,11 @@ msgid ""
 "weight settings for each cell. Changing to Bold for example will change all "
 "the selected cells font weight to Bold."
 msgstr ""
-"Seçili hücreler için yazıtipi ağırlığını seçin. Farklı yazıtipi ağırlığına "
+"Seçili hücreler için yazı tipi ağırlığını seçin. Farklı yazı tipi ağırlığına "
 "sahip hücreler seçtiğinizde görüntülenen ağırlık Değişken (Değişiklik Yok) "
-"olarak atanır ve onu öyle bırakmak her hücre için mevcut yazıtipi ağırlığı "
+"olarak atanır ve onu öyle bırakmak her hücre için mevcut yazı tipi ağırlığı "
 "değişmeden bırakır. Örneğin Kalın olarak değiştirirseniz seçili bütün "
-"hücrelerin yazıtipi ağırlığı Kalın olarak değiştirilir."
+"hücrelerin yazı tipi ağırlığı Kalın olarak değiştirilir."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:78
@@ -18341,7 +18341,7 @@ msgstr "Üzeri çizili"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr "Yazıtipi puntosunu seçin."
+msgstr "Yazı tipi puntosunu seçin."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -18350,7 +18350,7 @@ msgid ""
 "This box lists all your available font families. Click on one family to set "
 "it in the current cell."
 msgstr ""
-"Bu kutu kullanılabilir tüm yazıtipi ailelerini listeler. Geçerli hücrede "
+"Bu kutu kullanılabilir tüm yazı tipi ailelerini listeler. Geçerli hücrede "
 "kulllanmak için birini seçin."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
@@ -18366,7 +18366,7 @@ msgstr "Önizleme"
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
-"Geçerli hücrede kullanmayı seçtiğiniz yazıtipinin ön izlemesini "
+"Geçerli hücrede kullanmayı seçtiğiniz yazı tipinin ön izlemesini "
 "görebilirsiniz."
 
 #: ui/dialogs/LayoutDialog.cpp:116

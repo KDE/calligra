@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-11-10 21:38+0300\n"
+"PO-Revision-Date: 2026-11-15 19:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -489,7 +489,7 @@ msgstr "Değişiklikleri Göster"
 #: dialogs/CharacterGeneral.cpp:60 dialogs/FormattingPreview.cpp:38
 #, kde-format
 msgid "Font"
-msgstr "Yazıtipi"
+msgstr "Yazı Tipi"
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalTab)
 #: dialogs/CharacterGeneral.ui:33
@@ -1039,12 +1039,12 @@ msgstr "Otomatik tireleme"
 #: dialogs/FontDia.cpp:34
 #, kde-format
 msgid "Select Font"
-msgstr "Yazıtipi Seç"
+msgstr "Yazı Tipi Seç"
 
 #: dialogs/FontDia.cpp:70
 msgctxt "(qtundo-format)"
 msgid "Font"
-msgstr "Yazıtipi"
+msgstr "Yazı Tipi"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
@@ -1890,7 +1890,7 @@ msgstr " %"
 #: dialogs/ParagraphIndentSpacing.ui:129
 #, kde-format
 msgid "Use Font Metrics"
-msgstr "Yazıtipi ölçülerini kullan"
+msgstr "Yazı tipi ölçülerini kullan"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:136
@@ -2016,7 +2016,7 @@ msgstr "Başlık ekle"
 #: dialogs/SimpleCharacterWidget.cpp:53
 #, kde-format
 msgid "Change font format"
-msgstr "Yazıtipi biçimini değiştir"
+msgstr "Yazı tipi biçimini değiştir"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
 #: dialogs/SimpleCitationBibliographyWidget.ui:26
@@ -2701,17 +2701,17 @@ msgstr "Listeyi aç/kapat veya geçerli düzeyin biçimini değiştir"
 #: TextTool.cpp:308
 #, kde-format
 msgid "Increase Font Size"
-msgstr "Yazıtipi Puntosunu Büyüt"
+msgstr "Yazı Tipi Puntosunu Büyüt"
 
 #: TextTool.cpp:313
 #, kde-format
 msgid "Decrease Font Size"
-msgstr "Yazıtipi Puntosunu Küçült"
+msgstr "Yazı Tipi Puntosunu Küçült"
 
 #: TextTool.cpp:319
 #, kde-format
 msgid "Font Family"
-msgstr "Yazıtipi Ailesi"
+msgstr "Yazı Tipi Ailesi"
 
 #: TextTool.cpp:323
 #, kde-format
@@ -2761,12 +2761,12 @@ msgstr "Bu noktadan sonraki bütün metin sonraki sayfaya taşınacaktır."
 #: TextTool.cpp:361
 #, kde-format
 msgid "Font..."
-msgstr "Yazıtipi…"
+msgstr "Yazı Tipi…"
 
 #: TextTool.cpp:364
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
-msgstr "Karakter boyutu, kalınlığı, yatıklığı, yazıtipini vb. değiştir."
+msgstr "Karakter boyutu, kalınlığı, yatıklığı, yazı tipini vb. değiştir."
 
 #: TextTool.cpp:365
 #, kde-format
@@ -2776,7 +2776,7 @@ msgstr "Şimdi seçili olan karakterlerin niteliklerini değiştir."
 #: TextTool.cpp:368
 #, kde-format
 msgid "Font Size"
-msgstr "Yazıtipi Puntosu"
+msgstr "Yazı Tipi Puntosu"
 
 #: TextTool.cpp:374
 #, kde-format
@@ -2939,7 +2939,7 @@ msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
 "be changed using the dialog box.</p>"
 msgstr ""
-"<p>Biçimlerin yazıtipi ve paragraf niteliklerini değiştir.</p><p>Çoklu "
+"<p>Biçimlerin yazı tipi ve paragraf niteliklerini değiştir.</p><p>Çoklu "
 "biçimler iletişim penceresi kullanılarak değiştirilebilir.</p>"
 
 #: TextTool.cpp:474

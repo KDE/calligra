@@ -1,6 +1,6 @@
 # translation of kofficefilters.po to Slovenian
 # Translation of kofficefilters.po to Slovenian
-# $Id: calligrafilters.po 1746075 2026-09-10 01:32:43Z scripty $
+# $Id$
 # $Source$
 # Gregor Rakar <gregor.rakar@kiss.si>, 2004.
 # Andrej Vernekar <andrej.vernekar@moj.net>, 2005, 2006, 2007, 2012, 2013.

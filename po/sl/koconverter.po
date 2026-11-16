@@ -1,7 +1,7 @@
 # translation of koconverter.po to sloveanian
 # Translation of koconverter.po to Slovenian
 # Copyright (C) 2002, 2004, 2005 Free Software Foundation, Inc.
-# $Id: koconverter.po 1723087 2025-11-17 12:44:32Z scripty $
+# $Id$
 # $Source$
 #
 # Gregor Rakar <gregor.rakar@kiss.si>, 2002, 2004.
