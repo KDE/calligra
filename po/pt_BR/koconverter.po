@@ -4,7 +4,7 @@
 #
 # Lisiane Sztoltz Teixeira <lisiane@conectiva.com.br>, 2004.
 # Marcus Gama <marcus_gama@uol.com.br>, 2004.
-# Marcus Gama <marcus.gama@gmail.com>, 2006, 2007, 2011.
+# Marcus Gama <marcus.gama@kde.org>, 2006, 2007, 2011.
 # Aracele Torres <araceletorres@gmail.com>, 2010.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2012, 2015.
 msgid ""
@@ -30,7 +30,7 @@ msgstr "Marcus Gama, André Marcelo Alvarenga"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "marcus.gama@gmail.com, alvarenga@kde.org"
+msgstr "marcus.gama@kde.org, alvarenga@kde.org"
 
 #: calligraconverter.cpp:179
 #, kde-format
@@ -144,7 +144,7 @@ msgstr "*** A conversão falhou! ***"
 #~| msgid "Your emails"
 #~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
-#~ msgstr "marcus.gama@gmail.com, alvarenga@kde.org"
+#~ msgstr "marcus.gama@kde.org, alvarenga@kde.org"
 
 #, fuzzy
 #~| msgid "CalligraConverter"
