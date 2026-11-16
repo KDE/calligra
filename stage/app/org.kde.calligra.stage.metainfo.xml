@@ -411,7 +411,7 @@
           <li xml:lang="pt-BR">Correção da seleção de fontes e preservação das famílias de fontes ao carregar estilos e formatar texto.</li>
           <li xml:lang="ru">Исправлен выбор шрифта; при загрузке стилей и форматировании текста гарнитуры шрифтов больше не теряются.</li>
           <li xml:lang="sl">Popravi izbiro pisave in ohrani družine pisav pri nalaganju slogov ter oblikovanju besedila.</li>
-          <li xml:lang="tr">Stilleri ve metin biçimlendirmesini yüklerken yazıtipi seçimi ve yazıtipi aileleri artık korunuyor.</li>
+          <li xml:lang="tr">Stilleri ve metin biçimlendirmesini yüklerken yazı tipi seçimi ve yazı tipi aileleri artık korunuyor.</li>
           <li xml:lang="uk">Виправлено вибір шрифтів і збереження гарнітури шрифтів під час завантаження стилів та форматування тексту.</li>
           <li>Improve undo and redo when moving path points and control points.</li>
           <li xml:lang="ar">تحسين وظيفتي التراجع والإعادة عند تحريك نقاط المسار ونقاط التحكم.</li>
