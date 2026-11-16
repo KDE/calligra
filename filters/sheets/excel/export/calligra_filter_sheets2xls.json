@@ -2,8 +2,8 @@
     "KPlugin": {
         "Name": "KSpread Microsoft Excel Export Filter",
         "Name[ar]": "مرشح تصدير Microsoft Excel لـ KSpread",
-        "Name[ca@valencia]": "Filtre d'importació Microsoft Excel de KSpread",
-        "Name[ca]": "Filtre d'importació Microsoft Excel del KSpread",
+        "Name[ca@valencia]": "Filtre d'exportació Microsoft Excel de KSpread",
+        "Name[ca]": "Filtre d'exportació Microsoft Excel del KSpread",
         "Name[cs]": "Exportní filtr Microsoft Excel pro KSpread",
         "Name[de]": "KSpread MS-Excel-Exportfilter",
         "Name[el]": "Φίλτρο εξαγωγής KSpread Microsoft Excel",
