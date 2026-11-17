@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-11-15 19:58+0300\n"
+"PO-Revision-Date: 2026-11-16 19:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18358,7 +18358,7 @@ msgstr ""
 #: ui/dialogs/LayoutPage_Float.cpp:133 ui/dialogs/LayoutPage_Pattern.cpp:142
 #, kde-format
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön İzleme"
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
