@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-11-15 19:56+0300\n"
+"PO-Revision-Date: 2026-11-16 18:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1645,7 +1645,7 @@ msgstr "Resim"
 #: main/KoTemplateCreateDia.cpp:148
 #, kde-format
 msgid "&Preview"
-msgstr "&Önizleme"
+msgstr "Ö&n İzle"
 
 #: main/KoTemplateCreateDia.cpp:153
 #, kde-format
@@ -1665,7 +1665,7 @@ msgstr "Yeni şablonu öntanımlı olarak kullan"
 #: main/KoTemplateCreateDia.cpp:304
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "Var olan '%1' şablonunun üzerine gerçekten yazmak istiyor musunuz?"
+msgstr "Var olan “%1” şablonunun üzerine yazmayı gerçekten istiyor musunuz?"
 
 #: main/KoTemplateCreateDia.cpp:416 main/KoTemplateCreateDia.cpp:421
 #, kde-format
