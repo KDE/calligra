@@ -3914,12 +3914,12 @@ msgstr "Canvia el format de les vores"
 #: text/KoTextEditor.cpp:1198
 msgctxt "(qtundo-format)"
 msgid "Insert Table Of Contents"
-msgstr "Inserix una taula de contingut"
+msgstr "Inserix un índex de continguts"
 
 #: text/KoTextEditor.cpp:1237
 msgctxt "(qtundo-format)"
 msgid "Modify Table Of Contents"
-msgstr "Modifica la taula de contingut"
+msgstr "Modifica l'índex de continguts"
 
 #: text/KoTextEditor.cpp:1254 text/KoTextEditor.cpp:1256
 #: text/KoTextEditor.cpp:1275

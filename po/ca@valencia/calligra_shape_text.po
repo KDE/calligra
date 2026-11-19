@@ -522,7 +522,7 @@ msgstr "Estil del pare:"
 #: dialogs/CharacterGeneral.ui:84
 #, kde-format
 msgid "Include in table of contents"
-msgstr "Inclou en la taula de contingut"
+msgstr "Inclou a l'índex de continguts"
 
 #: dialogs/CharacterHighlighting.cpp:303 dialogs/CharacterHighlighting.cpp:314
 #, kde-format
@@ -1196,7 +1196,7 @@ msgstr "L'adreça d'interés no existix"
 #: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
-msgstr "S'està recuperant el títol: 0% complet"
+msgstr "S'està recuperant el títol: 0 % complet"
 
 #: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
@@ -2301,7 +2301,7 @@ msgstr "Ajusta a la disponibilitat dels voltants"
 #: dialogs/TableOfContentsConfigure.cpp:61
 #, kde-format
 msgid "Table of Contents - Configure"
-msgstr "Taula de contingut – Configura"
+msgstr "Índex de continguts – Configura"
 
 #: dialogs/TableOfContentsConfigure.cpp:63
 #, kde-format
@@ -2386,7 +2386,7 @@ msgstr "Estil"
 #: dialogs/TableOfContentsStyleConfigure.cpp:25
 #, kde-format
 msgid "Table of Contents - Configure Styles"
-msgstr "Taula de contingut – Configura els estils"
+msgstr "Índex de continguts – Configura els estils"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:29
 #, kde-format
@@ -2408,12 +2408,12 @@ msgstr "Desactivat"
 #: dialogs/TableOfContentsTemplate.cpp:27
 #, kde-format
 msgid "Table Of Contents"
-msgstr "Taula de contingut"
+msgstr "Índex de continguts"
 
 #: ReferencesTool.cpp:116
 #, kde-format
 msgid "Insert a Table of Contents into the document."
-msgstr "Inserix una taula de contingut en el document."
+msgstr "Inserix un índex de continguts en el document."
 
 #: ReferencesTool.cpp:118 TextTool.cpp:407
 #, kde-format
@@ -2423,7 +2423,7 @@ msgstr "Inserix una personalització…"
 #: ReferencesTool.cpp:120
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
-msgstr "Inserix una taula de contingut personalitzada en el document."
+msgstr "Inserix un índex de continguts personalitzat en el document."
 
 #: ReferencesTool.cpp:122
 #, kde-format
@@ -2433,7 +2433,7 @@ msgstr "Configura…"
 #: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure the Table of Contents"
-msgstr "Configura la taula de contingut"
+msgstr "Configura l'índex de continguts"
 
 #: ReferencesTool.cpp:127
 #, kde-format
