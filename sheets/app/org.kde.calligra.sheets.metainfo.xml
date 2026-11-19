@@ -349,6 +349,7 @@
           <li xml:lang="ca">Millora la compatibilitat amb OpenDocument 1.4 i afegeix suport per obrir fulls de càlcul OpenDocument plans (FODS).</li>
           <li xml:lang="ca-valencia">Millora la compatibilitat amb OpenDocument 1.4 i afig suport per a obrir fulls de càlcul OpenDocument plans (FODS).</li>
           <li xml:lang="cs">Vylepšená kompatibilita s formátem OpenDocument 1.4 a přidána podpora pro otevírání tabulkových souborů ve formátu OpenDocument (FODS).</li>
+          <li xml:lang="es">Mejorar la compatibilidad con OpenDocument 1.4 y permitir la apertura de hojas de cálculo planas de OpenDocument (FODS).</li>
           <li xml:lang="ka">გაუმჯობესდა OpenDocument 1.4-თან თავსებადობა და დაემატა ბრტყელი OpenDocument-ის ელცხრილების (FODS) მხარდაჭერა.</li>
           <li xml:lang="nl">Verbeter de compatibiliteit met OpenDocument 1.4 en voeg ondersteuning toe voor het openen van 'platte' OpenDocument-rekenbladen (FODS).</li>
           <li xml:lang="pt-BR">Melhoria da compatibilidade com o OpenDocument 1.4 e adição do suporte para a abertura de planilhas OpenDocument em formato plano (FODS).</li>
@@ -361,6 +362,7 @@
           <li xml:lang="ca">Amplia el suport de funcions de full de càlcul, incloent-hi LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC i YIELD, i millora la compatibilitat amb el LibreOffice.</li>
           <li xml:lang="ca-valencia">Amplia el suport de funcions de full de càlcul, incloent-hi LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC i YIELD, i millora la compatibilitat amb LibreOffice.</li>
           <li xml:lang="cs">Rozšíření podpory funkcí tabulkového procesoru, včetně funkcí LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC a YIELD, a zlepšení kompatibility s LibreOffice.</li>
+          <li xml:lang="es">Expandir la compatibilidad de funciones de hoja de cálculo, incluidas LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC y YIELD, así como mejorar la compatibilidad con LibreOffice.</li>
           <li xml:lang="ka">გაფართოვდა ელცხრილის ფუნქციების მხარდაჭერა LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC და YIELD-ის ჩათვლით და გაუმჯობესდა LibreOffice-სთან თავსებადობა.</li>
           <li xml:lang="nl">Breid de ondersteuning voor rekenbladfuncties uit – waaronder LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC en YIELD – en verbeter de compatibiliteit met LibreOffice.</li>
           <li xml:lang="pt-BR">Ampliação do suporte a funções de planilha, incluindo LINEST, LOGEST, FORECAST, CHISQDIST, CHISQINV, PRICE, PRICEDISC e YIELD, e melhoria da compatibilidade com o LibreOffice.</li>
@@ -373,6 +375,7 @@
           <li xml:lang="ca">Corregeix l'avaluació de fórmules, la importació de matrius, els càlculs de matrius i el càlcul de fórmules dependents. Millora el rendiment dels càlculs i evita fallades, bucles infinits i divisió per zero en funcions financeres.</li>
           <li xml:lang="ca-valencia">Corregix l'avaluació de fórmules, la importació de matrius, els càlculs de matrius i el càlcul de fórmules dependents. Millora el rendiment dels càlculs i evita fallades, bucles infinits i divisió per zero en funcions financeres.</li>
           <li xml:lang="cs">Opraveno vyhodnocování vzorců, import matic, výpočty s poli a přepočítávání závislých vzorců. Zlepšen výkon výpočtů a zabráněno pádům aplikace, nekonečným smyčkám a dělení nulou ve finančních funkcích.</li>
+          <li xml:lang="es">Corregir la evaluación de fórmulas, la importación de matrices, los cálculos de matrices y el recálculo de fórmulas dependientes. Mejorar el rendimiento de los cálculos y prevenir fallos de la aplicación, bucles infinitos y división por cero en funciones financieras.</li>
           <li xml:lang="ka">გასწორდა ფორმულის გამოთვლა, მატრიცის შემოტანა, მასივის გამოთვლა და დამოკიდებული ფორმულების თავიდან გამოთვლა. გაუმჯობესდა გამოთვლის წარმადობა და პროგრამის ავარიული დასრულების თავიდან არიდება, უსასრულო ციკლები და ნულზე გაყოფა ფინანსურ ფუნქციებში.</li>
           <li xml:lang="nl">Corrigeer de evaluatie van formules, het importeren van matrices, berekeningen met arrays en de herberekening van afhankelijke formules. Verbeter de rekenprestaties en voorkom crashes, oneindige lussen en delingen door nul in financiële functies.</li>
           <li xml:lang="pt-BR">Correção da avaliação de fórmulas, a importação de matrizes, os cálculos com arrays e o recálculo de fórmulas dependentes. Melhoria do desempenho dos cálculos e evitar travamentos, loops infinitos e divisões por zero em funções financeiras.</li>
@@ -385,6 +388,7 @@
           <li xml:lang="ca">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptatge AES-256 als fitxers OpenDocument.</li>
           <li xml:lang="ca-valencia">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptació AES-256 als fitxers OpenDocument.</li>
           <li xml:lang="cs">Obnovení ochrany heslem v okně Vlastnosti dokumentu a podpora šifrování AES-256 pro soubory OpenDocument.</li>
+          <li xml:lang="es">Restaurar la protección por contraseña en las propiedades del documento y admitir el cifrado AES-256 para archivos de OpenDocument.</li>
           <li xml:lang="ka">პაროლით დაცვის აღდგენა დოკუმენტის თვისებების ფანჯარაში და AES-256 დაშიფვრის მხარდაჭერა OpenDocument-ის ფაილებისთვის.</li>
           <li xml:lang="nl">Herstel wachtwoordbeveiliging in documenteigenschappen en voeg ondersteuning toe voor AES-256-versleuteling voor OpenDocument-bestanden.</li>
           <li xml:lang="pt-BR">Restauração da proteção por senha nas Propriedades do Documento e suporte à criptografia AES-256 para arquivos OpenDocument.</li>
@@ -397,6 +401,7 @@
           <li xml:lang="ca">Corregeix fuites de memòria en editar documents i treballar amb formes.</li>
           <li xml:lang="ca-valencia">Corregix fuites de memòria en editar documents i treballar amb formes.</li>
           <li xml:lang="cs">Opraveny úniky paměti při úpravách dokumentů a práci s tvary.</li>
+          <li xml:lang="es">Corregir fugas de memoria cuando se editan documentos y se trabaja con formas.</li>
           <li xml:lang="ka">გასწორდა მეხსიერების გაჟონვა დოკუმენტების ჩასწორებისას და მოხაზულობებთან მუშაობისას.</li>
           <li xml:lang="nl">Los geheugenlekken op die optreden bij het bewerken van documenten en het werken met vormen.</li>
           <li xml:lang="pt-BR">Correção de vazamentos de memória ao editar documentos e trabalhar com formas.</li>

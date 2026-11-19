@@ -438,6 +438,7 @@
           <li xml:lang="ca">Millora la compatibilitat amb l'estàndard OpenDocument 1.4.</li>
           <li xml:lang="ca-valencia">Millora la compatibilitat amb l'estàndard OpenDocument 1.4.</li>
           <li xml:lang="cs">Vylepšená kompatibilita se standardem OpenDocument 1.4.</li>
+          <li xml:lang="es">Mejorar la compatibilidad con el estándar OpenDocument 1.4.</li>
           <li xml:lang="ka">გაუმჯობესდა სტანდარტთან OpenDocument 1.4.</li>
           <li xml:lang="nl">Verbeter de compatibiliteit met de OpenDocument 1.4-standaard.</li>
           <li xml:lang="pt-BR">Melhoria da compatibilidade com o padrão OpenDocument 1.4.</li>
@@ -450,6 +451,7 @@
           <li xml:lang="ca">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptatge AES-256 als fitxers OpenDocument.</li>
           <li xml:lang="ca-valencia">Restaura la protecció amb contrasenya a les Propietats del document i admet l'encriptació AES-256 als fitxers OpenDocument.</li>
           <li xml:lang="cs">Obnovení ochrany heslem v okně Vlastnosti dokumentu a podpora šifrování AES-256 pro soubory OpenDocument.</li>
+          <li xml:lang="es">Restaurar la protección por contraseña en las propiedades del documento y admitir el cifrado AES-256 para archivos de OpenDocument.</li>
           <li xml:lang="ka">პაროლით დაცვის აღდგენა დოკუმენტის თვისებების ფანჯარაში და AES-256 დაშიფვრის მხარდაჭერა OpenDocument-ის ფაილებისთვის.</li>
           <li xml:lang="nl">Herstel wachtwoordbeveiliging in documenteigenschappen en voeg ondersteuning toe voor AES-256-versleuteling voor OpenDocument-bestanden.</li>
           <li xml:lang="pt-BR">Restauração da proteção por senha nas Propriedades do Documento e suporte à criptografia AES-256 para arquivos OpenDocument.</li>
@@ -462,6 +464,7 @@
           <li xml:lang="ca">Corregeix la selecció de les lletres i conserva les famílies de lletres quan es carreguen els estils i el format de text.</li>
           <li xml:lang="ca-valencia">Corregix la selecció de les lletres i conserva les famílies de lletres quan es carreguen els estils i el format de text.</li>
           <li xml:lang="cs">Opraven výběr písma a zachování rodin písem při načítání stylů a formátování textu.</li>
+          <li xml:lang="es">Corregir la selección de tipos de letra y preservar las familias de tipos de letra cuando se cargan estilos y se formatea texto.</li>
           <li xml:lang="ka">გასწორდა ფონის არჩევანი და ფონის ოჯახების შენარჩუნება სტილების ჩატვირთვისას და ტექსტის დაფორმატებისას.</li>
           <li xml:lang="nl">Corrigeer de lettertypeselectie en behoud lettertypefamilies bij het laden van stijlen en het opmaken van tekst.</li>
           <li xml:lang="pt-BR">Correção da seleção de fontes e preservação das famílias de fontes ao carregar estilos e formatar texto.</li>
@@ -474,6 +477,7 @@
           <li xml:lang="ca">Actualitza la importació de documents RTF per utilitzar QRtfReader.</li>
           <li xml:lang="ca-valencia">Actualitza la importació de documents RTF per a utilitzar QRtfReader.</li>
           <li xml:lang="cs">Aktualizovaný import dokumentů RTF tak, aby využíval knihovnu QRtfReader.</li>
+          <li xml:lang="es">Actualizar la importación de documentos RTF para usar QRtfReader.</li>
           <li xml:lang="ka">განახლდა RTF დოკუმენტის შემოტანა. ახლა ის QRtfReader-ს იყენებს.</li>
           <li xml:lang="nl">Werk het importeren van RTF-documenten bij zodat gebruik wordt gemaakt van QRtfReader.</li>
           <li xml:lang="pt-BR">Atualização da importação de documentos RTF para utilizar o QRtfReader.</li>
@@ -486,6 +490,7 @@
           <li xml:lang="ca">Millorar l'experiència d'edició de fórmules matemàtiques.</li>
           <li xml:lang="ca-valencia">Millorar l'experiència d'edició de fórmules matemàtiques.</li>
           <li xml:lang="cs">Vylepšené možnosti úpravy matematických vzorců.</li>
+          <li xml:lang="es">Mejorar la experiencia de edición de fórmulas matemáticas.</li>
           <li xml:lang="ka">გაუმჯობესდა მათემატიკური ფუნქციის ჩასწორების გარემო.</li>
           <li xml:lang="nl">Verbeter de ervaring bij het bewerken van wiskundige formules.</li>
           <li xml:lang="pt-BR">Melhoria da experiência de edição de fórmulas matemáticas.</li>
@@ -498,6 +503,7 @@
           <li xml:lang="ca">Millora la gestió de desfer dels noms de seccions i la numeració de llistes.</li>
           <li xml:lang="ca-valencia">Millora la gestió de desfer dels noms de seccions i la numeració de llistes.</li>
           <li xml:lang="cs">Vylepšené zpracování zpětných kroků u názvů sekcí a číslování seznamů.</li>
+          <li xml:lang="es">Mejorar la gestión de deshacer para nombres de sección y numeración de listas.</li>
           <li xml:lang="ka">გაუმჯობესდა ბოლო ქმედების გაუქმება სექციის სახელებისთვის და სიის დანომვრისთვის.</li>
           <li xml:lang="nl">Verbeter de afhandeling van ongedaan maken voor sectienamen en lijstnummering.</li>
           <li xml:lang="pt-BR">Melhoria do tratamento de desfazer para nomes de seções e numeração de listas.</li>
@@ -510,6 +516,7 @@
           <li xml:lang="ca">Corregeix fuites de memòria en editar documents i treballar amb formes.</li>
           <li xml:lang="ca-valencia">Corregix fuites de memòria en editar documents i treballar amb formes.</li>
           <li xml:lang="cs">Opraveny úniky paměti při úpravách dokumentů a práci s tvary.</li>
+          <li xml:lang="es">Corregir fugas de memoria cuando se editan documentos y se trabaja con formas.</li>
           <li xml:lang="ka">გასწორდა მეხსიერების გაჟონვა დოკუმენტების ჩასწორებისას და მოხაზულობებთან მუშაობისას.</li>
           <li xml:lang="nl">Los geheugenlekken op die optreden bij het bewerken van documenten en het werken met vormen.</li>
           <li xml:lang="pt-BR">Correção de vazamentos de memória ao editar documentos e trabalhar com formas.</li>
