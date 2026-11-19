@@ -715,7 +715,7 @@ msgstr "Exporta la informació sobre l'autoria:"
 #: sheets/latex/export/latexexportwidget.ui:349
 #, kde-format
 msgid "Add a table of content:"
-msgstr "Afig una taula de contingut:"
+msgstr "Afig un índex de continguts:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: sheets/latex/export/latexexportwidget.ui:368
