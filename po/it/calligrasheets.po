@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-09-10 17:22+0200\n"
+"PO-Revision-Date: 2026-11-10 18:24+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -11382,7 +11382,7 @@ msgstr ""
 #: functions/statistical.xml:1944
 #, kde-format
 msgid "FORECAST(x; known_y's; known_x's)"
-msgstr "PREVISIONE(x; valori noti di y; valori noti di x)"
+msgstr "FORECAST(x; valori noti di y; valori noti di x)"
 
 #: functions/statistical.xml:1955
 #, kde-format
