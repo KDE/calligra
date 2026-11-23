@@ -14307,7 +14307,7 @@ msgstr ""
 #: ui/actions/Border.cpp:88
 #, kde-format
 msgid "Border Top"
-msgstr ""
+msgstr "上边框"
 
 #: ui/actions/Border.cpp:88
 #, kde-format
