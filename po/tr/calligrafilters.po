@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-11-15 19:57+0300\n"
+"PO-Revision-Date: 2026-11-23 18:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -459,14 +459,14 @@ msgstr "Stil"
 msgid ""
 "Select this option to use the default fonts and colors for the HTML page."
 msgstr ""
-"HTML sayfası için öntanımlı yazı tipi ve renkleri kullanmak için bu seçeneği "
-"seçin."
+"HTML sayfası için varsayılan yazı tipi ve renkleri kullanmak için bu "
+"seçeneği seçin."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
 #: sheets/html/exportwidget.ui:92
 #, kde-format
 msgid "Use &default style"
-msgstr "Ö&ntanımlı stili kullan"
+msgstr "&Varsayılan stili kullan"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
 #: sheets/html/exportwidget.ui:102
@@ -647,7 +647,7 @@ msgstr "Taslak"
 #: sheets/latex/export/latexexportwidget.ui:154
 #, kde-format
 msgid "Default font size:"
-msgstr "Öntanımlı yazı tipi puntosu:"
+msgstr "Varsayılan yazı tipi puntosu:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget3)
 #: sheets/latex/export/latexexportwidget.ui:186

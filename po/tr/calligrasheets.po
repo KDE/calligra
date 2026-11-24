@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-11-16 19:01+0300\n"
+"PO-Revision-Date: 2026-11-23 18:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -150,7 +150,7 @@ msgstr "Başlık1"
 #: ui/dialogs/LayoutPage_General.cpp:122 ui/dialogs/LayoutPage_General.cpp:141
 #, kde-format
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #: core/ValueFormatter.cpp:548 core/ValueFormatter.cpp:554
 #, kde-format
@@ -916,7 +916,7 @@ msgid ""
 msgstr ""
 "ROMAN() işlevi, sayıyı Roma biçiminde döndürür. Yalnızca pozitif tam sayılar "
 "dönüştürülebilir. İsteğe bağlı Biçim parametresi kısalık düzeyini belirtir "
-"ve öntanımlı değeri 0’dır."
+"ve varsayılan değeri 0’dır."
 
 #: functions/conversion.xml:256
 #, kde-format
@@ -1281,7 +1281,7 @@ msgid ""
 "for monday, 1 for tuesday,..."
 msgstr ""
 "WEEKDAY() işlevi, verilen tarihin haftanın hangi gününe geldiğini bulur. "
-"Eğer 1. (öntanımlı) yöntem kullanılırsa WEEKDAY() işlevi, 1 değeri için "
+"Eğer 1. (varsayılan) yöntem kullanılırsa WEEKDAY() işlevi, 1 değeri için "
 "Pazar, 2 değeri için Pazartesi…. sonuçlarını döndürür. Eğer 2. yöntem "
 "kullanılırsa Pazartesi için 1, Salı için 2… değerleri geçerli olur. Eğer 3. "
 "yöntem kullanılırsa WEEKDAY() işlevi, Pazartesi için 0, Salı için 1…"
@@ -1320,7 +1320,7 @@ msgid ""
 msgstr ""
 "GÜN360() işlevi, her ayın 30 gün kabul edildiği 360 günlük takvimde tarih1 "
 "ve tarih2 arasındaki gün sayısını döndürür. Eğer bu yöntem yanlışsa "
-"(öntanımlı olarak) ABD yöntemi, değilse Avrupa yöntemi kullanılır."
+"(varsayılan olarak) ABD yöntemi, değilse Avrupa yöntemi kullanılır."
 
 #: functions/datetime.xml:43
 #, kde-format
@@ -2114,7 +2114,7 @@ msgid ""
 msgstr ""
 "WEEKNUM(A1; 1), A1 içeriği “9 Mart 2008” olduğunda 11 döndürür. Yıldaki "
 "hafta numarasını Pazar’ı başlangıç alarak döndürür (1, yöntem yazılmadığında "
-"öntanımlıdır.)"
+"varsayılandır.)"
 
 #: functions/datetime.xml:614
 #, kde-format
@@ -3585,7 +3585,7 @@ msgid ""
 "0. y defaults to 0."
 msgstr ""
 "GESTEP() işlevi, x, y’den büyük veya eşitse 1 döndürür, aksi durumda ise 0 "
-"döndürür. y’nin öntanımlı değeri sıfırdır."
+"döndürür. y’nin varsayılan değeri sıfırdır."
 
 #: functions/engineering.xml:903
 #, kde-format
@@ -3674,8 +3674,8 @@ msgstr ""
 "ACCRINT işlevi, periyodik faiz ödeyen bir menkul kıymet için birikmiş faizi "
 "döndürür. İzin verilen aralıklar 1 — yıllık, 2 — yarı yıllık veya 4 — üç "
 "ayda bir olur. Kural, kullanmak istediğiniz gün sayısının türü: 0: US 30/360 "
-"(öntanımlı), 1: gerçek günler, 2: gerçek günler/360, 3: gerçek günler/365 ya "
-"da Avrupai 30/360."
+"(varsayılan), 1: gerçek günler, 2: gerçek günler/360, 3: gerçek günler/365 "
+"ya da Avrupai 30/360."
 
 #: functions/financial.xml:40
 #, kde-format
@@ -3701,7 +3701,7 @@ msgid ""
 msgstr ""
 "ACCRINTM işlevi, faizleri vadesinde ödeyen bir menkul kıymet için birikmiş "
 "faizi döndürür. Kural, kullanmak istediğiniz gün sayısının türü: 0: US "
-"30/360 (öntanımlı), 1: gerçek günler, 2: gerçek günler/360, 3: gerçek "
+"30/360 (varsayılan), 1: gerçek günler, 2: gerçek günler/360, 3: gerçek "
 "günler/365 ya da Avrupai 30/360."
 
 #: functions/financial.xml:71
@@ -3884,7 +3884,7 @@ msgid ""
 "days/365 or 4: European 30/360."
 msgstr ""
 "COUPNUM işlevi, antlaşma ve vade tarihi arasında ödenecek kupon sayısını "
-"döndürür. Gün hesaplamada kullanılcak ölçü ise: 0: ABD 30/360 (öntanımlı), "
+"döndürür. Gün hesaplamada kullanılcak ölçü ise: 0: ABD 30/360 (varsayılan), "
 "1: takim günü, 2: takvim günü/360, 3: takvim günü/365 or 4: Avrupa 30/365."
 
 #: functions/financial.xml:198
@@ -4049,7 +4049,7 @@ msgid ""
 msgstr ""
 "DISC işlevi, bir yatırım aracının zaman içindeki değeri hesaplaması için "
 "indirim oranını döndürür. Gün hesaplamada kullanılacak ölçü ise: 0: ABD "
-"30/360 (öntanımlı), 1: takim günü, 2: takvim günü/360, 3: takvim günü/365 "
+"30/360 (varsayılan), 1: takim günü, 2: takvim günü/360, 3: takvim günü/365 "
 "veya 4: Avrupa 30/365."
 
 #: functions/financial.xml:370
@@ -4389,7 +4389,7 @@ msgid ""
 "30/360."
 msgstr ""
 "INTRATE işlevi, tamamen yatırım yapılmış bir yatırım aracı için faiz oranını "
-"döndürür. Gün hesaplamada kullanılacak ölçü: 0: ABD 30/360 (öntanımlı), 1: "
+"döndürür. Gün hesaplamada kullanılacak ölçü: 0: ABD 30/360 (varsayılan), 1: "
 "takim günü, 2: takvim günü/360, 3: takvim günü/365 or 4: Avrupa 30/365."
 
 #: functions/financial.xml:625
@@ -4461,7 +4461,7 @@ msgstr "PV, bir dizi ödemenin şu anki değeridir."
 #: functions/financial.xml:663 functions/financial.xml:1050
 #, kde-format
 msgid "FV (optional) is the desired (future) value.  default: 0."
-msgstr "FV (isteğe bağlı), istenen (gelecekteki) değeridir. Öntanımlı: 0."
+msgstr "FV (isteğe bağlı), istenen (gelecekteki) değeridir. Varsayılan: 0."
 
 #: functions/financial.xml:664 functions/financial.xml:1051
 #, kde-format
@@ -4470,7 +4470,7 @@ msgid ""
 "period and 0 (default) for payment at the end of a period."
 msgstr ""
 "Tür, ödeme tarihini belirler. Tür = 1 ise ödeme dönem başında ve Tür = 0 "
-"(öntanımlı) ise ödeme dönem sonundadır."
+"(varsayılan) ise ödeme dönem sonundadır."
 
 #: functions/financial.xml:665
 #, kde-format
@@ -5008,7 +5008,7 @@ msgid ""
 "European 30/360. The settlement date must be before maturity date."
 msgstr ""
 "RECEIVED işlevi, bir yatırım senedinin bitiş tarihindeki tutarı döndürür. "
-"Ölçü ise kullanılacak olan hesaplama yöntemidir: 0: ABD 30/360 (öntanımlı) "
+"Ölçü ise kullanılacak olan hesaplama yöntemidir: 0: ABD 30/360 (varsayılan) "
 "1: takvim günü, 2: takvim günü/360, 3:takvim günü/365 veya 4:Avrupa 30/360. "
 "Ödeme tarihi vadesinden önce olmalıdır."
 
@@ -6110,7 +6110,7 @@ msgid ""
 msgstr ""
 "IF() işlevi, koşullu bir işlevdir. Koşul doğruysa işlev ikinci parametreyi "
 "döndürür. Aksi durumda üçüncü parametreyi döndürür (bu yanlışa  "
-"öntanımlıdır)."
+"varsayılandır)."
 
 #: functions/logic.xml:214
 #, kde-format
@@ -7374,7 +7374,7 @@ msgid ""
 "rounds away from zero, instead of up towards the positive infinity."
 msgstr ""
 "CEILING() işlevi, x’i girdiden büyük olan Ağırlığın en yakın çarpımına "
-"(sıfırdan uzağa) yukarı yuvarlar. Ağırlığın öntanımlı değeri 1 (veya değer "
+"(sıfırdan uzağa) yukarı yuvarlar. Ağırlığın varsayılan değeri 1 (veya değer "
 "negatif ise −1)’dir, bu da en yakın tam sayıya yukarı yuvarlandığı anlamına "
 "gelir. Mod paremetresi sıfır değilse işlev pozitif sonsuza yuvarlamak yerine "
 "sıfırdan uzağa yuvarlar."
@@ -8081,7 +8081,7 @@ msgid ""
 "(default) the address is returned in A1 style if it is set to FALSE in R1C1 "
 "style."
 msgstr ""
-"A1 Stili, döndürülecek adresin stilini belirtir. Eğer A1 TRUE (öntanımlı) "
+"A1 Stili, döndürülecek adresin stilini belirtir. Eğer A1 TRUE (varsayılan) "
 "olarak atanırsa adres A1 stilinde, FALSE olarak atanırsa R1C1 stilinde "
 "döndürülür."
 
@@ -8706,7 +8706,7 @@ msgstr "URL"
 #: functions/reference.xml:430
 #, kde-format
 msgid "Display text (defaults to the URL)"
-msgstr "Metin görüntüle (öntanımlı olarak URL)"
+msgstr "Metin görüntüle (varsayılan olarak URL)"
 
 #: functions/reference.xml:434
 #, kde-format
@@ -8903,7 +8903,7 @@ msgid ""
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
 "Üçüncü ve dördüncü değerler isteğe bağlıdır. Alt ve üst sınırları "
-"belirlerler. Öntanımlı olarak sırasıyla 0,0 ve 1,0 değerlerine eşittirler."
+"belirlerler. Varsayılan olarak sırasıyla 0,0 ve 1,0 değerlerine eşittirler."
 
 #: functions/statistical.xml:117
 #, kde-format
@@ -8936,7 +8936,7 @@ msgid ""
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
 "Başlangıç ve bitiş parametreleri isteğe bağlıdır. Alt ve üst sınırları "
-"belirlerler. Öntanımlı olarak sırasıyla 0,0 ve 1,0 değerlerine eşittirler."
+"belirlerler. Varsayılan olarak sırasıyla 0,0 ve 1,0 değerlerine eşittirler."
 
 #: functions/statistical.xml:149
 #, kde-format
@@ -10551,7 +10551,7 @@ msgid ""
 msgstr ""
 "Regresyon doğrusunun orijinden (X=0, Y=0) geçmesini sağlamak için 4. "
 "parametre olan ofsete_izin_ver’i FALSE veya 0 olarak ayarlayabilirsiniz. Bu "
-"parametreyi “true” veya 1 (öntanımlı) olarak ayarlamak, en iyi uyum "
+"parametreyi “true” veya 1 (varsayılan) olarak ayarlamak, en iyi uyum "
 "doğrusunun dikey ekseni sıfır olmayan bir Y değerinde kesmesine olanak "
 "tanır. "
 
@@ -11213,18 +11213,18 @@ msgstr "LEGACYCHITEST(asıl_erim; kuramsal_erim)"
 #: functions/statistical.xml:1977 functions/statistical.xml:2006
 #, kde-format
 msgid "Known x-values (defaults to the sequence 1, 2, 3, ...)"
-msgstr "Bilinen X değerleri (öntanımlı olarak 1, 2, 3, … dizisidir)"
+msgstr "Bilinen X değerleri (varsayılan olarak 1, 2, 3, … dizisidir)"
 
 #: functions/statistical.xml:1981 functions/statistical.xml:2010
 #, kde-format
 msgid "Whether to fit an intercept (defaults to TRUE)"
-msgstr "Bir kesişimin hesaplanıp hesaplanmayacağı (öntanımlı değer DOĞRU)"
+msgstr "Bir kesişimin hesaplanıp hesaplanmayacağı (varsayılan değer DOĞRU)"
 
 #: functions/statistical.xml:1985 functions/statistical.xml:2014
 #, kde-format
 msgid "Whether to return additional regression statistics (defaults to FALSE)"
 msgstr ""
-"Ek regresyon istatistiklerinin döndürülüp döndürülmeyeceği (öntanımlı değer "
+"Ek regresyon istatistiklerinin döndürülüp döndürülmeyeceği (varsayılan değer "
 "YANLIŞ)"
 
 #: functions/statistical.xml:1989
@@ -12334,7 +12334,7 @@ msgstr "Düzenli ifade"
 #: functions/text.xml:735
 #, kde-format
 msgid "Default value (optional)"
-msgstr "Öntanımlı değer (isteğe bağlı)"
+msgstr "Varsayılan değer (isteğe bağlı)"
 
 #: functions/text.xml:739
 #, kde-format
@@ -12349,7 +12349,7 @@ msgid ""
 "default is returned."
 msgstr ""
 "Bir düzgün ifade ile eşleşen karakter dizisinin bir parçasını döndürür. Eğer "
-"karakter dizisi verilen düzenli ifade ile eşleşmezse öntanımlı olarak "
+"karakter dizisi verilen düzenli ifade ile eşleşmezse varsayılan olarak "
 "belirlenen değer döndürülür."
 
 #: functions/text.xml:744
@@ -12365,7 +12365,7 @@ msgid ""
 "If no default value is given, an empty string is assumed. If no back-"
 "reference is given, 0 is assumed (so that entire matching part is returned)."
 msgstr ""
-"Eğer öntanımlı değer verilmezse boş karakter dizisi varsayılır. Eğer geri "
+"Eğer varsayılan değer verilmezse boş karakter dizisi varsayılır. Eğer geri "
 "başvuru verilirse 0 varsayılır (böylece tüm bulunan parça döndürülür)."
 
 #: functions/text.xml:746
@@ -13517,7 +13517,7 @@ msgstr "&Birim:"
 #: part/dialogs/InterfaceOptionsWidget.ui:63
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
-msgstr "Çalışma sayfanızda kullanılacak öntanımlı birimi seçin."
+msgstr "Çalışma sayfanızda kullanılacak varsayılan birimi seçin."
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
 #: part/dialogs/InterfaceOptionsWidget.ui:70
@@ -13565,7 +13565,7 @@ msgid ""
 "default red."
 msgstr ""
 "Görünüm → Sayfa Kenarlıklarını Göster menu ögesi seçildiğinde sayfa "
-"kenarlıkları gösterilir. Kenarlıklar için öntanımlı kırmızı renkten başka "
+"kenarlıkları gösterilir. Kenarlıklar için varsayılan kırmızı renkten başka "
 "bir renk seçmek için buraya tıklayın."
 
 #: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:92
@@ -13928,7 +13928,7 @@ msgid ""
 "Right to Left, then the first column will be on the right and the others "
 "added from right to left."
 msgstr ""
-"Öntanımlı olarak çalışma sayfasındaki ilk sütun soldadır. Eğer Sağdan Sola "
+"Varsayılan olarak çalışma sayfasındaki ilk sütun soldadır. Eğer Sağdan Sola "
 "seçerseniz ilk sütun sağda olacaktır ve diğerler sağdan sola eklenecektir."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showCommentIndicatorCheckBox)
@@ -13974,7 +13974,7 @@ msgid ""
 "the page borders if you want to print your sheet."
 msgstr ""
 "Bu seçeneği işaretlerseniz sayfa kenarlıkları geçerli sayfa üzerine "
-"çizilecektir. Her öntanımlı sayfa kenarlığı gösterilmez. Eğer sayfanızı "
+"çizilecektir. Her varsayılan sayfa kenarlığı gösterilmez. Eğer sayfanızı "
 "yazdırmak istiyorsanız sayfa kenarlıklarını görmek kullanışlıdır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
@@ -14070,7 +14070,7 @@ msgid ""
 "If checked, the grid (the cell limits) will be shown. This is the default. "
 "If unchecked, the grid will be hidden."
 msgstr ""
-"İşaretliyse ızgaralar (hücre sınırları) gösterilir. Öntanımlı budur. "
+"İşaretliyse ızgaralar (hücre sınırları) gösterilir. Varsayılan budur. "
 "İşaretli değilse tablo gizli kalır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
@@ -16031,7 +16031,7 @@ msgstr "Dil: %1 (%2)"
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:186
 #, kde-format
 msgid "Default number format: %1"
-msgstr "Öntanımlı sayı biçimi: %1"
+msgstr "Varsayılan sayı biçimi: %1"
 
 #. i18ncheckarg
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:187
@@ -17627,12 +17627,12 @@ msgstr "Kesinliği Azalt"
 #: ui/actions/Style.cpp:603
 #, kde-format
 msgid "Resets to the default format"
-msgstr "Öntanımlı biçime geri dön"
+msgstr "Varsayılan biçime geri dön"
 
 #: ui/actions/Style.cpp:613
 msgctxt "(qtundo-format)"
 msgid "Set Default Style"
-msgstr "Öntanımlı Stil Olarak Ayarla"
+msgstr "Varsayılan Stil Olarak Ayarla"
 
 #: ui/actions/Style.cpp:622
 #, kde-format
@@ -18227,8 +18227,8 @@ msgstr ""
 "Burada geçerli hücre metni için yazı tipi stili, boyutu ve renginin yanı "
 "sıra altı çizili veya üzeri çizili ek özellikleri de seçebilirsiniz. "
 "Sayfanın altında seçtiğiniz metin biçiminin ön izlemesini görebilirsiniz.\n"
-"Tüm hücreler için öntanımlı yazı tipi Biçim → Stil Yöneticisi bağlantısından "
-"atanır."
+"Tüm hücreler için varsayılan yazı tipi Biçim → Stil Yöneticisi "
+"bağlantısından atanır."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -18427,8 +18427,8 @@ msgid ""
 "justifies numbers, dates and times within a cell and left justifies anything "
 "else."
 msgstr ""
-"Bu öntanımlı biçimdir ve Calligra Tablolar geçerli hücre verisine dayalı "
-"olarak gerçek veri türünü kendiliğinden algılar. Öntanımlı olarak Calligra "
+"Bu varsayılan biçimdir ve Calligra Tablolar geçerli hücre verisine dayalı "
+"olarak gerçek veri türünü kendiliğinden algılar. Varsayılan olarak Calligra "
 "Tablolar sayıları, tarihleri ve zamanı hücrelerde sağa, geri kalan her şeyi "
 "sola hizalar."
 
@@ -18441,7 +18441,7 @@ msgid ""
 msgstr ""
 "Sayı yazımı sizin Sistem Ayarları → Yaygın Görünüş ve Davranış → Yerel → "
 "Ülke/Bölge ve Dil → Sayılar sekmesi altında genel olarak ayarladığınız "
-"gösterimi kullanır. Sayılar öntanımlı olarak sağa hizalanır."
+"gösterimi kullanır. Sayılar varsayılan olarak sağa hizalanır."
 
 #: ui/dialogs/LayoutPage_Float.cpp:72
 #, kde-format
@@ -18544,7 +18544,7 @@ msgstr ""
 "biçimini Sistem Ayarları → Yaygın Görünüş ve Davranış → Yerel → Ülke/Bölge "
 "ve Dil → Tarih ve Zaman sekmesinden ayarlamalısınız. Hücre Biçimi "
 "penceresinde kullanılabilir zaman biçimlerinden birini seçerek zamanın nasıl "
-"görüntülenmesini istediğinizi belirleyebilirsiniz. Öntanımlı biçim Sistem "
+"görüntülenmesini istediğinizi belirleyebilirsiniz. Varsayılan biçim Sistem "
 "Ayarlarında ayarlanan sistem biçimidir. Hücredeki sayı zaman olarak bir "
 "anlam ifade etmediğinde Calligra Tablolar, Sistem Ayarlarında genel biçim "
 "olarak ayarladığınız 00:00’ı görüntüler."
@@ -18898,7 +18898,7 @@ msgid ""
 "You can learn more about all these settings in the User Manual in the "
 "Advanced Calligra Sheets chapter."
 msgstr ""
-"Bu sekme, hücre korumayı ayarlamanıza olanak verir. Öntanımlı olarak bütün "
+"Bu sekme, hücre korumayı ayarlamanıza olanak verir. Varsayılan olarak bütün "
 "hücreler korumalıdır (yani hücre içeriği değiştirilemez) ve hücre "
 "korumasının etkin olması için çalışma sayfasını da Araçlar → Sayfayı Koru "
 "menüsünden parola girerek korumalı hale getirmeniz gerekir.\n"
@@ -18924,8 +18924,8 @@ msgid ""
 "checked (default), the cell content will be printed.\n"
 "Note that you can print it even if the cell is protected"
 msgstr ""
-"İşaretlenmişse hücre içeriği yazdırılmaz. İşaretlenmemişse (öntanımlı) hücre "
-"içeriği yazdırılır.\n"
+"İşaretlenmişse hücre içeriği yazdırılmaz. İşaretlenmemişse (varsayılan) "
+"hücre içeriği yazdırılır.\n"
 "Hücre içeriği korumalı olsa bile yazdırabileceğinizi unutmayın"
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
@@ -18966,7 +18966,7 @@ msgid ""
 "manual for more details in the Advanced Calligra Sheets chapter. When a cell "
 "is protected, its content cannot be changed."
 msgstr ""
-"İşaretlendiğinde hücre içeriği korumalı olur. Bu öntanımlı davranıştır. "
+"İşaretlendiğinde hücre içeriği korumalı olur. Bu varsayılan davranıştır. "
 "Tekil hücre içeriklerini korumak için Araçlar → Sayfayı Koru menü "
 "seçeneğinden tüm çizelgeyi korumalı yapmanız gerekir. Daha fazla ayrıntıyı "
 "kullanıcı kılavuzunun Gelişmiş Calligra Tablolar faslında bulabilirsiniz. "

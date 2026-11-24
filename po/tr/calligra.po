@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-11-16 18:54+0300\n"
+"PO-Revision-Date: 2026-11-23 18:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1584,7 +1584,7 @@ msgstr "<tr><td><b>Erişilme zamanı:</b></td><td>%1</td></tr>"
 #: text/styles/KoStyleManager.cpp:100
 #, kde-format
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #: main/KoShapeCollectionMenu.cpp:358
 #, kde-format
@@ -1660,7 +1660,7 @@ msgstr "&Seç..."
 #: main/KoTemplateCreateDia.cpp:166
 #, kde-format
 msgid "Use the new template as default"
-msgstr "Yeni şablonu öntanımlı olarak kullan"
+msgstr "Yeni şablonu varsayılan olarak kullan"
 
 #: main/KoTemplateCreateDia.cpp:304
 #, kde-format
@@ -1782,7 +1782,7 @@ msgstr "Anonim"
 #: main/KoView.cpp:426 widgets/KoConfigAuthorPage.cpp:68
 #, kde-format
 msgid "Default Author Profile"
-msgstr "Öntanımlı Yazar Profili"
+msgstr "Varsayılan Yazar Profili"
 
 #: odf/KoDocumentInfo.cpp:80
 #, kde-format
@@ -3429,9 +3429,9 @@ msgid ""
 "the stylesheet for all existing semantic objects to the new default "
 "stylesheet as well."
 msgstr ""
-"Belgedeki anlamsal nesneler için öntanımlı stili ayarla. Yeni RDF nesneleri "
+"Belgedeki anlamsal nesneler için varsayılan stili ayarla. Yeni RDF nesneleri "
 "otomatik olarak bu stili kullanacak. Düğmeler de bütün var olan anlamsal "
-"nesneler için stili, yeni öntanımlı stile ayarlamanıza izin verir."
+"nesneler için stili, yeni varsayılan stile ayarlamanıza izin verir."
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
 #, kde-format
@@ -5181,7 +5181,7 @@ msgstr "Silmeyi geri al"
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #: widgets/KoToolBox.cpp:313
 #, kde-format

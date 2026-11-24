@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:52+0000\n"
-"PO-Revision-Date: 2026-05-06 00:56+0300\n"
+"PO-Revision-Date: 2026-11-23 18:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.04.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -183,12 +183,12 @@ msgstr "Efekti geçerli süzgeç yığınına ekle"
 #: filterEffectTool/FilterEffectEditWidget.cpp:70
 #, kde-format
 msgid "Add to filter presets"
-msgstr "Süzgeç öntanımlı değerlerine ekle"
+msgstr "Süzgeç varsayılan değerlerine ekle"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:74
 #, kde-format
 msgid "Remove filter preset"
-msgstr "Süzgeç öntanımlı değerini sil"
+msgstr "Süzgeç varsayılan değerini sil"
 
 #: filterEffectTool/FilterEffectEditWidget.cpp:335
 #, kde-format
@@ -334,7 +334,7 @@ msgstr "Gradyanı Düzenle"
 #: KarbonGradientTool.cpp:495
 #, kde-format
 msgid "Predefined Gradients"
-msgstr "Öntanımlı Eğimler"
+msgstr "Varsayılan Eğimler"
 
 #: KarbonGradientToolFactory.cpp:17
 #, kde-format
