@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/kocolorspaces.pot\n"
-"X-Crowdin-File-ID: 53558\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/kocolorspaces.pot\n"
+"X-Crowdin-File-ID: 56610\n"
 
 #: lcms2/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:25
 #: lcms2/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:20

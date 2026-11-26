@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/calligra/calligrasheets.pot\n"
-"X-Crowdin-File-ID: 53658\n"
+"X-Crowdin-File: /kf6-stable/messages/calligra/calligrasheets.pot\n"
+"X-Crowdin-File-ID: 56606\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -13931,22 +13931,22 @@ msgstr "更改边框"
 #: ui/actions/AdjustRowCol.cpp:31
 #, kde-format
 msgid "Insert Columns"
-msgstr ""
+msgstr "插入列"
 
 #: ui/actions/AdjustRowCol.cpp:31
 #, kde-format
 msgid "Insert Rows"
-msgstr ""
+msgstr "插入行"
 
 #: ui/actions/AdjustRowCol.cpp:31
 #, kde-format
 msgid "Remove Columns"
-msgstr ""
+msgstr "删除列"
 
 #: ui/actions/AdjustRowCol.cpp:31
 #, kde-format
 msgid "Remove Rows"
-msgstr ""
+msgstr "删除行"
 
 #: ui/actions/AdjustRowCol.cpp:48
 #, kde-format
@@ -13971,22 +13971,22 @@ msgstr "从工作表中删除一列"
 #: ui/actions/AdjustRowCol.cpp:93
 #, kde-format
 msgid "Hide Columns"
-msgstr ""
+msgstr "隐藏列"
 
 #: ui/actions/AdjustRowCol.cpp:93
 #, kde-format
 msgid "Hide Rows"
-msgstr ""
+msgstr "隐藏行"
 
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:39
 #, kde-format
 msgid "Show Columns"
-msgstr ""
+msgstr "显示栏目"
 
 #: ui/actions/AdjustRowCol.cpp:93 ui/actions/dialogs/ShowColRowDialog.cpp:36
 #, kde-format
 msgid "Show Rows"
-msgstr ""
+msgstr "显示行"
 
 #: ui/actions/AdjustRowCol.cpp:109
 #, kde-format
@@ -14307,7 +14307,7 @@ msgstr ""
 #: ui/actions/Border.cpp:88
 #, kde-format
 msgid "Border Top"
-msgstr ""
+msgstr "上边框"
 
 #: ui/actions/Border.cpp:88
 #, kde-format
@@ -14637,7 +14637,7 @@ msgstr ""
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:26
 #, kde-format
 msgid "Add Named Area"
-msgstr ""
+msgstr "添加命名区域"
 
 #: ui/actions/dialogs/AddNamedAreaDialog.cpp:34
 #, kde-format
@@ -15333,7 +15333,7 @@ msgstr ""
 #: ui/actions/dialogs/InsertDialog.cpp:45
 #, kde-format
 msgid "Insert Cells"
-msgstr ""
+msgstr "插入单元格"
 
 #: ui/actions/dialogs/InsertDialog.cpp:47 ui/actions/dialogs/ListDialog.cpp:78
 #, kde-format
@@ -15363,7 +15363,7 @@ msgstr ""
 #: ui/actions/dialogs/InsertDialog.cpp:52
 #, kde-format
 msgid "Remove Cells"
-msgstr ""
+msgstr "删除单元格"
 
 #: ui/actions/dialogs/LinkDialog.cpp:58 ui/actions/dialogs/LinkDialog.cpp:59
 #, kde-format
@@ -15557,7 +15557,7 @@ msgstr ""
 #: ui/actions/dialogs/NamedAreaDialog.cpp:193
 #, kde-format
 msgid "Remove Named Area"
-msgstr ""
+msgstr "删除命名区域"
 
 #: ui/actions/dialogs/NamedAreaDialog.cpp:219
 #, kde-format
@@ -15592,7 +15592,7 @@ msgstr ""
 #: ui/actions/dialogs/Resize2Dialog.cpp:31
 #, kde-format
 msgid "Resize Row"
-msgstr ""
+msgstr "调整行高"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:42
 #, kde-format
@@ -15602,7 +15602,7 @@ msgstr ""
 #: ui/actions/dialogs/Resize2Dialog.cpp:78
 #, kde-format
 msgid "Resize Column"
-msgstr ""
+msgstr "调整列宽"
 
 #: ui/actions/dialogs/Resize2Dialog.cpp:89
 #, kde-format
@@ -16354,12 +16354,12 @@ msgstr ""
 #: ui/actions/Merge.cpp:19
 #, kde-format
 msgid "Merge Cells Horizontally"
-msgstr ""
+msgstr "水平合并单元格"
 
 #: ui/actions/Merge.cpp:19
 #, kde-format
 msgid "Merge Cells Vertically"
-msgstr ""
+msgstr "垂直合并单元格"
 
 #: ui/actions/Merge.cpp:34
 #, kde-format
@@ -16379,7 +16379,7 @@ msgstr ""
 #: ui/actions/Merge.cpp:66
 #, kde-format
 msgid "Dissociate Cells"
-msgstr ""
+msgstr "分离单元格"
 
 #: ui/actions/Merge.cpp:66
 #, kde-format
