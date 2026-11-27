@@ -383,6 +383,7 @@
           <li xml:lang="ca-valencia">Millora la compatibilitat amb l'estàndard OpenDocument 1.4.</li>
           <li xml:lang="cs">Vylepšená kompatibilita se standardem OpenDocument 1.4.</li>
           <li xml:lang="es">Mejorar la compatibilidad con el estándar OpenDocument 1.4.</li>
+          <li xml:lang="he">התאימות מול תקן OpenDocument 1.4 השתפרה</li>
           <li xml:lang="it">Migliora la compatibilità con lo standard OpenDocument 1.4.</li>
           <li xml:lang="ka">გაუმჯობესდა სტანდარტთან OpenDocument 1.4.</li>
           <li xml:lang="nl">Verbeter de compatibiliteit met de OpenDocument 1.4-standaard.</li>
@@ -443,6 +444,7 @@
           <li xml:lang="ca-valencia">Corregix fuites de memòria a les animacions de diapositives i l'edició de documents.</li>
           <li xml:lang="cs">Opraveny úniky paměti v animacích snímků a při úpravách dokumentů.</li>
           <li xml:lang="es">Corregir fugas de memoria en animaciones de deslizamiento y en la edición de documentos.</li>
+          <li xml:lang="he">תוקנו זליגות זיכרון בהנפשות שקופיות ועריכת מסמכים.</li>
           <li xml:lang="it">Corregge le perdite di memoria nelle animazioni delle diapositive e nella modifica dei documenti.</li>
           <li xml:lang="ka">გასწორდა მეხსიერების გაჟონვები სლაიდის ანიმაციებში და დოკუმენტის ჩასწორებისას.</li>
           <li xml:lang="nl">Los geheugenlekken op in dia-animaties en documentbewerking.</li>
