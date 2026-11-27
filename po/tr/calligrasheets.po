@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-10 00:46+0000\n"
-"PO-Revision-Date: 2026-11-23 18:10+0300\n"
+"PO-Revision-Date: 2026-11-26 19:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -208,7 +208,7 @@ msgstr "Herhangi bir türde değer"
 #: engine/FunctionDescription.cpp:47
 #, kde-format
 msgid "A string representing a date (like \"2/22/2012\")"
-msgstr "Tarihi gösteren bir dizi (“2/2/2012” gibi)"
+msgstr "Tarihi gösteren bir dizge (“2/2/2012” gibi)"
 
 #: engine/FunctionDescription.cpp:52
 #, kde-format
@@ -239,7 +239,7 @@ msgstr "Herhangi bir türde değerler erimi"
 #, kde-format
 msgid ""
 "A string representing a range of dates (like \"2/22/2012\"-\"5/22/2012\")"
-msgstr "Tarih erimini gösteren bir dizi (“2/2/2012”–“5/2/2012” gibi)"
+msgstr "Tarih erimini gösteren bir dizge (“2/2/2012”–“5/2/2012” gibi)"
 
 #: engine/FunctionDescription.cpp:165
 #, kde-format
@@ -502,9 +502,8 @@ msgid ""
 "The BOOL2STRING() function returns a string value for a given boolean value. "
 "This method is intended for using a boolean in methods which require a string"
 msgstr ""
-"BOOL2STRING() işlevi, verilen bir Boole değeri için bir karakter dizisi "
-"döndürür. Bu yöntem, karakter dizisi gerektiren yöntemlerde Boole "
-"kullanılması amaçlıdır."
+"BOOL2STRING() işlevi, verilen bir Boole değeri için bir dizge döndürür. Bu "
+"yöntem, dizge gerektiren yöntemlerde Boole kullanılması amaçlıdır."
 
 #: functions/conversion.xml:16
 #, kde-format
@@ -601,9 +600,9 @@ msgid ""
 "that Calligra Sheets can auto-convert numbers to strings if needed, so this "
 "function should rarely be needed."
 msgstr ""
-"NUM2STRING() işlevi, verilen bir sayı için bir karakter dizisi döndürür. "
-"Unutmayın ki Calligra Tablolar, gerektiğinde sayıları kendiliğinden karakter "
-"dizisine çevirebilir. Dolayısıyla bu işlev nadiren gerekli olacaktır."
+"NUM2STRING() işlevi, verilen bir sayı için bir dizge döndürür. Unutmayın ki "
+"Calligra Tablolar, gerektiğinde sayıları kendiliğinden dizgeye çevirebilir. "
+"Dolayısıyla bu işlev nadiren gerekli olacaktır."
 
 #: functions/conversion.xml:65
 #, kde-format
@@ -631,13 +630,13 @@ msgid ""
 "The STRING() function returns a string value for a given number. It is the "
 "same as the NUM2STRING function."
 msgstr ""
-"STRING() işlevi, verilen bir sayı için bir dizi döndürür. NUM2STRING işlevi "
+"STRING() işlevi, verilen bir sayı için bir dizge döndürür. NUM2STRING işlevi "
 "ile aynıdır."
 
 #: functions/conversion.xml:90
 #, kde-format
 msgid "A one character string to convert"
-msgstr "Dönüştürülecek bir karakterlik bir dizi"
+msgstr "Dönüştürülecek bir karakterlik bir dizge"
 
 #: functions/conversion.xml:94
 #, kde-format
@@ -3000,13 +2999,13 @@ msgstr "Karmaşık sayı"
 #, kde-format
 msgid "The IMAGINARY(string) returns the imaginary coefficient of a complex."
 msgstr ""
-"IMAGINARY(dizi) işlevi, bir karmaşık sayının sanal bölümünün katsayısını "
+"IMAGINARY(dizge) işlevi, bir karmaşık sayının sanal bölümünün katsayısını "
 "döndürür."
 
 #: functions/engineering.xml:423
 #, kde-format
 msgid "IMAGINARY(string)"
-msgstr "IMAGINARY(dizi)"
+msgstr "IMAGINARY(dizge)"
 
 #: functions/engineering.xml:424
 #, kde-format
@@ -3022,13 +3021,13 @@ msgstr "IMAGINARY(\"1,2\"), 0 döndürür "
 #, kde-format
 msgid "The IMREAL(string) returns the real coefficient of a complex."
 msgstr ""
-"IMREAL(dizi) işlevi, bir karmaşık sayının gerçek bölümünün katsayısını "
+"IMREAL(dizge) işlevi, bir karmaşık sayının gerçek bölümünün katsayısını "
 "döndürür."
 
 #: functions/engineering.xml:438
 #, kde-format
 msgid "IMREAL(string)"
-msgstr "IMREAL(dizi)"
+msgstr "IMREAL(dizge)"
 
 #: functions/engineering.xml:439
 #, kde-format
@@ -3043,12 +3042,12 @@ msgstr "IMREAL(\"1,2i\"), 0 döndürür "
 #: functions/engineering.xml:452
 #, kde-format
 msgid "The IMCOS(string) returns the cosine of a complex number."
-msgstr "IMCOS(dizi) işlevi, bir karmaşık sayının kosünüsünü döndürür."
+msgstr "IMCOS(dizge) işlevi, bir karmaşık sayının kosünüsünü döndürür."
 
 #: functions/engineering.xml:453
 #, kde-format
 msgid "IMCOS(string)"
-msgstr "IMCOS(dizi)"
+msgstr "IMCOS(dizge)"
 
 #: functions/engineering.xml:454
 #, kde-format
@@ -3064,12 +3063,12 @@ msgstr "IMCOS(\"12i\"), 81 377,4 döndürür "
 #, kde-format
 msgid "The IMCOSH(string) returns the hyperbolic cosine of a complex number."
 msgstr ""
-"IMCOSH(dizi) işlevi, bir karmaşık sayının hiperbolik kosünüsünü döndürür."
+"IMCOSH(dizge) işlevi, bir karmaşık sayının hiperbolik kosünüsünü döndürür."
 
 #: functions/engineering.xml:468
 #, kde-format
 msgid "IMCOSH(string)"
-msgstr "IMCOSH(dizi)"
+msgstr "IMCOSH(dizge)"
 
 #: functions/engineering.xml:469
 #, kde-format
@@ -3084,12 +3083,12 @@ msgstr "IMCOSH(\"12i\"), 0,84358 döndürür "
 #: functions/engineering.xml:482
 #, kde-format
 msgid "The IMCOT(string) returns the cotangent of a complex number."
-msgstr "IMCOT(dizi) işlevi, bir karmaşık sayının kotanjantını döndürür."
+msgstr "IMCOT(dizge) işlevi, bir karmaşık sayının kotanjantını döndürür."
 
 #: functions/engineering.xml:483
 #, kde-format
 msgid "IMCOT(string)"
-msgstr "IMCOT(dizi)"
+msgstr "IMCOT(dizge)"
 
 #: functions/engineering.xml:484
 #, kde-format
@@ -3099,12 +3098,12 @@ msgstr "IMCOT(\"1+i\"), “0,21762 − 0,86801i” döndürür"
 #: functions/engineering.xml:496
 #, kde-format
 msgid "The IMCSC(string) returns the cosecant of a complex number."
-msgstr "IMSCS(dizi) işlevi, bir karmaşık sayının kosekantını döndürür."
+msgstr "IMSCS(dizge) işlevi, bir karmaşık sayının kosekantını döndürür."
 
 #: functions/engineering.xml:497
 #, kde-format
 msgid "IMCSC(string)"
-msgstr "IMCSC(dizi)"
+msgstr "IMCSC(dizge)"
 
 #: functions/engineering.xml:498
 #, kde-format
@@ -3115,12 +3114,12 @@ msgstr "IMCSC(\"1+i\"), “0,62151-0,30393i” döndürür"
 #, kde-format
 msgid "The IMCSCH(string) returns the hyperbolic cosecant of a complex number."
 msgstr ""
-"IMCSCH(dizi) işlevi, bir karmaşık sayının hiperbolik kosekantını döndürür."
+"IMCSCH(dizge) işlevi, bir karmaşık sayının hiperbolik kosekantını döndürür."
 
 #: functions/engineering.xml:511
 #, kde-format
 msgid "IMCSCH(string)"
-msgstr "IMCSCH(dizi)"
+msgstr "IMCSCH(dizge)"
 
 #: functions/engineering.xml:512
 #, kde-format
@@ -3130,12 +3129,12 @@ msgstr "IMCSCH(\"1+i\"), “0,30393 − i0,62151” döndürür"
 #: functions/engineering.xml:524
 #, kde-format
 msgid "The IMSEC(string) returns the secant of a complex number."
-msgstr "IMSEC(dizi) işlevi, bir karmaşık sayının sekantını döndürür."
+msgstr "IMSEC(dizge) işlevi, bir karmaşık sayının sekantını döndürür."
 
 #: functions/engineering.xml:525
 #, kde-format
 msgid "IMSEC(string)"
-msgstr "IMSEC(dizi)"
+msgstr "IMSEC(dizge)"
 
 #: functions/engineering.xml:526
 #, kde-format
@@ -3146,12 +3145,12 @@ msgstr "IMSEC(\"1+i\"), “0,49833+i0,59108” döndürür"
 #, kde-format
 msgid "The IMSECH(string) returns the hyperbolic secant of a complex number."
 msgstr ""
-"IMSECH(dizi) işlevi, bir karmaşık sayının hiperbolik sekantını döndürür."
+"IMSECH(dizge) işlevi, bir karmaşık sayının hiperbolik sekantını döndürür."
 
 #: functions/engineering.xml:539
 #, kde-format
 msgid "IMSECH(string)"
-msgstr "IMSECH(dizi)"
+msgstr "IMSECH(dizge)"
 
 #: functions/engineering.xml:540
 #, kde-format
@@ -3161,12 +3160,12 @@ msgstr "IMSECH(\"1+i\"), “0,49833 − i0,59108” döndürür"
 #: functions/engineering.xml:552
 #, kde-format
 msgid "The IMSIN(string) function returns the sine of a complex number."
-msgstr "IMSIN(dizi) işlevi, bir karmaşık sayının sinüsünü döndürür."
+msgstr "IMSIN(dizge) işlevi, bir karmaşık sayının sinüsünü döndürür."
 
 #: functions/engineering.xml:553
 #, kde-format
 msgid "IMSIN(string)"
-msgstr "IMSIN(dizi)"
+msgstr "IMSIN(dizge)"
 
 #: functions/engineering.xml:554
 #, kde-format
@@ -3183,12 +3182,12 @@ msgstr "IMSIN(\"1,2\"), −0,536573 döndürür"
 msgid ""
 "The IMSINH(string) function returns the hyperbolic sine of a complex number."
 msgstr ""
-"IMSINH(dizi) işlevi, bir karmaşık sayının hiperbolik sinüsünü döndürür."
+"IMSINH(dizge) işlevi, bir karmaşık sayının hiperbolik sinüsünü döndürür."
 
 #: functions/engineering.xml:568
 #, kde-format
 msgid "IMSINH(string)"
-msgstr "IMSINH(dizi)"
+msgstr "IMSINH(dizge)"
 
 #: functions/engineering.xml:569
 #, kde-format
@@ -3203,12 +3202,12 @@ msgstr "IMSINH(\"1,2\"), 1,50946 döndürür "
 #: functions/engineering.xml:582
 #, kde-format
 msgid "The IMTAN(string) function returns the tangent of a complex number."
-msgstr "IMTAN(dizi) işlevi, bir karmaşık sayının tanjantını döndürür."
+msgstr "IMTAN(dizge) işlevi, bir karmaşık sayının tanjantını döndürür."
 
 #: functions/engineering.xml:583
 #, kde-format
 msgid "IMTAN(string)"
-msgstr "IMTAN(dizi)"
+msgstr "IMTAN(dizge)"
 
 #: functions/engineering.xml:584
 #, kde-format
@@ -3226,12 +3225,12 @@ msgid ""
 "The IMTANH(string) function returns the hyperbolic tangent of a complex "
 "number."
 msgstr ""
-"IMTANH(dizi) işlevi, bir karmaşık sayının hiperbolik tanjantını döndürür."
+"IMTANH(dizge) işlevi, bir karmaşık sayının hiperbolik tanjantını döndürür."
 
 #: functions/engineering.xml:598
 #, kde-format
 msgid "IMTANH(string)"
-msgstr "IMTANH(dizi)"
+msgstr "IMTANH(dizge)"
 
 #: functions/engineering.xml:599
 #, kde-format
@@ -3246,12 +3245,12 @@ msgstr "IMTANH(\"1,2\"), 0,83365 döndürür"
 #: functions/engineering.xml:612
 #, kde-format
 msgid "The IMEXP(string) returns the exponential of a complex number."
-msgstr "IMEXP(dizi) işlevi, bir karmaşık sayının üssünü hesaplar."
+msgstr "IMEXP(dizge) işlevi, bir karmaşık sayının üssünü hesaplar."
 
 #: functions/engineering.xml:613
 #, kde-format
 msgid "IMEXP(string)"
-msgstr "IMEXP(dizi)"
+msgstr "IMEXP(dizge)"
 
 #: functions/engineering.xml:614
 #, kde-format
@@ -3266,12 +3265,12 @@ msgstr "IMEXP(\"12i\"), “0,843854-0,536573i” döndürür"
 #: functions/engineering.xml:627
 #, kde-format
 msgid "The IMLN(string) returns the natural logarithm of a complex number."
-msgstr "IMLN(dizi) işlevi, bir karmaşık sayının doğal logaritmasını döndürür."
+msgstr "IMLN(dizge) işlevi, bir karmaşık sayının doğal logaritmasını döndürür."
 
 #: functions/engineering.xml:628
 #, kde-format
 msgid "IMLN(string)"
-msgstr "IMLN(dizi)"
+msgstr "IMLN(dizge)"
 
 #: functions/engineering.xml:629
 #, kde-format
@@ -3287,13 +3286,13 @@ msgstr "IMLN(\"12\"), 2,48491 döndürür"
 #, kde-format
 msgid "The IMLOG2(string) returns the base-2 logarithm of a complex number."
 msgstr ""
-"IMLOG2(dizi) işlevi, bir karmaşık sayının 2 tabanına göre logaritmasını "
+"IMLOG2(dizge) işlevi, bir karmaşık sayının 2 tabanına göre logaritmasını "
 "döndürür."
 
 #: functions/engineering.xml:643
 #, kde-format
 msgid "IMLOG2(string)"
-msgstr "IMLOG2(dizi)"
+msgstr "IMLOG2(dizge)"
 
 #: functions/engineering.xml:644
 #, kde-format
@@ -3304,13 +3303,13 @@ msgstr "IMLOG2(\"3+4i\"), “2,321928+1,337804i” döndürür"
 #, kde-format
 msgid "The IMLOG10(string) returns the base-10 logarithm of a complex number."
 msgstr ""
-"IMLOG10(dizi) işlevi, bir karmaşık sayının 10 tabanına göre logaritmasını "
+"IMLOG10(dizge) işlevi, bir karmaşık sayının 10 tabanına göre logaritmasını "
 "döndürür."
 
 #: functions/engineering.xml:657
 #, kde-format
 msgid "IMLOG10(string)"
-msgstr "IMLOG10(dizi)"
+msgstr "IMLOG10(dizge)"
 
 #: functions/engineering.xml:658
 #, kde-format
@@ -3320,12 +3319,12 @@ msgstr "IMLOG10(\"3+4i\") “0,69897+0,402719i” döndürür"
 #: functions/engineering.xml:670
 #, kde-format
 msgid "The IMSQRT(string) returns the square root of a complex number."
-msgstr "IMSQRT(dizi) işlevi, bir karmaşık sayının karekökünü döndürür."
+msgstr "IMSQRT(dizge) işlevi, bir karmaşık sayının karekökünü döndürür."
 
 #: functions/engineering.xml:671
 #, kde-format
 msgid "IMSQRT(string)"
-msgstr "IMSQRT(dizi)"
+msgstr "IMSQRT(dizge)"
 
 #: functions/engineering.xml:672
 #, kde-format
@@ -3346,12 +3345,12 @@ msgstr "Üs"
 #, kde-format
 msgid "The IMPOWER(string) returns a complex number raised to a power."
 msgstr ""
-"IMPOWER(dizi) işlevi, bir karmaşık sayının üssü alınmış biçimini döndürür."
+"IMPOWER(dizge) işlevi, bir karmaşık sayının üssü alınmış biçimini döndürür."
 
 #: functions/engineering.xml:690
 #, kde-format
 msgid "IMPOWER(string)"
-msgstr "IMPOWER(dizi)"
+msgstr "IMPOWER(dizge)"
 
 #: functions/engineering.xml:691
 #, kde-format
@@ -5403,7 +5402,7 @@ msgstr "Başvuru"
 #: functions/information.xml:30
 #, kde-format
 msgid "The FORMULA() function returns the formula of a cell as string."
-msgstr "FORMULA() işlevi, bir hücre formülünü karakter dizisi olarak döndürür."
+msgstr "FORMULA() işlevi, bir hücre formülünü dizge olarak döndürür."
 
 #: functions/information.xml:31
 #, kde-format
@@ -5662,7 +5661,7 @@ msgid ""
 "The ISTEXT() function returns True if the parameter is a string. Otherwise "
 "it returns False"
 msgstr ""
-"ISTEXT() işlevi, eğer parametre bir diziyse True, değilse False döndürür"
+"ISTEXT() işlevi, eğer parametre bir dizgeyse True, değilse False döndürür"
 
 #: functions/information.xml:180
 #, kde-format
@@ -5685,8 +5684,8 @@ msgid ""
 "The ISNONTEXT() function returns True if the parameter is not a string. "
 "Otherwise it returns False. It's the same as ISNOTTEXT."
 msgstr ""
-"ISNONTEXT() işlevi, verilen değer bir karakter dizisi değil ise True "
-"döndürür. Diğer durumlarda ise False döndürür. ISNOTTEXT ile aynıdır."
+"ISNONTEXT() işlevi, verilen değer bir dizge değil ise True döndürür. Diğer "
+"durumlarda ise False döndürür. ISNOTTEXT ile aynıdır."
 
 #: functions/information.xml:195
 #, kde-format
@@ -5709,8 +5708,8 @@ msgid ""
 "The ISNOTTEXT() function returns True if the parameter is not a string. "
 "Otherwise it returns False. It's the same as ISNONTEXT."
 msgstr ""
-"ISNOTTEXT() işlevi, verilen değer karakter dizisi değil ise True döndürür. "
-"Diğer durumlarda False döndürür. ISNONTEXT ile aynıdır."
+"ISNOTTEXT() işlevi, verilen değer dizge değil ise True döndürür. Diğer "
+"durumlarda False döndürür. ISNONTEXT ile aynıdır."
 
 #: functions/information.xml:211
 #, kde-format
@@ -5880,7 +5879,7 @@ msgid ""
 "string is returned."
 msgstr ""
 "Güncel dosya adı gönderilir. Eğer çalışılan dosya önceden kaydedilmemişse "
-"boş bir dizi gönderilir."
+"boş bir dizge gönderilir."
 
 #: functions/information.xml:339
 #, kde-format
@@ -7022,8 +7021,8 @@ msgid ""
 "The MIN() function returns the smallest value given in the parameters. "
 "String and logical values are ignored."
 msgstr ""
-"MIN() işlevi, verilen değerler içinden en küçük olan değeri döndürür. "
-"Karakter dizisi ve mantıksal değerler yok sayılır."
+"MIN() işlevi, verilen değerler içinden en küçük olan değeri döndürür. Dizge "
+"ve mantıksal değerler yok sayılır."
 
 #: functions/math.xml:584
 #, kde-format
@@ -7052,8 +7051,7 @@ msgid ""
 "evaluates to 1, FALSE to 0. String values are ignored."
 msgstr ""
 "MINA() işlevi, verilen değerler içinden en küçük olan değeri döndürür. TRUE "
-"değeri 1 değerini, FALSE değeri 0 değerini döndürür. Karakter dizileri yok "
-"sayılır."
+"değeri 1 değerini, FALSE değeri 0 değerini döndürür. Dizgeler yok sayılır."
 
 #: functions/math.xml:605
 #, kde-format
@@ -8126,8 +8124,8 @@ msgid ""
 "Returns the number of areas in the reference string. An area can be asingle "
 "cell or a set of cells."
 msgstr ""
-"Kaynak karakter dizisindeki alanların sayısını döndürür. Bir alan tek bir "
-"hücre ya da hücre kümesi olabilir."
+"Kaynak dizgendeki alanların sayısını döndürür. Bir alan tek bir hücre ya da "
+"hücre kümesi olabilir."
 
 #: functions/reference.xml:53
 #, kde-format
@@ -8420,9 +8418,9 @@ msgstr ""
 "eşleşen bir değerle aynı indekse sahip bir değeri sonuç vektöründe döndürür. "
 "Eğer değer arama vektöründe yoksa bir sonraki daha düşük olanı alır. Eğer "
 "arama vektöründen hiç bir değer eşleşmez ise bir hata döndürülür. Arama "
-"vektörü artan sırada olmalıdır ve arama ve sonuç vekrörleri aynı boyutta "
-"olmalıdır. Sayısal değerler, karakter dizileri ve Boole değerler tanımlıdır. "
-"Karakter dizileri arasındaki karşılaştırma BÜYÜK/küçük harf duyarsızdır."
+"vektörü artan sırada olmalıdır ve arama ve sonuç vektörleri aynı boyutta "
+"olmalıdır. Sayısal değerler, dizgeler ve Boole değerler tanımlıdır. Dizgeler "
+"arasındaki karşılaştırma BÜYÜK/küçük harf duyarsızdır."
 
 #: functions/reference.xml:249
 #, kde-format
@@ -9042,11 +9040,11 @@ msgid ""
 "Both parameters should be positive and the first parameter should not be "
 "less than the second. Otherwise the function returns an error."
 msgstr ""
-"COMBINA() işlevi, yinelemeye yol açan olası birleşimlerin(kombinasyon) "
+"COMBINA() işlevi, yinelemeye yol açan olası birleşimlerin (kombinasyon) "
 "sayısını hesaplar. İlk değer, toplam eleman sayısıdır. İkinci değer ise "
 "yinelemeye yol açan seçilecek eleman sayısıdır. Her iki değer de artı olmalı "
 "ve ilk değer, ikincisinden küçük olmamalıdır. Aksi durumlarda işlev hata "
-"döner."
+"döndürür."
 
 #: functions/statistical.xml:207
 #, kde-format
@@ -11475,7 +11473,7 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text."
 msgstr ""
-"SEARCH() işlevi, bir metin dizisini (aranılan_metin) başka bir metin "
+"SEARCH() işlevi, bir metin dizgesini (aranılan_metin) başka bir metin "
 "dizisinde arar (ana_metin) ve sonucu aranılan_metin’in en soldaki değerinin "
 "bulunduğu ana_metin’deki yeri sayı olarak döndürür."
 
@@ -11529,10 +11527,9 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
-"SEARCHB() işlevi, bir metin karakter dizisini (bulunacak_metin) diğer bir "
-"metin karakter dizisi (metin_içinde) içinde bulur ve bayt konumunu "
-"kullanarak metin_içinde’nin en sol karakterinden, bulunacak_metin’in "
-"başlangıç noktasının sayısını döndürür."
+"SEARCHB() işlevi, bir metin dizgeyi (bulunacak_metin) diğer bir metin dizge "
+"(metin_içinde) içinde bulur ve bayt konumunu kullanarak metin_içinde’nin en "
+"sol karakterinden, bulunacak_metin’in başlangıç noktasının sayısını döndürür."
 
 #: functions/text.xml:128
 #, kde-format
@@ -11615,7 +11612,7 @@ msgstr ""
 #: functions/text.xml:175
 #, kde-format
 msgid "PROPER(string)"
-msgstr "PROPER(dizi)"
+msgstr "PROPER(dizge)"
 
 #: functions/text.xml:176
 #, kde-format
@@ -11716,8 +11713,8 @@ msgid ""
 "The REPLACE() function replaces part of a text string with a different text "
 "string."
 msgstr ""
-"REPLACE() işlevi, bir yazı dizisinin bi bölümünü başka bir yazı dizisi ile "
-"değiştirir."
+"REPLACE() işlevi, bir metin dizgesinin bi bölümünü başka bir metin dizgesi "
+"ile değiştirir."
 
 #: functions/text.xml:246
 #, kde-format
@@ -11756,8 +11753,8 @@ msgid ""
 "The REPLACEB() function replaces part of a text string with a different text "
 "string using byte positions."
 msgstr ""
-"REPLACE() işlevi, bir yazı dizisinin bi bölümünü bayt konumu kullanarak "
-"başka bir yazı dizisi ile değiştirir."
+"REPLACE() işlevi, bir metin dizgesinin bi bölümünü bayt konumu kullanarak "
+"başka bir metin dizgesi ile değiştirir."
 
 #: functions/text.xml:277
 #, kde-format
@@ -11776,7 +11773,7 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text."
 msgstr ""
-"FIND() işlevi, bir yazı dizisini (aranılan_metin) başka bir yazı dizisi "
+"FIND() işlevi, bir metin dizgesini (aranılan_metin) başka bir metin dizgesi "
 "(ana_metin) içinde arar ve en soldaki karakterden başlayarak, "
 "aranılan_metin’e ait başlama noktasının sayısını döndürür."
 
@@ -11832,7 +11829,7 @@ msgid ""
 "string (within_text) and returns the number of the starting point of "
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
-"FINDB() işlevi, bir yazı dizisini (find_text) başka bir yazı dizisi "
+"FINDB() işlevi, bir metin dizgesini (find_text) başka bir metin dizgesi "
 "(within_text) içinde arar ve en soldaki karakterden başlayarak, "
 "aranılan_metin’e ait başlama noktasının sayısını bayt konumu kullanarak "
 "döndürür."
@@ -11954,8 +11951,7 @@ msgstr "LEN(\"KSpread\"), 7 döndürür"
 msgid ""
 "The LENB() function returns the length of the string using byte positions."
 msgstr ""
-"LENB() işlevi, bayt konumları kullanılarak karakter dizisinin uzunluğunu "
-"döndürür."
+"LENB() işlevi, bayt konumları kullanılarak dizgenin uzunluğunu döndürür."
 
 #: functions/text.xml:425
 #, kde-format
@@ -12013,7 +12009,7 @@ msgid ""
 "rightmost characters of the string. The whole string is returned if 'length' "
 "exceeds the length of the string."
 msgstr ""
-"RIGHT() işlevi, verilen diziden uzunluk kadar bir diziyi, sağdan, alır.Eğer "
+"RIGHT() işlevi, verilen diziden uzunluk kadar bir dizgeyi, sağdan, alır.Eğer "
 "verilen uzunluk, girilen dizininkinden fazla ise tüm dizi döndürülür."
 
 #: functions/text.xml:486
@@ -12043,10 +12039,9 @@ msgid ""
 "rightmost characters of the string using byte positions. The whole string is "
 "returned if 'length' exceeds the length of the string."
 msgstr ""
-"RIGHTB() işlevi, bayt konumlarını kullanarak karakter dizisinin en sağ "
-"karakterinden “uzunluk” kadar bir diziyi içeren alt karakter dizisini döner. "
-"Eğer “uzunluk” verilen karakter dizisinin uzunluğuna ulaşırsa bütün karakter "
-"dizisini döner."
+"RIGHTB() işlevi, bayt konumlarını kullanarak dizgenin en sağ karakterinden "
+"“uzunluk” kadar bir dizgeyi içeren alt dizgeyi döndürür. Eğer “uzunluk” "
+"verilen dizgenin uzunluğuna ulaşırsa bütün dizgeyi döndürür."
 
 #: functions/text.xml:510
 #, kde-format
@@ -12061,10 +12056,9 @@ msgid ""
 "the length of the string. It is an error for the number of characters to be "
 "less than 0."
 msgstr ""
-"LEFT() işlevi, verilen karakter dizisinin en sol karakterine kadar "
-"’uzunluk’u içeren alt karakter dizisini döner. Eğer ’uzunluk’ karakter "
-"dizisinin uzunluğuna ulaşırsa tüm karakter dizisini döner. Karakter "
-"sayısının 0’dan küçük olması hatadır."
+"LEFT() işlevi, verilen dizgenin en sol karakterine kadar “uzunluk”u içeren "
+"alt dizgeyi döndürür. Eğerv “uzunluk”, dizgenin uzunluğuna ulaşırsa tüm "
+"dizgeyi döndürür. Karakter sayısının 0’dan küçük olması hatadır."
 
 #: functions/text.xml:531
 #, kde-format
@@ -12094,10 +12088,10 @@ msgid ""
 "if 'length' exceeds the length of the string. It is an error for the number "
 "of characters to be less than 0."
 msgstr ""
-"LEFTB() işlevi, bayt konumu kullanarak verilen karakter dizisinin en sol "
-"karakterine kadar ’uzunluk’u içeren alt karakter dizisini döner. Eğer "
-"’uzunluk’ karakter dizisinin uzunluğuna ulaşırsa tüm karakter dizisini "
-"döner. Karakter sayısının 0’dan küçük olası hatadır."
+"LEFTB() işlevi, bayt konumu kullanarak verilen dizgenin en sol karakterine "
+"kadar “uzunluk”u içeren alt dizgeyi döndürür. Eğer “uzunluk”, dizgenin "
+"uzunluğuna ulaşırsa tüm dizgeyi döndürür. Karakter sayısının 0’dan küçük "
+"olası hatadır."
 
 #: functions/text.xml:555
 #, kde-format
@@ -12118,8 +12112,8 @@ msgid ""
 "rounds down to zero)."
 msgstr ""
 "REPT() işlevi, ilk parametreyi ikinci parametre kadar yineler. İkinci "
-"parametre negatif olamaz ve bu işlev ikinci parametre sıfır olursa boş "
-"karakter dizisi döndürür (veya sıfıra yuvarlar)."
+"parametre negatif olamaz ve bu işlev ikinci parametre sıfır olursa boş dizge "
+"döndürür (veya sıfıra yuvarlar)."
 
 #: functions/text.xml:576
 #, kde-format
@@ -12309,7 +12303,7 @@ msgstr "CODE(\"KDE\"), 75 döndürür"
 #: functions/text.xml:717
 #, kde-format
 msgid "Converts text string that represents a value to the real value.  "
-msgstr "Bir değer belirten metin dizisini gerçek bir değere dönüştürür.  "
+msgstr "Bir değer belirten metin dizgesini gerçek bir değere dönüştürür.  "
 
 #: functions/text.xml:718
 #, kde-format
@@ -12348,9 +12342,9 @@ msgid ""
 "string does not match the given regular expression, value specified as "
 "default is returned."
 msgstr ""
-"Bir düzgün ifade ile eşleşen karakter dizisinin bir parçasını döndürür. Eğer "
-"karakter dizisi verilen düzenli ifade ile eşleşmezse varsayılan olarak "
-"belirlenen değer döndürülür."
+"Bir düzgün ifade ile eşleşen dizgenin bir parçasını döndürür. Eğer dizge "
+"verilen düzenli ifade ile eşleşmezse varsayılan olarak belirlenen değer "
+"döndürülür."
 
 #: functions/text.xml:744
 #, kde-format
@@ -12365,8 +12359,8 @@ msgid ""
 "If no default value is given, an empty string is assumed. If no back-"
 "reference is given, 0 is assumed (so that entire matching part is returned)."
 msgstr ""
-"Eğer varsayılan değer verilmezse boş karakter dizisi varsayılır. Eğer geri "
-"başvuru verilirse 0 varsayılır (böylece tüm bulunan parça döndürülür)."
+"Eğer varsayılan değer verilmezse boş dizge varsayılır. Eğer geri başvuru "
+"verilirse 0 varsayılır (böylece tüm bulunan parça döndürülür)."
 
 #: functions/text.xml:746
 #, kde-format
@@ -16001,7 +15995,7 @@ msgstr "Etiketleri otomatik bul"
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:106
 #, kde-format
 msgid "String comparison:"
-msgstr "Karakter dizisi karşılaştırması:"
+msgstr "Dizge karşılaştırması:"
 
 #: ui/actions/dialogs/DocumentSettingsDialog.cpp:112
 #, kde-format
@@ -18454,12 +18448,12 @@ msgid ""
 "back to 12.\n"
 "You can also use the Percent icon in the Format Toolbar."
 msgstr ""
-"Geçerli hücrede bir sayı varsa ve dcell biçiminden Genelden Yüzdeye "
+"Geçerli hücrede bir sayı varsa ve dcell biçiminden genelden yüzdeye "
 "geçerseniz geçerli hücredeki sayı %​100 ile çarpılır.\n"
-"Örneğin eğer 12 sayısını girer ve hücre formatını Yüzde olarak ayarlarsanız, "
-"sayı %​1,200 olacaktır. Yeniden Genel hücre biçimine dönerseniz sayı yeniden "
+"Örneğin eğer 12 sayısını girer ve hücre biçimini “Yüzde” olarak ayarlarsanız "
+"sayı %​​1.200 olacaktır. Yeniden Genel hücre biçimine dönerseniz sayı yeniden "
 "12 olacaktır.\n"
-"Ayrıca Biçim Araç Çubuğundan Yüzde simgesini de kullanabilirsiniz."
+"Ayrıca Biçim araç çubuğundan, yüzde simgesini de kullanabilirsiniz."
 
 #: ui/dialogs/LayoutPage_Float.cpp:79
 #, kde-format
